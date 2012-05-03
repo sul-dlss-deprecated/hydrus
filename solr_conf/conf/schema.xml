@@ -3,7 +3,7 @@
 IMPORTANT
 This copy of the solr schema is only used in the context of testing hydra-head.  If you want to make changes available to individual hydra heads, you must apply them to the template in lib/generators/hydra/templates/solr_config
 -->
-<schema name="Hydra" version="1.1">
+<schema name="Hydrus" version="1.1">
   <!-- For complete comments from the Solr project example schema.xml:
       http://svn.apache.org/viewvc/lucene/dev/trunk/solr/example/solr/conf/schema.xml?view=markup
     See also:  
