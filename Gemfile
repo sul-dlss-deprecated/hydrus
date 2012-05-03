@@ -7,11 +7,13 @@ gem 'devise'
 # For testing.  You will probably want to use these to run the tests you write for your hydra head
 group :test do 
   gem 'rspec-rails', '>=2.9.0'
-  gem "jettywrapper"
   gem "cucumber-rails"
   gem "database_cleaner"
 end
 
+group :development, :test do
+  gem "jettywrapper"
+end
 
 gem 'rails', '3.2.3'
 
