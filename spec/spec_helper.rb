@@ -1,3 +1,5 @@
+# for test coverage 
+require 'simplecov'
 
 # # This file is copied to spec/ when you run 'rails generate rspec:install'
 ENV["RAILS_ENV"] ||= 'test'

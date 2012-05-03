@@ -4,15 +4,16 @@ gem 'hydra-head', '~> 4.0.0'
 gem 'blacklight', '~> 3.3.1'
 gem 'devise'
 
-# For testing.  You will probably want to use these to run the tests you write for your hydra head
 group :test do 
-  gem 'rspec-rails', '>=2.9.0'
-  gem "cucumber-rails"
-  gem "database_cleaner"
+  gem "cucumber-rails", :require => false
+  gem 'database_cleaner', :require => false
+  gem 'rspec-rails', '>=2.9.0', :require => false
+  gem 'simplecov', :require => false
+  gem 'simplecov-rcov', :require => false
 end
 
 group :development, :test do
-  gem "jettywrapper"
+  gem 'jettywrapper'
 end
 
 gem 'rails', '3.2.3'
