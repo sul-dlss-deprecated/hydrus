@@ -5,10 +5,13 @@ gem 'blacklight', '~> 3.3.1'
 gem 'devise'
 
 # For testing.  You will probably want to use these to run the tests you write for your hydra head
-group :development, :test do 
-       gem 'rspec-rails', '>=2.9.0'
-       gem "jettywrapper"
+group :test do 
+  gem 'rspec-rails', '>=2.9.0'
+  gem "jettywrapper"
+  gem "cucumber-rails"
+  gem "database_cleaner"
 end
+
 
 gem 'rails', '3.2.3'
 
@@ -29,6 +32,9 @@ group :assets do
   gem 'uglifier', '>= 1.0.3'
 end
 
+gem "compass-rails", "~> 1.0.0", :group => :assets
+gem "compass-susy-plugin", "~> 0.9.0", :group => :assets
+
 gem 'jquery-rails'
 
 # To use ActiveModel has_secure_password
@@ -45,7 +51,3 @@ gem 'jquery-rails'
 
 # To use debugger
 #gem 'ruby-debug19', :require => 'ruby-debug'
-
-gem "devise"
-gem "compass-rails", "~> 1.0.0", :group => :assets
-gem "compass-susy-plugin", "~> 0.9.0", :group => :assets
