@@ -35,3 +35,29 @@ Hydrus::Application.configure do
   # Expands the lines which load the assets
   config.assets.debug = true
 end
+
+
+# FIXME:  this is a crude override for using local jetty that should be redone properly
+module Dor
+  class Configuration
+    # Override Dor-services  method to NOT use certs (for testing purposes)
+    def make_solr_connection(add_opts={})
+      opts = Config.solrizer.opts.merge(add_opts).merge(
+        :url => Config.solrizer.url
+      )
+      ::RSolr.connect(opts).extend(RSolr::Ext::Client)
+    end
+    
+  end
+end
+
+# FIXME:  these urls should be either re-read from .yml files or should be grabbed from hydra config object
+Dor::Config.configure do
+
+  fedora do
+    url 'http://fedoraAdmin:fedoraAdmin@127.0.0.1:8983/fedora'
+  end
+  
+  solrizer.url 'http://localhost:8983/solr/development'
+  
+end
