@@ -1,5 +1,7 @@
-source 'https://rubygems.org'
+source :rubygems
+source "http://sulair-rails-dev.stanford.edu"
 
+gem 'dor-services', ">= 3.5.1"
 gem 'hydra-head', '~> 4.0.0'
 gem 'blacklight', '~> 3.3.1'
 gem 'devise'
@@ -15,6 +17,14 @@ end
 group :development, :test do
   gem 'jettywrapper'
 end
+
+#group :deployment do
+#  gem 'capistrano'
+##  gem 'capistrano-ext'
+#  gem 'rvm-capistrano'
+#  gem 'lyberteam-devel', '>=0.7.0'
+##  gem 'net-ssh-kerberos'
+#end
 
 gem 'rails', '3.2.3'
 
