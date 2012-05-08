@@ -184,7 +184,7 @@
     <foxml:datastreamVersion ID="rightsMetadata.3" LABEL="Rights Metadata"
       CREATED="2010-11-09T23:59:04.511Z" MIMETYPE="application/xml" SIZE="623">
       <foxml:xmlContent>
-        <rightsMetadata objectId="druid:pv309jn3099">
+        <rightsMetadata  xmlns="http://hydra-collab.stanford.edu/schemas/rightsMetadata/v1" version="0.1" objectId="druid:pv309jn3099">
           <copyright>
             <human>(c) Copyright 2010 by Pipat Likanapaisal</human>
           </copyright>

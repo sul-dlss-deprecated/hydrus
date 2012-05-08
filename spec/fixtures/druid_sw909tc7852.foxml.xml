@@ -86,7 +86,7 @@
     <foxml:datastreamVersion ID="rightsMetadata.0" LABEL="Rights Metadata"
       CREATED="2011-06-27T21:45:41.157Z" MIMETYPE="text/xml" SIZE="300">
       <foxml:xmlContent>
-        <rightsMetadata>
+        <rightsMetadata xmlns="http://hydra-collab.stanford.edu/schemas/rightsMetadata/v1" version="0.1">
           <access type="discover">
             <machine>
               <group>public</group>
