@@ -1,46 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <foxml:digitalObject VERSION="1.1" PID="druid:sw909tc7852"
-xmlns:foxml="info:fedora/fedora-system:def/foxml#"
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/definitions/1/0/foxml1-1.xsd">
-<foxml:objectProperties>
-<foxml:property NAME="info:fedora/fedora-system:def/model#state" VALUE="Active"/>
-<foxml:property NAME="info:fedora/fedora-system:def/model#label" VALUE="Electronic Theses and Dissertations"/>
-<foxml:property NAME="info:fedora/fedora-system:def/model#ownerId" VALUE="DOR"/>
-<foxml:property NAME="info:fedora/fedora-system:def/model#createdDate" VALUE="2011-07-05T17:12:18.779Z"/>
-<foxml:property NAME="info:fedora/fedora-system:def/view#lastModifiedDate" VALUE="2012-05-07T22:24:37.010Z"/>
-</foxml:objectProperties>
-<foxml:datastream ID="AUDIT" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
-<foxml:datastreamVersion ID="AUDIT.0" LABEL="Audit Trail for this object" CREATED="2011-07-05T17:12:18.779Z" MIMETYPE="text/xml" FORMAT_URI="info:fedora/fedora-system:format/xml.fedora.audit">
-<foxml:xmlContent>
-<audit:auditTrail xmlns:audit="info:fedora/fedora-system:def/audit#">
-<audit:record ID="AUDREC1">
-<audit:process type="Fedora API-M"/>
-<audit:action>modifyDatastreamByValue</audit:action>
-<audit:componentID>descMetadata</audit:componentID>
-<audit:responsibility>fedoraAdmin</audit:responsibility>
-<audit:date>2012-03-16T22:33:14.505Z</audit:date>
-<audit:justification></audit:justification>
-</audit:record>
-</audit:auditTrail>
-</foxml:xmlContent>
-</foxml:datastreamVersion>
-</foxml:datastream>
-<foxml:datastream ID="RELS-EXT" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
-<foxml:datastreamVersion ID="RELS-EXT.0" LABEL="RDF Statements about this object" CREATED="2011-07-05T17:12:18.916Z" MIMETYPE="application/rdf+xml" FORMAT_URI="info:fedora/fedora-system:FedoraRELSExt-1.0" SIZE="456">
-<foxml:xmlContent>
-<rdf:RDF xmlns:fedora-model="info:fedora/fedora-system:def/model#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rel="info:fedora/fedora-system:def/relations-external#" xmlns:hydra="http://projecthydra.org/ns/relations#">
+  xmlns:foxml="info:fedora/fedora-system:def/foxml#"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/definitions/1/0/foxml1-1.xsd">
+  <foxml:objectProperties>
+    <foxml:property NAME="info:fedora/fedora-system:def/model#state" VALUE="Active"/>
+    <foxml:property NAME="info:fedora/fedora-system:def/model#label"
+      VALUE="Electronic Theses and Dissertations"/>
+    <foxml:property NAME="info:fedora/fedora-system:def/model#ownerId" VALUE="DOR"/>
+    <foxml:property NAME="info:fedora/fedora-system:def/model#createdDate"
+      VALUE="2011-07-05T17:12:18.779Z"/>
+    <foxml:property NAME="info:fedora/fedora-system:def/view#lastModifiedDate"
+      VALUE="2012-05-07T22:24:37.010Z"/>
+  </foxml:objectProperties>
+  <foxml:datastream ID="AUDIT" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
+    <foxml:datastreamVersion ID="AUDIT.0" LABEL="Audit Trail for this object"
+      CREATED="2011-07-05T17:12:18.779Z" MIMETYPE="text/xml"
+      FORMAT_URI="info:fedora/fedora-system:format/xml.fedora.audit">
+      <foxml:xmlContent>
+        <audit:auditTrail xmlns:audit="info:fedora/fedora-system:def/audit#">
+          <audit:record ID="AUDREC1">
+            <audit:process type="Fedora API-M"/>
+            <audit:action>modifyDatastreamByValue</audit:action>
+            <audit:componentID>descMetadata</audit:componentID>
+            <audit:responsibility>fedoraAdmin</audit:responsibility>
+            <audit:date>2012-03-16T22:33:14.505Z</audit:date>
+            <audit:justification/>
+          </audit:record>
+        </audit:auditTrail>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+  <foxml:datastream ID="RELS-EXT" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
+    <foxml:datastreamVersion ID="RELS-EXT.0" LABEL="RDF Statements about this object"
+      CREATED="2011-07-05T17:12:18.916Z" MIMETYPE="application/rdf+xml"
+      FORMAT_URI="info:fedora/fedora-system:FedoraRELSExt-1.0" SIZE="456">
+      <foxml:xmlContent>
+        <rdf:RDF xmlns:fedora-model="info:fedora/fedora-system:def/model#"
+          xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+          xmlns:rel="info:fedora/fedora-system:def/relations-external#"
+          xmlns:hydra="http://projecthydra.org/ns/relations#">
           <rdf:Description rdf:about="info:fedora/druid:sw909tc7852">
-            <hydra:isGovernedBy rdf:resource="info:fedora/druid:bx911tp9024"></hydra:isGovernedBy>
+            <hydra:isGovernedBy rdf:resource="info:fedora/druid:ww057vk7675"/>
+            <hasModel xmlns="info:fedora/fedora-system:def/model#"
+              rdf:resource="info:fedora/afmodel:Dor_Collection"/>
           </rdf:Description>
         </rdf:RDF>
-</foxml:xmlContent>
-</foxml:datastreamVersion>
-</foxml:datastream>
-<foxml:datastream ID="identityMetadata" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
-<foxml:datastreamVersion ID="identityMetadata.1" LABEL="Identity Metadata" CREATED="2011-07-05T17:25:35.008Z" MIMETYPE="text/xml" SIZE="488">
-<foxml:xmlContent>
-<identityMetadata>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+  <foxml:datastream ID="identityMetadata" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
+    <foxml:datastreamVersion ID="identityMetadata.1" LABEL="Identity Metadata"
+      CREATED="2011-07-05T17:25:35.008Z" MIMETYPE="text/xml" SIZE="488">
+      <foxml:xmlContent>
+        <identityMetadata>
           <objectLabel>Electronic Theses and Dissertations</objectLabel>
           <adminPolicy>druid:bx911tp9024</adminPolicy>
           <objectType>collection</objectType>
@@ -50,42 +63,51 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
           <objectCreator>DOR</objectCreator>
           <agreementId>druid:fn200hb6598</agreementId>
         </identityMetadata>
-</foxml:xmlContent>
-</foxml:datastreamVersion>
-</foxml:datastream>
-<foxml:datastream ID="DC" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
-<foxml:datastreamVersion ID="DC.1" LABEL="Dublin Core Record for this object" CREATED="2011-08-15T20:47:25.868Z" MIMETYPE="text/xml" FORMAT_URI="http://www.openarchives.org/OAI/2.0/oai_dc/" SIZE="480">
-<foxml:xmlContent>
-<oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
-  <dc:title>Electronic Theses and Dissertations</dc:title>
-  <dc:identifier>uuid:bf465da0-f9ed-11e0-be50-0800200c9a66</dc:identifier>
-  <dc:identifier>druid:sw909tc7852</dc:identifier>
-</oai_dc:dc>
-</foxml:xmlContent>
-</foxml:datastreamVersion>
-</foxml:datastream>
-<foxml:datastream ID="rightsMetadata" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
-<foxml:datastreamVersion ID="rightsMetadata.0" LABEL="Rights Metadata" CREATED="2011-06-27T21:45:41.157Z" MIMETYPE="text/xml" SIZE="300">
-<foxml:xmlContent>
-<rightsMetadata>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+  <foxml:datastream ID="DC" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
+    <foxml:datastreamVersion ID="DC.1" LABEL="Dublin Core Record for this object"
+      CREATED="2011-08-15T20:47:25.868Z" MIMETYPE="text/xml"
+      FORMAT_URI="http://www.openarchives.org/OAI/2.0/oai_dc/" SIZE="480">
+      <foxml:xmlContent>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/"
+          xmlns:dc="http://purl.org/dc/elements/1.1/"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:title>Electronic Theses and Dissertations</dc:title>
+          <dc:identifier>uuid:bf465da0-f9ed-11e0-be50-0800200c9a66</dc:identifier>
+          <dc:identifier>druid:sw909tc7852</dc:identifier>
+        </oai_dc:dc>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+  <foxml:datastream ID="rightsMetadata" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
+    <foxml:datastreamVersion ID="rightsMetadata.0" LABEL="Rights Metadata"
+      CREATED="2011-06-27T21:45:41.157Z" MIMETYPE="text/xml" SIZE="300">
+      <foxml:xmlContent>
+        <rightsMetadata>
           <access type="discover">
             <machine>
-              <world></world>
+              <group>public</group>
             </machine>
           </access>
           <access type="read">
             <machine>
-              <world></world>
+              <group>public</group>
             </machine>
           </access>
         </rightsMetadata>
-</foxml:xmlContent>
-</foxml:datastreamVersion>
-</foxml:datastream>
-<foxml:datastream ID="descMetadata" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
-<foxml:datastreamVersion ID="descMetadata.2" LABEL="Descriptive Metadata" CREATED="2012-03-16T22:33:14.505Z" MIMETYPE="text/xml" SIZE="958">
-<foxml:xmlContent>
-<mods xmlns="http://www.loc.gov/mods/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.3" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-3.xsd">
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+  <foxml:datastream ID="descMetadata" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
+    <foxml:datastreamVersion ID="descMetadata.2" LABEL="Descriptive Metadata"
+      CREATED="2012-03-16T22:33:14.505Z" MIMETYPE="text/xml" SIZE="958">
+      <foxml:xmlContent>
+        <mods xmlns="http://www.loc.gov/mods/v3"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.3"
+          xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-3.xsd">
           <titleInfo>
             <title>Electronic Theses and Dissertations</title>
           </titleInfo>
@@ -96,12 +118,28 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
               <roleTerm authority="marcrelator" type="text">creator</roleTerm>
             </role>
           </name>
-          <typeOfResource collection="yes"></typeOfResource>
+          <typeOfResource collection="yes"/>
           <language>
             <languageTerm authority="iso639-2b" type="code">eng</languageTerm>
           </language>
         </mods>
-</foxml:xmlContent>
-</foxml:datastreamVersion>
-</foxml:datastream>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+  <foxml:datastream ID="workflows" STATE="A" CONTROL_GROUP="M" VERSIONABLE="true">
+    <foxml:datastreamVersion ID="workflows.0" LABEL="" CREATED="2012-05-08T00:22:13.268Z"
+      MIMETYPE="application/xml">
+      <foxml:xmlContent>
+        <fields>
+          <abstract_provided>true</abstract_provided>
+          <permission_files_uploaded>false</permission_files_uploaded>
+          <cc_license_selected>true</cc_license_selected>
+          <citation_verified>true</citation_verified>
+          <dissertation_uploaded>true</dissertation_uploaded>
+          <permissions_provided>true</permissions_provided>
+          <rights_selected>true</rights_selected>
+        </fields>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
 </foxml:digitalObject>
