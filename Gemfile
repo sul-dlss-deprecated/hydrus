@@ -2,8 +2,8 @@ source :rubygems
 source "http://sulair-rails-dev.stanford.edu"
 
 gem 'dor-services', ">= 3.5.1"
-gem 'hydra-head', '~> 4.0.0'
 gem 'blacklight', '~> 3.3.1'
+gem 'hydra-head', '~> 4.0.0'
 gem 'devise'
 
 group :test do 
