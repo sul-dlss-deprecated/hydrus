@@ -18,6 +18,9 @@ group :development, :test do
   gem 'jettywrapper'
 end
 
+gem 'quiet_assets', :group => :development
+
+
 #group :deployment do
 #  gem 'capistrano'
 ##  gem 'capistrano-ext'

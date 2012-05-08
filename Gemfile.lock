@@ -195,6 +195,8 @@ GEM
     orm_adapter (0.0.7)
     polyglot (0.3.3)
     progressbar (0.11.0)
+    quiet_assets (1.0.1)
+      railties (~> 3.1)
     rack (1.4.1)
     rack-cache (1.2)
       rack (>= 0.4)
@@ -337,6 +339,7 @@ DEPENDENCIES
   hydra-head (~> 4.0.0)
   jettywrapper
   jquery-rails
+  quiet_assets
   rails (= 3.2.3)
   rspec-rails (>= 2.9.0)
   sass-rails (~> 3.2.3)
