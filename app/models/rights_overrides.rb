@@ -5,4 +5,5 @@ module Dor
     included do
       has_metadata :name => "rightsMetadata", :type => Hydra::RightsMetadata, :label => 'Rights Metadata'
     end
+  end
 end
