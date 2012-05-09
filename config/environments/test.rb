@@ -56,10 +56,10 @@ end
 Dor::Config.configure do
 
   fedora do
-    url 'http://fedoraAdmin:fedoraAdmin@127.0.0.1:8983/fedora'
+    url 'http://fedoraAdmin:fedoraAdmin@127.0.0.1:8983/fedora-test'
   end
   
-  solrizer.url 'http://localhost:8983/solr/development'
+  solrizer.url 'http://localhost:8983/solr/test'
   
   workflow.url 'http://lyberservices-dev.stanford.edu/workflow/'
   
