@@ -49,6 +49,7 @@ GEM
     akami (1.0.0)
       gyoku (>= 0.4.0)
     arel (3.0.2)
+    awesome_print (1.0.2)
     bagit (0.2.0)
       validatable (~> 1.6)
     bcrypt-ruby (3.0.1)
@@ -328,6 +329,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  awesome_print
   blacklight (~> 3.3.1)
   coffee-rails (~> 3.2.1)
   compass-rails (~> 1.0.0)

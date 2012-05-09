@@ -16,6 +16,7 @@ end
 
 group :development, :test do
   gem 'jettywrapper'
+  gem 'awesome_print'
 end
 
 gem 'quiet_assets', :group => :development
