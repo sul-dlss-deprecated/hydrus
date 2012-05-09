@@ -13,8 +13,18 @@ end
 
 Dor::Config.configure do
   fedora do
-    url Hydrus.fedora_yaml['url_auth']
+    # Load fedora.yml for the current environment.
+    yfile = File.expand_path(File.join(File.dirname(__FILE__), '..', 'fedora.yml'))
+    yaml  = YAML.load(File.read yfile)[Rails.env]
+    # Set the fedora URL with user and password info.
+    user  = yaml['user']
+    pw    = yaml['password']
+    url yaml['url'].sub /:\/\//, "://#{user}:#{pw}@"
   end
-  solrizer.url "http://localhost:8983/solr/#{Rails.env}"
+
+  yfile = File.expand_path(File.join(File.dirname(__FILE__), '..', 'solr.yml'))
+  yaml  = YAML.load(File.read yfile)[Rails.env]
+  solrizer.url yaml['url']
+
   workflow.url 'http://lyberservices-dev.stanford.edu/workflow/'
 end
