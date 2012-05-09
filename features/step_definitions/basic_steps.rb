@@ -4,8 +4,9 @@ Given /^I am on the home page$/ do
 end
 
 When /^I am viewing "([^"]*)"$/ do |object_id|
-  visit "/catalog/#{object_id}"
-#  pending # express the regexp above with the code you wish you had
+  visit catalog_path(object_id)
+  # visit catalog_path(CGI.escape object_id)
+  # visit "/catalog/#{CGI.escape object_id}"
 end
 
  
