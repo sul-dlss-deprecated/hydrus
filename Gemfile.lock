@@ -1,3 +1,27 @@
+GIT
+  remote: ssh://corn.stanford.edu/afs/ir/dev/dlss/git/lyberteam/dor-services-gem.git
+  revision: 012abc5c8b318c8177d9473376d7cf8712b6a5c6
+  branch: hydrus
+  specs:
+    dor-services (3.6.2)
+      active-fedora (>= 4.0.0)
+      active-fedora (>= 4.0.0.rc20)
+      confstruct (>= 0.2.2)
+      equivalent-xml (>= 0.2.2)
+      json
+      lyber-utils
+      nokogiri (~> 1.5.0)
+      om (>= 1.5.0)
+      progressbar
+      rest-client
+      rsolr-client-cert (>= 0.5.1)
+      rsolr-ext
+      ruby-cache
+      ruby-graphviz
+      systemu
+      uuidtools
+      validatable
+
 GEM
   remote: http://rubygems.org/
   remote: http://sulair-rails-dev.stanford.edu/
@@ -112,24 +136,6 @@ GEM
       railties (~> 3.1)
       warden (~> 1.1.1)
     diff-lcs (1.1.3)
-    dor-services (3.6.2)
-      active-fedora (>= 4.0.0)
-      active-fedora (>= 4.0.0.rc20)
-      confstruct (>= 0.2.2)
-      equivalent-xml (>= 0.2.2)
-      json
-      lyber-utils
-      nokogiri (~> 1.5.0)
-      om (>= 1.5.0)
-      progressbar
-      rest-client
-      rsolr-client-cert (>= 0.5.1)
-      rsolr-ext
-      ruby-cache
-      ruby-graphviz
-      systemu
-      uuidtools
-      validatable
     equivalent-xml (0.2.9)
       nokogiri (>= 1.4.3)
     erubis (2.7.0)
@@ -337,7 +343,7 @@ DEPENDENCIES
   cucumber-rails
   database_cleaner
   devise
-  dor-services (>= 3.5.1)
+  dor-services (>= 3.5.1)!
   hydra-head (~> 4.0.0)
   jettywrapper
   jquery-rails

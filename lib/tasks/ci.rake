@@ -1,4 +1,5 @@
 desc "Run Continuous Integration Suite (tests, coverage, docs)" 
+
 task :ci do 
   Rake::Task["hydra:jetty:config"].invoke
   
@@ -11,6 +12,7 @@ task :ci do
   
   error = nil
   error = Jettywrapper.wrap(jetty_params) do
+      Rake::Task['hydrus:refreshfix'].invoke
       Rake::Task['cucumber:ok'].invoke
       Rake::Task['rspec'].invoke
   end

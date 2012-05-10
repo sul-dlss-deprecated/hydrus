@@ -1,7 +1,9 @@
 source :rubygems
 source "http://sulair-rails-dev.stanford.edu"
 
-gem 'dor-services', ">= 3.5.1"
+gem 'dor-services', ">= 3.5.1", :git => '/afs/ir/dev/dlss/git/lyberteam/dor-services-gem.git', :branch => 'hydrus'
+# gem 'dor-services', ">= 3.5.1", :path => '../dor-services-gem'
+
 gem 'blacklight', '~> 3.3.1'
 gem 'hydra-head', '~> 4.0.0'
 gem 'devise'
