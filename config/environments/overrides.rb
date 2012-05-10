@@ -12,18 +12,22 @@ end
 
 
 Dor::Config.configure do
+
+  load_yaml_config = lambda { |yaml_file|
+    full_path = File.expand_path(File.join(File.dirname(__FILE__), '..', yaml_file))
+    yaml      = YAML.load(File.read full_path)
+    return yaml[Rails.env]
+  }
+
   fedora do
-    # Load fedora.yml for the current environment.
-    yfile = File.expand_path(File.join(File.dirname(__FILE__), '..', 'fedora.yml'))
-    yaml  = YAML.load(File.read yfile)[Rails.env]
     # Set the fedora URL with user and password info.
-    user  = yaml['user']
-    pw    = yaml['password']
+    yaml = load_yaml_config.call('fedora.yml')
+    user = yaml['user']
+    pw   = yaml['password']
     url yaml['url'].sub /:\/\//, "://#{user}:#{pw}@"
   end
 
-  yfile = File.expand_path(File.join(File.dirname(__FILE__), '..', 'solr.yml'))
-  yaml  = YAML.load(File.read yfile)[Rails.env]
+  yaml = load_yaml_config.call('solr.yml')
   solrizer.url yaml['url']
 
   workflow.url 'http://lyberservices-dev.stanford.edu/workflow/'
