@@ -1,5 +1,5 @@
 GIT
-  remote: ssh://corn.stanford.edu/afs/ir/dev/dlss/git/lyberteam/dor-services-gem.git
+  remote: /afs/ir/dev/dlss/git/lyberteam/dor-services-gem.git
   revision: 012abc5c8b318c8177d9473376d7cf8712b6a5c6
   branch: hydrus
   specs:
