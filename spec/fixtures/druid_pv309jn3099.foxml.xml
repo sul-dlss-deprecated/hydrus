@@ -291,6 +291,7 @@
             <place>
               <placeTerm authority="marccountry" type="code">xx</placeTerm>
             </place>
+            <publisher>FooBar Publishing Inc.</publisher>
             <dateIssued>2010</dateIssued>
             <dateIssued encoding="marc" keyDate="yes">2010</dateIssued>
             <issuance>monographic</issuance>

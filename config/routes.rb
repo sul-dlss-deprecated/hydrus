@@ -64,4 +64,5 @@ Hydrus::Application.routes.draw do
   # match ':controller(/:action(/:id))(.:format)'
 
   resources :collections, :controller => 'dor_collections'
+  resources :items,       :controller => 'dor_items'
 end

@@ -9,6 +9,11 @@ When /^I am viewing collection "([^"]*)"$/ do |object_id|
   visit collection_path(object_id)
 end
 
+When /^I am viewing item "([^"]*)"$/ do |object_id|
+  visit item_path(object_id)
+end
+
+
 
 When /^I am viewing "([^"]*)"$/ do |object_id|
   visit catalog_path(object_id)
