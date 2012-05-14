@@ -20,3 +20,7 @@
 //= require jquery-ui
 //= require blacklight/blacklight
 //= require_tree .
+
+
+/* Eliminate JavaScript functionality provided by Blacklight */
+Blacklight.do_search_context_behavior = function(){};  

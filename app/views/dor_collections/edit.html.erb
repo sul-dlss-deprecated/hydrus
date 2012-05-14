@@ -1,0 +1,28 @@
+<div>
+  <span class="edit-browse">
+    <%= edit_and_browse_links %>
+  </span>
+
+  <dl class="defList">
+
+    <dt>PID: </dt>
+    <dd><%= @pid %></dd>
+
+    <dt>Object type: </dt>
+    <dd><%= @identityMetadata.objectType.inspect %></dd>
+
+    <dt>Title: </dt>
+    <dd><%= @dcMetadata.title.first %></dd>
+
+    <dt id="abstract_field" class="fedora-text-area">
+    <%= fedora_field_label("descMetadata", [:abstract], "Abstract:") %></dt>
+    <dd>
+      <%= fedora_text_area( @document_fedora, "descMetadata", [:abstract], 
+                            :multiple=>false, :required=>false) %>
+    </dd>
+
+  </dl>
+
+</div>
+
+    <% render :partial => "hydra/permissions/index", :locals => {:document => @document_fedora, :asset_id=>params[:id]}%>
