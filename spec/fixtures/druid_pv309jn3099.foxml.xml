@@ -198,6 +198,11 @@
               <group>public</group>
             </machine>
           </access>
+          <access type="edit">
+            <machine>
+              <group>public</group>
+            </machine>
+          </access>
           <use>
             <machine type="creativeCommons">by-nc</machine>
             <human type="creativeCommons">CC Attribution Non-Commercial license</human>

@@ -97,6 +97,11 @@
               <group>public</group>
             </machine>
           </access>
+          <access type="edit">
+            <machine>
+              <group>public</group>
+            </machine>
+          </access>
         </rightsMetadata>
       </foxml:xmlContent>
     </foxml:datastreamVersion>

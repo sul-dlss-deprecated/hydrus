@@ -14,4 +14,12 @@ class DorCollectionsController < ApplicationController
     @identityMetadata = @document_fedora.identityMetadata
   end
 
+  def edit
+    @pid              = params[:id]
+    @document_fedora  = ActiveFedora::Base.find(@pid, :cast => true)
+    @descMetadata     = @document_fedora.descMetadata
+    @dcMetadata       = @document_fedora.DC
+    @identityMetadata = @document_fedora.identityMetadata
+  end
+
 end
