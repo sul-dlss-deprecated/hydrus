@@ -23,8 +23,8 @@ GIT
       validatable
 
 GIT
-  remote: git://github.com/projecthydra/hydra-head.git
-  revision: e739c7f1a2dd21b02f0ebd4602cf0a2876543aec
+  remote: http://github.com/projecthydra/hydra-head.git
+  revision: fddb6ef8c05936b17c14b59972618dede2ebe94a
   specs:
     hydra-head (4.0.1)
       RedCloth (= 4.2.9)
@@ -357,7 +357,7 @@ DEPENDENCIES
   debugger
   devise
   dor-services (>= 3.5.1)!
-  hydra-head (~> 4.0.0)!
+  hydra-head (~> 4.0.1)!
   jettywrapper
   jquery-rails
   quiet_assets

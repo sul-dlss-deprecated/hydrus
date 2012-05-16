@@ -4,7 +4,7 @@ source "http://sulair-rails-dev.stanford.edu"
 gem 'dor-services', ">= 3.5.1", :git => '/afs/ir/dev/dlss/git/lyberteam/dor-services-gem.git', :branch => 'hydrus'
 
 gem 'blacklight', '~> 3.3.1'
-gem 'hydra-head', '~> 4.0.0', :git => 'git://github.com/projecthydra/hydra-head.git'
+gem 'hydra-head', '~> 4.0.1', :git => 'http://github.com/projecthydra/hydra-head.git'
 gem 'devise'
 
 group :test do 
