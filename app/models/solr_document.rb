@@ -31,7 +31,7 @@ class SolrDocument
                          :format => "format"
                          )
 
-  def route_key                         
+  def route_key
     get('has_model_s').split(':').last.downcase
   end
 

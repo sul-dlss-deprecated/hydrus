@@ -100,6 +100,13 @@ describe "collection routes" do
       )
     end
 
+    # Not sure if this is the desired behavior, but it is the current implementation.
+    it "catalog_path() with a SolrDocument lacking a model should raise" do
+      h = { :id => @druid }
+      sdoc = SolrDocument.new h
+      expect { catalog_path(sdoc) }.to raise_error
+    end
+
   end
 
 end
