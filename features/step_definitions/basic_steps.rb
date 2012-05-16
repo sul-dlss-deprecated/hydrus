@@ -6,11 +6,11 @@ Given /^I am on the home page$/ do
 end
 
 When /^I am viewing collection "([^"]*)"$/ do |object_id|
-  visit collection_path(object_id)
+  visit dor_collection_path(object_id)
 end
 
 When /^I am viewing item "([^"]*)"$/ do |object_id|
-  visit item_path(object_id)
+  visit dor_item_path(object_id)
 end
 
 
