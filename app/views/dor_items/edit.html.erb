@@ -11,14 +11,14 @@
     <dt>Object type: </dt>
     <dd><%= @identityMetadata.objectType.inspect %></dd>
 
+    <dt id="publisher_field" class="fedora-text-area">
+      <%= fedora_field_label("descMetadata", [:originInfo, :publisher], "publisher:") %>
+    </dt>
+    <dd>
+      <%= fedora_text_area( @document_fedora, "descMetadata", [:originInfo, :publisher], 
+                            :multiple=>false, :required=>false) %>
+    </dd>
 
-
-
-
-    
-    
-    
-    
     <dt>Title: </dt>
     <dd><%= @dcMetadata.title.first %></dd>
 
