@@ -24,6 +24,8 @@ module Hydrus::RoutingHacks
         :only_path  => suffix == '_path',
       }
       url_for(url_params.merge doc)
+    when String
+      cat_up(prefix, suffix, (args[1] || {}).merge(:id => doc))
     else
       send(prefix + 'polymorphic' + suffix, *args)
     end
