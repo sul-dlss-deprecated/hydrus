@@ -1,11 +1,15 @@
 source :rubygems
 source "http://sulair-rails-dev.stanford.edu"
 
-gem 'dor-services', ">= 3.5.1", :git => '/afs/ir/dev/dlss/git/lyberteam/dor-services-gem.git', :branch => 'hydrus'
-# gem 'dor-services', ">= 3.5.1", :path => '../dor-services-gem'
+if ENV['HUDSON_URL']
+  gem 'dor-services', ">= 3.5.1", :git => '/afs/ir/dev/dlss/git/lyberteam/dor-services-gem.git', :branch => 'hydrus'
+else
+  gem 'dor-services', ">= 3.5.1", :git => 'ssh://corn.stanford.edu/afs/ir/dev/dlss/git/lyberteam/dor-services-gem.git', :branch => 'hydrus'
+  # gem 'dor-services', ">= 3.5.1", :path => '../dor-services-gem'
+end
 
 gem 'blacklight', '~> 3.3.1'
-gem 'hydra-head', '~> 4.0.0'
+gem 'hydra-head', '~> 4.0.0', :git => 'git://github.com/projecthydra/hydra-head.git'
 gem 'devise'
 
 group :test do 
@@ -19,6 +23,7 @@ end
 group :development, :test do
   gem 'jettywrapper'
   gem 'awesome_print'
+  gem 'debugger'
 end
 
 gem 'quiet_assets', :group => :development
