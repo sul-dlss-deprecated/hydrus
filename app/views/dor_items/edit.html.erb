@@ -1,41 +1,59 @@
-<div>
-  <span class="edit-browse">
-    <%= edit_and_browse_links %>
-  </span>
+<%# if !session[:scripts] %>
+  <%# render_previous_workflow_steps.html_safe %>
+  <%# render_submission_workflow_step -%>
+<%# else %>
+<%= form_tag(dor_item_path(@document_fedora), :class => "step", :method => 'PUT') do -%>
 
-  <dl class="defList">
+    <div>
+      <span class="edit-browse">
+        <%= edit_and_browse_links %>
+      </span>
 
-    <dt>PID: </dt>
-    <dd><%= @pid %></dd>
+      <dl class="defList">
 
-    <dt>Object type: </dt>
-    <dd><%= @identityMetadata.objectType.inspect %></dd>
+        <dt>PID: </dt>
+        <dd><%= @pid %></dd>
 
-    <dt id="publisher_field" class="fedora-text-area">
-      <%= fedora_field_label("descMetadata", [:originInfo, :publisher], "publisher:") %>
-    </dt>
-    <dd>
-      <%= fedora_text_area( @document_fedora, "descMetadata", [:originInfo, :publisher], 
-                            :multiple=>false, :required=>false) %>
-    </dd>
+        <dt>Object type: </dt>
+        <dd><%= @identityMetadata.objectType.inspect %></dd>
 
-    <dt>Title: </dt>
-    <dd><%= @dcMetadata.title.first %></dd>
+        <dt id="publisher_field" class="fedora-text-area">
+          <%= fedora_field_label("descMetadata", [:originInfo, :publisher], "Publisher:") %>
+        </dt>
+        <dd>
+          <%= fedora_text_area( @document_fedora, "descMetadata", [:originInfo, :publisher], 
+                                :multiple=>false, :required=>false) %>
+        </dd>
 
-    <dt id="abstract_field" class="fedora-text-area">
-      <%= fedora_field_label("descMetadata", [:abstract], "Abstract:") %>
-    </dt>
-    <dd>
-      <%= fedora_text_area( @document_fedora, "descMetadata", [:abstract], 
-                            :multiple=>false, :required=>false) %>
-    </dd>
+        <dt>Title: </dt>
+        <dd><%= @dcMetadata.title.first %></dd>
 
-  </dl>
+        <dt id="abstract_field" class="fedora-text-area">
+          <%= fedora_field_label("descMetadata", [:abstract], "Abstract:") %>
+        </dt>
+        <dd>
+          <%= fedora_text_area( @document_fedora, "descMetadata", [:abstract], 
+                                :multiple=>false, :required=>false) %>
+        </dd>
 
-</div>
+      </dl>
 
-<% render(
-     :partial => "hydra/permissions/index", 
-     :locals  => { :document => @document_fedora, :asset_id => params[:id] }
-   )
-%>
+    </div>
+
+    <% render(
+         :partial => "hydra/permissions/index", 
+         :locals  => { :document => @document_fedora, :asset_id => params[:id] }
+       )
+    %>
+
+    <%# render_all_workflow_steps.html_safe %>
+
+    <div class="all-steps-actions">
+      <button id="all_save_continue" name="all_save_continue">Save and Continue Editing</button>
+      <button id="all_save_finish" name="all_save_finish">Save and Finish</button>
+    </div>
+
+  <% end %>
+
+<%# end %>
+
