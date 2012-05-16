@@ -1,14 +1,21 @@
 module HydraHelper
+
   include Hydra::HydraHelperBehavior
 
   def edit_and_browse_links
     if params[:action] == "edit"
-      result = "<a href=\"#{catalog_path(@pid, :viewing_context=>"browse")}\" class=\"browse toggle\">Switch to browse view</a>"
+      link_to( 
+        "Switch to browse view", 
+        polymorphic_path(@document_fedora, :viewing_context => 'browse'),
+        :class => 'browse toggle'
+      )
     else
-      result = "<a href=\"#{edit_catalog_path(@pid, :viewing_context=>"edit")}\" class=\"edit toggle\">Switch to edit view</a>"
+      link_to( 
+        "Switch to edit view", 
+        edit_polymorphic_path(@document_fedora, :viewing_context => 'edit'),
+        :class => 'edit toggle'
+      )
     end
-    return result.html_safe
   end
 
 end
-

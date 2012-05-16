@@ -30,4 +30,9 @@ class SolrDocument
                          :language => "language_facet",
                          :format => "format"
                          )
+
+  def route_key                         
+    get('has_model_s').split(':').last.downcase
+  end
+
 end
