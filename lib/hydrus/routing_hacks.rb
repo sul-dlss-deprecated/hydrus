@@ -18,7 +18,12 @@ module Hydrus::RoutingHacks
     when SolrDocument
       sdoc_up(prefix, '_path', *args)
     when Hash
-      super
+      url_params = {
+        :controller => 'catalog',
+        :action     => 'show', 
+        :only_path  => suffix == '_path',
+      }
+      url_for(url_params.merge doc)
     else
       send(prefix + 'polymorphic' + suffix, *args)
     end
