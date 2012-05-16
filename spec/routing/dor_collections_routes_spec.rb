@@ -61,6 +61,16 @@ describe "collection routes" do
       )
     end
 
+    it "edit_catalog_path() with SolrDocument" do
+      h = { :has_model_s => @has_model_s, :id => @druid }
+      sdoc = SolrDocument.new h
+      { :get => edit_catalog_path(sdoc) }.should route_to(
+        :controller => "dor_collections",
+        :id         => @druid,
+        :action     => "edit"
+      )
+    end
+
     it "polymorphic_path() with SolrDocument" do
       h = { :has_model_s => @has_model_s, :id => @druid }
       sdoc = SolrDocument.new h
@@ -68,6 +78,16 @@ describe "collection routes" do
         :controller => "dor_collections",
         :id         => @druid,
         :action     => "show"
+      )
+    end
+
+    it "edit_polymorphic_path() with SolrDocument" do
+      h = { :has_model_s => @has_model_s, :id => @druid }
+      sdoc = SolrDocument.new h
+      { :get => edit_polymorphic_path(sdoc) }.should route_to(
+        :controller => "dor_collections",
+        :id         => @druid,
+        :action     => "edit"
       )
     end
 
@@ -83,4 +103,3 @@ describe "collection routes" do
   end
 
 end
-
