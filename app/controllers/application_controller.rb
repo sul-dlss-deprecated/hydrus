@@ -12,11 +12,5 @@ class ApplicationController < ActionController::Base
   # Please be sure to impelement current_user and user_session. Blacklight depends on 
   # these methods in order to perform user specific actions. 
 
-  # def ap_dump(*args)
-  #   header = '=' * 80
-  #   puts header, args.ai, header
-  # end
-  # helper_method :ap_dump
-
   protect_from_forgery
 end

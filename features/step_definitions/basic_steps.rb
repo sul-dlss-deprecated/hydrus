@@ -13,8 +13,6 @@ When /^I am viewing item "([^"]*)"$/ do |object_id|
   visit dor_item_path(object_id)
 end
 
-
-
 When /^I am viewing "([^"]*)"$/ do |object_id|
   visit catalog_path(object_id)
 end

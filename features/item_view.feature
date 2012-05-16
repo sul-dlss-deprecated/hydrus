@@ -1,8 +1,7 @@
 Feature: Item view
   I want the item show page to reflect Hydrus expectations
 
-  @wip
-  Scenario: Item description (mods:abstract) is displayed
+  Scenario: Item description is displayed
 		When I am viewing item "druid:pv309jn3099"
 		Then I should see "STATISTICAL MOMENT EQUATIONS FOR FORWARD"
 		And I should see "pv309jn3099"
