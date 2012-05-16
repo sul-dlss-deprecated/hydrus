@@ -1,4 +1,7 @@
 class ApplicationController < ActionController::Base
+  # Adds a few additional behaviors into the application controller
+  include SulChrome::Controller
+
   include Blacklight::Controller  
   include Hydra::Controller
   include Hydrus::RoutingHacks
@@ -6,7 +9,7 @@ class ApplicationController < ActionController::Base
   helper Hydrus::RoutingHacks
 
   def layout_name
-   'hydra-head'
+   'sul_chrome/application'
   end
 
   # Please be sure to impelement current_user and user_session. Blacklight depends on 
