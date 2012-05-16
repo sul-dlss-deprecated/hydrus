@@ -1,41 +1,59 @@
-<div>
-  <span class="edit-browse">
-    <%= edit_and_browse_links %>
-  </span>
+<%# if !session[:scripts] %>
+  <%# render_previous_workflow_steps.html_safe %>
+  <%# render_submission_workflow_step -%>
+<%# else %>
+<%= form_tag(dor_item_path(@document_fedora), :class => "step", :method => 'PUT') do -%>
 
-  <dl class="defList">
+    <div>
+      <span class="edit-browse">
+        <%= edit_and_browse_links %>
+      </span>
 
-    <dt>PID: </dt>
-    <dd><%= @pid %></dd>
+      <dl class="defList">
 
-    <dt>Object type: </dt>
-    <dd><%= @identityMetadata.objectType.inspect %></dd>
+        <dt>PID: </dt>
+        <dd><%= @pid %></dd>
+
+        <dt>Object type: </dt>
+        <dd><%= @identityMetadata.objectType.inspect %></dd>
 
 
 
 
 
-    
-    
-    
-    
-    <dt>Title: </dt>
-    <dd><%= @dcMetadata.title.first %></dd>
+        
+        
+        
+        
+        <dt>Title: </dt>
+        <dd><%= @dcMetadata.title.first %></dd>
 
-    <dt id="abstract_field" class="fedora-text-area">
-      <%= fedora_field_label("descMetadata", [:abstract], "Abstract:") %>
-    </dt>
-    <dd>
-      <%= fedora_text_area( @document_fedora, "descMetadata", [:abstract], 
-                            :multiple=>false, :required=>false) %>
-    </dd>
+        <dt id="abstract_field" class="fedora-text-area">
+          <%= fedora_field_label("descMetadata", [:abstract], "Abstract:") %>
+        </dt>
+        <dd>
+          <%= fedora_text_area( @document_fedora, "descMetadata", [:abstract], 
+                                :multiple=>false, :required=>false) %>
+        </dd>
 
-  </dl>
+      </dl>
 
-</div>
+    </div>
 
-<% render(
-     :partial => "hydra/permissions/index", 
-     :locals  => { :document => @document_fedora, :asset_id => params[:id] }
-   )
-%>
+    <% render(
+         :partial => "hydra/permissions/index", 
+         :locals  => { :document => @document_fedora, :asset_id => params[:id] }
+       )
+    %>
+
+    <%# render_all_workflow_steps.html_safe %>
+
+    <div class="all-steps-actions">
+      <button id="all_save" name="all_save">Save</button>
+      <button id="all_publish" name="all_publish">Publish</button>
+    </div>
+
+  <% end %>
+
+<%# end %>
+
