@@ -1,20 +1,5 @@
 GIT
-  remote: git://github.com/projecthydra/hydra-head.git
-  revision: e739c7f1a2dd21b02f0ebd4602cf0a2876543aec
-  specs:
-    hydra-head (4.0.1)
-      RedCloth (= 4.2.9)
-      active-fedora (~> 4.0.0)
-      blacklight (~> 3.3.2)
-      block_helpers
-      cancan
-      devise
-      jquery-rails
-      rails (= 3.2.3)
-      sanitize
-
-GIT
-  remote: ssh://corn.stanford.edu/afs/ir/dev/dlss/git/lyberteam/dor-services-gem.git
+  remote: /afs/ir/dev/dlss/git/lyberteam/dor-services-gem.git
   revision: 307b824d5c10b20959c0397bdf53fe07d562e9e1
   branch: hydrus
   specs:
@@ -36,6 +21,21 @@ GIT
       systemu
       uuidtools
       validatable
+
+GIT
+  remote: git://github.com/projecthydra/hydra-head.git
+  revision: e739c7f1a2dd21b02f0ebd4602cf0a2876543aec
+  specs:
+    hydra-head (4.0.1)
+      RedCloth (= 4.2.9)
+      active-fedora (~> 4.0.0)
+      blacklight (~> 3.3.2)
+      block_helpers
+      cancan
+      devise
+      jquery-rails
+      rails (= 3.2.3)
+      sanitize
 
 GEM
   remote: http://rubygems.org/
