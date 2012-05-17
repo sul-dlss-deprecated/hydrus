@@ -322,7 +322,7 @@ GEM
       tilt (~> 1.1, != 1.3.0)
     sqlite3 (1.3.6)
     stomp (1.2.2)
-    sul_chrome (0.0.1.pre2)
+    sul_chrome (0.0.1.pre3)
       compass-rails
       compass_twitter_bootstrap
       rails (>= 3.1.0)
