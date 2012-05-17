@@ -12,6 +12,8 @@ class DorItemsController < ApplicationController
     @descMetadata     = @document_fedora.descMetadata
     @dcMetadata       = @document_fedora.DC
     @identityMetadata = @document_fedora.identityMetadata
+    @apo_pid          = @document_fedora.admin_policy_object_ids.first
+    @apo              = @apo_pid ? ActiveFedora::Base.find(@apo_pid, :cast => true) : nil
   end
 
   def show

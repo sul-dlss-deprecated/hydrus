@@ -2,7 +2,7 @@
   <%# render_previous_workflow_steps.html_safe %>
   <%# render_submission_workflow_step -%>
 <%# else %>
-<%= form_tag(dor_item_path(@document_fedora), :class => "step", :method => 'PUT') do -%>
+<%= form_tag(dor_collection_path(@document_fedora), :class => "step", :method => 'PUT') do -%>
 
     <div>
       <span class="edit-browse">
