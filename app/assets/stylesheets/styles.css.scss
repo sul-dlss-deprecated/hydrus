@@ -1,0 +1,15 @@
+@import "sul_chrome/sul_chrome_mixins";
+/* search form */
+#search {
+	label, h2 {
+		display: inline;
+	}
+	input.submit {@include primary-button}
+}
+
+#main {
+	float: right;
+}
+#sidebar {
+	float: left;
+}
