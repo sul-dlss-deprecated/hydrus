@@ -4,6 +4,9 @@
 	label, h2 {
 		display: inline;
 	}
+	select#search_field {
+		width: auto;
+	}
 	input.submit {@include primary-button}
 }
 
