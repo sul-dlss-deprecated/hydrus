@@ -25,7 +25,8 @@ module Hydrus::RoutingHacks
       }
       url_for(url_params.merge doc)
     when String
-      cat_up(prefix, suffix, (args[1] || {}).merge(:id => doc))
+      h = (args[1] || {}).merge(:id => doc)
+      cat_up(prefix, suffix, h) # Just call cat_up() with a Hash.
     else
       send(prefix + 'polymorphic' + suffix, *args)
     end

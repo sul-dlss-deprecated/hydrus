@@ -53,8 +53,15 @@ describe "collection routes" do
     end
 
     it "catalog_path() with Hash" do
-      h = { :has_model_s => @has_model_s, :id => @druid }
       { :get => catalog_path(:id => @druid) }.should route_to(
+        :controller => "catalog",
+        :id         => @druid,
+        :action     => "show"
+      )
+    end
+
+    it "catalog_path() with Hash" do
+      { :get => catalog_path(@druid) }.should route_to(
         :controller => "catalog",
         :id         => @druid,
         :action     => "show"
