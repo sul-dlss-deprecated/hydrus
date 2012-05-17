@@ -2,7 +2,7 @@
   <%# render_previous_workflow_steps.html_safe %>
   <%# render_submission_workflow_step -%>
 <%# else %>
-<%= form_tag(dor_collection_path(@document_fedora), :class => "step", :method => 'PUT') do -%>
+<%= form_for(@document_fedora, :class => "step", :method => 'PUT') do -%>
 
     <div>
       <span class="edit-browse">
@@ -12,10 +12,10 @@
       <dl class="defList">
 
         <dt>PID: </dt>
-        <dd><%= @pid %></dd>
+        <dd><%= @document_fedora.pid %></dd>
 
         <dt>Object type: </dt>
-        <dd><%= @identityMetadata.objectType.inspect %></dd>
+        <dd><%= @document_fedora.identityMetadata.objectType.inspect %></dd>
 
 
 
@@ -26,7 +26,7 @@
         
         
         <dt>Title: </dt>
-        <dd><%= @dcMetadata.title.first %></dd>
+        <dd><%= @document_fedora.DC.title.first %></dd>
 
         <dt id="abstract_field" class="fedora-text-area">
           <%= fedora_field_label("descMetadata", [:abstract], "Abstract:") %>

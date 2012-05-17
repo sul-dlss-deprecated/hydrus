@@ -63,7 +63,7 @@ Hydrus::Application.routes.draw do
   # Note: This route will make all actions in every controller accessible via GET requests.
   # match ':controller(/:action(/:id))(.:format)'
 
-  resources :collections, :controller => 'dor_collections', :as => 'dor_collections'
-  resources :items,       :controller => 'dor_items', :as => 'dor_items'
+  resources :collections, :controller => 'hydrus_collections', :as => 'hydrus_collections'
+  resources :items,       :controller => 'hydrus_items', :as => 'hydrus_items'
 
 end

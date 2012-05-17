@@ -6,7 +6,7 @@ describe "collection routes" do
     druid = 'druid:sw909tc7852'
     h = { :get => "/collections/#{druid}" }
     h.should route_to(
-        :controller => "dor_collections",
+        :controller => "hydrus_collections",
         :id         => druid,
         :action     => "show"
     )
@@ -16,7 +16,7 @@ describe "collection routes" do
     druid = 'druid:sw909tc7852'
     h = { :get => "/collections/#{druid}/edit" }
     h.should route_to(
-        :controller => "dor_collections",
+        :controller => "hydrus_collections",
         :id         => druid,
         :action     => "edit"
     )
@@ -36,24 +36,24 @@ describe "named route hacks" do
 
   it "should be able to exercise all of the routing hacks" do
     sdoc    = SolrDocument.new(:has_model_s => @has_model_s, :id => @druid)
-    mock_dc = mock_model('DorCollection', :id => @druid)
+    mock_dc = mock_model('HydrusCollection', :id => @druid)
     h       = { :id => @druid }
     tests   = [
-      [ 'catalog',          sdoc,     'dor_collections', 'show' ],
-      [ 'catalog',          h,        'catalog',         'show' ],
-      [ 'catalog',          @druid,   'catalog',         'show' ],
-      [ 'catalog',          mock_dc,  'dor_collections', 'show' ],
+      [ 'catalog',          sdoc,     'hydrus_collections', 'show' ],
+      [ 'catalog',          h,        'catalog',            'show' ],
+      [ 'catalog',          @druid,   'catalog',            'show' ],
+      [ 'catalog',          mock_dc,  'hydrus_collections', 'show' ],
 
-      [ 'solr_document',    h,        'catalog',         'show' ],
-      [ 'solr_document',    sdoc,     'dor_collections', 'show' ],
+      [ 'solr_document',    h,        'catalog',            'show' ],
+      [ 'solr_document',    sdoc,     'hydrus_collections', 'show' ],
 
-      [ 'edit_catalog',     sdoc,     'dor_collections', 'edit' ],
-      [ 'edit_catalog',     h,        'catalog',         'edit' ],
-      [ 'edit_catalog',     @druid,   'catalog',         'edit' ],
-      [ 'edit_catalog',     mock_dc,  'dor_collections', 'edit' ],
+      [ 'edit_catalog',     sdoc,     'hydrus_collections', 'edit' ],
+      [ 'edit_catalog',     h,        'catalog',            'edit' ],
+      [ 'edit_catalog',     @druid,   'catalog',            'edit' ],
+      [ 'edit_catalog',     mock_dc,  'hydrus_collections', 'edit' ],
 
-      [ 'polymorphic',      sdoc,     'dor_collections', 'show' ],
-      [ 'edit_polymorphic', sdoc,     'dor_collections', 'edit' ],
+      [ 'polymorphic',      sdoc,     'hydrus_collections', 'show' ],
+      [ 'edit_polymorphic', sdoc,     'hydrus_collections', 'edit' ],
     ]
     tests.each do |meth, arg, exp_controller, exp_action|
       %w(_path _url).each do |meth_suffix|

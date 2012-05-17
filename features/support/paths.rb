@@ -17,10 +17,10 @@ module NavigationHelpers
       catalog_index_path
       
     when /the collection page "([^"]+)"/ 
-      dor_collection_path($1)
+      hydrus_collection_path($1)
       
     when /the item page "([^"]+)"/ 
-      dor_item_path($1)
+      hydrus_item_path($1)
       
     # Add more mappings here.
     # Here is an example that pulls values out of the Regexp:

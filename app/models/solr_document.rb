@@ -32,7 +32,7 @@ class SolrDocument
                          )
 
   def route_key
-    get('has_model_s').split(':').last.downcase
+    get('has_model_s').split(':').last.downcase.sub(/^dor_/, 'hydrus_')
   end
 
 end
