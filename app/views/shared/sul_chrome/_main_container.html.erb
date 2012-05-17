@@ -1,2 +1,4 @@
-<div><%= yield %></div>
-<div id="sidebar"><%= sidebar_items.join('').html_safe %></div>	
+<div class="row">
+  <div class="span9" id="main"><%= yield %></div>
+  <div class="span3" id="sidebar"><%= sidebar_items.join('').html_safe %></div>	
+</div>
