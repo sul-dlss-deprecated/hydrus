@@ -22,98 +22,60 @@ describe "collection routes" do
     )
   end
 
-  describe "named route hacks" do
-    
-    include Hydrus::RoutingHacks
-    include ActionDispatch::Routing::PolymorphicRoutes
+end
 
-    before (:each) do
-      @has_model_s = 'info:fedora/afmodel:Dor_Collection'
-      @druid       = 'druid:sw909tc7852'
+describe "named route hacks" do
+  
+  include Hydrus::RoutingHacks
+  include ActionDispatch::Routing::PolymorphicRoutes
+
+  before (:each) do
+    @has_model_s = 'info:fedora/afmodel:Dor_Collection'
+    @druid       = 'druid:sw909tc7852'
+  end
+
+  it "should be able to exercise all of the routing hacks" do
+    sdoc    = SolrDocument.new(:has_model_s => @has_model_s, :id => @druid)
+    mock_dc = mock_model('DorCollection', :id => @druid)
+    h       = { :id => @druid }
+    tests   = [
+      [ 'catalog',          sdoc,     'dor_collections', 'show' ],
+      [ 'catalog',          h,        'catalog',         'show' ],
+      [ 'catalog',          @druid,   'catalog',         'show' ],
+      [ 'catalog',          mock_dc,  'dor_collections', 'show' ],
+
+      [ 'solr_document',    h,        'catalog',         'show' ],
+      [ 'solr_document',    sdoc,     'dor_collections', 'show' ],
+
+      [ 'edit_catalog',     sdoc,     'dor_collections', 'edit' ],
+      [ 'edit_catalog',     h,        'catalog',         'edit' ],
+      [ 'edit_catalog',     @druid,   'catalog',         'edit' ],
+      [ 'edit_catalog',     mock_dc,  'dor_collections', 'edit' ],
+
+      [ 'polymorphic',      sdoc,     'dor_collections', 'show' ],
+      [ 'edit_polymorphic', sdoc,     'dor_collections', 'edit' ],
+    ]
+    tests.each do |meth, arg, exp_controller, exp_action|
+      %w(_path _url).each do |meth_suffix|
+        arg = arg.merge({:host => 'localhost'}) if(
+          meth_suffix == '_url' and 
+          arg.class == Hash
+        )
+        route_hash = { :get => send(meth + meth_suffix, arg, :host => 'localhost') }
+        route_hash.should route_to(
+          :controller => exp_controller,
+          :action     => exp_action,
+          :id         => @druid
+        )
+      end
     end
+  end
 
-    it "catalog_path() with SolrDocument" do
-      h = { :has_model_s => @has_model_s, :id => @druid }
-      sdoc = SolrDocument.new h
-      { :get => catalog_path(sdoc) }.should route_to(
-        :controller => "dor_collections",
-        :id         => @druid,
-        :action     => "show"
-      )
-    end
-
-    it "catalog_path() with DorCollection" do
-      h = { :has_model_s => @has_model_s, :id => @druid }
-      dorc = mock_model('DorCollection', :id => @druid)
-      { :get => catalog_path(dorc) }.should route_to(
-        :controller => "dor_collections",
-        :id         => @druid,
-        :action     => "show"
-      )
-    end
-
-    it "catalog_path() with Hash" do
-      { :get => catalog_path(:id => @druid) }.should route_to(
-        :controller => "catalog",
-        :id         => @druid,
-        :action     => "show"
-      )
-    end
-
-    it "catalog_path() with Hash" do
-      { :get => catalog_path(@druid) }.should route_to(
-        :controller => "catalog",
-        :id         => @druid,
-        :action     => "show"
-      )
-    end
-
-    it "edit_catalog_path() with SolrDocument" do
-      h = { :has_model_s => @has_model_s, :id => @druid }
-      sdoc = SolrDocument.new h
-      { :get => edit_catalog_path(sdoc) }.should route_to(
-        :controller => "dor_collections",
-        :id         => @druid,
-        :action     => "edit"
-      )
-    end
-
-    it "polymorphic_path() with SolrDocument" do
-      h = { :has_model_s => @has_model_s, :id => @druid }
-      sdoc = SolrDocument.new h
-      { :get => polymorphic_path(sdoc) }.should route_to(
-        :controller => "dor_collections",
-        :id         => @druid,
-        :action     => "show"
-      )
-    end
-
-    it "edit_polymorphic_path() with SolrDocument" do
-      h = { :has_model_s => @has_model_s, :id => @druid }
-      sdoc = SolrDocument.new h
-      { :get => edit_polymorphic_path(sdoc) }.should route_to(
-        :controller => "dor_collections",
-        :id         => @druid,
-        :action     => "edit"
-      )
-    end
-
-    it "solr_document_path() with Hash" do
-      h = { :has_model_s => @has_model_s, :id => @druid }
-      { :get => solr_document_path(:id => @druid) }.should route_to(
-        :controller => "catalog",
-        :id         => @druid,
-        :action     => "show"
-      )
-    end
-
-    # Not sure if this is the desired behavior, but it is the current implementation.
-    it "catalog_path() with a SolrDocument lacking a model should raise" do
-      h = { :id => @druid }
-      sdoc = SolrDocument.new h
-      expect { catalog_path(sdoc) }.to raise_error
-    end
-
+  # Not sure if this is the desired behavior, but it is the current implementation.
+  it "catalog_path() with a SolrDocument lacking a model should raise" do
+    h = { :id => @druid }
+    sdoc = SolrDocument.new h
+    expect { catalog_path(sdoc) }.to raise_error
   end
 
 end

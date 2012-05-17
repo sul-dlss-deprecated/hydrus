@@ -2,25 +2,48 @@
 
 module Hydrus::RoutingHacks
 
-  def catalog_path           (*args);  cat_up('',       '_path', *args)  end
-  def catalog_url            (*args);  cat_up('',       '_url',  *args)  end
-  def edit_catalog_path      (*args);  cat_up('edit_',  '_path', *args)  end
-  def edit_catalog_url       (*args);  cat_up('edit_',  '_url',  *args)  end
-  def solr_document_path     (*args);  sdoc_up('',      '_path', *args)  end
-  def solr_document_url      (*args);  sdoc_up('',      '_url',  *args)  end
-  def edit_solr_document_path(*args);  sdoc_up('edit_', '_path', *args)  end
-  def edit_solr_document_url (*args);  sdoc_up('edit_', '_url',  *args)  end
+  def catalog_path(*args)
+    cat_up('', '_path', *args)
+  end
+
+  def catalog_url(*args)
+    cat_up('', '_url', *args)
+  end
+
+  def edit_catalog_path(*args)
+    cat_up('edit_', '_path', *args)
+  end
+
+  def edit_catalog_url(*args)
+    cat_up('edit_', '_url', *args)
+  end
+
+  def solr_document_path(*args)
+    sdoc_up('', '_path', *args)
+  end
+
+  def solr_document_url(*args)
+    sdoc_up('', '_url', *args)
+  end
+
+  def edit_solr_document_path(*args)
+    sdoc_up('edit_', '_path', *args)
+  end
+
+  def edit_solr_document_url(*args)
+    sdoc_up('edit_', '_url', *args)
+  end
 
   def cat_up(prefix, suffix, *args)
     # The catalog _url or _path.
     doc = args.first
     case doc
     when SolrDocument
-      sdoc_up(prefix, '_path', *args)
+      sdoc_up(prefix, suffix, *args)
     when Hash
       url_params = {
         :controller => 'catalog',
-        :action     => 'show', 
+        :action     => (prefix == 'edit_' ? 'edit' : 'show'), 
         :only_path  => suffix == '_path',
       }
       url_for(url_params.merge doc)
@@ -37,7 +60,7 @@ module Hydrus::RoutingHacks
     doc = args.first
     url_params = {
       :controller => 'catalog',
-      :action     => 'show', 
+      :action     => (prefix == 'edit_' ? 'edit' : 'show'), 
       :only_path  => suffix == '_path',
     }
     case doc
