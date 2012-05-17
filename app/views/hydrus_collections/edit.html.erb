@@ -5,9 +5,7 @@
 <%= form_for(@document_fedora, :class => "step", :method => 'PUT') do -%>
 
     <div>
-      <span class="edit-browse">
-        <%= edit_and_browse_links %>
-      </span>
+			<%=render :partial=>'shared/navigation' %>
 
       <dl class="defList">
 

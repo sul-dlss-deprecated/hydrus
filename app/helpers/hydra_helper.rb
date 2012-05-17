@@ -2,6 +2,10 @@ module HydraHelper
 
   include Hydra::HydraHelperBehavior
 
+  def home_link
+    link_to("Home",root_url)
+  end
+  
   def edit_and_browse_links
     if params[:action] == "edit"
       link_to("Switch to browse view", 
