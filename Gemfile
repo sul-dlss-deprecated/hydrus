@@ -15,6 +15,10 @@ gem 'blacklight', '~> 3.3.1'
 gem 'hydra-head', '~> 4.0.1', :git => 'http://github.com/projecthydra/hydra-head.git'
 gem 'devise'
 
+gem 'sul_chrome'
+gem 'compass_twitter_bootstrap', :group => :assets 
+
+
 group :test do 
   gem "cucumber-rails", :require => false
   gem 'database_cleaner', :require => false

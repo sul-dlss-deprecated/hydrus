@@ -19,6 +19,9 @@
 // Required by Blacklight
 //= require jquery-ui
 //= require blacklight/blacklight
+// Required by SULChrome:
+//= require sul_chrome/sul_chrome_base
+//= require bootstrap-all
 //= require_tree .
 
 
