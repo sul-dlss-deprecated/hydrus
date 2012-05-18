@@ -1,5 +1,9 @@
 namespace :hydrus do
-  FIXTURE_PIDS = ["druid:ww057vk7675", "druid:sw909tc7852", "druid:oo000oo0001"]
+  FIXTURE_PIDS = [
+    "druid:oo000oo0001", # Item
+    "druid:oo000oo0002", # APO
+    "druid:oo000oo0003", # Collection
+  ]
   
   desc "load hydrus fixtures"
   task :loadfix do

@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<foxml:digitalObject VERSION="1.1" PID="druid:oo000oo0003"
+  xmlns:foxml="info:fedora/fedora-system:def/foxml#"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/definitions/1/0/foxml1-1.xsd">
+
+  <foxml:objectProperties>
+    <foxml:property NAME="info:fedora/fedora-system:def/model#state"
+      VALUE="Active"/>
+    <foxml:property NAME="info:fedora/fedora-system:def/model#label"
+      VALUE="SSDS Social Science Data Collection"/>
+    <foxml:property NAME="info:fedora/fedora-system:def/model#ownerId"
+      VALUE="DOR"/>
+    <foxml:property NAME="info:fedora/fedora-system:def/model#createdDate"
+      VALUE="2011-07-05T17:12:18.757Z"/>
+    <foxml:property NAME="info:fedora/fedora-system:def/view#lastModifiedDate"
+      VALUE="2011-07-25T20:32:10.617Z"/>
+  </foxml:objectProperties>
+
+  <foxml:datastream ID="RELS-EXT" STATE="A" CONTROL_GROUP="X"
+    VERSIONABLE="false">
+    <foxml:datastreamVersion ID="RELS-EXT.0"
+      LABEL="RDF Statements about this object"
+      CREATED="2011-07-25T20:32:10.617Z" MIMETYPE="application/rdf+xml"
+      FORMAT_URI="info:fedora/fedora-system:FedoraRELSExt-1.0" SIZE="424">
+      <foxml:xmlContent>
+        <rdf:RDF
+          xmlns:fedora="info:fedora/fedora-system:def/relations-external#"
+          xmlns:hydra="http://projecthydra.org/ns/relations#"
+          xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+          <rdf:Description rdf:about="info:fedora/druid:oo000oo0003">
+            <hydra:isGovernedBy rdf:resource="info:fedora/druid:oo000oo0002"/>
+            <hasModel xmlns="info:fedora/fedora-system:def/model#"
+              rdf:resource="info:fedora/afmodel:Hydrus_Collection"/>
+          </rdf:Description>
+        </rdf:RDF>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+
+  <foxml:datastream ID="identityMetadata" STATE="A" CONTROL_GROUP="X"
+    VERSIONABLE="false">
+    <foxml:datastreamVersion ID="identityMetadata.0" LABEL="Identity Metadata"
+      CREATED="2011-07-05T20:49:25.801Z" MIMETYPE="text/xml" SIZE="345">
+      <foxml:xmlContent>
+        <identityMetadata>
+          <objectId>druid:oo000oo0003</objectId>
+          <objectType>collection</objectType>
+          <objectLabel>SSDS Social Science Data Collection</objectLabel>
+          <objectCreator>DOR</objectCreator>
+          <otherId name="uuid">d96e19f2-9ff1-11e1-86c5-02231e89cef0</otherId>
+          <tag>Project : DOR</tag>
+        </identityMetadata>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+
+  <foxml:datastream ID="DC" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
+    <foxml:datastreamVersion ID="DC.0"
+      LABEL="Dublin Core Record for this object"
+      CREATED="2011-07-05T20:50:11.624Z" MIMETYPE="text/xml"
+      FORMAT_URI="http://www.openarchives.org/OAI/2.0/oai_dc/" SIZE="459">
+      <foxml:xmlContent>
+        <oai_dc:dc xmlns:dc="http://purl.org/dc/elements/1.1/"
+          xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:title>SSDS Social Science Data Collection</dc:title>
+          <dc:identifier>druid:oo000oo0003</dc:identifier>
+        </oai_dc:dc>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+
+  <foxml:datastream ID="descMetadata" STATE="A" CONTROL_GROUP="X"
+    VERSIONABLE="false">
+    <foxml:datastreamVersion ID="descMetadata.0" LABEL="Descriptive Metadata"
+      CREATED="2011-07-05T20:50:24.156Z" MIMETYPE="text/xml" SIZE="377">
+      <foxml:xmlContent>
+        <mods xmlns:mods="http://www.loc.gov/mods/v3"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.3"
+          xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-3.xsd">
+          <titleInfo>
+            <title>SSDS Social Science Data Collection</title>
+          </titleInfo>
+          <typeOfResource collection="yes"/>
+          <abstract>Stanford University Libraries and Academic Information
+            Resources (SULAIR) works with Stanford researchers to archive and
+            redistribute social science research data created by the Stanford
+            community via the Social Science Data and Software (SSDS) Data
+            Collection. A unit within the Library's Digital Initiatives Group
+            (DIG), SSDS provides resources and consulting for research and
+            instruction in the social sciences. </abstract>
+          <relatedItem>
+            <location>
+              <url>http://data.stanford.edu/</url>
+            </location>
+          </relatedItem>
+          <accessCondition displayLabel="Terms of Use" type="useAndReproduction"
+            >Data cannot be used to identify individuals. Data cannot be
+            redistributed for a fee. Please inform the collection contact by
+            email about research or other work derived from use of this data,
+            and please use the preferred citation as provided.
+          </accessCondition>
+        </mods>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+
+  <foxml:datastream ID="rightsMetadata" STATE="A" CONTROL_GROUP="X"
+    VERSIONABLE="false">
+    <foxml:datastreamVersion ID="rightsMetadata.0" LABEL="Rights Metadata"
+      CREATED="2011-07-05T20:46:24.337Z" MIMETYPE="text/xml" SIZE="293">
+      <foxml:xmlContent>
+        <rightsMetadata
+          xmlns="http://hydra-collab.stanford.edu/schemas/rightsMetadata/v1"
+          version="0.1" objectId="druid:oo000oo0003">
+          <access type="discover">
+            <machine>
+              <group>public</group>
+            </machine>
+          </access>
+          <access type="read">
+            <machine>
+              <group>public</group>
+            </machine>
+          </access>
+          <access type="edit">
+            <machine>
+              <group>public</group>
+            </machine>
+          </access>
+        </rightsMetadata>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+
+  <foxml:datastream ID="workflows" STATE="A" CONTROL_GROUP="E"
+    VERSIONABLE="false">
+    <foxml:datastreamVersion ID="workflows.0" LABEL="Workflows"
+      CREATED="2012-04-11T18:09:43.955Z" MIMETYPE="application/xml">
+      <foxml:contentLocation TYPE="URL"
+        REF="https://lyberservices-dev.stanford.edu/workflow/dor/objects/druid:oo000oo0003/workflows"
+      />
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+
+</foxml:digitalObject>

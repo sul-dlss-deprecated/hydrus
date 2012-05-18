@@ -5,7 +5,7 @@ describe HydrusCollectionsController do
   describe "show action" do
 
     before(:each) do
-      @pid = 'druid:sw909tc7852'
+      @pid = 'druid:oo000oo0003'
     end
 
     it "should get fedora document and assign various attributes", :integration => true do

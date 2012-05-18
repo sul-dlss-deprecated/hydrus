@@ -2,22 +2,24 @@ require 'spec_helper'
 
 describe "collection routes" do
   
+  before (:each) do
+    @druid = 'druid:oo000oo0003'
+  end
+
   it "show page should route correctly" do
-    druid = 'druid:sw909tc7852'
-    h = { :get => "/collections/#{druid}" }
+    h = { :get => "/collections/#{@druid}" }
     h.should route_to(
         :controller => "hydrus_collections",
-        :id         => druid,
+        :id         => @druid,
         :action     => "show"
     )
   end
 
   it "edit page should route correctly" do
-    druid = 'druid:sw909tc7852'
-    h = { :get => "/collections/#{druid}/edit" }
+    h = { :get => "/collections/#{@druid}/edit" }
     h.should route_to(
         :controller => "hydrus_collections",
-        :id         => druid,
+        :id         => @druid,
         :action     => "edit"
     )
   end
@@ -31,7 +33,7 @@ describe "named route hacks" do
 
   before (:each) do
     @has_model_s = 'info:fedora/afmodel:Dor_Collection'
-    @druid       = 'druid:sw909tc7852'
+    @druid       = 'druid:oo000oo0003'
   end
 
   it "should be able to exercise all of the routing hacks" do
