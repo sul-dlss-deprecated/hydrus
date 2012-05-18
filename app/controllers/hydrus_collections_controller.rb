@@ -12,7 +12,6 @@ class HydrusCollectionsController < ApplicationController
   end
 
   def show
-    Hydrus.ap_dump @document_fedora.descMetadata
   end
 
   def edit
