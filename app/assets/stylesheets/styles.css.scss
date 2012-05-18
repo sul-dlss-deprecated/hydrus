@@ -1,4 +1,23 @@
 @import "sul_chrome/sul_chrome_mixins";
+/* forms */
+.section-header {
+	margin-bottom: 5px;
+}
+.section-header .required {
+	@media (max-width: 767px) {
+		text-align: right;
+	}
+}
+.form-label {
+	text-align: right;
+	@media (max-width: 767px) {
+		text-align: left;
+	}
+}
+form.step textarea {
+	width: 95%;
+}
+
 /* search form */
 #search {
 	label, h2 {
@@ -16,3 +35,4 @@
 #sidebar {
 	float: left;
 }
+
