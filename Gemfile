@@ -11,7 +11,7 @@ end
 
 gem 'dor-services', ">= 3.5.1", :git => ssh_or_afs_gitpath('/afs/ir/dev/dlss/git/lyberteam/dor-services-gem.git'), :branch => 'hydrus'
 
-gem 'blacklight', '~> 3.3.1'
+gem 'blacklight', '~>3.4.2' 
 gem 'hydra-head', '~> 4.0.1', :git => 'http://github.com/projecthydra/hydra-head.git'
 gem 'devise'
 
