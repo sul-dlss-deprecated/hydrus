@@ -1,8 +1,8 @@
 development:
   user: fedoraAdmin
   password: fedoraAdmin
-  url: http://dor-dev.stanford.edu/fedora
-  # url: http://127.0.0.1:8983/fedora
+  # url: http://dor-dev.stanford.edu/fedora
+  url: http://127.0.0.1:8983/fedora
 test: &TEST  
   user: fedoraAdmin
   password: fedoraAdmin

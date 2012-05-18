@@ -1,10 +1,16 @@
 namespace :hydrus do
   FIXTURE_PIDS = [
-    "druid:oo000oo0001", # Item
-    "druid:oo000oo0002", # APO
-    "druid:oo000oo0003", # Collection
+    'druid:oo000oo0001', # Item
+    'druid:oo000oo0002', # APO
+    'druid:oo000oo0003', # Collection
+
+    # OLD fixtures.
+    # 'druid:pv309jn3099',
+    # 'druid:sw909tc7852',
+    # 'druid:ww057vk7675',
   ]
-  
+
+
   desc "load hydrus fixtures"
   task :loadfix do
     FIXTURE_PIDS.each { |pid|  
