@@ -17,50 +17,38 @@
 </div>
 
 <%= form_for(@document_fedora, :method => 'PUT', :html => {:class=>"step"}) do -%>
-  <div class="row section-header">
-    <div class="span8">
-      <h3>Title</h3>
-    </div>
-    <div class="span1">
-      <div class="required">required</div>
-    </div>
-  </div>
+
+  <%= hydrus_form_header(:required=>true) {"Title"} %>
   <div class="row">
-    <div class="span2 form-label">
-      <%= fedora_field_label("DC", [:title], "Title of #{@document_fedora.identityMetadata.objectType.first}") %>
-    </div>
-    <div class="span7 short-textarea">
-      <%= fedora_text_area( @document_fedora, "DC", [:title], :multiple=>false, :required=>true) %>
-    </div>
+    <%= hydrus_form_label do %>
+      <%- fedora_field_label("DC", [:title], "Title of #{@document_fedora.identityMetadata.objectType.first}") -%>
+    <%- end -%>
+    <%= hydrus_form_value(:class=>"short-textarea") do %>
+      <%- fedora_text_area( @document_fedora, "DC", [:title], :multiple=>false, :required=>true) -%>
+    <%- end -%>
   </div>
 
-  <div class="row section-header">
-    <div class="span9">
-      <h3>Abstract and keywords</h3>
-    </div>
-  </div>
-  <div class="row form-horizontal">
-    <div class="span2 form-label">
-      <%= fedora_field_label("descMetadata", [:abstract], "Abstract") %>
-    </div>
-    <div class="span7">
-      <%= fedora_text_area( @document_fedora, "descMetadata", [:abstract], :multiple=>false, :required=>false) %>
-    </div>
+
+  <%= hydrus_form_header {"Abstract and keywords"} -%>
+  <div class="row">
+    <%= hydrus_form_label do %>
+      <%- fedora_field_label("descMetadata", [:abstract], "Abstract") -%>
+    <%- end -%>
+    <%= hydrus_form_value do  -%>
+      <%- fedora_text_area( @document_fedora, "descMetadata", [:abstract], :multiple=>false, :required=>false) -%>
+    <%- end -%>
   </div>
 
-  <div class="row section-header">
-    <div class="span9">
-      <h3>Citation</h3>
-    </div>
-  </div>
+  <%= hydrus_form_header {"Citation"} -%>
   <div class="row">
-    <div class="span2 form-label">
-      <%= fedora_field_label("descMetadata", [:originInfo, :publisher], "Publisher") %>
-    </div>
-    <div class="span7">
-        <%= fedora_text_field( @document_fedora, "descMetadata", [:originInfo, :publisher], :multiple=>false, :required=>false) %>
-    </div>
+    <%= hydrus_form_label do %>
+      <%- fedora_field_label("descMetadata", [:originInfo, :publisher], "Publisher") -%>
+    <%- end -%>
+    <%= hydrus_form_value do  -%>
+      <%- fedora_text_field( @document_fedora, "descMetadata", [:originInfo, :publisher], :multiple=>false, :required=>false) %>
+    <%- end -%>
   </div>
+
   
   <% render(
        :partial => "hydra/permissions/index", 
