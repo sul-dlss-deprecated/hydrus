@@ -4,6 +4,9 @@
 	margin-bottom: 5px;
 }
 .section-header .required {
+	color: #990000;
+}
+.section-header .required {
 	@media (max-width: 767px) {
 		text-align: right;
 	}
@@ -14,7 +17,12 @@
 		text-align: left;
 	}
 }
-form.step textarea {
+
+.short-textarea textarea {
+	height: 60px;
+}
+
+form.step textarea, form.step input[type=text] {
 	width: 95%;
 }
 
@@ -34,5 +42,11 @@ form.step textarea {
 }
 #sidebar {
 	float: left;
+}
+/* This seems to help fix an issue w/ floats once we stack all columns on-top of each other */
+#main, #sidebar {
+	@media (max-width: 767px) {
+	  float: none;	
+	}
 }
 
