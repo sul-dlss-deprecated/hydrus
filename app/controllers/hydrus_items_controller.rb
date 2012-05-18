@@ -8,7 +8,7 @@ class HydrusItemsController < ApplicationController
   before_filter :setup_attributes
 
   def setup_attributes
-    @document_fedora  = Hydrus::Item.find(params[:id])
+    @document_fedora = Hydrus::Item.find(params[:id])
   end
 
   def show

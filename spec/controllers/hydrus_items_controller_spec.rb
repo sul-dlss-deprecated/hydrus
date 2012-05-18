@@ -18,7 +18,7 @@ describe HydrusItemsController do
   # SHOW ACTION.
   describe "show action" do
 
-    pid = 'druid:pv309jn3099'
+    pid = 'druid:oo000oo0001'
 
     it "should get fedora document and assign various attributes", :integration => true do
       get :show, :id => pid

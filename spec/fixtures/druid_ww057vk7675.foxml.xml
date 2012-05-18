@@ -163,7 +163,7 @@
     <foxml:datastreamVersion ID="defaultObjectRights.0" LABEL="Default Object Rights"
       CREATED="2012-03-01T00:31:10.134Z" MIMETYPE="text/xml" SIZE="723">
       <foxml:xmlContent>
-        <rightsMetadata xmlns="http://hydra-collab.stanford.edu/schemas/rightsMetadata/v1" version="0.1">
+        <rightsMetadata xmlns="http://hydra-collab.stanford.edu/schemas/rightsMetadata/v1" version="0.1" objectId="druid:ww057vk7675">
           <access type="discover">
             <machine>
               <group>public</group>
