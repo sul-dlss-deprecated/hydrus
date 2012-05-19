@@ -1,3 +1,5 @@
+<% dmd = @document_fedora.descMetadata %>
+
 <div>
 
   <span class="edit-browse">
@@ -25,4 +27,44 @@
     <dd><%= @document_fedora.apo.pid %></dd>
 
   </dl>
+
+
+  <!-- New stuff -->
+  <dl class="defList">
+
+    <dt>PURL: </dt>
+    <dd>
+      <%=
+        url = "http://purl.stanford.edu/#{@document_fedora.pid}"
+        link_to(url, url)
+      %>
+    </dd>
+
+    <dt>Publisher: </dt>
+    <dd><%= dmd.originInfo.publisher.first %></dd>
+
+    <% dmd.name.namePart.each do |np| %>
+
+      <dt>namePart</dt>
+      <dd><%= np.inspect %></dd>
+
+    <% end %>
+
+    <dt>Object type: </dt>
+    <dd><%= @document_fedora.identityMetadata.objectType.inspect %></dd>
+
+    <dt>Publisher: </dt>
+    <dd><%= dmd.originInfo.publisher.first %></dd>
+
+    <dt>Title: </dt>
+    <dd><%= dmd.title.first %></dd>
+
+    <dt>Abstract: </dt>
+    <dd><%= dmd.abstract.first %></dd>
+
+    <dt>APO PID: </dt>
+    <dd><%= @document_fedora.apo.pid %></dd>
+
+  </dl>
+
 </div>
