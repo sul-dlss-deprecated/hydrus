@@ -6,9 +6,9 @@ def dor_services_gem_params
   if ENV['USE_LOCAL_DOR_SERVICES']
     return { :path => ENV['USE_LOCAL_DOR_SERVICES'] }
   elsif ENV['USE_SSH_OVER_OPENAFS_PATH']
-    return { :branch => 'hydrus', :git => "ssh://corn.stanford.edu#{p}" }
+    return { :git => "ssh://corn.stanford.edu#{p}", :branch => 'hydrus' }
   else
-    return { :branch => 'hydrus', :git => p }
+    return { :git => p, :branch => 'hydrus' }
   end
 end
 
