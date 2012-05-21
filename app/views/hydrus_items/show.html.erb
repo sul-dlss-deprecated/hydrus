@@ -1,4 +1,7 @@
-<% dmd = @document_fedora.descMetadata %>
+<% 
+  dmd = @document_fedora.descMetadata
+  cmd = @document_fedora.contentMetadata
+%>
 
 <div>
 
@@ -8,29 +11,7 @@
 
   <dl class="defList">
 
-    <dt>PID: </dt>
-    <dd><%= @document_fedora.pid %></dd>
-
-    <dt>Object type: </dt>
-    <dd><%= @document_fedora.identityMetadata.objectType.inspect %></dd>
-
-    <dt>Publisher: </dt>
-    <dd><%= @document_fedora.descMetadata.originInfo.publisher.first %></dd>
-
-    <dt>Title: </dt>
-    <dd><%= @document_fedora.DC.title.first %></dd>
-
-    <dt>Abstract: </dt>
-    <dd><%= @document_fedora.descMetadata.abstract.first %></dd>
-
-    <dt>APO PID: </dt>
-    <dd><%= @document_fedora.apo.pid %></dd>
-
-  </dl>
-
-
-  <!-- New stuff -->
-  <dl class="defList">
+    <h3><%= dmd.title.first %></h3>
 
     <dt>PURL: </dt>
     <dd>
@@ -40,30 +21,49 @@
       %>
     </dd>
 
-    <dt>Publisher: </dt>
-    <dd><%= dmd.originInfo.publisher.first %></dd>
-
-    <% dmd.name.namePart.each do |np| %>
-
-      <dt>namePart</dt>
-      <dd><%= np.inspect %></dd>
-
+    <% dmd.name.namePart.zip(dmd.name.role.roleTerm).each do |np, rt| %>
+      <dt><%= rt %></dt>
+      <dd><%= np %></dd>
     <% end %>
-
-    <dt>Object type: </dt>
-    <dd><%= @document_fedora.identityMetadata.objectType.inspect %></dd>
-
-    <dt>Publisher: </dt>
-    <dd><%= dmd.originInfo.publisher.first %></dd>
-
-    <dt>Title: </dt>
-    <dd><%= dmd.title.first %></dd>
 
     <dt>Abstract: </dt>
     <dd><%= dmd.abstract.first %></dd>
 
-    <dt>APO PID: </dt>
-    <dd><%= @document_fedora.apo.pid %></dd>
+    <dt>Keywords: </dt>
+    <dd><font color=red>#TODO: spec is unclear</font></dd>
+
+    <dt>Cite this item as: </dt>
+    <dd><font color=red>#TODO: spec is unclear</font></dd>
+
+    <dt>Cite related work as: </dt>
+    <dd><font color=red>#TODO: spec is unclear</font></dd>
+
+    <dt>Publisher: </dt>
+    <dd><%= dmd.originInfo.publisher.first %></dd>
+
+    <dt>Publication date: </dt>
+    <dd><%= dmd.originInfo.dateIssued.first %></dd>
+
+    <dt>Peer-reviewed: </dt>
+    <dd><font color=red>#TODO: spec is unclear</font></dd>
+
+    <% dmd.relatedItem.titleInfo.title.zip(dmd.relatedItem.identifier).each do |ti, uri| %>
+      <dt>Related content: </dt>
+      <dd><%= link_to(ti, uri) %></dd>
+    <% end %>
+
+    <dt>Files: </dt>
+    <% 
+      resources = @document_fedora.contentMetadata.ng_xml.css 'resource'
+      resources.each do |resource|
+        file_name = resource.at_css('file')['id']
+        file_desc = resource.at_css('label').content
+    %>
+      <dd>
+      <%= link_to(file_name, file_name) %>
+      <%= file_desc %><br/>
+      </dd>
+    <% end %>
 
   </dl>
 

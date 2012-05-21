@@ -1,6 +1,6 @@
 GIT
   remote: /afs/ir/dev/dlss/git/lyberteam/dor-services-gem.git
-  revision: 29503234fab0189128af907c78e1de8334ee326a
+  revision: 0423166ffcc9df65810760b019889ce0d908f6ef
   branch: hydrus
   specs:
     dor-services (3.6.2)
