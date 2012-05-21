@@ -37,6 +37,12 @@ GIT
       rails (= 3.2.3)
       sanitize
 
+PATH
+  remote: ../about_page
+  specs:
+    about_page (0.0.1)
+      rails (~> 3.2)
+
 GEM
   remote: http://rubygems.org/
   remote: http://sulair-rails-dev.stanford.edu/
@@ -353,6 +359,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  about_page!
   awesome_print
   blacklight (~> 3.4.2)
   coffee-rails (~> 3.2.1)

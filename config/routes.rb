@@ -1,4 +1,6 @@
 Hydrus::Application.routes.draw do
+  mount AboutPage::Engine => '/about(.:format)'
+
   Blacklight.add_routes(self)
   HydraHead.add_routes(self)
 
