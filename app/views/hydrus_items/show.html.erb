@@ -49,7 +49,7 @@
     <dd><%= dmd.originInfo.dateIssued.first %></dd>
 
     <dt>Peer-reviewed: </dt>
-    <dd><font color=red>#TODO: spec is unclear</font></dd>
+    <dd><%= dmd.peer_reviewed.first %></dd>
 
     <% dmd.find_by_terms(:relatedItem).each do |rel_node|
       ti  = rel_node.at_css('titleInfo title').content
