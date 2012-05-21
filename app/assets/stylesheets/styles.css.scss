@@ -17,14 +17,18 @@
 		text-align: left;
 	}
 }
-
-.short-textarea textarea {
-	height: 60px;
-}
-
 form.step textarea, form.step input[type=text] {
 	width: 95%;
 }
+.short-textarea textarea {
+	height: 60px;
+}
+form.step .people-select {
+	input[type=text] {
+	  width: 60%;
+	}
+}
+
 
 /* search form */
 #search {

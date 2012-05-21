@@ -31,4 +31,8 @@ module HydrusFormHelper
     html.html_safe
   end
   
+  def people_roles
+    ["Author", "Creator", "Collector", "Contributing Author", "Distributor", "Principal Investigator", "Publisher", "Sponsor"]
+  end
+  
 end

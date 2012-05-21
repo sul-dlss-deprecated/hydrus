@@ -20,29 +20,56 @@
 		<%=render :partial=>'shared/navigation' %>
   </div>
 </div>
-<div class="row">
-  <div class="span2 form-label">
-    Object type:
-  </div>
-  <div class="span7">
-    <%= @document_fedora.identityMetadata.objectType.join(", ") %>
-  </div>
-</div>
 
+<%- object_type = @document_fedora.identityMetadata.objectType.first -%>
 <%= form_for(@document_fedora, :method => 'PUT', :html => {:class=>"step"}) do -%>
 
   <%= hydrus_form_header(:required=>true) {"Title"} %>
   <div class="row">
     <%= hydrus_form_label do %>
-      <%- fedora_field_label("DC", [:title], "Title of #{@document_fedora.identityMetadata.objectType.first}") -%>
+      <%- fedora_field_label("descMetadata", [:title], "Title of #{object_type}") -%>
     <%- end -%>
     <%= hydrus_form_value(:class=>"short-textarea") do %>
-      <%- fedora_text_area( @document_fedora, "DC", [:title], :multiple=>false, :required=>true) -%>
+      <%- fedora_text_area( @document_fedora, "descMetadata", [:title], :multiple=>false, :required=>true) -%>
+    <%- end -%>
+  </div>
+  <div class="row">
+    <%= hydrus_form_label do %>
+      <%- "Contact email" -%>
+      <%#- fedora_field_label("DC", [:title], "Title of #{object_type}") -%>
+    <%- end -%>
+    <%= hydrus_form_value(:class=>"short-textarea") do %>
+      <%- "#TODO: spec is unclear" -%>
+      <%#- fedora_text_area( @document_fedora, "DC", [:title], :multiple=>false, :required=>true) -%>
     <%- end -%>
   </div>
 
+  <%= hydrus_form_header(:required=>true) {"People and organizations responsible for this #{object_type}"} -%>
+  <div class="row">
+    <%= hydrus_form_label do %>
+      <%- label_tag("asset_descMetadata_name_namePart_0", "People") -%>
+    <%- end -%>
+    <%= hydrus_form_value(:class=>"people-select") do -%>
+      <%- text = "" -%>
+      <%- text << hidden_field_tag("field_selectors[descMetadata][name_namePart][]", "name") -%>
+      <%- text << hidden_field_tag("field_selectors[descMetadata][name_namePart][]", "namePart") -%>
+      <%- text << hidden_field_tag("field_selectors[descMetadata][name_role_roleTerm][]", "name") -%>
+      <%- text << hidden_field_tag("field_selectors[descMetadata][name_role_roleTerm][]", "role") -%>
+      <%- text << hidden_field_tag("field_selectors[descMetadata][name_role_roleTerm][]", "roleTerm") -%>
+      <%- @document_fedora.descMetadata.find_by_terms(:name).each_with_index do |name_node, ix| -%>
+        <%- text << "<div>" -%>
+          <%- text << text_field_tag("asset[descMetadata][name_namePart][#{ix}]", name_node.at_css('namePart').content) -%>
+          <%- text << " as " -%>
+          <%- text << select_tag("asset[descMetadata][name_role_roleTerm][#{ix}]", options_for_select(people_roles, name_node.at_css("role roleTerm").content.gsub(/\s+/, " "))) -%>
+        <%- text << "</div>" -%>
+      <%- end -%>
+      <%- text -%>
+    <%- end -%>
+  </div>
+  
+  <%= hydrus_form_header(:required=>true) {"Upload file(s)"} -%>
 
-  <%= hydrus_form_header {"Abstract and keywords"} -%>
+  <%= hydrus_form_header(:required=>true) {"Abstract and keywords"} -%>
   <div class="row">
     <%= hydrus_form_label do %>
       <%- fedora_field_label("descMetadata", [:abstract], "Abstract") -%>
@@ -51,8 +78,42 @@
       <%- fedora_text_area( @document_fedora, "descMetadata", [:abstract], :multiple=>false, :required=>false) -%>
     <%- end -%>
   </div>
+  <div class="row">
+    <%= hydrus_form_label do %>
+      <%- fedora_field_label("descMetadata", [:subject, :topic], "Keywords") -%>
+    <%- end -%>
+    <%= hydrus_form_value do  -%>
+      <%- fedora_text_field( @document_fedora, "descMetadata", [:subject, :topic], :multiple=>true, :required=>false) %>
+    <%- end -%>    
+  </div>
 
   <%= hydrus_form_header {"Citation"} -%>
+  <div class="row">
+    <%= hydrus_form_label do %>
+      <%- fedora_field_label("descMetadata", [:preferred_citation], "Cite this #{object_type} as") -%>
+    <%- end -%>
+    <%= hydrus_form_value(:class=>"short-textarea") do  -%>
+      <%- fedora_text_area( @document_fedora, "descMetadata", [:preferred_citation], :multiple=>false, :required=>false) %>
+    <%- end -%>
+  </div>
+  <div class="row">
+    <%= hydrus_form_label do %>
+      <%- "Cite this related published work as" -%>
+      <%#- fedora_field_label("descMetadata", [:preferred_citation], "Cite this related published work as") -%>
+    <%- end -%>
+    <%= hydrus_form_value(:class=>"short-textarea") do  -%>
+      <%- "#TODO: spec is unclear" -%>
+      <%#- fedora_text_area( @document_fedora, "descMetadata", [:preferred_citation], :multiple=>false, :required=>false) %>
+    <%- end -%>
+  </div>
+  <div class="row">
+    <%= hydrus_form_label do %>
+      <%- fedora_field_label("descMetadata", [:originInfo, :dateIssued], "Year of publication") -%>
+    <%- end -%>
+    <%= hydrus_form_value(:columns => "2") do  -%>
+      <%- fedora_text_field( @document_fedora, "descMetadata", [:originInfo, :dateIssued], :multiple=>false, :required=>false) %>
+    <%- end -%>
+  </div>
   <div class="row">
     <%= hydrus_form_label do %>
       <%- fedora_field_label("descMetadata", [:originInfo, :publisher], "Publisher") -%>
@@ -61,6 +122,18 @@
       <%- fedora_text_field( @document_fedora, "descMetadata", [:originInfo, :publisher], :multiple=>false, :required=>false) %>
     <%- end -%>
   </div>
+  <div class="row">
+    <%= hydrus_form_label do %>
+      <%- fedora_field_label("descMetadata", [:peer_reviewed], "Peer reviewed") -%>
+    <%- end -%>
+    <%= hydrus_form_value(:columns=>"1") do  -%>
+      <%- text = "" -%>
+      <%- text << hidden_field_tag("field_selectors[descMetadata][peer_reviewed][]", "peer_reviewed") -%>
+      <%- text << select_tag("asset[descMetadata][peer_reviewed][0]", options_for_select(["Yes", "No"], @document_fedora.descMetadata.peer_reviewed.first)) -%>
+      <%- text -%>
+    <%- end -%>
+  </div>
+
 
   
   <% render(
