@@ -55,28 +55,23 @@ form.step textarea, form.step input[type=text] {
 
 /* edit item */
 form.actions-box {
-	margin-top: 100px;
-	&.well {
-		padding: 2px 5px 15px 15px;
-		legend {
-			font-size: 120%;
-			border-bottom: none;
-			padding-bottom: 10px;
-		}
+	margin-right: 20px;
+	margin-top: 25px;
+	legend {
+		border-bottom: 1px dotted #CCC;
+		font-size: 120%;
+		line-height: 1em;
+		padding: 0px 0px 5px;
 	}
 	button {
-		margin-left: 18px;
-		&.btn.save-edits {
-			margin-bottom: 22px;
-		}
+		margin: 12px 0px 22px 18px;
 	}
 	label {
 		font-size: 75%;
 		line-height: 1.5em;
-		margin-bottom: 10px;
-	}
-	p.discard-item {
-		// font-size: 85%;
-		margin-top: 20px;
+		margin-bottom: 0;
 	}
 }
+
+
+
