@@ -30,7 +30,11 @@
     <dd><%= dmd.abstract.first %></dd>
 
     <dt>Keywords: </dt>
-    <dd><font color=red>#TODO: spec is unclear</font></dd>
+    <dd>
+      <% dmd.subject.topic.each do |topic| %>
+        <%= link_to(topic, '#') %>,
+      <% end %>
+    </dd>
 
     <dt>Cite this item as: </dt>
     <dd><font color=red>#TODO: spec is unclear</font></dd>
