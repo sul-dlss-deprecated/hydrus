@@ -4,7 +4,6 @@ describe Hydrus::GenericItem do
 
   before(:each) do
     @hi      = Hydrus::GenericItem.new
-    @dru     = 'druid:oo000oo0001'
     @apo_pid = 'druid:oo000oo0002'
   end
   
