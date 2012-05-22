@@ -29,6 +29,17 @@ form.step .people-select {
 	}
 }
 
+/* forms on search results */
+#sortAndPerPage {
+	form, label {display:inline;}
+	select {width:auto;}
+	.sort {
+		text-align:right;
+		@media (max-width: 767px) {
+			text-align:left;
+		}
+	}
+}
 
 /* search form */
 #search {
