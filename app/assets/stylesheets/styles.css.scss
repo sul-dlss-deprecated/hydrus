@@ -38,7 +38,8 @@ form.step .people-select {
 	select#search_field {
 		width: auto;
 	}
-	input.submit {@include primary-button}
+	/* we need to explicitly set the bottom margin here because the hydra html refactor CSS is being included in a weird way */
+	input.submit {@include primary-button; margin-bottom: 9px;}
 }
 
 #main {
@@ -47,6 +48,9 @@ form.step .people-select {
 #sidebar {
 	float: left;
 }
+
+
+
 /* This seems to help fix an issue w/ floats once we stack all columns on-top of each other */
 #main, #sidebar {
 	@media (max-width: 767px) {
