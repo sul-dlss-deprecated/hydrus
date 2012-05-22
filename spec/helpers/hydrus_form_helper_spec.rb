@@ -19,7 +19,7 @@ describe HydrusFormHelper do
   describe "hydrus form value" do
     it "should return the appropriate HTML when no options are sent" do
       hydrus_form_value{"<input type='text' />"}.should have_selector "div.span7"
-      hydrus_form_value{"<input type='text' />"}.should have_selector "div.span7 input[type='text']"
+      hydrus_form_value{"<input type='text' />".html_safe}.should have_selector "div.span7 input[type='text']"
     end
     it "should apply columns passed in the options hash" do
       hydrus_form_value(:columns=>"3"){"<input type='text' />"}.should have_selector "div.span3"
