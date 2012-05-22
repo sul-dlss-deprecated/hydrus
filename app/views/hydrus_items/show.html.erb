@@ -90,6 +90,13 @@
     <dt>Visibility: </dt>
     <dd><%= @document_fedora.discover_access %></dd>
 
+
+    <h3>Collections</h3>
+
+    <% @document_fedora.collection.each do |c| %>
+      <dd><%= link_to(c.descMetadata.title.first, polymorphic_path(c)) %></dd>
+    <% end %>
+
   </dl>
 
 </div>
