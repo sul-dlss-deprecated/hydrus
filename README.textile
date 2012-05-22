@@ -2,3 +2,8 @@ h1. Hydrus
 
 A Hydra application enabling deposit of digital objects into the Stanford Digital Repository for preservation and access.
 
+This code has dependencies on non-public code:
+<ul>
+<li>Stanford's dor-services gem</li>
+<li>Stanford's sul-chrome gem </li>
+</ul>
