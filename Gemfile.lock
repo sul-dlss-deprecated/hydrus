@@ -37,17 +37,13 @@ GIT
       rails (= 3.2.3)
       sanitize
 
-PATH
-  remote: ../about_page
-  specs:
-    about_page (0.0.1)
-      rails (~> 3.2)
-
 GEM
   remote: http://rubygems.org/
   remote: http://sulair-rails-dev.stanford.edu/
   specs:
     RedCloth (4.2.9)
+    about_page (0.0.2)
+      rails (~> 3.2)
     actionmailer (3.2.3)
       actionpack (= 3.2.3)
       mail (~> 2.4.4)
@@ -359,7 +355,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  about_page!
+  about_page
   awesome_print
   blacklight (~> 3.4.2)
   coffee-rails (~> 3.2.1)
