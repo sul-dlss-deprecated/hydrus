@@ -1,5 +1,11 @@
 class Hydrus::Collection < Dor::Collection
 
+  has_metadata(
+    :name => "descMetadata",
+    :type => Hydrus::DescMetadataDS,
+    :label => 'Descriptive Metadata',
+    :control_group => 'M')
+
   def apo
     @apo ||= (apo_pid ? ActiveFedora::Base.find(apo_pid, :cast => true) : nil)
   end

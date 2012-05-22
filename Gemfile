@@ -1,18 +1,18 @@
 source :rubygems
 source "http://sulair-rails-dev.stanford.edu"
 
-def dor_services_gem_params
-  p = '/afs/ir/dev/dlss/git/lyberteam/dor-services-gem.git'
-  if ENV['USE_LOCAL_DOR_SERVICES']
-    return { :path => ENV['USE_LOCAL_DOR_SERVICES'] }
-  elsif ENV['USE_SSH_OVER_OPENAFS_PATH']
-    return { :git => "ssh://corn.stanford.edu#{p}", :branch => 'hydrus' }
-  else
-    return { :git => p, :branch => 'hydrus' }
-  end
-end
+# def dor_services_gem_params
+#   p = '/afs/ir/dev/dlss/git/lyberteam/dor-services-gem.git'
+#   if ENV['USE_LOCAL_DOR_SERVICES']
+#     return { :path => ENV['USE_LOCAL_DOR_SERVICES'] }
+#   elsif ENV['USE_SSH_OVER_OPENAFS_PATH']
+#     return { :git => "ssh://corn.stanford.edu#{p}", :branch => 'hydrus' }
+#   else
+#     return { :git => p, :branch => 'hydrus' }
+#   end
+# end
 
-gem 'dor-services', ">= 3.5.1", dor_services_gem_params
+gem 'dor-services', ">= 3.5.1"  # , dor_services_gem_params
 
 gem 'blacklight', '~>3.4.2' 
 gem 'hydra-head', '~> 4.0.1', :git => 'http://github.com/projecthydra/hydra-head.git'

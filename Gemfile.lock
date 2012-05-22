@@ -1,28 +1,4 @@
 GIT
-  remote: /afs/ir/dev/dlss/git/lyberteam/dor-services-gem.git
-  revision: c9f4a6b794c05e61aedb7d035a5843973dc7dc12
-  branch: hydrus
-  specs:
-    dor-services (3.6.2)
-      active-fedora (>= 4.0.0)
-      active-fedora (>= 4.0.0.rc20)
-      confstruct (>= 0.2.2)
-      equivalent-xml (>= 0.2.2)
-      json
-      lyber-utils
-      nokogiri (~> 1.5.0)
-      om (>= 1.5.0)
-      progressbar
-      rest-client
-      rsolr-client-cert (>= 0.5.1)
-      rsolr-ext
-      ruby-cache
-      ruby-graphviz
-      systemu
-      uuidtools
-      validatable
-
-GIT
   remote: http://github.com/projecthydra/hydra-head.git
   revision: 3f3f17d0fa08c5babdae28c368ba8f52245d6cb7
   specs:
@@ -162,6 +138,24 @@ GEM
       railties (~> 3.1)
       warden (~> 1.1.1)
     diff-lcs (1.1.3)
+    dor-services (3.6.2)
+      active-fedora (>= 4.0.0)
+      active-fedora (>= 4.0.0.rc20)
+      confstruct (>= 0.2.2)
+      equivalent-xml (>= 0.2.2)
+      json
+      lyber-utils
+      nokogiri (~> 1.5.0)
+      om (>= 1.5.0)
+      progressbar
+      rest-client
+      rsolr-client-cert (>= 0.5.1)
+      rsolr-ext
+      ruby-cache
+      ruby-graphviz
+      systemu
+      uuidtools
+      validatable
     equivalent-xml (0.2.9)
       nokogiri (>= 1.4.3)
     erubis (2.7.0)
@@ -366,7 +360,7 @@ DEPENDENCIES
   database_cleaner
   debugger
   devise
-  dor-services (>= 3.5.1)!
+  dor-services (>= 3.5.1)
   hydra-head (~> 4.0.1)!
   jettywrapper
   jquery-rails
