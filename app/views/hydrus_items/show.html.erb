@@ -40,7 +40,7 @@
     <dd><%= dmd.preferred_citation.first %></dd>
 
     <dt>Cite related work as: </dt>
-    <dd><font color=red>#TODO: spec is unclear</font></dd>
+    <dd><font color=red>#TODO decisions required</font></dd>
 
     <dt>Publisher: </dt>
     <dd><%= dmd.originInfo.publisher.first %></dd>
@@ -70,6 +70,21 @@
       <%= file_desc %><br/>
       </dd>
     <% end %>
+
+
+    <h3>Status</h3>
+
+    <dt>Submitted by: </dt>
+    <dd><font color=red>#TODO decisions required</font></dd>
+
+    <dt>Submitted on: </dt>
+    <dd><%= @document_fedora.submit_time %></dd>
+
+    <dt>Release date: </dt>
+    <dd><font color=red>#TODO decisions required</font></dd>
+
+    <dt>Visibility: </dt>
+    <dd><%= @document_fedora.discover_access %></dd>
 
   </dl>
 

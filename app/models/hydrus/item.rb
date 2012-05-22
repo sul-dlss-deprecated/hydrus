@@ -4,10 +4,17 @@ class Hydrus::Item < Dor::Item
     @apo ||= (apo_pid ? ActiveFedora::Base.find(apo_pid, :cast => true) : nil)
   end
 
-  private
-
   def apo_pid
     @apo_pid ||= admin_policy_object_ids.first
+  end
+
+  def submit_time
+    query = '//workflow[@id="sdrDepositWF"]/process[@name="submit"]'
+    return workflows.ng_xml.at_xpath(query)['datetime']
+  end
+
+  def discover_access
+    return rightsMetadata.discover_access.first
   end
 
 end
