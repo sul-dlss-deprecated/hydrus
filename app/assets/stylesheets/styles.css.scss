@@ -55,7 +55,10 @@ form.step .people-select {
 }
 
 /* search results */
-
+table.hydrus-striped-table {
+	@include striped-table;
+	width: 100%;
+}
 
 /* edit item */
 form.actions-box {
