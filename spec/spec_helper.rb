@@ -40,3 +40,11 @@ end
 def noko_doc(x)
   Nokogiri.XML(x) { |conf| conf.default_xml.noblanks }
 end
+
+def mock_user
+  mock_user =  mock("user")
+  mock_user.stub!(:email)
+  mock_user.stub!(:new_record?)
+  mock_user.stub!(:is_being_superuser?).and_return(false)
+  return mock_user
+end

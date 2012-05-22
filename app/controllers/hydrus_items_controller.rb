@@ -5,7 +5,13 @@ class HydrusItemsController < ApplicationController
   include Hydra::FileAssetsHelper
 
   prepend_before_filter :sanitize_update_params, :only => :update
+  before_filter :enforce_access_controls
   before_filter :setup_attributes
+  
+  def index
+    flash[:warning]="You need to log in."
+    redirect_to new_user_session_path
+  end  
 
   def setup_attributes
     @document_fedora = Hydrus::Item.find(params[:id])

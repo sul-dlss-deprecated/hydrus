@@ -34,6 +34,9 @@ Hydrus::Application.configure do
 
   # Expands the lines which load the assets
   config.assets.debug = true
+  
+  config.resource_base_path = '/dor/assembly'
+  
 end
 
 require File.expand_path(File.join(File.dirname(__FILE__), 'overrides'))

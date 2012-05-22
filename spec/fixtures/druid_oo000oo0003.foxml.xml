@@ -68,17 +68,17 @@
         <rightsMetadata xmlns="http://hydra-collab.stanford.edu/schemas/rightsMetadata/v1" version="0.1" objectId="druid:oo000oo0003">
           <access type="discover">
             <machine>
-              <group>public</group>
+              <group>archivist</group>
             </machine>
           </access>
           <access type="read">
             <machine>
-              <group>public</group>
+              <group>archivist</group>
             </machine>
           </access>
           <access type="edit">
             <machine>
-              <group>public</group>
+              <group>archivist</group>
             </machine>
           </access>
         </rightsMetadata>

@@ -21,8 +21,10 @@ describe HydrusItemsController do
     pid = 'druid:oo000oo0001'
 
     it "should get fedora document and assign various attributes", :integration => true do
+      controller.stub(:current_user).and_return(mock_user)
       get :show, :id => pid
-      assigns[:document_fedora].should_not be_nil
+      assigns[:document_fedora].should be_nil
+      response.should redirect_to :hydrus_items      
     end
 
   end
