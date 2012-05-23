@@ -54,7 +54,7 @@ class Hydrus::DescMetadataDS < ActiveFedora::NokogiriDatastream
   def insert_person
     builder = Nokogiri::XML::Builder.new do |xml|
       # I don't think that all should be personal, but I'm not sure our roles map evenly.
-      xml.name(:type=>"personal") {
+      xml.name {
         xml.namePart
         xml.role {
           xml.roleTerm(:authority=>"marcrelator", :type=>"text")
