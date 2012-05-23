@@ -24,6 +24,12 @@ class HydrusItemsController < ApplicationController
   end
 
   def update
+    keywords = {}
+    params[:hydrus_item_keywords].split(",").map{|k| k.strip}.each_with_index do |keyword, index|
+      keywords[index] = keyword
+    end
+    
+    @sanitized_params["descMetadata"].merge!({[:subject, :topic] => keywords})
     @response = update_document(@document_fedora, @sanitized_params)
     if params.has_key?(:add_person)
       @document_fedora.descMetadata.insert_person
