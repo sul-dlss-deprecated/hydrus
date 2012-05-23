@@ -27,7 +27,13 @@ class HydrusItemsController < ApplicationController
         redirect_to @document_fedora
       }
       want.js {
-        render :json => tidy_response_from_update(@response)
+        if params.has_key?(:add_person)
+          render "add_person", :locals=>{:index=>params[:add_person]}
+        elsif params.has_key?(:add_link)
+          render "add_link", :locals=>{:index=>params[:add_link]}
+        else
+          render :json => tidy_response_from_update(@response) unless params.has_key?(:add_person)
+        end
       }
     end
   end

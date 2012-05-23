@@ -57,13 +57,11 @@
       <%= hidden_field_tag("field_selectors[descMetadata][name_role_roleTerm][]", "name") -%>
       <%= hidden_field_tag("field_selectors[descMetadata][name_role_roleTerm][]", "role") -%>
       <%= hidden_field_tag("field_selectors[descMetadata][name_role_roleTerm][]", "roleTerm") -%>
-      <%- @document_fedora.descMetadata.find_by_terms(:name).each_with_index do |name_node, ix| -%>
-        <div>
-          <%= text_field_tag("asset[descMetadata][name_namePart][#{ix}]", name_node.at_css('namePart').content) -%>
-          as
-          <%= select_tag("asset[descMetadata][name_role_roleTerm][#{ix}]", options_for_select(people_roles, name_node.at_css("role roleTerm").content.gsub(/\s+/, " "))) -%>
-        </div>
+      <%- people = @document_fedora.descMetadata.find_by_terms(:name) -%>
+      <%- people.each_with_index do |name_node, ix| -%>
+        <%= render :partial => "hydrus_items/person", :locals=> {:name_node=> name_node, :index=>ix} %>
       <%- end -%>
+      <%= button_tag("Add Person", :name=>"add_person", :"data-attribute" => "add_person", :id=>"add_person", :value=>people.length) %>
     <%- end -%>
   </div>
   
@@ -139,24 +137,15 @@
   <%= hidden_field_tag("field_selectors[descMetadata][relatedItem_titleInfo_title][]", "relatedItem") %>
   <%= hidden_field_tag("field_selectors[descMetadata][relatedItem_titleInfo_title][]", "titleInfo") %>
   <%= hidden_field_tag("field_selectors[descMetadata][relatedItem_titleInfo_title][]", "title") %>
-  <%- @document_fedora.descMetadata.find_by_terms(:relatedItem).each_with_index do |node, ix| -%>
-    <div class="row">
-      <%= hydrus_form_label do  %>
-        <%= label_tag("asset[descMetadata][relatedItem_titleInfo_title][#{ix}]", "Link title") %>
-      <%- end -%>
-      <%= hydrus_form_value do -%>
-        <%= text_field_tag("asset[descMetadata][relatedItem_titleInfo_title][#{ix}]", node.at_css('titleInfo title').content) %>
-      <%- end -%>
-    </div>
-    <div class="row">
-      <%= hydrus_form_label do  %>
-        <%= label_tag("asset[descMetadata][relatedItem_identifier][#{ix}]", "URL") %>
-      <%- end -%>
-      <%= hydrus_form_value do -%>
-        <%= text_field_tag("asset[descMetadata][relatedItem_identifier][#{ix}]", node.at_css('identifier').content) %>
-      <%- end -%>
-    </div>
+  <%- related_items = @document_fedora.descMetadata.find_by_terms(:relatedItem) -%>
+  <%- related_items.each_with_index do |node, ix| -%>
+    <%= render :partial => "related_item", :locals => {:node=>node, :index=>ix} %>
   <%- end -%>
+  <div class="row">
+    <div class="span7 offset2">
+      <%= button_tag("Add another link", :name=>"add_link", :"data-attribute" => "add_link", :id=>"add_link", :value=>related_items.length) %>
+    </div>
+  </div>
   
   <% render(
        :partial => "hydra/permissions/index", 
