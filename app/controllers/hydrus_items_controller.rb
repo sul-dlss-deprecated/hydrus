@@ -24,8 +24,13 @@ class HydrusItemsController < ApplicationController
   end
 
   def update
-    logger.debug("attributes submitted: #{@sanitized_params.inspect}")
     @response = update_document(@document_fedora, @sanitized_params)
+    if params.has_key?(:add_person)
+      @document_fedora.descMetadata.insert_person
+    elsif params.has_key?(:add_link)
+      @document_fedora.descMetadata.insert_related_item
+    end
+    logger.debug("attributes submitted: #{@sanitized_params.inspect}")
     @document_fedora.save
     flash[:notice] = "Your changes have been saved."
     respond_to do |want|
