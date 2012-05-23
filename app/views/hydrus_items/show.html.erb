@@ -2,7 +2,7 @@
   dmd = @document_fedora.descMetadata
   cmd = @document_fedora.contentMetadata
 %>
-
+<%- @page_title = "#{dmd.title.first} - #{application_name}" -%>
 <div>
 
   <span class="edit-browse">
