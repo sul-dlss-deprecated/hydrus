@@ -48,3 +48,19 @@ def mock_user
   mock_user.stub!(:is_being_superuser?).and_return(false)
   return mock_user
 end
+
+def login_as_archivist1
+  login_as "archivist1@example.com", 'beatcal'
+end
+
+def login_as(email, password)
+  logout
+  visit new_user_session_path
+  fill_in "Email", :with => email 
+  fill_in "Password", :with => password
+  click_button "Sign in"
+end
+
+def logout
+  visit destroy_user_session_path
+end

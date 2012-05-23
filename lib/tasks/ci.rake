@@ -13,8 +13,8 @@ task :ci do
   error = nil
   error = Jettywrapper.wrap(jetty_params) do
       Rake::Task['hydrus:refreshfix'].invoke
-      Rake::Task['cucumber:ok'].invoke
       Rake::Task['rspec'].invoke
+      # Rake::Task['cucumber:ok'].invoke
   end
   raise "TEST FAILURES: #{error}" if error
   Rake::Task["doc:reapp"].invoke

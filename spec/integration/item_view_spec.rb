@@ -7,6 +7,12 @@ describe("Item view", :type => :request) do
     @hi    = Hydrus::Item.find @druid
   end
 
+  it "If not logged in, should be redirected to sign-in page" do
+    logout
+    visit polymorphic_url(@hi)
+    current_path.should == new_user_session_path
+  end
+
   it "Some of the expected info is displayed" do
     exp_content = [
       "How Couples Meet and Stay Together",
@@ -21,7 +27,9 @@ describe("Item view", :type => :request) do
       'Online survey research site (really Project Gutenberg)',
       'pinocchio.htm',
     ]
-    visit polymorphic_url(@hi)
+    login_as_archivist1
+    visit polymorphic_path(@hi)
+    current_path.should == polymorphic_path(@hi)
     exp_content.each do |exp|
       page.should have_content(exp)
     end
