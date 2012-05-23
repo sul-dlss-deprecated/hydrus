@@ -13,6 +13,7 @@ require 'capybara/rspec'
 Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
 
 RSpec.configure do |config|
+
   # ## Mock Framework
   #
   # If you prefer to use mocha, flexmock or RR, uncomment the appropriate line:
@@ -55,6 +56,7 @@ end
 
 def login_as(email, password)
   logout
+
   visit new_user_session_path
   fill_in "Email", :with => email 
   fill_in "Password", :with => password

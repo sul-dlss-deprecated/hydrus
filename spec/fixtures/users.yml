@@ -1,0 +1,4 @@
+archivist1:
+  id: 1
+  email: archivist1@example.com
+  encrypted_password: "$2a$10$mhcz9WtWgJpF7RAooWcK8OhyBxnp1qRSW/BCAnJqk7QZVDyKxullm" # beatcal
