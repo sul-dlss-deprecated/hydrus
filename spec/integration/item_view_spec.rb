@@ -8,7 +8,7 @@ describe("Item view", :type => :request) do
   end
 
   it "Some of the expected info is displayed" do
-    exp_items = [
+    exp_content = [
       "How Couples Meet and Stay Together",
       "The story of Pinocchio",
       @druid,
@@ -22,7 +22,7 @@ describe("Item view", :type => :request) do
       'pinocchio.htm',
     ]
     visit polymorphic_url(@hi)
-    exp_items.each do |exp|
+    exp_content.each do |exp|
       page.should have_content(exp)
     end
   end
