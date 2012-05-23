@@ -14,17 +14,7 @@ describe Hydrus::DescMetadataDS do
           <originInfo>
             <publisher>publisher content</publisher>
             <dateIssued>Nov 7</dateIssued>
-            <place>
-              <placeTerm type="text">placeTerm content 1</placeTerm>
-              <placeTerm type="BLAH">placeTerm content 2</placeTerm>
-              <placeTerm type="text">placeTerm content 3</placeTerm>
-            </place>
           </originInfo>
-          <coordinates>coordinates content</coordinates>
-          <extent>extent content</extent>
-          <scale>scale content</scale>
-          <topic>top1</topic>
-          <topic>top2</topic>
           <abstract>abstract content</abstract>
           <titleInfo>
             <title>Learn VB in 21 Days</title>
@@ -58,12 +48,6 @@ describe Hydrus::DescMetadataDS do
       tests = [
         [[:originInfo, :publisher],          'publisher content'],
         [[:originInfo, :dateIssued],         'Nov 7'],
-        [[:originInfo, :place, :placeTerm],  ['placeTerm content 1', 'placeTerm content 3']],
-        [[:originInfo, :place, :placeTerm],  ['placeTerm content 1', 'placeTerm content 3']],
-        [:coordinates,                       'coordinates content'],
-        [:extent,                            'extent content'],
-        [:scale,                             'scale content'],
-        [:topic,                             ['top1', 'top2', 'divorce', 'marriage']],
         [:abstract,                          'abstract content'],
         [:title,                             'Learn VB in 21 Days'],
         [[:name, :namePart],                 'Angus'],
