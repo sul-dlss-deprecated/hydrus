@@ -31,13 +31,7 @@
 
     <dt>Keywords: </dt>
     <dd>
-    <% 
-      topics = dmd.subject.topic
-      topics.each_with_index do |topic, i|
-    %>
-        <%= link_to(topic, '#') %>
-        <%= i == topics.size - 1 ? '' : ';' %>
-    <% end %>
+      <%= dmd.subject.topic.map{|topic| link_to(topic, "#")}.join(", ").html_safe %>
     </dd>
 
     <dt>Cite this item as: </dt>
