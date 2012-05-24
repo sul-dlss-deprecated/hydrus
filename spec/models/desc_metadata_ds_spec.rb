@@ -2,15 +2,22 @@ require 'spec_helper'
 
 describe Hydrus::DescMetadataDS do
 
+  before(:all) do
+    sloc = "http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-3.xsd"
+    @mods_start = <<-EOF
+      <?xml version="1.0"?>
+      <mods xmlns="http://www.loc.gov/mods/v3"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            version="3.3"
+            xsi:schemaLocation="#{sloc}">
+    EOF
+  end
+
   context "Marshalling to and from a Fedora Datastream" do
 
     before(:each) do
-      sloc = "http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-3.xsd"
-      @dsxml = <<-EOF
-        <mods xmlns="http://www.loc.gov/mods/v3"
-              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              version="3.3"
-              xsi:schemaLocation="#{sloc}">
+      dsxml = <<-EOF
+        #{@mods_start}
           <originInfo>
             <publisher>publisher content</publisher>
             <dateIssued>Nov 7</dateIssued>
@@ -41,7 +48,7 @@ describe Hydrus::DescMetadataDS do
         </mods>
       EOF
       
-      @dsdoc = Hydrus::DescMetadataDS.from_xml(@dsxml)
+      @dsdoc = Hydrus::DescMetadataDS.from_xml(dsxml)
     end
     
     it "should get correct values from OM terminology" do
@@ -67,4 +74,21 @@ describe Hydrus::DescMetadataDS do
 
   end
     
+  context "Inserting new nodes" do
+
+    before(:each) do
+      nm = '<name><namePart/><role><roleTerm authority="marcrelator" type="text"/></role></name>'
+      ri = '<relatedItem><titleInfo><title/></titleInfo><identifier type="uri"/></relatedItem>'
+      @exp_xml = noko_doc([@mods_start, nm, nm, ri, '</mods>'].join '')
+      @dsdoc   = Hydrus::DescMetadataDS.from_xml("#{@mods_start}</mods>")
+    end
+    it "###" do
+      @dsdoc.insert_new_node(:name)
+      @dsdoc.insert_new_node(:name)
+      @dsdoc.insert_new_node(:relatedItem)
+      @dsdoc.ng_xml.should be_equivalent_to @exp_xml
+    end
+
+  end
+
 end
