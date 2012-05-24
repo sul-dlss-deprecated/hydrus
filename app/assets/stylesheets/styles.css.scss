@@ -72,6 +72,7 @@ form.step .people-select {
 /* search results */
 table.hydrus-striped-table {
 	@include striped-table;
+	margin-top: 12px;
 	width: 100%;
 }
 
