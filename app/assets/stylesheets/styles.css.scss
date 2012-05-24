@@ -111,7 +111,34 @@ table.hydrus-striped-table {
 			margin-left: -15px;
 		}
 	}
-
+}
+  /* reformat sidebar based on screen size */
+.actions-box.item-status { 
+	@media (min-width: 768px) and (max-width: 978px) {
+	  .dl-horizontal dt {
+		  clear: both;
+		  width: 100%;
+		}
+		.dl-horizontal dd {
+		  line-height: 1.5em;
+		  margin-left: 6px;
+		  padding-bottom: 12px;
+		  text-align: left;
+		  width: 100%;
+		}
+	}
+}
+.actions-box.item-status {
+	@media (max-width: 767px) {
+	  .dl-horizontal dt {
+		  float: left;
+		  width: 100px;
+		  clear: both;
+		}
+		.dl-horizontal dd {
+		  margin-left: 100px;
+		}
+	}
 }
 
 #sidebar dd.collection {
