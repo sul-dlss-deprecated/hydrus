@@ -35,7 +35,7 @@
 		<%=render :partial=>'shared/navigation' %>
   </span>
 
-  <dl class="dl-horizontal">
+  <dl class="dl-horizontal item-view">
 
     <h3><%= dmd.title.first %></h3>
 
@@ -48,7 +48,7 @@
     </dd>
 
     <% dmd.find_by_terms(:name).each do |name_node| %>
-      <dt><%= name_node.at_css('role roleTerm').content %></dt>
+      <dt><%= name_node.at_css('role roleTerm').content %>:</dt>
       <dd><%= name_node.at_css('namePart').content %></dd>
     <% end %>
 
@@ -84,17 +84,26 @@
     <% end %>
 
     <dt>Files: </dt>
-    <% 
-      cmd.find_by_terms(:resource).each do |res_node|
-        file_name = res_node.at_css('file')['id']
-        file_desc = res_node.at_css('label').content
-    %>
-      <dd>
-      <%= link_to(file_name, file_name) %>
-      <%= file_desc %><br/>
-      </dd>
-    <% end %>
-
+    <dd>
+      <table class="hydrus-striped-table table-striped table-condensed">
+        <thead>
+          <th>File (Download)</th>
+          <th>Description</th>
+        </thead>
+        <tbody>
+          <% 
+            cmd.find_by_terms(:resource).each do |res_node|
+              file_name = res_node.at_css('file')['id']
+              file_desc = res_node.at_css('label').content
+          %>
+              <tr class="document <%= cycle("even","odd") %>">
+                <td><%= link_to(file_name, file_name) %></td>
+                <td><%= file_desc %></td>
+              </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </dd>
 
   </dl>
 

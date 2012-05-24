@@ -80,6 +80,9 @@ table.hydrus-striped-table {
 .actions-box {
 	margin-right: 20px;
 	margin-top: 25px;
+	&.well {
+		padding: 19px 10px 0 15px;
+	}
 	.box-header {
 		border-bottom: 1px dotted #CCC;
 		font-size: 120%;
@@ -105,6 +108,7 @@ table.hydrus-striped-table {
 		margin-bottom: 0;
 	}
 	p.discard-item {
+		margin-bottom: 18px;
 		margin-left: 12px;
 		i {
 			margin-right: 5px;
@@ -140,10 +144,28 @@ table.hydrus-striped-table {
 		}
 	}
 }
-
 #sidebar dd.collection {
 	font-size: 90%;
 	margin-left:0;
 }
 
+/* item view */
+#hydrus_items-show {
+	#sidebar {margin-top: 25px;}
+	table.hydrus-striped-table {
+		@include striped-table;
+		margin-top: 0;
+		width: 100%;
+	}
+}
+.item-view {
+	h3 {margin-bottom: 15px;}
+	dt {
+		width: 150px;
+	}
+	dd {
+		margin-left: 165px;
+		padding-bottom: 6px;
+	}
+}
 
