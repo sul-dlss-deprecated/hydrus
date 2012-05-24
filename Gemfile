@@ -17,6 +17,7 @@ gem 'dor-services', ">= 3.5.1"  # , dor_services_gem_params
 gem 'blacklight', '~>3.4.2' 
 gem 'hydra-head', '~> 4.0.1', :git => 'http://github.com/projecthydra/hydra-head.git'
 gem 'devise'
+gem 'carrierwave'
 
 gem 'sul_chrome'
 gem 'compass_twitter_bootstrap', :group => :assets 

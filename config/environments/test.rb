@@ -34,6 +34,10 @@ Hydrus::Application.configure do
 
   # Print deprecation notices to the stderr
   config.active_support.deprecation = :stderr
+  
+  # this is the path from the root of the public folder into which file uploads will be stored
+  config.file_upload_path = 'uploads'
+  
 end
 
 require File.expand_path(File.join(File.dirname(__FILE__), 'overrides'))

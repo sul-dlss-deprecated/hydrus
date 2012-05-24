@@ -29,6 +29,7 @@ Dor::Config.configure do
 
   yaml = load_yaml_config.call('solr.yml')
   solrizer.url yaml['url']
-
+    
   workflow.url 'http://lyberservices-dev.stanford.edu/workflow/'
+  
 end

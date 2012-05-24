@@ -23,6 +23,7 @@ coverage/*
 
 ## PROJECT::GENERAL
 rdoc
+public/uploads
 doc
 pkg
 /.bundle
