@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe("Item edit", :type => :request) do
+  fixtures :users
 
   before :each do
     @druid = 'druid:oo000oo0001'

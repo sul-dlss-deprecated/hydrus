@@ -50,5 +50,57 @@ class Hydrus::DescMetadataDS < ActiveFedora::NokogiriDatastream
                     :index_as => [:searchable, :displayable])
 
   end
-
+  
+  def insert_person
+    builder = Nokogiri::XML::Builder.new do |xml|
+      xml.name {
+        xml.namePart
+        xml.role {
+          xml.roleTerm(:authority=>"marcrelator", :type=>"text")
+        }                          
+      }
+    end
+    node = builder.doc.root
+    nodeset = self.find_by_terms(:name)
+    
+    unless nodeset.nil?
+      if nodeset.empty?
+        self.ng_xml.root.add_child(node)
+        index = 0
+      else
+        nodeset.after(node)
+        index = nodeset.length
+      end
+      self.dirty = true
+    end
+    
+    return node, index
+  end
+  
+  def insert_related_item
+    builder = Nokogiri::XML::Builder.new do |xml|
+      xml.relatedItem {
+        xml.titleInfo {
+          xml.title
+        }
+        xml.identifier(:type=>"uri")
+      }
+    end
+    node = builder.doc.root
+    nodeset = self.find_by_terms(:relatedItem)
+    
+    unless nodeset.nil?
+      if nodeset.empty?
+        self.ng_xml.root.add_child(node)
+        index = 0
+      else
+        nodeset.after(node)
+        index = nodeset.length
+      end
+      self.dirty = true
+    end
+    
+    return node, index
+  end
+  
 end

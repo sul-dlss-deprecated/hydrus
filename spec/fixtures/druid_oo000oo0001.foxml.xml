@@ -89,13 +89,11 @@
             <publisher>FooBar Publishing, Inc.</publisher>
           </originInfo>
           <abstract>The story of Pinocchio, or, How Couples Meet and Stay Together (HCMST) is a study of how Americans meet their spouses and romantic partners. The study is a nationally representative study of American adults. 4,002 adults responded to the survey, 3,009 of those had a spouse or main romantic partner. The study oversamples self-identified gay, lesbian, and bisexual adults. Follow-up surveys were implemented one and two years after the main survey, to study couple dissolution rates. Version 3.0 of the dataset includes two follow-up surveys, waves 2 and 3. The study will provide answers to the following research questions: Do traditional couples and nontraditional couples meet in the same way? What kinds of couples are more likely to have met online? Have the most recent marriage cohorts (especially the traditional heterosexual same-race married couples) met in the same way their parents and grandparents did? How do the couple dissolution rates of nontraditional couples compare to the couple dissolution rates of more traditional same-race heterosexual couples? How does the availability of civil union, domestic partnership or same-sex marriage rights affect couple stability for same-sex couples? This study will provide the first nationally representative data on the couple dissolution rates of same-sex couples.</abstract>
-          <subject>
-            <topic>same-sex marriage</topic>
-            <topic>civil union</topic>
-            <topic>divorce</topic>
-            <topic>marriage</topic>
-            <topic>wooden boys</topic>
-          </subject>
+          <subject><topic>same-sex marriage</topic></subject>
+          <subject><topic>civil union</topic></subject>
+          <subject><topic>divorce</topic></subject>
+          <subject><topic>marriage</topic></subject>
+          <subject><topic>wooden boys</topic></subject>
           <note type="Preferred Citation">How Couples Meet and Stay Together ("HCMST": NSF Grant SES-0751613, 2012)</note>
           <note type="peer-review" displayLabel="Peer reviewed">No</note>
           <relatedItem type="references" displayLabel="Related content">

@@ -1,3 +1,4 @@
+<%- @page_title = "Editing '#{@document_fedora.descMetadata.title.first}' - #{application_name}" -%>
 <%# if !session[:scripts] %>
   <%# render_previous_workflow_steps.html_safe %>
   <%# render_submission_workflow_step -%>
@@ -11,7 +12,7 @@
         <input type="checkbox"> I agree to the <a href="#">terms of deposit</a> for the Stanford Digital Repository
       </label>
       <button type="submit" class="btn btn-small">Publish</button>
-      <p class="discard-item"><a href="#">[_] Discard the -item type-</a></p>
+      <p class="discard-item"><i class="icon-trash"></i> <a href="#"> Discard the **item type**</a></p>
     </fieldset>
   </form>
 <%- end -%>
@@ -61,7 +62,7 @@
       <%- people.each_with_index do |name_node, ix| -%>
         <%= render :partial => "hydrus_items/person", :locals=> {:name_node=> name_node, :index=>ix} %>
       <%- end -%>
-      <%= button_tag("Add Person", :name=>"add_person", :"data-attribute" => "add_person", :id=>"add_person", :value=>people.length) %>
+      <%= button_tag("Add Person", :name=>"add_person", :"data-attribute" => "add_person", :id=>"add_person", :class=>"btn", :value=>people.length) %>
     <%- end -%>
   </div>
   
@@ -78,10 +79,12 @@
   </div>
   <div class="row">
     <%= hydrus_form_label do %>
-      <%= fedora_field_label("descMetadata", [:subject, :topic], "Keywords") -%>
+      <%= label_tag("hydrus_item_keywords", "Keywords") %>
     <%- end -%>
     <%= hydrus_form_value do  -%>
-      <%= fedora_text_field( @document_fedora, "descMetadata", [:subject, :topic], :multiple=>true, :required=>false) %>
+      <%= hidden_field_tag("field_selectors[descMetadata][subject_topic][]", "subject") -%>
+      <%= hidden_field_tag("field_selectors[descMetadata][subject_topic][]", "topic") -%>
+      <%= text_field_tag("hydrus_item_keywords", @document_fedora.descMetadata.subject.topic.join(", ")) -%>
     <%- end -%>    
   </div>
 
@@ -143,7 +146,7 @@
   <%- end -%>
   <div class="row">
     <div class="span7 offset2">
-      <%= button_tag("Add another link", :name=>"add_link", :"data-attribute" => "add_link", :id=>"add_link", :value=>related_items.length) %>
+      <%= button_tag("Add another link", :name=>"add_link", :"data-attribute" => "add_link", :id=>"add_link", :class=>"btn", :value=>related_items.length) %>
     </div>
   </div>
   

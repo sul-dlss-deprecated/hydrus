@@ -1,0 +1,5 @@
+<%- if current_user -%>
+  Welcome <%= current_user.to_s.gsub(/@.*$/, "") %>! | <%= link_to("Sign out", destroy_user_session_path) %>
+<%- else -%>
+  <%= link_to("Sign in", new_user_session_path) %>
+<%- end -%>
