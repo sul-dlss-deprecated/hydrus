@@ -74,6 +74,14 @@ Recommended workflow:
  git merge working
  git push origin develop
 
+If you get a conflict on the push to origin (last line), you'll need to rebase your local changes on top of the remote branch:
+
+	git rebase origin/develop
+	
+And then repush:
+
+	git push origin develop
+	
 4. If the git fetch didn't pull any updates from the server, then:
 
  git merge working
