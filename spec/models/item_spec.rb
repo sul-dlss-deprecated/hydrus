@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Hydrus::Item do
-
+  
   before(:each) do
     @hi      = Hydrus::Item.new
     @dru     = 'druid:oo000oo0001'
@@ -25,5 +25,5 @@ describe Hydrus::Item do
     @hi.stub(:workflows).and_return(mock_wf)
     @hi.submit_time.should == "9999"
   end
-
+  
 end

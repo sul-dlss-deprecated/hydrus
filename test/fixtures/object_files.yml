@@ -12,7 +12,7 @@ file2:
   created_at: <%=Time.now%>
   updated_at: <%=Time.now%>
   label:      "Main survey -- as PDF (prepared May 17, 2012)"
-  file:       "pinocchio = \"characters' &tc in $file #name.pdf"
+  file:       "pinocchio characters tc in file name.pdf"
 
 file3:
   id:         3

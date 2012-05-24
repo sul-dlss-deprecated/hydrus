@@ -9,7 +9,10 @@ class FileUploader < CarrierWave::Uploader::Base
   # Include the Sprockets helpers for Rails 3.1+ asset pipeline compatibility:
   # include Sprockets::Helpers::RailsHelper
   # include Sprockets::Helpers::IsolatedHelper
-
+  
+  # allow any character in the uploaded filename - see https://github.com/jnicklas/carrierwave
+  CarrierWave::SanitizedFile.sanitize_regexp = /$^/
+  
   # Choose what kind of storage to use for this uploader:
   storage :file
   # storage :fog

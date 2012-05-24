@@ -119,7 +119,7 @@
           </resource>
           <resource id="file2" type="file" sequence="2">
             <label>Main survey -- as PDF (prepared May 17, 2012)</label>
-            <file id="pinocchio = &quot;characters' &amp;tc in $file #name.pdf" filesize="3622063" mimetype="application/pdf" publish="yes" shelve="yes" preserve="yes">
+            <file id="pinocchio characters tc in file name.pdf" filesize="3622063" mimetype="application/pdf" publish="yes" shelve="yes" preserve="yes">
               <checksum type="md5">da2ccda82d1e6bba71b7a92dd38b4b71</checksum>
               <checksum type="sha1">62f3fe2cea13cacf110c96d279ae7a45fa962407</checksum>
             </file>

@@ -10,3 +10,4 @@ require 'solrizer'
 solr_log = File.expand_path(File.join(File.dirname(__FILE__), '..', 'log', "solrizer.log"))
 Solrizer.logger = Logger.new solr_log
 Solrizer.logger.level = Logger::INFO
+
