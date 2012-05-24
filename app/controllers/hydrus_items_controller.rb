@@ -31,6 +31,10 @@ class HydrusItemsController < ApplicationController
       end    
       @sanitized_params["descMetadata"].merge!({[:subject, :topic] => keywords})
     end
+    # special case for Peer reviewed check box
+    unless params["asset"]["descMetadata"].has_key?("peer_reviewed")
+      @sanitized_params["descMetadata"].merge!({[:peer_reviewed]=>{"0"=>"No"}})
+    end
     
     @response = update_document(@document_fedora, @sanitized_params)
     if params.has_key?(:add_person)

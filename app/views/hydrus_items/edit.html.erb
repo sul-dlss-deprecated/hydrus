@@ -125,11 +125,11 @@
   </div>
   <div class="row">
     <%= hydrus_form_label do %>
-      <%= fedora_field_label("descMetadata", [:peer_reviewed], "Peer reviewed") -%>
+      <%= label_tag("asset[descMetadata][peer_reviewed][0]", "Peer reviewed")%>
     <%- end -%>
-    <%= hydrus_form_value(:columns=>"1") do  -%>
+    <%= hydrus_form_value do  -%>
       <%= hidden_field_tag("field_selectors[descMetadata][peer_reviewed][]", "peer_reviewed") -%>
-      <%= select_tag("asset[descMetadata][peer_reviewed][0]", options_for_select(["Yes", "No"], @document_fedora.descMetadata.peer_reviewed.first)) -%>
+      <%= check_box_tag("asset[descMetadata][peer_reviewed][0]", "Yes", @document_fedora.descMetadata.peer_reviewed.first == "Yes") %> This work has passed a peer review process
     <%- end -%>
   </div>
   
