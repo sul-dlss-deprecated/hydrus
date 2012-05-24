@@ -1,4 +1,5 @@
 <%- @page_title = "Editing '#{@document_fedora.descMetadata.title.first}' - #{application_name}" -%>
+<%- object_type = @document_fedora.identityMetadata.objectType.first -%>
 <%# if !session[:scripts] %>
   <%# render_previous_workflow_steps.html_safe %>
   <%# render_submission_workflow_step -%>
@@ -12,7 +13,7 @@
         <input type="checkbox"> I agree to the <a href="#">terms of deposit</a> for the Stanford Digital Repository
       </label>
       <button type="submit" class="btn btn-small" disabled="disabled">Publish</button>
-      <p class="discard-item"><i class="icon-trash"></i> <a href="#"> Discard the **item type**</a></p>
+      <p class="discard-item"><i class="icon-trash"></i> <a href="#">Discard this <%= object_type %></a></p>
     </fieldset>
   </form>
 <%- end -%>
@@ -24,7 +25,6 @@
   </div>
 </div>
 
-<%- object_type = @document_fedora.identityMetadata.objectType.first -%>
 <%= form_for(@document_fedora, :method => 'PUT', :html => {:class=>"step"}) do -%>
 
   <%= hydrus_form_header(:required=>true) {"Title"} %>
