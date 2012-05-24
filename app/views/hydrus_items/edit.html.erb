@@ -74,7 +74,7 @@
       <%= fedora_field_label("descMetadata", [:abstract], "Abstract") -%>
     <%- end -%>
     <%= hydrus_form_value do  -%>
-      <%- fedora_text_area( @document_fedora, "descMetadata", [:abstract], :multiple=>false, :required=>false) -%>
+      <%- fedora_text_area( @document_fedora, "descMetadata", [:abstract], :multiple=>false, :required=>true) -%>
     <%- end -%>
   </div>
   <div class="row">
@@ -85,6 +85,7 @@
       <%= hidden_field_tag("field_selectors[descMetadata][subject_topic][]", "subject") -%>
       <%= hidden_field_tag("field_selectors[descMetadata][subject_topic][]", "topic") -%>
       <%= text_field_tag("hydrus_item_keywords", @document_fedora.descMetadata.subject.topic.join(", ")) -%>
+      <div class="help">separate keywords with commas</div>
     <%- end -%>    
   </div>
 

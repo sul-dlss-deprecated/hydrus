@@ -1,7 +1,7 @@
 <%- name_part = defined?(name_node) ? name_node.at_css('namePart').content : "" -%>
 <%- role_term = defined?(name_node) ? name_node.at_css("role roleTerm").content : "" -%>
 <div class="person">
-  <%= text_field_tag("asset[descMetadata][name_namePart][#{index}]", name_part) -%>
+  <%= text_field_tag("asset[descMetadata][name_namePart][#{index}]", name_part, :required => (index == 0 ? true : false)) -%>
   as
   <%= select_tag("asset[descMetadata][name_role_roleTerm][#{index}]", options_for_select(people_roles, role_term.gsub(/\s+/, " "))) -%>
 </div>
