@@ -36,11 +36,11 @@ end
 # gems only needed for particular environments
 
 group :test do 
-  gem "cucumber-rails", :require => false
-  gem 'database_cleaner', :require => false
-  gem 'rspec-rails', '>=2.9.0', :require => false
-  gem 'simplecov', :require => false
-  gem 'simplecov-rcov', :require => false
+  gem "cucumber-rails"
+  gem 'database_cleaner'
+  gem 'rspec-rails', '>=2.9.0'
+  gem 'simplecov'
+  gem 'simplecov-rcov'
 end
 
 group :development, :test do
@@ -48,6 +48,10 @@ group :development, :test do
   gem 'awesome_print'
   gem 'debugger'
   gem 'sqlite3'
+end
+
+group :production do
+  gem 'mysql'
 end
 
 gem 'quiet_assets', :group => :development

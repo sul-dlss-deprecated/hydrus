@@ -208,6 +208,7 @@ GEM
     mime-types (1.18)
     multi_json (1.3.5)
     multipart-post (1.1.2)
+    mysql (2.8.1)
     nokogiri (1.5.2)
     nori (1.1.0)
     om (1.6.0)
@@ -368,6 +369,7 @@ DEPENDENCIES
   hydra-head (~> 4.0.1)!
   jettywrapper
   jquery-rails
+  mysql
   quiet_assets
   rails (= 3.2.3)
   rspec-rails (>= 2.9.0)
