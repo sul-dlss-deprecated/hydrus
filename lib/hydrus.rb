@@ -1,11 +1,9 @@
 module Hydrus
   autoload :RoutingHacks, 'hydrus/routing_hacks'
 
-  def self.ap_dump(*args)
+  def self.ap_dump(arg, file_handle = STDOUT)
     divider = '=' * 80
-    args.each do |arg|
-      puts divider, arg.ai(:plain => true), divider
-    end
+    file_handle.puts divider, arg.ai(:plain => true), divider
   end
 
 end
