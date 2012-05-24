@@ -5,6 +5,7 @@ file1:
   updated_at: <%=Time.now%>
   label:      "Main survey -- formatted in HTML"
   file:       "pinocchio.htm"
+  weight:     1
 
 file2:
   id:         2
@@ -13,7 +14,8 @@ file2:
   updated_at: <%=Time.now%>
   label:      "Main survey -- as PDF (prepared May 17, 2012)"
   file:       "pinocchio characters tc in file name.pdf"
-
+  weight:     3
+  
 file3:
   id:         3
   pid:        "druid:oo000oo0001"
@@ -21,7 +23,8 @@ file3:
   updated_at: <%=Time.now%>
   label:      "Main survey -- as plain text (extracted into CSV tables)"
   file:       "pinocchio.-punctuation_in=file.name.txt"
-
+  weight:     2
+  
 file4:
   id:         4
   pid:        "druid:oo000oo0001"
@@ -29,3 +32,4 @@ file4:
   updated_at: <%=Time.now%>
   label:      "Imagine this is a set of data samples"
   file:       "pinocchio_using_a_rather_long_filename-2012-05-17.zip"
+  weight:     99
