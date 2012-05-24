@@ -14,6 +14,7 @@ task :ci do
   error = Jettywrapper.wrap(jetty_params) do
       Rake::Task['hydrus:refreshfix'].invoke
       Rake::Task['rspec'].invoke
+      # as of 2012-05-23, no longer have cucumber tests
       # Rake::Task['cucumber:ok'].invoke
   end
   raise "TEST FAILURES: #{error}" if error
