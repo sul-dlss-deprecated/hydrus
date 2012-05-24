@@ -92,4 +92,43 @@ describe Hydrus::DescMetadataDS do
 
   end
 
+  context "Blank template" do
+
+    it "should match our expectations" do
+      exp_xml = %Q(
+        #{@mods_start}
+          <originInfo>
+            <publisher/>
+            <dateIssued/>
+          </originInfo>
+          <abstract/>
+          <titleInfo>
+            <title/>
+          </titleInfo>
+          <name>
+            <namePart/>
+            <role>
+              <roleTerm/>
+            </role>
+          </name>
+          <relatedItem>
+            <titleInfo>
+              <title/>
+            </titleInfo>
+            <identifier type="uri"/>
+          </relatedItem>
+          <subject>
+            <topic/>
+          </subject>
+          <note type="Preferred Citation"/>
+          <note type="peer-review"/>
+        </mods>
+      )
+      exp_xml = noko_doc(exp_xml)
+      @dsdoc = Hydrus::DescMetadataDS.new(nil, nil)
+      @dsdoc.ng_xml.should be_equivalent_to exp_xml
+    end
+
+  end
+
 end

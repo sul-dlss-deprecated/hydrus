@@ -2,11 +2,22 @@ class Hydrus::DescMetadataDS < ActiveFedora::NokogiriDatastream
 
   include SolrDocHelper
 
+  # MODS XML constants.
+
   MODS_NS = 'http://www.loc.gov/mods/v3'
+  MODS_PARAMS = {
+    "version"            => "3.3", 
+    "xmlns:xlink"        => "http://www.w3.org/1999/xlink",
+    "xmlns:xsi"          => "http://www.w3.org/2001/XMLSchema-instance",
+    "xmlns"              => MODS_NS,
+    "xsi:schemaLocation" => "http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-3.xsd",
+  }
+
+  # OM terminology.
+
   IA      = { :index_as => [:searchable, :displayable] }
   IAF     = { :index_as => [:searchable, :displayable, :facetable] }
   IANS    = { :index_as => [:not_searchable] }
-
   set_terminology do |t|
     t.root :path => 'mods', :xmlns => MODS_NS, :index_as => [:not_searchable]
     t.originInfo IANS do
@@ -51,7 +62,9 @@ class Hydrus::DescMetadataDS < ActiveFedora::NokogiriDatastream
     )
   end
 
-  NOKOGIRI_BUILDER_BLOCKS = {
+  # Blocks to pass into Nokogiri::XML::Builder.new()
+
+  NOKO_BUILDERS = {
     :name => lambda { |xml|
       xml.name {
         xml.namePart
@@ -68,8 +81,43 @@ class Hydrus::DescMetadataDS < ActiveFedora::NokogiriDatastream
         xml.identifier(:type=>"uri")
       }
     },
+    :xml_template => lambda { |xml|
+      xml.mods(MODS_PARAMS) {
+        xml.originInfo {
+          xml.publisher
+          xml.dateIssued
+        }
+        xml.abstract
+        xml.titleInfo {
+          xml.title
+        }
+        xml.name {
+          xml.namePart
+          xml.role {
+            xml.roleTerm
+          }
+        }
+        xml.relatedItem {
+          xml.titleInfo {
+            xml.title
+          }
+          xml.identifier(:type=>"uri")
+        }
+        xml.subject {
+          xml.topic
+        }
+        xml.note(:type => "Preferred Citation")
+        xml.note(:type => "peer-review")
+      }
+    },
   }
 
+  # Methods returning empty XML documents and nodes.
+
+  def self.xml_template
+    return Nokogiri::XML::Builder.new(&NOKO_BUILDERS[:xml_template]).doc
+  end
+      
   def insert_person
     insert_new_node(:name)
   end
@@ -79,7 +127,7 @@ class Hydrus::DescMetadataDS < ActiveFedora::NokogiriDatastream
   end
 
   def insert_new_node(term)
-    builder = Nokogiri::XML::Builder.new(&NOKOGIRI_BUILDER_BLOCKS[term])
+    builder = Nokogiri::XML::Builder.new(&NOKO_BUILDERS[term])
     node    = builder.doc.root
     nodeset = self.find_by_terms(term)
     unless nodeset.nil?
