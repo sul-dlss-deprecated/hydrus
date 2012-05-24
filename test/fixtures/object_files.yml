@@ -1,0 +1,6 @@
+file1:
+  id: 1
+  pid: druid:oo000oo0001
+  created_at: <%=Time.now%>
+  updated_at: <%=Time.now%>
+  file: test

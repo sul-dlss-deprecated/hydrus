@@ -1,7 +1,9 @@
 class Hydrus::ObjectFile < ActiveRecord::Base
-  # attr_accessible :title, :body
-  mount_uploader :file, FileUploader
   
+  attr_accessible :label,:published?
+  
+  mount_uploader :file, FileUploader
+    
   def url
     file.url
   end
@@ -9,7 +11,7 @@ class Hydrus::ObjectFile < ActiveRecord::Base
   def current_path
     file.current_path
   end
-  
+      
   def filename
     file.file.identifier
   end

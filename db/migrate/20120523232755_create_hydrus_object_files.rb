@@ -1,15 +1,10 @@
 class CreateHydrusObjectFiles < ActiveRecord::Migration
-  def up
+  def change
     create_table(:object_files) do |t|
       t.string :pid,                :null => false, :default => ""
       t.string :file, :null => false, :default => ""
       t.timestamps
     end
-    add_index :object_files, :pid
-    
-  end
-
-  def down
-    drop_table :object_files
+    add_index :object_files, :pid    
   end
 end

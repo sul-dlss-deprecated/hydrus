@@ -13,6 +13,7 @@ namespace :hydrus do
 
   desc "load hydrus fixtures"
   task :loadfix do
+    Rake::Task['db:fixtures:load'].invoke
     FIXTURE_PIDS.each { |pid|  
       ENV["pid"] = pid
       Rake::Task['repo:load'].reenable

@@ -1,7 +1,7 @@
 class Hydrus::Item < Hydrus::GenericItem
 
   def files
-    Hydrus::ObjectFile.find_all_by_pid(pid)
+    Hydrus::ObjectFile.find_all_by_pid(pid)  # coming from the database
   end
   
   def submit_time

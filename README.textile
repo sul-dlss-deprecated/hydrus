@@ -7,3 +7,118 @@ This code has dependencies on non-public code:
 <li>Stanford's dor-services gem</li>
 <li>Stanford's sul-chrome gem </li>
 </ul>
+
+h2. Getting your environment setup:
+
+	rvm install 1.9.3
+
+	git clone git@github.com:sul-dlss/hydrus.git
+	cd hydrus
+
+	bundle install
+
+	git submodule init
+	git submodule update
+
+	rake hydra:jetty:config
+
+	rake jetty:start
+
+	rake db:migrate
+	rake db:test:prepare
+	rake db:migrate RAILS_ENV=test
+
+	rake hydrus:loadfix
+	rake hydrus:loadfix RAILS_ENV=test 
+
+h2. Starting the app
+
+	rake jetty:start
+	rails server
+	
+Go to http://localhost:3000
+
+h2. Default user
+
+Note that you will need to be logged in to see any objects, since there is an authentication and permissions system preventing read access to the default fixtures.  Login with the following default user:
+
+username: archivist1@example.com
+password: beatcal
+	
+
+h2. Developing
+
+Recommended workflow:
+
+0. Create a local working branch
+
+ git branch working
+
+1. Go to your local working branch
+
+	git checkout working
+
+	-- make changes and local commits here --
+	
+2. Once you are committed to your local working branch:
+
+ git checkout develop
+ git fetch
+
+3. If the git fetch pulled updates from the server, then:
+
+ git merge origin/develop
+ git checkout working
+ git rebase develop
+ git checkout develop
+ git merge working
+ git push origin develop
+
+4. If the git fetch didn't pull any updates from the server, then:
+
+ git merge working
+ git push origin develop
+
+You can use "gitx --all" at any time to see the history of each branch.
+	
+5. When you're ready to develop more code, go back to step 1.	You can use multiple working branches if you are developing multiple features at once that you don't want to mix together.  Just create a different local branch and replace "working" above with your local branch name.
+
+h2. Useful commands
+
+h3. Using Rails console:
+
+	rails console
+	
+h3. Dropping databases entirely:
+
+	rake db:drop:all
+	
+Most of the rake commands are environment specific, so they can be run in test environment by adding 'RAILS_ENV=test' to the end.
+
+h3. Migrating databases to the latest version (which will also set them up if they don't exist, assuming you are using sqllite):
+
+	rake db:migrate
+
+h3. Fixtures:
+
+	rake hydrus:refreshfix   # deletes and then reloads fixtures (most common)
+	rake hydrus:loadfix      # loads fixtures (will fail if they exist)
+	rake hydrus:deletefix    # deletes fixtures 
+
+h3. Tests:
+	
+	rake local_ci	   # run all tests (will shut down jetty, runs 'rake ci' task and then restart jetty)
+	rake rspec       # just run rspec tests
+	open coverage/rcov/index.html  # check your test coverage (won't exist until tests run at least once)
+
+h3. App URLs:
+
+	http://localhost:3000
+	
+Local services provided by jetty, assuming it's running (most will have both a development and a test instance):
+
+	http://localhost:8983/    # lists all services
+	http://localhost:8983/fedora/admin/   # fedora admin   (username and password are "fedoraAdmin")
+	http://localhost:8983/fedora/objects  # find fedora objects
+	http://localhost:8983/solr/   # solr
+	http://localhost:8983/solr/development/select/   # show all solr index information
