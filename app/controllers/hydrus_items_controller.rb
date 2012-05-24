@@ -24,12 +24,14 @@ class HydrusItemsController < ApplicationController
   end
 
   def update
-    keywords = {}
-    params[:hydrus_item_keywords].split(",").map{|k| k.strip}.each_with_index do |keyword, index|
-      keywords[index] = keyword
+    if params.has_key?(:hydrus_item_keywords)
+      keywords = {}
+      params[:hydrus_item_keywords].split(",").map{|k| k.strip}.each_with_index do |keyword, index|
+        keywords[index] = keyword
+      end    
+      @sanitized_params["descMetadata"].merge!({[:subject, :topic] => keywords})
     end
     
-    @sanitized_params["descMetadata"].merge!({[:subject, :topic] => keywords})
     @response = update_document(@document_fedora, @sanitized_params)
     if params.has_key?(:add_person)
       @document_fedora.descMetadata.insert_person
@@ -41,7 +43,13 @@ class HydrusItemsController < ApplicationController
     flash[:notice] = "Your changes have been saved."
     respond_to do |want|
       want.html {
-        redirect_to @document_fedora
+        if params.has_key?(:add_person) or params.has_key?(:add_link)
+          # if we want to pass on parameters to edit screen we'll need to use the named route
+          #redirect_to edit_polymorphic_path(@document_fedora, :my_param=>"oh-hai-there")
+          redirect_to [:edit, @document_fedora]
+        else
+          redirect_to @document_fedora
+        end
       }
       want.js {
         if params.has_key?(:add_person)
