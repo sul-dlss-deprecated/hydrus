@@ -76,20 +76,30 @@ table.hydrus-striped-table {
 	width: 100%;
 }
 
-/* edit item */
-form.actions-box {
+/* object sidebar */
+.actions-box {
 	margin-right: 20px;
 	margin-top: 25px;
-	legend {
+	.box-header {
 		border-bottom: 1px dotted #CCC;
 		font-size: 120%;
 		line-height: 1em;
 		padding: 0px 0px 5px;
 	}
+	dt, dd { 
+		line-height: 2em;
+		text-align: left;
+		width: 50%;
+	}
+	dd { margin-left: 55%;}
+	dl {
+		font-size: 85%;
+		margin-bottom: none;
+	}
 	button {
 		margin: 12px 0px 22px 18px;
 	}
-	label {
+	label{
 		font-size: 75%;
 		line-height: 1.5em;
 		margin-bottom: 0;
@@ -104,5 +114,9 @@ form.actions-box {
 
 }
 
+#sidebar dd.collection {
+	font-size: 90%;
+	margin-left:0;
+}
 
 

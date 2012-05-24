@@ -3,13 +3,39 @@
   cmd = @document_fedora.contentMetadata
 %>
 <%- @page_title = "#{dmd.title.first} - #{application_name}" -%>
+
+<% sidebar_items << capture do %>
+
+  <dl>
+    <dt><h6>Collection</h6></dt>
+    <% @document_fedora.collection.each do |c| %>
+      <dd class="collection"><%= link_to(c.descMetadata.title.first, polymorphic_path(c)) %></dd>
+    <% end %>
+  </dl>
+
+
+  <div class="well actions-box">
+    <div class="box-header">Status</div>
+    <dl class="dl-horizontal">
+      <dt>Submitted by:</dt>
+      <dd><font color=red>#TODO</font></dd>
+      <dt>Submitted on:</dt>
+      <dd><%= @document_fedora.submit_time.to_date.strftime("%b %d, %Y") %></dd>
+      <dt>Release date:</dt>
+      <dd><font color=red>#TODO</font></dd>
+      <dt>Visibility:</dt>
+      <dd><%= @document_fedora.discover_access %></dd>
+    </dl>
+  </div>
+<%- end -%>
+
 <div>
 
   <span class="edit-browse">
 		<%=render :partial=>'shared/navigation' %>
   </span>
 
-  <dl class="defList">
+  <dl class="dl-horizontal">
 
     <h3><%= dmd.title.first %></h3>
 
@@ -69,27 +95,6 @@
       </dd>
     <% end %>
 
-
-    <h3>Status</h3>
-
-    <dt>Submitted by: </dt>
-    <dd><font color=red>#TODO decisions required</font></dd>
-
-    <dt>Submitted on: </dt>
-    <dd><%= @document_fedora.submit_time %></dd>
-
-    <dt>Release date: </dt>
-    <dd><font color=red>#TODO decisions required</font></dd>
-
-    <dt>Visibility: </dt>
-    <dd><%= @document_fedora.discover_access %></dd>
-
-
-    <h3>Collections</h3>
-
-    <% @document_fedora.collection.each do |c| %>
-      <dd><%= link_to(c.descMetadata.title.first, polymorphic_path(c)) %></dd>
-    <% end %>
 
   </dl>
 
