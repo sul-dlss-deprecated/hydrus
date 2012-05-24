@@ -4,6 +4,25 @@
 #
 #   rails runner script/experiment.rb
 
+
+hi   = Hydrus::Item.find('druid:oo000oo0001')
+dmd  = hi.descMetadata
+cmd  = hi.contentMetadata
+rm   = hi.rightsMetadata
+coll = hi.collection
+wf   = hi.workflows
+
+__END__
+
+file_nodes = cmd.ng_xml.xpath '//file'
+
+file_nodes.each do |fn|
+  ap fn['id']
+end
+
+__END__
+
+
 blk = lambda { |xml|
   xml.relatedItem {
     xml.titleInfo { xml.title }
@@ -17,9 +36,3 @@ puts node
 
 __END__
 
-hi   = Hydrus::Item.find('druid:oo000oo0001')
-dmd  = hi.descMetadata
-cmd  = hi.contentMetadata
-rm   = hi.rightsMetadata
-coll = hi.collection
-wf   = hi.workflows
