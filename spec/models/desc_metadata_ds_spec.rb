@@ -79,12 +79,14 @@ describe Hydrus::DescMetadataDS do
     before(:each) do
       nm = '<name><namePart/><role><roleTerm authority="marcrelator" type="text"/></role></name>'
       ri = '<relatedItem><titleInfo><title/></titleInfo><identifier type="uri"/></relatedItem>'
-      @exp_xml = noko_doc([@mods_start, nm, nm, ri, '</mods>'].join '')
+      @exp_xml = noko_doc([@mods_start, nm, nm, nm, ri, ri, '</mods>'].join '')
       @dsdoc   = Hydrus::DescMetadataDS.from_xml("#{@mods_start}</mods>")
     end
     it "###" do
+      @dsdoc.insert_person
       @dsdoc.insert_new_node(:name)
       @dsdoc.insert_new_node(:name)
+      @dsdoc.insert_related_item
       @dsdoc.insert_new_node(:relatedItem)
       @dsdoc.ng_xml.should be_equivalent_to @exp_xml
     end
