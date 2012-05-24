@@ -31,13 +31,8 @@ db/schema.rb
 db/*.sqlite3
 *.sqlite3
 log/*
-#log/*.log
 *.log
-tmp/**/*
-#tmp/performance
-#tmp/*.log
-#tmp/pids/
-#tmp/test_app/
+tmp
 nohup.out
 *~
 
