@@ -1,15 +1,11 @@
-<% 
-  dmd = @document_fedora.descMetadata
-  cmd = @document_fedora.contentMetadata
-%>
-<%- @page_title = "#{dmd.title.first} - #{application_name}" -%>
+<%- @page_title = "#{@document_fedora.title} - #{application_name}" -%>
 
 <% sidebar_items << capture do %>
 
   <dl>
     <dt><h6>Collection</h6></dt>
     <% @document_fedora.collection.each do |c| %>
-      <dd class="collection"><%= link_to(c.descMetadata.title.first, polymorphic_path(c)) %></dd>
+      <dd class="collection"><%= link_to(c.title, polymorphic_path(c)) %></dd>
     <% end %>
   </dl>
 
@@ -37,50 +33,44 @@
 
   <dl class="dl-horizontal item-view">
 
-    <h3><%= dmd.title.first %></h3>
+    <h3><%= @document_fedora.title %></h3>
 
     <dt>PURL: </dt>
     <dd>
-      <%=
-        url = "http://purl.stanford.edu/#{@document_fedora.pid}"
-        link_to(url, url)
-      %>
+      <%=link_to(@document_fedora.url, @document_fedora.url)%>
     </dd>
 
-    <% dmd.find_by_terms(:name).each do |name_node| %>
-      <dt><%= name_node.at_css('role roleTerm').content %>:</dt>
-      <dd><%= name_node.at_css('namePart').content %></dd>
+    <% @document_fedora.actors.each do |actor| %>
+      <dt><%= actor.role %></dt>
+      <dd><%= actor.name %></dd>
     <% end %>
 
     <dt>Abstract: </dt>
-    <dd><%= dmd.abstract.first %></dd>
+    <dd><%= @document_fedora.abstract %></dd>
 
     <dt>Keywords: </dt>
     <dd>
-      <%= dmd.subject.topic.map{|topic| link_to(topic, "#")}.join(", ").html_safe %>
+      <%= @document_fedora.keywords.map {|topic| link_to(topic, "#")}.join(", ").html_safe %>
     </dd>
 
     <dt>Cite this item as: </dt>
-    <dd><%= dmd.preferred_citation.first %></dd>
+    <dd><%= @document_fedora.preferred_citation %></dd>
 
     <dt>Cite related work as: </dt>
     <dd><font color=red>#TODO decisions required</font></dd>
 
     <dt>Publisher: </dt>
-    <dd><%= dmd.originInfo.publisher.first %></dd>
+    <dd><%= @document_fedora.publisher %></dd>
 
     <dt>Publication date: </dt>
-    <dd><%= dmd.originInfo.dateIssued.first %></dd>
+    <dd><%= @document_fedora.publication_date %></dd>
 
     <dt>Peer-reviewed: </dt>
-    <dd><%= dmd.peer_reviewed.first %></dd>
+    <dd><%= @document_fedora.peer_reviewed %></dd>
 
-    <% dmd.find_by_terms(:relatedItem).each do |rel_node|
-      ti  = rel_node.at_css('titleInfo title').content
-      uri = rel_node.at_css('identifier').content
-    %>
+    <% @document_fedora.related_items.each do |related_item| %>
       <dt>Related content: </dt>
-      <dd><%= link_to(ti, uri) %></dd>
+      <dd><%= link_to(related_item.title, related_item.url) %></dd>
     <% end %>
 
     <dt>Files: </dt>

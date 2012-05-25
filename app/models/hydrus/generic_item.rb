@@ -8,6 +8,10 @@ class Hydrus::GenericItem < Dor::Item
     :label => 'Descriptive Metadata',
     :control_group => 'M')
 
+  def object_type
+      identityMetadata.objectType.inspect
+  end
+        
   def apo
     @apo ||= (apo_pid ? get_fedora_item(apo_pid) : nil)
   end

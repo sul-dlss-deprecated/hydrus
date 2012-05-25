@@ -13,11 +13,6 @@ module ApplicationHelper
       return false
     end
   end
-  
-  # used to determine if we should show beta message in UI
-  def is_production?
-    return true if Rails.env.production? and (!request.env["HTTP_HOST"].nil? and !request.env["HTTP_HOST"].include?("-test") and !request.env["HTTP_HOST"].include?("-dev") and !request.env["HTTP_HOST"].include?("localhost"))
-  end
 
   def render_head_content
     render_extra_head_content +
