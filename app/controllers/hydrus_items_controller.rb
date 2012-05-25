@@ -32,7 +32,7 @@ class HydrusItemsController < ApplicationController
       @sanitized_params["descMetadata"].merge!({[:subject, :topic] => keywords})
     end
     # special case for Peer reviewed check box
-    unless params["asset"]["descMetadata"].has_key?("peer_reviewed")
+    if params.has_key?("asset") and params["asset"].has_key?("descMetadata") and !params["asset"]["descMetadata"].has_key?("peer_reviewed")
       @sanitized_params["descMetadata"].merge!({[:peer_reviewed]=>{"0"=>"No"}})
     end
     
