@@ -84,7 +84,7 @@ And then repush:
 	
 Skip step 3b and go to 4
 	
-3b. If the git fetch didn't pull any updates from the server, then:
+3b. If from step 2 the git fetch didn't pull any updates from the server, then:
 
  git merge working
  git push origin develop
