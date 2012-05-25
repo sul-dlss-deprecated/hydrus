@@ -175,3 +175,27 @@ table.hydrus-striped-table {
 	}
 }
 
+/* beta version warning elements */
+#beta-dialog.modal {
+	text-align: center;
+	p {
+		font-size: 110%;
+		font-weight: bold;
+	}
+	.modal-header {
+		background-color: #93190c;
+		color: #fff;
+	}
+	.modal-footer {
+		border: none;
+		background-color: inherit;
+		padding: 0 15px 20px;
+		text-align: center;
+	}
+}
+
+
+
+
+
+

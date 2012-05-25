@@ -13,4 +13,5 @@ $(document).ready(function(){
 		});
 		return false;
 	});
+	$("[rel=tooltip]").tooltip();
 });
