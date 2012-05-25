@@ -64,24 +64,30 @@ class Hydrus::DescMetadataDS < ActiveFedora::NokogiriDatastream
 
   # Blocks to pass into Nokogiri::XML::Builder.new()
 
-  NOKO_BUILDERS = {
-    :name => lambda { |xml|
+  def noko_builder_name
+    return lambda { |xml| 
       xml.name {
         xml.namePart
         xml.role {
           xml.roleTerm(:authority => "marcrelator", :type => "text")
         }
       }
-    },
-    :relatedItem => lambda { |xml|
+    }
+  end
+
+  def noko_builder_relatedItem
+    return lambda { |xml| 
       xml.relatedItem {
         xml.titleInfo {
           xml.title
         }
         xml.identifier(:type=>"uri")
       }
-    },
-    :xml_template => lambda { |xml|
+    }
+  end
+
+  def self.noko_builder_xml_template
+    return lambda { |xml| 
       xml.mods(MODS_PARAMS) {
         xml.originInfo {
           xml.publisher
@@ -109,13 +115,13 @@ class Hydrus::DescMetadataDS < ActiveFedora::NokogiriDatastream
         xml.note(:type => "Preferred Citation")
         xml.note(:type => "peer-review")
       }
-    },
-  }
+    }
+  end
 
   # Methods returning empty XML documents and nodes.
 
   def self.xml_template
-    return Nokogiri::XML::Builder.new(&NOKO_BUILDERS[:xml_template]).doc
+    return Nokogiri::XML::Builder.new(&send(:noko_builder_xml_template)).doc
   end
       
   def insert_person
@@ -127,7 +133,7 @@ class Hydrus::DescMetadataDS < ActiveFedora::NokogiriDatastream
   end
 
   def insert_new_node(term)
-    builder = Nokogiri::XML::Builder.new(&NOKO_BUILDERS[term])
+    builder = Nokogiri::XML::Builder.new(&send("noko_builder_#{term.to_s}"))
     node    = builder.doc.root
     nodeset = self.find_by_terms(term)
     unless nodeset.nil?
