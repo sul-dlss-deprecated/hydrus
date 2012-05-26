@@ -36,6 +36,38 @@ class HydrusItemsController < ApplicationController
       @sanitized_params["descMetadata"].merge!({[:peer_reviewed]=>{"0"=>"No"}})
     end
     
+    # Binary Base64 files from drag-and-drop.
+    if params.has_key?("binary_files")
+      params["binary_files"].each_with_index do |binary_file, index|
+        binary_file.gsub!(/^.*;base64,/, "")
+        temp_file = StringIO.new(Base64.decode64(binary_file))
+        temp_file.class_eval { attr_accessor :original_filename }
+        temp_file.original_filename = params["file_names"][index]
+        new_file = Hydrus::ObjectFile.new
+        new_file.pid = params[:id]
+        new_file.file = temp_file
+        new_file.save
+      end
+    end
+
+    # Files from the file input.
+    if params.has_key?("files")
+      params["files"].each do |file|
+        new_file = Hydrus::ObjectFile.new
+        new_file.pid = params[:id]
+        new_file.label = params["file_label"][new_file.id] if params.has_key?("file_label") and params["file_label"][new_file.id]
+        new_file.file = file
+        new_file.save
+      end
+    end
+    if params.has_key?("file_label")
+      params["file_label"].each do |id,label|
+        file = Hydrus::ObjectFile.find(id)
+        file.label = label
+        file.save
+      end
+    end
+    
     @response = update_document(@document_fedora, @sanitized_params)
     if params.has_key?(:add_person)
       @document_fedora.descMetadata.insert_person

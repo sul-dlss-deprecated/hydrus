@@ -25,7 +25,7 @@
   </div>
 </div>
 
-<%= form_for(@document_fedora, :method => 'PUT', :html => {:class=>"step"}) do -%>
+<%= form_for(@document_fedora, :method => 'PUT', :html => {:class=>"step", :multipart=>true}) do -%>
 
   <%= hydrus_form_header(:required=>true) {"Title"} %>
   <div class="row">
@@ -67,6 +67,23 @@
   </div>
   
   <%= hydrus_form_header(:required=>true) {"Upload file(s)"} -%>
+  <div class="row">
+    <div class="span9" id="file-upload">
+      <%- unless @document_fedora.files.blank? -%>
+        <%- @document_fedora.files.each do |file| -%>
+          <div class="row">
+            <div class="span3"><%= file.filename %> (<%= number_to_human_size(file.file.size) %>)</div>
+            <div class="span6"><%= text_field_tag("file_label[#{file.id}]", file.label) -%></div>
+          </div>
+        <%- end -%>
+      <%- end -%>
+      <div class="row">
+        <div class="span7 offset2">
+          <%= file_field_tag "files[]", :multiple=>true %>
+        </div>    
+      </div>
+    </div>
+  </div>
 
   <%= hydrus_form_header(:required=>true) {"Abstract and keywords"} -%>
   <div class="row">

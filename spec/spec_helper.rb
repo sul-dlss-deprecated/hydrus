@@ -50,6 +50,14 @@ def mock_user
   return mock_user
 end
 
+def mock_authed_user
+  mock_user =  mock("user")
+  mock_user.stub!(:email).and_return("archivist1@example.com")
+  mock_user.stub!(:new_record?)
+  mock_user.stub!(:is_being_superuser?).and_return(false)
+  return mock_user
+end
+
 def login_as_archivist1
   login_as "archivist1@example.com", 'beatcal'
 end

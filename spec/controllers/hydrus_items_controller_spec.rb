@@ -29,4 +29,20 @@ describe HydrusItemsController do
 
   end
 
+  describe "update" do
+    describe "file upload" do
+      before(:all) do
+        @pid = "druid:oo000oo0001"
+        @file = fixture_file_upload("/../../spec/fixtures/files/fixture.html", "text/html")
+      end
+      it "should update the file successfully" do
+        controller.stub(:current_user).and_return(mock_authed_user)
+        put :update, :id => @pid, "files" => [@file]
+        response.should redirect_to(hydrus_item_path(@pid))
+        flash[:notice].should == "Your changes have been saved."
+        Hydrus::Item.find(@pid).files.map{|file| file.filename }.include?("fixture.html").should be_true
+      end
+    end
+  end
+
 end
