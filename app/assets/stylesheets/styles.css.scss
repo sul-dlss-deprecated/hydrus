@@ -175,6 +175,13 @@ table.hydrus-striped-table {
 	}
 }
 
+/* drag and drop styles */
+#file-dnd-text {
+	margin-top: 10px;
+	margin-bottom: 10px;
+	color: #990000;
+}
+
 /* beta version warning elements */
 #beta-dialog.modal {
 	text-align: center;
@@ -193,9 +200,3 @@ table.hydrus-striped-table {
 		text-align: center;
 	}
 }
-
-
-
-
-
-

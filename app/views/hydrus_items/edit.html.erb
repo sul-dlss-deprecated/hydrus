@@ -77,6 +77,9 @@
           </div>
         <%- end -%>
       <%- end -%>
+      <div class="row" id="file-dnd-text" style="display:none;">
+        <div class="span9"><span id="uploaded-files">0</span> files to be uploaded on save. (<span id="uploaded-file-names"></span>)</div>
+      </div>
       <div class="row">
         <div class="span7 offset2">
           <%= file_field_tag "files[]", :multiple=>true %>

@@ -1,5 +1,5 @@
 $(document).ready(function() {
-	var dropbox = document.getElementById("main")
+	var dropbox = document.getElementById("main");
 
 	// init event handlers
 	dropbox.addEventListener("dragenter", dragEnter, false);
@@ -26,9 +26,9 @@ function dragOver(evt) {
 function drop(evt) {
 	evt.stopPropagation();
 	evt.preventDefault();
-
+	
+	$("#file-dnd-text:hidden").toggle();
 	var files = evt.dataTransfer.files;
-	var count = files.length;
 	for(i = 0;  i < files.length; i++) {
 		var file = files[i];
     var reader = new FileReader();
@@ -37,8 +37,14 @@ function drop(evt) {
 		// init the reader event handlers
 		//reader.onprogress = function(){ console.log(evt) };
 		$("#file-upload").append("<input type='hidden' name='file_names[]' value='" + file.name + "' />");
+		var file_name_add = file.name;
+		if($("#file-dnd-text #uploaded-file-names").text() != "") {
+			file_name_add = ", " + file.name;
+		}
+		$("#file-dnd-text #uploaded-file-names").text($("#file-dnd-text #uploaded-file-names").text() + file_name_add);
 		reader.onloadend = function(evt){
 			$("#file-upload").append("<input type='hidden' name='binary_files[]' value='" + evt.target.result + "' />");			
+			$("#file-dnd-text #uploaded-files").text(parseInt($("#file-dnd-text #uploaded-files").text()) + 1);
 		};
 	}
 }
