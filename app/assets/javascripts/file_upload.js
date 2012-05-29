@@ -35,7 +35,7 @@ function drop(evt) {
 
     reader.readAsDataURL(file);
 		// init the reader event handlers
-		reader.onprogress = function(){ console.log(evt) };
+		//reader.onprogress = function(){ console.log(evt) };
 		$("#file-upload").append("<input type='hidden' name='file_names[]' value='" + file.name + "' />");
 		reader.onloadend = function(evt){
 			$("#file-upload").append("<input type='hidden' name='binary_files[]' value='" + evt.target.result + "' />");			
