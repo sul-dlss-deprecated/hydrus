@@ -35,6 +35,10 @@ form .help {
 	color: #666666;
 }
 
+form.step .peer_reviewed label {
+	display: inline;
+}
+
 /* forms on search results */
 #sortAndPerPage {
 	form, label {display:inline;}
