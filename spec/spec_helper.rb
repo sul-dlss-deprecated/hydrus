@@ -1,7 +1,32 @@
 # for test coverage 
-require 'simplecov'
 
-# # This file is copied to spec/ when you run 'rails generate rspec:install'
+ruby_engine = defined?(RUBY_ENGINE) ? RUBY_ENGINE : "ruby"
+
+if ENV['COVERAGE'] and RUBY_VERSION =~ /^1.9/ and ruby_engine != "jruby"
+  require 'simplecov'
+  require 'simplecov-rcov'
+
+  class SimpleCov::Formatter::MergedFormatter
+    def format(result)
+       SimpleCov::Formatter::HTMLFormatter.new.format(result)
+       SimpleCov::Formatter::RcovFormatter.new.format(result)
+    end
+  end
+  SimpleCov.formatter = SimpleCov::Formatter::MergedFormatter
+  SimpleCov.start do
+    # group coverage data
+    add_group "Controllers", "app/controllers"
+    add_group "Helpers", "app/helpers"
+    add_group "Mailers", "app/mailers"
+    add_group "Models", "app/models"
+    # exclude from coverage
+    add_filter "config/"
+    add_filter "features/"
+    add_filter "spec/"
+  end
+end
+
+# This file is copied to spec/ when you run 'rails generate rspec:install'
 ENV["RAILS_ENV"] ||= 'test'
 require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'

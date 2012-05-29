@@ -2,6 +2,8 @@ desc "Run Continuous Integration Suite (tests, coverage, docs)"
 
 task :ci do 
   Rake::Task["hydra:jetty:config"].invoke
+
+  ENV['COVERAGE'] = 'true' unless ENV.key? 'COVERAGE'
   
   require 'jettywrapper'
   jetty_params = Jettywrapper.load_config.merge({
