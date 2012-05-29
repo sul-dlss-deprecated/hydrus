@@ -1,4 +1,7 @@
-<div class="row">
-  <div class="span9" id="main"><%= yield %></div>
-  <div class="span3" id="sidebar"><%= sidebar_items.join('').html_safe %></div>	
-</div>
+<%- if params[:controller] == "hydrus_items" and params[:action] == "edit" -%>
+  <%= form_for(@document_fedora, :method => 'PUT', :html => {:class=>"step", :multipart=>true}) do -%>
+    <%= render "shared/main_contents" %>
+  <%- end -%>
+<%- else -%>
+  <%= render "shared/main_contents" %>
+<%- end -%>
