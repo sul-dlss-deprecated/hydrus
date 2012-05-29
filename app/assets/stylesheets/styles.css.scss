@@ -176,6 +176,9 @@ table.hydrus-striped-table {
 	dd {
 		margin-left: 165px;
 		padding-bottom: 6px;
+		@media (max-width: 768px) {
+			margin-left: 0;
+		}
 	}
 }
 
