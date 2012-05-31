@@ -25,6 +25,7 @@ class HydrusItemsController < ApplicationController
   end
 
   def update
+    notice = []
     if params.has_key?(:hydrus_item_keywords)
       keywords = {}
       params[:hydrus_item_keywords].split(",").map{|k| k.strip}.each_with_index do |keyword, index|
@@ -48,6 +49,7 @@ class HydrusItemsController < ApplicationController
         new_file.pid = params[:id]
         new_file.file = temp_file
         new_file.save
+        notice << "'#{temp_file.original_filename}' uploaded."
       end
     end
 
@@ -59,6 +61,8 @@ class HydrusItemsController < ApplicationController
         new_file.label = params["file_label"][new_file.id] if params.has_key?("file_label") and params["file_label"][new_file.id]
         new_file.file = file
         new_file.save
+        new_file.label
+        notice << "'#{file.original_filename}' uploaded."
       end
     end
     if params.has_key?("file_label")
@@ -77,7 +81,10 @@ class HydrusItemsController < ApplicationController
     end
     logger.debug("attributes submitted: #{@sanitized_params.inspect}")
     @document_fedora.save
-    flash[:notice] = "Your changes have been saved."
+    
+    notice << "Your changes have been saved."
+    flash[:notice] = notice.join("<br/>").html_safe unless notice.blank?
+    
     respond_to do |want|
       want.html {
         if params.has_key?(:add_person) or params.has_key?(:add_link)

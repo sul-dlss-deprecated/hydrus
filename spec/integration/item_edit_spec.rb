@@ -6,6 +6,7 @@ describe("Item edit", :type => :request) do
   before :each do
     @druid = 'druid:oo000oo0001'
     @hi    = Hydrus::Item.find @druid
+    @notice = "Your changes have been saved."
   end
 
   it "If not logged in, should be redirected to sign-in page" do
@@ -26,6 +27,7 @@ describe("Item edit", :type => :request) do
     find_field("Publisher").value.should == orig_name
     fill_in "Publisher", :with => new_name
     click_button "Save"
+    page.should have_content(@notice)
 
     current_path.should == polymorphic_path(@hi)
     visit polymorphic_path(@hi)
@@ -57,6 +59,7 @@ describe("Item edit", :type => :request) do
     fill_in(field_np, :with => new_name)
     select(new_role, :from => field_rt)
     click_button "Save"
+    page.should have_content(@notice)
 
     current_path.should == polymorphic_path(@hi)
     visit polymorphic_path(@hi)
@@ -90,6 +93,7 @@ describe("Item edit", :type => :request) do
     fill_in(field_link,  :with => new_link)
     fill_in(field_title, :with => new_title)
     click_button "Save"
+    page.should have_content(@notice)
 
     current_path.should == polymorphic_path(@hi)
     visit polymorphic_path(@hi)

@@ -1,3 +1,29 @@
+<div class="row">
+  <%- if flash[:notice] -%>
+    <div class="span9 offset3">
+      <div class="alert alert-info">
+        <button class="close" data-dismiss="alert">×</button>
+        <%= flash[:notice] %>
+      </div>
+    </div>
+  <%- end -%>
+  <%- if flash[:warning] -%>
+    <div class="span9 offset3">
+      <div class="alert">
+        <button class="close" data-dismiss="alert">×</button>
+        <%= flash[:warning] %>
+      </div>
+    </div>
+  <%- end -%>
+  <%- if flash[:error] -%>
+    <div class="span9 offset3">
+      <div class="alert alert-error">
+        <button class="close" data-dismiss="alert">×</button>
+        <%= flash[:error] %>
+      </div>
+    </div>
+  <%- end -%>
+</div>
 <%- if params[:controller] == "hydrus_items" and params[:action] == "edit" -%>
   <%= form_for(@document_fedora, :method => 'PUT', :html => {:class=>"step", :multipart=>true}) do -%>
     <%= render "shared/main_contents" %>

@@ -39,7 +39,8 @@ describe HydrusItemsController do
         controller.stub(:current_user).and_return(mock_authed_user)
         put :update, :id => @pid, "files" => [@file]
         response.should redirect_to(hydrus_item_path(@pid))
-        flash[:notice].should == "Your changes have been saved."
+        flash[:notice].should =~ /Your changes have been saved/
+        flash[:notice].should =~ /'fixture.html' uploaded/
         Hydrus::Item.find(@pid).files.map{|file| file.filename }.include?("fixture.html").should be_true
       end
     end
