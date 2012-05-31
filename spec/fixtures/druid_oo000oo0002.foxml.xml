@@ -13,6 +13,7 @@
         <rdf:RDF xmlns:fedora-model="info:fedora/fedora-system:def/model#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rel="info:fedora/fedora-system:def/relations-external#" xmlns:hydra="http://projecthydra.org/ns/relations#">
           <rdf:Description rdf:about="info:fedora/druid:oo000oo0002">
             <hydra:isGovernedBy rdf:resource="info:fedora/druid:hv992ry2431" />
+            <hasModel xmlns="info:fedora/fedora-system:def/model#" rdf:resource="info:fedora/afmodel:Dor_AdminPolicyObject" />
           </rdf:Description>
         </rdf:RDF>
       </foxml:xmlContent>
