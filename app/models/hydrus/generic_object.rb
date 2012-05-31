@@ -1,4 +1,4 @@
-class Hydrus::GenericItem < Dor::Item
+class Hydrus::GenericObject < Dor::Item
 
   attr_accessor :apo_pid
 
@@ -11,7 +11,15 @@ class Hydrus::GenericItem < Dor::Item
   def object_type
       identityMetadata.objectType.inspect
   end
-        
+
+  def abstract
+    descMetadata.abstract.first    
+  end
+  
+  def title
+    descMetadata.title.first
+  end
+  
   def apo
     @apo ||= (apo_pid ? get_fedora_item(apo_pid) : nil)
   end

@@ -1,15 +1,7 @@
-class Hydrus::Item < Hydrus::GenericItem
+class Hydrus::Item < Hydrus::GenericObject
 
   def files
     Hydrus::ObjectFile.find_all_by_pid(pid,:order=>'weight')  # coming from the database
-  end
-
-  def abstract
-    descMetadata.abstract.first    
-  end
-  
-  def title
-    descMetadata.title.first
   end
   
   def preferred_citation

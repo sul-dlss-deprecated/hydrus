@@ -1,9 +1,9 @@
 require 'spec_helper'
 
-describe Hydrus::GenericItem do
+describe Hydrus::GenericObject do
 
   before(:each) do
-    @hi      = Hydrus::GenericItem.new
+    @hi      = Hydrus::GenericObject.new
     @apo_pid = 'druid:oo000oo0002'
   end
   
