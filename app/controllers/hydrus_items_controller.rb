@@ -3,6 +3,7 @@ class HydrusItemsController < ApplicationController
   include Hydra::Controller
   include Hydra::AssetsControllerHelper  # This is to get apply_depositor_metadata method
   include Hydra::FileAssetsHelper
+  include Hydrus::AccessControlsEnforcement
 
   prepend_before_filter :sanitize_update_params, :only => :update
   before_filter :enforce_access_controls

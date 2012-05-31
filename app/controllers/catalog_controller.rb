@@ -6,6 +6,7 @@ class CatalogController < ApplicationController
   include Blacklight::Catalog
   # Extend Blacklight::Catalog with Hydra behaviors (primarily editing).
   include Hydra::Catalog
+  include Hydrus::AccessControlsEnforcement
 
   # These before_filters apply the hydra access controls
   before_filter :enforce_access_controls
