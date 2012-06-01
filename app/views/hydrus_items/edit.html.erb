@@ -5,11 +5,11 @@
   <div class="well actions-box">
     <fieldset>
       <legend class="box-header">Actions</legend>
-      <button type="submit" class="btn btn-small save-edits">Save</button>
+      <button type="submit" class="btn btn-small save-edits" name="save" id="save">Save</button>
       <label class="checkbox">
-        <input type="checkbox"> I agree to the <a href="#">terms of deposit</a> for the Stanford Digital Repository
+        <input type="checkbox" name="terms" id="terms" /> I agree to the <a href="#">terms of deposit</a> for the Stanford Digital Repository
       </label>
-      <button type="submit" class="btn btn-small" disabled="disabled">Publish</button>
+      <button type="submit" class="btn btn-small" id="publish" name="publish" disabled="disabled">Publish</button>
       <p class="discard-item"><i class="icon-trash"></i> <a href="#">Discard this <%= object_type %></a></p>
     </fieldset>
   </div>

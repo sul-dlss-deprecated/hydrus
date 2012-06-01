@@ -14,4 +14,25 @@ $(document).ready(function(){
 		return false;
 	});
 	$("[rel=tooltip]").tooltip();
+	
+	// $("#hydrus_items-edit form input, #hydrus_items-edit form textarea").live("blur", function(){
+	//     validate_hydrus_item();
+	// });
+	// $("#terms").click(function(){
+	// 	validate_hydrus_item();
+	// });
 });
+
+function validate_hydrus_item() {
+	var all_required_filled = true;
+	$("#hydrus_items-edit form input:required, #hydrus_items-edit form textarea:required").each(function(){
+		if($(this).attr("value") == "") {
+			all_required_filled = false;
+		}
+	});
+	if(all_required_filled && $("input#terms").is(":checked")) {
+		$("#publish").removeAttr("disabled");
+	}else{
+		$("#publish").attr("disabled", "disabled");
+	}
+}
