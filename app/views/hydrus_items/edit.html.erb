@@ -109,12 +109,10 @@
 </div>
 <div class="row">
   <%= hydrus_form_label do %>
-    Cite this related published work as
-    <%#- fedora_field_label("descMetadata", [:preferred_citation], "Cite this related published work as") -%>
+    <%- fedora_field_label("descMetadata", [:relatedItem, :cite_related_as], "Cite this related published work as") -%>
   <%- end -%>
   <%= hydrus_form_value(:class=>"short-textarea") do  -%>
-    #TODO: spec is unclear
-    <%#- fedora_text_area( @document_fedora, "descMetadata", [:preferred_citation], :multiple=>false, :required=>false) %>
+    <%- fedora_text_area( @document_fedora, "descMetadata", [:relatedItem, :cite_related_as], :multiple=>false, :required=>false) %>
   <%- end -%>
 </div>
 <div class="row">
