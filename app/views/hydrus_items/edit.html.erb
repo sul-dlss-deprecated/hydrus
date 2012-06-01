@@ -139,7 +139,7 @@
   <%- end -%>
   <%= hydrus_form_value(:class=>"peer_reviewed") do  -%>
     <%= hidden_field_tag("field_selectors[descMetadata][peer_reviewed][]", "peer_reviewed") -%>
-    <%#= hidden_field_tag("asset[descMetadata][peer_reviewed][0]", "No")%>
+    <%= hidden_field_tag("asset[descMetadata][peer_reviewed][0]", "No")%>
     <%= check_box_tag("asset[descMetadata][peer_reviewed][0]", "Yes", @document_fedora.descMetadata.peer_reviewed.first == "Yes") %> <%= label_tag("asset[descMetadata][peer_reviewed][0]", "This work has passed a peer review process")%>
   <%- end -%>
 </div>
