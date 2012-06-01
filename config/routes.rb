@@ -67,5 +67,7 @@ Hydrus::Application.routes.draw do
 
   resources :collections, :controller => 'hydrus_collections', :as => 'hydrus_collections'
   resources :items,       :controller => 'hydrus_items', :as => 'hydrus_items'
+  
+  resources :object_files
 
 end

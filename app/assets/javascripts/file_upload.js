@@ -27,24 +27,18 @@ function drop(evt) {
 	evt.stopPropagation();
 	evt.preventDefault();
 	
-	$("#file-dnd-text:hidden").toggle();
 	var files = evt.dataTransfer.files;
 	for(i = 0;  i < files.length; i++) {
 		var file = files[i];
     var reader = new FileReader();
-
     reader.readAsDataURL(file);
-		// init the reader event handlers
+    reader.original_filename = file.name;
+		
+		// We can do something like a progress bar below.
 		//reader.onprogress = function(){ console.log(evt) };
-		$("#file-upload").append("<input type='hidden' name='file_names[]' value='" + file.name + "' />");
-		var file_name_add = file.name;
-		if($("#file-dnd-text #uploaded-file-names").text() != "") {
-			file_name_add = ", " + file.name;
-		}
-		$("#file-dnd-text #uploaded-file-names").text($("#file-dnd-text #uploaded-file-names").text() + file_name_add);
 		reader.onloadend = function(evt){
-			$("#file-upload").append("<input type='hidden' name='binary_files[]' value='" + evt.target.result + "' />");			
-			$("#file-dnd-text #uploaded-files").text(parseInt($("#file-dnd-text #uploaded-files").text()) + 1);
+			var object_id = $("#object_id").attr("value");
+			$.post("/object_files?format=js", {file_name: evt.target.original_filename, binary_data: evt.target.result, id: object_id}, function(data){});
 		};
 	}
 }

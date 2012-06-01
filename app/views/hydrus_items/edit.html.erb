@@ -21,7 +21,7 @@
 		<%=render :partial=>'shared/navigation' %>
   </div>
 </div>
-
+<%= hidden_field_tag("object_id", params[:id]) -%>
 <%= hydrus_form_header(:required=>true) {"Title"} %>
 <div class="row">
   <%= hydrus_form_label do %>
@@ -66,15 +66,9 @@
   <div class="span9" id="file-upload">
     <%- unless @document_fedora.files.blank? -%>
       <%- @document_fedora.files.each do |file| -%>
-        <div class="row">
-          <div class="span3"><%= file.filename %> (<%= number_to_human_size(file.file.size) %>)</div>
-          <div class="span6"><%= text_field_tag("file_label[#{file.id}]", file.label) -%></div>
-        </div>
+        <%= render :partial => "object_files/object_file", :locals => {:file => file} %>
       <%- end -%>
     <%- end -%>
-    <div class="row" id="file-dnd-text" style="display:none;">
-      <div class="span9"><span id="uploaded-files">0</span> files to be uploaded on save. (<span id="uploaded-file-names"></span>)</div>
-    </div>
     <div class="row">
       <div class="span7 offset2">
         <%= file_field_tag "files[]", :multiple=>true %>
@@ -145,6 +139,7 @@
   <%- end -%>
   <%= hydrus_form_value(:class=>"peer_reviewed") do  -%>
     <%= hidden_field_tag("field_selectors[descMetadata][peer_reviewed][]", "peer_reviewed") -%>
+    <%#= hidden_field_tag("asset[descMetadata][peer_reviewed][0]", "No")%>
     <%= check_box_tag("asset[descMetadata][peer_reviewed][0]", "Yes", @document_fedora.descMetadata.peer_reviewed.first == "Yes") %> <%= label_tag("asset[descMetadata][peer_reviewed][0]", "This work has passed a peer review process")%>
   <%- end -%>
 </div>

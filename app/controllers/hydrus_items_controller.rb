@@ -26,6 +26,8 @@ class HydrusItemsController < ApplicationController
 
   def update
     notice = []
+    
+    # special case for comma delimited keywords.
     if params.has_key?(:hydrus_item_keywords)
       keywords = {}
       params[:hydrus_item_keywords].split(",").map{|k| k.strip}.each_with_index do |keyword, index|
@@ -33,26 +35,12 @@ class HydrusItemsController < ApplicationController
       end    
       @sanitized_params["descMetadata"].merge!({[:subject, :topic] => keywords})
     end
+    
     # special case for Peer reviewed check box
     if params.has_key?("asset") and params["asset"].has_key?("descMetadata") and !params["asset"]["descMetadata"].has_key?("peer_reviewed")
       @sanitized_params["descMetadata"].merge!({[:peer_reviewed]=>{"0"=>"No"}})
     end
     
-    # Binary Base64 files from drag-and-drop.
-    if params.has_key?("binary_files")
-      params["binary_files"].each_with_index do |binary_file, index|
-        binary_file.gsub!(/^.*;base64,/, "")
-        temp_file = StringIO.new(Base64.decode64(binary_file))
-        temp_file.class_eval { attr_accessor :original_filename }
-        temp_file.original_filename = params["file_names"][index]
-        new_file = Hydrus::ObjectFile.new
-        new_file.pid = params[:id]
-        new_file.file = temp_file
-        new_file.save
-        notice << "'#{temp_file.original_filename}' uploaded."
-      end
-    end
-
     # Files from the file input.
     if params.has_key?("files")
       params["files"].each do |file|
@@ -65,6 +53,8 @@ class HydrusItemsController < ApplicationController
         notice << "'#{file.original_filename}' uploaded."
       end
     end
+    
+    # The file labels.
     if params.has_key?("file_label")
       params["file_label"].each do |id,label|
         file = Hydrus::ObjectFile.find(id)

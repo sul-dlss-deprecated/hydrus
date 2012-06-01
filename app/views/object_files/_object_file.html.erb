@@ -1,0 +1,4 @@
+<div class="row object_file">
+  <div class="span3"><%= file.filename %> (<%= number_to_human_size(file.file.size) %>)</div>
+  <div class="span6"><%= text_field_tag("file_label[#{file.id}]", file.label) -%></div>
+</div>
