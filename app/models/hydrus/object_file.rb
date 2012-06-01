@@ -4,6 +4,10 @@ class Hydrus::ObjectFile < ActiveRecord::Base
   
   mount_uploader :file, FileUploader
     
+  def size
+    file.size
+  end
+  
   def url
     file.url
   end

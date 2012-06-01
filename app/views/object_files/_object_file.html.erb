@@ -1,4 +1,5 @@
-<div class="row object_file">
-  <div class="span3"><%= file.filename %> (<%= number_to_human_size(file.file.size) %>)</div>
+<div class="row object_file" id="object_file_<%=file.id%>">
+	<div class="span1"><%=link_to 'delete',object_file_path(file),:method=>:delete,:remote=>true, :confirm=>'Are you sure? Once deleted, you cannot recover this file.',:class=>'icon-trash'%></div>
+  <div class="span3"><%= file.filename %> (<%= number_to_human_size(file.size) %>)</div>
   <div class="span6"><%= text_field_tag("file_label[#{file.id}]", file.label) -%></div>
 </div>

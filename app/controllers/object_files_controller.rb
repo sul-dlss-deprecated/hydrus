@@ -12,8 +12,12 @@ class ObjectFilesController < ApplicationController
       new_file.file = temp_file
       new_file.save
       @file = new_file
-    end
-    
+    end    
+  end
+  
+  def destroy
+    Hydrus::ObjectFile.find(params[:id]).destroy  # this will also delete the underlying file from the local Hydrus file system upload location
+    @id=params[:id]
   end
   
 end
