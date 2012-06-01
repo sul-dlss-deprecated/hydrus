@@ -46,15 +46,19 @@ class Hydrus::DescMetadataDS < ActiveFedora::NokogiriDatastream
         :attributes => { :type => "uri" },
         :index_as => [:searchable, :displayable]
       )
+      t.related_citation :path => 'note', :attributes => { :type => "Preferred Citation" }
     end
     t.subject IANS do
       t.topic IAF
     end
+
+    t.all_preferred_citations :path => 'note',  :attributes => { :type => "Preferred Citation" }
+
     t.preferred_citation(
-      :path => 'note',
-      :attributes => { :type => "Preferred Citation" },
+      :proxy => [:mods, :all_preferred_citations],
       :index_as => [:searchable, :displayable]
     )
+
     t.peer_reviewed(
       :path => 'note',
       :attributes => { :type => "peer-review" },

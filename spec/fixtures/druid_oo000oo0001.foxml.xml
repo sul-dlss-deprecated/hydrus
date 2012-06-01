@@ -101,6 +101,7 @@
               <title>Online survey research site (really Project Gutenberg)</title>
             </titleInfo>
             <identifier type="uri">http://www.gutenberg.org/ebooks/500</identifier>
+            <note type="Preferred Citation">Project Gutenberg citation.</note>
           </relatedItem>
         </mods>
       </foxml:xmlContent>

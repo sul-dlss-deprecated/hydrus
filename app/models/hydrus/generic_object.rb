@@ -9,7 +9,7 @@ class Hydrus::GenericObject < Dor::Item
     :control_group => 'M')
 
   def object_type
-      identityMetadata.objectType.inspect
+      identityMetadata.objectType.first
   end
 
   def abstract

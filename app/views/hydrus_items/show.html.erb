@@ -57,7 +57,7 @@
     <dd><%= @document_fedora.preferred_citation %></dd>
 
     <dt>Cite related work as: </dt>
-    <dd><font color=red>#TODO decisions required</font></dd>
+    <dd><%= @document_fedora.descMetadata.relatedItem.related_citation %></dd>
 
     <dt>Publisher: </dt>
     <dd><%= @document_fedora.publisher %></dd>
