@@ -38,12 +38,13 @@ describe Hydrus::DescMetadataDS do
             </titleInfo>
             <identifier type="uri">http://example.com</identifier>
             <identifier type="foo">FUBB</identifier>
+            <note type="Preferred Citation">pref_cite inner</note>
           </relatedItem>
           <subject>
             <topic>divorce</topic>
             <topic>marriage</topic>
           </subject>
-          <note type="Preferred Citation">pref_cite</note>
+          <note type="Preferred Citation">pref_cite outer</note>
           <note type="peer-review">Indeed</note>
         </mods>
       EOF
@@ -61,8 +62,9 @@ describe Hydrus::DescMetadataDS do
         [[:name, :role, :roleTerm],          'guitar'],
         [[:relatedItem, :titleInfo, :title], 'Learn VB in 1 Day'],
         [[:relatedItem, :identifier],        'http://example.com'],
+        [[:relatedItem, :cite_related_as],   'pref_cite inner'],
         [[:subject, :topic],                 ['divorce', 'marriage']],
-        [:preferred_citation,                'pref_cite'],
+        [:preferred_citation,                'pref_cite outer'],
         [:peer_reviewed,                     'Indeed'],
       ]
       tests.each do |terms, exp|
@@ -116,6 +118,7 @@ describe Hydrus::DescMetadataDS do
               <title/>
             </titleInfo>
             <identifier type="uri"/>
+            <note type="Preferred Citation"/>
           </relatedItem>
           <subject>
             <topic/>
