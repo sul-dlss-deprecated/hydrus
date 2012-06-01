@@ -58,7 +58,10 @@ Recommended workflow:
 
 	git checkout working
 
-	-- make changes and local commits here --
+	-- make changes --
+	
+	git add -A
+	git commit -m 'i did lots of cool stuff'
 
 2. Get updates from remote server and switch back to the develop branch
 
