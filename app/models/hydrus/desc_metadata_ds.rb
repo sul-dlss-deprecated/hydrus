@@ -132,7 +132,7 @@ class Hydrus::DescMetadataDS < ActiveFedora::NokogiriDatastream
   def insert_person
     insert_new_node(:name)
   end
-
+  
   def insert_related_item
     insert_new_node(:relatedItem)
   end
@@ -152,6 +152,14 @@ class Hydrus::DescMetadataDS < ActiveFedora::NokogiriDatastream
       self.dirty = true
     end
     return node, index
+  end
+
+  def remove_node(term, index)
+    node = self.find_by_terms(term.to_sym => index.to_i).first
+    unless node.nil?
+      node.remove
+      self.dirty = true
+    end
   end
 
 end

@@ -25,7 +25,18 @@ form.step textarea, form.step input[type=text] {
 }
 form.step .people-select {
 	input[type=text] {
-	  width: 60%;
+	  width: 49%;
+	}
+	.delete-node {
+		margin-bottom: 9px;
+	}
+}
+form.step .related-item {
+	input[type=text] {
+		width: 84%;
+	}
+	.delete-node {
+		margin-bottom: 9px;
 	}
 }
 

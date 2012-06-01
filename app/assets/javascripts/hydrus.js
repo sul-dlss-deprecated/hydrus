@@ -15,6 +15,20 @@ $(document).ready(function(){
 	});
 	$("[rel=tooltip]").tooltip();
 	
+	
+	$(".delete-node").live("click", function(){
+		var button = $(this);
+		$.ajax({url: button.attr("href") + "&format=js",
+		        success: function(data){
+						  //hydrus_alert("notice", "Field deleted.");
+						},
+						error: function(data){
+							//hydrus_alert("error", "Unable to destroy field.");
+						}
+		});
+		return false;
+	});
+	
 	// $("#hydrus_items-edit form input, #hydrus_items-edit form textarea").live("blur", function(){
 	//     validate_hydrus_item();
 	// });

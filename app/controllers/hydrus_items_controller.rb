@@ -92,4 +92,13 @@ class HydrusItemsController < ApplicationController
     end
   end
 
+  def destroy_value
+    @document_fedora.descMetadata.remove_node(params[:term], params[:term_index])
+    @document_fedora.save
+    respond_to do |want|
+      want.html {redirect_to :back}
+      want.js 
+    end
+  end
+
 end

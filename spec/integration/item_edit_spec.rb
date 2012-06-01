@@ -73,6 +73,41 @@ describe("Item edit", :type => :request) do
     select(orig_role, :from => field_rt)
     click_button "Save"
   end
+  
+  it "People/Role adding and deleting" do
+    new_field = "asset_descMetadata_name_namePart_5"
+    new_delete_button = "remove_name_5"
+    person = "Mr. Test Person"
+    
+    login_as_archivist1
+    
+    visit edit_polymorphic_path(@hi)
+    current_path.should == edit_polymorphic_path(@hi)
+    
+    page.should have_css("input#asset_descMetadata_name_namePart_4")
+    page.should_not have_css("##{new_field}")
+    
+    click_button "add_person"
+    page.should have_css("##{new_field}")
+    page.should have_css("##{new_delete_button}")
+    
+    fill_in(new_field, :with => person)
+    click_button "Save"
+    page.should have_content(@notice)
+    
+    visit edit_polymorphic_path(@hi)
+    current_path.should == edit_polymorphic_path(@hi)
+    
+    page.should have_css("##{new_delete_button}")
+    find_field(new_field).value.should == person
+    
+    # delete
+    click_link new_delete_button
+    
+    current_path.should == edit_polymorphic_path(@hi)
+    page.should_not have_css("##{new_field}")
+    page.should_not have_css("##{new_delete_button}")
+  end
 
   it "Related Content editing" do
     orig_link   = "http://www.gutenberg.org/ebooks/500"
@@ -106,6 +141,50 @@ describe("Item edit", :type => :request) do
     fill_in(field_link,  :with => orig_link)
     fill_in(field_title, :with => orig_title)
     click_button "Save"
+  end
+  
+  it "Related Content adding and deleting" do
+    new_label = "asset_descMetadata_relatedItem_titleInfo_title_1"
+    new_url = "asset_descMetadata_relatedItem_identifier_1"
+    new_delete_button = "remove_relatedItem_1"
+    url = "http://library.stanford.edu"
+    label = "Library Website"
+    
+    login_as_archivist1
+    
+    visit edit_polymorphic_path(@hi)
+    current_path.should == edit_polymorphic_path(@hi)
+    
+    page.should have_css("input#asset_descMetadata_relatedItem_titleInfo_title_0")
+    page.should have_css("input#asset_descMetadata_relatedItem_identifier_0")
+    page.should_not have_css("##{new_label}")
+    page.should_not have_css("##{new_url}")
+    
+    click_button "add_link"
+    page.should have_css("##{new_label}")
+    page.should have_css("##{new_url}")
+    page.should have_css("##{new_delete_button}")
+    
+    fill_in(new_label, :with => label)
+    fill_in(new_url, :with => url)
+    
+    click_button "Save"
+    page.should have_content(@notice)
+    
+    visit edit_polymorphic_path(@hi)
+    current_path.should == edit_polymorphic_path(@hi)
+    
+    page.should have_css("##{new_delete_button}")
+    find_field(new_label).value.should == label
+    find_field(new_url).value.should == url
+    
+    # delete
+    click_link new_delete_button
+    
+    current_path.should == edit_polymorphic_path(@hi)
+    page.should_not have_css("##{new_label}")
+    page.should_not have_css("##{new_url}")
+    page.should_not have_css("##{new_delete_button}")
   end
 
   it "can edit preferred citation field without affecting cite-related-as citation field" do
