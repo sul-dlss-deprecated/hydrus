@@ -8,6 +8,10 @@ class Hydrus::Item < Hydrus::GenericObject
     descMetadata.preferred_citation.first
   end
     
+  def cite_related_as
+    descMetadata.relatedItem.cite_related_as.first
+  end
+    
   def keywords
     @keywords ||= descMetadata.subject.topic.collect {|topic| topic}   
   end

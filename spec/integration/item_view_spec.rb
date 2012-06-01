@@ -16,17 +16,18 @@ describe("Item view", :type => :request) do
 
   it "Some of the expected info is displayed" do
     exp_content = [
-      "How Couples Meet and Stay Together",
-      "The story of Pinocchio",
+      "How Couples Meet and Stay Together", # title
+      "The story of Pinocchio", #abstract
       @druid,
-      'Contributing Author',
-      'Frisbee, Hanna',
-      'Sponsor',
-      'US National Science Foundation, award SES-0751613',
-      'wooden boys',
-      'Related content:',
-      'Online survey research site (really Project Gutenberg)',
-      'pinocchio.htm',
+      'Contributing Author', # label for actor
+      'Frisbee, Hanna', # actor
+      'Sponsor', # label for actor 
+      'US National Science Foundation, award SES-0751613', # actor
+      'wooden boys', # keyword
+      'Related content:', # relatedItem label
+      'Online survey research site (really Project Gutenberg)', # relatedItem title applying to url
+      'Project Gutenberg citation.', # cite_related_as
+      'pinocchio.htm', # file
     ]
     login_as_archivist1
     visit polymorphic_path(@hi)
