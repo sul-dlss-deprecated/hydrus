@@ -57,7 +57,7 @@
     <dd><%= @document_fedora.preferred_citation %></dd>
 
     <dt>Cite related work as: </dt>
-    <dd><%= @document_fedora.descMetadata.relatedItem.related_citation %></dd>
+    <dd><%= @document_fedora.descMetadata.relatedItem.related_citation.first %></dd>
 
     <dt>Publisher: </dt>
     <dd><%= @document_fedora.publisher %></dd>

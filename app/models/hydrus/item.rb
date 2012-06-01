@@ -5,7 +5,7 @@ class Hydrus::Item < Hydrus::GenericObject
   end
   
   def preferred_citation
-    descMetadata.preferred_citation.inspect
+    descMetadata.preferred_citation.first
   end
     
   def keywords
