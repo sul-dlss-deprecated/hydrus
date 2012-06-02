@@ -1,7 +1,74 @@
 <%- @page_title = application_name -%>
-<div class="home_text">
-	<h1>Welcome to the Stanford Digital Repository (Hydrus)</h1>
-	<br/>
-	<p>other text will go here.</p>
-	<p>Revise me at app/views/catalog/_home_text.html.erb</p>
-</div>
+
+<h2>Stanford Digital Repository</h2>
+<p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.</p>
+
+<%- if current_user -%>
+  <div class="user-collections">
+    <h3>Your active collections</h3>
+    <table class="hydrus-striped-table table-striped table-condensed">
+      <thead>
+        <tr>
+          <th class="title">Collection</th>
+          <th class="journal">Your role</th>
+          <th class="deposited">Your work</th>
+          <th class="files">What you can do</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- iterate through collections  -->
+        <tr>
+          <td>Collection A</td>
+          <td>owner</td>
+          <td>11 published, 1 draft</td>
+          <td>
+            <form class="form-horizontal">
+              <div class="btn-group">
+                <a class="btn" href="#">Add new &hellip;</a>
+                <a class="btn dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <li><a href="#">article</a></li>
+                  <li><a href="#">dataset</a></li>
+                  <li><a href="#">image</a></li>
+                  <li><a href="#">paper</a></li>
+                  <li><a href="#">other</a></li>
+                </ul>
+              </div>
+            </form>
+          </td>
+        </tr> 
+        <!-- end iterate through collections -->
+        <tr class="document <%= cycle("even","odd") %>">
+          <td>Collection B</td>
+          <td>contributor</td>
+          <td>30 published, 2 drafts</td>
+          <td>
+            <form class="form-horizontal">
+              <div class="btn-group">
+                <a class="btn" href="#">Add new &hellip;</a>
+                <a class="btn dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <li><a href="#">article</a></li>
+                  <li><a href="#">dataset</a></li>
+                  <li><a href="#">image</a></li>
+                  <li><a href="#">paper</a></li>
+                  <li><a href="#">other</a></li>
+                </ul>
+              </div>
+            </form>
+          </td>
+        </tr> 
+      </tbody>
+    </table>
+
+    <form class="form-horizontal">
+      <a class="btn disabled" href="#">Create a new collection</a>
+    </form>
+  </div>
+
+<%- else -%>
+  <p>
+    <%= link_to("Sign in", new_user_session_path) %>
+    to view your collections
+  </p>
+<%- end -%>

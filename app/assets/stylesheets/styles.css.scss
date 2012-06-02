@@ -50,6 +50,8 @@ form.step .peer_reviewed label {
 	display: inline;
 }
 
+form .dropdown-menu a {border-bottom: none;}
+
 /* forms on search results */
 #sortAndPerPage {
 	form, label {display:inline;}
@@ -59,6 +61,16 @@ form.step .peer_reviewed label {
 		@media (max-width: 767px) {
 			text-align:left;
 		}
+	}
+}
+
+/* forms in tables */
+table form {
+	margin-bottom: 0px;
+	.btn {
+		font-size: 12px;
+		line-height: 14px;
+		margin-bottom: 1px;
 	}
 }
 
@@ -93,9 +105,13 @@ form.step .peer_reviewed label {
 /* search results */
 table.hydrus-striped-table {
 	@include striped-table;
-	margin-top: 12px;
+	margin-top: 6px;
 	width: 100%;
 }
+
+/* home page */
+
+
 
 /* object sidebar */
 .actions-box {
@@ -175,6 +191,12 @@ table.hydrus-striped-table {
 #sidebar dd.collection {
 	font-size: 90%;
 	margin-left:0;
+}
+
+#catalog-index .user-collections {
+	h3 {margin-top: 24px;}
+	table {margin-bottom: 12px;}
+	// .btn-primary {@include primary-button;}
 }
 
 /* item view */
