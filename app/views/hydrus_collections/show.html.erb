@@ -2,36 +2,48 @@
 
 <% sidebar_items << capture do %>
 
-	<div class="well actions-box item-status">
-	  <div class="box-header">Collection Settings</div>
-	  <dl class="dl-horizontal">
-	    <dt>Collection owner:</dt>
-	    <dd><font color=red>#TODO (APO?)</font></dd>
-	    <dt>Collection-level embargo:</dt>
-	    <dd><font color=red>#TODO (APO?)</font></dd>
-	    <dt>Collection visibility:</dt>
-	    <dd><font color=red>#TODO (APO?)</font></dd>
-	    <dt>Collection-level license:</dt>
-	    <dd><font color=red>#TODO (APO)</font></dd>
-	    <dt>User's status:</dt>
-	    <dd><font color=red>#TODO - don't understand this</font></dd>
-	  </dl>
-	</div>
+    <div class="well actions-box collection-settings">
+      <div class="box-header">Collection Settings</div>
+      <dl class="dl-horizontal">
+        <dt>Owner:</dt>
+        <dd><font color=red>#TODO (APO?)</font></dd>
+        <dt>Embargo:</dt>
+        <dd><font color=red>#TODO (APO?)</font></dd>
+        <dt>Visibility:</dt>
+        <dd><font color=red>#TODO (APO?)</font></dd>
+        <dt>License:</dt>
+        <dd><font color=red>#TODO (APO)</font></dd>
+        <dt>User's status:</dt>
+        <dd><font color=red>#TODO - don't understand this</font></dd>
+      </dl>
+    </div>
 
-	<div class="well actions-box item-status">
-	  <div class="box-header">What you can do</div>
-	  link to edit collection settings, pull down to add new items, etc
-	</div>
+    <div class="well actions-box collection-actions">
+      <div class="box-header">What you can do</div>
+      <p><%= link_to("Edit collection settings", "#") %></p>
+      <form class="form-horizontal">
+        <div class="btn-group">
+          <button class="btn btn-small">Add new &hellip;</button>
+          <button class="btn btn-small dropdown-toggle" data-toggle="dropdown">
+            <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu">
+            <li><a href="#">Action 1</a></li>
+            <li><a href="#">Action 2</a></li>
+          </ul>
+        </div>
+      </form>
+    </div>
 
 <%- end -%>
 
 <div>
 
   <span class="edit-browse">
-		<%=render :partial=>'shared/navigation' %>
+        <%=render :partial=>'shared/navigation' %>
   </span>
 
-  <dl class="dl-horizontal collection-view">
+  <dl class="dl-horizontal object-view">
 
     <h3><%= @document_fedora.title %></h3>
 
