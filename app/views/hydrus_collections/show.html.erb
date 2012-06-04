@@ -1,22 +1,51 @@
+<%- @page_title = "#{@document_fedora.title} - #{application_name}" -%>
+
+<% sidebar_items << capture do %>
+
+	<div class="well actions-box item-status">
+	  <div class="box-header">Collection Settings</div>
+	  <dl class="dl-horizontal">
+	    <dt>Collection owner:</dt>
+	    <dd><font color=red>#TODO (APO?)</font></dd>
+	    <dt>Collection-level embargo:</dt>
+	    <dd><font color=red>#TODO (APO?)</font></dd>
+	    <dt>Collection visibility:</dt>
+	    <dd><font color=red>#TODO (APO?)</font></dd>
+	    <dt>Collection-level license:</dt>
+	    <dd><font color=red>#TODO (APO)</font></dd>
+	    <dt>User's status:</dt>
+	    <dd><font color=red>#TODO - don't understand this</font></dd>
+	  </dl>
+	</div>
+
+	<div class="well actions-box item-status">
+	  <div class="box-header">What you can do</div>
+	  link to edit collection settings, pull down to add new items, etc
+	</div>
+
+<%- end -%>
+
 <div>
 
   <span class="edit-browse">
 		<%=render :partial=>'shared/navigation' %>
   </span>
 
-  <dl class="defList">
+  <dl class="dl-horizontal collection-view">
 
-    <dt>PID: </dt>
-    <dd><%= @document_fedora.pid %></dd>
+    <h3><%= @document_fedora.title %></h3>
 
-    <dt>Object type: </dt>
-    <dd><%= @document_fedora.object_type %></dd>
-
-    <dt>Title: </dt>
-    <dd><%= @document_fedora.title %></dd>
-
-    <dt>Abstract: </dt>
+    <dt>Description: </dt>
     <dd><%= @document_fedora.abstract %></dd>
+
+    <dt>Contact: </dt>
+    <dd><font color=red>#TODO</font></dd>
+
+    <%- @document_fedora.related_items.each do |related_item| -%>
+      <dt>Related links: </dt>
+			<dd><%= @document_fedora.related_items.to_s %></dd>
+      <dd><%#= link_to(related_item.title, related_item.url) %></dd>
+    <%- end -%>
 
     <dt>APO PID: </dt>
     <dd><%= @document_fedora.apo.pid %></dd>
