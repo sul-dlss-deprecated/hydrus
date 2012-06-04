@@ -4,6 +4,7 @@ describe("Collection view", :type => :request) do
   fixtures :users
 
   before :each do
+    @apo_druid = 'druid:oo000oo0002'
     @druid = 'druid:oo000oo0003'
     @hc    = Hydrus::Collection.find @druid
   end
@@ -16,9 +17,9 @@ describe("Collection view", :type => :request) do
 
   it "Some of the expected info is displayed" do
     exp_content = [
-      @druid,
+      @apo_druid,
       "SSDS Social Science Data Collection",
-      "Abstract:",
+      "Description:",
     ]
     login_as_archivist1
     visit polymorphic_path(@hc)
