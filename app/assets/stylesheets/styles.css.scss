@@ -205,7 +205,7 @@ table.hydrus-striped-table {
 	// .btn-primary {@include primary-button;}
 }
 
-/* item view */
+/* object view */
 #hydrus_items-show {
 	#sidebar {margin-top: 25px;}
 	table.hydrus-striped-table {
@@ -226,6 +226,23 @@ table.hydrus-striped-table {
 			margin-left: 0;
 		}
 	}
+}
+
+.collection-items {
+	border-top: 1px solid #eee;
+	margin: 50px 0 30px;
+	padding: 10px 0;
+	h4 { margin-bottom: 12px;}
+}
+
+/* druid footer */
+.object-druid {
+	border-top: 1px solid #eee;
+	color: #555;
+	font-size: 90%;
+	padding-top: 3px;
+	text-align: right;
+	width: 100%;
 }
 
 /* drag and drop styles */
