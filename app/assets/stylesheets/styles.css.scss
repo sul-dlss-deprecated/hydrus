@@ -118,13 +118,12 @@ table.hydrus-striped-table {
 	margin-right: 20px;
 	margin-top: 25px;
 	&.well {
-		padding: 19px 10px 0 15px;
+		padding: 12px 10px 0 15px;
 	}
 	.box-header {
 		border-bottom: 1px dotted #CCC;
 		font-size: 120%;
-		line-height: 1em;
-		padding: 0px 0px 5px;
+		line-height: 1.6em;
 	}
 	dt, dd { 
 		line-height: 2em;
@@ -161,7 +160,8 @@ table.hydrus-striped-table {
 	}
 }
   /* reformat sidebar based on screen size */
-.actions-box.item-status { 
+.actions-box.item-status,
+.actions-box.collection-settings { 
 	@media (min-width: 768px) and (max-width: 978px) {
 	  .dl-horizontal dt {
 		  clear: both;
@@ -176,7 +176,8 @@ table.hydrus-striped-table {
 		}
 	}
 }
-.actions-box.item-status {
+.actions-box.item-status,
+.actions-box.collection-settings {
 	@media (max-width: 767px) {
 	  .dl-horizontal dt {
 		  float: left;
