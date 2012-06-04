@@ -40,6 +40,9 @@
       <%=link_to(@document_fedora.url, @document_fedora.url)%>
     </dd>
 
+    <dt>Contact email:</dt>
+    <dd><font color=red>#TODO</font></dd>
+
     <% @document_fedora.actors.each do |actor| %>
       <dt><%= actor.role %>:</dt>
       <dd><%= actor.name %></dd>
@@ -64,9 +67,6 @@
 
     <dt>Publication date: </dt>
     <dd><%= @document_fedora.publication_date %></dd>
-
-    <dt>Peer-reviewed: </dt>
-    <dd><%= @document_fedora.peer_reviewed %></dd>
 
     <% @document_fedora.related_items.each do |related_item| %>
       <dt>Related content: </dt>
