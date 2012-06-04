@@ -27,14 +27,6 @@ class Hydrus::Item < Hydrus::GenericObject
   def peer_reviewed
     descMetadata.peer_reviewed.first
   end
- 
-  def url
-    "http://purl.stanford.edu/#{pid}"
-  end
-  
-  def related_items
-    @related_items ||= descMetadata.find_by_terms(:relatedItem).collect {|rel_node| Hydrus::RelatedItem.new(:title=>rel_node.at_css('titleInfo title').content,:url=>rel_node.at_css('identifier').content)}
-  end
   
   def actors
     @actors ||= descMetadata.find_by_terms(:name).collect {|name_node| Hydrus::Actor.new(:name=>name_node.at_css('namePart').content,:role=>name_node.at_css('role roleTerm').content)}

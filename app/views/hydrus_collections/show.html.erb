@@ -43,8 +43,7 @@
 
     <%- @document_fedora.related_items.each do |related_item| -%>
       <dt>Related links: </dt>
-			<dd><%= @document_fedora.related_items.to_s %></dd>
-      <dd><%#= link_to(related_item.title, related_item.url) %></dd>
+      <dd><%= link_to(related_item.title, related_item.url) %></dd>
     <%- end -%>
 
     <dt>APO PID: </dt>
