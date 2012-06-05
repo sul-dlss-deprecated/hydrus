@@ -5,12 +5,13 @@ class Hydrus::DescMetadataDS < ActiveFedora::NokogiriDatastream
   # MODS XML constants.
 
   MODS_NS = 'http://www.loc.gov/mods/v3'
+  MODS_SCHEMA = 'http://www.loc.gov/standards/mods/v3/mods-3-3.xsd'
   MODS_PARAMS = {
     "version"            => "3.3", 
     "xmlns:xlink"        => "http://www.w3.org/1999/xlink",
     "xmlns:xsi"          => "http://www.w3.org/2001/XMLSchema-instance",
     "xmlns"              => MODS_NS,
-    "xsi:schemaLocation" => "http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-3.xsd",
+    "xsi:schemaLocation" => "#{MODS_NS} #{MODS_SCHEMA}",
   }
 
   # OM terminology.
