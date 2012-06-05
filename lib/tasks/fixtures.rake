@@ -3,6 +3,7 @@ namespace :hydrus do
     'druid:oo000oo0001', # Item
     'druid:oo000oo0002', # APO
     'druid:oo000oo0003', # Collection
+    'druid:oo000oo0004', # Collection #2
 
     # OLD fixtures.
     # 'druid:pv309jn3099',
