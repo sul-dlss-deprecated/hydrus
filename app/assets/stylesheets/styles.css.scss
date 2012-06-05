@@ -39,6 +39,15 @@ form.step .related-item {
 		margin-bottom: 9px;
 	}
 }
+form.step #file-upload {
+	input[type=text] {
+		width: 88%;
+	}
+	.delete-file {
+		margin-bottom: 9px;
+	}
+}
+
 
 form .help {
 	margin-top: -9px;
