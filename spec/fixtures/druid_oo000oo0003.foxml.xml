@@ -53,11 +53,17 @@
           <typeOfResource collection="yes" />
           <abstract>The Social Science Data and Software (SSDS) Data Collection at Stanford University assembles research data produced by Stanford faculty and other researchers working in the social sciences. Preserving and providing access to research data through this collection is one of several SSDS services in support of research and instruction in the social sciences. If you have a social science dataset that you would like to add to the SSDS collection, please contact the collection owner using the contact information provided.</abstract>
           <relatedItem type="references">
-            <titleInfo>
-              <title>link text goes here</title>
-            </titleInfo>
             <location>
               <url>http://data.stanford.edu/</url>        
+            </location>            
+          </relatedItem>
+          <abstract>The Social Science Data and Software (SSDS) Data Collection at Stanford University assembles research data produced by Stanford faculty and other researchers working in the social sciences. Preserving and providing access to research data through this collection is one of several SSDS services in support of research and instruction in the social sciences. If you have a social science dataset that you would like to add to the SSDS collection, please contact the collection owner using the contact information provided.</abstract>
+          <relatedItem type="references">
+            <titleInfo>
+              <title>About the SSDS</title>
+            </titleInfo>
+            <location>
+              <url>http://ssds.stanford.edu/</url>        
             </location>            
           </relatedItem>
           <!-- <accessCondition displayLabel="Terms of Use" type="useAndReproduction">Data cannot be used to identify individuals. Data cannot be redistributed for a fee. Please inform the collection contact by email about research or other work derived from use of this data, and please use the preferred citation as provided.</accessCondition> -->
