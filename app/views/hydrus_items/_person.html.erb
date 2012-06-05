@@ -4,5 +4,5 @@
   <%= text_field_tag("asset[descMetadata][name_namePart][#{index}]", name_part, :required => true) -%>
   as
   <%= select_tag("asset[descMetadata][name_role_roleTerm][#{index}]", options_for_select(people_roles, role_term.gsub(/\s+/, " "))) -%>
-  <%= link_to("remove", destory_hydrus_item_value_path(:term=>"name", :term_index=>index), :class=>"delete-node btn", :id => "remove_name_#{index}") unless index == 0 %>
+  <%= link_to('<i class="icon-trash"></i>'.html_safe, destory_hydrus_item_value_path(:term=>"name", :term_index=>index), :class=>"delete-node btn", :id => "remove_name_#{index}") unless index == 0 %>
 </div>
