@@ -17,7 +17,7 @@ describe("Collection view", :type => :request) do
 
   it "Some of the expected info is displayed" do
     exp_content = [
-      @apo_druid,
+      @druid,
       "SSDS Social Science Data Collection",
       "Description:",
     ]
