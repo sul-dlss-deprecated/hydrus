@@ -44,6 +44,8 @@ function validate_hydrus_item() {
 			all_required_filled = false;
 		}
 	});
+	// Need to check that a file item exists here.
+	
 	if(all_required_filled && $("input#terms").is(":checked")) {
 		$("#publish").removeAttr("disabled");
 	}else{
