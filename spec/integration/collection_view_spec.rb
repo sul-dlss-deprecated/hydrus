@@ -17,9 +17,9 @@ describe("Collection view", :type => :request) do
 
   it "Some of the expected info is displayed" do
     exp_content = [
-      @druid,
       "SSDS Social Science Data Collection",
       "Description:",
+      "How Couples Meet and Stay Together",
     ]
     login_as_archivist1
     visit polymorphic_path(@hc)

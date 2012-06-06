@@ -77,27 +77,17 @@
       </thead>
       <tbody>
         <!-- iterate through collection items  -->
-        <tr class="document <%= cycle("even","odd") %>">
-          <td>Machine Approaches to Epistemic Learning with Application to Descision Strategy Recognition</td>
-          <td>Binky McRae</td>
-          <td>Paper</td>
-          <td>Published</td>
-          <td>3-Jun-2012 12:15pm</td>
-        </tr> 
-        <!-- end iterating -->
-        <tr class="document <%= cycle("even","odd") %>">
-          <td>Machine Approaches to Epistemic Learning with Application to Descision Strategy Recognition</td>
-          <td>Binky McRae</td>
-          <td>Paper</td>
-          <td>Published</td>
-          <td>3-Jun-2012 12:15pm</td>
-        </tr> 
+        <% @document_fedora.hydrus_items.each do |item| %>
+          <tr class="document <%= cycle("even","odd") %>">
+            <td><%= item.title %></td>
+            <td><font color=red>#TODO</font></td>
+            <td><font color=red><%= item.object_type %></font></td>
+            <td><font color=red>#TODO Published?</font></td>
+            <td><%= item.submit_time %></td>
+          </tr>
+        <% end %>
       </tbody>
     </table>
-  </div>
-
-  <div class="object-druid">
-    <%= @document_fedora.pid %>
   </div>
 
 </div>
