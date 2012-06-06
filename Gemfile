@@ -46,6 +46,7 @@ end
 group :development, :test do
   gem 'jettywrapper'
   gem 'awesome_print'
+  gem 'looksee'
   gem 'debugger'
   gem 'sqlite3'
 end
