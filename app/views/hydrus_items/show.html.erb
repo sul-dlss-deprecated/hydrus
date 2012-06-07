@@ -68,9 +68,11 @@
     <dt>Publication date</dt>
     <dd><%= @document_fedora.publication_date %></dd>
 
-    <% @document_fedora.related_items.each do |related_item| %>
+    <% unless @document_fedora.related_items.size == 0 %>
       <dt>Related content</dt>
-      <dd><%= link_to(related_item.title, related_item.url) %></dd>
+      <% @document_fedora.related_items.each do |related_item| %>
+        <dd><%= link_to(related_item.title, related_item.url) %></dd>
+      <% end %>
     <% end %>
 
   </dl>
