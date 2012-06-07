@@ -79,7 +79,7 @@
         <!-- iterate through collection items  -->
         <% @document_fedora.hydrus_items.each do |item| %>
           <tr class="document <%= cycle("even","odd") %>">
-            <td><%= item.title %></td>
+            <td><%= link_to(item.title, polymorphic_path(item)) %></td>
             <td><font color=red>#TODO</font></td>
             <td><font color=red><%= item.object_type %></font></td>
             <td><font color=red>#TODO Published?</font></td>
