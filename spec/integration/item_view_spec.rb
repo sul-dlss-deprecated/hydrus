@@ -24,7 +24,7 @@ describe("Item view", :type => :request) do
       'Sponsor', # label for actor 
       'US National Science Foundation, award SES-0751613', # actor
       'wooden boys', # keyword
-      'Related content:', # relatedItem label
+      'Related content', # relatedItem label
       'Online survey research site (really Project Gutenberg)', # relatedItem title applying to url
       'Project Gutenberg citation.', # cite_related_as
       'pinocchio.htm', # file

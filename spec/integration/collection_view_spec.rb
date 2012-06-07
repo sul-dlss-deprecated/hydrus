@@ -18,7 +18,7 @@ describe("Collection view", :type => :request) do
   it "Some of the expected info is displayed" do
     exp_content = [
       "SSDS Social Science Data Collection",
-      "Description:",
+      "Description",
       "How Couples Meet and Stay Together",
     ]
     login_as_archivist1

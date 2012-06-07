@@ -35,45 +35,45 @@
 
     <h3><%= @document_fedora.title %></h3>
 
-    <dt>PURL: </dt>
+    <dt>PURL</dt>
     <dd>
       <%=link_to(@document_fedora.url, @document_fedora.url)%>
     </dd>
 
-    <dt>Contact email:</dt>
+    <dt>Contact email</dt>
     <dd><font color=red>#TODO</font></dd>
 
     <% @document_fedora.actors.each do |actor| %>
-      <dt><%= actor.role %>:</dt>
+      <dt><%= actor.role %></dt>
       <dd><%= actor.name %></dd>
     <% end %>
 
-    <dt>Abstract: </dt>
+    <dt>Abstract</dt>
     <dd><%= @document_fedora.abstract %></dd>
 
-    <dt>Keywords: </dt>
+    <dt>Keywords</dt>
     <dd>
       <%= @document_fedora.keywords.map {|topic| link_to(topic, "#")}.join(", ").html_safe %>
     </dd>
 
-    <dt>Cite this item as: </dt>
+    <dt>Cite this item as</dt>
     <dd><%= @document_fedora.preferred_citation %></dd>
 
-    <dt>Cite related work as: </dt>
+    <dt>Cite related work as</dt>
     <dd><%= @document_fedora.cite_related_as %></dd>
 
-    <dt>Publisher: </dt>
+    <dt>Publisher</dt>
     <dd><%= @document_fedora.publisher %></dd>
 
-    <dt>Publication date: </dt>
+    <dt>Publication date</dt>
     <dd><%= @document_fedora.publication_date %></dd>
 
     <% @document_fedora.related_items.each do |related_item| %>
-      <dt>Related content: </dt>
+      <dt>Related content</dt>
       <dd><%= link_to(related_item.title, related_item.url) %></dd>
     <% end %>
 
-    <dt>Files: </dt>
+    <dt>Files</dt>
     <dd>
       <table class="hydrus-striped-table table-striped table-condensed">
         <thead>

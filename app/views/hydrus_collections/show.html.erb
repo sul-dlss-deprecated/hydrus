@@ -47,18 +47,18 @@
 
     <h3><%= @document_fedora.title %></h3>
 
-    <dt>Description: </dt>
+    <dt>Description</dt>
     <dd><%= @document_fedora.abstract %></dd>
 
-    <dt>Contact: </dt>
+    <dt>Contact</dt>
     <dd><font color=red>#TODO</font></dd>
 
     <%- @document_fedora.related_items.each do |related_item| -%>
-      <dt>Related links: </dt>
+      <dt>Related links</dt>
       <dd>&raquo; <%= link_to(related_item.title, related_item.url) %></dd>
     <%- end -%>
 
-<!--     <dt>APO PID: </dt>
+<!--     <dt>APO PID </dt>
     <dd><%= @document_fedora.apo.pid %></dd> -->
 
   </dl>
