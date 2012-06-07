@@ -83,7 +83,7 @@
             <td><font color=red>#TODO</font></td>
             <td><font color=red><%= item.object_type %></font></td>
             <td><font color=red>#TODO Published?</font></td>
-            <td><%= item.submit_time %></td>
+            <td><%= item.submit_time.to_date.strftime("%b %d, %Y") %></td>
           </tr>
         <% end %>
       </tbody>
