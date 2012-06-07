@@ -112,6 +112,9 @@ class CatalogController < ApplicationController
     config.spell_max = 5
   end
 
-
+  def index
+    @collections = Hydrus::Collection.find(:all)
+    super
+  end
 
 end 

@@ -16,9 +16,9 @@
         </tr>
       </thead>
       <tbody>
-        <!-- iterate through collections  -->
+      <% @collections.each do |c| %>
         <tr>
-          <td>Collection A</td>
+          <td><%= c.title %></td>
           <td>owner</td>
           <td>11 published, 1 draft</td>
           <td>
@@ -37,27 +37,7 @@
             </form>
           </td>
         </tr> 
-        <!-- end iterate through collections -->
-        <tr class="document <%= cycle("even","odd") %>">
-          <td>Collection B</td>
-          <td>contributor</td>
-          <td>30 published, 2 drafts</td>
-          <td>
-            <form class="form-horizontal">
-              <div class="btn-group">
-                <a class="btn" href="#">Add new &hellip;</a>
-                <a class="btn dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
-                <ul class="dropdown-menu">
-                  <li><a href="#">article</a></li>
-                  <li><a href="#">dataset</a></li>
-                  <li><a href="#">image</a></li>
-                  <li><a href="#">paper</a></li>
-                  <li><a href="#">other</a></li>
-                </ul>
-              </div>
-            </form>
-          </td>
-        </tr> 
+        <% end %>
       </tbody>
     </table>
 
