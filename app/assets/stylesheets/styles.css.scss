@@ -219,7 +219,6 @@ table.hydrus-striped-table {
 	#sidebar {margin-top: 25px;}
 	table.hydrus-striped-table {
 		@include striped-table;
-		margin-top: 0;
 		width: 100%;
 	}
 }

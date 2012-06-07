@@ -31,7 +31,7 @@
 		<%=render :partial=>'shared/navigation' %>
   </span>
 
-  <dl class="dl-horizontal object-view">
+  <dl class="dl-horizontal object-view clearfix">
 
     <h3><%= @document_fedora.title %></h3>
 
@@ -73,26 +73,23 @@
       <dd><%= link_to(related_item.title, related_item.url) %></dd>
     <% end %>
 
-    <dt>Files</dt>
-    <dd>
-      <table class="hydrus-striped-table table-striped table-condensed">
-        <thead>
-          <th>File (Download)</th>
-          <th>Description</th>
-        </thead>
-        <tbody>
-          <% 
-            @document_fedora.files.each do |file|
-          %>
-              <tr class="document <%= cycle("even","odd") %>">
-                <td><%= link_to(file.filename, file.url) %></td>
-                <td><%= file.label %></td>
-              </tr>
-          <% end %>
-        </tbody>
-      </table>
-    </dd>
-
   </dl>
+
+  <table class="hydrus-striped-table table-striped table-condensed">
+    <thead>
+      <th>File (Download)</th>
+      <th>Description</th>
+    </thead>
+    <tbody>
+      <% 
+        @document_fedora.files.each do |file|
+      %>
+          <tr class="document <%= cycle("even","odd") %>">
+            <td><%= link_to(file.filename, file.url) %></td>
+            <td><%= file.label %></td>
+          </tr>
+      <% end %>
+    </tbody>
+  </table>
 
 </div>
