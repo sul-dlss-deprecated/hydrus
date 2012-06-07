@@ -22,7 +22,7 @@
   </div>
 </div>
 <%= hidden_field_tag("object_id", params[:id]) -%>
-<%= hydrus_form_header(:required=>true) {"Title"} %>
+<%= hydrus_form_header(:required=>true, :first=>true) {"Title"} %>
 <div class="row">
   <%= hydrus_form_label do %>
     <%= fedora_field_label("descMetadata", [:title], "Title of #{object_type}") -%>

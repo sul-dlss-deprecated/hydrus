@@ -1,14 +1,22 @@
 @import "sul_chrome/sul_chrome_mixins";
 /* forms */
 .section-header {
-	margin-bottom: 5px;
+	background-color: #F5F5F5;
+	border: 1px solid rgba(0,0,0,0.05);
+	margin-bottom: 20px;
+	margin-top: 30px;
+	padding: 3px 0;
+	> .span1 {margin-left: 5px;}
+	&.first-header {margin-top: 6px;}
 }
 .section-header .required {
-	color: #990000;
+	// color: #990000;
+	color: #FFF;
+	margin-top: 3px;
 }
 .section-header .required {
 	@media (max-width: 767px) {
-		text-align: right;
+		text-align: right; 	margin-right: 6px;
 	}
 }
 .form-label {
