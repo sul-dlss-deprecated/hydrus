@@ -22,8 +22,7 @@ class Hydrus::DescMetadataDS < ActiveFedora::NokogiriDatastream
   set_terminology do |t|
     t.root :path => 'mods', :xmlns => MODS_NS, :index_as => [:not_searchable]
     t.originInfo IANS do
-      t.publisher  IA
-      t.dateIssued IA
+      t.dateOther IA
     end
     t.abstract IA
     t.titleInfo IANS do
@@ -95,8 +94,7 @@ class Hydrus::DescMetadataDS < ActiveFedora::NokogiriDatastream
     return lambda { |xml| 
       xml.mods(MODS_PARAMS) {
         xml.originInfo {
-          xml.publisher
-          xml.dateIssued
+          xml.dateOther
         }
         xml.abstract
         xml.titleInfo {

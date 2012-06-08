@@ -62,12 +62,6 @@
     <dt>Cite related work as</dt>
     <dd><%= @document_fedora.cite_related_as %></dd>
 
-    <dt>Publisher</dt>
-    <dd><%= @document_fedora.publisher %></dd>
-
-    <dt>Publication date</dt>
-    <dd><%= @document_fedora.publication_date %></dd>
-
     <% unless @document_fedora.related_items.size == 0 %>
       <dt>Related content</dt>
       <% @document_fedora.related_items.each do |related_item| %>

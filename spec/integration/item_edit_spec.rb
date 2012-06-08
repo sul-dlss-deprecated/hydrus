@@ -17,15 +17,15 @@ describe("Item edit", :type => :request) do
 
   it "Can edit basic content" do
     new_name  = 'abcxyz123'
-    orig_name = @hi.descMetadata.originInfo.publisher.first
+    orig_name = @hi.descMetadata.abstract.first
 
     login_as_archivist1
 
     visit edit_polymorphic_path(@hi)
     current_path.should == edit_polymorphic_path(@hi)
 
-    find_field("Publisher").value.should == orig_name
-    fill_in "Publisher", :with => new_name
+    find_field("Abstract").value.should == orig_name
+    fill_in "Abstract", :with => new_name
     click_button "Save"
     page.should have_content(@notice)
 
@@ -36,7 +36,7 @@ describe("Item edit", :type => :request) do
     # Clean up.
     visit edit_polymorphic_path(@hi)
     current_path.should == edit_polymorphic_path(@hi)
-    fill_in "Publisher", :with => orig_name
+    fill_in "Abstract", :with => orig_name
     click_button "Save"
   end
   

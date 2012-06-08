@@ -117,22 +117,6 @@
 </div>
 <div class="row">
   <%= hydrus_form_label do %>
-    <%= fedora_field_label("descMetadata", [:originInfo, :dateIssued], "Year of publication") -%>
-  <%- end -%>
-  <%= hydrus_form_value(:columns => "2") do  -%>
-    <%= fedora_text_field( @document_fedora, "descMetadata", [:originInfo, :dateIssued], :multiple=>false, :required=>false) %>
-  <%- end -%>
-</div>
-<div class="row">
-  <%= hydrus_form_label do %>
-    <%= fedora_field_label("descMetadata", [:originInfo, :publisher], "Publisher") -%>
-  <%- end -%>
-  <%= hydrus_form_value do -%>
-    <%= fedora_text_field( @document_fedora, "descMetadata", [:originInfo, :publisher], :multiple=>false, :required=>false) %>
-  <%- end -%>
-</div>
-<div class="row">
-  <%= hydrus_form_label do %>
     Peer reviewed
   <%- end -%>
   <%= hydrus_form_value(:class=>"peer_reviewed") do  -%>

@@ -16,14 +16,6 @@ class Hydrus::Item < Hydrus::GenericObject
     @keywords ||= descMetadata.subject.topic.collect {|topic| topic}   
   end
       
-  def publisher
-    descMetadata.originInfo.publisher.first
-  end
-  
-  def publication_date
-    descMetadata.originInfo.dateIssued.first
-  end
-  
   def peer_reviewed
     descMetadata.peer_reviewed.first
   end
