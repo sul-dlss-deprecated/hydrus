@@ -44,7 +44,6 @@ describe Hydrus::DescMetadataDS do
             <topic>marriage</topic>
           </subject>
           <note type="preferred citation">pref_cite outer</note>
-          <note type="peer-review">Indeed</note>
         </mods>
       EOF
       
@@ -63,7 +62,6 @@ describe Hydrus::DescMetadataDS do
         [[:relatedItem, :cite_related_as],   'pref_cite inner'],
         [[:subject, :topic],                 ['divorce', 'marriage']],
         [:preferred_citation,                'pref_cite outer'],
-        [:peer_reviewed,                     'Indeed'],
       ]
       tests.each do |terms, exp|
         terms = [terms] unless terms.class == Array
@@ -121,7 +119,6 @@ describe Hydrus::DescMetadataDS do
             <topic/>
           </subject>
           <note type="preferred citation"/>
-          <note type="peer-review"/>
         </mods>
       )
       exp_xml = noko_doc(exp_xml)

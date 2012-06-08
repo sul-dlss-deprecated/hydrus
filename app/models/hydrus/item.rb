@@ -16,10 +16,6 @@ class Hydrus::Item < Hydrus::GenericObject
     @keywords ||= descMetadata.subject.topic.collect {|topic| topic}   
   end
       
-  def peer_reviewed
-    descMetadata.peer_reviewed.first
-  end
-  
   def actors
     @actors ||= descMetadata.find_by_terms(:name).collect {|name_node| Hydrus::Actor.new(:name=>name_node.at_css('namePart').content,:role=>name_node.at_css('role roleTerm').content)}
   end

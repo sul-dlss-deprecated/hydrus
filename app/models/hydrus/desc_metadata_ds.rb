@@ -58,12 +58,6 @@ class Hydrus::DescMetadataDS < ActiveFedora::NokogiriDatastream
       :proxy => [:mods, :all_preferred_citation_notes],
       :index_as => [:searchable, :displayable]
     )
-
-    t.peer_reviewed(
-      :path => 'note',
-      :attributes => { :type => "peer-review" },
-      :index_as => [:searchable, :displayable]
-    )
   end
 
   # Blocks to pass into Nokogiri::XML::Builder.new()
@@ -117,7 +111,6 @@ class Hydrus::DescMetadataDS < ActiveFedora::NokogiriDatastream
           xml.topic
         }
         xml.note(:type => "preferred citation")
-        xml.note(:type => "peer-review")
       }
     }
   end
