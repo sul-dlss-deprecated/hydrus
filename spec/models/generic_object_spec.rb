@@ -39,4 +39,12 @@ describe Hydrus::GenericObject do
     @hi.discover_access.should == ""
   end
 
+  it "can exercise related_items()" do
+    ris = @hi.related_items
+    ris.size.should == 1
+    ri = ris.first
+    ri.title.should == ''
+    ri.url.should == ''
+  end
+
 end
