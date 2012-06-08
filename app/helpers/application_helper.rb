@@ -5,6 +5,10 @@ module ApplicationHelper
     'Stanford Digital Repository'
   end
   
+  def hydrus_format_date(input_string)
+    input_string.blank? ? '' : input_string.to_date.strftime("%b %d, %Y")
+  end
+  
   def seen_beta_dialog?
     if session[:seen_beta_dialog]
       return true

@@ -4,6 +4,7 @@ namespace :hydrus do
     'druid:oo000oo0002', # APO
     'druid:oo000oo0003', # Collection
     'druid:oo000oo0004', # Collection #2
+    'druid:oo000oo0005', # Item #2
 
     # OLD fixtures.
     # 'druid:pv309jn3099',
@@ -32,6 +33,25 @@ namespace :hydrus do
   end
   
   desc "refresh hydrus fixtures"
-  task :refreshfix => [:deletefix, :loadfix]
+  task :refreshfix => [:deletefix,:loadfix,:refresh_upload_files]
+  
+  desc "reload test uploaded files to public/upload directory"
+  task :refresh_upload_files do
+    app_path=File.expand_path('../../../', __FILE__)
+    source_base_path_to_files=File.join(app_path,'spec/fixtures/files')
+    dest_base_path_to_files=File.join(app_path,'public/uploads')
+    FIXTURE_PIDS.each { |pid|  
+      pid.gsub!('druid:','')
+      source_path_to_files=File.join(source_base_path_to_files,pid)
+      dest_path_to_files=Druid.new(pid).path(dest_base_path_to_files)
+      if File.exists?(source_path_to_files) && File.directory?(source_path_to_files)
+        puts "#{source_path_to_files} found and is a directory"
+        Dir.mkdir(dest_path_to_files) unless File.directory?(dest_path_to_files)
+        copy_command="cp -fr #{source_path_to_files}/ #{dest_path_to_files}/"
+        system copy_command
+      end
+    }
+  end
+
   
 end

@@ -16,7 +16,7 @@
       <dt>Submitted by:</dt>
       <dd><font color=red>#TODO</font></dd>
       <dt>Submitted on:</dt>
-      <dd><%= @document_fedora.submit_time.to_date.strftime("%b %d, %Y") %></dd>
+      <dd><%= hydrus_format_date(@document_fedora.submit_time) %></dd>
       <dt>Release date:</dt>
       <dd><font color=red>#TODO</font></dd>
       <dt>Visibility:</dt>

@@ -34,7 +34,8 @@ class Hydrus::Item < Hydrus::GenericObject
   
   def submit_time
     query = '//workflow[@id="sdrDepositWF"]/process[@name="submit"]'
-    return workflows.ng_xml.at_xpath(query)['datetime']
+    time=workflows.ng_xml.at_xpath(query)
+    return (time ? time['datetime'] : nil)
   end
   
   def add_to_collection(pid)
