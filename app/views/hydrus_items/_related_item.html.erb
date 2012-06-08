@@ -1,5 +1,5 @@
 <%- title = defined?(node) ? node.at_css('titleInfo title').content : "" -%>
-<%- url = defined?(node) ? node.at_css("identifier").content : "" -%>
+<%- url = defined?(node) ? node.at_css("location url").content : "" -%>
 <div class="destroy-set">
   <div class="row related-item">
     <%= hydrus_form_label do  %>
@@ -12,10 +12,10 @@
   </div>
   <div class="row related-item">
     <%= hydrus_form_label do  %>
-      <%= label_tag("asset[descMetadata][relatedItem_identifier][#{index}]", "URL") %>
+      <%= label_tag("asset[descMetadata][relatedItem_location_url][#{index}]", "URL") %>
     <%- end -%>
     <%= hydrus_form_value do -%>
-      <%= text_field_tag("asset[descMetadata][relatedItem_identifier][#{index}]", url) %>
+      <%= text_field_tag("asset[descMetadata][relatedItem_location_url][#{index}]", url) %>
     <%- end -%>
   </div>
 </div>

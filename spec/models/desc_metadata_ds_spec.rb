@@ -35,9 +35,9 @@ describe Hydrus::DescMetadataDS do
             <titleInfo>
               <title>Learn VB in 1 Day</title>
             </titleInfo>
-            <identifier type="uri">http://example.com</identifier>
-            <identifier type="foo">FUBB</identifier>
-            <note type="preferred citation">pref_cite inner</note>
+            <location>
+              <url>http://example.com</url>
+            </location>
           </relatedItem>
           <subject>
             <topic>divorce</topic>
@@ -58,8 +58,7 @@ describe Hydrus::DescMetadataDS do
         [[:name, :namePart],                 'Angus'],
         [[:name, :role, :roleTerm],          'guitar'],
         [[:relatedItem, :titleInfo, :title], 'Learn VB in 1 Day'],
-        [[:relatedItem, :identifier],        'http://example.com'],
-        [[:relatedItem, :cite_related_as],   'pref_cite inner'],
+        [[:relatedItem, :location, :url],    'http://example.com'],
         [[:subject, :topic],                 ['divorce', 'marriage']],
         [:preferred_citation,                'pref_cite outer'],
       ]
@@ -76,7 +75,7 @@ describe Hydrus::DescMetadataDS do
 
     it "Should be able to insert new XML nodes" do
       nm = '<name><namePart/><role><roleTerm authority="marcrelator" type="text"/></role></name>'
-      ri = '<relatedItem><titleInfo><title/></titleInfo><identifier type="uri"/></relatedItem>'
+      ri = '<relatedItem><titleInfo><title/></titleInfo><location><url/></location></relatedItem>'
       @exp_xml = noko_doc([@mods_start, nm, nm, nm, ri, ri, '</mods>'].join '')
       @dsdoc   = Hydrus::DescMetadataDS.from_xml("#{@mods_start}</mods>")
 
@@ -112,8 +111,9 @@ describe Hydrus::DescMetadataDS do
             <titleInfo>
               <title/>
             </titleInfo>
-            <identifier type="uri"/>
-            <note type="preferred citation"/>
+            <location>
+              <url/>
+            </location>
           </relatedItem>
           <subject>
             <topic/>

@@ -110,10 +110,10 @@ describe("Item edit", :type => :request) do
   end
 
   it "Related Content editing" do
-    orig_link   = "http://www.gutenberg.org/ebooks/500"
+    orig_link   = @hi.descMetadata.relatedItem.location.url.first
     new_link    = "foo_LINK_bar"
-    field_link  = "asset_descMetadata_relatedItem_identifier_0"
-    orig_title  = "Online survey research site (really Project Gutenberg)"
+    field_link  = "asset_descMetadata_relatedItem_location_url_0"
+    orig_title  = @hi.descMetadata.relatedItem.titleInfo.title.first
     new_title   = "foo_TITLE_bar"
     field_title = "asset_descMetadata_relatedItem_titleInfo_title_0"
 
@@ -144,11 +144,11 @@ describe("Item edit", :type => :request) do
   end
   
   it "Related Content adding and deleting" do
-    new_label = "asset_descMetadata_relatedItem_titleInfo_title_1"
-    new_url = "asset_descMetadata_relatedItem_identifier_1"
-    new_delete_button = "remove_relatedItem_1"
-    url = "http://library.stanford.edu"
-    label = "Library Website"
+    new_label         = "asset_descMetadata_relatedItem_titleInfo_title_2"
+    new_url           = "asset_descMetadata_relatedItem_location_url_2"
+    new_delete_button = "remove_relatedItem_2"
+    url               = "http://library.stanford.edu"
+    label             = "Library Website"
     
     login_as_archivist1
     
@@ -156,7 +156,7 @@ describe("Item edit", :type => :request) do
     current_path.should == edit_polymorphic_path(@hi)
     
     page.should have_css("input#asset_descMetadata_relatedItem_titleInfo_title_0")
-    page.should have_css("input#asset_descMetadata_relatedItem_identifier_0")
+    page.should have_css("input#asset_descMetadata_relatedItem_location_url_0")
     page.should_not have_css("##{new_label}")
     page.should_not have_css("##{new_url}")
     
@@ -187,10 +187,9 @@ describe("Item edit", :type => :request) do
     page.should_not have_css("##{new_delete_button}")
   end
 
-  it "can edit preferred citation field without affecting cite-related-as citation field" do
-    new_pref_cit = "new preferred citation"
+  it "can edit preferred citation field" do
+    new_pref_cit  = "new_citation_FOO"
     orig_pref_cit = @hi.descMetadata.preferred_citation.first
-    cite_rel_as = "Project Gutenberg citation."
     
     login_as_archivist1
 
@@ -198,7 +197,6 @@ describe("Item edit", :type => :request) do
     current_path.should == edit_polymorphic_path(@hi)
 
     find_field("preferred_citation").value.should == orig_pref_cit
-    find_field("relatedItem_cite_related_as").value.should == cite_rel_as
     fill_in "preferred_citation", :with => new_pref_cit
     click_button "Save"
     page.should have_content(@notice)
@@ -206,41 +204,11 @@ describe("Item edit", :type => :request) do
     current_path.should == polymorphic_path(@hi)
     visit polymorphic_path(@hi)
     page.should have_content(new_pref_cit)
-    page.should have_content(cite_rel_as)
 
     # Clean up.
     visit edit_polymorphic_path(@hi)
     current_path.should == edit_polymorphic_path(@hi)
     fill_in "preferred_citation", :with => orig_pref_cit
-    click_button "Save"
-  end
-
-  it "edit cite-related-as without affecting preferred-citation" do
-    new_cite_rel_as   = "new cite related as"
-    orig_cite_rel_as  = "Project Gutenberg citation."
-    cite_rel_as_field = "relatedItem_cite_related_as"
-    pref_cit          = @hi.descMetadata.preferred_citation.first
-    
-    login_as_archivist1
-
-    visit edit_polymorphic_path(@hi)
-    current_path.should == edit_polymorphic_path(@hi)
-
-    find_field(cite_rel_as_field).value.should == orig_cite_rel_as
-    find_field("preferred_citation").value.should == pref_cit
-    fill_in cite_rel_as_field, :with => new_cite_rel_as
-    click_button "Save"
-    page.should have_content(@notice)
-
-    current_path.should == polymorphic_path(@hi)
-    visit polymorphic_path(@hi)
-    page.should have_content(new_cite_rel_as)
-    page.should have_content(pref_cit)
-
-    # Clean up.
-    visit edit_polymorphic_path(@hi)
-    current_path.should == edit_polymorphic_path(@hi)
-    fill_in cite_rel_as_field, :with => orig_cite_rel_as
     click_button "Save"
   end
 

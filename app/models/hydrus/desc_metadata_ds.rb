@@ -42,11 +42,9 @@ class Hydrus::DescMetadataDS < ActiveFedora::NokogiriDatastream
       t.titleInfo IANS do
         t.title IA
       end
-      t.identifier(
-        :attributes => { :type => "uri" },
-        :index_as => [:searchable, :displayable]
-      )
-      t.cite_related_as :path => 'note', :attributes => { :type => "preferred citation" }
+      t.location IANS do
+        t.url IA
+      end
     end
     t.subject IANS do
       t.topic IAF
@@ -79,7 +77,9 @@ class Hydrus::DescMetadataDS < ActiveFedora::NokogiriDatastream
         xml.titleInfo {
           xml.title
         }
-        xml.identifier(:type=>"uri")
+        xml.location {
+          xml.url
+        }
       }
     }
   end
@@ -104,8 +104,9 @@ class Hydrus::DescMetadataDS < ActiveFedora::NokogiriDatastream
           xml.titleInfo {
             xml.title
           }
-          xml.identifier(:type=>"uri")
-          xml.note(:type => "preferred citation")
+          xml.location {
+            xml.url
+          }
         }
         xml.subject {
           xml.topic
