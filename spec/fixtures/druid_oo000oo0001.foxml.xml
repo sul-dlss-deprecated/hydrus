@@ -137,14 +137,14 @@
           <subject>
             <topic>wooden boys</topic>
           </subject>
-          <note type="Preferred Citation">How Couples Meet and Stay Together ("HCMST": NSF Grant SES-0751613, 2012)</note>
+          <note type="preferred citation">Rosenfeld, Michael J., and Reuben J. Thomas. 2011. How Couples Meet and Stay Together, Waves 1, 2, and 3: Public version 3.04 [Computer file]. Stanford, CA: Stanford University Libraries. http://purl.stanford.edu/oo000oo0001</note>
           <note type="peer-review" displayLabel="Peer reviewed">No</note>
           <relatedItem type="references" displayLabel="Related content">
             <titleInfo>
               <title>Online survey research site (really Project Gutenberg)</title>
             </titleInfo>
             <identifier type="uri">http://www.gutenberg.org/ebooks/500</identifier>
-            <note type="Preferred Citation">Project Gutenberg citation.</note>
+            <note type="preferred citation">Project Gutenberg citation.</note>
           </relatedItem>
         </mods>
       </foxml:xmlContent>

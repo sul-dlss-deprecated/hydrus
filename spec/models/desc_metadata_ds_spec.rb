@@ -37,13 +37,13 @@ describe Hydrus::DescMetadataDS do
             </titleInfo>
             <identifier type="uri">http://example.com</identifier>
             <identifier type="foo">FUBB</identifier>
-            <note type="Preferred Citation">pref_cite inner</note>
+            <note type="preferred citation">pref_cite inner</note>
           </relatedItem>
           <subject>
             <topic>divorce</topic>
             <topic>marriage</topic>
           </subject>
-          <note type="Preferred Citation">pref_cite outer</note>
+          <note type="preferred citation">pref_cite outer</note>
           <note type="peer-review">Indeed</note>
         </mods>
       EOF
@@ -115,12 +115,12 @@ describe Hydrus::DescMetadataDS do
               <title/>
             </titleInfo>
             <identifier type="uri"/>
-            <note type="Preferred Citation"/>
+            <note type="preferred citation"/>
           </relatedItem>
           <subject>
             <topic/>
           </subject>
-          <note type="Preferred Citation"/>
+          <note type="preferred citation"/>
           <note type="peer-review"/>
         </mods>
       )

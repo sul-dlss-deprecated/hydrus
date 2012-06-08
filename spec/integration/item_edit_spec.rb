@@ -189,7 +189,7 @@ describe("Item edit", :type => :request) do
 
   it "can edit preferred citation field without affecting cite-related-as citation field" do
     new_pref_cit = "new preferred citation"
-    orig_pref_cit = 'How Couples Meet and Stay Together ("HCMST": NSF Grant SES-0751613, 2012)'
+    orig_pref_cit = @hi.descMetadata.preferred_citation.first
     cite_rel_as = "Project Gutenberg citation."
     
     login_as_archivist1
@@ -215,11 +215,11 @@ describe("Item edit", :type => :request) do
     click_button "Save"
   end
 
-  it "edit cite-related-as without affected preferred-citation" do
-    new_cite_rel_as = "new cite related as"
-    orig_cite_rel_as = "Project Gutenberg citation."
+  it "edit cite-related-as without affecting preferred-citation" do
+    new_cite_rel_as   = "new cite related as"
+    orig_cite_rel_as  = "Project Gutenberg citation."
     cite_rel_as_field = "relatedItem_cite_related_as"
-    pref_cit = 'How Couples Meet and Stay Together ("HCMST": NSF Grant SES-0751613, 2012)'
+    pref_cit          = @hi.descMetadata.preferred_citation.first
     
     login_as_archivist1
 
