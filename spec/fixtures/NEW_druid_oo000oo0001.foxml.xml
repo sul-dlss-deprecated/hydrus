@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<foxml:digitalObject VERSION="1.1" PID="druid:oo000oo0001" xmlns:foxml="info:fedora/fedora-system:def/foxml#" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/definitions/1/0/foxml1-1.xsd">
+    <foxml:objectProperties>
+        <foxml:property NAME="info:fedora/fedora-system:def/model#state" VALUE="Active" />
+        <foxml:property NAME="info:fedora/fedora-system:def/model#label" VALUE="How Couples Meet and Stay Together" />
+        <foxml:property NAME="info:fedora/fedora-system:def/model#ownerId" VALUE="DOR" />
+        <foxml:property NAME="info:fedora/fedora-system:def/model#createdDate" VALUE="2011-07-05T17:12:18.757Z" />
+        <foxml:property NAME="info:fedora/fedora-system:def/view#lastModifiedDate" VALUE="2011-07-25T20:32:10.617Z" />
+    </foxml:objectProperties>
+    <foxml:datastream ID="RELS-EXT" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
+        <foxml:datastreamVersion ID="RELS-EXT.0" LABEL="RDF Statements about this object" CREATED="2011-07-25T20:32:10.617Z" MIMETYPE="application/rdf+xml" FORMAT_URI="info:fedora/fedora-system:FedoraRELSExt-1.0" SIZE="424">
+            <foxml:xmlContent>
+                <rdf:RDF xmlns:fedora="info:fedora/fedora-system:def/relations-external#" xmlns:hydra="http://projecthydra.org/ns/relations#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                    <rdf:Description rdf:about="info:fedora/druid:oo000oo0001">
+                        <hydra:isGovernedBy rdf:resource="info:fedora/druid:oo000oo0002" />
+                        <fedora:isMemberOf rdf:resource="info:fedora/druid:oo000oo0003" />
+                        <fedora:isMemberOfCollection rdf:resource="info:fedora/druid:oo000oo0003" />
+                        <hasModel xmlns="info:fedora/fedora-system:def/model#" rdf:resource="info:fedora/afmodel:Hydrus_Item" />
+                    </rdf:Description>
+                </rdf:RDF>
+            </foxml:xmlContent>
+        </foxml:datastreamVersion>
+    </foxml:datastream>
+    <foxml:datastream ID="identityMetadata" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
+        <foxml:datastreamVersion ID="identityMetadata.0" LABEL="Identity Metadata" CREATED="2011-07-05T20:49:25.801Z" MIMETYPE="text/xml" SIZE="345">
+            <foxml:xmlContent>
+                <identityMetadata>
+                    <objectId>druid:oo000oo0001</objectId>
+                    <objectType>item</objectType>
+                    <objectLabel>How Couples Meet and Stay Together</objectLabel>
+                    <objectCreator>DOR</objectCreator>
+                    <otherId name="uuid">cea858c0-9ff1-11e1-baef-02231e89cef0</otherId>
+                    <tag>Project : DOR</tag>
+                </identityMetadata>
+            </foxml:xmlContent>
+        </foxml:datastreamVersion>
+    </foxml:datastream>
+    <foxml:datastream ID="DC" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
+        <foxml:datastreamVersion ID="DC.0" LABEL="Dublin Core Record for this object" CREATED="2011-07-05T20:50:11.624Z" MIMETYPE="text/xml" FORMAT_URI="http://www.openarchives.org/OAI/2.0/oai_dc/" SIZE="459">
+            <foxml:xmlContent>
+                <oai_dc:dc xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+                    <dc:title>How Couples Meet and Stay Together</dc:title>
+                    <dc:identifier>druid:oo000oo0001</dc:identifier>
+                </oai_dc:dc>
+            </foxml:xmlContent>
+        </foxml:datastreamVersion>
+    </foxml:datastream>
+    <foxml:datastream ID="descMetadata" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
+        <foxml:datastreamVersion ID="descMetadata.0" LABEL="Descriptive Metadata" CREATED="2011-07-05T20:50:24.156Z" MIMETYPE="text/xml" SIZE="377">
+            <foxml:xmlContent>
+                <mods xmlns="http://www.loc.gov/mods/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.3" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-3.xsd">
+                    <titleInfo>
+                        <title>How Couples Meet and Stay Together</title>
+                    </titleInfo>
+                    <name type="personal">
+                        <namePart>Rosenfeld, Michael J.</namePart>
+                        <role>
+                            <roleTerm authority="marcrelator" type="text">Principal Investigator</roleTerm>
+                        </role>
+                    </name>
+                    <name type="personal">
+                        <namePart>Frisbee, Hannah</namePart>
+                        <role>
+                            <roleTerm type="text">Contributing Author</roleTerm>
+                        </role>
+                    </name>
+                    <name type="corporate">
+                        <namePart>US National Science Foundation, award SES-0751613</namePart>
+                        <role>
+                            <roleTerm authority="marcrelator" type="text">Sponsor</roleTerm>
+                        </role>
+                    </name>
+                    <name type="corporate">
+                        <namePart>Stanford Institute for Research in the Social Sciences</namePart>
+                        <role>
+                            <roleTerm authority="marcrelator" type="text">Sponsor</roleTerm>
+                        </role>
+                    </name>
+                    <name type="corporate">
+                        <namePart>UPS endowment at Stanford University</namePart>
+                        <role>
+                            <roleTerm authority="marcrelator" type="text">Sponsor</roleTerm>
+                        </role>
+                    </name>
+                    <typeOfResource>Data</typeOfResource>
+                    <originInfo>
+                        <dateOther type="released">TO DO</dateOther>
+                    </originInfo>
+                    <abstract>The story of Pinocchio, or, How Couples Meet and Stay Together (HCMST) is a study of how Americans meet their spouses and romantic partners.
+                        The study will provide answers to the following research questions:
+                        
+                        1. Do traditional couples and nontraditional couples meet in the same way? What kinds of couples are more likely to have met online?
+                        2. Have the most recent marriage cohorts (especially the traditional heterosexual same-race married couples) met in the same way their parents and grandparents did?
+                        3. How do the couple dissolution rates of nontraditional couples compare to the couple dissolution rates of more traditional same-race heterosexual couples?
+                        4. How does the availability of civil union, domestic partnership or same-sex marriage rights affect couple stability for same-sex couples? This study will provide the first nationally representative data on the couple dissolution rates of same-sex couples.
+                    </abstract>
+                    <subject><topic>same-sex marriage</topic></subject>
+                    <subject><topic>civil union</topic></subject>
+                    <subject><topic>divorce</topic></subject>
+                    <subject><topic>marriage</topic></subject>
+                    <subject><topic>wooden boys</topic></subject>
+                    <note type="preferred citation">Rosenfeld, Michael J., and Reuben J. Thomas. 2011. How Couples Meet and Stay Together, Waves 1, 2, and 3: Public version 3.04 [Computer file]. Stanford, CA: Stanford University Libraries. http://purl.stanford.edu/oo000oo0001</note>
+                    <relatedItem type="references">
+                        <titleInfo>
+                            <title>Reuters Newswire: Being Online can Boost Your Chances of Being In Love, August 16, 2010</title>
+                        </titleInfo>
+                        <location>
+                            <url>NPR, "Computers are Becoming Cupid's Best Weapon," story by Jennifer Ludden, August 16, 2010</url>
+                        </location>
+                    </relatedItem>
+                    <relatedItem type="references">                        
+                        <titleInfo>
+                            <title>USA Today, Feb 11, 2010 story by Sharon Jayson on friends, the Web, and How Couples Meet.</title>
+                        </titleInfo>
+                        <location>
+                            <url>http://www.usatoday.com/life/lifestyle/2010-02-11-couplesmeet11_CV_N.htm</url>
+                        </location>
+                    </relatedItem>
+                </mods>
+            </foxml:xmlContent>
+        </foxml:datastreamVersion>
+    </foxml:datastream>
+    <foxml:datastream ID="contentMetadata" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
+        <foxml:datastreamVersion ID="contentMetadata.0" LABEL="Content Metadata" CREATED="2012-05-02T23:10:37.034Z" MIMETYPE="text/xml" SIZE="928">
+            <foxml:xmlContent>
+                <contentMetadata objectId="druid:oo000oo0001" type="file">
+                    <resource id="file1" type="file" sequence="1">
+                        <label>Main survey -- formatted in HTML</label>
+                        <file id="pinocchio.htm" filesize="262979" mimetype="text/html" publish="yes" shelve="yes" preserve="yes">
+                            <checksum type="md5">b409fde7ff1d2b650b0d2647175641e9</checksum>
+                            <checksum type="sha1">88f259289a3d012b09477948888fcda2cb87feea</checksum>
+                        </file>
+                    </resource>
+                    <resource id="file2" type="file" sequence="2">
+                        <label>Main survey -- as PDF (prepared May 17, 2012)</label>
+                        <file id="pinocchio characters tc in file name.pdf" filesize="3622063" mimetype="application/pdf" publish="yes" shelve="yes" preserve="yes">
+                            <checksum type="md5">da2ccda82d1e6bba71b7a92dd38b4b71</checksum>
+                            <checksum type="sha1">62f3fe2cea13cacf110c96d279ae7a45fa962407</checksum>
+                        </file>
+                    </resource>
+                    <resource id="file3" type="file" sequence="3">
+                        <label>Main survey -- as plain text (extracted into CSV tables)</label>
+                        <file id="pinocchio.-punctuation_in=file.name.txt" filesize="239350" mimetype="text/plain" publish="yes" shelve="yes" preserve="yes">
+                            <checksum type="md5">bffc0a355ce783a6709117e61c221724</checksum>
+                            <checksum type="sha1">afa18147ee5735641141b2046576af390ec120bd</checksum>
+                        </file>
+                    </resource>
+                    <resource id="file4" type="file" sequence="4">
+                        <label>Imagine this is a set of data samples</label>
+                        <file id="pinocchio_using_a_rather_long_filename-2012-05-17.zip" filesize="90095" mimetype="application/zip" publish="yes" shelve="yes" preserve="yes">
+                            <checksum type="md5">654a54fcf531c78c3efff916db332017</checksum>
+                            <checksum type="sha1">f80ab50a5599b1ecf92c1d8d6a38a409b4801b53</checksum>
+                        </file>
+                    </resource>
+                </contentMetadata>
+            </foxml:xmlContent>
+        </foxml:datastreamVersion>
+    </foxml:datastream>
+    <foxml:datastream ID="rightsMetadata" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
+        <foxml:datastreamVersion ID="rightsMetadata.0" LABEL="Rights Metadata" CREATED="2011-07-05T20:46:24.337Z" MIMETYPE="text/xml" SIZE="293">
+            <foxml:xmlContent>
+                <rightsMetadata xmlns="http://hydra-collab.stanford.edu/schemas/rightsMetadata/v1" version="0.1" objectId="druid:oo000oo0001">
+                    <access type="discover">
+                        <machine>
+                            <group>archivist</group>
+                        </machine>
+                    </access>
+                    <access type="read">
+                        <machine>
+                            <group>archivist</group>
+                        </machine>
+                    </access>
+                    <access type="edit">
+                        <machine>
+                            <group>archivist</group>
+                        </machine>
+                    </access>
+                </rightsMetadata>
+            </foxml:xmlContent>
+        </foxml:datastreamVersion>
+    </foxml:datastream>
+    <foxml:datastream ID="workflows" STATE="A" CONTROL_GROUP="E" VERSIONABLE="false">
+        <foxml:datastreamVersion ID="workflows.0" LABEL="Workflows" CREATED="2012-04-11T18:09:43.955Z" MIMETYPE="application/xml">
+            <foxml:contentLocation TYPE="URL" REF="https://lyberservices-dev.stanford.edu/workflow/dor/objects/druid:oo000oo0001/workflows" />
+        </foxml:datastreamVersion>
+    </foxml:datastream>
+</foxml:digitalObject>
