@@ -63,31 +63,33 @@
 
   </dl>
 
-  <div class="collection-items">
-    <h4>In this collection</h4>
-    <table class="hydrus-striped-table table-striped table-condensed">
-      <thead>
-        <tr>
-          <th class="title">Title</th>
-          <th class="depositor">Depositor</th>
-          <th class="type">Type</th>
-          <th class="status">Status</th>
-          <th class="date">Date added</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- iterate through collection items  -->
-        <% @document_fedora.hydrus_items.each do |item| %>
-          <tr class="document <%= cycle("even","odd") %>">
-            <td><%= link_to(item.title, polymorphic_path(item)) %></td>
-            <td><font color=red>#TODO</font></td>
-            <td><font color=red><%= item.object_type %></font></td>
-            <td><font color=red>#TODO Published?</font></td>
-            <td><%= hydrus_format_date(item.submit_time) %></td>
+  <% unless @document_fedora.hydrus_items.size == 0 %>
+    <div class="collection-items">
+      <h4>In this collection</h4>
+      <table class="hydrus-striped-table table-striped table-condensed">
+        <thead>
+          <tr>
+            <th class="title">Title</th>
+            <th class="depositor">Depositor</th>
+            <th class="type">Type</th>
+            <th class="status">Status</th>
+            <th class="date">Date added</th>
           </tr>
-        <% end %>
-      </tbody>
-    </table>
-  </div>
+        </thead>
+        <tbody>
+          <!-- iterate through collection items  -->
+          <% @document_fedora.hydrus_items.each do |item| %>
+            <tr class="document <%= cycle("even","odd") %>">
+              <td><%= link_to(item.title, polymorphic_path(item)) %></td>
+              <td><font color=red>#TODO</font></td>
+              <td><font color=red><%= item.object_type %></font></td>
+              <td><font color=red>#TODO Published?</font></td>
+              <td><%= hydrus_format_date(item.submit_time) %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% end %>
 
 </div>
