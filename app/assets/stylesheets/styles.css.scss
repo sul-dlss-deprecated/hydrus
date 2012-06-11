@@ -235,6 +235,7 @@ table.hydrus-striped-table {
 	dt {
 		color: #999;
 		width: 150px;
+		&.hidden-label {display: none;}
 	}
 	dd {
 		margin-left: 165px;
