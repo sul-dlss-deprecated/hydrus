@@ -1,4 +1,15 @@
 @import "sul_chrome/sul_chrome_mixins";
+
+@mixin druid-footer {
+	border-top: 1px solid #eee;
+	color: #ccc;
+	font-size: 90%;
+	margin-top: 20px;
+	padding-top: 3px;
+	text-align: right;
+	// width: 100%;
+}
+
 /* forms */
 .section-header {
 	background-color: #F5F5F5;
@@ -229,6 +240,7 @@ table.hydrus-striped-table {
 		@include striped-table;
 		width: 100%;
 	}
+	#druid-footer {@include druid-footer;}
 }
 .object-view {
 	h3 {margin-bottom: 15px;}
@@ -253,14 +265,8 @@ table.hydrus-striped-table {
 	h4 { margin-bottom: 12px;}
 }
 
-/* druid footer */
-.object-druid {
-	border-top: 1px solid #eee;
-	color: #555;
-	font-size: 90%;
-	padding-top: 3px;
-	text-align: right;
-	width: 100%;
+#hydrus_collections-show {
+	#druid-footer {@include druid-footer;}
 }
 
 /* drag and drop styles */
