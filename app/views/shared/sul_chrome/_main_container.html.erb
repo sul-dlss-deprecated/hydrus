@@ -24,10 +24,4 @@
     </div>
   <%- end -%>
 </div>
-<%- if params[:controller] == "hydrus_items" and params[:action] == "edit" -%>
-  <%= form_for(@document_fedora, :method => 'PUT', :html => {:class=>"step", :multipart=>true}) do -%>
-    <%= render "shared/main_contents" %>
-  <%- end -%>
-<%- else -%>
-  <%= render "shared/main_contents" %>
-<%- end -%>
+<%= render "shared/main_contents" %>

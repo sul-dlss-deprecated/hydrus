@@ -13,12 +13,15 @@ class Hydrus::GenericObject < Dor::Item
   end
 
   def abstract
-    descMetadata.abstract.first    
+    descMetadata.abstract
   end
+  delegate :abstract, :to => "descMetadata"
   
   def title
-    descMetadata.title.first
+    descMetadata.title
   end
+  delegate :title, :to => "descMetadata"
+  
   
   def apo
     @apo ||= (apo_pid ? get_fedora_item(apo_pid) : nil)
@@ -45,5 +48,15 @@ class Hydrus::GenericObject < Dor::Item
       Hydrus::RelatedItem.new_from_node(n)
     }
   end
-
+  
+  def related_item_title
+    descMetadata.relatedItem.titleInfo.title
+  end
+  delegate :related_item_title, :to => "descMetadata", :at => [:relatedItem, :titleInfo, :title]
+  
+  def related_item_url
+    descMetadata.relatedItem.location.url
+  end
+  delegate :related_item_url, :to => "descMetadata", :at => [:relatedItem, :location, :url]
+  
 end

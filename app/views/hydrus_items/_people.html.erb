@@ -1,0 +1,4 @@
+<%- @document_fedora.actors.each_with_index do |person, ix| -%>
+  <%= render :partial => "hydrus_items/person", :locals=> {:person=> person, :index=>ix} %>
+<%- end -%>
+<%= button_tag("Add Person", :name=>"add_person", :"data-attribute" => "add_person", :id=>"add_person", :class=>"btn", :value=>@document_fedora.actors.length) %>

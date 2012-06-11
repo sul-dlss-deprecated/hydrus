@@ -1,1 +1,3 @@
+var group = $("#remove_<%= escape_javascript(params[:term]) %>_<%= escape_javascript(params[:term_index]) %>").parents(".destroy-group");
 $("#remove_<%= escape_javascript(params[:term]) %>_<%= escape_javascript(params[:term_index]) %>").parents(".destroy-set").remove();
+group.html("<%= escape_javascript(render params[:type].pluralize) %>");

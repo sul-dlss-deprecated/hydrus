@@ -5,7 +5,7 @@ class HydrusItemsController < ApplicationController
   include Hydra::FileAssetsHelper
   include Hydrus::AccessControlsEnforcement
 
-  prepend_before_filter :sanitize_update_params, :only => :update
+  #prepend_before_filter :sanitize_update_params, :only => :update
   before_filter :enforce_access_controls
   before_filter :setup_attributes
   
@@ -27,13 +27,15 @@ class HydrusItemsController < ApplicationController
   def update
     notice = []
     
-    # special case for comma delimited keywords.
-    if params.has_key?(:hydrus_item_keywords)
+    # special case for editing multi-valued field as comma delimted string.
+    if params.has_key?("hydrus_item_keywords")
+      # need to clear out all keywords from document as the hydrus_item_keywords is the canonical list of keywords.
+      @document_fedora.update_attributes({"keywords" => {0=>""}})
       keywords = {}
-      params[:hydrus_item_keywords].split(",").map{|k| k.strip}.each_with_index do |keyword, index|
+      params["hydrus_item_keywords"].split(",").map{|k| k.strip}.each_with_index do |keyword, index|
         keywords[index] = keyword
-      end    
-      @sanitized_params["descMetadata"].merge!({[:subject, :topic] => keywords})
+      end
+      params["hydrus_item"].merge!("keywords" => keywords)
     end
     
     # Files from the file input.
@@ -58,13 +60,13 @@ class HydrusItemsController < ApplicationController
       end
     end
     
-    @response = update_document(@document_fedora, @sanitized_params)
+    @document_fedora.update_attributes(params["hydrus_item"]) if params.has_key?("hydrus_item")
     if params.has_key?(:add_person)
       @document_fedora.descMetadata.insert_person
     elsif params.has_key?(:add_link)
       @document_fedora.descMetadata.insert_related_item
     end
-    logger.debug("attributes submitted: #{@sanitized_params.inspect}")
+    logger.debug("attributes submitted: #{params['hydrus_item'].inspect}")
     @document_fedora.save
     
     notice << "Your changes have been saved."

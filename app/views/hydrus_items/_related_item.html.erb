@@ -1,21 +1,19 @@
-<%- title = defined?(node) ? node.at_css('titleInfo title').content : "" -%>
-<%- url = defined?(node) ? node.at_css("location url").content : "" -%>
 <div class="destroy-set">
   <div class="row related-item">
     <%= hydrus_form_label do  %>
-      <%= label_tag("asset[descMetadata][relatedItem_titleInfo_title][#{index}]", "Link title") %>
+      <%= label :"hydrus_item[related_item_title[#{index}]]", "Link title" %>
     <%- end -%>
     <%= hydrus_form_value do -%>
-      <%= text_field_tag("asset[descMetadata][relatedItem_titleInfo_title][#{index}]", title) %>
-      <%= link_to('<i class="icon-trash"></i>'.html_safe, destory_hydrus_item_value_path(:term=>"relatedItem", :term_index=>index), :class=>"delete-node btn", :id=>"remove_relatedItem_#{index}") %>
+      <%= text_field_tag :"hydrus_item[related_item_title[#{index}]]", (defined?(item) ? item.title : "") %>
+      <%= link_to('<i class="icon-trash"></i>'.html_safe, destory_hydrus_item_value_path(:term=>"relatedItem", :term_index=>index, :type=>"related_item"), :class=>"delete-node btn", :id=>"remove_relatedItem_#{index}") %>
     <%- end -%>
   </div>
   <div class="row related-item">
     <%= hydrus_form_label do  %>
-      <%= label_tag("asset[descMetadata][relatedItem_location_url][#{index}]", "URL") %>
+      <%= label :"hydrus_item[related_item_url[#{index}]]", "URL" %>
     <%- end -%>
     <%= hydrus_form_value do -%>
-      <%= text_field_tag("asset[descMetadata][relatedItem_location_url][#{index}]", url) %>
+      <%= text_field_tag :"hydrus_item[related_item_url[#{index}]]", (defined?(item) ? item.url : "") %>
     <%- end -%>
   </div>
 </div>

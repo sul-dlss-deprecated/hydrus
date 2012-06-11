@@ -17,14 +17,14 @@ describe("Item edit", :type => :request) do
 
   it "Can edit basic content" do
     new_name  = 'abcxyz123'
-    orig_name = @hi.descMetadata.abstract.first
+    orig_name = @hi.descMetadata.abstract.first.strip
 
     login_as_archivist1
 
     visit edit_polymorphic_path(@hi)
     current_path.should == edit_polymorphic_path(@hi)
 
-    find_field("Abstract").value.should == orig_name
+    find_field("Abstract").value.strip.should == orig_name
     fill_in "Abstract", :with => new_name
     click_button "Save"
     page.should have_content(@notice)
@@ -43,8 +43,8 @@ describe("Item edit", :type => :request) do
   it "People/Role editing" do
     new_name  = "MY EDITIED PERSON"
     orig_name = "Rosenfeld, Michael J."
-    field_np  = "asset_descMetadata_name_namePart_0"
-    field_rt  = "asset_descMetadata_name_role_roleTerm_0"
+    field_np  = "hydrus_item_person_0"
+    field_rt  = "hydrus_item_person_role_0"
     orig_role = "Principal Investigator"
     new_role  = "Collector"
 
@@ -75,7 +75,7 @@ describe("Item edit", :type => :request) do
   end
   
   it "People/Role adding and deleting" do
-    new_field = "asset_descMetadata_name_namePart_5"
+    new_field = "hydrus_item_person_5"
     new_delete_button = "remove_name_5"
     person = "Mr. Test Person"
     
@@ -84,7 +84,7 @@ describe("Item edit", :type => :request) do
     visit edit_polymorphic_path(@hi)
     current_path.should == edit_polymorphic_path(@hi)
     
-    page.should have_css("input#asset_descMetadata_name_namePart_4")
+    page.should have_css("input#hydrus_item_person_4")
     page.should_not have_css("##{new_field}")
     
     click_button "add_person"
@@ -112,10 +112,10 @@ describe("Item edit", :type => :request) do
   it "Related Content editing" do
     orig_link   = @hi.descMetadata.relatedItem.location.url.first
     new_link    = "foo_LINK_bar"
-    field_link  = "asset_descMetadata_relatedItem_location_url_0"
+    field_link  = "hydrus_item_related_item_url_0"
     orig_title  = @hi.descMetadata.relatedItem.titleInfo.title.first
     new_title   = "foo_TITLE_bar"
-    field_title = "asset_descMetadata_relatedItem_titleInfo_title_0"
+    field_title = "hydrus_item_related_item_title_0"
 
     login_as_archivist1
 
@@ -144,8 +144,8 @@ describe("Item edit", :type => :request) do
   end
   
   it "Related Content adding and deleting" do
-    new_label         = "asset_descMetadata_relatedItem_titleInfo_title_2"
-    new_url           = "asset_descMetadata_relatedItem_location_url_2"
+    new_label         = "hydrus_item_related_item_title_2"
+    new_url           = "hydrus_item_related_item_url_2"
     new_delete_button = "remove_relatedItem_2"
     url               = "http://library.stanford.edu"
     label             = "Library Website"
@@ -155,8 +155,8 @@ describe("Item edit", :type => :request) do
     visit edit_polymorphic_path(@hi)
     current_path.should == edit_polymorphic_path(@hi)
     
-    page.should have_css("input#asset_descMetadata_relatedItem_titleInfo_title_0")
-    page.should have_css("input#asset_descMetadata_relatedItem_location_url_0")
+    page.should have_css("input#hydrus_item_related_item_title_0")
+    page.should have_css("input#hydrus_item_related_item_url_0")
     page.should_not have_css("##{new_label}")
     page.should_not have_css("##{new_url}")
     
@@ -188,16 +188,17 @@ describe("Item edit", :type => :request) do
   end
 
   it "can edit preferred citation field" do
+    citation_field = "hydrus_item_preferred_citation"
     new_pref_cit  = "new_citation_FOO"
-    orig_pref_cit = @hi.descMetadata.preferred_citation.first
+    orig_pref_cit = @hi.descMetadata.preferred_citation.first.strip
     
     login_as_archivist1
 
     visit edit_polymorphic_path(@hi)
     current_path.should == edit_polymorphic_path(@hi)
 
-    find_field("preferred_citation").value.should == orig_pref_cit
-    fill_in "preferred_citation", :with => new_pref_cit
+    find_field(citation_field).value.strip.should == orig_pref_cit
+    fill_in citation_field, :with => new_pref_cit
     click_button "Save"
     page.should have_content(@notice)
 
@@ -208,7 +209,7 @@ describe("Item edit", :type => :request) do
     # Clean up.
     visit edit_polymorphic_path(@hi)
     current_path.should == edit_polymorphic_path(@hi)
-    fill_in "preferred_citation", :with => orig_pref_cit
+    fill_in citation_field, :with => orig_pref_cit
     click_button "Save"
   end
 

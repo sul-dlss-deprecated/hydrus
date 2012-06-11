@@ -29,6 +29,12 @@ $(document).ready(function(){
 		return false;
 	});
 	
+	// javascript form submission
+	$("#item-actions").toggle();
+	$("#item-actions button[type=submit]").click(function(){
+		$("form.step").submit();
+	});
+	
 	// $("#hydrus_items-edit form input, #hydrus_items-edit form textarea").live("blur", function(){
 	//     validate_hydrus_item();
 	// });

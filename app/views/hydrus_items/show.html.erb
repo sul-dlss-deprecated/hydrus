@@ -1,11 +1,11 @@
-<%- @page_title = "#{@document_fedora.title} - #{application_name}" -%>
+<%- @page_title = "#{@document_fedora.title.first} - #{application_name}" -%>
 
 <% sidebar_items << capture do %>
 
   <dl>
     <dt><h6>Collection</h6></dt>
     <% @document_fedora.collection.each do |c| %>
-      <dd class="collection"><%= link_to(c.title, polymorphic_path(c)) %></dd>
+      <dd class="collection"><%= link_to(c.title.first, polymorphic_path(c)) %></dd>
     <% end %>
   </dl>
 
@@ -33,7 +33,7 @@
 
   <dl class="dl-horizontal object-view clearfix">
 
-    <h3><%= @document_fedora.title %></h3>
+    <h3><%= @document_fedora.title.first %></h3>
 
     <dt>PURL</dt>
     <dd>
@@ -49,7 +49,7 @@
     <% end %>
 
     <dt>Abstract</dt>
-    <dd><%= @document_fedora.abstract %></dd>
+    <dd><%= @document_fedora.abstract.first %></dd>
 
     <dt>Keywords</dt>
     <dd>
@@ -57,7 +57,7 @@
     </dd>
 
     <dt>Cite this item as</dt>
-    <dd><%= @document_fedora.preferred_citation %></dd>
+    <dd><%= @document_fedora.preferred_citation.first %></dd>
 
     <% unless @document_fedora.related_items.size == 0 %>
       <% @document_fedora.related_items.each_with_index do |related_item, index| %>
