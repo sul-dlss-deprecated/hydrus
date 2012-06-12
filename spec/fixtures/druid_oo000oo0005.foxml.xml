@@ -1,160 +1,215 @@
 <?xml version="1.0" encoding="utf-8"?>
-<foxml:digitalObject VERSION="1.1" PID="druid:oo000oo0005" xmlns:foxml="info:fedora/fedora-system:def/foxml#" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/definitions/1/0/foxml1-1.xsd">
-    <foxml:objectProperties>
-        <foxml:property NAME="info:fedora/fedora-system:def/model#state" VALUE="Active" />
-        <foxml:property NAME="info:fedora/fedora-system:def/model#label" VALUE="How Couples Meet and Stay Together" />
-        <foxml:property NAME="info:fedora/fedora-system:def/model#ownerId" VALUE="DOR" />
-        <foxml:property NAME="info:fedora/fedora-system:def/model#createdDate" VALUE="2011-07-05T17:12:18.757Z" />
-        <foxml:property NAME="info:fedora/fedora-system:def/view#lastModifiedDate" VALUE="2011-07-25T20:32:10.617Z" />
-    </foxml:objectProperties>
-    <foxml:datastream ID="RELS-EXT" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
-        <foxml:datastreamVersion ID="RELS-EXT.0" LABEL="RDF Statements about this object" CREATED="2011-07-25T20:32:10.617Z" MIMETYPE="application/rdf+xml" FORMAT_URI="info:fedora/fedora-system:FedoraRELSExt-1.0" SIZE="424">
-            <foxml:xmlContent>
-                <rdf:RDF xmlns:fedora="info:fedora/fedora-system:def/relations-external#" xmlns:hydra="http://projecthydra.org/ns/relations#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
-                    <rdf:Description rdf:about="info:fedora/druid:oo000oo0005">
-                        <hydra:isGovernedBy rdf:resource="info:fedora/druid:oo000oo0002" />
-                        <fedora:isMemberOf rdf:resource="info:fedora/druid:oo000oo0003" />
-                        <fedora:isMemberOfCollection rdf:resource="info:fedora/druid:oo000oo0003" />
-                        <hasModel xmlns="info:fedora/fedora-system:def/model#" rdf:resource="info:fedora/afmodel:Hydrus_Item" />
-                    </rdf:Description>
-                </rdf:RDF>
-            </foxml:xmlContent>
-        </foxml:datastreamVersion>
-    </foxml:datastream>
-    <foxml:datastream ID="identityMetadata" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
-        <foxml:datastreamVersion ID="identityMetadata.0" LABEL="Identity Metadata" CREATED="2011-07-05T20:49:25.801Z" MIMETYPE="text/xml" SIZE="345">
-            <foxml:xmlContent>
-                <identityMetadata>
-                    <objectId>druid:oo000oo0005</objectId>
-                    <objectType>item</objectType>
-                    <objectLabel>Ethnic Collective Action in Contemporary Urban U.S. - Data on Conflicts and Protests</objectLabel>
-                    <objectCreator>DOR</objectCreator>
-                    <otherId name="uuid">need_new</otherId>
-                    <tag>Project : DOR</tag>
-                </identityMetadata>
-            </foxml:xmlContent>
-        </foxml:datastreamVersion>
-    </foxml:datastream>
-    <foxml:datastream ID="DC" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
-        <foxml:datastreamVersion ID="DC.0" LABEL="Dublin Core Record for this object" CREATED="2011-07-05T20:50:11.624Z" MIMETYPE="text/xml" FORMAT_URI="http://www.openarchives.org/OAI/2.0/oai_dc/" SIZE="459">
-            <foxml:xmlContent>
-                <oai_dc:dc xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
-                    <dc:title>Ethnic Collective Action in Contemporary Urban U.S. - Data on Conflicts and Protests</dc:title>
-                    <dc:identifier>druid:oo000oo0005</dc:identifier>
-                </oai_dc:dc>
-            </foxml:xmlContent>
-        </foxml:datastreamVersion>
-    </foxml:datastream>
-    <foxml:datastream ID="descMetadata" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
-        <foxml:datastreamVersion ID="descMetadata.0" LABEL="Descriptive Metadata" CREATED="2011-07-05T20:50:24.156Z" MIMETYPE="text/xml" SIZE="377">
-            <foxml:xmlContent>
-                <mods xmlns="http://www.loc.gov/mods/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.3" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-3.xsd">
-                    <titleInfo>
-                        <title>Ethnic Collective Action in Contemporary Urban U.S. - Data on Conflicts and Protests</title>
-                    </titleInfo>
-                    <name type="personal">
-                        <namePart>Olzak, Susan</namePart>
-                        <role>
-                            <roleTerm authority="marcrelator" type="text">Principal Investigator</roleTerm>
-                        </role>
-                    </name>
-                    <name type="corporate">
-                        <namePart>National Science Foundation, Sociology Program (SES-9196229) </namePart>
-                        <role>
-                            <roleTerm authority="marcrelator" type="text">Sponsor</roleTerm>
-                        </role>
-                    </name>
-                    <typeOfResource>Data</typeOfResource>
-                    <originInfo>
-                        <dateOther type="released">TO DO</dateOther>
-                    </originInfo>
-                    <abstract>This project seeks to identify sources of ethnic and racial conflict and protest in urban America from 1954 through 1992. The data on collective events are coded using the New York Times. Detailed coding rules produced a chronological data set that allows researchers to:
-                        
-                        1. Analyze the location and timing of both conflicts (confrontations between two or more ethnic populations) and protests (marches, mass meetings, demonstrations on behalf of one ethnic group, expressing grievances related to discrimination or racial policy).
-                        2. Specifically analyze a type of protest (e.g., Civil Rights Movement activity, or urban race riots) and the potential dynamic relationship of different types of protests and conflicts.
-                        3. Identify any ethnic, nationality, or racial characteristics of participants who were the targets and/or instigators of each protest and conflict.
-                        4. Analyze information on each event’s location, size, targets, police presence, arrests, damage or injuries, and the content of claims directed against government authorizes, police, and other groups are included in these data.
-                    </abstract>
-                    <subject><topic>ethnic protest</topic></subject>
-                    <subject><topic>racial protest</topic></subject>
-                    <subject><topic>conflict events</topic></subject>
-                    <subject><topic>urban areas</topic></subject>
-                    <note type="preferred citation">Olzak, Susan, and Elizabeth West. 1995. Ethnic Collective Action in Contemporary Urban U.S. from 1954 to 1992. Stanford, CA: Department of Sociology, Stanford University. http://purl.stanford.edu/oo000oo0005</note>
-                    <relatedItem type="references">
-                   <!-- <titleInfo> 
+<foxml:digitalObject VERSION="1.1" PID="druid:oo000oo0005"
+  xmlns:foxml="info:fedora/fedora-system:def/foxml#"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/definitions/1/0/foxml1-1.xsd">
+  <foxml:objectProperties>
+    <foxml:property NAME="info:fedora/fedora-system:def/model#state"
+      VALUE="Active"/>
+    <foxml:property NAME="info:fedora/fedora-system:def/model#label"
+      VALUE="How Couples Meet and Stay Together"/>
+    <foxml:property NAME="info:fedora/fedora-system:def/model#ownerId"
+      VALUE="DOR"/>
+    <foxml:property NAME="info:fedora/fedora-system:def/model#createdDate"
+      VALUE="2011-07-05T17:12:18.757Z"/>
+    <foxml:property NAME="info:fedora/fedora-system:def/view#lastModifiedDate"
+      VALUE="2011-07-25T20:32:10.617Z"/>
+  </foxml:objectProperties>
+  <foxml:datastream ID="RELS-EXT" STATE="A" CONTROL_GROUP="X"
+    VERSIONABLE="false">
+    <foxml:datastreamVersion ID="RELS-EXT.0"
+      LABEL="RDF Statements about this object"
+      CREATED="2011-07-25T20:32:10.617Z" MIMETYPE="application/rdf+xml"
+      FORMAT_URI="info:fedora/fedora-system:FedoraRELSExt-1.0" SIZE="424">
+      <foxml:xmlContent>
+        <rdf:RDF
+          xmlns:fedora="info:fedora/fedora-system:def/relations-external#"
+          xmlns:hydra="http://projecthydra.org/ns/relations#"
+          xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+          <rdf:Description rdf:about="info:fedora/druid:oo000oo0005">
+            <hydra:isGovernedBy rdf:resource="info:fedora/druid:oo000oo0002"/>
+            <fedora:isMemberOf rdf:resource="info:fedora/druid:oo000oo0003"/>
+            <fedora:isMemberOfCollection
+              rdf:resource="info:fedora/druid:oo000oo0003"/>
+            <hasModel xmlns="info:fedora/fedora-system:def/model#"
+              rdf:resource="info:fedora/afmodel:Hydrus_Item"/>
+          </rdf:Description>
+        </rdf:RDF>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+  <foxml:datastream ID="identityMetadata" STATE="A" CONTROL_GROUP="X"
+    VERSIONABLE="false">
+    <foxml:datastreamVersion ID="identityMetadata.0" LABEL="Identity Metadata"
+      CREATED="2011-07-05T20:49:25.801Z" MIMETYPE="text/xml" SIZE="345">
+      <foxml:xmlContent>
+        <identityMetadata>
+          <objectId>druid:oo000oo0005</objectId>
+          <objectType>item</objectType>
+          <objectLabel>Ethnic Collective Action in Contemporary Urban U.S. -
+            Data on Conflicts and Protests</objectLabel>
+          <objectCreator>DOR</objectCreator>
+          <otherId name="uuid">need_new</otherId>
+          <tag>Project : DOR</tag>
+        </identityMetadata>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+  <foxml:datastream ID="DC" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
+    <foxml:datastreamVersion ID="DC.0"
+      LABEL="Dublin Core Record for this object"
+      CREATED="2011-07-05T20:50:11.624Z" MIMETYPE="text/xml"
+      FORMAT_URI="http://www.openarchives.org/OAI/2.0/oai_dc/" SIZE="459">
+      <foxml:xmlContent>
+        <oai_dc:dc xmlns:dc="http://purl.org/dc/elements/1.1/"
+          xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:title>Ethnic Collective Action in Contemporary Urban U.S. - Data on Conflicts and Protests</dc:title>
+          <dc:identifier>druid:oo000oo0005</dc:identifier>
+        </oai_dc:dc>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+  <foxml:datastream ID="descMetadata" STATE="A" CONTROL_GROUP="X"
+    VERSIONABLE="false">
+    <foxml:datastreamVersion ID="descMetadata.0" LABEL="Descriptive Metadata"
+      CREATED="2011-07-05T20:50:24.156Z" MIMETYPE="text/xml" SIZE="377">
+      <foxml:xmlContent>
+        <mods xmlns="http://www.loc.gov/mods/v3"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.3"
+          xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-3.xsd">
+          <titleInfo>
+            <title>Ethnic Collective Action in Contemporary Urban U.S. - Data on Conflicts and Protests</title>
+          </titleInfo>
+          <name type="personal">
+            <namePart>Olzak, Susan</namePart>
+            <role>
+              <roleTerm authority="marcrelator" type="text">Principal Investigator</roleTerm>
+            </role>
+          </name>
+          <name type="corporate">
+            <namePart>National Science Foundation, Sociology Program (SES-9196229) </namePart>
+            <role>
+              <roleTerm authority="marcrelator" type="text">Sponsor</roleTerm>
+            </role>
+          </name>
+          <typeOfResource>Data</typeOfResource>
+          <originInfo>
+            <dateOther type="released">TO DO</dateOther>
+          </originInfo>
+          <abstract>This project seeks to identify sources of ethnic and racial conflict and protest in urban America from 1954 through 1992. The data on collective events are coded using the New York Times. Detailed coding rules produced a chronological data set that allows researchers to:
+            
+            1. Analyze the location and timing of both conflicts (confrontations between two or more ethnic populations) and protests (marches, mass meetings, demonstrations on behalf of one ethnic group, expressing grievances related to discrimination or racial policy).
+            2. Specifically analyze a type of protest (e.g., Civil Rights Movement activity, or urban race riots) and the potential dynamic relationship of different types of protests and conflicts.
+            3. Identify any ethnic, nationality, or racial characteristics of participants who were the targets and/or instigators of each protest and conflict.
+            4. Analyze information on each event’s location, size, targets, police presence, arrests, damage or injuries, and the content of claims directed against government authorizes, police, and other groups are included in these data.
+          </abstract>
+          <subject>
+            <topic>ethnic protest</topic>
+          </subject>
+          <subject>
+            <topic>racial protest</topic>
+          </subject>
+          <subject>
+            <topic>conflict events</topic>
+          </subject>
+          <subject>
+            <topic>urban areas</topic>
+          </subject>
+          <note type="preferred citation">Olzak, Susan, and Elizabeth West. 1995. Ethnic Collective Action in Contemporary Urban U.S. from 1954 to 1992. Stanford, CA: Department of Sociology, Stanford University. http://purl.stanford.edu/oo000oo0005</note>
+          <relatedItem type="references">
+            <!-- <titleInfo> 
                            <title>is deliberately not used</title>
                         </titleInfo> -->
-                        <location>
-                            <url>http://data.stanford.edu/urban_ECA</url>
-                        </location>
-                    </relatedItem>
-                    <relatedItem type="references">
-                        <titleInfo>
-                            <title>Olzak, Susan. 2004. Causes of ethnic conflict and protest in Urban America, 1877–1889. Ithaca, NY: Department of Sociology, Cornell University.</title>
-                        </titleInfo>
-                        <location>
-                            <url>http://dx.doi.org/10.1016/0049-089X(87)90016-0</url>
-                        </location>
-                    </relatedItem>
-                </mods>
-            </foxml:xmlContent>
-        </foxml:datastreamVersion>
-    </foxml:datastream>
-    <foxml:datastream ID="contentMetadata" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
-        <foxml:datastreamVersion ID="contentMetadata.0" LABEL="Content Metadata" CREATED="2012-05-02T23:10:37.034Z" MIMETYPE="text/xml" SIZE="928">
-            <foxml:xmlContent>
-                <contentMetadata objectId="druid:oo000oo0005" type="file">
-                    <resource id="file1" type="file" sequence="1">
-                        <label>Project Description and Coding Manual - Revised July 24, 2007</label>
-                        <file id="manual.htm" filesize="262979" mimetype="text/html" publish="yes" shelve="yes" preserve="yes">
-                            <checksum type="md5">b409fde7ff1d2b650b0d2647175641e9</checksum>
-                            <checksum type="sha1">88f259289a3d012b09477948888fcda2cb87feea</checksum>
-                        </file>
-                    </resource>
-                    <resource id="file2" type="file" sequence="2">
-                        <label>Olzak Bibliography of Articles</label>
-                        <file id="article.pdf" filesize="3622063" mimetype="application/pdf" publish="yes" shelve="yes" preserve="yes">
-                            <checksum type="md5">da2ccda82d1e6bba71b7a92dd38b4b71</checksum>
-                            <checksum type="sha1">62f3fe2cea13cacf110c96d279ae7a45fa962407</checksum>
-                        </file>
-                    </resource>
-                    <resource id="file3" type="file" sequence="3">
-                        <label>Data set (Stata dta file)</label>
-                        <file id="dataset.txt" filesize="239350" mimetype="text/plain" publish="yes" shelve="yes" preserve="yes">
-                            <checksum type="md5">bffc0a355ce783a6709117e61c221724</checksum>
-                            <checksum type="sha1">afa18147ee5735641141b2046576af390ec120bd</checksum>
-                        </file>
-                    </resource>
-                </contentMetadata>
-            </foxml:xmlContent>
-        </foxml:datastreamVersion>
-    </foxml:datastream>
-    <foxml:datastream ID="rightsMetadata" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
-        <foxml:datastreamVersion ID="rightsMetadata.0" LABEL="Rights Metadata" CREATED="2011-07-05T20:46:24.337Z" MIMETYPE="text/xml" SIZE="293">
-            <foxml:xmlContent>
-                <rightsMetadata xmlns="http://hydra-collab.stanford.edu/schemas/rightsMetadata/v1" version="0.1" objectId="druid:oo000oo0005">
-                    <access type="discover">
-                        <machine>
-                            <group>archivist</group>
-                        </machine>
-                    </access>
-                    <access type="read">
-                        <machine>
-                            <group>archivist</group>
-                        </machine>
-                    </access>
-                    <access type="edit">
-                        <machine>
-                            <group>archivist</group>
-                        </machine>
-                    </access>
-                </rightsMetadata>
-            </foxml:xmlContent>
-        </foxml:datastreamVersion>
-    </foxml:datastream>
-    <foxml:datastream ID="workflows" STATE="A" CONTROL_GROUP="E" VERSIONABLE="false">
-        <foxml:datastreamVersion ID="workflows.0" LABEL="Workflows" CREATED="2012-04-11T18:09:43.955Z" MIMETYPE="application/xml">
-            <foxml:contentLocation TYPE="URL" REF="https://lyberservices-dev.stanford.edu/workflow/dor/objects/druid:oo000oo0005/workflows" />
-        </foxml:datastreamVersion>
-    </foxml:datastream>
+            <location>
+              <url>http://data.stanford.edu/urban_ECA</url>
+            </location>
+          </relatedItem>
+          <relatedItem type="references">
+            <titleInfo>
+              <title>Olzak, Susan. 2004. Causes of ethnic conflict and protest in Urban America, 1877–1889. Ithaca, NY: Department of Sociology, Cornell University.</title>
+            </titleInfo>
+            <location>
+              <url>http://dx.doi.org/10.1016/0049-089X(87)90016-0</url>
+            </location>
+          </relatedItem>
+        </mods>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+  <foxml:datastream ID="contentMetadata" STATE="A" CONTROL_GROUP="X"
+    VERSIONABLE="false">
+    <foxml:datastreamVersion ID="contentMetadata.0" LABEL="Content Metadata"
+      CREATED="2012-05-02T23:10:37.034Z" MIMETYPE="text/xml" SIZE="928">
+      <foxml:xmlContent>
+        <contentMetadata objectId="druid:oo000oo0005" type="file">
+          <resource id="file1" type="file" sequence="1">
+            <label>Project Description and Coding Manual - Revised July 24,
+              2007</label>
+            <file id="manual.htm" filesize="262979" mimetype="text/html"
+              publish="yes" shelve="yes" preserve="yes">
+              <checksum type="md5">b409fde7ff1d2b650b0d2647175641e9</checksum>
+              <checksum type="sha1"
+                >88f259289a3d012b09477948888fcda2cb87feea</checksum>
+            </file>
+          </resource>
+          <resource id="file2" type="file" sequence="2">
+            <label>Olzak Bibliography of Articles</label>
+            <file id="article.pdf" filesize="3622063" mimetype="application/pdf"
+              publish="yes" shelve="yes" preserve="yes">
+              <checksum type="md5">da2ccda82d1e6bba71b7a92dd38b4b71</checksum>
+              <checksum type="sha1"
+                >62f3fe2cea13cacf110c96d279ae7a45fa962407</checksum>
+            </file>
+          </resource>
+          <resource id="file3" type="file" sequence="3">
+            <label>Data set (Stata dta file)</label>
+            <file id="dataset.txt" filesize="239350" mimetype="text/plain"
+              publish="yes" shelve="yes" preserve="yes">
+              <checksum type="md5">bffc0a355ce783a6709117e61c221724</checksum>
+              <checksum type="sha1"
+                >afa18147ee5735641141b2046576af390ec120bd</checksum>
+            </file>
+          </resource>
+        </contentMetadata>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+  <foxml:datastream ID="rightsMetadata" STATE="A" CONTROL_GROUP="X"
+    VERSIONABLE="false">
+    <foxml:datastreamVersion ID="rightsMetadata.0" LABEL="Rights Metadata"
+      CREATED="2011-07-05T20:46:24.337Z" MIMETYPE="text/xml" SIZE="293">
+      <foxml:xmlContent>
+        <rightsMetadata
+          xmlns="http://hydra-collab.stanford.edu/schemas/rightsMetadata/v1"
+          version="0.1" objectId="druid:oo000oo0005">
+          <access type="discover">
+            <machine>
+              <group>archivist</group>
+            </machine>
+          </access>
+          <access type="read">
+            <machine>
+              <group>archivist</group>
+            </machine>
+          </access>
+          <access type="edit">
+            <machine>
+              <group>archivist</group>
+            </machine>
+          </access>
+        </rightsMetadata>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+  <foxml:datastream ID="workflows" STATE="A" CONTROL_GROUP="E"
+    VERSIONABLE="false">
+    <foxml:datastreamVersion ID="workflows.0" LABEL="Workflows"
+      CREATED="2012-04-11T18:09:43.955Z" MIMETYPE="application/xml">
+      <foxml:contentLocation TYPE="URL"
+        REF="https://lyberservices-dev.stanford.edu/workflow/dor/objects/druid:oo000oo0005/workflows"
+      />
+    </foxml:datastreamVersion>
+  </foxml:datastream>
 </foxml:digitalObject>
