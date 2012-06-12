@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<foxml:digitalObject VERSION="1.1" PID="druid:oo000oo0005"
+<foxml:digitalObject VERSION="1.1" PID="druid:oo000oo0007"
   xmlns:foxml="info:fedora/fedora-system:def/foxml#"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/definitions/1/0/foxml1-1.xsd">
@@ -7,7 +7,7 @@
     <foxml:property NAME="info:fedora/fedora-system:def/model#state"
       VALUE="Active"/>
     <foxml:property NAME="info:fedora/fedora-system:def/model#label"
-      VALUE="Ethnic Collective Action in Contemporary Urban U.S. - Data on Conflicts and Protests"/>
+      VALUE="Fubblicious Dataset Title"/>
     <foxml:property NAME="info:fedora/fedora-system:def/model#ownerId"
       VALUE="DOR"/>
     <foxml:property NAME="info:fedora/fedora-system:def/model#createdDate"
@@ -26,7 +26,7 @@
           xmlns:fedora="info:fedora/fedora-system:def/relations-external#"
           xmlns:hydra="http://projecthydra.org/ns/relations#"
           xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
-          <rdf:Description rdf:about="info:fedora/druid:oo000oo0005">
+          <rdf:Description rdf:about="info:fedora/druid:oo000oo0007">
             <hydra:isGovernedBy rdf:resource="info:fedora/druid:oo000oo0002"/>
             <fedora:isMemberOf rdf:resource="info:fedora/druid:oo000oo0003"/>
             <fedora:isMemberOfCollection
@@ -44,10 +44,9 @@
       CREATED="2011-07-05T20:49:25.801Z" MIMETYPE="text/xml" SIZE="345">
       <foxml:xmlContent>
         <identityMetadata>
-          <objectId>druid:oo000oo0005</objectId>
+          <objectId>druid:oo000oo0007</objectId>
           <objectType>item</objectType>
-          <objectLabel>Ethnic Collective Action in Contemporary Urban U.S. -
-            Data on Conflicts and Protests</objectLabel>
+          <objectLabel>Fubblicious Dataset Title</objectLabel>
           <objectCreator>DOR</objectCreator>
           <otherId name="uuid">need_new</otherId>
           <tag>Project : DOR</tag>
@@ -65,8 +64,8 @@
           xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/"
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
-          <dc:title>Ethnic Collective Action in Contemporary Urban U.S. - Data on Conflicts and Protests</dc:title>
-          <dc:identifier>druid:oo000oo0005</dc:identifier>
+          <dc:title>Fubblicious Dataset Title</dc:title>
+          <dc:identifier>druid:oo000oo0007</dc:identifier>
         </oai_dc:dc>
       </foxml:xmlContent>
     </foxml:datastreamVersion>
@@ -80,58 +79,40 @@
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.3"
           xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-3.xsd">
           <titleInfo>
-            <title>Ethnic Collective Action in Contemporary Urban U.S. - Data on Conflicts and Protests</title>
+            <title>Fubblicious Dataset Title</title>
           </titleInfo>
           <name type="personal">
-            <namePart>Olzak, Susan</namePart>
+            <namePart>Nugent, Theodore</namePart>
             <role>
               <roleTerm authority="marcrelator" type="text">Principal Investigator</roleTerm>
-            </role>
-          </name>
-          <name type="corporate">
-            <namePart>National Science Foundation, Sociology Program (SES-9196229) </namePart>
-            <role>
-              <roleTerm authority="marcrelator" type="text">Sponsor</roleTerm>
             </role>
           </name>
           <typeOfResource>Data</typeOfResource>
           <originInfo>
             <dateOther type="released">TO DO</dateOther>
           </originInfo>
-          <abstract>This project seeks to identify sources of ethnic and racial conflict and protest in urban America from 1954 through 1992. The data on collective events are coded using the New York Times. Detailed coding rules produced a chronological data set that allows researchers to:
-            
-            1. Analyze the location and timing of both conflicts (confrontations between two or more ethnic populations) and protests (marches, mass meetings, demonstrations on behalf of one ethnic group, expressing grievances related to discrimination or racial policy).
-            2. Specifically analyze a type of protest (e.g., Civil Rights Movement activity, or urban race riots) and the potential dynamic relationship of different types of protests and conflicts.
-            3. Identify any ethnic, nationality, or racial characteristics of participants who were the targets and/or instigators of each protest and conflict.
-            4. Analyze information on each event’s location, size, targets, police presence, arrests, damage or injuries, and the content of claims directed against government authorizes, police, and other groups are included in these data.
-          </abstract>
+          <abstract>Blort, blort, blort.</abstract>
           <subject>
-            <topic>ethnic protest</topic>
+            <topic>metal</topic>
           </subject>
           <subject>
-            <topic>racial protest</topic>
+            <topic>hair</topic>
           </subject>
-          <subject>
-            <topic>conflict events</topic>
-          </subject>
-          <subject>
-            <topic>urban areas</topic>
-          </subject>
-          <note type="preferred citation">Olzak, Susan, and Elizabeth West. 1995. Ethnic Collective Action in Contemporary Urban U.S. from 1954 to 1992. Stanford, CA: Department of Sociology, Stanford University. http://purl.stanford.edu/oo000oo0005</note>
+          <note type="preferred citation">Fubblicious Dataset Title. http://purl.stanford.edu/oo000oo0007</note>
           <relatedItem type="references">
-            <!-- <titleInfo> 
-                           <title>is deliberately not used</title>
-                        </titleInfo> -->
+            <titleInfo>
+              <title>Related Item Title 1</title>
+            </titleInfo>
             <location>
-              <url>http://data.stanford.edu/urban_ECA</url>
+              <url>#</url>
             </location>
           </relatedItem>
           <relatedItem type="references">
             <titleInfo>
-              <title>Olzak, Susan. 2004. Causes of ethnic conflict and protest in Urban America, 1877–1889. Ithaca, NY: Department of Sociology, Cornell University.</title>
+              <title>Related Item Title 2</title>
             </titleInfo>
             <location>
-              <url>http://dx.doi.org/10.1016/0049-089X(87)90016-0</url>
+              <url>#</url>
             </location>
           </relatedItem>
         </mods>
@@ -143,11 +124,10 @@
     <foxml:datastreamVersion ID="contentMetadata.0" LABEL="Content Metadata"
       CREATED="2012-05-02T23:10:37.034Z" MIMETYPE="text/xml" SIZE="928">
       <foxml:xmlContent>
-        <contentMetadata objectId="druid:oo000oo0005" type="file">
+        <contentMetadata objectId="druid:oo000oo0007" type="file">
           <resource id="file1" type="file" sequence="1">
-            <label>Project Description and Coding Manual - Revised July 24,
-              2007</label>
-            <file id="manual.htm" filesize="262979" mimetype="text/html"
+            <label>Some manual</label>
+            <file id="manual_bar.htm" filesize="262979" mimetype="text/html"
               publish="yes" shelve="yes" preserve="yes">
               <checksum type="md5">b409fde7ff1d2b650b0d2647175641e9</checksum>
               <checksum type="sha1"
@@ -155,8 +135,8 @@
             </file>
           </resource>
           <resource id="file2" type="file" sequence="2">
-            <label>Olzak Bibliography of Articles</label>
-            <file id="article.pdf" filesize="3622063" mimetype="application/pdf"
+            <label>Some article</label>
+            <file id="article_bar.pdf" filesize="3622063" mimetype="application/pdf"
               publish="yes" shelve="yes" preserve="yes">
               <checksum type="md5">da2ccda82d1e6bba71b7a92dd38b4b71</checksum>
               <checksum type="sha1"
@@ -164,8 +144,8 @@
             </file>
           </resource>
           <resource id="file3" type="file" sequence="3">
-            <label>Data set (Stata dta file)</label>
-            <file id="dataset.txt" filesize="239350" mimetype="text/plain"
+            <label>Some data</label>
+            <file id="dataset_bar.txt" filesize="239350" mimetype="text/plain"
               publish="yes" shelve="yes" preserve="yes">
               <checksum type="md5">bffc0a355ce783a6709117e61c221724</checksum>
               <checksum type="sha1"
@@ -183,7 +163,7 @@
       <foxml:xmlContent>
         <rightsMetadata
           xmlns="http://hydra-collab.stanford.edu/schemas/rightsMetadata/v1"
-          version="0.1" objectId="druid:oo000oo0005">
+          version="0.1" objectId="druid:oo000oo0007">
           <access type="discover">
             <machine>
               <group>archivist</group>
@@ -208,7 +188,7 @@
     <foxml:datastreamVersion ID="workflows.0" LABEL="Workflows"
       CREATED="2012-04-11T18:09:43.955Z" MIMETYPE="application/xml">
       <foxml:contentLocation TYPE="URL"
-        REF="https://lyberservices-dev.stanford.edu/workflow/dor/objects/druid:oo000oo0005/workflows"
+        REF="https://lyberservices-dev.stanford.edu/workflow/dor/objects/druid:oo000oo0007/workflows"
       />
     </foxml:datastreamVersion>
   </foxml:datastream>

@@ -20,6 +20,7 @@ describe("Collection view", :type => :request) do
       "SSDS Social Science Data Collection",
       "Description",
       "How Couples Meet and Stay Together",
+      "Ethnic Collective Action",
     ]
     login_as_archivist1
     visit polymorphic_path(@hc)

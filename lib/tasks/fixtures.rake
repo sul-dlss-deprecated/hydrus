@@ -1,15 +1,12 @@
 namespace :hydrus do
   FIXTURE_PIDS = [
-    'druid:oo000oo0001', # Item
+    'druid:oo000oo0001', # Collection #1: Item #1
     'druid:oo000oo0002', # APO
-    'druid:oo000oo0003', # Collection
+    'druid:oo000oo0003', # Collection #1
     'druid:oo000oo0004', # Collection #2
-    'druid:oo000oo0005', # Item #2
-
-    # OLD fixtures.
-    # 'druid:pv309jn3099',
-    # 'druid:sw909tc7852',
-    # 'druid:ww057vk7675',
+    'druid:oo000oo0005', # Collection #1: Item #2
+    'druid:oo000oo0006', #  "             Item #3
+    'druid:oo000oo0007', #  "             Item #4
   ]
 
 
@@ -45,7 +42,7 @@ namespace :hydrus do
       source_path_to_files=File.join(source_base_path_to_files,pid)
       dest_path_to_files=Druid.new(pid).path(dest_base_path_to_files)
       if File.exists?(source_path_to_files) && File.directory?(source_path_to_files)
-        puts "#{source_path_to_files} found and is a directory"
+        # puts "#{source_path_to_files} found and is a directory"
         Dir.mkdir(dest_path_to_files) unless File.directory?(dest_path_to_files)
         copy_command="cp -fr #{source_path_to_files}/ #{dest_path_to_files}/"
         system copy_command
