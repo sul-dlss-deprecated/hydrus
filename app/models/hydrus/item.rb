@@ -4,29 +4,14 @@ class Hydrus::Item < Hydrus::GenericObject
     Hydrus::ObjectFile.find_all_by_pid(pid,:order=>'weight')  # coming from the database
   end
   
-  def preferred_citation
-    descMetadata.preferred_citation
-  end
   delegate :preferred_citation, :to => "descMetadata"
-    
-  def keywords
-    descMetadata.subject.topic
-  end
   delegate :keywords, :to => "descMetadata", :at => [:subject, :topic]
+  delegate :person, :to => "descMetadata", :at => [:name, :namePart]
+  delegate :person_role, :to => "descMetadata", :at => [:name, :role, :roleTerm]
   
   def actors
     @actors ||= descMetadata.find_by_terms(:name).collect {|name_node| Hydrus::Actor.new(:name=>name_node.at_css('namePart').content,:role=>name_node.at_css('role roleTerm').content)}
   end
-  
-  def person
-    descMetadata.name.namePart
-  end
-  delegate :person, :to => "descMetadata", :at => [:name, :namePart]
-  
-  def person_role
-    descMetadata.name.role.roleTerm
-  end
-  delegate :person_role, :to => "descMetadata", :at => [:name, :role, :roleTerm]
     
   def submit_time
     query = '//workflow[@id="sdrDepositWF"]/process[@name="submit"]'

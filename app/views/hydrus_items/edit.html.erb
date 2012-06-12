@@ -1,5 +1,5 @@
-<%- @page_title = "Editing '#{@document_fedora.descMetadata.title.first}' - #{application_name}" -%>
-<%- object_type = @document_fedora.identityMetadata.objectType.first -%>
+<%- @page_title = "Editing '#{@document_fedora.title.first}' - #{application_name}" -%>
+<%- object_type = @document_fedora.object_type -%>
 <% sidebar_items << capture do %>
   <div class="well actions-box" id="item-actions">
     <fieldset>
