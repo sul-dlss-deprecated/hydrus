@@ -20,6 +20,8 @@
 //= require jquery-ui
 //= require blacklight/blacklight
 //= require about_page
+// Required by Hydrus:
+//= require jquery.truncator
 // Required by SULChrome:
 //= require sul_chrome/sul_chrome_base
 //= require bootstrap-all

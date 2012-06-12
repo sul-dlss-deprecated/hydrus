@@ -13,8 +13,10 @@ $(document).ready(function(){
 		});
 		return false;
 	});
+	
 	$("[rel=tooltip]").tooltip();
 	
+	$(".abstract").truncate({max_length: 350});
 	
 	$(".delete-node").live("click", function(){
 		var button = $(this);
