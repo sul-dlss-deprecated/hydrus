@@ -17,6 +17,9 @@ describe Hydrus::RelatedItem do
             </location>
           </relatedItem>
           <relatedItem>
+            <titleInfo>
+              <title></title>
+            </titleInfo>
             <location>
               <url>URL2</url>
             </location>

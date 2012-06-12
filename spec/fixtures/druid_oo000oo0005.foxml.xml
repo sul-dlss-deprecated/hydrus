@@ -119,9 +119,9 @@
           </subject>
           <note type="preferred citation">Olzak, Susan, and Elizabeth West. 1995. Ethnic Collective Action in Contemporary Urban U.S. from 1954 to 1992. Stanford, CA: Department of Sociology, Stanford University. http://purl.stanford.edu/oo000oo0005</note>
           <relatedItem type="references">
-            <!-- <titleInfo> 
-                           <title>is deliberately not used</title>
-                        </titleInfo> -->
+            <titleInfo>
+              <title></title>
+            </titleInfo>
             <location>
               <url>http://data.stanford.edu/urban_ECA</url>
             </location>

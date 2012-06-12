@@ -186,6 +186,41 @@ describe("Item edit", :type => :request) do
     page.should_not have_css("##{new_url}")
     page.should_not have_css("##{new_delete_button}")
   end
+  
+  it "editing related content w/o titles" do
+    object = Hydrus::Item.find("druid:oo000oo0005")
+    title_field = "hydrus_item_related_item_title_0"
+    url_field = "hydrus_item_related_item_url_0"
+    
+    login_as_archivist1
+    
+    visit edit_polymorphic_path(object)
+    current_path.should == edit_polymorphic_path(object)
+    
+    old_title = find_field(title_field).value
+    old_url = find_field(url_field).value
+    new_title = "My URL Title"
+    new_url = "http://library.stanford.edu"
+    
+old_title.should == ""    
+    old_title.should be_blank
+    
+    fill_in title_field, :with => new_title
+    fill_in url_field, :with => new_url
+    
+    click_button "Save"
+    page.should have_content(@notice)
+    
+    page.should have_content new_title
+    
+    #cleanup
+    visit edit_polymorphic_path(object)
+    current_path.should == edit_polymorphic_path(object)
+    fill_in title_field, :with => old_title
+    fill_in url_field, :with => old_url
+    
+    click_button "Save"
+  end
 
   it "can edit preferred citation field" do
     citation_field = "hydrus_item_preferred_citation"

@@ -53,6 +53,9 @@
           <typeOfResource collection="yes" />
           <abstract>The SNAP library is being actively developed since 2004 and is organically growing as a result of our research pursuits in analysis of large social and information networks. Largest network we analyzed so far using the library was the Microsoft Instant Messenger network from 2006 with 240 million nodes and 1.3 billion edges.</abstract>
           <relatedItem>
+            <titleInfo>
+              <title></title>
+            </titleInfo>
             <location>
               <url>http://snap.stanford.edu/</url>
             </location>

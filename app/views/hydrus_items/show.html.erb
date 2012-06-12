@@ -59,7 +59,7 @@
     <dt>Cite this item as</dt>
     <dd><%= @document_fedora.preferred_citation.first %></dd>
 
-    <% unless @document_fedora.related_items.size == 0 %>
+    <% unless @document_fedora.related_items.blank? %>
       <% @document_fedora.related_items.each_with_index do |related_item, index| %>
         <dt class="<%= 'hidden-label' if index > 0 %>">Related content</dt>
         <dd><%= link_to(related_item.title, related_item.url) %></dd>
