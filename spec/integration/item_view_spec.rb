@@ -24,7 +24,7 @@ describe("Item view", :type => :request) do
       'Sponsor', # label for actor 
       'US National Science Foundation, award SES-0751613', # actor
       'wooden boys', # keyword
-      'Related content', # relatedItem label
+      'Related links', # relatedItem label
       'story by Jennifer Ludden August 16, 2010', # relatedItem title
       'pinocchio.htm', # file
     ]
