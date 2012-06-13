@@ -4,6 +4,13 @@ module Hydrus::AccessControlsEnforcement
 
   end
 
+  def enforce_new_permissions *args
+    unless can? :edit, params[:collection]
+      flash[:error] = "You do not have sufficient privileges to edit this document. You have been redirected to the read-only view."
+      redirect_to edit_polymorphic_path(Hydrus::Collection.find(params[:collection]))
+    end
+  end
+
   # This filters out objects that you want to exclude from search results.
   # By default it only excludes FileAssets
   # @param solr_parameters the current solr parameters

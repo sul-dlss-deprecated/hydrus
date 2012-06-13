@@ -26,10 +26,15 @@ describe HydrusItemsController do
       assigns[:document_fedora].should be_nil
       response.should redirect_to :hydrus_items      
     end
-
   end
 
   describe "new" do
+    it "should do something" do
+      controller.stub(:current_user).and_return(mock_user)
+      get :new, :collection => "druid:oo000oo0003"
+      response.should redirect_to edit_hydrus_collection_path("druid:oo000oo0003")
+      flash[:error].should == "You do not have sufficient privileges to edit this document. You have been redirected to the read-only view."
+    end
     it "should redirect w/ a flash error when no collection has been provided" do
       controller.stub(:current_user).and_return(mock_authed_user)
       get :new
