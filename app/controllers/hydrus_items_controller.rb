@@ -85,6 +85,8 @@ class HydrusItemsController < ApplicationController
       @document_fedora.descMetadata.insert_person
     elsif params.has_key?(:add_link)
       @document_fedora.descMetadata.insert_related_item
+    elsif params.has_key?(:add_related_citation)
+      @document_fedora.descMetadata.insert_related_citation
     end
     logger.debug("attributes submitted: #{params['hydrus_item'].inspect}")
     @document_fedora.save

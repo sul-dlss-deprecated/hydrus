@@ -5,6 +5,7 @@ class Hydrus::Item < Hydrus::GenericObject
   end
   
   delegate :preferred_citation, :to => "descMetadata"
+  delegate :related_citation, :to => "descMetadata"
   delegate :keywords, :to => "descMetadata", :at => [:subject, :topic]
   delegate :person, :to => "descMetadata", :at => [:name, :namePart]
   delegate :person_role, :to => "descMetadata", :at => [:name, :role, :roleTerm]

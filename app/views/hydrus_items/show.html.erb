@@ -59,9 +59,16 @@
     <dt>Cite this item as</dt>
     <dd><%= @document_fedora.preferred_citation.first %></dd>
 
+    <% unless @document_fedora.related_citation.blank? %>
+      <% @document_fedora.related_citation.each_with_index do |related_citation, index| %>
+        <dt class="<%= 'hidden-label' if index > 0 %>">Related published work</dt>
+        <dd><%= related_citation %></dd>
+      <% end %>
+    <% end %>
+
     <% unless @document_fedora.related_items.blank? %>
       <% @document_fedora.related_items.each_with_index do |related_item, index| %>
-        <dt class="<%= 'hidden-label' if index > 0 %>">Related content</dt>
+        <dt class="<%= 'hidden-label' if index > 0 %>">Related links</dt>
         <dd><%= link_to(related_item.title, related_item.url) %></dd>
       <% end %>
     <% end %>

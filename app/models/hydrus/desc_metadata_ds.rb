@@ -50,12 +50,9 @@ class Hydrus::DescMetadataDS < ActiveFedora::NokogiriDatastream
       t.topic IAF
     end
 
-    t.all_preferred_citation_notes :path => 'note',  :attributes => { :type => "preferred citation" }
+    t.preferred_citation :path => 'note',  :attributes => { :type => "preferred citation" }
+    t.related_citation :path => 'note',  :attributes => { :type => "citation/reference" }
 
-    t.preferred_citation(
-      :proxy => [:mods, :all_preferred_citation_notes],
-      :index_as => [:searchable, :displayable]
-    )
   end
 
   # Blocks to pass into Nokogiri::XML::Builder.new()
@@ -81,6 +78,12 @@ class Hydrus::DescMetadataDS < ActiveFedora::NokogiriDatastream
           xml.url
         }
       }
+    }
+  end
+
+  def noko_builder_related_citation
+    return lambda { |xml| 
+      xml.note(:type => "citation/reference")
     }
   end
 
@@ -112,6 +115,7 @@ class Hydrus::DescMetadataDS < ActiveFedora::NokogiriDatastream
           xml.topic
         }
         xml.note(:type => "preferred citation")
+        xml.note(:type => "citation/reference")
       }
     }
   end
@@ -128,6 +132,10 @@ class Hydrus::DescMetadataDS < ActiveFedora::NokogiriDatastream
   
   def insert_related_item
     insert_new_node(:relatedItem)
+  end
+
+  def insert_related_citation
+    insert_new_node(:related_citation)
   end
 
   def insert_new_node(term)

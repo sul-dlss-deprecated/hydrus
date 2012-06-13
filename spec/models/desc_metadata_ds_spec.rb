@@ -44,6 +44,7 @@ describe Hydrus::DescMetadataDS do
             <topic>marriage</topic>
           </subject>
           <note type="preferred citation">pref_cite outer</note>
+          <note type="citation/reference">related_cite outer</note>
         </mods>
       EOF
       
@@ -61,6 +62,7 @@ describe Hydrus::DescMetadataDS do
         [[:relatedItem, :location, :url],    'http://example.com'],
         [[:subject, :topic],                 ['divorce', 'marriage']],
         [:preferred_citation,                'pref_cite outer'],
+        [:related_citation,                  'related_cite outer'],
       ]
       tests.each do |terms, exp|
         terms = [terms] unless terms.class == Array
@@ -76,13 +78,15 @@ describe Hydrus::DescMetadataDS do
     it "Should be able to insert new XML nodes" do
       nm = '<name><namePart/><role><roleTerm authority="marcrelator" type="text"/></role></name>'
       ri = '<relatedItem><titleInfo><title/></titleInfo><location><url/></location></relatedItem>'
-      @exp_xml = noko_doc([@mods_start, nm, nm, nm, ri, ri, '</mods>'].join '')
+      rc = '<note type="citation/reference"></note>'
+      @exp_xml = noko_doc([@mods_start, nm, nm, nm, ri, ri, rc, '</mods>'].join '')
       @dsdoc   = Hydrus::DescMetadataDS.from_xml("#{@mods_start}</mods>")
 
       @dsdoc.insert_person
       @dsdoc.insert_new_node(:name)
       @dsdoc.insert_new_node(:name)
       @dsdoc.insert_related_item
+      @dsdoc.insert_related_citation
       @dsdoc.insert_new_node(:relatedItem)
       @dsdoc.ng_xml.should be_equivalent_to @exp_xml
     end
@@ -119,6 +123,7 @@ describe Hydrus::DescMetadataDS do
             <topic/>
           </subject>
           <note type="preferred citation"/>
+          <note type="citation/reference"/>
         </mods>
       )
       exp_xml = noko_doc(exp_xml)
