@@ -76,14 +76,14 @@
     </httpCaching>
   </requestDispatcher>
   
-  <requestHandler name="standard" class="solr.SearchHandler">
+  <requestHandler name="standard" class="solr.SearchHandler" default="true">
      <lst name="defaults">
        <str name="echoParams">explicit</str>
      </lst>
   </requestHandler>
 
   <!-- Searching ("All Fields") -->
-    <requestHandler name="search" class="solr.SearchHandler" default="true">
+    <requestHandler name="search" class="solr.SearchHandler">
       <lst name="defaults">
         <str name="defType">dismax</str>
         <str name="echoParams">explicit</str>      
