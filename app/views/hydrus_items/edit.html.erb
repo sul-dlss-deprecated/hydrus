@@ -53,11 +53,13 @@
   <%= hydrus_form_header(:required=>true) {"Upload file(s)"} -%>
   <div class="row">
     <div class="span9" id="file-upload">
-      <%- unless @document_fedora.files.blank? -%>
-        <%- @document_fedora.files.each do |file| -%>
-          <%= render :partial => "object_files/object_file", :locals => {:file => file} %>
+      <div id="uploaded-files">
+        <%- unless @document_fedora.files.blank? -%>
+          <%- @document_fedora.files.each do |file| -%>
+            <%= render :partial => "object_files/object_file", :locals => {:file => file} %>
+          <%- end -%>
         <%- end -%>
-      <%- end -%>
+      </div>
       <div class="row">
         <div class="span7 offset2">
           <%= file_field_tag "files[]", :multiple=>true %>
