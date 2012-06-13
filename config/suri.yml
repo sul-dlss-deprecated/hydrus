@@ -1,0 +1,14 @@
+production:
+  url: http://sul-lyberservices-prod.stanford.edu
+  user:
+  password:
+  
+test:
+  url: http://sul-lyberservices-test.stanford.edu
+  user:
+  password:
+  
+development:
+  url: http://sul-lyberservices-dev.stanford.edu
+  user: 
+  password: 

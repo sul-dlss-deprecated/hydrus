@@ -60,7 +60,7 @@ RSpec.configure do |config|
   # rspec-rails.
   config.infer_base_class_for_anonymous_controllers = false
 end
-
+Dor::Config.configure.suri.mint_ids = false
 
 # Create a Nokogiri document from an XML source, with some whitespace configuration.
 def noko_doc(x)

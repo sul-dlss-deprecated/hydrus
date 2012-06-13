@@ -26,6 +26,16 @@ Dor::Config.configure do
     pw   = yaml['password']
     url yaml['url'].sub /:\/\//, "://#{user}:#{pw}@"
   end
+  
+  suri do
+    mint_ids true
+    id_namespace 'druid'
+    yaml = load_yaml_config.call('suri.yml')
+    url yaml['url']
+    user yaml['user']
+    pass yaml['password']
+  end
+  
 
   yaml = load_yaml_config.call('solr.yml')
   solrizer.url yaml['url']
