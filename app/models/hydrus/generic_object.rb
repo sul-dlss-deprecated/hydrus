@@ -1,5 +1,9 @@
 class Hydrus::GenericObject < Dor::Item
 
+  include ActiveModel::Validations
+  validates :title, :abstract, :not_empty=>true
+  validates :pid, :is_druid=>true
+  
   attr_accessor :apo_pid
 
   has_metadata(
@@ -16,7 +20,6 @@ class Hydrus::GenericObject < Dor::Item
   delegate :title, :to => "descMetadata"
   delegate :related_item_title, :to => "descMetadata", :at => [:relatedItem, :titleInfo, :title]
   delegate :related_item_url, :to => "descMetadata", :at => [:relatedItem, :location, :url]
-  
   
   def apo
     @apo ||= (apo_pid ? get_fedora_item(apo_pid) : nil)

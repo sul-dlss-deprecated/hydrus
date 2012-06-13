@@ -23,6 +23,7 @@ gem 'devise'
 gem 'carrierwave'
 gem 'rails', '3.2.3'
 gem 'jquery-rails'
+gem 'dynamic_form'
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'

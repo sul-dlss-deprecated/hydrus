@@ -26,6 +26,21 @@ describe Hydrus::Item do
     @hi.submit_time.should == "9999"
   end
 
+  it "should be invalid if required fields are missing" do
+    @item=Hydrus::Item.find('druid:oo000oo0001')
+    @item.valid?.should == true  # should start out as valid
+    @item.title=''   
+    @item.valid?.should == false  # invalid!
+    @item.title='ok'   
+    @item.valid?.should == true  # valid!
+    @item.abstract=''  
+    @item.valid?.should == false  # invalid!
+    @item.abstract='ok'  
+    @item.valid?.should == true  # valid!
+    # @item.actors << Hydrus::Actor.new  
+    # @item.valid?.should == false  # invalid!    
+  end
+  
   it "should be able to add and remove and item from a collection" do
     collection_pid = 'druid:xx99xx9999'
     exp_uri        = "info:fedora/#{collection_pid}"

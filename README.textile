@@ -30,7 +30,9 @@ h2. Getting your environment setup:
 
 	rake hydrus:loadfix
 	rake hydrus:loadfix RAILS_ENV=test 
-
+	
+	rake hydrus:refresh_upload_files
+	
 h2. Starting the app
 
 	rake jetty:start
@@ -117,6 +119,7 @@ h3. Fixtures:
 	rake hydrus:refreshfix   # deletes and then reloads fixtures (most common)
 	rake hydrus:loadfix      # loads fixtures (will fail if they exist)
 	rake hydrus:deletefix    # deletes fixtures 
+	rake hydrus:refresh_upload_files  # copy uploaded files associated with fixtures back into the public/uploads directory
 
 h3. Tests:
 	

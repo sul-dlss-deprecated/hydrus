@@ -1,6 +1,6 @@
 class Hydrus::ObjectFile < ActiveRecord::Base
-
-  attr_accessible :label
+  
+  attr_accessible :label,:pid
   
   mount_uploader :file, FileUploader
     

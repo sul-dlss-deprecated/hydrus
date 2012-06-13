@@ -1,5 +1,8 @@
 class Hydrus::Item < Hydrus::GenericObject
 
+  validates :actors, :at_least_one=>true
+  validates :files, :at_least_one=>true
+
   def files
     Hydrus::ObjectFile.find_all_by_pid(pid,:order=>'weight')  # coming from the database
   end
