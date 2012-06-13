@@ -99,6 +99,8 @@
             <topic>hair</topic>
           </subject>
           <note type="preferred citation">Fubblicious Dataset Title. http://purl.stanford.edu/oo000oo0007</note>
+          <note type="citation/reference">Abu-Nader, R., and Terrell, C.L. (2002). Mycobacterium bovis vertebral osteomyelitis as a complication of intravesical BCG use. Mayo Clin Proc 77, 393-397.</note> 
+          <note type="citation/reference">Marzocchetti, A., Di Giambenedetto, S., Cingolani, A., Ammassari, A., Cauda, R., and De Luca, A. (2005). Reduced rate of diagnostic positive detection of JC virus DNA in cerebrospinal fluid in cases of suspected progressive multifocal leukoencephalopathy in the era of potent antiretroviral therapy. J Clin Microbiol 43, 4175-4177.</note> 
           <relatedItem type="references">
             <titleInfo>
               <title>Related Item Title 1</title>
