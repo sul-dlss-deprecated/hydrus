@@ -10,6 +10,15 @@
 	// width: 100%;
 }
 
+@mixin hidden-label {
+	position: absolute;
+	left: -10000px;
+	top: auto;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+}
+
 /* forms */
 .section-header {
 	background-color: #F5F5F5;
@@ -250,7 +259,7 @@ table.hydrus-striped-table {
 	dt {
 		color: #999;
 		width: 150px;
-		&.hidden-label {display: none;}
+		&.hidden-label {@include hidden-label;}
 	}
 	dd {
 		margin-left: 165px;
