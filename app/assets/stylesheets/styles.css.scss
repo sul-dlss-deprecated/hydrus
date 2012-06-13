@@ -88,6 +88,8 @@ form.step .peer_reviewed label {
 }
 
 form .dropdown-menu a {border-bottom: none;}
+form .dropdown-menu .disabled a {color: #cccccc;}
+form .dropdown-menu li.disabled:hover, form .dropdown-menu .disabled a:hover {cursor: default; background: none;}
 
 /* forms on search results */
 #sortAndPerPage {

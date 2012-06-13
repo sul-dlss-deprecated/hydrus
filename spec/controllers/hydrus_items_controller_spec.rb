@@ -29,6 +29,15 @@ describe HydrusItemsController do
 
   end
 
+  describe "new" do
+    it "should redirect w/ a flash error when no collection has been provided" do
+      controller.stub(:current_user).and_return(mock_authed_user)
+      get :new
+      response.should redirect_to(root_path)
+      flash[:error].should =~ /You cannot create an item without specifying a collection./
+    end
+  end
+
   describe "update" do
     describe "file upload" do
       before(:all) do

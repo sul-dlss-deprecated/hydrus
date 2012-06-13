@@ -27,10 +27,7 @@
           <button class="btn btn-small dropdown-toggle" data-toggle="dropdown">
             <span class="caret"></span>
           </button>
-          <ul class="dropdown-menu">
-            <li><a href="#">Action 1</a></li>
-            <li><a href="#">Action 2</a></li>
-          </ul>
+          <%= render :partial => "shared/add_content_options", :locals => {:parent => @document_fedora} %>
         </div>
       </form>
     </div>

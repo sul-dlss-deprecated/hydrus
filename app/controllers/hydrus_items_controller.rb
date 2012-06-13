@@ -8,6 +8,7 @@ class HydrusItemsController < ApplicationController
   #prepend_before_filter :sanitize_update_params, :only => :update
   before_filter :enforce_access_controls
   before_filter :setup_attributes
+  before_filter :check_for_collection, :only => :new
   
   def index
     flash[:warning]="You need to log in."
@@ -22,6 +23,25 @@ class HydrusItemsController < ApplicationController
   end
 
   def edit
+  end
+  
+  def new
+    collection = Hydrus::Collection.find(params[:collection])
+    # We will probably want to refactor this out somewhere to be reused for creating collections.
+    apo = collection.apo_pid
+    registration_params = {
+      :object_type  => 'item',
+      :admin_policy => apo,
+      :source_id    => { "Hydrus" => "#{current_user}-#{Time.now}" },
+      :label        => "Hydrus",
+      :tags         => ["Project : Hydrus"]
+    }
+    dor_item = Dor::RegistrationService.register_object registration_params
+    item = dor_item.adapt_to(Hydrus::Item)
+    item.assert_content_model
+    item.add_to_collection(collection.pid)
+    item.save
+    redirect_to edit_polymorphic_path(item)
   end
 
   def update
@@ -100,6 +120,15 @@ class HydrusItemsController < ApplicationController
     respond_to do |want|
       want.html {redirect_to :back}
       want.js 
+    end
+  end
+
+  protected
+  
+  def check_for_collection
+    unless params.has_key?(:collection)
+      flash[:error] = "You cannot create an item without specifying a collection."
+      redirect_to root_path
     end
   end
 

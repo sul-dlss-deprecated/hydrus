@@ -26,13 +26,7 @@
               <div class="btn-group">
                 <a class="btn" href="#">Add new &hellip;</a>
                 <a class="btn dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
-                <ul class="dropdown-menu">
-                  <li><a href="#">article</a></li>
-                  <li><a href="#">dataset</a></li>
-                  <li><a href="#">image</a></li>
-                  <li><a href="#">paper</a></li>
-                  <li><a href="#">other</a></li>
-                </ul>
+                <%= render :partial => "shared/add_content_options", :locals => {:parent => c} %>
               </div>
             </form>
           </td>
