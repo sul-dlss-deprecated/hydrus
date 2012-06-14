@@ -298,7 +298,7 @@ table.hydrus-striped-table {
 }
 
 /* beta version warning elements */
-#beta-dialog.modal {
+#beta-dialog.modal, #signin.modal {
 	text-align: center;
 	p {
 		font-size: 110%;
@@ -314,4 +314,8 @@ table.hydrus-striped-table {
 		padding: 0 15px 20px;
 		text-align: center;
 	}
+}
+#signin.modal {
+	label {text-align: right;}
+	.checkbox {text-align: left;}
 }

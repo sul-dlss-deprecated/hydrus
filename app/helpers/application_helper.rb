@@ -23,4 +23,8 @@ module ApplicationHelper
     content_for(:head)
   end
 
+  def hydrus_signin_link
+    link_to("Sign in", new_user_session_path, :class=>'signin_link', :"data-url" => new_signin_path)
+  end
+
 end

@@ -70,5 +70,6 @@ Hydrus::Application.routes.draw do
   match "items/:id/destroy_value" => "hydrus_items#destroy_value", :as => 'destory_hydrus_item_value', :via => "get"
   
   resources :object_files
+  resources :signin
 
 end

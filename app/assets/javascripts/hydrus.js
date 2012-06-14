@@ -16,6 +16,14 @@ $(document).ready(function(){
 	
 	$("[rel=tooltip]").tooltip();
 	
+	// Modal sign in
+	$(".signin_link").each(function(){
+		$(this).click(function(){
+			$.ajax($(this).attr("data-url"));
+			return false;
+	  });
+	});
+
 	$(".abstract").truncate({max_length: 350});
 	
 	$(".delete-node").live("click", function(){
