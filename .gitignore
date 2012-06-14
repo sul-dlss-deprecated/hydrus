@@ -14,6 +14,9 @@ tmtags
 *.swp
 *.swo
 
+# config files
+config/suri.yml
+
 ## Cucumber
 rerun.txt
 
