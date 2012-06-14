@@ -1,5 +1,6 @@
 desc "Run Continuous Integration Suite (tests, coverage, docs)" 
 task :ci do 
+  Rake::Task["hydrus:config"].invoke
   Rake::Task["hydra:jetty:config"].invoke
 
   ENV['COVERAGE'] = 'true' unless ENV.key? 'COVERAGE'
