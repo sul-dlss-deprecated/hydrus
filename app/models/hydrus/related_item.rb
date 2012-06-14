@@ -1,5 +1,10 @@
 class Hydrus::RelatedItem < Hydrus::GenericModel
   
+  attr_accessor :title, :url
+
+   # TODO we would like to validate related_items, but we can't if we need to create a blank one and save the whole item when the user clicks 'add' in the UI 
+  # validates :url, :presence=>true
+
   def self.new_from_node(related_item_node)
     # Takes a Nokogiri <relatedItem> node.
     # Returns a new Hydrus::RelatedItem object.
