@@ -87,15 +87,31 @@
     <%- end -%>    
   </div>
 
-  <%= hydrus_form_header {"Citation"} -%>
+  <%= hydrus_form_header {"Citations"} -%>
   <div class="row">
     <%= hydrus_form_label do %>
-      <%= f.label :preferred_citation, "Cite this #{object_type} as" %>
+      <%= f.label :preferred_citation, "Preferred citation for this #{object_type}" %>
     <%- end -%>
     <%= hydrus_form_value(:class=>"short-textarea") do  -%>
       <%= f.text_area :preferred_citation, :value=>@document_fedora.preferred_citation.first %>
     <%- end -%>
   </div>
+  <div class="row">
+    <%= hydrus_form_label do %>
+      <%= f.label :related_citation, "Related published work" %>
+    <%- end -%>
+    <%= hydrus_form_value(:class=>"short-textarea") do  -%>
+      <div id="related-citations" class="destroy-group">
+        <%= render "related_citations" %>
+      </div>
+    <%- end -%>
+  </div>
+  <div class="row">
+    <div class="span7 offset2">
+      <%= button_tag("Add another published work", :name=>"add_related_citation", :"data-attribute" => "add_related_citation", :id=>"add_related_citation", :class=>"btn", :value=>@document_fedora.related_citation.length) %>
+    </div>
+  </div>
+
 
   <%= hydrus_form_header {"Links to related content"} -%>
   <div id="related-items" class="destroy-group">

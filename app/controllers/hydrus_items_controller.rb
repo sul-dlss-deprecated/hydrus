@@ -96,7 +96,7 @@ class HydrusItemsController < ApplicationController
     
     respond_to do |want|
       want.html {
-        if params.has_key?(:add_person) or params.has_key?(:add_link)
+        if params.has_key?(:add_person) or params.has_key?(:add_link) or params.has_key?(:add_related_citation)
           # if we want to pass on parameters to edit screen we'll need to use the named route
           #redirect_to edit_polymorphic_path(@document_fedora, :my_param=>"oh-hai-there")
           redirect_to [:edit, @document_fedora]
@@ -109,6 +109,8 @@ class HydrusItemsController < ApplicationController
           render "add_person", :locals=>{:index=>params[:add_person]}
         elsif params.has_key?(:add_link)
           render "add_link", :locals=>{:index=>params[:add_link]}
+        elsif params.has_key?(:add_related_citation)
+          render "add_related_citation", :locals=>{:index=>params[:add_related_citation]}
         else
           render :json => tidy_response_from_update(@response) unless params.has_key?(:add_person)
         end

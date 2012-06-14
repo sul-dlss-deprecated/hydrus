@@ -59,6 +59,11 @@ form.step .people-select {
 		margin-bottom: 9px;
 	}
 }
+form.step .related-citation {
+	textarea {
+	  width: 90%;	
+	}
+}
 form.step .related-item {
 	input[type=text] {
 		width: 90%;

@@ -1,5 +1,5 @@
 $(document).ready(function(){
-	$("#add_person, #add_link").click(function(){
+	$("#add_person, #add_link, #add_related_citation").click(function(){
 		var button = $(this);
 		var type = $(this).attr("class");
 		var form = $(this).closest("form");

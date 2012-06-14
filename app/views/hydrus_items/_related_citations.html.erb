@@ -1,0 +1,3 @@
+<%- @document_fedora.related_citation.each_with_index do |related_citation, index| -%>
+  <%= render :partial => "related_citation", :locals => {:related_citation => related_citation, :index => index} %>
+<%- end -%>
