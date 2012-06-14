@@ -16,7 +16,7 @@ describe("Collection edit", :type => :request, :integration => true) do
 
   it "Can edit some Collection content" do
     new_abstract  = 'foobarfubb'
-    orig_abstract = @hc.descMetadata.abstract.first
+    orig_abstract = @hc.abstract.first
 
     login_as_archivist1
 
@@ -25,7 +25,7 @@ describe("Collection edit", :type => :request, :integration => true) do
 
     page.should have_content(orig_abstract)
     page.should_not have_content(new_abstract)
-    fill_in "Abstract", :with => new_abstract
+    fill_in "Description", :with => new_abstract
     click_button "Save"
 
     current_path.should == polymorphic_path(@hc)
@@ -35,8 +35,64 @@ describe("Collection edit", :type => :request, :integration => true) do
     # Clean up.
     visit edit_polymorphic_path(@hc)
     current_path.should == edit_polymorphic_path(@hc)
-    fill_in "Abstract", :with => orig_abstract
+    fill_in "Description", :with => orig_abstract
     click_button "Save"
+  end
+  
+  it "Can edit and delete multi-valued fields" do
+    new_url = "http://library.stanford.edu"
+    new_label = "Library Website"
+    new_url_field = "hydrus_collection_related_item_url_2"
+    new_label_field = "hydrus_collection_related_item_title_2"
+    new_delete_link = "remove_relatedItem_2"
+    original_url_field = "hydrus_collection_related_item_url_1"
+    original_label_field = "hydrus_collection_related_item_title_1"
+    
+    login_as_archivist1
+    
+    visit edit_polymorphic_path(@hc)
+    current_path.should == edit_polymorphic_path(@hc)
+    
+    page.should_not have_css("##{new_url_field}")
+    page.should_not have_css("##{new_label_field}")
+    page.should_not have_css("##{new_delete_link}")
+    
+    page.should have_css("##{original_url_field}")
+    page.should have_css("##{original_label_field}")
+    
+    page.should_not have_content new_url
+    page.should_not have_content new_label
+    
+    click_button "Add another link"
+    current_path.should == edit_polymorphic_path(@hc)
+
+    page.should have_css("##{new_url_field}")
+    page.should have_css("##{new_label_field}")
+    page.should have_css("##{new_delete_link}")
+
+    fill_in("hydrus_collection_related_item_url_2", :with => new_url)
+    fill_in("hydrus_collection_related_item_title_2", :with => new_label)
+    
+    click_button "Save"
+    current_path.should == polymorphic_path(@hc)
+    
+    page.should have_content(new_label)
+    
+    visit edit_polymorphic_path(@hc)
+    current_path.should == edit_polymorphic_path(@hc)
+    
+    page.should have_css("##{new_url_field}")
+    page.should have_css("##{new_label_field}")
+    page.should have_css("##{new_delete_link}")
+    
+    click_link new_delete_link
+    
+    current_path.should == edit_polymorphic_path(@hc)
+    
+    page.should_not have_css("##{new_url_field}")
+    page.should_not have_css("##{new_label_field}")
+    page.should_not have_css("##{new_delete_link}")
+
   end
 
 end

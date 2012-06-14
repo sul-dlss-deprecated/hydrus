@@ -1,0 +1,2 @@
+$("#related-items").append("<%= escape_javascript(render :partial => 'related_item', :locals=>{:index=>index}) %>");
+$("#add_link").attr("value", parseInt($("#add_link").attr("value")) + 1);

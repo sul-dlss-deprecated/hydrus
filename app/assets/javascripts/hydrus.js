@@ -40,8 +40,8 @@ $(document).ready(function(){
 	});
 	
 	// javascript form submission
-	$("#item-actions").toggle();
-	$("#item-actions button[type=submit]").click(function(){
+	$("#item-actions, #collection-actions").toggle();
+	$("#item-actions button[type=submit], #collection-actions button[type=submit]").click(function(){
 		$("form.step").submit();
 	});
 	

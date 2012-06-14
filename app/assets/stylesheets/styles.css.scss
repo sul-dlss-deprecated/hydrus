@@ -160,9 +160,10 @@ table.hydrus-striped-table {
 
 
 /* object sidebar */
-#item-actions {
+#item-actions, #collection-actions {
 	display:none;
 }
+#collection-actions .btn-group {margin-left: 18px;}
 .actions-box {
 	margin-right: 20px;
 	margin-top: 25px;
@@ -207,7 +208,7 @@ table.hydrus-striped-table {
 	.btn-group .btn {margin-bottom: 0px;}
 }
 
-#hydrus_items-edit #sidebar {
+#hydrus_items-edit #sidebar, #hydrus_collections-edit #sidebar {
 	position:fixed;
 	@media (max-width: 768px) {
 		position: relative;
