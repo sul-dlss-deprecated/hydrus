@@ -1,7 +1,5 @@
 class Hydrus::RelatedItem < Hydrus::GenericModel
   
-  attr_accessor :title, :url
-
   def self.new_from_node(related_item_node)
     # Takes a Nokogiri <relatedItem> node.
     # Returns a new Hydrus::RelatedItem object.
