@@ -1,7 +1,7 @@
 <div class="destroy-set">
   <div class="row related-item">
     <%= hydrus_form_label do  %>
-      <%= label :"hydrus_item[related_item_title[#{index}]]", "Link title" %>
+      <%= label :"hydrus_item", :"related_item_title_#{index}", "Link title" %>
     <%- end -%>
     <%= hydrus_form_value do -%>
       <%= text_field_tag :"hydrus_item[related_item_title[#{index}]]", @document_fedora.related_item_title[index.to_i] %>
@@ -10,7 +10,7 @@
   </div>
   <div class="row related-item">
     <%= hydrus_form_label do  %>
-      <%= label :"hydrus_item[related_item_url[#{index}]]", "URL" %>
+      <%= label :"hydrus_item", :"related_item_url_#{index}", "URL" %>
     <%- end -%>
     <%= hydrus_form_value do -%>
       <%= text_field_tag :"hydrus_item[related_item_url[#{index}]]", @document_fedora.related_item_url[index.to_i] %>

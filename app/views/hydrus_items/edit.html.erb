@@ -43,7 +43,7 @@
   <%= hydrus_form_header(:required=>true) {"People and organizations responsible for this #{object_type}"} -%>
   <div class="row">
     <%= hydrus_form_label do %>
-      <%= label_tag("asset_descMetadata_name_namePart_0", "People") -%>
+      <%= f.label :person_0, "People" -%>
     <%- end -%>
     <%= hydrus_form_value(:class=>"people-select destroy-group") do -%>
       <%= render "people" %>
@@ -98,7 +98,7 @@
   </div>
   <div class="row">
     <%= hydrus_form_label do %>
-      <%= f.label :related_citation, "Related published work" %>
+      <%= f.label :"related_citation_0", "Related published work" %>
     <%- end -%>
     <%= hydrus_form_value(:class=>"short-textarea") do  -%>
       <div id="related-citations" class="destroy-group">
