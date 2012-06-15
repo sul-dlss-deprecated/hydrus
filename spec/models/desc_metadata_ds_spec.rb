@@ -93,6 +93,26 @@ describe Hydrus::DescMetadataDS do
 
   end
 
+   context "Remove nodes" do
+
+    it "Should be able to insert new XML nodes" do
+      nm1 = '<name><namePart>Angus</namePart><role><roleTerm authority="marcrelator" type="text"/></role></name>'
+      nm2 = '<name><namePart>John</namePart><role><roleTerm authority="marcrelator" type="text"/></role></name>'
+      @exp_xml = noko_doc([@mods_start, nm1, '</mods>'].join '')
+      @dsdoc   = Hydrus::DescMetadataDS.from_xml("#{@mods_start}</mods>")
+
+      @dsdoc.insert_new_node(:name)
+      @dsdoc.name(0).namePart = 'Angus'
+
+      @dsdoc.insert_new_node(:name)
+      @dsdoc.name(1).namePart = 'John'
+
+      @dsdoc.remove_node(:name, 1)
+      @dsdoc.ng_xml.should be_equivalent_to @exp_xml
+    end
+
+  end
+
   context "Blank template" do
 
     it "should match our expectations" do
