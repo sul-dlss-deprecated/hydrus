@@ -202,7 +202,6 @@ describe("Item edit", :type => :request, :integration => true) do
     new_title = "My URL Title"
     new_url = "http://library.stanford.edu"
     
-old_title.should == ""    
     old_title.should be_blank
     
     fill_in title_field, :with => new_title
@@ -246,6 +245,47 @@ old_title.should == ""
     current_path.should == edit_polymorphic_path(@hi)
     fill_in citation_field, :with => orig_pref_cit
     click_button "Save"
+  end
+  
+  it "Related citation adding and deleting" do
+    new_citation         = "hydrus_item_related_citation_2"
+    new_delete_button    = "remove_related_citation_2"
+    new_citation_text    = "This is a citation for a related item!"
+    
+    login_as_archivist1
+    
+    visit edit_polymorphic_path(@hi)
+    current_path.should == edit_polymorphic_path(@hi)
+    
+    page.should have_css("textarea#hydrus_item_related_citation_0")
+    page.should have_css("textarea#hydrus_item_related_citation_1")
+    
+    page.should_not have_css("textarea##{new_citation}")
+    page.should_not have_css("##{new_delete_button}")
+    
+    click_button "add_related_citation"
+    current_path.should == edit_polymorphic_path(@hi)
+    
+    page.should have_css("##{new_citation}")
+    page.should have_css("##{new_delete_button}")
+    
+    fill_in(new_citation, :with => new_citation_text)
+    
+    click_button "Save"
+    page.should have_content(@notice)
+    
+    visit edit_polymorphic_path(@hi)
+    current_path.should == edit_polymorphic_path(@hi)
+    
+    page.should have_css("##{new_delete_button}")
+    find_field(new_citation).value.strip.should == new_citation_text
+    
+    # delete
+    click_link new_delete_button
+    
+    current_path.should == edit_polymorphic_path(@hi)
+    page.should_not have_css("##{new_citation}")
+    page.should_not have_css("##{new_delete_button}")
   end
 
 end

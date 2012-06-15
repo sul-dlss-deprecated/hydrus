@@ -4,7 +4,7 @@
       <%= label :"hydrus_item[related_item_title[#{index}]]", "Link title" %>
     <%- end -%>
     <%= hydrus_form_value do -%>
-      <%= text_field_tag :"hydrus_item[related_item_title[#{index}]]", @document_fedora.related_item_title[index] %>
+      <%= text_field_tag :"hydrus_item[related_item_title[#{index}]]", @document_fedora.related_item_title[index.to_i] %>
       <%= link_to('<i class="icon-trash"></i>'.html_safe, destory_hydrus_item_value_path(:term=>"relatedItem", :term_index=>index, :type=>"related_item"), :class=>"delete-node btn", :id=>"remove_relatedItem_#{index}")  %>
     <%- end -%>
   </div>
@@ -13,7 +13,7 @@
       <%= label :"hydrus_item[related_item_url[#{index}]]", "URL" %>
     <%- end -%>
     <%= hydrus_form_value do -%>
-      <%= text_field_tag :"hydrus_item[related_item_url[#{index}]]", @document_fedora.related_item_url[index] %>
+      <%= text_field_tag :"hydrus_item[related_item_url[#{index}]]", @document_fedora.related_item_url[index.to_i] %>
     <%- end -%>
   </div>
 </div>

@@ -1,4 +1,4 @@
 <div class="related-citation destroy-set">
-  <%= text_area :hydrus_item, :"related_citation[#{index}]", :value => related_citation %>
+  <%= text_area_tag :"hydrus_item[related_citation[#{index}]]", @document_fedora.related_citation[index.to_i] %>
   <%= link_to('<i class="icon-trash"></i>'.html_safe, destory_hydrus_item_value_path(:term=>"related_citation", :term_index=>index, :type=>"related_citation"), :class=>"delete-node btn", :id=>"remove_related_citation_#{index}")  %>
 </div>
