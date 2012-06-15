@@ -3,7 +3,12 @@ begin
 
   desc "Run all specs"
   RSpec::Core::RakeTask.new(:rspec) do |spec|
-    spec.rspec_opts = ["-c", "-f progress", "-r ./spec/spec_helper.rb"]
+    spec.rspec_opts = ["-c", "-f progress", "-r ./spec/spec_helper.rb", "--tag ~integration"]
+  end
+
+  desc "Run only integration specs"
+  RSpec::Core::RakeTask.new(:rspec_with_integration) do |spec|
+    spec.rspec_opts = ["-c", "-f progress", "-r ./spec/spec_helper.rb", "--tag integration"]
   end
 rescue LoadError
   desc 'rspec rake task not available (rspec not installed)'

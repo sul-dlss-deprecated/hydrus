@@ -2,7 +2,7 @@
 
 ruby_engine = defined?(RUBY_ENGINE) ? RUBY_ENGINE : "ruby"
 
-if ENV['COVERAGE'] and RUBY_VERSION =~ /^1.9/ and ruby_engine != "jruby"
+if ENV['COVERAGE'] == "true" and ruby_engine != "jruby"
   require 'simplecov'
   require 'simplecov-rcov'
 

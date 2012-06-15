@@ -3,8 +3,6 @@ task :ci do
   Rake::Task["hydrus:config"].invoke
   Rake::Task["hydra:jetty:config"].invoke
 
-  ENV['COVERAGE'] = 'true' unless ENV.key? 'COVERAGE'
-  
   require 'jettywrapper'
   jetty_params = Jettywrapper.load_config.merge({
     :jetty_home => File.expand_path(File.dirname(__FILE__) + '/../../jetty'),
@@ -15,8 +13,12 @@ task :ci do
   error = nil
   error = Jettywrapper.wrap(jetty_params) do
     Rails.env = "test"
+    original_coverage = ENV['COVERAGE']
     Rake::Task['hydrus:refreshfix'].invoke
+    ENV['COVERAGE'] ||= 'true'
     Rake::Task['rspec'].invoke
+    ENV['COVERAGE'] = original_coverage || 'false'
+    Rake::Task['rspec_with_integration'].invoke
     # as of 2012-05-23, no longer have cucumber tests
     # Rake::Task['cucumber:ok'].invoke
   end
