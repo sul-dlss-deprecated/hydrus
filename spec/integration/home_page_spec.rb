@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe("Home page", :type => :request) do
+describe("Home page", :type => :request, :integration => true) do
 
   it "Some of the expected info is displayed" do
     visit root_path

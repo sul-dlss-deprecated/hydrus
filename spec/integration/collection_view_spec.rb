@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe("Collection view", :type => :request) do
+describe("Collection view", :type => :request, :integration => true) do
   fixtures :users
 
   before :each do

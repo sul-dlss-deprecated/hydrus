@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe("Search page", :type => :request) do
+describe("Search page", :type => :request, :integration => true) do
 
   it "Some results should appear for archivist1 user for default search" do
     visit root_path
