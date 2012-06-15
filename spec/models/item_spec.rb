@@ -45,4 +45,72 @@ describe Hydrus::Item do
     @hi.relationships(:is_member_of_collection).should == []
   end
 
+  describe "#files" do
+    subject { Hydrus::Item.new }
+
+    it "should retrieve ObjectFiles from the database" do
+      m = mock()
+      Hydrus::ObjectFile.should_receive(:find_all_by_pid).with(subject.pid, hash_including(:order => 'weight')).and_return(m)
+      subject.files.should == m
+    end
+  end
+
+  describe "#actors" do
+    subject { Hydrus::Item.new }
+    let(:descMetadata_xml) { <<-eos
+   <mods xmlns="http://www.loc.gov/mods/v3">
+        <name>
+            <namePart>Angus</namePart>
+            <role>
+              <roleTerm>guitar</roleTerm>
+            </role>
+          </name>
+        <name>
+            <namePart>John</namePart>
+            <role>
+              <roleTerm>bass</roleTerm>
+            </role>
+          </name>
+  </mods>
+eos
+}
+    let(:descMetadata) { Hydrus::DescMetadataDS.from_xml(descMetadata_xml) }
+    
+    before(:each) do
+      subject.stub(:descMetadata) { descMetadata }
+    end
+
+    it "should have the right number of items" do
+      subject.actors.length.should == 2
+      subject.actors.all? { |x| x.should be_a_kind_of(Hydrus::Actor) }
+    end
+
+    it "should have array-like accessors" do
+      actor = subject.actors.first
+      actor.name.should == "Angus"
+      actor.role.should == "guitar"
+    end
+
+  end
+
+  describe "#add_to_collection" do
+    subject { Hydrus::Item.new }
+
+    it "should add 'set' and 'collection' relations" do
+      subject.should_receive(:add_relationship_by_name).with('set', 'info:fedora/collection_pid')
+      subject.should_receive(:add_relationship_by_name).with('collection', 'info:fedora/collection_pid')
+      subject.add_to_collection('collection_pid')
+    end
+  end
+
+  describe "#remove_to_collection" do
+    subject { Hydrus::Item.new }
+
+    it "should add 'set' and 'collection' relations" do
+      subject.should_receive(:remove_relationship_by_name).with('set', 'info:fedora/collection_pid')
+      subject.should_receive(:remove_relationship_by_name).with('collection', 'info:fedora/collection_pid')
+      subject.remove_from_collection('collection_pid')
+    end
+  end
+
 end
