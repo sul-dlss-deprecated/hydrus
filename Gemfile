@@ -15,6 +15,7 @@ source "http://sulair-rails-dev.stanford.edu"
 gem 'dor-services', ">= 3.5.1"  # , dor_services_gem_params
 gem 'sul_chrome'
 gem 'about_page'
+gem 'is_it_working-cbeer', "~> 1.0.13"
 
 gem 'blacklight', '~>3.4.2' 
 gem 'hydra-head', '~> 4.0.1', :git => 'http://github.com/projecthydra/hydra-head.git'

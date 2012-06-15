@@ -176,6 +176,7 @@ GEM
     httpi (1.0.0)
       rack
     i18n (0.6.0)
+    is_it_working-cbeer (1.0.13)
     jettywrapper (1.2.1)
       activesupport (>= 3.0.0)
       childprocess
@@ -370,6 +371,7 @@ DEPENDENCIES
   devise
   dor-services (>= 3.5.1)
   hydra-head (~> 4.0.1)!
+  is_it_working-cbeer (~> 1.0.13)
   jettywrapper
   jquery-rails
   looksee
