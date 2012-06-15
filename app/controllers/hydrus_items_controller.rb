@@ -38,6 +38,7 @@ class HydrusItemsController < ApplicationController
     }
     dor_item = Dor::RegistrationService.register_object registration_params
     item = dor_item.adapt_to(Hydrus::Item)
+    item.remove_relationship :has_model, 'info:fedora/afmodel:Dor_Item'
     item.assert_content_model
     item.add_to_collection(collection.pid)
     item.save
