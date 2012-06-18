@@ -107,11 +107,11 @@ class HydrusItemsController < ApplicationController
       }
       want.js {
         if params.has_key?(:add_person)
-          render "add_person", :locals=>{:index=>params[:add_person].to_i}
+          render "add_person", :locals=>{:index=>params[:add_person]}
         elsif params.has_key?(:add_link)
-          render "add_link", :locals=>{:index=>params[:add_link].to_i}
+          render "add_link", :locals=>{:index=>params[:add_link]}
         elsif params.has_key?(:add_related_citation)
-          render "add_related_citation", :locals=>{:index=>params[:add_related_citation].to_i}
+          render "add_related_citation", :locals=>{:index=>params[:add_related_citation]}
         else
           render :json => tidy_response_from_update(@response) unless params.has_key?(:add_person)
         end
