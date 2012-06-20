@@ -42,17 +42,18 @@ $(document).ready(function(){
 	// javascript form submission
 	$("#item-actions, #collection-actions").toggle();
 	$("#item-actions button[type=submit], #collection-actions button[type=submit]").click(function(){
-		$("form.step").submit();
+		$("form.step").append("<input type='hidden' value='" + $(this).attr('value') + "' name='" + $(this).attr('name') + "' />");	
+  	$("form.step").submit();
 	});
-	
-	// $("#hydrus_items-edit form input, #hydrus_items-edit form textarea").live("blur", function(){
-	//     validate_hydrus_item();
-	// });
-	// $("#terms").click(function(){
-	// 	validate_hydrus_item();
-	// });
+  
+  validate_hydrus_item();
+	$("#hydrus_items-edit form input, #hydrus_items-edit form textarea").live("blur", function(){
+	    validate_hydrus_item();
+	});
+	$("#terms").click(function(){
+		validate_hydrus_item();
+	});
 });
-
 function validate_hydrus_item() {
 	var all_required_filled = true;
 	$("#hydrus_items-edit form input:required, #hydrus_items-edit form textarea:required").each(function(){
@@ -60,11 +61,16 @@ function validate_hydrus_item() {
 			all_required_filled = false;
 		}
 	});
-	// Need to check that a file item exists here.
-	
+	if($("#uploaded-files .object_file").length == 0) {
+		all_required_filled = false;
+	}
 	if(all_required_filled && $("input#terms").is(":checked")) {
-		$("#publish").removeAttr("disabled");
+		$(".publish").each(function(){
+			$(this).removeAttr("disabled");
+		});
 	}else{
-		$("#publish").attr("disabled", "disabled");
+		$(".publish").each(function(){
+			$(this).attr("disabled", "disabled");
+		});
 	}
 }

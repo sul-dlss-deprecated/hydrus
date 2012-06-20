@@ -8,7 +8,7 @@
       <label class="checkbox">
         <input type="checkbox" name="terms" id="terms" /> I agree to the <a href="#">terms of deposit</a> for the Stanford Digital Repository
       </label>
-      <button type="submit" class="btn btn-small" id="publish" name="publish" disabled="disabled">Publish</button>
+      <button type="submit" class="btn btn-small publish" name="hydrus_item[publish]" value="true">Publish</button>
       <p class="discard-item"><i class="icon-trash"></i> <a href="#">Discard this <%= object_type %></a></p>
     </fieldset>
   </div>
@@ -20,15 +20,15 @@
 		<%=render :partial=>'shared/navigation' %>
   </div>
 </div>
-<%= form_for(@document_fedora, :method => 'PUT', :html => {:class=>"step", :multipart=>true}) do |f| -%>
+<%= form_for(@document_fedora, :method => 'PUT', :html => {:class=>"step", :multipart=>true, :novalidate=>""}) do |f| -%>
   <%= hidden_field_tag("object_id", params[:id]) -%>
   <%= hydrus_form_header(:required=>true, :first=>true) {"Title"} %>
   <div class="row">
     <%= hydrus_form_label do %>
-      <%= f.label :"title[0]", "Title of #{object_type}" %>
+      <%= f.label :title, "Title of #{object_type}" %>
     <%- end -%>
     <%= hydrus_form_value(:class=>"short-textarea") do %>
-      <%= f.text_area :"title[0]", :value=>@document_fedora.title.first, :required=>true %>
+      <%= f.text_area :title, :value=>(@document_fedora.title.first || ""), :required => true %>
     <%- end -%>
   </div>
   <div class="row">
@@ -74,7 +74,7 @@
       <%= f.label :abstract %>
     <%- end -%>
     <%= hydrus_form_value do  -%>
-      <%= f.text_area :abstract, :value=>@document_fedora.abstract.first, :require=>true %>
+      <%= f.text_area :abstract, :value=>(@document_fedora.abstract.first || ""), :required=>true %>
     <%- end -%>
   </div>
   <div class="row">
@@ -124,7 +124,7 @@
   </div>
   <noscript>
     <button type="submit" class="btn btn-small save-edits" name="save" id="save">Save</button>    
-    <button type="submit" class="btn btn-small" id="publish" name="publish" disabled="disabled">Publish</button>
+    <button type="submit" class="btn btn-small publish" name="hydrus_item[publish]" value="true">Publish</button>
   </noscript>
 <%- end -%>
 

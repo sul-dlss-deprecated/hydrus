@@ -1,2 +1,3 @@
 $(".people-select .person:last").after("<%= escape_javascript(render :partial => 'person', :locals=>{:index=>index}) %>");
 $("#add_person").attr("value", parseInt($("#add_person").attr("value")) + 1);
+validate_hydrus_item();

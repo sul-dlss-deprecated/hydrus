@@ -1,2 +1,3 @@
 $("#related-citations .related-citation:last").after("<%= escape_javascript(render :partial => 'related_citation', :locals=>{:related_citation => "", :index=>index}) %>");
 $("#add_related_citation").attr("value", parseInt($("#add_related_citation").attr("value")) + 1);
+validate_hydrus_item();

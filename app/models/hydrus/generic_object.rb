@@ -1,7 +1,10 @@
 class Hydrus::GenericObject < Dor::Item
 
+  attr_accessor :publish
+  
   include ActiveModel::Validations
-  validates :title, :abstract, :not_empty=>true
+  validates :title, :abstract, :not_empty => true, :if => :clicked_publish?
+  
   validates :pid, :is_druid=>true
   
   attr_accessor :apo_pid
@@ -15,12 +18,16 @@ class Hydrus::GenericObject < Dor::Item
   def object_type
       identityMetadata.objectType.first
   end
-
+  
+  def clicked_publish?
+    publish == "true"
+  end
+  
   delegate :abstract, :to => "descMetadata"  
   delegate :title, :to => "descMetadata"
   delegate :related_item_title, :to => "descMetadata", :at => [:relatedItem, :titleInfo, :title]
   delegate :related_item_url, :to => "descMetadata", :at => [:relatedItem, :location, :url]
-  
+    
   def apo
     @apo ||= (apo_pid ? get_fedora_item(apo_pid) : nil)
   end

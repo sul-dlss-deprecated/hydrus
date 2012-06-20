@@ -26,19 +26,30 @@ describe Hydrus::Item do
     @hi.submit_time.should == "9999"
   end
 
-  it "should be invalid if required fields are missing" do
+  it "should be invalid if required fields are missing (and publish was selected)" do
     @item=Hydrus::Item.find('druid:oo000oo0001')
     @item.valid?.should == true  # should start out as valid
-    @item.title=''   
-    @item.valid?.should == false  # invalid!
-    @item.title='ok'   
-    @item.valid?.should == true  # valid!
+    @item.publish = "true"
+    @item.title=''
+    @item.should_not be_valid # invalid!
+    @item.title='ok'
+    @item.should be_valid  # valid!
     @item.abstract=''  
-    @item.valid?.should == false  # invalid!
+    @item.should_not be_valid  # invalid!
     @item.abstract='ok'  
-    @item.valid?.should == true  # valid!
-    # @item.actors << Hydrus::Actor.new  
-    # @item.valid?.should == false  # invalid!    
+    @item.should be_valid  # valid!
+    # @item.actors << Hydrus::Actor.new
+    # @item.should_not be_valid  # invalid!
+  end
+  it "should not try to validate required fields when publish was not pressed" do
+    @item=Hydrus::Item.find('druid:oo000oo0001')
+    @item.should be_valid  # should start out as valid
+    @item.title = ""
+    @item.should be_valid
+    @item.abstract = ""
+    @item.should be_valid
+    # @item.actors << Hydrus::Actor.new
+    # @item.should be_valid
   end
   
   it "should be able to add and remove and item from a collection" do
