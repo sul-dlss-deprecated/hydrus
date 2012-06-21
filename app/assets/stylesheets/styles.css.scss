@@ -139,6 +139,10 @@ table form {
 	float: left;
 }
 
+/* search results pagination */
+.pagination {
+	h2 {@include hidden-label;}
+}
 
 
 /* This seems to help fix an issue w/ floats once we stack all columns on-top of each other */
