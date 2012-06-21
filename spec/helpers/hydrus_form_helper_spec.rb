@@ -31,11 +31,11 @@ describe HydrusFormHelper do
   
   describe "hydrus form header" do
     it "should return the appropirate HTML when no options are sent" do
-      hydrus_form_header{"Title"}.should have_selector ".row .span8 h3" and 
+      hydrus_form_header{"Title"}.should have_selector ".row .span9 h3" and 
       hydrus_form_header{"Title"}.should match(/<h3>Title<\/h3>/)
     end
     it "should apply the required element when the required option is sent" do
-       hydrus_form_header(:required=>true){"Title"}.should have_selector ".row .span1 .required"
+       hydrus_form_header(:required=>true){"Title"}.should have_selector ".row .span9 .required"
     end
     
   end

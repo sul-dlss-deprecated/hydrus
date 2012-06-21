@@ -19,14 +19,12 @@ module HydrusFormHelper
   def hydrus_form_header(opts={}, &block)
     html = ""
     html << "<div class='row section-header#{' first-header' if opts.has_key?(:first)}'>"
-      html << "<div class='span8'>"
+      html << "<div class='span9'>"
         html << "<h3>#{capture(&block)}</h3>"
+        if opts.has_key?(:required) and opts[:required]
+            html << "<span class='required'><span class='label label-important'>required</span></span>"
+        end
       html << "</div>"
-      if opts.has_key?(:required) and opts[:required]
-        html << "<div class='span1'>"
-          html << "<div class='required'><span class='label label-important'>required</span></div>"
-        html << "</div>"
-      end
     html << "</div>"
     html.html_safe
   end

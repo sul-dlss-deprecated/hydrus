@@ -26,21 +26,22 @@
 	background-color: #F5F5F5;
 	border: 1px solid rgba(0,0,0,0.05);
 	margin-bottom: 20px;
+	margin-left: -1px;
 	margin-top: 30px;
-	padding: 3px 0;
-	> .span1 {margin-left: 5px;}
+	padding: 2px 0;
+	> .span1, > .span9 {margin-left: 5px;}
+	// > .span9 {margin-left: 5px;}
 	&.first-header {margin-top: 6px;}
+	h3 {float: left; padding-left: 2px;}
 }
 .section-header .required {
 	// color: #990000;
 	color: #FFF;
+	float: right;
+	margin-right: 12px;
 	margin-top: 3px;
 }
-.section-header .required {
-	@media (max-width: 767px) {
-		text-align: right; 	margin-right: 6px;
-	}
-}
+
 .form-label {
 	text-align: right;
 	@media (max-width: 767px) {
