@@ -35,14 +35,16 @@
     <%= hydrus_form_value do %>
       <%= f.text_field :title, :value => @document_fedora.title.first %>
     <%- end -%>
-    
+  </div>
+  <div class="row">
     <%= hydrus_form_label do %>
       <%= f.label :abstract, "Description" %>
     <%- end -%>
     <%= hydrus_form_value(:class=>"short-textarea") do %>
       <%= f.text_area :abstract, :value => @document_fedora.abstract.first %>
     <%- end -%>
-    
+  </div>
+  <div class="row">
     <%= hydrus_form_label do %>
       Contact email
     <%- end -%>
@@ -56,7 +58,7 @@
     <%= render "related_items" %>
   </div>
   <div class="row">
-    <div class="span7 offset2">
+    <div class="span8 offset1">
       <%= button_tag("Add another link", :name=>"add_link", :"data-attribute" => "add_link", :id=>"add_link", :class=>"btn", :value=>@document_fedora.related_items.length) %>
     </div>
   </div>  
