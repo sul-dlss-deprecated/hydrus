@@ -42,12 +42,14 @@
 
   <%= hydrus_form_header(:required=>true) {"People and organizations responsible for this #{object_type}"} -%>
   <div class="row">
-    <%= hydrus_form_label do %>
-      <%= f.label :person_0, "People" -%>
-    <%- end -%>
-    <%= hydrus_form_value(:class=>"people-select destroy-group") do -%>
+    <!-- <%= hydrus_form_label do %> -->
+      <!-- <%= f.label :person_0, "People" -%> -->
+    <!-- <%- end -%> -->
+    <!-- <%= hydrus_form_value(:class=>"people-select destroy-group") do -%> -->
+    <div class="span9 people-select destroy-group">
       <%= render "people" %>
-    <%- end -%>
+    </div>
+    <!-- <%- end -%> -->
   </div>
 
   <%= hydrus_form_header(:required=>true) {"Upload file(s)"} -%>
@@ -61,7 +63,7 @@
         <%- end -%>
       </div>
       <div class="row">
-        <div class="span7 offset2">
+        <div class="span8 offset1">
           <%= file_field_tag "files[]", :multiple=>true %>
         </div>    
       </div>
@@ -107,7 +109,7 @@
     <%- end -%>
   </div>
   <div class="row">
-    <div class="span7 offset2">
+    <div class="span8 offset1">
       <%= button_tag("Add another published work", :name=>"add_related_citation", :"data-attribute" => "add_related_citation", :id=>"add_related_citation", :class=>"btn", :value=>@document_fedora.related_citation.length) %>
     </div>
   </div>
@@ -118,7 +120,7 @@
     <%= render "related_items" %>
   </div>
   <div class="row">
-    <div class="span7 offset2">
+    <div class="span8 offset1">
       <%= button_tag("Add another link", :name=>"add_link", :"data-attribute" => "add_link", :id=>"add_link", :class=>"btn", :value=>@document_fedora.related_items.length) %>
     </div>
   </div>
