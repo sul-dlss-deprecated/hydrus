@@ -142,6 +142,7 @@ table form {
 /* search results pagination */
 .pagination {
 	h2 {@include hidden-label;}
+	a {border-bottom: 1px solid #DDD;}
 }
 
 
