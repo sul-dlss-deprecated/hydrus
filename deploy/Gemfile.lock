@@ -1,0 +1,51 @@
+GEM
+  remote: http://rubygems.org/
+  remote: http://sulair-rails-dev.stanford.edu/
+  specs:
+    capistrano (2.12.0)
+      highline
+      net-scp (>= 1.0.0)
+      net-sftp (>= 2.0.0)
+      net-ssh (>= 2.0.14)
+      net-ssh-gateway (>= 1.1.0)
+    capistrano-ext (1.2.1)
+      capistrano (>= 1.0.0)
+    highline (1.6.13)
+    lyberteam-capistrano-devel (0.9.0)
+      capistrano (>= 2.11.0)
+      lyberteam-gems-devel
+      net-ssh-kerberos
+      rake (>= 0.8.7)
+      rest-client
+      rvm-capistrano
+    lyberteam-devel (0.8.0)
+      lyberteam-capistrano-devel
+      lyberteam-gems-devel
+    lyberteam-gems-devel (0.8.0)
+      rake (>= 0.8.7)
+      rest-client
+    mime-types (1.19)
+    net-scp (1.0.4)
+      net-ssh (>= 1.99.1)
+    net-sftp (2.0.5)
+      net-ssh (>= 2.0.9)
+    net-ssh (2.5.2)
+    net-ssh-gateway (1.1.0)
+      net-ssh (>= 1.99.1)
+    net-ssh-kerberos (0.2.7)
+      net-ssh (>= 2.0)
+    rake (0.9.2.2)
+    rest-client (1.6.7)
+      mime-types (>= 1.16)
+    rvm-capistrano (1.2.2)
+      capistrano (>= 2.0.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  capistrano
+  capistrano-ext
+  lyberteam-devel (>= 0.7.0)
+  net-ssh-kerberos
+  rvm-capistrano

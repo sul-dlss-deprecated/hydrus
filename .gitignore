@@ -16,6 +16,9 @@ tmtags
 
 # config files
 config/suri.yml
+config/database.yml
+config/fedora.yml
+config/solr.yml
 
 ## Cucumber
 rerun.txt
