@@ -14,4 +14,4 @@ AboutPage.configure do |config|
 
   config.fedora = AboutPage::Fedora.new(ActiveFedora::Base.connection_for_pid(0))
   config.solr = AboutPage::Solr.new(Blacklight.solr)
-end
+end unless $0 =~ /rake$/

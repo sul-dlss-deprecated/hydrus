@@ -8,4 +8,4 @@ Rails.configuration.middleware.use(IsItWorking::Handler) do |h|
   # Check that AwesomeService is working using the service's own logic
   h.check :rubydora, :client => ActiveFedora::Base.connection_for_pid(0)
   h.check :rsolr, :client => Blacklight.solr
-end
+end unless $0 =~ /rake$/
