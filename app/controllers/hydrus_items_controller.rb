@@ -49,7 +49,7 @@ class HydrusItemsController < ApplicationController
     notice = []
     
     # special case for editing multi-valued field as comma delimted string.
-    if params.has_key?("hydrus_item_keywords")# and @document_fedora.keywords.sort == params["hydrus_item_keywords"].split(",").map{|k| k.strip }.sort
+    if params.has_key?("hydrus_item_keywords") and @document_fedora.keywords.sort != params["hydrus_item_keywords"].split(",").map{|k| k.strip }.sort
       # need to clear out all keywords from document as the hydrus_item_keywords is the canonical list of keywords.
       @document_fedora.update_attributes({"keywords" => {0=>""}})
       keywords = {}

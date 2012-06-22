@@ -1,17 +1,7 @@
 <%- @page_title = "Editing '#{@document_fedora.title.first}' - #{application_name}" -%>
 <%- object_type = @document_fedora.object_type -%>
 <% sidebar_items << capture do %>
-  <div class="well actions-box" id="item-actions">
-    <fieldset>
-      <legend class="box-header">Actions</legend>
-      <button type="submit" class="btn btn-small save-edits" name="save" id="save">Save</button>
-      <label class="checkbox">
-        <input type="checkbox" name="terms" id="terms" /> I agree to the <a href="#">terms of deposit</a> for the Stanford Digital Repository
-      </label>
-      <button type="submit" class="btn btn-small publish" name="hydrus_item[publish]" value="true">Publish</button>
-      <p class="discard-item"><i class="icon-trash"></i> <a href="#">Discard this <%= object_type %></a></p>
-    </fieldset>
-  </div>
+  <%= render :partial => "actions_box", :locals => {:id=>"js"}%>
 <%- end -%>
 
 
@@ -125,8 +115,7 @@
     </div>
   </div>
   <noscript>
-    <button type="submit" class="btn btn-small save-edits" name="save" id="save">Save</button>    
-    <button type="submit" class="btn btn-small publish" name="hydrus_item[publish]" value="true">Publish</button>
+    <%= render :partial => "actions_box", :locals => {:id=>"nojs"}%>
   </noscript>
 <%- end -%>
 

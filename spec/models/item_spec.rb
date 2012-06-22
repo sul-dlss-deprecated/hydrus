@@ -26,10 +26,11 @@ describe Hydrus::Item do
     @hi.submit_time.should == "9999"
   end
 
-  it "should be invalid if required fields are missing (and publish was selected)" do
+  it "should be invalid if required fields are missing (and publish/terms of deposit was selected)" do
     @item=Hydrus::Item.find('druid:oo000oo0001')
-    @item.valid?.should == true  # should start out as valid
+    @item.should be_valid  # should start out as valid
     @item.publish = "true"
+    @item.terms_of_deposit = "true"
     @item.title=''
     @item.should_not be_valid # invalid!
     @item.title='ok'
@@ -41,7 +42,13 @@ describe Hydrus::Item do
     # @item.actors << Hydrus::Actor.new
     # @item.should_not be_valid  # invalid!
   end
-  it "should not try to validate required fields when publish was not pressed" do
+  it "should invalidate any item when terms of deposit hasn't been selected" do
+    @item=Hydrus::Item.find('druid:oo000oo0001')
+    @item.should be_valid  # should start out as valid
+    @item.publish = "true"
+    @item.should_not be_valid
+  end
+  it "should not try to validate required fields when publish was not pressed and terms of deposit was not selected" do
     @item=Hydrus::Item.find('druid:oo000oo0001')
     @item.should be_valid  # should start out as valid
     @item.title = ""

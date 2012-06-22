@@ -1,7 +1,10 @@
 class Hydrus::Item < Hydrus::GenericObject
-
+  
+  attr_accessor :terms_of_deposit
+  
   validates :actors, :at_least_one=>true, :if => :clicked_publish?
   validates :files, :at_least_one=>true, :if => :clicked_publish?
+  validates :terms_of_deposit, :presence => true, :if => :clicked_publish?
 
   def files
     Hydrus::ObjectFile.find_all_by_pid(pid,:order=>'weight')  # coming from the database

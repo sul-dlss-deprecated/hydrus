@@ -3,3 +3,10 @@
 
 en:
   hello: "Hello world"
+  activemodel:
+    errors:
+      models:
+        "hydrus/item":
+          attributes:
+            terms_of_deposit:
+              blank: "must be checked"

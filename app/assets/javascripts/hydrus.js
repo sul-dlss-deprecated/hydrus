@@ -50,9 +50,12 @@ $(document).ready(function(){
 	$("#hydrus_items-edit form input, #hydrus_items-edit form textarea").live("blur", function(){
 	    validate_hydrus_item();
 	});
-	$("#terms").click(function(){
-		validate_hydrus_item();
+	$(".terms_of_deposit").each(function(){
+		$(this).click(function(){
+			validate_hydrus_item();
+		});
 	});
+	
 });
 function validate_hydrus_item() {
 	var all_required_filled = true;
