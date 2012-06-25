@@ -53,7 +53,7 @@
         <%- end -%>
       </div>
       <div class="row">
-        <div class="span8 offset1">
+        <div class="span9">
           <%= file_field_tag "files[]", :multiple=>true %>
         </div>    
       </div>
@@ -82,7 +82,8 @@
   <%= hydrus_form_header {"Citations"} -%>
   <div class="row">
     <%= hydrus_form_label do %>
-      <%= f.label :preferred_citation, "Preferred citation for this #{object_type}" %>
+      <%= f.label :preferred_citation, "Preferred citation for this #{object_type}", :class => "hidden-tablet" %>
+      <%= f.label :preferred_citation, "Cite this #{object_type}", :class => "visible-tablet" %>
     <%- end -%>
     <%= hydrus_form_value(:class=>"short-textarea") do  -%>
       <%= f.text_area :preferred_citation, :value=>@document_fedora.preferred_citation.first %>
