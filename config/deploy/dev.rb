@@ -22,6 +22,13 @@ namespace :jetty do
   end
 end
 
+namespace :deploy do
+  namespace :assets do
+    task :symlink do ; end
+    task :precompile do ; end
+  end
+end
+
 before "deploy", "jetty:stop"
 after "deploy", "jetty:start"
 after "jetty:start", "jetty:ingest_fixtures"
