@@ -5,7 +5,7 @@ describe("Home page", :type => :request, :integration => true) do
   it "Some of the expected info is displayed" do
     visit root_path
     page.should have_content("Stanford Digital Repository")
-    page.should have_content("Hydrus")
+    page.should have_content("SDR")
     page.should_not have_content("override")
   end
 
