@@ -329,3 +329,12 @@ noscript #item-actions, noscript #collection-actions {
 	label {text-align: right;}
 	.checkbox {text-align: left;}
 }
+
+/* SUL Chrome overrides */
+#hydra-attribution {
+	display: inline;
+	margin-left: 50px;
+}
+#hydra-attribution a, #hydra-attribution a:hover {
+	border-bottom: none;
+}
