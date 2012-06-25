@@ -67,7 +67,7 @@ function validate_hydrus_item() {
 	if($("#uploaded-files .object_file").length == 0) {
 		all_required_filled = false;
 	}
-	if(all_required_filled && $("input#terms").is(":checked")) {
+	if(all_required_filled && $("input#terms_js").is(":checked")) {
 		$(".publish").each(function(){
 			$(this).removeAttr("disabled");
 		});
