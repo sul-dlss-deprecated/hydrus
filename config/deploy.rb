@@ -22,7 +22,7 @@ set :user, "lyberadmin"
 set :runner, "lyberadmin"
 set :ssh_options, {:auth_methods => %w(gssapi-with-mic publickey hostbased), :forward_agent => true}
 
-set :destination, "/home/lyberadmin"
+set :destination, "/var/home/lyberadmin"
 set :application, "hydrus"
 
 set :scm, :git
