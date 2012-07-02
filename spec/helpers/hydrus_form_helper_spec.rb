@@ -1,4 +1,4 @@
-require File.expand_path('../../spec_helper', __FILE__)
+require 'spec_helper'
 
 describe HydrusFormHelper do
   include HydrusFormHelper
@@ -37,7 +37,14 @@ describe HydrusFormHelper do
     it "should apply the required element when the required option is sent" do
        hydrus_form_header(:required=>true){"Title"}.should have_selector ".row .span9 .required"
     end
-    
+  end
+  
+  describe "misc" do
+    it "can exercise people_roles()" do
+      prs = people_roles
+      prs.should be_kind_of Array
+      prs.include?("Author").should == true
+    end
   end
   
 end

@@ -13,6 +13,7 @@ describe Hydrus::ObjectFile do
     f.url.should == exp_url
     f.current_path.should == "#{Rails.root}/public#{exp_url}"
     files[1].filename.should == %q{pinocchio characters tc in file name.pdf}
+    files[1].size.should > 0
   end
 
 end
