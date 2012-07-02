@@ -95,22 +95,36 @@
       <foxml:xmlContent>
         <roleMetadata objectId="druid:oo000oo0002">
           <role type="manager">
-            <person>
-              <identifier type="sunetid">ronbo</identifier>
-              <name>Nakao, Ron</name>
-            </person>
+             <person>
+                <identifier type="sunetid">brown</identifier>
+                <name>Brown, Malcolm</name>
+             </person>
+             <person>
+                <identifier type="sunetid">dblack</identifier>
+                <name>Black, Delores</name>
+             </person>
           </role>
           <role type="depositor">
-            <person>
-              <identifier type="sunetid">mrosenfe</identifier>
-              <name>Rosenfeld, Michael J.</name>
-            </person>
+             <person>
+                <identifier type="sunetid">ggreen</identifier>
+                <name>Green, Greg</name>
+             </person>
+             <group>
+                <identifier type="workgroup">pasig:2011attendees</identifier>
+                <name>Conference attendees</name>
+              </group>
           </role>
-          <role type="depositor">
-            <person>
-              <identifier type="sunetid">solzak</identifier>
-              <name>Olzak, Susan</name>
-            </person>
+          <role type="reviewer">
+             <group>
+                <identifier type="workgroup">pasig:staff</identifier>
+                <name>Conference attendees</name>
+             </group>
+          </role>
+          <role type="viewer">
+             <group>
+                <identifier type="community">stanford</identifier>
+                <name>Stanford University Community</name>
+             </group>
           </role>
         </roleMetadata>
       </foxml:xmlContent>
