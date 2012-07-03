@@ -72,24 +72,23 @@ describe Hydrus::RoleMetadataDS do
 
   it "Should be able to insert new role, person, and group nodes" do
     p = '<person><identifier type="sunetid"/><name/></person>'
-    g = '<group><identifier/><name/></group>'
-    rstart = '<role>'
-    rend = '</role>'
+    gs = '<group><identifier type="stanford"/><name/></group>'
+    gw = '<group><identifier type="workgroup"/><name/></group>'
     exp_parts = [
       @rmd_start,
-      rstart, g, p, rend,
-      rstart, g, p, g, rend,
+      '<role type="manager">',  gw, p,     '</role>',
+      '<role type="reviewer">', gs, p, gs, '</role>',
       @rmd_end,
     ]
     @exp_xml = noko_doc(exp_parts.join '')
     @rmdoc   = Hydrus::RoleMetadataDS.from_xml("#{@rmd_start}#{@rmd_end}")
-    role_node1 = @rmdoc.insert_role
-    role_node2 = @rmdoc.insert_role
-    @rmdoc.insert_group(role_node2)
+    role_node1 = @rmdoc.insert_role('manager')
+    role_node2 = @rmdoc.insert_role('reviewer')
+    @rmdoc.insert_group(role_node2, 'stanford')
     @rmdoc.insert_person(role_node2)
-    @rmdoc.insert_group(role_node1)
+    @rmdoc.insert_group(role_node1, 'workgroup')
     @rmdoc.insert_person(role_node1)
-    @rmdoc.insert_group(role_node2)
+    @rmdoc.insert_group(role_node2, 'stanford')
     @rmdoc.ng_xml.should be_equivalent_to @exp_xml
   end
 

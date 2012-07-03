@@ -39,10 +39,10 @@ class Hydrus::RoleMetadataDS < ActiveFedora::NokogiriDatastream
     solr_doc
   end
 
-  # Blocks to pass into Nokogiri::XML::Builder.new()
+  # OM templates.
 
-  define_template :role do |xml|
-    xml.role
+  define_template :role do |xml, role_type|
+    xml.role(:type => role_type)
   end
 
   define_template :person do |xml|
@@ -52,14 +52,14 @@ class Hydrus::RoleMetadataDS < ActiveFedora::NokogiriDatastream
     }
   end
 
-  define_template :group do |xml|
+  define_template :group do |xml, group_type|
     xml.group {
-      xml.identifier
+      xml.identifier(:type => group_type)
       xml.name
     }
   end
 
-  # Methods returning empty XML documents and nodes.
+  # Empty XML document.
 
   def self.xml_template
     Nokogiri::XML::Builder.new do |xml|
@@ -67,16 +67,18 @@ class Hydrus::RoleMetadataDS < ActiveFedora::NokogiriDatastream
     end.doc
   end
       
-  def insert_role
-    return add_child_node(ng_xml.root, :role)
+  # Adding/removing nodes.
+
+  def insert_role(role_type)
+    return add_child_node(ng_xml.root, :role, role_type)
   end
 
   def insert_person(role_node)
     return add_child_node(role_node, :person)
   end
 
-  def insert_group(role_node)
-    return add_child_node(role_node, :group)
+  def insert_group(role_node, group_type)
+    return add_child_node(role_node, :group, group_type)
   end
 
   def remove_node(term, index)
