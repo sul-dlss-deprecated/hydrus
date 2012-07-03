@@ -102,4 +102,19 @@ describe Hydrus::RoleMetadataDS do
     @rmdoc.ng_xml.should be_equivalent_to exp_xml
   end
 
+  it "should be able to exercise to_solr()" do
+    sdoc = @rmdoc.to_solr
+    sdoc.should be_kind_of Hash
+    exp_hash = {
+      "apo_register_permissions_t"     => ["sunetid:brown", "sunetid:dblack", "sunetid:ggreen", "workgroup:pasig:2011attendees"],
+      "apo_role_depositor_facet"       => ["sunetid:ggreen", "workgroup:pasig:2011attendees"],
+      "apo_role_depositor_t"           => ["sunetid:ggreen", "workgroup:pasig:2011attendees"],
+      "apo_role_group_depositor_facet" => ["workgroup:pasig:2011attendees"],
+      "apo_role_group_depositor_t"     => ["workgroup:pasig:2011attendees"],
+      "apo_role_person_manager_facet"  => ["sunetid:brown", "sunetid:dblack"],
+      "apo_role_person_manager_t"      => ["sunetid:brown", "sunetid:dblack"],
+    }
+    sdoc.should include(exp_hash)
+  end
+
 end
