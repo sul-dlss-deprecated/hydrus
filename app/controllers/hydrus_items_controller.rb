@@ -1,13 +1,13 @@
 class HydrusItemsController < ApplicationController
 
-  include Hydra::Controller
+  include Hydra::Controller::ControllerBehavior
   include Hydra::AssetsControllerHelper  # This is to get apply_depositor_metadata method
-  include Hydra::FileAssetsHelper
+  include Hydra::Controller::UploadBehavior
   include Hydrus::AccessControlsEnforcement
 
   #prepend_before_filter :sanitize_update_params, :only => :update
   before_filter :enforce_access_controls
-  before_filter :setup_attributes
+  before_filter :setup_attributes, :except => :new
   before_filter :check_for_collection, :only => :new
   
   def index

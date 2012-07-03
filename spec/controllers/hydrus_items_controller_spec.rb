@@ -24,7 +24,7 @@ describe HydrusItemsController do
       controller.stub(:current_user).and_return(mock_user)
       get :show, :id => pid
       assigns[:document_fedora].should be_nil
-      response.should redirect_to :hydrus_items      
+      response.should redirect_to new_user_session_path
     end
   end
 

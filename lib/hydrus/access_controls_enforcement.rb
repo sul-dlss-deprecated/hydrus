@@ -4,7 +4,7 @@ module Hydrus::AccessControlsEnforcement
 
   end
 
-  def enforce_new_permissions *args
+  def enforce_create_permissions *args
     unless can? :edit, params[:collection]
       flash[:error] = "You do not have sufficient privileges to edit this document. You have been redirected to the read-only view."
       redirect_to edit_polymorphic_path(Hydrus::Collection.find(params[:collection]))

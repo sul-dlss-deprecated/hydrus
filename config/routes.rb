@@ -67,6 +67,11 @@ Hydrus::Application.routes.draw do
 
   resources :collections, :controller => 'hydrus_collections', :as => 'hydrus_collections'
   resources :items,       :controller => 'hydrus_items', :as => 'hydrus_items'
+
+  resources :collections, :controller => 'hydrus_collections', :as => 'dor_collections'
+  resources :items,       :controller => 'hydrus_items', :as => 'dor_items'
+
+
   
   match "items/:id/destroy_value" => "hydrus_items#destroy_value", :as => 'destroy_hydrus_item_value', :via => "get"
   match "collections/:id/destroy_value" => "hydrus_collections#destroy_value", :as => 'destroy_hydrus_collection_value', :via => "get"

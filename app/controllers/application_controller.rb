@@ -2,10 +2,7 @@ class ApplicationController < ActionController::Base
 
   include SulChrome::Controller
   include Blacklight::Controller  
-  include Hydra::Controller
-  include Hydrus::RoutingHacks
-
-  helper Hydrus::RoutingHacks
+  include Hydra::Controller::ControllerBehavior
   helper_method :is_production?
   
   def layout_name

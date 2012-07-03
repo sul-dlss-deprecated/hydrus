@@ -35,4 +35,8 @@ class SolrDocument
     get('has_model_s').split(':').last.downcase.sub(/^dor_/, 'hydrus_')
   end
 
+  def to_model
+    ActiveFedora::Base.load_instance_from_solr(id, self)
+  end
+
 end
