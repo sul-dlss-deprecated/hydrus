@@ -95,7 +95,7 @@ describe Hydrus::DescMetadataDS do
 
    context "Remove nodes" do
 
-    it "Should be able to insert new XML nodes" do
+    it "Should be able to remove XML nodes" do
       nm1 = '<name><namePart>Angus</namePart><role><roleTerm authority="marcrelator" type="text"/></role></name>'
       nm2 = '<name><namePart>John</namePart><role><roleTerm authority="marcrelator" type="text"/></role></name>'
       @exp_xml = noko_doc([@mods_start, nm1, '</mods>'].join '')

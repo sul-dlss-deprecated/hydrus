@@ -15,6 +15,12 @@ class Hydrus::GenericObject < Dor::Item
     :label => 'Descriptive Metadata',
     :control_group => 'M')
 
+  has_metadata(
+    :name => "roleMetadata",
+    :type => Hydrus::RoleMetadataDS,
+    :label => 'Role Metadata',
+    :control_group => 'M')
+
   def object_type
       identityMetadata.objectType.first
   end
