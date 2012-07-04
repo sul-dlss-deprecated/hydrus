@@ -1,5 +1,5 @@
 # Override make_solr_connection() so that we don't need certs in dev and test.
-if %w(development test).include?(Rails.env)
+#if %w(development test prod_w_local_dor).include?(Rails.env)
   module Dor
     class Configuration
       def make_solr_connection(add_opts = {})
@@ -8,7 +8,7 @@ if %w(development test).include?(Rails.env)
       end
     end
   end
-end
+#end
 
 
 Dor::Config.configure do

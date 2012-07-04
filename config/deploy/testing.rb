@@ -1,4 +1,4 @@
-set :rails_env, "production"
+set :rails_env, "prod_w_local_dor"
 set :deployment_host, "hydrus-test.stanford.edu"
 set :repository, File.expand_path(File.join(File.dirname(Pathname.new(__FILE__).realpath), "../.."))
 set :deploy_via, :copy
