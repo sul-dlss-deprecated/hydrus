@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<foxml:digitalObject VERSION="1.1" PID="druid:oo000oo0000"
+  xmlns:foxml="info:fedora/fedora-system:def/foxml#"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/definitions/1/0/foxml1-1.xsd">
+  <foxml:objectProperties>
+    <foxml:property NAME="info:fedora/fedora-system:def/model#state"
+      VALUE="Active"/>
+    <foxml:property NAME="info:fedora/fedora-system:def/model#label"
+      VALUE="Internal Objects"/>
+    <foxml:property NAME="info:fedora/fedora-system:def/model#createdDate"
+      VALUE="2011-04-18T18:18:53.666Z"/>
+    <foxml:property NAME="info:fedora/fedora-system:def/view#lastModifiedDate"
+      VALUE="2012-07-03T21:23:13.584Z"/>
+  </foxml:objectProperties>
+  <foxml:datastream ID="AUDIT" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
+    <foxml:datastreamVersion ID="AUDIT.0" LABEL="Audit Trail for this object"
+      CREATED="2011-04-18T18:18:53.666Z" MIMETYPE="text/xml"
+      FORMAT_URI="info:fedora/fedora-system:format/xml.fedora.audit">
+      <foxml:xmlContent>
+        <audit:auditTrail xmlns:audit="info:fedora/fedora-system:def/audit#">
+          <audit:record ID="AUDREC1">
+            <audit:process type="Fedora API-M"/>
+            <audit:action>modifyObject</audit:action>
+            <audit:componentID/>
+            <audit:responsibility>fedoraAdmin</audit:responsibility>
+            <audit:date>2011-05-23T17:19:33.425Z</audit:date>
+            <audit:justification/>
+          </audit:record>
+        </audit:auditTrail>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+  <foxml:datastream ID="DC" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
+    <foxml:datastreamVersion ID="DC.9"
+      LABEL="Dublin Core Record for this object"
+      CREATED="2011-09-14T16:59:41.029Z" MIMETYPE="text/xml"
+      FORMAT_URI="http://www.openarchives.org/OAI/2.0/oai_dc/" SIZE="418">
+      <foxml:xmlContent>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/"
+          xmlns:dc="http://purl.org/dc/elements/1.1/"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:title>Ur-APO</dc:title>
+          <dc:identifier>druid:oo000oo0000</dc:identifier>
+          <dc:language>eng</dc:language>
+        </oai_dc:dc>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+  <foxml:datastream ID="identityMetadata" STATE="A" CONTROL_GROUP="X"
+    VERSIONABLE="true">
+    <foxml:datastreamVersion ID="identityMetadata.2" LABEL="Identity Metadata"
+      CREATED="2012-07-03T21:23:13.584Z" MIMETYPE="text/xml" SIZE="348">
+      <foxml:xmlContent>
+        <identityMetadata>
+          <objectId>druid:oo000oo0000</objectId>
+          <objectType>adminPolicy</objectType>
+          <objectLabel>Internal Objects</objectLabel>
+          <objectDescription>Ur-APO</objectDescription>
+          <otherId name="uuid">661e629a-24c8-2ef3-227e-883eb4e2c6d4</otherId>
+          <tag>AdminPolicy : Ur-APO</tag>
+        </identityMetadata>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+  <foxml:datastream ID="defaultObjectRights" STATE="A" CONTROL_GROUP="X"
+    VERSIONABLE="true">
+    <foxml:datastreamVersion ID="defaultObjectRights.4"
+      LABEL="Default Object Rights" CREATED="2011-05-23T17:22:27.144Z"
+      MIMETYPE="text/xml" SIZE="572">
+      <foxml:xmlContent>
+        <rightsMetadata>
+          <copyright>
+            <human type="copyright">This work is copyrighted by the
+              creator.</human>
+          </copyright>
+          <access type="discover">
+            <world/>
+          </access>
+          <access type="read">
+            <human>This document is available only to the Stanford faculty,
+              staff and student community</human>
+            <machine>
+              <group>stanford</group>
+            </machine>
+          </access>
+          <use>
+            <human type="creativecommons">Attribution Non-Commercial Share Alike
+              license</human>
+            <machine type="creativecommons">by-nc-sa</machine>
+          </use>
+        </rightsMetadata>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+  <foxml:datastream ID="administrativeMetadata" STATE="A" CONTROL_GROUP="X"
+    VERSIONABLE="true">
+    <foxml:datastreamVersion ID="administrativeMetadata.3"
+      LABEL="Administrative Metadata" CREATED="2011-06-16T20:30:07.581Z"
+      MIMETYPE="text/xml" SIZE="2326">
+      <foxml:xmlContent>
+        <administrativeMetadata>
+          <descMetadata>
+            <format>MODS</format>
+            <source>symphony</source>
+          </descMetadata>
+          <contact id="sunetid:mbklein" type="user">
+            <name>Michael B. Klein</name>
+            <organization>DLSS</organization>
+            <email>mbklein@stanford.edu</email>
+          </contact>
+          <rights>
+            <copyright useDefault="true"/>
+            <use>
+              <defaultLicense override="yes" type="CreativeCommons"
+                value="by-sa"/>
+            </use>
+            <use>
+              <access override="yes"/>
+            </use>
+          </rights>
+          <relationships/>
+          <registration>
+            <itemTag>AdminPolicy : Ur-APO</itemTag>
+            <workflow id="digitizationWF">
+              <process lifecycle="registered" name="initiate" status="completed"/>
+              <process name="digitize" status="waiting"/>
+              <process name="start-accession" status="waiting"/>
+            </workflow>
+          </registration>
+          <deposit>
+            <depositStatus>closed</depositStatus>
+            <approval required="no"/>
+            <termsOfDeposit> By depositing stuff you agree... </termsOfDeposit>
+            <embargo default="6 months" maximum="2 years" minimum="0"/>
+          </deposit>
+          <accessioning>
+            <workflow id="accessionWF">
+              <process lifecycle="inprocess" name="start-accession"
+                status="completed"/>
+              <process name="transfer-content" status="waiting"/>
+              <process name="descriptive-metadata" status="waiting"/>
+              <process name="technical-metadata" status="waiting"/>
+              <process name="content-metadata" status="waiting"/>
+              <process name="shelve" status="waiting"/>
+              <process lifecycle="released" name="publish" status="waiting"/>
+              <process name="provenance-metadata" status="waiting"/>
+              <process name="sdr-ingest-transfer" status="waiting"/>
+              <process name="sdr-ingest-deposit" status="waiting"/>
+              <process lifecycle="archived" name="sdr-ingest-archive"
+                status="waiting"/>
+              <process lifecycle="accessioned" name="cleanup" status="waiting"/>
+            </workflow>
+          </accessioning>
+          <preservation> ... storage, replication, audit requirements, e.g. </preservation>
+          <dissemination>
+            <releaseDelayLimit>20 years</releaseDelayLimit>
+          </dissemination>
+        </administrativeMetadata>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+  <foxml:datastream ID="roleMetadata" STATE="A" CONTROL_GROUP="X"
+    VERSIONABLE="true">
+    <foxml:datastreamVersion ID="roleMetadata.0" LABEL="Role Metadata"
+      CREATED="2011-05-23T18:08:21.810Z" MIMETYPE="text/xml" SIZE="568">
+      <foxml:xmlContent>
+        <roleMetadata>
+          <role type="manager">
+            <person>
+              <identifier type="sunetid">mbklein</identifier>
+              <name>Klein, Michael</name>
+            </person>
+            <person>
+              <identifier type="sunetid">lmcrae</identifier>
+              <name>McRae, Lynn</name>
+            </person>
+          </role>
+          <role type="depositor">
+            <person>
+              <identifier type="sunetid">labware</identifier>
+              <name>Labware, Hydra</name>
+            </person>
+            <group>
+              <identifier type="workgroup">dlss:labstaff</identifier>
+              <name>Scanning Lab Staff</name>
+            </group>
+          </role>
+        </roleMetadata>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+</foxml:digitalObject>

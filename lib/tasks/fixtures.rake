@@ -1,5 +1,6 @@
 namespace :hydrus do
   FIXTURE_PIDS = [
+    'druid:oo000oo0000', # The Ur-APO
     'druid:oo000oo0001', # Collection #1: Item #1
     'druid:oo000oo0002', # APO
     'druid:oo000oo0003', # Collection #1

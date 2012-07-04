@@ -59,5 +59,5 @@ class Hydrus::GenericObject < Dor::Item
       Hydrus::RelatedItem.new_from_node(n)
     }
   end
-  
+
 end

@@ -23,6 +23,16 @@ class HydrusCollectionsController < ApplicationController
   def edit
   end
 
+  def new
+    apo = create_apo(current_user)
+    dor_item   = register_dor_object(current_user, 'collection', apo.pid)
+    collection = dor_item.adapt_to(Hydrus::Collection)
+    collection.remove_relationship :has_model, 'info:fedora/afmodel:Dor_Collection'
+    collection.assert_content_model
+    collection.save
+    redirect_to edit_polymorphic_path(collection)
+  end
+
   def update
     @document_fedora.update_attributes(params["hydrus_collection"]) if params.has_key?("hydrus_collection")
     @document_fedora.descMetadata.insert_related_item if params.has_key?(:add_link)
@@ -54,4 +64,11 @@ class HydrusCollectionsController < ApplicationController
       want.js 
     end
   end
+
+  def create_apo(user)
+    # TODO: should be a protected method, but not sure how to unit test it.
+    # TODO: put the Ur-APO druid in config file.
+    return register_dor_object(user, 'adminPolicy', 'druid:oo000oo0000')
+  end
+
 end
