@@ -6,7 +6,7 @@
       <div class="box-header">Collection Settings</div>
       <dl class="dl-horizontal">
         <dt>Owner:</dt>
-        <dd><font color=red>#TODO (APO?)</font></dd>
+        <dd><%= @document_fedora.manager %></dd>
         <dt>Embargo:</dt>
         <dd><%= @document_fedora.embargo %></dd>
         <dt>Visibility:</dt>
@@ -75,12 +75,13 @@
         </thead>
         <tbody>
           <!-- iterate through collection items  -->
+          <!-- Can use Hydrus::Item.milestones.last to get status. Speak with Lynn. -->
           <% @document_fedora.hydrus_items.each do |item| %>
             <tr class="document <%= cycle("even","odd") %>">
               <td><%= link_to(item.title.first, polymorphic_path(item)) %></td>
               <td><font color=red>#TODO</font></td>
               <td><font color=red><%= item.object_type %></font></td>
-              <td><font color=red>#TODO Published?</font></td>
+              <td><font color=red>#TODO</font></td>
               <td><%= hydrus_format_date(item.submit_time) %></td>
             </tr>
           <% end %>

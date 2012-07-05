@@ -8,7 +8,7 @@ class Hydrus::Collection < Hydrus::GenericObject
   end
 
   # These getters and setters are needed because the ActiveFedora delegate()
-  # does not work when we need to delegate to the APO.
+  # does not work when we need to delegate through to the APO.
 
   def embargo *args
     apo.embargo *args
@@ -32,6 +32,14 @@ class Hydrus::Collection < Hydrus::GenericObject
 
   def license= *args
     apo.license= *args
+  end
+
+  def manager *args
+    apo.manager *args
+  end
+
+  def manager= *args
+    apo.manager= *args
   end
 
 end
