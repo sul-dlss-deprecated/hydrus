@@ -34,8 +34,13 @@ class HydrusCollectionsController < ApplicationController
   end
 
   def create_apo(user)
-    return Hydrus::GenericObject.register_dor_object(
-      user, 'adminPolicy', Dor::Config.ur_apo_druid)
+    args = [user, 'adminPolicy', Dor::Config.ur_apo_druid]
+    apo  = Hydrus::GenericObject.register_dor_object(*args)
+    apo  = apo.adapt_to(Hydrus::AdminPolicyObject)
+    apo.remove_relationship :has_model, 'info:fedora/afmodel:Dor_AdminPolicyObject'
+    apo.assert_content_model
+    apo.save
+    return apo
   end
 
   def update
