@@ -41,5 +41,8 @@ Dor::Config.configure do
   solrizer.url yaml['url']
     
   workflow.url 'http://lyberservices-dev.stanford.edu/workflow/'
-  
+
+  # TODO: this will probably need to vary by environment.
+  ur_apo_druid 'druid:oo000oo0000'
+
 end

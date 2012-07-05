@@ -6,8 +6,8 @@ class HydrusCollectionsController < ApplicationController
   include Hydrus::AccessControlsEnforcement
 
   before_filter :enforce_access_controls
-  before_filter :setup_attributes
-  
+  before_filter :setup_attributes, :except => :new
+
   def index
     flash[:warning]="You need to log in."
     redirect_to new_user_session_path
@@ -25,12 +25,17 @@ class HydrusCollectionsController < ApplicationController
 
   def new
     apo = create_apo(current_user)
-    dor_item   = register_dor_object(current_user, 'collection', apo.pid)
+    dor_item = Hydrus::GenericObject.register_dor_object(current_user, 'collection', apo.pid)
     collection = dor_item.adapt_to(Hydrus::Collection)
     collection.remove_relationship :has_model, 'info:fedora/afmodel:Dor_Collection'
     collection.assert_content_model
     collection.save
     redirect_to edit_polymorphic_path(collection)
+  end
+
+  def create_apo(user)
+    return Hydrus::GenericObject.register_dor_object(
+      user, 'adminPolicy', Dor::Config.ur_apo_druid)
   end
 
   def update
@@ -55,20 +60,16 @@ class HydrusCollectionsController < ApplicationController
       }
     end
   end
-  
+
   def destroy_value
     @document_fedora.descMetadata.remove_node(params[:term], params[:term_index])
     @document_fedora.save
     respond_to do |want|
       want.html {redirect_to :back}
-      want.js 
+      want.js
     end
   end
 
-  def create_apo(user)
-    # TODO: should be a protected method, but not sure how to unit test it.
-    # TODO: put the Ur-APO druid in config file.
-    return register_dor_object(user, 'adminPolicy', 'druid:oo000oo0000')
-  end
+  protected :create_apo
 
 end

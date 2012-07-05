@@ -60,4 +60,23 @@ class Hydrus::GenericObject < Dor::Item
     }
   end
 
+  # Registers an object in Dor, and returns it.
+  def self.register_dor_object(*args)
+    params = self.dor_registration_params(*args)
+    return Dor::RegistrationService.register_object(params)
+  end
+
+  private
+
+  # Returns a hash of info needed to register a Dor object.
+  def self.dor_registration_params(user_string, object_type, apo_pid)
+    return {
+      :object_type  => object_type,
+      :admin_policy => apo_pid,
+      :source_id    => { "Hydrus" => "#{object_type}-#{user_string}-#{Time.now}" },
+      :label        => "Hydrus",
+      :tags         => ["Project : Hydrus"]
+    }
+  end
+
 end

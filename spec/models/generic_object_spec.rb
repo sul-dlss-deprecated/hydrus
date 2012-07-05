@@ -47,4 +47,25 @@ describe Hydrus::GenericObject do
     ri.url.should == ''
   end
 
+  describe "registration" do
+
+    before(:each) do
+      @args = %w(whobar item somePID)
+      @drp = Hydrus::GenericObject.dor_registration_params(*@args)
+    end
+
+    it "should be able to exercise dor_registration_params() and get a Hash" do
+      @drp.should be_kind_of Hash
+      @drp[:admin_policy].should == @args.last
+      @drp.should include(:source_id)
+    end
+
+    it "should be able to exercise register_dor_object(), using stubbed call to Dor" do
+      expectation = Dor::RegistrationService.should_receive(:register_object)
+      expectation.with(hash_including(*@drp.keys))
+      Hydrus::GenericObject.register_dor_object(nil, nil, nil)
+    end
+
+  end
+
 end
