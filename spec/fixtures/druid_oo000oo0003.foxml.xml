@@ -69,7 +69,7 @@
               <url>http://ssds.stanford.edu/</url>        
             </location>            
           </relatedItem>
-          <!-- <accessCondition displayLabel="Terms of Use" type="useAndReproduction">Data cannot be used to identify individuals. Data cannot be redistributed for a fee. Please inform the collection contact by email about research or other work derived from use of this data, and please use the preferred citation as provided.</accessCondition> -->
+          <note type="contact">archivist1@example.com</note>
         </mods>
       </foxml:xmlContent>
     </foxml:datastreamVersion>

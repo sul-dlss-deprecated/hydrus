@@ -51,7 +51,8 @@ class Hydrus::DescMetadataDS < ActiveFedora::NokogiriDatastream
     end
 
     t.preferred_citation :path => 'note',  :attributes => { :type => "preferred citation" }
-    t.related_citation :path => 'note',  :attributes => { :type => "citation/reference" }
+    t.related_citation   :path => 'note',  :attributes => { :type => "citation/reference" }
+    t.contact            :path => 'note',  :attributes => { :type => "contact" }
 
   end
 
@@ -116,6 +117,7 @@ class Hydrus::DescMetadataDS < ActiveFedora::NokogiriDatastream
         }
         xml.note(:type => "preferred citation")
         xml.note(:type => "citation/reference")
+        xml.note(:type => "contact")
       }
     }
   end

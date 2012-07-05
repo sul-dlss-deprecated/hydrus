@@ -44,6 +44,8 @@ describe Hydrus::DescMetadataDS do
           </subject>
           <note type="preferred citation">pref_cite outer</note>
           <note type="citation/reference">related_cite outer</note>
+          <note type="contact">foo@bar.com</note>
+          <note type="contact">blah@bar.com</note>
         </mods>
       EOF
       @dsdoc = Hydrus::DescMetadataDS.from_xml(dsxml)
@@ -51,20 +53,19 @@ describe Hydrus::DescMetadataDS do
     
     it "should get correct values from OM terminology" do
       tests = [
-        [[:originInfo, :dateOther],          'Nov 7'],
-        [:abstract,                          'abstract content'],
-        [:title,                             'Learn VB in 21 Days'],
-        [[:name, :namePart],                 'Angus'],
-        [[:name, :role, :roleTerm],          'guitar'],
-        [[:relatedItem, :titleInfo, :title], 'Learn VB in 1 Day'],
-        [[:relatedItem, :location, :url],    'http://example.com'],
+        [[:originInfo, :dateOther],          ['Nov 7']],
+        [[:abstract],                        ['abstract content']],
+        [[:title],                           ['Learn VB in 21 Days']],
+        [[:name, :namePart],                 ['Angus']],
+        [[:name, :role, :roleTerm],          ['guitar']],
+        [[:relatedItem, :titleInfo, :title], ['Learn VB in 1 Day']],
+        [[:relatedItem, :location, :url],    ['http://example.com']],
         [[:subject, :topic],                 ['divorce', 'marriage']],
-        [:preferred_citation,                'pref_cite outer'],
-        [:related_citation,                  'related_cite outer'],
+        [[:preferred_citation],              ['pref_cite outer']],
+        [[:related_citation],                ['related_cite outer']],
+        [[:contact],                         %w(foo@bar.com blah@bar.com)],
       ]
       tests.each do |terms, exp|
-        terms = [terms] unless terms.class == Array
-        exp   = [exp]   unless exp.class == Array
         @dsdoc.term_values(*terms).should == exp
       end
     end
@@ -142,6 +143,7 @@ describe Hydrus::DescMetadataDS do
           </subject>
           <note type="preferred citation"/>
           <note type="citation/reference"/>
+          <note type="contact"/>
         </mods>
       )
       exp_xml = noko_doc(exp_xml)
