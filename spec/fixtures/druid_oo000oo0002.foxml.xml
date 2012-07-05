@@ -86,6 +86,14 @@
             <fedora:isMemberOf rdf:resource="info:fedora/druid:oo000oo0003" />
             <fedora:isMemberOfCollection rdf:resource="info:fedora/druid:oo000oo0003" />
           </relationships>
+          <hydrus>
+            <depositStatus>open</depositStatus>
+            <reviewRequired>yes</reviewRequired>
+            <termsOfDeposit>By depositing stuff you agree.</termsOfDeposit>
+            <embargo option="varies">1 year</embargo>
+            <release option="fixed">stanford</release>
+            <license option="fixed">cc-by</license>
+          </hydrus>
         </administrativeMetadata>
       </foxml:xmlContent>
     </foxml:datastreamVersion>
