@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Hydrus::RoleMetadataDS do
 
   before(:all) do
-    @rmd_start = '<?xml version="1.0"?><roleMetadata>'
+    @rmd_start = '<roleMetadata>'
     @rmd_end   = '</roleMetadata>'
   end
 
