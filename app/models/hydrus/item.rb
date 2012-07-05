@@ -15,7 +15,7 @@ class Hydrus::Item < Hydrus::GenericObject
   delegate :keywords, :to => "descMetadata", :at => [:subject, :topic]
   delegate :person, :to => "descMetadata", :at => [:name, :namePart]
   delegate :person_role, :to => "descMetadata", :at => [:name, :role, :roleTerm]
-  
+
   def actors
     @actors ||= descMetadata.find_by_terms(:name).collect {|name_node| Hydrus::Actor.new(:name=>name_node.at_css('namePart').content,:role=>name_node.at_css('role roleTerm').content)}
   end
