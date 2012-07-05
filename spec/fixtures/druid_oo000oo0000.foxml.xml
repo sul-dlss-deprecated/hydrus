@@ -13,6 +13,17 @@
     <foxml:property NAME="info:fedora/fedora-system:def/view#lastModifiedDate"
       VALUE="2012-07-03T21:23:13.584Z"/>
   </foxml:objectProperties>
+  <foxml:datastream ID="RELS-EXT" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
+    <foxml:datastreamVersion ID="RELS-EXT.0" LABEL="RDF Statements about this object" CREATED="2011-07-25T20:32:10.617Z" MIMETYPE="application/rdf+xml" FORMAT_URI="info:fedora/fedora-system:FedoraRELSExt-1.0" SIZE="424">
+      <foxml:xmlContent>
+        <rdf:RDF xmlns:fedora-model="info:fedora/fedora-system:def/model#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rel="info:fedora/fedora-system:def/relations-external#" xmlns:hydra="http://projecthydra.org/ns/relations#">
+          <rdf:Description rdf:about="info:fedora/druid:oo000oo0000">
+            <hasModel xmlns="info:fedora/fedora-system:def/model#" rdf:resource="info:fedora/afmodel:Dor_AdminPolicyObject" />
+          </rdf:Description>
+        </rdf:RDF>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
   <foxml:datastream ID="AUDIT" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
     <foxml:datastreamVersion ID="AUDIT.0" LABEL="Audit Trail for this object"
       CREATED="2011-04-18T18:18:53.666Z" MIMETYPE="text/xml"
