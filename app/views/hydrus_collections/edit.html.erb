@@ -62,6 +62,22 @@
       <%= button_tag("Add another link", :name=>"add_link", :"data-attribute" => "add_link", :id=>"add_link", :class=>"btn", :value=>@document_fedora.related_items.length) %>
     </div>
   </div>  
+
+  <%= hydrus_form_header {"Release and visibility of content"} %>
+  <div id="content-visibility" class="destroy-group">
+    <font color=red>#TODO partial for content visibility</font>
+  </div>
+
+  <%= hydrus_form_header {"License"} %>
+  <div id="license" class="destroy-group">
+    <font color=red>#TODO partial for license</font>
+  </div>
+
+  <%= hydrus_form_header {"Allow others to contribute to this collection"} %>
+  <div id="role-management" class="destroy-group">
+    <font color=red>#TODO partial for role management</font>
+  </div>
+
   <% render(
        :partial => "hydra/permissions/index", 
        :locals  => { :document => @document_fedora, :asset_id => params[:id] }
