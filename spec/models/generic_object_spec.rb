@@ -39,6 +39,16 @@ describe Hydrus::GenericObject do
     @hi.discover_access.should == ""
   end
 
+  it "can exercise object_type()" do
+    fake_imd = double('fake_imd', :objectType => [123,456])
+    @hi.should_receive(:identityMetadata).and_return(fake_imd)
+    @hi.object_type.should == 123
+  end
+
+  it "can exercise url()" do
+    @hi.url.should == "http://purl.stanford.edu/__DO_NOT_USE__"
+  end
+
   it "can exercise related_items()" do
     ris = @hi.related_items
     ris.size.should == 1

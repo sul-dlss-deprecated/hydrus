@@ -22,7 +22,7 @@ class Hydrus::GenericObject < Dor::Item
     :control_group => 'M')
 
   def object_type
-      identityMetadata.objectType.first
+    identityMetadata.objectType.first
   end
   
   def clicked_publish?
