@@ -1,0 +1,24 @@
+Confirm: When a Hydrus item is created, it should get a roleMetadata datastream
+with the one item-depositor role for the current logged-in user [from Lynn].
+
+Test to exercise the creation of a new Item.
+
+Test to exercise the creation of a new Collection.
+
+Convert desc_metadata_ds.rb to use approach similar to that in role_metadata_ds.rb.
+
+OM tests: when we write using OM terms, confirm that the change goes to correct place in XML.
+
+Test our delegate() methods in GenericObject, Item, and AdminPolicyObject).
+
+Assess Item and Collection controllers for test coverage.
+
+ObjectFiles controller: destroy() lacks testing.
+
+AtLeastOneValidator: is the logic correct?
+
+role_metadata_ds.rb: test remove_node(), but need more clarity regarding the need behavior.
+
+DEPRECATION WARNING: Hydra::FileAssetsHelper has been moved ...
+
+DEPRECATION WARNING: Use RbConfig instead of obsolete and deprecated Config.
