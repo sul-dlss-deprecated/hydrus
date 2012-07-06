@@ -19,8 +19,7 @@ module ApplicationHelper
   end
 
   def render_head_content
-    render_extra_head_content +
-    content_for(:head)
+    render_extra_head_content + content_for(:head)
   end
 
   def hydrus_signin_link
