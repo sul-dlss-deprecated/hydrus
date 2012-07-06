@@ -8,13 +8,13 @@ describe("Collection edit", :type => :request, :integration => true) do
     @hc    = Hydrus::Collection.find @druid
   end
 
-  it "If not logged in, should be redirected to sign-in page" do
+  it "if not logged in, should be redirected to sign-in page" do
     logout
     visit edit_polymorphic_path(@hc)
     current_path.should == new_user_session_path
   end
 
-  it "Can edit some Collection content" do
+  it "can edit some Collection content" do
     new_abstract  = 'foobarfubb'
     orig_abstract = @hc.abstract.first.strip
     new_contact   = 'ted@gonzo.com'
@@ -51,7 +51,7 @@ describe("Collection edit", :type => :request, :integration => true) do
     page.should_not have_content(new_contact)
   end
   
-  it "Can edit and delete multi-valued fields" do
+  it "can edit and delete multi-valued fields" do
     new_url = "http://library.stanford.edu"
     new_label = "Library Website"
     new_url_field = "hydrus_collection_related_item_url_2"
@@ -105,6 +105,37 @@ describe("Collection edit", :type => :request, :integration => true) do
     page.should_not have_css("##{new_label_field}")
     page.should_not have_css("##{new_delete_link}")
 
+  end
+
+  it "can edit APO license content" do
+    # Setup and login.
+    orig_license        = @hc.license         # cc-by  >  odc-odbl
+    orig_license_option = @hc.license_option  # fixed  >  varies
+    new_license         = 'odc-odbl'
+    new_license_option  = 'varies'
+    login_as_archivist1
+    # Visit edit page, and confirm content.
+    visit edit_polymorphic_path(@hc)
+    current_path.should == edit_polymorphic_path(@hc)
+    page.should have_checked_field('hydrus_collection_license_option_fixed')
+    page.should     have_xpath("//input[@value='#{orig_license}']")
+    page.should_not have_xpath("//input[@value='#{new_license}']")
+    # Make changes, save, and confirm redirect.
+    choose('hydrus_collection_license_option_varies')
+    fill_in("hydrus_collection_license", :with => new_license)
+    click_button "Save"
+    current_path.should == polymorphic_path(@hc)
+    # Visit view-page, and confirm that changes occured.
+    visit polymorphic_path(@hc)
+    find("div.collection-settings").should have_content(new_license)
+    # Undo changes, and confirm.
+    visit edit_polymorphic_path(@hc)
+    current_path.should == edit_polymorphic_path(@hc)
+    choose('hydrus_collection_license_option_fixed')
+    fill_in("hydrus_collection_license", :with => orig_license)
+    click_button "Save"
+    current_path.should == polymorphic_path(@hc)
+    find("div.collection-settings").should have_content(orig_license)
   end
 
 end
