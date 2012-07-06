@@ -16,7 +16,9 @@ describe("Collection edit", :type => :request, :integration => true) do
 
   it "Can edit some Collection content" do
     new_abstract  = 'foobarfubb'
-    orig_abstract = @hc.abstract.first
+    orig_abstract = @hc.abstract.first.strip
+    new_contact   = 'ted@gonzo.com'
+    orig_contact  = @hc.contact.strip
 
     login_as_archivist1
 
@@ -24,19 +26,29 @@ describe("Collection edit", :type => :request, :integration => true) do
     current_path.should == edit_polymorphic_path(@hc)
 
     page.should have_content(orig_abstract)
+    page.should have_xpath("//input[@value='#{orig_contact}']")
+
     page.should_not have_content(new_abstract)
+    page.should have_no_xpath("//input[@value='#{new_contact}']")
     fill_in "Description", :with => new_abstract
+    fill_in "hydrus_collection_contact", :with => new_contact
     click_button "Save"
 
     current_path.should == polymorphic_path(@hc)
     visit polymorphic_path(@hc)
     page.should have_content(new_abstract)
 
-    # Clean up.
+    # Clean up and confirm.
     visit edit_polymorphic_path(@hc)
     current_path.should == edit_polymorphic_path(@hc)
     fill_in "Description", :with => orig_abstract
+    fill_in "hydrus_collection_contact", :with => orig_contact
     click_button "Save"
+    current_path.should == polymorphic_path(@hc)
+    page.should have_content(orig_abstract)
+    page.should have_content(orig_contact)
+    page.should_not have_content(new_abstract)
+    page.should_not have_content(new_contact)
   end
   
   it "Can edit and delete multi-valued fields" do

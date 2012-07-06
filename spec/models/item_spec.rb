@@ -136,7 +136,7 @@ eos
     end
   end
 
-  describe "#remove_to_collection" do
+  describe "#remove_from_collection" do
     subject { Hydrus::Item.new }
 
     it "should add 'set' and 'collection' relations" do
