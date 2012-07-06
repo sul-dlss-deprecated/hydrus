@@ -15,12 +15,36 @@ describe("Collection view", :type => :request, :integration => true) do
     current_path.should == new_user_session_path
   end
 
-  it "Some of the expected info is displayed" do
+  it "should show info form the Collection" do
     exp_content = [
       "SSDS Social Science Data Collection",
       "Description",
+    ]
+    login_as_archivist1
+    visit polymorphic_path(@hc)
+    current_path.should == polymorphic_path(@hc)
+    exp_content.each do |exp|
+      page.should have_content(exp)
+    end
+  end
+
+  it "should show info from the Items of the Collection" do
+    exp_content = [
       "How Couples Meet and Stay Together",
       "Ethnic Collective Action",
+    ]
+    login_as_archivist1
+    visit polymorphic_path(@hc)
+    current_path.should == polymorphic_path(@hc)
+    exp_content.each do |exp|
+      page.should have_content(exp)
+    end
+  end
+
+  it "should show some APO info" do
+    exp_content = [
+      "cc-by",
+      "1 year",
     ]
     login_as_archivist1
     visit polymorphic_path(@hc)
