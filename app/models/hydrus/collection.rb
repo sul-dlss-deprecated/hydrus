@@ -1,5 +1,13 @@
 class Hydrus::Collection < Hydrus::GenericObject
 
+  # Any time we save a Collection, save its corresponding APO.
+
+  before_save :save_apo
+
+  def save_apo
+    apo.save
+  end
+
   def hydrus_items
     query = %Q(is_member_of_collection_s:"info:fedora/#{pid}")
     resp  = Blacklight.solr.find('q'.to_sym => query)
@@ -32,6 +40,14 @@ class Hydrus::Collection < Hydrus::GenericObject
 
   def license= *args
     apo.license= *args
+  end
+
+  def license_option *args
+    apo.license_option *args
+  end
+
+  def license_option= *args
+    apo.license_option= *args
   end
 
   def manager *args
