@@ -9,6 +9,8 @@ Test to exercise the creation of a new Collection.
 
 Convert desc_metadata_ds.rb to use approach similar to that in role_metadata_ds.rb.
 
+collection.rb: unit test the getters/setters delegation to the APO.
+
 OM tests: when we write using OM terms, confirm that the change goes to correct place in XML.
 
 Test our delegate() methods in GenericObject, Item, and AdminPolicyObject).
