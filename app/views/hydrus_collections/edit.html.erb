@@ -72,17 +72,10 @@
   <div id="license" class="destroy-group">
     After its release date, items in this collections can be discovered and downloaded by:
     <%= hydrus_form_value do %>
-      <%- 
-        buttons = {
-          'none'   => 'no license -- blah blah',
-          'varies' => 'varies -- blah blah',
-          'fixed'  => 'required license -- blah, blah',
-        }
-        buttons.each do |k, lic_type| 
-      -%>
-        <%= f.radio_button 'license_option', k %>
-        <%= f.label        'license_option', lic_type, :value => lic_type %>
-      <%- end -%>
+      <% license_types.each do |lic_opt, lic_text| %>
+        <%= f.radio_button 'license_option', lic_opt %>
+        <%= f.label        'license_option', lic_text, :value => lic_text %>
+      <% end %>
     <% end %>
 
     <%# TODO: convert to drop-down, conditional on radio button choice %>

@@ -1,3 +1,5 @@
+Collection Edit: convert license test to drop-down, conditional on radio button choice.
+
 Confirm: When a Hydrus item is created, it should get a roleMetadata datastream
 with the one item-depositor role for the current logged-in user [from Lynn].
 

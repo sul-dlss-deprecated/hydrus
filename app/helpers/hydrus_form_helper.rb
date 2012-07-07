@@ -30,7 +30,27 @@ module HydrusFormHelper
   end
   
   def people_roles
-    ["Author", "Creator", "Collector", "Contributing Author", "Distributor", "Principal Investigator", "Publisher", "Sponsor"]
+    return [
+      "Author",
+      "Creator",
+      "Collector",
+      "Contributing Author",
+      "Distributor",
+      "Principal Investigator",
+      "Publisher",
+      "Sponsor",
+    ]
   end
-  
+ 
+  # Returns a hash of info needed for licenses in the APO.
+  # Keys correspond to the license_option in the OM terminology.
+  # Values are displayed in the web form.
+  def license_types
+    return {
+      'none'   => 'no license -- blah blah',
+      'varies' => 'varies -- blah blah',
+      'fixed'  => 'required license -- blah, blah',
+    }
+  end
+
 end
