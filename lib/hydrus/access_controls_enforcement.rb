@@ -19,6 +19,7 @@ module Hydrus::AccessControlsEnforcement
     solr_parameters[:fq] ||= [
       '-has_model_s:"info:fedora/afmodel:Dor_AdminPolicyObject"',
       '-has_model_s:"info:fedora/afmodel:Hydrus_AdminPolicyObject"',
+      '-has_model_s:"info:fedora/afmodel:hydrus"',  # TODO: temporary hack.
     ]
   end
 
