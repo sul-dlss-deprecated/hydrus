@@ -1,11 +1,24 @@
-Collection Edit: convert license test to drop-down, conditional on radio button choice.
+# Temporary to-do list as MH and ND work through some needed model
+# changes and related tests.
 
-Confirm: When a Hydrus item is created, it should get a roleMetadata datastream
-with the one item-depositor role for the current logged-in user [from Lynn].
+
 
 Test to exercise the creation of a new Item.
 
 Test to exercise the creation of a new Collection.
+
+Collection edit: add functionality for other APO-dependent sections
+
+Set {:unique => true} for title, abstract, citation, contact. Modify tests,
+views, etc as needed. Also see Consul pages (Collection and Item description)
+for other unique fields.
+
+==========
+
+Collection Edit: convert license test to drop-down, conditional on radio button choice.
+
+Confirm: When a Hydrus item is created, it should get a roleMetadata datastream
+with the one item-depositor role for the current logged-in user [from Lynn].
 
 Convert desc_metadata_ds.rb to use approach similar to that in role_metadata_ds.rb.
 
