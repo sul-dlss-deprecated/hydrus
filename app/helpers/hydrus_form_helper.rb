@@ -47,9 +47,9 @@ module HydrusFormHelper
   # Values are displayed in the web form.
   def license_types
     return {
-      'none'   => 'no license -- blah blah',
-      'varies' => 'varies -- blah blah',
-      'fixed'  => 'required license -- blah, blah',
+      'none'   => 'no license -- content creator retains exclusive rights',
+      'varies' => 'varies -- select a default below; contributor may change it for each item',
+      'fixed'  => 'required license -- apply the selected license to all items in the collection',
     }
   end
 
