@@ -38,9 +38,12 @@ describe HydrusCollectionsController do
   end
 
   it "should be able to create an APO object, whose APO is the Ur-APO" do
+    # TODO: this should be an integration test.
     apo = controller.send(:create_apo, 'foo@bar.com')
     apo.should be_kind_of Hydrus::AdminPolicyObject
     apo.admin_policy_object_ids.first.should == Dor::Config.ur_apo_druid
+    apo.delete
   end
+
 
 end
