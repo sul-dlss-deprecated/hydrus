@@ -36,7 +36,10 @@
     </table>
 
     <form class="form-horizontal">
-      <a class="btn disabled" href="#">Create a new collection</a>
+      <%= link_to(
+            "Create a new collection", 
+            new_polymorphic_path(Hydrus::Collection),
+            :class => 'btn') %>
     </form>
   </div>
 
