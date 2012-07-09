@@ -26,12 +26,28 @@ class Hydrus::Collection < Hydrus::GenericObject
     apo.embargo= *args
   end
 
+  def embargo_option *args
+    apo.embargo_option *args
+  end
+
+  def embargo_option= *args
+    apo.embargo_option= *args
+  end
+
   def release *args
     apo.release *args
   end
 
   def release= *args
     apo.release= *args
+  end
+
+  def release_option *args
+    apo.release_option *args
+  end
+
+  def release_option= *args
+    apo.release_option= *args
   end
 
   def license *args

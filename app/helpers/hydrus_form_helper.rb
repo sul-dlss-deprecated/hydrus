@@ -53,4 +53,20 @@ module HydrusFormHelper
     }
   end
 
+  def embargo_types
+    return {
+      'none'   => 'no delay -- release all items as soon as they are deposited',
+      'varies' => 'varies -- select a release date per item, from "now" to a maximum of <> after deposit',
+      'fixed'  => 'fixed -- delay release of all items for <> after deposit',
+    }
+  end
+
+  def release_types
+    return {
+      'everyone' => 'everyone -- all items in this collection will be public',
+      'varies'   => 'varies -- default is public, but you can choose to restrict some items to Stanford community',
+      'stanford' => 'Stanford community -- all items will be visible only to Stanford-authenticated users',
+    }
+  end
+
 end

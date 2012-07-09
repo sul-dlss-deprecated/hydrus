@@ -63,9 +63,32 @@
     </div>
   </div>  
 
-  <%= hydrus_form_header {"Release and visibility of content"} %>
+  <%= hydrus_form_header {"Release and visibility of content (part 1)"} %>
   <div id="content-visibility" class="destroy-group">
-    <font color=red>#TODO partial for content visibility</font>
+    Content in SDR is intended to be shared. You can impose a delay (embargo) before
+    content in this collection is released for public or Stanford-only discovery
+    and download.
+
+    <%= hydrus_form_value do %>
+      <% embargo_types.each do |emb_opt, emb_text| %>
+        <%= f.radio_button 'embargo_option', emb_opt %>
+        <%= f.label        'embargo_option', emb_text, :value => emb_text %>
+      <% end %>
+    <% end %>
+
+  </div>
+
+  <%= hydrus_form_header {"Release and visibility of content (part 2)"} %>
+  <div id="content-visibility-2" class="destroy-group">
+    After its release date, content in this collection can be discovered and downloaded by:
+
+    <%= hydrus_form_value do %>
+      <% release_types.each do |rel_opt, rel_text| %>
+        <%= f.radio_button 'release_option', rel_opt %>
+        <%= f.label        'release_option', rel_text, :value => rel_text %>
+      <% end %>
+    <% end %>
+
   </div>
 
   <%= hydrus_form_header {"License"} %>
