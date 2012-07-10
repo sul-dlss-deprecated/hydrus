@@ -66,12 +66,12 @@ class Hydrus::Collection < Hydrus::GenericObject
     apo.license_option= *args
   end
 
-  def manager *args
-    apo.manager *args
+  def collection_manager *args
+    apo.collection_manager *args
   end
 
-  def manager= *args
-    apo.manager= *args
+  def collection_manager= *args
+    apo.collection_manager= *args
   end
 
 end

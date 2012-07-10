@@ -20,10 +20,12 @@ class Hydrus::RoleMetadataDS < ActiveFedora::NokogiriDatastream
       t.group  :ref => [:group]
     end
     
-    t.manager    :ref => [:role], :attributes => {:type => 'manager'}
-    t.depositor  :ref => [:role], :attributes => {:type => 'depositor'}
-    t.reviewer   :ref => [:role], :attributes => {:type => 'reviewer'}
-    t.viewer     :ref => [:role], :attributes => {:type => 'viewer'}
+    t.collection_manager   :ref => [:role], :attributes => {:type => 'collection_manager'}
+    t.item_manager         :ref => [:role], :attributes => {:type => 'item_manager'}
+    t.collection_depositor :ref => [:role], :attributes => {:type => 'collection_depositor'}
+    t.item_depositor       :ref => [:role], :attributes => {:type => 'item_depositor'}
+    t.collection_reviewer  :ref => [:role], :attributes => {:type => 'collection_reviewer'}
+    t.collection_viewer    :ref => [:role], :attributes => {:type => 'collection_viewer'}
   end
 
   def to_solr(solr_doc=Hash.new, *args)
@@ -32,7 +34,7 @@ class Hydrus::RoleMetadataDS < ActiveFedora::NokogiriDatastream
       val = [actor.at_xpath('identifier/@type'),actor.at_xpath('identifier/text()')].join ':'
       add_solr_value(solr_doc, "apo_role_#{actor.name}_#{role_type}", val, :string, [:searchable, :facetable])
       add_solr_value(solr_doc, "apo_role_#{role_type}", val, :string, [:searchable, :facetable])
-      if ['manager','depositor'].include? role_type
+      if ['collection_manager','collection_depositor'].include? role_type
         add_solr_value(solr_doc, "apo_register_permissions", val, :string, [:searchable, :facetable])
       end
     end

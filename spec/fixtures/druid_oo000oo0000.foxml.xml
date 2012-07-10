@@ -178,7 +178,7 @@
       CREATED="2011-05-23T18:08:21.810Z" MIMETYPE="text/xml" SIZE="568">
       <foxml:xmlContent>
         <roleMetadata>
-          <role type="manager">
+          <role type="collection_manager">
             <person>
               <identifier type="sunetid">mbklein</identifier>
               <name>Klein, Michael</name>
@@ -188,7 +188,7 @@
               <name>McRae, Lynn</name>
             </person>
           </role>
-          <role type="depositor">
+          <role type="collection_depositor">
             <person>
               <identifier type="sunetid">labware</identifier>
               <name>Labware, Hydra</name>

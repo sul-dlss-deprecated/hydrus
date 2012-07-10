@@ -30,6 +30,7 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
   delegate(:release_option, :to => "administrativeMetadata",
            :at => [:hydrus, :release, :option], :unique => true)
 
-  delegate(:manager, :to => "roleMetadata", :at => [:manager, :person, :name])
+  delegate(:collection_manager, :to => "roleMetadata",
+           :at => [:collection_manager, :person, :name])
 
 end
