@@ -63,11 +63,11 @@
     </div>
   </div>  
 
-  <%= hydrus_form_header {"Release and visibility of content (part 1)"} %>
+  <%= hydrus_form_header {"Release and visibility of content"} %>
   <div id="content-visibility" class="destroy-group">
-    Content in SDR is intended to be shared. You can impose a delay (embargo) before
+    <p>Content in SDR is intended to be shared. You can impose a delay (embargo) before
     content in this collection is released for public or Stanford-only discovery
-    and download.
+    and download.</p>
 
     <%= hydrus_form_value do %>
       <% embargo_types.each do |emb_opt, emb_text| %>
@@ -76,11 +76,9 @@
       <% end %>
     <% end %>
 
-  </div>
+    <%= select_tag :embargo, options_for_select(embargo_terms, @document_fedora.embargo) -%>
 
-  <%= hydrus_form_header {"Release and visibility of content (part 2)"} %>
-  <div id="content-visibility-2" class="destroy-group">
-    After its release date, content in this collection can be discovered and downloaded by:
+    <p>After its release date, content in this collection can be discovered and downloaded by:</p>
 
     <%= hydrus_form_value do %>
       <% release_types.each do |rel_opt, rel_text| %>
@@ -93,7 +91,7 @@
 
   <%= hydrus_form_header {"License"} %>
   <div id="license" class="destroy-group">
-    After its release date, items in this collections can be discovered and downloaded by:
+    <p>After its release date, items in this collections can be discovered and downloaded by:</p>
     <%= hydrus_form_value do %>
       <% license_types.each do |lic_opt, lic_text| %>
         <%= f.radio_button 'license_option', lic_opt %>

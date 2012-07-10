@@ -1,11 +1,13 @@
 # Temporary to-do list as MH and ND work through some needed model
 # changes and related tests.
 
+Collection edit: add functionality for other APO-dependent sections
+  # it "qqq can edit APO embargo content"
 
+Collection edit tests: the selected field names should be driven by fixture
+content, not hard-coded
 
 Test to exercise the creation of a new Collection.
-
-Collection edit: add functionality for other APO-dependent sections
 
 Set {:unique => true} for title, abstract, citation, contact. Modify tests,
 views, etc as needed. Also see Consul pages (Collection and Item description)

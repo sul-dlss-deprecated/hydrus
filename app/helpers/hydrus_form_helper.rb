@@ -69,4 +69,13 @@ module HydrusFormHelper
     }
   end
 
+  def embargo_terms
+    return [
+      '6 months',
+      '1 year',
+      '2 years',
+      '3 years',
+    ]
+  end
+
 end

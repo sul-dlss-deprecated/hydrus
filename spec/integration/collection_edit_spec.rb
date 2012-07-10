@@ -138,4 +138,37 @@ describe("Collection edit", :type => :request, :integration => true) do
     find("div.collection-settings").should have_content(orig_license)
   end
 
+  it "qqq can edit APO embargo content" do
+    # Setup and login.
+    orig_embargo        = @hc.embargo         # 1 year > 3 years
+    orig_embargo_option = @hc.embargo_option  # varies > fixed
+    new_embargo         = '3 years'
+    new_embargo_option  = 'varies'
+    login_as_archivist1
+    # Visit edit page, and confirm content.
+    visit edit_polymorphic_path(@hc)
+    current_path.should == edit_polymorphic_path(@hc)
+    page.should have_checked_field('hydrus_collection_embargo_option_varies')
+    page.has_select?('embargo', :selected => orig_embargo).should == true
+    # Make changes, save, and confirm redirect.
+    choose('hydrus_collection_embargo_option_fixed')
+    select(new_embargo, :from => 'embargo')
+    click_button "Save"
+    current_path.should == polymorphic_path(@hc)
+    # Visit view-page, and confirm that changes occured.
+    visit polymorphic_path(@hc)
+
+    # TODO: get this to work!!
+    # find("div.collection-settings").should have_content(new_embargo)
+
+    # Undo changes, and confirm.
+    visit edit_polymorphic_path(@hc)
+    current_path.should == edit_polymorphic_path(@hc)
+    choose('hydrus_collection_embargo_option_varies')
+    select(orig_embargo, :from => 'embargo')
+    click_button "Save"
+    current_path.should == polymorphic_path(@hc)
+    find("div.collection-settings").should have_content(orig_embargo)
+  end
+
 end
