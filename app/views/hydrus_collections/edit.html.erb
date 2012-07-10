@@ -76,9 +76,13 @@
       <% end %>
     <% end %>
 
-    <%= select_tag :embargo, options_for_select(embargo_terms, @document_fedora.embargo) -%>
+    <%= hydrus_form_value do %>
+      <%# NOTE: was unable to get this working as a pulldown %>
+      <%#= select_tag :embargo, options_for_select(embargo_terms, @document_fedora.embargo) -%>
+      <%= f.text_field :embargo, :value => @document_fedora.embargo %>
+    <% end %>
 
-    <p>After its release date, content in this collection can be discovered and downloaded by:</p>
+    After its release date, content in this collection can be discovered and downloaded by:
 
     <%= hydrus_form_value do %>
       <% release_types.each do |rel_opt, rel_text| %>

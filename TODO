@@ -1,8 +1,7 @@
 # Temporary to-do list as MH and ND work through some needed model
 # changes and related tests.
 
-Collection edit: add functionality for other APO-dependent sections
-  # it "qqq can edit APO embargo content"
+Collection edit: add functionality for role metadata section
 
 Collection edit tests: the selected field names should be driven by fixture
 content, not hard-coded

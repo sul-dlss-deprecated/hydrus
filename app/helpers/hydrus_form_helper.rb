@@ -63,8 +63,10 @@ module HydrusFormHelper
 
   def release_types
     return {
-      'everyone' => 'everyone -- all items in this collection will be public',
+      'fixed' => 'everyone -- all items in this collection will be public',
       'varies'   => 'varies -- default is public, but you can choose to restrict some items to Stanford community',
+      # FIXME:  this is wrong per https://consul.stanford.edu/display/HYDRUS/Create+a+Collection+-+notes+on+APO-related+fields
+      #   as both the first and this last value have option attr set to fixed ... but changes are expected.  2012-07-09
       'stanford' => 'Stanford community -- all items will be visible only to Stanford-authenticated users',
     }
   end

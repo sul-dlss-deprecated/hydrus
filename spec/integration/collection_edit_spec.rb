@@ -14,7 +14,7 @@ describe("Collection edit", :type => :request, :integration => true) do
     current_path.should == new_user_session_path
   end
 
-  it "can edit some Collection content" do
+  it "can edit Collection descMetadata content" do
     new_abstract  = 'foobarfubb'
     orig_abstract = @hc.abstract.first.strip
     new_contact   = 'ted@gonzo.com'
@@ -138,37 +138,70 @@ describe("Collection edit", :type => :request, :integration => true) do
     find("div.collection-settings").should have_content(orig_license)
   end
 
-  it "qqq can edit APO embargo content" do
+  it "can edit APO embargo content" do
     # Setup and login.
     orig_embargo        = @hc.embargo         # 1 year > 3 years
     orig_embargo_option = @hc.embargo_option  # varies > fixed
     new_embargo         = '3 years'
     new_embargo_option  = 'varies'
     login_as_archivist1
+    
     # Visit edit page, and confirm content.
     visit edit_polymorphic_path(@hc)
     current_path.should == edit_polymorphic_path(@hc)
     page.should have_checked_field('hydrus_collection_embargo_option_varies')
-    page.has_select?('embargo', :selected => orig_embargo).should == true
+    #page.has_select?('embargo', :selected => orig_embargo).should == true
+    page.should     have_xpath("//input[@value='#{orig_embargo}']")
+    page.should_not have_xpath("//input[@value='#{new_embargo}']")
+    
     # Make changes, save, and confirm redirect.
     choose('hydrus_collection_embargo_option_fixed')
-    select(new_embargo, :from => 'embargo')
+    fill_in("hydrus_collection_embargo", :with => new_embargo)
     click_button "Save"
     current_path.should == polymorphic_path(@hc)
     # Visit view-page, and confirm that changes occured.
     visit polymorphic_path(@hc)
-
-    # TODO: get this to work!!
-    # find("div.collection-settings").should have_content(new_embargo)
+    find("div.collection-settings").should have_content(new_embargo)
 
     # Undo changes, and confirm.
     visit edit_polymorphic_path(@hc)
     current_path.should == edit_polymorphic_path(@hc)
     choose('hydrus_collection_embargo_option_varies')
-    select(orig_embargo, :from => 'embargo')
+    fill_in("hydrus_collection_embargo", :with => orig_embargo)
     click_button "Save"
     current_path.should == polymorphic_path(@hc)
     find("div.collection-settings").should have_content(orig_embargo)
   end
+  
+#  it "can edit APO release/visibility content" do
+#    # Setup and login.
+#    orig_visibility     = @hc.release         # stanford -> empty
+#    new_visibility         = 'world'
+#    orig_visibility_option = @hc.release_option  # fixed > varies
+#    login_as_archivist1
+#    
+#    # Visit edit page, and confirm content.
+#    visit edit_polymorphic_path(@hc)
+#    current_path.should == edit_polymorphic_path(@hc)
+#    page.should have_checked_field('hydrus_collection_release_option_fixed')
+#    #page.has_select?('embargo', :selected => orig_embargo).should == true
+#    page.should     have_xpath("//input[@value='#{orig_visibility}']")
+#    page.should_not have_xpath("//input[@value='#{new_visibility}']")
+#    
+#    # Make changes, save, and confirm that changes occured.
+#    choose('hydrus_collection_release_option_varies')
+#    click_button "Save"
+#    current_path.should == polymorphic_path(@hc)
+#    visit polymorphic_path(@hc)
+#    find("div.collection-settings").should have_content(new_visibility)
+#
+#    # Undo changes, and confirm.
+#    visit edit_polymorphic_path(@hc)
+#    current_path.should == edit_polymorphic_path(@hc)
+#    choose('hydrus_collection_release_option_fixed')
+#    click_button "Save"
+#    current_path.should == polymorphic_path(@hc)
+#    find("div.collection-settings").should have_content(orig_visibility)
+#  end
 
 end
