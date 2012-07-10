@@ -102,7 +102,7 @@
     <foxml:datastreamVersion ID="roleMetadata.0" LABEL="Role Metadata" CREATED="2011-07-05T20:47:26.359Z" MIMETYPE="text/xml" SIZE="405">
       <foxml:xmlContent>
         <roleMetadata objectId="druid:oo000oo0002">
-          <role type="collection_manager">
+          <role type="collection-manager">
              <person>
                 <identifier type="sunetid">brown</identifier>
                 <name>Brown, Malcolm</name>
@@ -112,7 +112,7 @@
                 <name>Black, Delores</name>
              </person>
           </role>
-          <role type="collection_depositor">
+          <role type="collection-depositor">
              <person>
                 <identifier type="sunetid">ggreen</identifier>
                 <name>Green, Greg</name>
@@ -122,13 +122,13 @@
                 <name>Conference attendees</name>
               </group>
           </role>
-          <role type="collection_reviewer">
+          <role type="collection-reviewer">
              <group>
                 <identifier type="workgroup">pasig:staff</identifier>
                 <name>Conference attendees</name>
              </group>
           </role>
-          <role type="collection_viewer">
+          <role type="collection-viewer">
              <group>
                 <identifier type="community">stanford</identifier>
                 <name>Stanford University Community</name>

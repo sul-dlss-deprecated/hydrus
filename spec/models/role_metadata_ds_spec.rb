@@ -10,7 +10,7 @@ describe Hydrus::RoleMetadataDS do
   before(:each) do
     xml = <<-EOF
       #{@rmd_start}
-        <role type="collection_manager">
+        <role type="collection-manager">
            <person>
               <identifier type="sunetid">brown</identifier>
               <name>Brown, Malcolm</name>
@@ -20,7 +20,7 @@ describe Hydrus::RoleMetadataDS do
               <name>Black, Delores</name>
            </person>
         </role>
-        <role type="collection_depositor">
+        <role type="collection-depositor">
            <person>
               <identifier type="sunetid">ggreen</identifier>
               <name>Green, Greg</name>
@@ -30,13 +30,13 @@ describe Hydrus::RoleMetadataDS do
               <name>Conference attendees</name>
             </group>
         </role>
-        <role type="collection_reviewer">
+        <role type="collection-reviewer">
            <group>
               <identifier type="workgroup">pasig:staff</identifier>
               <name>Conference attendees</name>
            </group>
         </role>
-        <role type="collection_viewer">
+        <role type="collection-viewer">
            <group>
               <identifier type="community">stanford</identifier>
               <name>Stanford University Community</name>
@@ -60,7 +60,7 @@ describe Hydrus::RoleMetadataDS do
       [[:collection_reviewer, :group, :identifier], %w(pasig:staff)],
       [[:collection_viewer, :person, :identifier], %w()],
       [[:collection_viewer, :group, :identifier], %w(stanford)],
-      [[:role, :type], %w(collection_manager collection_depositor collection_reviewer collection_viewer)],
+      [[:role, :type], %w(collection-manager collection-depositor collection-reviewer collection-viewer)],
       [[:person, :identifier, :type], %w(sunetid sunetid sunetid)],
       [[:group, :identifier, :type], %w(workgroup workgroup community)],
       [[:actor], %w()],
@@ -76,8 +76,8 @@ describe Hydrus::RoleMetadataDS do
     gw = '<group><identifier type="workgroup"/><name/></group>'
     exp_parts = [
       @rmd_start,
-      '<role type="collection_manager">',  gw, p,     '</role>',
-      '<role type="collection_reviewer">', gs, p, gs, '</role>',
+      '<role type="collection-manager">',  gw, p,     '</role>',
+      '<role type="collection-reviewer">', gs, p, gs, '</role>',
       @rmd_end,
     ]
     @exp_xml = noko_doc(exp_parts.join '')

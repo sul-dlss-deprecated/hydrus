@@ -2,9 +2,14 @@
 # changes and related tests.
 
 Collection edit: add functionality for role metadata section
+    administrator
+    collection-manager
+    item-depositor
 
 Collection edit tests: the selected field names should be driven by fixture
 content, not hard-coded
+
+Change <release> to <visibility>
 
 Test to exercise the creation of a new Collection.
 
@@ -12,9 +17,11 @@ Set {:unique => true} for title, abstract, citation, contact. Modify tests,
 views, etc as needed. Also see Consul pages (Collection and Item description)
 for other unique fields.
 
-Remove the hack from access_controls_enforcement.rb related to "hydrus" objects.
-
 ==========
+
+Improve hyphen toggling methods.
+
+Implement Item-level contact.
 
 Collection Edit: convert license test to drop-down, conditional on radio button choice.
 
@@ -40,3 +47,5 @@ role_metadata_ds.rb: test remove_node(), but need more clarity regarding the nee
 DEPRECATION WARNING: Hydra::FileAssetsHelper has been moved ...
 
 DEPRECATION WARNING: Use RbConfig instead of obsolete and deprecated Config.
+
+White space in text fields: trim leading and trailing; but preserve interior whitespace.
