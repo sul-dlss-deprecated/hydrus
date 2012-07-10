@@ -19,8 +19,6 @@ task :ci do
     Rake::Task['rspec'].invoke
     ENV['COVERAGE'] = original_coverage || 'false'
     Rake::Task['rspec_with_integration'].invoke
-    # as of 2012-05-23, no longer have cucumber tests
-    # Rake::Task['cucumber:ok'].invoke
   end
   raise "TEST FAILURES: #{error}" if error
   Rake::Task["doc:reapp"].invoke
@@ -29,6 +27,7 @@ end
 
 desc "Stops jetty, runs `rake ci`, and then starts jetty." 
 task :local_ci do 
+  Rails.env = "test"
   sub_tasks = %w(jetty:stop db:migrate ci jetty:start)
   sub_tasks.each { |st| Rake::Task[st].invoke }
 end
