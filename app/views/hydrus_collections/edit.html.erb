@@ -73,7 +73,7 @@
       <%= hydrus_form_value do %>
         <% embargo_types.each do |emb_opt, emb_text| %>
           <%= f.radio_button 'embargo_option', emb_opt %>
-          <%= f.label        'embargo_option', emb_text, :value => emb_text %>
+          <%= f.label        'embargo_option', emb_text, :value => emb_opt %>
         <% end %>
       <% end %>
 
@@ -89,7 +89,7 @@
       <%= hydrus_form_value do %>
         <% visibility_types.each do |vis_opt, vis_text| %>
           <%= f.radio_button 'visibility_option', vis_opt %>
-          <%= f.label        'visibility_option', vis_text, :value => vis_text %>
+          <%= f.label        'visibility_option', vis_text, :value => vis_opt %>
         <% end %>
       <% end %>
     </div>
@@ -103,7 +103,7 @@
       <%= hydrus_form_value do %>
         <% license_types.each do |lic_opt, lic_text| %>
           <%= f.radio_button 'license_option', lic_opt %>
-          <%= f.label        'license_option', lic_text, :value => lic_text %>
+          <%= f.label        'license_option', lic_text, :value => lic_opt %>
         <% end %>
       <% end %>
 

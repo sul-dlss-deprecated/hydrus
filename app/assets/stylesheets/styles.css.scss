@@ -338,3 +338,8 @@ noscript #item-actions, noscript #collection-actions {
 #hydra-attribution a, #hydra-attribution a:hover {
 	border-bottom: none;
 }
+
+label.radio-group { float:left; clear:none; display:block; padding: 2px 1em 0 0; }
+input.radio-group { float:left; clear:left; margin: 2px 9px 0 30px; }
+
+
