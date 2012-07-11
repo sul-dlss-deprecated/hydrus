@@ -86,13 +86,8 @@ class Hydrus::Collection < Hydrus::GenericObject
     apo.person_id= *args
   end
   
-# TODO: model for person's role is borked!  
-  def person_role *args
-    apo.person_id *args
-  end
-  
-  def person_role= *args
-    apo.person_id= *args
+  def get_person_role *args
+    apo.roleMetadata.get_person_role *args
   end
 
 end

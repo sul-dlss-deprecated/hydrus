@@ -2,10 +2,10 @@
 # changes and related tests.
 
 Collection edit: add functionality for role metadata section (and test!)
-  fix borked person_role stuff in collection_edit / apo model
-        need methods:   add_person?  remove_person?  add_person_with_role???
-  get remove_person working for little trash can
+  integration tests for collection/apo role metadata
+  need methods (and tests):   add_person?  remove_person?  add_person_with_role???
   get add_person button working (and tested)
+    get remove_person working for little trash can
     administrator --> app logic: role_.yml?
     collection-manager --> APO
     item-depositor --> item object

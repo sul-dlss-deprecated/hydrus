@@ -29,6 +29,10 @@ class Hydrus::RoleMetadataDS < ActiveFedora::NokogiriDatastream
     t.item_depositor       :ref => [:role], :attributes => {:type => 'item-depositor'}
   end
 
+  def get_person_role(person_id)
+    self.find_by_xpath("/roleMetadata/role[person/identifier='#{person_id}']/@type").text
+  end
+
   def to_solr(solr_doc=Hash.new, *args)
     self.find_by_xpath('/roleMetadata/role/*').each do |actor|
       role_type = dehyphenate_role(actor.parent['type'])

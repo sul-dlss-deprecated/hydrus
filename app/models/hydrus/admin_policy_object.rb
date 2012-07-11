@@ -35,11 +35,7 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
   delegate(:collection_manager, :to => "roleMetadata",
            :at => [:collection_manager, :person, :name])
 
-# TODO: this is borked, esp role!
   delegate(:person_id, :to => "roleMetadata",
            :at => [:role, :person, :identifier])
-
-  delegate(:person_role, :to => "roleMetadata",
-           :at => [:role, :type])
 
 end

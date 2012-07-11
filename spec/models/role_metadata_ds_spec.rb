@@ -70,6 +70,12 @@ describe Hydrus::RoleMetadataDS do
         @rmdoc.term_values(*terms).should == exp
       end
     end
+    
+    it "should be able to retrieve the role for a person identifier" do
+      @rmdoc.get_person_role('brown').should == "collection-manager"
+      @rmdoc.get_person_role('dblack').should == "collection-manager"
+      @rmdoc.get_person_role('ggreen').should == "collection-depositor"
+    end
 
     it "Should be able to insert new role, person, and group nodes" do
       p = '<person><identifier type="sunetid"/><name/></person>'
@@ -119,7 +125,7 @@ describe Hydrus::RoleMetadataDS do
     end
   end  # context APO object
   
-  context "item object role metadata" do
+  context "ITEM object role metadata" do
     before(:each) do
       xml = <<-EOF
         #{@rmd_start}
