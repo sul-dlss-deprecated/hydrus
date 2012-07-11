@@ -93,7 +93,7 @@
   </foxml:datastream>
   <foxml:datastream ID="workflows" STATE="A" CONTROL_GROUP="E" VERSIONABLE="false">
     <foxml:datastreamVersion ID="workflows.0" LABEL="Workflows" CREATED="2012-04-11T18:09:43.955Z" MIMETYPE="application/xml">
-      <foxml:contentLocation TYPE="URL" REF="https://lyberservices-dev.stanford.edu/workflow/dor/objects/druid:oo000oo0004/workflows" />
+      <foxml:contentLocation TYPE="URL" REF="http://sul-lyberservices-dev.stanford.edu/workflow/dor/objects/druid:oo000oo0004/workflows" />
     </foxml:datastreamVersion>
   </foxml:datastream>
 </foxml:digitalObject>
