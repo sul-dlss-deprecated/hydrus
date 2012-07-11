@@ -27,7 +27,9 @@ end
 
 desc "Stop jetty, run `rake ci`, db:migrate, start jetty." 
 task :local_ci do 
-  # Rails.env = "test"
+  # Rails.env = "test" causes error /spec/integration/item_edit_spec.rb:205
+  # Item edit editing related content w/o titles
+  #Rails.env = "test"
   sub_tasks = %w(jetty:stop db:migrate ci jetty:start)
   sub_tasks.each { |st| Rake::Task[st].invoke }
 end
