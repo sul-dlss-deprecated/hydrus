@@ -137,7 +137,7 @@ describe Hydrus::Item do
   describe "#remove_from_collection" do
     subject { Hydrus::Item.new }
 
-    it "should add 'set' and 'collection' relations" do
+    it "should remove 'set' and 'collection' relations" do
       subject.should_receive(:remove_relationship_by_name).with('set', 'info:fedora/collection_pid')
       subject.should_receive(:remove_relationship_by_name).with('collection', 'info:fedora/collection_pid')
       subject.remove_from_collection('collection_pid')
