@@ -69,44 +69,49 @@
     content in this collection is released for public or Stanford-only discovery
     and download.</p>
 
-    <%= hydrus_form_value do %>
-      <% embargo_types.each do |emb_opt, emb_text| %>
-        <%= f.radio_button 'embargo_option', emb_opt %>
-        <%= f.label        'embargo_option', emb_text, :value => emb_text %>
+    <div class="row">
+      <%= hydrus_form_value do %>
+        <% embargo_types.each do |emb_opt, emb_text| %>
+          <%= f.radio_button 'embargo_option', emb_opt %>
+          <%= f.label        'embargo_option', emb_text, :value => emb_text %>
+        <% end %>
       <% end %>
-    <% end %>
 
-    <%= hydrus_form_value do %>
-      <%# NOTE: was unable to get this working as a pulldown %>
-      <%#= select_tag :embargo, options_for_select(embargo_terms, @document_fedora.embargo) -%>
-      <%= f.text_field :embargo, :value => @document_fedora.embargo %>
-    <% end %>
-
-    After its release date, content in this collection can be discovered and downloaded by:
-
-    <%= hydrus_form_value do %>
-      <% visibility_types.each do |vis_opt, vis_text| %>
-        <%= f.radio_button 'visibility_option', vis_opt %>
-        <%= f.label        'visibility_option', vis_text, :value => vis_text %>
+      <%= hydrus_form_value do %>
+        <%# NOTE: was unable to get this working as a pulldown %>
+        <%#= select_tag :embargo, options_for_select(embargo_terms, @document_fedora.embargo) -%>
+        <%= f.text_field :embargo, :value => @document_fedora.embargo %>
       <% end %>
-    <% end %>
+    </div>
+
+    <p>After its release date, content in this collection can be discovered and downloaded by:</p>
+    <div class="row">
+      <%= hydrus_form_value do %>
+        <% visibility_types.each do |vis_opt, vis_text| %>
+          <%= f.radio_button 'visibility_option', vis_opt %>
+          <%= f.label        'visibility_option', vis_text, :value => vis_text %>
+        <% end %>
+      <% end %>
+    </div>
 
   </div>
 
   <%= hydrus_form_header {"License"} %>
   <div id="license" class="destroy-group">
     <p>After its release date, items in this collections can be discovered and downloaded by:</p>
-    <%= hydrus_form_value do %>
-      <% license_types.each do |lic_opt, lic_text| %>
-        <%= f.radio_button 'license_option', lic_opt %>
-        <%= f.label        'license_option', lic_text, :value => lic_text %>
+    <div class="row">
+      <%= hydrus_form_value do %>
+        <% license_types.each do |lic_opt, lic_text| %>
+          <%= f.radio_button 'license_option', lic_opt %>
+          <%= f.label        'license_option', lic_text, :value => lic_text %>
+        <% end %>
       <% end %>
-    <% end %>
 
-    <%# TODO: convert to drop-down, conditional on radio button choice %>
-    <%= hydrus_form_value do %>
-      <%= f.text_field :license, :value => @document_fedora.license %>
-    <%- end -%>
+      <%# TODO: convert to drop-down, conditional on radio button choice %>
+      <%= hydrus_form_value do %>
+        <%= f.text_field :license, :value => @document_fedora.license %>
+      <%- end -%>
+    </div>
   </div>
 
   <%= hydrus_form_header {"Allow others to contribute to this collection"} %>
