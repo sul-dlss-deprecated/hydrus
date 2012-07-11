@@ -72,8 +72,10 @@
     <div class="row">
       <%= hydrus_form_value do %>
         <% embargo_types.each do |emb_opt, emb_text| %>
-          <%= f.radio_button 'embargo_option', emb_opt %>
-          <%= f.label        'embargo_option', emb_text, :value => emb_opt %>
+          <div class="radio-group-container">
+            <%= f.radio_button 'embargo_option', emb_opt, :class => 'radio-group' %>
+            <%= f.label        'embargo_option', emb_text, :value => emb_opt, :class => 'radio-group' %>
+          </div>
         <% end %>
       <% end %>
 
@@ -88,8 +90,10 @@
     <div class="row">
       <%= hydrus_form_value do %>
         <% visibility_types.each do |vis_opt, vis_text| %>
-          <%= f.radio_button 'visibility_option', vis_opt %>
-          <%= f.label        'visibility_option', vis_text, :value => vis_opt %>
+          <div class="radio-group-container">
+            <%= f.radio_button 'visibility_option', vis_opt, :class => 'radio-group' %>
+            <%= f.label        'visibility_option', vis_text, :value => vis_opt, :class => 'radio-group' %>
+          </div>
         <% end %>
       <% end %>
     </div>
@@ -102,8 +106,10 @@
     <div class="row">
       <%= hydrus_form_value do %>
         <% license_types.each do |lic_opt, lic_text| %>
-          <%= f.radio_button 'license_option', lic_opt %>
-          <%= f.label        'license_option', lic_text, :value => lic_opt %>
+          <div class="radio-group-container">
+            <%= f.radio_button 'license_option', lic_opt, :class => 'radio-group' %>
+            <%= f.label        'license_option', lic_text, :value => lic_opt, :class => 'radio-group' %>
+          </div>
         <% end %>
       <% end %>
 
