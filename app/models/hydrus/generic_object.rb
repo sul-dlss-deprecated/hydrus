@@ -30,7 +30,7 @@ class Hydrus::GenericObject < Dor::Item
   end
   
   delegate :abstract, :to => "descMetadata"  
-  delegate :title, :to => "descMetadata"
+  delegate :title, :to => "descMetadata", :unique => true
   delegate :related_item_title, :to => "descMetadata", :at => [:relatedItem, :titleInfo, :title]
   delegate :related_item_url, :to => "descMetadata", :at => [:relatedItem, :location, :url]
   delegate :contact, :to => "descMetadata", :unique => true

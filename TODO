@@ -30,6 +30,8 @@ Test our delegate() methods in GenericObject, Item, and AdminPolicyObject).
 
 ----------
 
+local_ci task: figure out why setting Rails.env=true causes test failure on 2nd run.
+
 Validation for the new APO-related fields.
 
 AtLeastOneValidator: tests.

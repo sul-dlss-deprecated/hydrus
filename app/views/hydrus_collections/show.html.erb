@@ -1,4 +1,4 @@
-<%- @page_title = "#{@document_fedora.title.first} - #{application_name}" -%>
+<%- @page_title = "#{@document_fedora.title} - #{application_name}" -%>
 
 <% sidebar_items << capture do %>
 
@@ -42,7 +42,7 @@
 
   <dl class="dl-horizontal object-view">
 
-    <h3><%= @document_fedora.title.first %></h3>
+    <h3><%= @document_fedora.title %></h3>
 
     <dt>Description</dt>
     <dd><%= @document_fedora.abstract.first %></dd>
@@ -78,7 +78,7 @@
           <!-- Can use Hydrus::Item.milestones.last to get status. Speak with Lynn. -->
           <% @document_fedora.hydrus_items.each do |item| %>
             <tr class="document <%= cycle("even","odd") %>">
-              <td><%= link_to(item.title.first, polymorphic_path(item)) %></td>
+              <td><%= link_to(item.title, polymorphic_path(item)) %></td>
               <td><font color=red>#TODO</font></td>
               <td><font color=red><%= item.object_type %></font></td>
               <td><font color=red>#TODO</font></td>

@@ -1,4 +1,4 @@
-<%- @page_title = "Editing '#{@document_fedora.title.first}' - #{application_name}" -%>
+<%- @page_title = "Editing '#{@document_fedora.title}' - #{application_name}" -%>
 <%- object_type = @document_fedora.object_type -%>
 <% sidebar_items << capture do %>
   <%= render :partial => "actions_box", :locals => {:id=>"js"}%>
@@ -18,7 +18,7 @@
       <%= f.label :title, "Title of #{object_type}" %>
     <%- end -%>
     <%= hydrus_form_value(:class=>"short-textarea") do %>
-      <%= f.text_area :title, :value=>(@document_fedora.title.first || ""), :required => true %>
+      <%= f.text_area :title, :value=>(@document_fedora.title || ""), :required => true %>
     <%- end -%>
   </div>
   <div class="row">

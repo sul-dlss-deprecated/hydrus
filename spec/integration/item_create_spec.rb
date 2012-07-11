@@ -30,7 +30,7 @@ describe("Item create", :type => :request, :integration => true) do
     page.should have_content(@notice)
     # Get Item out of fedora and confirm that our edits were persisted.
     item = Hydrus::Item.find(druid)
-    item.title.first.should == 'title_foo'
+    item.title.should == 'title_foo'
     item.person.first.should == 'person_foo'
     item.abstract.first.should == 'abstract_foo'
     item.should be_instance_of Hydrus::Item

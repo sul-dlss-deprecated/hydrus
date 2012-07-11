@@ -18,7 +18,7 @@
       <tbody>
       <% @collections.each do |c| %>
         <tr>
-          <td><%= link_to(c.title.first, polymorphic_path(c)) %></td>
+          <td><%= link_to(c.title, polymorphic_path(c)) %></td>
           <td>owner</td>
           <td>11 published, 1 draft</td>
           <td>

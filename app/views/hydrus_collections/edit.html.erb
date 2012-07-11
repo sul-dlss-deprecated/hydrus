@@ -1,4 +1,4 @@
-<%- @page_title = "Editing '#{@document_fedora.title.first}' - #{application_name}" -%>
+<%- @page_title = "Editing '#{@document_fedora.title}' - #{application_name}" -%>
 <%- object_type = @document_fedora.object_type -%>
 <%- sidebar_items << capture do -%>
   <div class="well actions-box" id="collection-actions">
@@ -33,7 +33,7 @@
       <%= f.label :title, "Collection name" %>
     <%- end -%>
     <%= hydrus_form_value do %>
-      <%= f.text_field :title, :value => @document_fedora.title.first %>
+      <%= f.text_field :title, :value => @document_fedora.title %>
     <%- end -%>
   </div>
   <div class="row">
