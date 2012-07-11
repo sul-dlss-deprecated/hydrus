@@ -24,11 +24,11 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
   delegate(:license_option, :to => "administrativeMetadata",
            :at => [:hydrus, :license, :option], :unique => true)
 
-  delegate(:release, :to => "administrativeMetadata",
-           :at => [:hydrus, :release], :unique => true)
+  delegate(:visibility, :to => "administrativeMetadata",
+           :at => [:hydrus, :visibility], :unique => true)
 
-  delegate(:release_option, :to => "administrativeMetadata",
-           :at => [:hydrus, :release, :option], :unique => true)
+  delegate(:visibility_option, :to => "administrativeMetadata",
+           :at => [:hydrus, :visibility, :option], :unique => true)
 
   delegate(:collection_manager, :to => "roleMetadata",
            :at => [:collection_manager, :person, :name])

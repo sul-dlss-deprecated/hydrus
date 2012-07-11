@@ -9,9 +9,9 @@ class Hydrus::AdministrativeMetadataDS < ActiveFedora::NokogiriDatastream
       t.depositStatus
       t.reviewRequired
       t.termsOfDeposit
-      t.embargo { t.option :path => {:attribute => 'option'} }
-      t.release { t.option :path => {:attribute => 'option'} }
-      t.license { t.option :path => {:attribute => 'option'} }
+      t.embargo    { t.option :path => {:attribute => 'option'} }
+      t.visibility { t.option :path => {:attribute => 'option'} }
+      t.license    { t.option :path => {:attribute => 'option'} }
     end
   end
   
@@ -26,7 +26,7 @@ class Hydrus::AdministrativeMetadataDS < ActiveFedora::NokogiriDatastream
           xml.reviewRequired
           xml.termsOfDeposit
           xml.embargo
-          xml.release
+          xml.visibility
           xml.license
         }
       }

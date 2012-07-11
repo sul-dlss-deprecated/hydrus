@@ -61,7 +61,7 @@ module HydrusFormHelper
     }
   end
 
-  def release_types
+  def visibility_types
     return {
       'fixed' => 'everyone -- all items in this collection will be public',
       'varies'   => 'varies -- default is public, but you can choose to restrict some items to Stanford community',

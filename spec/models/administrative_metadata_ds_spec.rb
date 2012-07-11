@@ -16,7 +16,7 @@ describe Hydrus::AdministrativeMetadataDS do
           <reviewRequired>yes</reviewRequired>
           <termsOfDeposit>Blah-blah</termsOfDeposit>
           <embargo option="varies">1-year</embargo>
-          <release option="fixed">stanford</release>
+          <visibility option="fixed">stanford</visibility>
           <license option="fixed">cc-by</license>
         </hydrus>
       #{@amd_end}
@@ -31,7 +31,7 @@ describe Hydrus::AdministrativeMetadataDS do
       [[:hydrus, :termsOfDeposit], %w(Blah-blah)],
       [[:hydrus, :embargo], %w(1-year)],
       [[:hydrus, :embargo, :option], %w(varies)],
-      [[:hydrus, :release, :option], %w(fixed)],
+      [[:hydrus, :visibility, :option], %w(fixed)],
       [[:hydrus, :license, :option], %w(fixed)],
     ]
     tests.each do |terms, exp|
@@ -48,7 +48,7 @@ describe Hydrus::AdministrativeMetadataDS do
           <reviewRequired/>
           <termsOfDeposit/>
           <embargo/>
-          <release/>
+          <visibility/>
           <license/>
         </hydrus>
       #{@amd_end}

@@ -34,20 +34,20 @@ class Hydrus::Collection < Hydrus::GenericObject
     apo.embargo_option= *args
   end
 
-  def release *args
-    apo.release *args
+  def visibility *args
+    apo.visibility *args
   end
 
-  def release= *args
-    apo.release= *args
+  def visibility= *args
+    apo.visibility= *args
   end
 
-  def release_option *args
-    apo.release_option *args
+  def visibility_option *args
+    apo.visibility_option *args
   end
 
-  def release_option= *args
-    apo.release_option= *args
+  def visibility_option= *args
+    apo.visibility_option= *args
   end
 
   def license *args

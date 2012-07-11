@@ -91,7 +91,7 @@
             <reviewRequired>yes</reviewRequired>
             <termsOfDeposit>By depositing stuff you agree.</termsOfDeposit>
             <embargo option="varies">1 year</embargo>
-            <release option="fixed">stanford</release>
+            <visibility option="fixed">stanford</visibility>
             <license option="fixed">cc-by</license>
           </hydrus>
         </administrativeMetadata>

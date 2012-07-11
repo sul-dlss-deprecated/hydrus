@@ -85,9 +85,9 @@
     After its release date, content in this collection can be discovered and downloaded by:
 
     <%= hydrus_form_value do %>
-      <% release_types.each do |rel_opt, rel_text| %>
-        <%= f.radio_button 'release_option', rel_opt %>
-        <%= f.label        'release_option', rel_text, :value => rel_text %>
+      <% visibility_types.each do |vis_opt, vis_text| %>
+        <%= f.radio_button 'visibility_option', vis_opt %>
+        <%= f.label        'visibility_option', vis_text, :value => vis_text %>
       <% end %>
     <% end %>
 
