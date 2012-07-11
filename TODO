@@ -1,5 +1,4 @@
-# Temporary to-do list as MH and ND work through some needed model
-# changes and related tests.
+# Temporary to-do list as we work through varous model changes and related tests.
 
 Collection edit: add functionality for role metadata section (and test!)
   integration tests for collection/apo role metadata
@@ -29,6 +28,14 @@ OM tests: when we write tests using OM terms, confirm that the change goes to co
 
 Test our delegate() methods in GenericObject, Item, and AdminPolicyObject).
 
+----------
+
+Validation for the new APO-related fields.
+
+AtLeastOneValidator: tests.
+
+White space in text fields: trim leading and trailing; but preserve interior whitespace.
+
 ==========
 
 Fix visibility_types in hydrus_form_helper.rb.
@@ -46,8 +53,4 @@ Assess Item and Collection controllers for test coverage.
 
 ObjectFiles controller: destroy() lacks testing.
 
-AtLeastOneValidator: is the logic correct?
-
 role_metadata_ds.rb: test remove_node(), but need more clarity regarding the desired behavior.
-
-White space in text fields: trim leading and trailing; but preserve interior whitespace.
