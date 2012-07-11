@@ -339,7 +339,8 @@ noscript #item-actions, noscript #collection-actions {
 	border-bottom: none;
 }
 
-label.radio-group { float:left; clear:none; display:block; padding: 2px 1em 0 0; }
-input.radio-group { float:left; clear:left; margin: 2px 9px 0 30px; }
+.radio-group-container {clear: left; margin-left: 20px; width: 100%;}
+label.radio-group { float:left; clear:none; display:block; padding-left: 10px;}
+input.radio-group { float:left; clear:none; }
 
 
