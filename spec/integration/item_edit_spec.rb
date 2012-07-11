@@ -224,7 +224,7 @@ describe("Item edit", :type => :request, :integration => true) do
   it "can edit preferred citation field" do
     citation_field = "hydrus_item_preferred_citation"
     new_pref_cit  = "new_citation_FOO"
-    orig_pref_cit = @hi.descMetadata.preferred_citation.first.strip
+    orig_pref_cit = @hi.preferred_citation.strip
     
     login_as_archivist1
 

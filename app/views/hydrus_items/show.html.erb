@@ -57,7 +57,7 @@
     </dd>
 
     <dt>Cite this item as</dt>
-    <dd><%= @document_fedora.preferred_citation.first %></dd>
+    <dd><%= @document_fedora.preferred_citation %></dd>
 
     <% unless @document_fedora.related_citation.blank? %>
       <% @document_fedora.related_citation.each_with_index do |related_citation, index| %>
