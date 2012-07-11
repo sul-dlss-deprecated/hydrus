@@ -6,9 +6,6 @@ Collection edit: add functionality for role metadata section
     collection-manager
     item-depositor
 
-Collection edit tests: the selected field names should be driven by fixture
-content, not hard-coded
-
 Change <release> to <visibility>
 
 Test to exercise the creation of a new Collection.
