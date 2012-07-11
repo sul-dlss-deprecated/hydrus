@@ -20,10 +20,12 @@ class Hydrus::RoleMetadataDS < ActiveFedora::NokogiriDatastream
       t.group  :ref => [:group]
     end
     
+    # APO roles
     t.collection_manager   :ref => [:role], :attributes => {:type => 'collection-manager'}
     t.collection_depositor :ref => [:role], :attributes => {:type => 'collection-depositor'}
     t.collection_reviewer  :ref => [:role], :attributes => {:type => 'collection-reviewer'}
     t.collection_viewer    :ref => [:role], :attributes => {:type => 'collection-viewer'}
+    # item object roles
     t.item_depositor       :ref => [:role], :attributes => {:type => 'item-depositor'}
   end
 
@@ -43,11 +45,11 @@ class Hydrus::RoleMetadataDS < ActiveFedora::NokogiriDatastream
   # Methods to toggle role types from underscore to hyphen.
   # TODO: generalize and possibly move to a different part of the app.
   def hyphenate_role(role_type)
-    role_type.sub(/\Acollection_/, "collection-")
+    role_type.sub(/\Acollection_/, "collection-").sub(/\Aitem_/, "item-")
   end
 
   def dehyphenate_role(role_type)
-    role_type.sub(/\Acollection-/, "collection_")
+    role_type.sub(/\Acollection-/, "collection_").sub(/\Aitem-/, "item_")
   end
 
   # Adding/removing nodes.
