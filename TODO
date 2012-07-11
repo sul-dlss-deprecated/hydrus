@@ -1,12 +1,19 @@
 # Temporary to-do list as MH and ND work through some needed model
 # changes and related tests.
 
-Collection edit: add functionality for role metadata section
-    administrator
-    collection-manager
-    item-depositor
+Collection edit: add functionality for role metadata section (and test!)
+  fix borked person_role stuff in collection_edit / apo model
+        need methods:   add_person?  remove_person?  add_person_with_role???
+  get remove_person working for little trash can
+  get add_person button working (and tested)
+    administrator --> app logic: role_.yml?
+    collection-manager --> APO
+    item-depositor --> item object
 
 Test to exercise the creation of a new Collection.
+
+Coll create:
+  Initialize roleMetadata datastream with the collection-manager role for the current logged-in user
 
 ----------
 
@@ -16,9 +23,9 @@ for other unique fields.
 
 Improve hyphen toggling methods.
 
-Convert desc_metadata_ds.rb to use approach similar to that in role_metadata_ds.rb.
+Convert desc_metadata_ds.rb to use template approach similar to that in role_metadata_ds.rb.
 
-OM tests: when we write using OM terms, confirm that the change goes to correct place in XML.
+OM tests: when we write tests using OM terms, confirm that the change goes to correct place in XML.
 
 Test our delegate() methods in GenericObject, Item, and AdminPolicyObject).
 
@@ -28,12 +35,12 @@ Fix visibility_types in hydrus_form_helper.rb.
 
 Implement Item-level contact.
 
-Collection Edit: convert license test to drop-down, conditional on radio button choice.
+(UI coding: Collection Edit: convert license test to drop-down, conditional on radio button choice.)
 
 Confirm: When a Hydrus item is created, it should get a roleMetadata datastream
 with the one item-depositor role for the current logged-in user [from Lynn].
 
-collection.rb: unit test the getters/setters delegation to the APO.
+collection.rb: unit test the getters/setters delegation to the APO. (or a sample? or skip this?)
 
 Assess Item and Collection controllers for test coverage.
 
@@ -41,6 +48,6 @@ ObjectFiles controller: destroy() lacks testing.
 
 AtLeastOneValidator: is the logic correct?
 
-role_metadata_ds.rb: test remove_node(), but need more clarity regarding the need behavior.
+role_metadata_ds.rb: test remove_node(), but need more clarity regarding the desired behavior.
 
 White space in text fields: trim leading and trailing; but preserve interior whitespace.

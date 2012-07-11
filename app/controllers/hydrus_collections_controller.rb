@@ -29,6 +29,7 @@ class HydrusCollectionsController < ApplicationController
     collection = dor_item.adapt_to(Hydrus::Collection)
     collection.remove_relationship :has_model, 'info:fedora/afmodel:Dor_Collection'
     collection.assert_content_model
+    #TODO:  Initialize roleMetadata datastream with the collection-manager role for the current logged-in user
     collection.save
     redirect_to edit_polymorphic_path(collection)
   end

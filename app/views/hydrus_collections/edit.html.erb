@@ -111,7 +111,12 @@
 
   <%= hydrus_form_header {"Allow others to contribute to this collection"} %>
   <div id="role-management" class="destroy-group">
-    <font color=red>#TODO partial for role management</font>
+	  <%= render "role_management"%>
+	  <div class="row">
+	    <div class="span8 offset1">
+	      <%= button_tag("Add a person", :name=>"add_person", :"data-attribute" => "add_person", :id=>"add_person", :class=>"btn", :value=>@document_fedora.person_id.length) %>
+	    </div>
+	  </div>  	
   </div>
 
   <% render(

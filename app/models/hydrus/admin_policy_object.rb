@@ -12,6 +12,7 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
     :label => 'Role Metadata',
     :control_group => 'M')
 
+  # administrativeMetadata
   delegate(:embargo, :to => "administrativeMetadata",
            :at => [:hydrus, :embargo], :unique => true)
 
@@ -30,7 +31,15 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
   delegate(:visibility_option, :to => "administrativeMetadata",
            :at => [:hydrus, :visibility, :option], :unique => true)
 
+  # roleMetadata
   delegate(:collection_manager, :to => "roleMetadata",
            :at => [:collection_manager, :person, :name])
+
+# TODO: this is borked, esp role!
+  delegate(:person_id, :to => "roleMetadata",
+           :at => [:role, :person, :identifier])
+
+  delegate(:person_role, :to => "roleMetadata",
+           :at => [:role, :type])
 
 end

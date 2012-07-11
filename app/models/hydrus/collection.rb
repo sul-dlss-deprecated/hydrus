@@ -18,6 +18,8 @@ class Hydrus::Collection < Hydrus::GenericObject
   # These getters and setters are needed because the ActiveFedora delegate()
   # does not work when we need to delegate through to the APO.
 
+  # for APO administrativeMetadata
+  
   def embargo *args
     apo.embargo *args
   end
@@ -66,12 +68,31 @@ class Hydrus::Collection < Hydrus::GenericObject
     apo.license_option= *args
   end
 
+  # for APO roleMetadata 
+   
   def collection_manager *args
     apo.collection_manager *args
   end
 
   def collection_manager= *args
     apo.collection_manager= *args
+  end
+  
+  def person_id *args
+    apo.person_id *args
+  end
+  
+  def person_id= *args
+    apo.person_id= *args
+  end
+  
+# TODO: model for person's role is borked!  
+  def person_role *args
+    apo.person_id *args
+  end
+  
+  def person_role= *args
+    apo.person_id= *args
   end
 
 end

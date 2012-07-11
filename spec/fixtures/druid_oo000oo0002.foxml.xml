@@ -117,22 +117,6 @@
                 <identifier type="sunetid">ggreen</identifier>
                 <name>Green, Greg</name>
              </person>
-             <group>
-                <identifier type="workgroup">pasig:2011attendees</identifier>
-                <name>Conference attendees</name>
-              </group>
-          </role>
-          <role type="collection-reviewer">
-             <group>
-                <identifier type="workgroup">pasig:staff</identifier>
-                <name>Conference attendees</name>
-             </group>
-          </role>
-          <role type="collection-viewer">
-             <group>
-                <identifier type="community">stanford</identifier>
-                <name>Stanford University Community</name>
-             </group>
           </role>
         </roleMetadata>
       </foxml:xmlContent>
