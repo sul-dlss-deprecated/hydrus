@@ -41,7 +41,7 @@
       <%= f.label :abstract, "Description" %>
     <%- end -%>
     <%= hydrus_form_value(:class=>"short-textarea") do %>
-      <%= f.text_area :abstract, :value => @document_fedora.abstract.first %>
+      <%= f.text_area :abstract, :value => @document_fedora.abstract %>
     <%- end -%>
   </div>
   <div class="row">

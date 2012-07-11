@@ -66,7 +66,7 @@
       <%= f.label :abstract %>
     <%- end -%>
     <%= hydrus_form_value do  -%>
-      <%= f.text_area :abstract, :value=>(@document_fedora.abstract.first || ""), :required=>true %>
+      <%= f.text_area :abstract, :value=>(@document_fedora.abstract || ""), :required=>true %>
     <%- end -%>
   </div>
   <div class="row">

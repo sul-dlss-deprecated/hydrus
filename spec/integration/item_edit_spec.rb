@@ -17,7 +17,7 @@ describe("Item edit", :type => :request, :integration => true) do
 
   it "Can edit basic content" do
     new_name  = 'abcxyz123'
-    orig_name = @hi.descMetadata.abstract.first.strip
+    orig_name = @hi.abstract.strip
 
     login_as_archivist1
 

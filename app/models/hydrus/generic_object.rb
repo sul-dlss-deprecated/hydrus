@@ -29,7 +29,7 @@ class Hydrus::GenericObject < Dor::Item
     publish == "true"
   end
   
-  delegate :abstract, :to => "descMetadata"  
+  delegate :abstract, :to => "descMetadata", :unique => true
   delegate :title, :to => "descMetadata", :unique => true
   delegate :related_item_title, :to => "descMetadata", :at => [:relatedItem, :titleInfo, :title]
   delegate :related_item_url, :to => "descMetadata", :at => [:relatedItem, :location, :url]

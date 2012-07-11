@@ -32,7 +32,7 @@ describe("Item create", :type => :request, :integration => true) do
     item = Hydrus::Item.find(druid)
     item.title.should == 'title_foo'
     item.person.first.should == 'person_foo'
-    item.abstract.first.should == 'abstract_foo'
+    item.abstract.should == 'abstract_foo'
     item.should be_instance_of Hydrus::Item
     # Delete object.
     item.delete
