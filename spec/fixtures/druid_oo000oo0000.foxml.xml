@@ -4,14 +4,10 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/definitions/1/0/foxml1-1.xsd">
   <foxml:objectProperties>
-    <foxml:property NAME="info:fedora/fedora-system:def/model#state"
-      VALUE="Active"/>
-    <foxml:property NAME="info:fedora/fedora-system:def/model#label"
-      VALUE="Internal Objects"/>
-    <foxml:property NAME="info:fedora/fedora-system:def/model#createdDate"
-      VALUE="2011-04-18T18:18:53.666Z"/>
-    <foxml:property NAME="info:fedora/fedora-system:def/view#lastModifiedDate"
-      VALUE="2012-07-03T21:23:13.584Z"/>
+    <foxml:property NAME="info:fedora/fedora-system:def/model#state" VALUE="Active"/>
+    <foxml:property NAME="info:fedora/fedora-system:def/model#label" VALUE="Internal Objects"/>
+    <foxml:property NAME="info:fedora/fedora-system:def/model#createdDate" VALUE="2011-04-18T18:18:53.666Z"/>
+    <foxml:property NAME="info:fedora/fedora-system:def/view#lastModifiedDate" VALUE="2012-07-03T21:23:13.584Z"/>
   </foxml:objectProperties>
   <foxml:datastream ID="RELS-EXT" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
     <foxml:datastreamVersion ID="RELS-EXT.0" LABEL="RDF Statements about this object" CREATED="2011-07-25T20:32:10.617Z" MIMETYPE="application/rdf+xml" FORMAT_URI="info:fedora/fedora-system:FedoraRELSExt-1.0" SIZE="424">

@@ -4,8 +4,6 @@ describe Hydrus::Item do
   
   before(:each) do
     @hi      = Hydrus::Item.new
-    @dru     = 'druid:oo000oo0001'
-    @apo_pid = 'druid:oo000oo0002'
     @workflow_xml = <<-END
       <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
       <workflows objectId="druid:oo000oo0001">
@@ -59,7 +57,7 @@ describe Hydrus::Item do
     # @item.should be_valid
   end
   
-  it "should be able to add and remove and item from a collection" do
+  it "should be able to add and remove an item from a collection" do
     collection_pid = 'druid:xx99xx9999'
     exp_uri        = "info:fedora/#{collection_pid}"
 
@@ -91,22 +89,22 @@ describe Hydrus::Item do
   describe "#actors" do
     subject { Hydrus::Item.new }
     let(:descMetadata_xml) { <<-eos
-   <mods xmlns="http://www.loc.gov/mods/v3">
-        <name>
-            <namePart>Angus</namePart>
-            <role>
-              <roleTerm>guitar</roleTerm>
-            </role>
+     <mods xmlns="http://www.loc.gov/mods/v3">
+          <name>
+              <namePart>Angus</namePart>
+              <role>
+                <roleTerm>guitar</roleTerm>
+              </role>
           </name>
-        <name>
-            <namePart>John</namePart>
-            <role>
-              <roleTerm>bass</roleTerm>
-            </role>
+          <name>
+              <namePart>John</namePart>
+              <role>
+                <roleTerm>bass</roleTerm>
+              </role>
           </name>
-  </mods>
-eos
-}
+     </mods>
+     eos
+    }
     let(:descMetadata) { Hydrus::DescMetadataDS.from_xml(descMetadata_xml) }
     
     before(:each) do
@@ -124,7 +122,7 @@ eos
       actor.role.should == "guitar"
     end
 
-  end
+  end # describe #actors
 
   describe "#add_to_collection" do
     subject { Hydrus::Item.new }
@@ -143,6 +141,15 @@ eos
       subject.should_receive(:remove_relationship_by_name).with('set', 'info:fedora/collection_pid')
       subject.should_receive(:remove_relationship_by_name).with('collection', 'info:fedora/collection_pid')
       subject.remove_from_collection('collection_pid')
+    end
+  end
+  
+  describe "roleMetadata in the item" do
+    subject { Hydrus::Item.find('druid:oo000oo0001') }
+    it "should have a roleMetadata datastream" do
+      subject.roleMetadata.should be_an_instance_of(Hydrus::RoleMetadataDS)
+      subject.item_depositor_id.should == 'cardinal'
+      subject.item_depositor_name.should == 'Mascot, Stanford'
     end
   end
 

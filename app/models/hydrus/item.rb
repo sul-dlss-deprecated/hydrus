@@ -16,6 +16,18 @@ class Hydrus::Item < Hydrus::GenericObject
   delegate :person, :to => "descMetadata", :at => [:name, :namePart]
   delegate :person_role, :to => "descMetadata", :at => [:name, :role, :roleTerm]
 
+
+  has_metadata(
+    :name => "roleMetadata",
+    :type => Hydrus::RoleMetadataDS,
+    :label => 'Role Metadata',
+    :control_group => 'M')
+
+  delegate(:item_depositor_id, :to => "roleMetadata",
+           :at => [:item_depositor, :person, :identifier], :unique => true)
+  delegate(:item_depositor_name, :to => "roleMetadata",
+           :at => [:item_depositor, :person, :name], :unique => true)
+
   def actors
     @actors ||= descMetadata.find_by_terms(:name).collect {|name_node| Hydrus::Actor.new(:name=>name_node.at_css('namePart').content,:role=>name_node.at_css('role roleTerm').content)}
   end

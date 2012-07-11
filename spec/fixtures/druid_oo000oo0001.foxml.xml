@@ -4,16 +4,11 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/definitions/1/0/foxml1-1.xsd">
   <foxml:objectProperties>
-    <foxml:property NAME="info:fedora/fedora-system:def/model#state"
-      VALUE="Active"/>
-    <foxml:property NAME="info:fedora/fedora-system:def/model#label"
-      VALUE="How Couples Meet and Stay Together"/>
-    <foxml:property NAME="info:fedora/fedora-system:def/model#ownerId"
-      VALUE="DOR"/>
-    <foxml:property NAME="info:fedora/fedora-system:def/model#createdDate"
-      VALUE="2011-07-05T17:12:18.757Z"/>
-    <foxml:property NAME="info:fedora/fedora-system:def/view#lastModifiedDate"
-      VALUE="2011-07-25T20:32:10.617Z"/>
+    <foxml:property NAME="info:fedora/fedora-system:def/model#state" VALUE="Active"/>
+    <foxml:property NAME="info:fedora/fedora-system:def/model#label" VALUE="How Couples Meet and Stay Together"/>
+    <foxml:property NAME="info:fedora/fedora-system:def/model#ownerId" VALUE="DOR"/>
+    <foxml:property NAME="info:fedora/fedora-system:def/model#createdDate" VALUE="2011-07-05T17:12:18.757Z"/>
+    <foxml:property NAME="info:fedora/fedora-system:def/view#lastModifiedDate" VALUE="2011-07-25T20:32:10.617Z"/>
   </foxml:objectProperties>
   <foxml:datastream ID="RELS-EXT" STATE="A" CONTROL_GROUP="X"
     VERSIONABLE="false">
@@ -160,6 +155,21 @@
       </foxml:xmlContent>
     </foxml:datastreamVersion>
   </foxml:datastream>
+  <foxml:datastream ID="roleMetadata" STATE="A" CONTROL_GROUP="M" VERSIONABLE="false">
+    <foxml:datastreamVersion ID="roleMetadata.0" LABEL="Role Metadata"
+      CREATED="2011-07-10T11:22:33.666Z" MIMETYPE="text/xml" SIZE="377">
+      <foxml:xmlContent>
+        <roleMetadata>
+          <role type="item-depositor">
+             <person>
+                <identifier type="sunetid">cardinal</identifier>
+                <name>Mascot, Stanford</name>
+             </person>
+          </role>
+	      </roleMetadata>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
   <foxml:datastream ID="contentMetadata" STATE="A" CONTROL_GROUP="X"
     VERSIONABLE="false">
     <foxml:datastreamVersion ID="contentMetadata.0" LABEL="Content Metadata"
@@ -171,8 +181,7 @@
             <file id="pinocchio.htm" filesize="262979" mimetype="text/html"
               publish="yes" shelve="yes" preserve="yes">
               <checksum type="md5">b409fde7ff1d2b650b0d2647175641e9</checksum>
-              <checksum type="sha1"
-                >88f259289a3d012b09477948888fcda2cb87feea</checksum>
+              <checksum type="sha1">88f259289a3d012b09477948888fcda2cb87feea</checksum>
             </file>
           </resource>
           <resource id="file2" type="file" sequence="2">
@@ -181,8 +190,7 @@
               filesize="3622063" mimetype="application/pdf" publish="yes"
               shelve="yes" preserve="yes">
               <checksum type="md5">da2ccda82d1e6bba71b7a92dd38b4b71</checksum>
-              <checksum type="sha1"
-                >62f3fe2cea13cacf110c96d279ae7a45fa962407</checksum>
+              <checksum type="sha1">62f3fe2cea13cacf110c96d279ae7a45fa962407</checksum>
             </file>
           </resource>
           <resource id="file3" type="file" sequence="3">
@@ -191,8 +199,7 @@
             <file id="pinocchio.-punctuation_in=file.name.txt" filesize="239350"
               mimetype="text/plain" publish="yes" shelve="yes" preserve="yes">
               <checksum type="md5">bffc0a355ce783a6709117e61c221724</checksum>
-              <checksum type="sha1"
-                >afa18147ee5735641141b2046576af390ec120bd</checksum>
+              <checksum type="sha1">afa18147ee5735641141b2046576af390ec120bd</checksum>
             </file>
           </resource>
           <resource id="file4" type="file" sequence="4">
@@ -201,8 +208,7 @@
               filesize="90095" mimetype="application/zip" publish="yes"
               shelve="yes" preserve="yes">
               <checksum type="md5">654a54fcf531c78c3efff916db332017</checksum>
-              <checksum type="sha1"
-                >f80ab50a5599b1ecf92c1d8d6a38a409b4801b53</checksum>
+              <checksum type="sha1">f80ab50a5599b1ecf92c1d8d6a38a409b4801b53</checksum>
             </file>
           </resource>
         </contentMetadata>
@@ -241,8 +247,7 @@
     <foxml:datastreamVersion ID="workflows.0" LABEL="Workflows"
       CREATED="2012-04-11T18:09:43.955Z" MIMETYPE="application/xml">
       <foxml:contentLocation TYPE="URL"
-        REF="https://lyberservices-dev.stanford.edu/workflow/dor/objects/druid:oo000oo0001/workflows"
-      />
+        REF="https://lyberservices-dev.stanford.edu/workflow/dor/objects/druid:oo000oo0001/workflows" />
     </foxml:datastreamVersion>
   </foxml:datastream>
 </foxml:digitalObject>
