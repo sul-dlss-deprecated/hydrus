@@ -25,9 +25,9 @@ task :ci do
 end
 
 
-desc "Stops jetty, runs `rake ci`, and then starts jetty." 
+desc "Stop jetty, run `rake ci`, db:migrate, start jetty." 
 task :local_ci do 
-  Rails.env = "test"
+  # Rails.env = "test"
   sub_tasks = %w(jetty:stop db:migrate ci jetty:start)
   sub_tasks.each { |st| Rake::Task[st].invoke }
 end
