@@ -40,6 +40,9 @@ White space in text fields: trim leading and trailing; but preserve interior whi
 
 ==========
 
+Item edit: "Add Another Published work" button does not work if the user first
+deletes all of the related published works.
+
 local_ci task: figure out why setting Rails.env=true causes test failure on 2nd run.
 
 Fix visibility_types in hydrus_form_helper.rb.
