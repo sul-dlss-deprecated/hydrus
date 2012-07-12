@@ -5,7 +5,6 @@ Collection edit: add functionality for role metadata section (and test!)
     displaying what is in fedora
     adding
     removing
-		OM tests: when we write tests using OM terms, confirm that the change goes to correct place in XML.
 
   need methods (and tests):   add_person?  remove_person?  add_person_with_role???
   get add_person button working (and tested)
@@ -16,11 +15,11 @@ Collection edit: add functionality for role metadata section (and test!)
 
 Test to exercise the creation of a new Collection.
 
-Coll create:
-  Initialize apo roleMetadata datastream with the collection-manager role for the current logged-in user
+Coll create: Initialize apo roleMetadata datastream with the collection-manager
+role for the current logged-in user
 
-Item create:
-  Create roleMetadata datastream with the item-depositor for the current logged-in user.
+Item create: Create roleMetadata datastream with the item-depositor for the
+current logged-in user.
 
 ----------
 
@@ -32,7 +31,8 @@ Validation for the new APO-related fields.
 
 AtLeastOneValidator: tests.
 
-White space in text fields: trim leading and trailing; but preserve interior whitespace.
+White space in text fields: trim leading and trailing; but preserve interior
+whitespace.
 
 ==========
 
@@ -47,12 +47,15 @@ Fix visibility_types in hydrus_form_helper.rb.
 
 Implement Item-level contact.
 
-(UI coding: Collection Edit: convert license test to drop-down, conditional on radio button choice.)
+UI coding: Collection Edit: convert license test to drop-down, conditional on
+radio button choice.
 
-collection.rb: unit test the getters/setters delegation to the APO. (or a sample? or skip this?)
+collection.rb: unit test the getters/setters delegation to the APO. (or a
+sample? or skip this?)
 
 Assess Item and Collection controllers for test coverage.
 
 ObjectFiles controller: destroy() lacks testing.
 
-role_metadata_ds.rb: test remove_node(), but need more clarity regarding the desired behavior.
+role_metadata_ds.rb: test remove_node(), but need more clarity regarding the
+desired behavior.
