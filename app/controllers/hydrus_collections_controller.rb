@@ -25,8 +25,8 @@ class HydrusCollectionsController < ApplicationController
 
   def new
     apo = create_apo(current_user)
-    dor_item = Hydrus::GenericObject.register_dor_object(current_user, 'collection', apo.pid)
-    collection = dor_item.adapt_to(Hydrus::Collection)
+    dor_obj = Hydrus::GenericObject.register_dor_object(current_user, 'collection', apo.pid)
+    collection = dor_obj.adapt_to(Hydrus::Collection)
     collection.remove_relationship :has_model, 'info:fedora/afmodel:Dor_Collection'
     collection.assert_content_model
     #TODO:  Initialize roleMetadata datastream with the collection-manager role for the current logged-in user
@@ -45,13 +45,27 @@ class HydrusCollectionsController < ApplicationController
   end
 
   def update
+    notice = []
+    
     @document_fedora.update_attributes(params["hydrus_collection"]) if params.has_key?("hydrus_collection")
-    @document_fedora.descMetadata.insert_related_item if params.has_key?(:add_link)
+    if params.has_key?(:add_link)
+      @document_fedora.descMetadata.insert_related_item
+    elsif params.has_key?(:add_person)
+      @document_fedora.apo.roleMetadata.add_person_of_role('coll_cntlr_update_method_hardcoded')
+    end
+    logger.debug("attributes submitted: #{params['hydrus_collection'].inspect}")
+    
+    # TODO: validate doc!
     @document_fedora.save
-    flash[:notice] = "Your changes have been saved."
+    
+    notice << "Your changes have been saved."
+    flash[:notice] = notice.join("<br/>").html_safe unless notice.blank?
+    
     respond_to do |want|
       want.html {
-        if params.has_key?(:add_link)
+        if params.has_key?(:add_link) or params.has_key?(:add_person)
+          # if we want to pass on parameters to edit screen we'll need to use the named route
+          #redirect_to edit_polymorphic_path(@document_fedora, :person_role=>"collection_viewer")
           redirect_to [:edit, @document_fedora]
         else
           redirect_to @document_fedora
@@ -60,12 +74,15 @@ class HydrusCollectionsController < ApplicationController
       want.js {
         if params.has_key?(:add_link)
           render "add_link", :locals=>{:index=>params[:add_link]}
+        elsif params.has_key?(:add_person)
+          render "add_person", :locals=>{:index=>params[:add_person]}
         else
           render :json => tidy_response_from_update(@response)
         end
       }
     end
-  end
+
+  end # update
 
   def destroy_value
     @document_fedora.descMetadata.remove_node(params[:term], params[:term_index])

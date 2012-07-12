@@ -55,6 +55,22 @@ class Hydrus::RoleMetadataDS < ActiveFedora::NokogiriDatastream
 
   # Adding/removing nodes.
 
+  # if the role node exists, add a person node to it; otherwise, create the role node and then add
+  #  the person node
+  def add_person_of_role(role_type)
+puts "DEBUG: add_person_of_role got #{role_type.inspect}"    
+    role_node = self.find_by_xpath("/roleMetadata/role[@type='#{toggle_hyphen_underscore(role_type)}']")
+puts "DEBUG: role_node is #{role_node.to_s}"    
+    if role_node.size == 0
+puts "DEBUG: Don't have role #{role_type}"      
+      new_role_node = insert_role(role_type)
+      insert_person(new_role_node)
+    else
+puts "DEBUG: Have role #{role_type}"
+      insert_person(role_node)
+    end
+  end  
+
   def insert_role(role_type)
     return add_child_node(ng_xml.root, :role, toggle_hyphen_underscore(role_type))
   end
@@ -66,6 +82,8 @@ class Hydrus::RoleMetadataDS < ActiveFedora::NokogiriDatastream
   def insert_group(role_node, group_type)
     return add_child_node(role_node, :group, group_type)
   end
+
+  # to do:  remove_person(id) method
 
   def remove_node(term, index)
     # Tests postponed until we know what this method should do. MH 7/3.
