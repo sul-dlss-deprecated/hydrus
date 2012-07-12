@@ -80,7 +80,7 @@
               <%= f.label        'embargo_option', emb_text, :value => emb_opt %>
               <%# Don't include embargo period select if embargo type is 'none' %>
               <% unless emb_opt == 'none' %>
-                <%= f.select :embargo, options_for_select(embargo_terms, @document_fedora.embargo), {:include_blank => 'Select embargo'}, {:class => 'inline-select right', :id => "embargo_option_#{emb_opt}" } %>
+                <%= f.select "embargo_#{emb_opt}".to_sym, options_for_select(embargo_terms, @document_fedora.send("embargo_#{emb_opt}")), {:include_blank => 'Select embargo'}, {:class => 'inline-select right', :id => "embargo_option_#{emb_opt}" } %>
               <% end %>
             </div>
           </div>

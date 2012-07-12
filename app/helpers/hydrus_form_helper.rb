@@ -53,6 +53,9 @@ module HydrusFormHelper
     }
   end
 
+  # WARNING - the keys of this hash (which appear in the radio buttons in the colelction edit page) 
+  #   are used in the collection model to trigger specific getting and setting behavior of embargo lengths
+  #  if you change these keys here, you need to update the collection model as well
   def embargo_types
     return {
       'none'   => 'no delay -- release all items as soon as they are deposited',

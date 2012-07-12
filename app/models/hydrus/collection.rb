@@ -25,6 +25,25 @@ class Hydrus::Collection < Hydrus::GenericObject
 
   # for APO administrativeMetadata
   
+  # These getter and setter methods allow us to set a single value for the embargo 
+  #  period from two separate HTML select controls, based on the value of a radio button
+  def embargo_varies
+    embargo_option=="varies" ? embargo : ""
+  end
+
+  def embargo_fixed
+   embargo_option=="fixed" ? embargo : ""
+  end
+
+  def embargo_varies= *args
+    apo.embargo= *args if embargo_option=="varies" # only set the embargo period for this setter if the corresponding radio button is selected
+  end
+
+  def embargo_fixed= *args
+    apo.embargo= *args if embargo_option=="fixed"  # only set the embargo period for this setter if the corresponding radio button is selected
+  end
+  #############
+
   def embargo *args
     apo.embargo *args
   end
