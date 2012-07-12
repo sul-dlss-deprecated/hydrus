@@ -58,19 +58,16 @@ class Hydrus::DescMetadataDS < ActiveFedora::NokogiriDatastream
 
   # Blocks to pass into Nokogiri::XML::Builder.new()
 
-  def noko_builder_name
-    return lambda { |xml| 
+  define_template :name do |xml|
       xml.name {
         xml.namePart
         xml.role {
           xml.roleTerm(:authority => "marcrelator", :type => "text")
         }
       }
-    }
   end
 
-  def noko_builder_relatedItem
-    return lambda { |xml| 
+  define_template :relatedItem do |xml|
       xml.relatedItem {
         xml.titleInfo {
           xml.title
@@ -79,17 +76,14 @@ class Hydrus::DescMetadataDS < ActiveFedora::NokogiriDatastream
           xml.url
         }
       }
-    }
   end
 
-  def noko_builder_related_citation
-    return lambda { |xml| 
+  define_template :related_citation do |xml|
       xml.note(:type => "citation/reference")
-    }
   end
 
-  def self.noko_builder_xml_template
-    return lambda { |xml| 
+  def self.xml_template
+    Nokogiri::XML::Builder.new do |xml|
       xml.mods(MODS_PARAMS) {
         xml.originInfo {
           xml.dateOther
@@ -119,42 +113,26 @@ class Hydrus::DescMetadataDS < ActiveFedora::NokogiriDatastream
         xml.note(:type => "citation/reference")
         xml.note(:type => "contact")
       }
-    }
+    end.doc
   end
 
-  # Methods returning empty XML documents and nodes.
-
-  def self.xml_template
-    return Nokogiri::XML::Builder.new(&send(:noko_builder_xml_template)).doc
-  end
-      
   def insert_person
-    insert_new_node(:name)
+    add_hydrus_child_node(ng_xml.root, :name)
   end
   
   def insert_related_item
-    insert_new_node(:relatedItem)
+    add_hydrus_child_node(ng_xml.root, :relatedItem)
   end
 
   def insert_related_citation
-    insert_new_node(:related_citation)
+    add_hydrus_child_node(ng_xml.root, :related_citation)
   end
 
-  def insert_new_node(term)
-    builder = Nokogiri::XML::Builder.new(&send("noko_builder_#{term.to_s}"))
-    node    = builder.doc.root
-    nodeset = self.find_by_terms(term)
-    unless nodeset.nil?
-      if nodeset.empty?
-        self.ng_xml.root.add_child(node)
-        index = 0
-      else
-        nodeset.after(node)
-        index = nodeset.length
-      end
-      self.dirty = true
-    end
-    return node, index
+  # Set dirty=true. Otherwise, inserting repeated nodes does not work.
+  def add_hydrus_child_node(*args)
+    node = add_child_node(*args)
+    self.dirty = true  
+    return node
   end
 
   def remove_node(term, index)

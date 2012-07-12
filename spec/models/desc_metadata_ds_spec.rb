@@ -80,13 +80,12 @@ describe Hydrus::DescMetadataDS do
       rc = '<note type="citation/reference"></note>'
       @exp_xml = noko_doc([@mods_start, nm, nm, nm, ri, ri, rc, '</mods>'].join '')
       @dsdoc   = Hydrus::DescMetadataDS.from_xml("#{@mods_start}</mods>")
-
       @dsdoc.insert_person
-      @dsdoc.insert_new_node(:name)
-      @dsdoc.insert_new_node(:name)
+      @dsdoc.insert_person
+      @dsdoc.insert_person
       @dsdoc.insert_related_item
       @dsdoc.insert_related_citation
-      @dsdoc.insert_new_node(:relatedItem)
+      @dsdoc.insert_related_item
       @dsdoc.ng_xml.should be_equivalent_to @exp_xml
     end
 
@@ -99,13 +98,10 @@ describe Hydrus::DescMetadataDS do
       nm2 = '<name><namePart>John</namePart><role><roleTerm authority="marcrelator" type="text"/></role></name>'
       @exp_xml = noko_doc([@mods_start, nm1, '</mods>'].join '')
       @dsdoc   = Hydrus::DescMetadataDS.from_xml("#{@mods_start}</mods>")
-
-      @dsdoc.insert_new_node(:name)
+      @dsdoc.insert_person
       @dsdoc.name(0).namePart = 'Angus'
-
-      @dsdoc.insert_new_node(:name)
+      @dsdoc.insert_person
       @dsdoc.name(1).namePart = 'John'
-
       @dsdoc.remove_node(:name, 1)
       @dsdoc.ng_xml.should be_equivalent_to @exp_xml
     end
