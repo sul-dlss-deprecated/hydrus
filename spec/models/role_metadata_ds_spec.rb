@@ -181,4 +181,25 @@ describe Hydrus::RoleMetadataDS do
     end
   end # context item object
 
+  it "toggle_hyphen_underscore() should work correctly" do
+    @rmdoc = Hydrus::RoleMetadataDS.from_xml('')
+    tests = {
+      # Should change.
+      'item-foo'        => 'item_foo',
+      'item_foo'        => 'item-foo',
+      'collection-foo'  => 'collection_foo',
+      'collection_foo'  => 'collection-foo',
+      'collection_Foo'  => 'collection-Foo',
+      # No changes.
+      'item-'           => 'item-',
+      'xcollection_foo' => 'xcollection_foo',
+      'blah'            => 'blah',
+      ''                => '',
+    }
+    tests.each do |input, exp|
+      @rmdoc.toggle_hyphen_underscore(input).should == exp
+    end
+    
+  end
+
 end

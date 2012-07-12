@@ -11,22 +11,20 @@ Collection edit: add functionality for role metadata section (and test!)
 
 Test to exercise the creation of a new Collection.
 
-Coll create:
-  Initialize roleMetadata datastream with the collection-manager role for the current logged-in user
+Coll create: Initialize roleMetadata datastream with the collection-manager
+role for the current logged-in user
 
 ----------
 
-Improve hyphen toggling methods.
+Convert desc_metadata_ds.rb to use template approach similar to that in
+role_metadata_ds.rb.
 
-Convert desc_metadata_ds.rb to use template approach similar to that in role_metadata_ds.rb.
-
-OM tests: when we write tests using OM terms, confirm that the change goes to correct place in XML.
+OM tests: when we write tests using OM terms, confirm that the change goes to
+correct place in XML.
 
 Test our delegate() methods in GenericObject, Item, and AdminPolicyObject).
 
 ----------
-
-local_ci task: figure out why setting Rails.env=true causes test failure on 2nd run.
 
 Validation for the new APO-related fields.
 
@@ -35,6 +33,8 @@ AtLeastOneValidator: tests.
 White space in text fields: trim leading and trailing; but preserve interior whitespace.
 
 ==========
+
+local_ci task: figure out why setting Rails.env=true causes test failure on 2nd run.
 
 Fix visibility_types in hydrus_form_helper.rb.
 
