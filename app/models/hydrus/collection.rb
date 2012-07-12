@@ -2,7 +2,12 @@ class Hydrus::Collection < Hydrus::GenericObject
 
   # Any time we save a Collection, save its corresponding APO.
 
+  after_validation :strip_whitespace
   before_save :save_apo
+
+  def strip_whitespace
+     strip_whitespace_from_fields [:title,:abstract,:contact]
+  end
 
   def save_apo
     apo.save

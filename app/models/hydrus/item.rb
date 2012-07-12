@@ -1,5 +1,7 @@
 class Hydrus::Item < Hydrus::GenericObject
   
+  after_validation :strip_whitespace
+      
   attr_accessor :terms_of_deposit
   
   validates :actors, :at_least_one=>true, :if => :clicked_publish?
@@ -16,7 +18,6 @@ class Hydrus::Item < Hydrus::GenericObject
   delegate :person, :to => "descMetadata", :at => [:name, :namePart]
   delegate :person_role, :to => "descMetadata", :at => [:name, :role, :roleTerm]
 
-
   has_metadata(
     :name => "roleMetadata",
     :type => Hydrus::RoleMetadataDS,
@@ -28,6 +29,10 @@ class Hydrus::Item < Hydrus::GenericObject
   delegate(:item_depositor_name, :to => "roleMetadata",
            :at => [:item_depositor, :person, :name], :unique => true)
 
+  def strip_whitespace
+     strip_whitespace_from_fields [:preferred_citation,:title,:abstract]
+  end
+  
   def actors
     @actors ||= descMetadata.find_by_terms(:name).collect {|name_node| Hydrus::Actor.new(:name=>name_node.at_css('namePart').content,:role=>name_node.at_css('role roleTerm').content)}
   end

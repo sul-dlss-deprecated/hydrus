@@ -1,7 +1,8 @@
 class Hydrus::GenericObject < Dor::Item
-
+    
   attr_accessor :publish
   
+  include Hydrus::ModelHelper
   include ActiveModel::Validations
   validates :title, :abstract, :not_empty => true, :if => :clicked_publish?
   
@@ -26,7 +27,7 @@ class Hydrus::GenericObject < Dor::Item
   end
   
   def clicked_publish?
-    publish == "true"
+    (publish == "true" || publish == true)
   end
   
   delegate :abstract, :to => "descMetadata"  

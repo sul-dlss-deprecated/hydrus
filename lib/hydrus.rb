@@ -4,5 +4,5 @@ module Hydrus
     divider = '=' * 80
     file_handle.puts divider, arg.ai(:plain => true), divider
   end
-
+  
 end

@@ -16,8 +16,8 @@ describe("Item edit", :type => :request, :integration => true) do
   end
 
   it "Can edit basic content" do
-    new_name  = 'abcxyz123'
-    orig_name = @hi.descMetadata.abstract.first.strip
+    new_name  = '  abcxyz123 '
+    orig_name = @hi.descMetadata.abstract.first
 
     login_as_archivist1
 
@@ -31,7 +31,7 @@ describe("Item edit", :type => :request, :integration => true) do
 
     current_path.should == polymorphic_path(@hi)
     visit polymorphic_path(@hi)
-    page.should have_content(new_name)
+    page.should have_content(new_name.strip)
 
     # Clean up.
     visit edit_polymorphic_path(@hi)
@@ -224,7 +224,7 @@ describe("Item edit", :type => :request, :integration => true) do
   it "can edit preferred citation field" do
     citation_field = "hydrus_item_preferred_citation"
     new_pref_cit  = "new_citation_FOO"
-    orig_pref_cit = @hi.descMetadata.preferred_citation.first.strip
+    orig_pref_cit = @hi.descMetadata.preferred_citation.first
     
     login_as_archivist1
 
