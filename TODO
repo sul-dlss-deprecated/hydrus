@@ -5,6 +5,8 @@ Collection edit: add functionality for role metadata section (and test!)
     displaying what is in fedora
     adding
     removing
+		role_metadata_ds.rb: test remove_node(), but need more clarity regarding the
+		desired behavior.
 
   need methods (and tests):   add_person?  remove_person?  add_person_with_role???
   get add_person button working (and tested)
@@ -14,12 +16,6 @@ Collection edit: add functionality for role metadata section (and test!)
     item-depositor --> item object
 
 Test to exercise the creation of a new Collection.
-
-Coll create: Initialize apo roleMetadata datastream with the collection-manager
-role for the current logged-in user
-
-Item create: Create roleMetadata datastream with the item-depositor for the
-current logged-in user.
 
 ----------
 
@@ -41,6 +37,7 @@ whitespace.
 
 ==========
 
+
 local_ci task: figure out why setting Rails.env=true causes test failure on 2nd run.
 
 Fix visibility_types in hydrus_form_helper.rb.
@@ -49,5 +46,9 @@ Assess Item and Collection controllers for test coverage.
 
 ObjectFiles controller: destroy() lacks testing.
 
-role_metadata_ds.rb: test remove_node(), but need more clarity regarding the
-desired behavior.
+After webauthing:  Coll create: Initialize apo roleMetadata datastream with the collection-manager
+role for the current logged-in user 
+
+After webauthing:  Item create: Create roleMetadata datastream with the item-depositor for the
+current logged-in user.
+
