@@ -2,3 +2,8 @@ Select people who can add items to this collection, or modify the collection set
 <%- @document_fedora.person_id.each_with_index do |person, ix| -%>
   <%= render :partial => "person", :locals => {:person=>person, :index=>ix} %>
 <%- end -%>
+<div class="row">
+  <div class="span8 offset1">
+    <%= button_tag("Add a person", :name=>"add_person", :"data-attribute" => "add_person", :id=>"add_person", :class=>"btn", :value=>@document_fedora.person_id.length) %>
+  </div>
+</div>

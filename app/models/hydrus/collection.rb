@@ -94,5 +94,11 @@ class Hydrus::Collection < Hydrus::GenericObject
   def get_person_role *args
     apo.roleMetadata.get_person_role *args
   end
+  
+  # NAOMI_MUST_COMMENT_THIS_METHOD
+  def person_role= *args
+#puts "DEBUG: person_role args are #{args.inspect}"
+#    apo.roleMetadata.add_person_of_role *args
+  end
 
 end

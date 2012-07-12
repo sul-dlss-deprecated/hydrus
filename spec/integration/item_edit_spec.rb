@@ -17,7 +17,7 @@ describe("Item edit", :type => :request, :integration => true) do
 
   it "Can edit basic content" do
     new_name  = '  abcxyz123 '
-    orig_name = @hi.descMetadata.abstract.first
+    orig_name = @hi.abstract.strip
 
     login_as_archivist1
 
@@ -224,7 +224,11 @@ describe("Item edit", :type => :request, :integration => true) do
   it "can edit preferred citation field" do
     citation_field = "hydrus_item_preferred_citation"
     new_pref_cit  = "new_citation_FOO"
+<<<<<<< HEAD
     orig_pref_cit = @hi.descMetadata.preferred_citation.first
+=======
+    orig_pref_cit = @hi.preferred_citation.strip
+>>>>>>> develop
     
     login_as_archivist1
 

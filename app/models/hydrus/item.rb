@@ -12,7 +12,7 @@ class Hydrus::Item < Hydrus::GenericObject
     Hydrus::ObjectFile.find_all_by_pid(pid,:order=>'weight')  # coming from the database
   end
   
-  delegate :preferred_citation, :to => "descMetadata"
+  delegate :preferred_citation, :to => "descMetadata", :unique => true
   delegate :related_citation, :to => "descMetadata"
   delegate :keywords, :to => "descMetadata", :at => [:subject, :topic]
   delegate :person, :to => "descMetadata", :at => [:name, :namePart]

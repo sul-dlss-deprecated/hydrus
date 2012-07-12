@@ -15,8 +15,8 @@ describe("Collection edit", :type => :request, :integration => true) do
   end
 
   it "can edit Collection descMetadata content" do
-    new_abstract  = 'foobarfubb'
-    orig_abstract = @hc.abstract.first
+    new_abstract  = '  foobarfubb '
+    orig_abstract = @hc.abstract.strip
     new_contact   = 'ted@gonzo.com'
     orig_contact  = @hc.contact
 
@@ -36,7 +36,7 @@ describe("Collection edit", :type => :request, :integration => true) do
 
     current_path.should == polymorphic_path(@hc)
     visit polymorphic_path(@hc)
-    page.should have_content(new_abstract)
+    page.should have_content(new_abstract.strip)
 
     # Clean up and confirm.
     visit edit_polymorphic_path(@hc)

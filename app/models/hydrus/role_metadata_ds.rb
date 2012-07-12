@@ -35,7 +35,7 @@ class Hydrus::RoleMetadataDS < ActiveFedora::NokogiriDatastream
 
   def to_solr(solr_doc=Hash.new, *args)
     self.find_by_xpath('/roleMetadata/role/*').each do |actor|
-      role_type = dehyphenate_role(actor.parent['type'])
+      role_type = toggle_hyphen_underscore(actor.parent['type'])
       val = [actor.at_xpath('identifier/@type'),actor.at_xpath('identifier/text()')].join ':'
       add_solr_value(solr_doc, "apo_role_#{actor.name}_#{role_type}", val, :string, [:searchable, :facetable])
       add_solr_value(solr_doc, "apo_role_#{role_type}", val, :string, [:searchable, :facetable])
@@ -46,20 +46,33 @@ class Hydrus::RoleMetadataDS < ActiveFedora::NokogiriDatastream
     solr_doc
   end
 
-  # Methods to toggle role types from underscore to hyphen.
-  # TODO: generalize and possibly move to a different part of the app.
-  def hyphenate_role(role_type)
-    role_type.sub(/\Acollection_/, "collection-").sub(/\Aitem_/, "item-")
-  end
-
-  def dehyphenate_role(role_type)
-    role_type.sub(/\Acollection-/, "collection_").sub(/\Aitem-/, "item_")
+  # Takes a string       (eg, item-foo or collection_bar)
+  # Returns a new string (eg, item_foo or collection-bar).
+  TOGGLE_HYPHEN_REGEX = / \A (collection|item) ([_\-]) ([a-z]) /ix
+  def toggle_hyphen_underscore(role_type)
+    role_type.sub(TOGGLE_HYPHEN_REGEX) { "#{$1}#{$2 == '_' ? '-' : '_'}#{$3}" }
   end
 
   # Adding/removing nodes.
 
+  # if the role node exists, add a person node to it; otherwise, create the role node and then add
+  #  the person node
+  def add_person_of_role(role_type)
+puts "DEBUG: add_person_of_role got #{role_type.inspect}"    
+    role_node = self.find_by_xpath("/roleMetadata/role[@type='#{toggle_hyphen_underscore(role_type)}']")
+puts "DEBUG: role_node is #{role_node.to_s}"    
+    if role_node.size == 0
+puts "DEBUG: Don't have role #{role_type}"      
+      new_role_node = insert_role(role_type)
+      insert_person(new_role_node)
+    else
+puts "DEBUG: Have role #{role_type}"
+      insert_person(role_node)
+    end
+  end  
+
   def insert_role(role_type)
-    return add_child_node(ng_xml.root, :role, hyphenate_role(role_type))
+    return add_child_node(ng_xml.root, :role, toggle_hyphen_underscore(role_type))
   end
 
   def insert_person(role_node)
@@ -69,6 +82,8 @@ class Hydrus::RoleMetadataDS < ActiveFedora::NokogiriDatastream
   def insert_group(role_node, group_type)
     return add_child_node(role_node, :group, group_type)
   end
+
+  # to do:  remove_person(id) method
 
   def remove_node(term, index)
     # Tests postponed until we know what this method should do. MH 7/3.
