@@ -92,9 +92,13 @@
     <div class="row">
       <%= hydrus_form_value do %>
         <% visibility_types.each do |vis_opt, vis_text| %>
-          <div class="radio-group-container">
-            <%= f.radio_button 'visibility_option', vis_opt, :class => 'radio-group' %>
-            <%= f.label        'visibility_option', vis_text, :value => vis_opt, :class => 'radio-group' %>
+          <div class="row">
+            <div class="span1 radio-input">
+              <%= f.radio_button 'visibility_option', vis_opt, :class => 'radio-group' %>
+            </div>
+            <div class="span7 radio-label">
+              <%= f.label        'visibility_option', vis_text, :value => vis_opt, :class => 'radio-group' %>
+            </div>
           </div>
         <% end %>
       <% end %>
@@ -108,9 +112,13 @@
     <div class="row">
       <%= hydrus_form_value do %>
         <% license_types.each do |lic_opt, lic_text| %>
-          <div class="radio-group-container">
-            <%= f.radio_button 'license_option', lic_opt, :class => 'radio-group' %>
-            <%= f.label        'license_option', lic_text, :value => lic_opt, :class => 'radio-group' %>
+          <div class="row">
+            <div class="span1 radio-input">
+              <%= f.radio_button 'license_option', lic_opt, :class => 'radio-group' %>
+            </div>
+            <div class="span7 radio-label">
+              <%= f.label        'license_option', lic_text, :value => lic_opt, :class => 'radio-group' %>
+            </div>
           </div>
         <% end %>
       <% end %>
