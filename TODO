@@ -23,7 +23,12 @@ current logged-in user.
 
 ----------
 
-Test our delegate() methods in GenericObject, Item, and AdminPolicyObject).
+Item edit: "Add Another Published work" button does not work if the user first
+deletes all of the related published works.
+
+Possible bug: Item edit: keyword editing does not persist??
+
+Implement Item-level contact.
 
 ----------
 
@@ -36,22 +41,9 @@ whitespace.
 
 ==========
 
-Item edit: "Add Another Published work" button does not work if the user first
-deletes all of the related published works.
-
-Possible bug: Item edit: keyword editing does not persist??
-
 local_ci task: figure out why setting Rails.env=true causes test failure on 2nd run.
 
 Fix visibility_types in hydrus_form_helper.rb.
-
-Implement Item-level contact.
-
-UI coding: Collection Edit: convert license test to drop-down, conditional on
-radio button choice.
-
-collection.rb: unit test the getters/setters delegation to the APO. (or a
-sample? or skip this?)
 
 Assess Item and Collection controllers for test coverage.
 
