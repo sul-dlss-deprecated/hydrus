@@ -2,6 +2,11 @@
 
 Collection edit: add functionality for role metadata section (and test!)
   integration tests for collection/apo role metadata
+    displaying what is in fedora
+    adding
+    removing
+		OM tests: when we write tests using OM terms, confirm that the change goes to correct place in XML.
+
   need methods (and tests):   add_person?  remove_person?  add_person_with_role???
   get add_person button working (and tested)
     get remove_person working for little trash can
@@ -11,16 +16,17 @@ Collection edit: add functionality for role metadata section (and test!)
 
 Test to exercise the creation of a new Collection.
 
-Coll create: Initialize roleMetadata datastream with the collection-manager
-role for the current logged-in user
+Coll create:
+  Initialize apo roleMetadata datastream with the collection-manager role for the current logged-in user
+
+Item create:
+  Create roleMetadata datastream with the item-depositor for the current logged-in user.
 
 ----------
 
-Convert desc_metadata_ds.rb to use template approach similar to that in
-role_metadata_ds.rb.
+Convert desc_metadata_ds.rb to use template approach similar to that in role_metadata_ds.rb.
 
-OM tests: when we write tests using OM terms, confirm that the change goes to
-correct place in XML.
+OM tests: when we write tests using OM terms, confirm that the change goes to correct place in XML.
 
 Test our delegate() methods in GenericObject, Item, and AdminPolicyObject).
 
@@ -41,9 +47,6 @@ Fix visibility_types in hydrus_form_helper.rb.
 Implement Item-level contact.
 
 (UI coding: Collection Edit: convert license test to drop-down, conditional on radio button choice.)
-
-Confirm: When a Hydrus item is created, it should get a roleMetadata datastream
-with the one item-depositor role for the current logged-in user [from Lynn].
 
 collection.rb: unit test the getters/setters delegation to the APO. (or a sample? or skip this?)
 
