@@ -42,6 +42,8 @@
 	margin-top: 3px;
 }
 
+.form-section-para {margin-top: 20px;}
+
 .form-label {
 	text-align: right;
 	@media (max-width: 767px) {
@@ -138,6 +140,24 @@ table form {
 }
 #sidebar {
 	float: left;
+}
+
+/* form: radio button groups with embedded select */
+.radio-input { 
+	float:left; clear:none;
+	text-align: right; 
+	margin-right: 12px;
+	@media (max-width: 767px) {
+		text-align: left;
+	}
+}
+.radio-label {margin: 2px 0 0 6px;}
+.radio-label label {display: inline-block;}
+/* make inline select pulldowns only as wide as necessary */
+.inline-select {
+	height: 20px;
+	width: auto;
+	&.right {margin: 2px 0 2px 0;}
 }
 
 /* search results pagination */
@@ -338,9 +358,4 @@ noscript #item-actions, noscript #collection-actions {
 #hydra-attribution a, #hydra-attribution a:hover {
 	border-bottom: none;
 }
-
-.radio-group-container {clear: left; margin-left: 20px; width: 100%;}
-label.radio-group { float:left; clear:none; display:block; padding-left: 10px;}
-input.radio-group { float:left; clear:none; }
-
 

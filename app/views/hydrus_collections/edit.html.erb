@@ -64,7 +64,7 @@
   </div>  
 
   <%= hydrus_form_header {"Release and visibility of content"} %>
-  <div id="content-visibility" class="destroy-group">
+  <div id="content-visibility">
     <p>Content in SDR is intended to be shared. You can impose a delay (embargo) before
     content in this collection is released for public or Stanford-only discovery
     and download.</p>
@@ -72,21 +72,23 @@
     <div class="row">
       <%= hydrus_form_value do %>
         <% embargo_types.each do |emb_opt, emb_text| %>
-          <div class="radio-group-container">
-            <%= f.radio_button 'embargo_option', emb_opt, :class => 'radio-group' %>
-            <%= f.label        'embargo_option', emb_text, :value => emb_opt, :class => 'radio-group' %>
+          <div class="row">
+            <div class="span1 radio-input">
+              <%= f.radio_button 'embargo_option', emb_opt %>
+            </div>
+            <div class="span7 radio-label">
+              <%= f.label        'embargo_option', emb_text, :value => emb_opt %>
+              <%# Don't include embargo period select if embargo type is 'none' %>
+              <% unless emb_opt == 'none' %>
+                <%= f.select :embargo, options_for_select(embargo_terms, @document_fedora.embargo), {:include_blank => 'Select embargo'}, {:class => 'inline-select right', :id => "embargo_option_#{emb_opt}" } %>
+              <% end %>
+            </div>
           </div>
         <% end %>
       <% end %>
-
-      <%= hydrus_form_value do %>
-        <%# NOTE: was unable to get this working as a pulldown %>
-        <%#= select_tag :embargo, options_for_select(embargo_terms, @document_fedora.embargo) -%>
-        <%= f.text_field :embargo, :value => @document_fedora.embargo %>
-      <% end %>
     </div>
 
-    <p>After its release date, content in this collection can be discovered and downloaded by:</p>
+    <p class="form-section-para">After its release date, content in this collection can be discovered and downloaded by:</p>
     <div class="row">
       <%= hydrus_form_value do %>
         <% visibility_types.each do |vis_opt, vis_text| %>
@@ -101,7 +103,7 @@
   </div>
 
   <%= hydrus_form_header {"License"} %>
-  <div id="license" class="destroy-group">
+  <div id="license">
     <p>After its release date, items in this collections can be discovered and downloaded by:</p>
     <div class="row">
       <%= hydrus_form_value do %>
@@ -121,7 +123,7 @@
   </div>
 
   <%= hydrus_form_header {"Allow others to contribute to this collection"} %>
-  <div id="role-management" class="destroy-group">
+  <div id="role-management">
 	  <%= render "role_management"%>
   </div>
 

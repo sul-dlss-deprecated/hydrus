@@ -56,8 +56,8 @@ module HydrusFormHelper
   def embargo_types
     return {
       'none'   => 'no delay -- release all items as soon as they are deposited',
-      'varies' => 'varies -- select a release date per item, from "now" to a maximum of <> after deposit',
-      'fixed'  => 'fixed -- delay release of all items for <> after deposit',
+      'varies' => 'varies -- select a release date per item, from "now" to a maximum of',
+      'fixed'  => 'fixed -- delay release of all items for',
     }
   end
 
@@ -73,10 +73,10 @@ module HydrusFormHelper
 
   def embargo_terms
     return [
-      '6 months',
-      '1 year',
-      '2 years',
-      '3 years',
+      '6 months after deposit',
+      '1 year after deposit',
+      '2 years after deposit',
+      '3 years after deposit',
     ]
   end
 
