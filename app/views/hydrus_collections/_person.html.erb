@@ -4,7 +4,7 @@
       <%= label :hydrus_collection, :"person_id_#{index}", "SUNet ID:" %>
     <%- end -%>
     <%= hydrus_form_value do -%>
-      <%= text_field_tag :"hydrus_collection[person_id[#{index}]]", @document_fedora.person_id[index.to_i] %>
+      <%= text_field_tag :"hydrus_collection[person_id[#{index}]]", @document_fedora.person_id[index.to_i].strip %>
     <%- end -%>
   </div>
   <div class="row person">

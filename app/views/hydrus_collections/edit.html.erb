@@ -33,7 +33,7 @@
       <%= f.label :title, "Collection name" %>
     <%- end -%>
     <%= hydrus_form_value do %>
-      <%= f.text_field :title, :value => @document_fedora.title %>
+      <%= f.text_field :title, :value => @document_fedora.title.strip %>
     <%- end -%>
   </div>
   <div class="row">
@@ -41,7 +41,7 @@
       <%= f.label :abstract, "Description" %>
     <%- end -%>
     <%= hydrus_form_value(:class=>"short-textarea") do %>
-      <%= f.text_area :abstract, :value => @document_fedora.abstract %>
+      <%= f.text_area :abstract, :value => @document_fedora.abstract.strip %>
     <%- end -%>
   </div>
   <div class="row">
@@ -49,7 +49,7 @@
       Contact email
     <%- end -%>
     <%= hydrus_form_value do %>
-      <%= f.text_field :contact, :value => @document_fedora.contact %>
+      <%= f.text_field :contact, :value => @document_fedora.contact.strip %>
     <%- end -%>
   </div>
   

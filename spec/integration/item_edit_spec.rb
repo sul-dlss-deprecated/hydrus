@@ -17,7 +17,7 @@ describe("Item edit", :type => :request, :integration => true) do
 
   it "Can edit basic content" do
     new_name  = '  abcxyz123 '
-    orig_name = @hi.abstract.strip
+    orig_name = @hi.abstract
 
     login_as_archivist1
 
@@ -224,11 +224,7 @@ describe("Item edit", :type => :request, :integration => true) do
   it "can edit preferred citation field" do
     citation_field = "hydrus_item_preferred_citation"
     new_pref_cit  = "new_citation_FOO"
-<<<<<<< HEAD
-    orig_pref_cit = @hi.descMetadata.preferred_citation.first
-=======
-    orig_pref_cit = @hi.preferred_citation.strip
->>>>>>> develop
+    orig_pref_cit = @hi.preferred_citation
     
     login_as_archivist1
 
@@ -252,9 +248,9 @@ describe("Item edit", :type => :request, :integration => true) do
   end
   
   it "Related citation adding and deleting" do
-    new_citation         = "hydrus_item_related_citation_2"
+    new_citation         = "hydrus_item_related_citation_2" 
     new_delete_button    = "remove_related_citation_2"
-    new_citation_text    = "This is a citation for a related item!"
+    new_citation_text    = " This is a citation for a related item! "
     
     login_as_archivist1
     
@@ -282,7 +278,7 @@ describe("Item edit", :type => :request, :integration => true) do
     current_path.should == edit_polymorphic_path(@hi)
     
     page.should have_css("##{new_delete_button}")
-    find_field(new_citation).value.strip.should == new_citation_text
+    find_field(new_citation).value.strip.should == new_citation_text.strip
     
     # delete
     click_link new_delete_button

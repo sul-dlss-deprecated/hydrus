@@ -16,7 +16,7 @@ describe("Collection edit", :type => :request, :integration => true) do
 
   it "can edit Collection descMetadata content" do
     new_abstract  = '  foobarfubb '
-    orig_abstract = @hc.abstract.strip
+    orig_abstract = @hc.abstract
     new_contact   = 'ted@gonzo.com'
     orig_contact  = @hc.contact
 
