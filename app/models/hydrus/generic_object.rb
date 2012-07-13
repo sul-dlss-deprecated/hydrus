@@ -27,7 +27,7 @@ class Hydrus::GenericObject < Dor::Item
   end
   
   def clicked_publish?
-    (publish == "true" || publish == true)
+    publish == "true"
   end
   
   delegate :abstract, :to => "descMetadata", :unique => true

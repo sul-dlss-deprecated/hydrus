@@ -156,7 +156,6 @@ describe("Collection edit", :type => :request, :integration => true) do
     visit edit_polymorphic_path(@hc)
     current_path.should == edit_polymorphic_path(@hc)
     page.should have_checked_field(orig_check_field)
-    puts orig_embargo
     page.has_select?('embargo_option_varies').should == true
     page.has_select?('embargo_option_varies', :selected => "#{orig_embargo} after deposit").should == true
     page.has_select?('embargo_option_fixed', :selected => nil).should == true

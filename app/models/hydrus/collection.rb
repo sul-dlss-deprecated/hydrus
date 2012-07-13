@@ -15,7 +15,7 @@ class Hydrus::Collection < Hydrus::GenericObject
   end
 
   def remove_embargo_length_if_none_selected
-    self.embargo = "" if embargo_option == "none"
+    self.embargo = nil if self.embargo_option == "none"
   end
 
   def hydrus_items

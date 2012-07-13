@@ -26,7 +26,7 @@ describe Hydrus::Item do
 
   it "new items should be invalid if no files have been added yet" do
     @item=Hydrus::Item.new
-    @item.should be_valid
+    @item.should_not be_valid
     @item.publish="true"
     @item.should_not be_valid
     @item.errors.messages[:title].should_not be_nil
