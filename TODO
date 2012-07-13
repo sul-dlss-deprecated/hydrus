@@ -37,9 +37,6 @@ Validation for the new APO-related fields.
 
 AtLeastOneValidator: tests.
 
-White space in text fields: trim leading and trailing; but preserve interior
-whitespace.
-
 ==========
 
 

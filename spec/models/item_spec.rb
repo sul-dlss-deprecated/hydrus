@@ -24,7 +24,18 @@ describe Hydrus::Item do
     @hi.submit_time.should == "9999"
   end
 
-  it "should be invalid if required fields are missing (and publish/terms of deposit was selected)" do
+  it "new items should be invalid if no files have been added yet" do
+    @item=Hydrus::Item.new
+    @item.should be_valid
+    @item.publish="true"
+    @item.should_not be_valid
+    @item.errors.messages[:title].should_not be_nil
+    @item.errors.messages[:files].should_not be_nil    
+    @item.errors.messages[:terms_of_deposit].should_not be_nil    
+    @item.errors.messages[:abstract].should_not be_nil    
+  end
+  
+  it "existing item should be invalid if required fields are missing (and publish/terms of deposit was selected)" do
     @item=Hydrus::Item.find('druid:oo000oo0001')
     @item.should be_valid  # should start out as valid
     @item.publish = "true"
@@ -40,6 +51,7 @@ describe Hydrus::Item do
     # @item.actors << Hydrus::Actor.new
     # @item.should_not be_valid  # invalid!
   end
+  
   it "should invalidate any item when terms of deposit hasn't been selected" do
     @item=Hydrus::Item.find('druid:oo000oo0001')
     @item.should be_valid  # should start out as valid
