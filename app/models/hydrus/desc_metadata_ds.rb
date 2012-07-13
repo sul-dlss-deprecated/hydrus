@@ -82,6 +82,12 @@ class Hydrus::DescMetadataDS < ActiveFedora::NokogiriDatastream
       xml.note(:type => "citation/reference")
   end
 
+  define_template :topic do |xml, topic|
+      xml.subject {
+        xml.topic(topic)
+      }
+  end
+
   def self.xml_template
     Nokogiri::XML::Builder.new do |xml|
       xml.mods(MODS_PARAMS) {
@@ -128,6 +134,10 @@ class Hydrus::DescMetadataDS < ActiveFedora::NokogiriDatastream
     add_hydrus_child_node(ng_xml.root, :related_citation)
   end
 
+  def insert_topic(topic)
+    add_hydrus_child_node(ng_xml.root, :topic, topic)
+  end
+  
   # Set dirty=true. Otherwise, inserting repeated nodes does not work.
   def add_hydrus_child_node(*args)
     node = add_child_node(*args)
@@ -136,11 +146,17 @@ class Hydrus::DescMetadataDS < ActiveFedora::NokogiriDatastream
   end
 
   def remove_node(term, index)
-    node = self.find_by_terms(term.to_sym => index.to_i).first
+    node = find_by_terms(term.to_sym => index.to_i).first
     unless node.nil?
       node.remove
       self.dirty = true
     end
+  end
+
+  def remove_nodes(term)
+    nodes = find_by_terms(term.to_sym)
+    nodes.each { |n| n.remove }
+    self.dirty = true
   end
 
 end

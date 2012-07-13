@@ -23,6 +23,10 @@ Item edit: "Add Another Published work" button does not work if the user first
 deletes all of the related published works.
 
 Possible bug: Item edit: keyword editing does not persist??
+- tests for keywords() and keywords=().
+- test for insert_topic()
+- refactor and test remove_node() and remove_nodes().
+- integration test for topic editing
 
 Implement Item-level contact.
 

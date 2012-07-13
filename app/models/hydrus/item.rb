@@ -14,7 +14,6 @@ class Hydrus::Item < Hydrus::GenericObject
   
   delegate :preferred_citation, :to => "descMetadata", :unique => true
   delegate :related_citation, :to => "descMetadata"
-  delegate :keywords, :to => "descMetadata", :at => [:subject, :topic]
   delegate :person, :to => "descMetadata", :at => [:name, :namePart]
   delegate :person_role, :to => "descMetadata", :at => [:name, :role, :roleTerm]
 
@@ -53,6 +52,15 @@ class Hydrus::Item < Hydrus::GenericObject
     uri = "info:fedora/#{pid}"
     remove_relationship_by_name('set', uri)
     remove_relationship_by_name('collection', uri)
+  end
+
+  def keywords(*args)
+    descMetadata.subject.topic(*args)
+  end
+
+  def keywords=(*args)
+    descMetadata.remove_nodes(:subject)
+    args.first.values.each { |kw| descMetadata.insert_topic(kw)  }
   end
 
 end

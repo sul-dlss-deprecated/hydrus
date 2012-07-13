@@ -36,20 +36,22 @@ class HydrusItemsController < ApplicationController
     redirect_to edit_polymorphic_path(item)
   end
 
+  # Takes a comma-delimited string of keywords, as entered in the UI.
+  # Returns a hash like this: { 0 => 'foo', 1 => 'bar bar', etc. }
+  # Leading and trailing whitespace is removed from the keywords.
+  def parse_keywords(kws)
+    Hash[ kws.strip.split(/\s*,\s*/).each_with_index.map { |kw,i| [i,kw] } ]
+  end
+
   def update
     notice = []
     
-    # special case for editing multi-valued field as comma delimted string.
-    if params.has_key?("hydrus_item_keywords") and @document_fedora.keywords.sort != params["hydrus_item_keywords"].split(",").map{|k| k.strip }.sort
-      # need to clear out all keywords from document as the hydrus_item_keywords is the canonical list of keywords.
-      @document_fedora.update_attributes({"keywords" => {0=>""}})
-      keywords = {}
-      params["hydrus_item_keywords"].split(",").map{|k| k.strip}.each_with_index do |keyword, index|
-        keywords[index] = keyword
-      end
-      params["hydrus_item"].merge!("keywords" => keywords)
+    # Handle keywords (topics), which user supplies as a comma-delimited string.
+    if params.has_key?("hydrus_item_keywords")
+      kws = parse_keywords(params['hydrus_item_keywords'])
+      params["hydrus_item"]["keywords"] = kws unless @document_fedora.keywords == kws.values
     end
-    
+
     # Files from the file input.
     if params.has_key?("files")
       params["files"].each do |file|
