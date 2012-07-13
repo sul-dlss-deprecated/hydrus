@@ -75,12 +75,12 @@ module HydrusFormHelper
   end
 
   def embargo_terms
-    return [
-      '6 months after deposit',
-      '1 year after deposit',
-      '2 years after deposit',
-      '3 years after deposit',
-    ]
+    return {
+      '6 months after deposit' => '6 months',
+      '1 year after deposit'   => '1 year',
+      '2 years after deposit'  => '2 years',
+      '3 years after deposit'  => '3 years',
+    }
   end
 
 end

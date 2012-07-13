@@ -10,7 +10,12 @@ class Hydrus::Collection < Hydrus::GenericObject
   end
 
   def save_apo
+    remove_embargo_length_if_none_selected
     apo.save
+  end
+
+  def remove_embargo_length_if_none_selected
+    self.embargo = "" if embargo_option == "none"
   end
 
   def hydrus_items
@@ -28,19 +33,19 @@ class Hydrus::Collection < Hydrus::GenericObject
   # These getter and setter methods allow us to set a single value for the embargo 
   #  period from two separate HTML select controls, based on the value of a radio button
   def embargo_varies
-    embargo_option=="varies" ? embargo : ""
+    embargo_option == "varies" ? embargo : ""
   end
 
   def embargo_fixed
-   embargo_option=="fixed" ? embargo : ""
+    embargo_option == "fixed" ? embargo : ""
   end
 
   def embargo_varies= *args
-    apo.embargo= *args if embargo_option=="varies" # only set the embargo period for this setter if the corresponding radio button is selected
+    apo.embargo= *args if embargo_option == "varies" # only set the embargo period for this setter if the corresponding radio button is selected
   end
 
   def embargo_fixed= *args
-    apo.embargo= *args if embargo_option=="fixed"  # only set the embargo period for this setter if the corresponding radio button is selected
+    apo.embargo= *args if embargo_option == "fixed"  # only set the embargo period for this setter if the corresponding radio button is selected
   end
   #############
 

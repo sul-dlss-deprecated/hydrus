@@ -142,23 +142,27 @@ describe("Collection edit", :type => :request, :integration => true) do
 
   it "can edit APO embargo content" do
     # Setup and login.
-    orig_embargo        = @hc.embargo         # 1 year > 3 years
-    orig_embargo_option = @hc.embargo_option  # varies > fixed
+    orig_embargo        = @hc.embargo         # original value = 1 year, will set to 3 years
+    orig_embargo_option = @hc.embargo_option  # original value = varies, will set to fixed
     orig_check_field    = "hydrus_collection_embargo_option_#{orig_embargo_option}"
     new_embargo         = '3 years'
-    new_embargo_option  = 'varies'
+    new_embargo_option  = 'fixed'
     new_check_field     = "hydrus_collection_embargo_option_#{new_embargo_option}"
+    no_embargo_option   = 'none'
+    no_embargo          = ''
+    no_embargo_check_field    = "hydrus_collection_embargo_option_#{no_embargo_option}"
     login_as_archivist1
     # Visit edit page, and confirm content.
     visit edit_polymorphic_path(@hc)
     current_path.should == edit_polymorphic_path(@hc)
     page.should have_checked_field(orig_check_field)
-    #page.has_select?('embargo', :selected => orig_embargo).should == true
-    page.should     have_xpath("//input[@value='#{orig_embargo}']")
-    page.should_not have_xpath("//input[@value='#{new_embargo}']")
+    puts orig_embargo
+    page.has_select?('embargo_option_varies').should == true
+    page.has_select?('embargo_option_varies', :selected => "#{orig_embargo} after deposit").should == true
+    page.has_select?('embargo_option_fixed', :selected => nil).should == true
     # Make changes, save, and confirm redirect.
     choose(new_check_field)
-    fill_in("hydrus_collection_embargo", :with => new_embargo)
+    select(new_embargo, :from => "embargo_option_#{new_embargo_option}")
     click_button "Save"
     current_path.should == polymorphic_path(@hc)
     # Visit view-page, and confirm that changes occured.
@@ -167,11 +171,31 @@ describe("Collection edit", :type => :request, :integration => true) do
     # Undo changes, and confirm.
     visit edit_polymorphic_path(@hc)
     current_path.should == edit_polymorphic_path(@hc)
+    page.has_select?('embargo_option_varies', :selected => nil).should == true
+    page.has_select?('embargo_option_fixed', :selected => "#{new_embargo} after deposit").should == true   
     choose(orig_check_field)
-    fill_in("hydrus_collection_embargo", :with => orig_embargo)
+    select(orig_embargo, :from => "embargo_option_#{orig_embargo_option}")
     click_button "Save"
     current_path.should == polymorphic_path(@hc)
     find("div.collection-settings").should have_content(orig_embargo)
+    # Set to no embargo after embargo was previously set and ensure there is no longer an embargo period set.
+    visit edit_polymorphic_path(@hc)
+    current_path.should == edit_polymorphic_path(@hc)
+    page.has_select?('embargo_option_varies', :selected => "#{orig_embargo} after deposit").should == true   
+    choose(no_embargo_check_field)
+    click_button "Save"
+    current_path.should == polymorphic_path(@hc)
+    find("div.collection-settings").should_not have_content(orig_embargo)
+    # verify embargo is now 'none'
+    @hc.embargo == 'none'
+    # Undo changes, and confirm.
+    visit edit_polymorphic_path(@hc)
+    current_path.should == edit_polymorphic_path(@hc)
+    choose("hydrus_collection_embargo_option_varies")
+    select("1 year", :from => "embargo_option_varies")
+    click_button "Save"
+    current_path.should == polymorphic_path(@hc)
+    find("div.collection-settings").should have_content("1 year")
   end
   
 end
