@@ -14,23 +14,6 @@ GIT
       sass-rails
       unicode
 
-GIT
-  remote: http://github.com/projecthydra/hydra-head.git
-  revision: c4c525e4284ac5a1edc907efd0227c1f1b67759c
-  specs:
-    hydra-head (4.1.0)
-      RedCloth (= 4.2.9)
-      active-fedora (~> 4.1)
-      blacklight (~> 3.4)
-      block_helpers
-      deprecation (>= 0.0.5)
-      devise
-      hydra-access-controls (>= 0.0.2)
-      hydra-mods (>= 0.0.5)
-      jquery-rails
-      rails (~> 3.2.3)
-      sanitize
-
 GEM
   remote: http://rubygems.org/
   remote: http://sulair-rails-dev.stanford.edu/
@@ -183,11 +166,24 @@ GEM
     hike (1.2.1)
     httpi (1.1.1)
       rack
-    hydra-access-controls (0.0.2)
+    hydra-access-controls (0.0.5)
       active-fedora
       activesupport
+      blacklight
       cancan
       deprecation
+    hydra-head (4.1.1)
+      RedCloth (= 4.2.9)
+      active-fedora (~> 4.1)
+      blacklight (~> 3.4)
+      block_helpers
+      deprecation (>= 0.0.5)
+      devise
+      hydra-access-controls (>= 0.0.5)
+      hydra-mods (>= 0.0.5)
+      jquery-rails
+      rails (~> 3.2.3)
+      sanitize
     hydra-mods (0.0.5)
       active-fedora (~> 4.1)
     i18n (0.6.0)
@@ -389,7 +385,7 @@ DEPENDENCIES
   dor-services (>= 3.5.1)
   druid-tools
   dynamic_form
-  hydra-head (~> 4.0)!
+  hydra-head (~> 4.1.1)
   is_it_working-cbeer (~> 1.0.13)
   jettywrapper
   jquery-rails

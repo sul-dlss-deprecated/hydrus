@@ -19,7 +19,7 @@ gem 'about_page'
 gem 'is_it_working-cbeer', "~> 1.0.13"
 
 gem 'blacklight', '~>3.5', :git => 'http://github.com/projectblacklight/blacklight.git'
-gem 'hydra-head', '~> 4.0', :git => 'http://github.com/projecthydra/hydra-head.git'
+gem 'hydra-head', '~> 4.1.1'
 gem 'devise'
 gem 'carrierwave'
 gem 'rails', '3.2.3'
