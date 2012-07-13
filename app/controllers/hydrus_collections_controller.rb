@@ -45,9 +45,18 @@ class HydrusCollectionsController < ApplicationController
   end
 
   def update
-    @document_fedora.update_attributes(params["hydrus_collection"]) if params.has_key?("hydrus_collection")      
-    @document_fedora.descMetadata.insert_related_item if params.has_key?(:add_link)
+    @document_fedora.update_attributes(params["hydrus_collection"]) if params.has_key?("hydrus_collection")
+    if params.has_key?(:add_link)
+      @document_fedora.descMetadata.insert_related_item
+    elsif params.has_key?(:add_person)
+      @document_fedora.apo.roleMetadata.add_person_of_role('from_controller')
+    end
+#    logger.debug("attributes submitted: #{params['hydrus_collection'].inspect}")
+    
+    # TODO: validate doc!
+#    puts "DEBUG: before save: #{@document_fedora.apo.roleMetadata.to_xml}"
     @document_fedora.save
+#    puts "DEBUG: after save: #{@document_fedora.apo.roleMetadata.to_xml}"
     
     notice << "Your changes have been saved."
     flash[:notice] = notice.join("<br/>").html_safe unless notice.blank?
@@ -72,7 +81,6 @@ class HydrusCollectionsController < ApplicationController
         end
       }
     end
-
   end # update
 
   def destroy_value
