@@ -13,6 +13,8 @@ class Hydrus::RoleMetadataDS < ActiveFedora::NokogiriDatastream
     end
     t.person :ref => [:actor], :path => 'person'
     t.group  :ref => [:actor], :path => 'group'
+    
+    t.person_id :proxy => [:person, :identifier]
 
     t.role do
       t.type_ :path => {:attribute => 'type'}

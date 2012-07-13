@@ -51,6 +51,7 @@ describe Hydrus::RoleMetadataDS do
     it "should get expected values from OM terminology" do
       tests = [
         [[:role, :person, :identifier], %w(brown dblack ggreen)],
+        [:person_id, %w(brown dblack ggreen)],
         [[:role, :group,  :identifier], %w(pasig:2011attendees pasig:staff stanford)],
         [[:role, :person, :name], ["Brown, Malcolm", "Black, Delores", "Green, Greg"]],
         [[:collection_manager, :person, :identifier], %w(brown dblack)],
