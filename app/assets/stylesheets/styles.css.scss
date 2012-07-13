@@ -155,7 +155,8 @@ table form {
 .radio-label label {display: inline-block;}
 /* make inline select pulldowns only as wide as necessary */
 .inline-select {
-	// height: 20px; //doesn't work on Firefox
+	height: 20px; 
+	padding: 0; // needed for reduced height in Firefox
 	width: auto;
 	&.right {margin: 2px 0 2px 0;}
 }
