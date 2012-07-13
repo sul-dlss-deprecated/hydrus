@@ -25,8 +25,8 @@ class HydrusCollectionsController < ApplicationController
 
   def new
     apo = create_apo(current_user)
-    dor_item = Hydrus::GenericObject.register_dor_object(current_user, 'collection', apo.pid)
-    collection = dor_item.adapt_to(Hydrus::Collection)
+    dor_obj = Hydrus::GenericObject.register_dor_object(current_user, 'collection', apo.pid)
+    collection = dor_obj.adapt_to(Hydrus::Collection)
     collection.remove_relationship :has_model, 'info:fedora/afmodel:Dor_Collection'
     collection.assert_content_model
     #TODO:  Initialize roleMetadata datastream with the collection-manager role for the current logged-in user
@@ -45,6 +45,7 @@ class HydrusCollectionsController < ApplicationController
   end
 
   def update
+    notice = []
     @document_fedora.update_attributes(params["hydrus_collection"]) if params.has_key?("hydrus_collection")
     if params.has_key?(:add_link)
       @document_fedora.descMetadata.insert_related_item
