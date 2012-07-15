@@ -69,10 +69,10 @@
     content in this collection is released for public or Stanford-only discovery
     and download.</p>
 
-    <div class="row">
+    <div class="row radio-select-group" >
       <%= hydrus_form_value do %>
         <% embargo_types.each do |emb_opt, emb_text| %>
-          <div class="row">
+          <div class="row radio-select-option">
             <div class="span1 radio-input">
               <%= f.radio_button 'embargo_option', emb_opt %>
             </div>
