@@ -28,11 +28,9 @@ $(document).ready(function(){
 
 	// Manage state of select dropdowns when the select should be enabled only when its associated radio button is selected
 	$('div.radio-select-group input:radio').click(function() { // when a radio button in the group is clicked
-		$('div.radio-select-group select').each(function() { // find all selects within the group of radio buttons
-			$(this).prop('disabled', true); // disable all the selects
-	});
-	$('div.radio-select-group input:radio:checked').parentsUntil('.radio-select-option').siblings('div.radio-label').children('select')
-		.prop('disabled', false); // re-enable the select that is associated with the selected radio button
+		$('div.radio-select-group select').prop('disabled', true); // disable all the selects
+		$('div.radio-select-group input:radio:checked').parentsUntil('.radio-select-option').siblings('div.radio-label').children('select')
+			.prop('disabled', false); // re-enable the select that is associated with the selected radio button
 	});
 	// On page load, execute the code block above to disable appropriate select dropdowns
 	$('div.radio-select-group input:radio:checked').trigger('click');
