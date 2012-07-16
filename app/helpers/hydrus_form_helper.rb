@@ -53,6 +53,24 @@ module HydrusFormHelper
     }
   end
 
+  def license
+    return {
+      'Creative Commons Licenses' =>  [
+        ['CC BY Attribution'                                 , 'cc-by'],
+        ['CC BY-SA Attribution Share Alike'                  , 'cc-by-sa'],
+        ['CC BY-ND Attribution-NoDerivs'                     , 'cc-by-nd'],
+        ['CC BY-NC Attribution-NonCommercial'                , 'cc-by-nc'],
+        ['CC BY-NC-SA Attribution-NonCommercial-ShareAlike'  , 'cc-by-nc-sa'],
+        ['CC BY-NC-ND Attribution-NonCommercial-NoDerivs'    , 'cc-by-nc-nd'],
+      ],
+      'Open Data Commons Licenses'  =>  [
+        ['PDDL Public Domain Dedication and License'         , 'pddl'],
+        ['ODC-By Attribution License'                        , 'odc-by'],
+        ['ODC-ODbl Open Database License'                    , 'odc-odbl'],
+      ]
+    }
+  end
+
   # WARNING - the keys of this hash (which appear in the radio buttons in the colelction edit page) 
   #   are used in the collection model to trigger specific getting and setting behavior of embargo lengths
   #  if you change these keys here, you need to update the collection model as well

@@ -147,18 +147,26 @@ table form {
 	float:left; clear:none;
 	text-align: right; 
 	margin-right: 12px;
-	@media (max-width: 767px) {
-		text-align: left;
-	}
+	@media (max-width: 767px) {text-align: left;}
 }
-.radio-label {margin: 0 0 0 6px;}
-.radio-label label {display: inline-block;}
+.radio-label {
+	margin-left: 6px;
+	label {display: inline-block;}
+}
 /* make inline select pulldowns only as wide as necessary */
 .inline-select {
 	height: 20px; 
 	padding: 0; // needed for reduced height in Firefox
 	width: auto;
 	&.right {margin: 2px 0 2px 0;}
+}
+.radio-select-group {
+	optgroup[label] {
+		background-color: #eeeeee;
+		margin: 9px 0 12px 2px;
+		padding-top: 4px;
+	}
+	optgroup option {background-color: white;}
 }
 
 /* search results pagination */

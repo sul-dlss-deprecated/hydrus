@@ -38,10 +38,8 @@ describe Hydrus::DescMetadataDS do
               <url>http://example.com</url>
             </location>
           </relatedItem>
-          <subject>
-            <topic>divorce</topic>
-            <topic>marriage</topic>
-          </subject>
+          <subject><topic>divorce</topic></subject>
+          <subject><topic>marriage</topic></subject>
           <note type="preferred citation">pref_cite outer</note>
           <note type="citation/reference">related_cite outer</note>
           <note type="contact">foo@bar.com</note>
@@ -78,14 +76,25 @@ describe Hydrus::DescMetadataDS do
       nm = '<name><namePart/><role><roleTerm authority="marcrelator" type="text"/></role></name>'
       ri = '<relatedItem><titleInfo><title/></titleInfo><location><url/></location></relatedItem>'
       rc = '<note type="citation/reference"></note>'
-      @exp_xml = noko_doc([@mods_start, nm, nm, nm, ri, ri, rc, '</mods>'].join '')
+      to = '<subject><topic>foo</topic></subject>'
+      @exp_xml = noko_doc([
+        @mods_start,
+        to,
+        nm, nm, nm,
+        ri, ri,
+        rc,
+        to,
+        '</mods>',
+      ].join '')
       @dsdoc   = Hydrus::DescMetadataDS.from_xml("#{@mods_start}</mods>")
+      @dsdoc.insert_topic('foo')
       @dsdoc.insert_person
       @dsdoc.insert_person
       @dsdoc.insert_person
       @dsdoc.insert_related_item
       @dsdoc.insert_related_citation
       @dsdoc.insert_related_item
+      @dsdoc.insert_topic('foo')
       @dsdoc.ng_xml.should be_equivalent_to @exp_xml
     end
 
@@ -104,6 +113,25 @@ describe Hydrus::DescMetadataDS do
       @dsdoc.name(1).namePart = 'John'
       @dsdoc.remove_node(:name, 1)
       @dsdoc.ng_xml.should be_equivalent_to @exp_xml
+    end
+
+    it "should be able to remove all nodes of a type using remove_nodes()" do
+      ab = '<abstract>abstract content</abstract>'
+      xml = <<-EOF
+        #{@mods_start}
+          <subject><topic>foo</topic></subject>
+          <subject><topic>bar</topic></subject>
+          <note type="preferred citation">pref_cite outer</note>
+          #{ab}
+          <note type="citation/reference">related_cite outer</note>
+          <subject><topic>blah</topic></subject>
+        </mods>
+      EOF
+      d = Hydrus::DescMetadataDS.from_xml(xml)
+      d.remove_nodes(:subject)
+      d.remove_nodes(:preferred_citation)
+      d.remove_nodes(:related_citation)
+      d.ng_xml.should be_equivalent_to "#{@mods_start}#{ab}</mods>"
     end
 
   end

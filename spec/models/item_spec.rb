@@ -165,4 +165,34 @@ describe Hydrus::Item do
     end
   end
 
+  describe "keywords" do
+
+    before(:each) do
+      @mods_start = '<mods xmlns="http://www.loc.gov/mods/v3">'
+      xml = <<-EOF
+        #{@mods_start}
+          <subject><topic>divorce</topic></subject>
+          <subject><topic>marriage</topic></subject>
+        </mods>
+      EOF
+      @dsdoc = Hydrus::DescMetadataDS.from_xml(xml)
+      @hi.stub(:descMetadata).and_return(@dsdoc)
+    end
+
+    it "keywords() should return expected values" do
+      @hi.keywords.should == %w(divorce marriage)
+    end
+
+    it "keywords= should rewrite all <subject> nodes" do
+      @hi.keywords = { 0 => 'foo', 1 => 'bar', 2 => 'quux' }
+      puts @dsdoc.ng_xml.should be_equivalent_to <<-EOF
+        #{@mods_start}
+          <subject><topic>foo</topic></subject>
+          <subject><topic>bar</topic></subject>
+          <subject><topic>quux</topic></subject>
+        </mods>
+      EOF
+    end
+
+  end
 end

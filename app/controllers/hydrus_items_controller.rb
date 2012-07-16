@@ -4,6 +4,7 @@ class HydrusItemsController < ApplicationController
   include Hydra::AssetsControllerHelper  # This is to get apply_depositor_metadata method
   include Hydra::Controller::UploadBehavior
   include Hydrus::AccessControlsEnforcement
+  include Hydrus::ControllerHelper
 
   #prepend_before_filter :sanitize_update_params, :only => :update
   before_filter :enforce_access_controls
@@ -35,13 +36,6 @@ class HydrusItemsController < ApplicationController
     item.add_to_collection(collection.pid)
     item.save
     redirect_to edit_polymorphic_path(item)
-  end
-
-  # Takes a comma-delimited string of keywords, as entered in the UI.
-  # Returns a hash like this: { 0 => 'foo', 1 => 'bar bar', etc. }
-  # Leading and trailing whitespace is removed from the keywords.
-  def parse_keywords(kws)
-    Hash[ kws.strip.split(/\s*,\s*/).each_with_index.map { |kw,i| [i,kw] } ]
   end
 
   def update
