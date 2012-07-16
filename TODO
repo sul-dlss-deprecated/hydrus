@@ -33,9 +33,9 @@ Implement Item-level contact.
 
 ----------
 
-Validation for the new APO-related fields.
-
-AtLeastOneValidator: tests.
+Only allow users to create new items if the underlying collection is set to published.
+Store publish state for item and collection (collection publish state stored in APO?)
+Store "agree to terms" checkbox for item.
 
 ==========
 

@@ -15,6 +15,13 @@ describe("Collection view", :type => :request, :integration => true) do
     current_path.should == new_user_session_path
   end
 
+  it "should redirect to the collection page if the requested druid is a collection but is visited at the item page URL" do
+    @bad_url = "/items/#{@druid}" # this is actually a collection druid
+    login_as_archivist1
+    visit @bad_url
+    current_path.should == polymorphic_path(@hc)    
+  end
+  
   it "should show info form the Collection" do
     exp_content = [
       "SSDS Social Science Data Collection",

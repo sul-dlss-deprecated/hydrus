@@ -25,7 +25,7 @@ class Hydrus::GenericObject < Dor::Item
   def object_type
     identityMetadata.objectType.first
   end
-  
+    
   def clicked_publish?
     to_bool(publish)
   end

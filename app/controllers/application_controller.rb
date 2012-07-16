@@ -22,6 +22,15 @@ class ApplicationController < ActionController::Base
     ))
   end
 
+  # when on an item/collection page, check druid against object type and redirect to correct controller if needed
+  def redirect_if_not_correct_object_type
+    return unless @document_fedora
+    if !self.controller_name.include?(@document_fedora.object_type)
+      redirect_url=Rails.application.routes.url_helpers.send("hydrus_#{@document_fedora.object_type}_path",@document_fedora.pid) 
+      redirect_to redirect_url    
+    end
+  end
+  
   # Please be sure to impelement current_user and user_session. Blacklight depends on 
   # these methods in order to perform user specific actions. 
 

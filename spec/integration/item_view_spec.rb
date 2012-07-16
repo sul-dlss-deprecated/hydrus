@@ -14,6 +14,13 @@ describe("Item view", :type => :request, :integration => true) do
     current_path.should == new_user_session_path
   end
 
+  it "should redirect to the item page if the requested druid is an item but is visited at the collection page URL" do
+    @bad_url = "/collections/#{@druid}" # this is actually an item druid
+    login_as_archivist1
+    visit @bad_url
+    current_path.should == polymorphic_path(@hi)    
+  end
+
   it "Some of the expected info is displayed" do
     exp_content = [
       "How Couples Meet and Stay Together", # title
