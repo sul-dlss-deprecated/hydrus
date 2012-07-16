@@ -87,6 +87,7 @@ class HydrusItemsController < ApplicationController
     if @document_fedora.valid?
       @document_fedora.save
     else
+      # invalid item, generate errors to display to user
       errors = []  
       @document_fedora.errors.messages.each do |field, error|
         errors << "#{field.to_s.humanize.capitalize} #{error.join(', ')}"

@@ -5,7 +5,7 @@
     <label class="checkbox">
       <input type="checkbox" name="terms_of_deposit" class="terms_of_deposit" id="terms_<%= id %>" /> I agree to the <a href="#">terms of deposit</a> for the Stanford Digital Repository
     </label>
-    <button type="submit" class="btn btn-small publish" name="hydrus_item[publish]" value="true">Publish</button>
-    <p class="discard-item"><i class="icon-trash"></i> <a href="#">Discard this item</a></p>
+    <button type="submit" id="hydrus_item_publish" class="btn btn-small publish" name="hydrus_item[publish]" value="true">Publish</button>
+    <p class="discard-item"><i class="icon-trash"></i> <a href="#">Discard this <%=@document_fedora.object_type%></a></p>
   </fieldset>
 </div>

@@ -1,5 +1,21 @@
 class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
 
+  include Hydrus::ModelHelper
+
+  attr_accessor :publish
+  
+  validate :check_embargo_options, :if => :clicked_publish?
+  
+  def check_embargo_options
+    if embargo_option != 'none' && embargo.blank?
+      errors.add(:embargo, "must have a time period specified")
+    end
+  end
+
+  def clicked_publish?
+   to_bool(publish)
+  end  
+  
   has_metadata(
     :name => "administrativeMetadata",
     :type => Hydrus::AdministrativeMetadataDS,
@@ -37,5 +53,5 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
 
   delegate(:person_id, :to => "roleMetadata",
            :at => [:role, :person, :identifier])
-
+           
 end

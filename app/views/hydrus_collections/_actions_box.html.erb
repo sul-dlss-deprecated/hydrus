@@ -1,0 +1,18 @@
+<div class="well actions-box" id="collection-actions">
+  <fieldset>
+    <legend class="box-header">Actions</legend>
+    <button type="submit" class="btn btn-small save-edits" name="save" id="save">Save</button>
+    <label class="checkbox">
+      <input type="checkbox" name="terms" id="terms" /> Name, description, contact provided
+    </label>
+    <button type="submit" class="btn btn-small save-edits" disabled="disabled" name="open_collection" id="save">Open Collections</button>
+    <div class="btn-group">
+      <button class="btn btn-small" disabled="disabled">Add and add &hellip;</button>
+      <button class="btn btn-small dropdown-toggle" data-toggle="dropdown" disabled="disabled">
+        <span class="caret"></span>
+      </button>
+      <%= render :partial => "shared/add_content_options", :locals => {:parent => @document_fedora} %>
+    </div>
+    <p class="discard-item"><i class="icon-trash"></i> <a href="#">Discard this <%=@document_fedora.object_type%></a></p>
+  </fieldset>
+</div>

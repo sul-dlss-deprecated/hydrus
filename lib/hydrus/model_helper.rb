@@ -7,6 +7,10 @@ module Hydrus
         eval("self.#{field} = self.#{field}.strip") if self.send(field).respond_to?('strip')  # we can't just call a strip directly on the field due to OM?
       end
     end
+    
+    def to_bool(value)
+      value == "true" || value == true || value.to_i == 1 ? true : false
+    end
   
   end
 end

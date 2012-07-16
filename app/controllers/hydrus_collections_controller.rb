@@ -56,8 +56,19 @@ class HydrusCollectionsController < ApplicationController
     
     # TODO: validate doc!
 #    puts "DEBUG: before save: #{@document_fedora.apo.roleMetadata.to_xml}"
-    @document_fedora.save
 #    puts "DEBUG: after save: #{@document_fedora.apo.roleMetadata.to_xml}"
+    
+    if @document_fedora.object_valid?
+      @document_fedora.save
+    else
+      # invalid collection, generate errors to display to user
+      errors = []  
+      @document_fedora.object_error_messages.each do |field, error|
+        errors << "#{field.to_s.humanize.capitalize} #{error.join(', ')}"
+      end
+      flash[:error] = errors.join("<br/>").html_safe
+      redirect_to [:edit, @document_fedora] and return
+    end  
     
     notice << "Your changes have been saved."
     flash[:notice] = notice.join("<br/>").html_safe unless notice.blank?

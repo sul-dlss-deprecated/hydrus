@@ -1,24 +1,9 @@
 <%- @page_title = "Editing '#{@document_fedora.title}' - #{application_name}" -%>
 <%- object_type = @document_fedora.object_type -%>
+<%= form_for(@document_fedora, :method => 'PUT', :html => {:class => "step"}) do |f| -%>
+
 <%- sidebar_items << capture do -%>
-  <div class="well actions-box" id="collection-actions">
-    <fieldset>
-      <legend class="box-header">Actions</legend>
-      <button type="submit" class="btn btn-small save-edits" name="save" id="save">Save</button>
-      <label class="checkbox">
-        <input type="checkbox" name="terms" id="terms" /> Name, description, contact provided
-      </label>
-      <button type="submit" class="btn btn-small save-edits" disabled="disabled" name="open_collection" id="save">Open Collections</button>
-      <div class="btn-group">
-        <button class="btn btn-small" disabled="disabled">Add and add &hellip;</button>
-        <button class="btn btn-small dropdown-toggle" data-toggle="dropdown" disabled="disabled">
-          <span class="caret"></span>
-        </button>
-        <%= render :partial => "shared/add_content_options", :locals => {:parent => @document_fedora} %>
-      </div>
-      <p class="discard-item"><i class="icon-trash"></i> <a href="#">Discard this <%= object_type %></a></p>
-    </fieldset>
-  </div>
+	<%= render :partial => "actions_box", :locals => {:f=>f, :id=>"js"}%>
 <%- end -%>
 
 <div class="row">
@@ -26,14 +11,13 @@
 		<%=render :partial=>'shared/navigation' %>
   </div>
 </div>
-<%= form_for(@document_fedora, :method => 'PUT', :html => {:class => "step"}) do |f| -%>
   <%= hydrus_form_header(:required=>true, :first=>true) {"Name, description, contact"} %>
   <div class="row">
     <%= hydrus_form_label do %>
       <%= f.label :title, "Collection name" %>
     <%- end -%>
     <%= hydrus_form_value do %>
-      <%= f.text_field :title, :value => @document_fedora.title.strip %>
+      <%= f.text_field :title, :value => @document_fedora.title || "" %>
     <%- end -%>
   </div>
   <div class="row">
@@ -41,7 +25,7 @@
       <%= f.label :abstract, "Description" %>
     <%- end -%>
     <%= hydrus_form_value(:class=>"short-textarea") do %>
-      <%= f.text_area :abstract, :value => @document_fedora.abstract.strip %>
+      <%= f.text_area :abstract, :value => @document_fedora.abstract || "" %>
     <%- end -%>
   </div>
   <div class="row">
@@ -49,7 +33,7 @@
       Contact email
     <%- end -%>
     <%= hydrus_form_value do %>
-      <%= f.text_field :contact, :value => @document_fedora.contact.strip %>
+      <%= f.text_field :contact, :value => @document_fedora.contact || ""%>
     <%- end -%>
   </div>
   
@@ -142,7 +126,7 @@
   %>
   <noscript>
     <button type="submit" class="btn btn-small save-edits" name="save" id="save">Save</button>    
-    <button type="submit" class="btn btn-small" id="publish" name="publish" disabled="disabled">Publish</button>
+    <button type="submit" class="btn btn-small" id="publish" name="publish">Publish</button>
   </noscript>
 <% end %>
 <div id="druid-footer"><%= @document_fedora.pid %></div>

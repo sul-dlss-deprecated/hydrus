@@ -25,14 +25,14 @@ describe Hydrus::Item do
   end
 
   it "new items should be invalid if no files have been added yet" do
-    @item=Hydrus::Item.new
-    @item.should_not be_valid
-    @item.publish="true"
-    @item.should_not be_valid
-    @item.errors.messages[:title].should_not be_nil
-    @item.errors.messages[:files].should_not be_nil    
-    @item.errors.messages[:terms_of_deposit].should_not be_nil    
-    @item.errors.messages[:abstract].should_not be_nil    
+    item      = Hydrus::Item.new(:pid=>'druid:tt000tt0001')
+    item.should be_valid
+    item.publish="true"
+    item.should_not be_valid
+    item.errors.messages[:title].should_not be_nil
+    item.errors.messages[:files].should_not be_nil    
+    item.errors.messages[:terms_of_deposit].should_not be_nil    
+    item.errors.messages[:abstract].should_not be_nil    
   end
   
   it "existing item should be invalid if required fields are missing (and publish/terms of deposit was selected)" do

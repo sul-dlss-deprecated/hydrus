@@ -27,7 +27,7 @@ class Hydrus::GenericObject < Dor::Item
   end
   
   def clicked_publish?
-    publish == "true"
+    to_bool(publish)
   end
   
   delegate :abstract, :to => "descMetadata", :unique => true
@@ -37,7 +37,7 @@ class Hydrus::GenericObject < Dor::Item
   delegate :contact, :to => "descMetadata", :unique => true
     
   def apo
-    @apo ||= (apo_pid ? get_fedora_item(apo_pid) : nil)
+    @apo ||= (apo_pid ? get_fedora_item(apo_pid) : Hydrus::AdminPolicyObject.new)
   end
 
   def apo_pid

@@ -4,7 +4,25 @@ class Hydrus::Collection < Hydrus::GenericObject
 
   after_validation :strip_whitespace
   before_save :save_apo
-
+  
+  # this lets us check if both the apo and the collection are valid at once (used in the controller)
+  def object_valid?
+    valid? # first run the validations on BOTH models specifically to collect all errors
+    apo.valid?
+    valid? && apo.valid? # then return true only if both are actually valid
+  end
+  
+  def object_error_messages
+    # grab all error messages from both collection and the apo to show to the user
+    errors.messages.merge(apo.errors.messages)
+  end
+    
+  def publish=(value)
+    # set the APO to published if the collection is published, since they are tied together, so that we only run validations when both are published
+    apo.publish=true if to_bool(value)
+    super
+  end
+  
   def strip_whitespace
      strip_whitespace_from_fields [:title,:abstract,:contact]
   end

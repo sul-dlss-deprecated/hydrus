@@ -7,10 +7,8 @@ describe Hydrus::GenericObject do
     @apo_pid = 'druid:oo000oo0002'
   end
   
-  it "apo() should return nil if the apo_pid is nil" do
-    exp = 'foobar'
-    @hi.stub(:admin_policy_object_ids).and_return [nil]
-    @hi.apo.should == nil
+  it "apo() should return a new blank apo if the apo_pid is nil" do
+    @hi.apo.class.should == Hydrus::AdminPolicyObject 
   end
 
   it "apo() should return fedora object if the apo_pid is defined" do

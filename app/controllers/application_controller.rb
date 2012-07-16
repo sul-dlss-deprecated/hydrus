@@ -3,6 +3,9 @@ class ApplicationController < ActionController::Base
   include SulChrome::Controller
   include Blacklight::Controller  
   include Hydra::Controller::ControllerBehavior
+  include Hydrus::ModelHelper
+  
+  helper_method :to_bool # defined in Hydra::ModelHelper so it can be used in models as well
   helper_method :is_production?
   
   def layout_name

@@ -78,11 +78,11 @@ function validate_hydrus_item() {
 		all_required_filled = false;
 	}
 	if(all_required_filled && $("input#terms_js").is(":checked")) {
-		$(".publish").each(function(){
+		$("#hydrus_item_publish").each(function(){
 			$(this).removeAttr("disabled");
 		});
 	}else{
-		$(".publish").each(function(){
+		$("#hydrus_item_publish").each(function(){
 			$(this).attr("disabled", "disabled");
 		});
 	}
