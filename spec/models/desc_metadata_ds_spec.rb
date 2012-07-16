@@ -38,10 +38,8 @@ describe Hydrus::DescMetadataDS do
               <url>http://example.com</url>
             </location>
           </relatedItem>
-          <subject>
-            <topic>divorce</topic>
-            <topic>marriage</topic>
-          </subject>
+          <subject><topic>divorce</topic></subject>
+          <subject><topic>marriage</topic></subject>
           <note type="preferred citation">pref_cite outer</note>
           <note type="citation/reference">related_cite outer</note>
           <note type="contact">foo@bar.com</note>
@@ -78,14 +76,25 @@ describe Hydrus::DescMetadataDS do
       nm = '<name><namePart/><role><roleTerm authority="marcrelator" type="text"/></role></name>'
       ri = '<relatedItem><titleInfo><title/></titleInfo><location><url/></location></relatedItem>'
       rc = '<note type="citation/reference"></note>'
-      @exp_xml = noko_doc([@mods_start, nm, nm, nm, ri, ri, rc, '</mods>'].join '')
+      to = '<subject><topic>foo</topic></subject>'
+      @exp_xml = noko_doc([
+        @mods_start,
+        to,
+        nm, nm, nm,
+        ri, ri,
+        rc,
+        to,
+        '</mods>',
+      ].join '')
       @dsdoc   = Hydrus::DescMetadataDS.from_xml("#{@mods_start}</mods>")
+      @dsdoc.insert_topic('foo')
       @dsdoc.insert_person
       @dsdoc.insert_person
       @dsdoc.insert_person
       @dsdoc.insert_related_item
       @dsdoc.insert_related_citation
       @dsdoc.insert_related_item
+      @dsdoc.insert_topic('foo')
       @dsdoc.ng_xml.should be_equivalent_to @exp_xml
     end
 

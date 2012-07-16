@@ -25,7 +25,6 @@ deletes all of the related published works.
 Possible bug: Item edit: keyword editing does not persist??
 - test for parse_keywords(): and relocate it?
 - tests for keywords() and keywords=().
-- test for insert_topic()
 - refactor and test remove_node() and remove_nodes().
 - integration test for topic editing
 
@@ -48,9 +47,8 @@ Assess Item and Collection controllers for test coverage.
 
 ObjectFiles controller: destroy() lacks testing.
 
-After webauthing:  Coll create: Initialize apo roleMetadata datastream with the collection-manager
-role for the current logged-in user 
+Coll create: Initialize apo roleMetadata datastream with the collection-manager
+role for the current logged-in user (waiting on web auth).
 
-After webauthing:  Item create: Create roleMetadata datastream with the item-depositor for the
-current logged-in user.
-
+Item create: Create roleMetadata datastream with the item-depositor for the
+current logged-in user (waiting on web auth).
