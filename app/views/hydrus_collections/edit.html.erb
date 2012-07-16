@@ -53,7 +53,7 @@
     content in this collection is released for public or Stanford-only discovery
     and download.</p>
 
-    <div class="row radio-select-group" >
+    <div class="row radio-select-group">
       <%= hydrus_form_value do %>
         <% embargo_types.each do |emb_opt, emb_text| %>
           <div class="row radio-select-option">
@@ -64,7 +64,7 @@
               <%= f.label        'embargo_option', emb_text, :value => emb_opt %>
               <%# Don't include embargo period select if embargo type is 'none' %>
               <% unless emb_opt == 'none' %>
-                <%= f.select "embargo_#{emb_opt}".to_sym, options_for_select(embargo_terms, @document_fedora.send("embargo_#{emb_opt}")), {:include_blank => 'Select embargo'}, {:class => 'inline-select right', :id => "embargo_option_#{emb_opt}" } %>
+                <%= f.select "embargo_#{emb_opt}".to_sym, options_for_select(embargo_terms, @document_fedora.send("embargo_#{emb_opt}")), {:prompt => 'Select embargo'}, {:class => 'inline-select right', :id => "embargo_option_#{emb_opt}" } %>
               <% end %>
             </div>
           </div>
@@ -78,10 +78,10 @@
         <% visibility_types.each do |vis_opt, vis_text| %>
           <div class="row">
             <div class="span1 radio-input">
-              <%= f.radio_button 'visibility_option', vis_opt, :class => 'radio-group' %>
+              <%= f.radio_button 'visibility_option', vis_opt %>
             </div>
             <div class="span7 radio-label">
-              <%= f.label        'visibility_option', vis_text, :value => vis_opt, :class => 'radio-group' %>
+              <%= f.label        'visibility_option', vis_text, :value => vis_opt %>
             </div>
           </div>
         <% end %>
@@ -93,24 +93,23 @@
   <%= hydrus_form_header {"License"} %>
   <div id="license">
     <p>After its release date, items in this collections can be discovered and downloaded by:</p>
-    <div class="row">
+    <div class="row radio-select-group">
       <%= hydrus_form_value do %>
         <% license_types.each do |lic_opt, lic_text| %>
-          <div class="row">
+          <div class="row radio-select-option">
             <div class="span1 radio-input">
-              <%= f.radio_button 'license_option', lic_opt, :class => 'radio-group' %>
+              <%= f.radio_button 'license_option', lic_opt %>
             </div>
             <div class="span7 radio-label">
-              <%= f.label        'license_option', lic_text, :value => lic_opt, :class => 'radio-group' %>
+              <%= f.label        'license_option', lic_text, :value => lic_opt %>
+              <%# Don't include license select dropdown if license type is 'no license' %>
+              <% unless lic_opt == 'none' %>
+                <%= f.select "license_#{lic_opt}".to_sym, grouped_options_for_select(license, @document_fedora.send("license_#{lic_opt}")), {:prompt => 'Select license'}, {:class => 'inline-select right', :id => "license_option_#{lic_opt}" } %>
+              <% end %>
             </div>
           </div>
         <% end %>
       <% end %>
-
-      <%# TODO: convert to drop-down, conditional on radio button choice %>
-      <%= hydrus_form_value do %>
-        <%= f.text_field :license, :value => @document_fedora.license %>
-      <%- end -%>
     </div>
   </div>
 

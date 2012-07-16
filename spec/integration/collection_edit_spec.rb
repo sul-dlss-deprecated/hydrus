@@ -109,10 +109,12 @@ describe("Collection edit", :type => :request, :integration => true) do
 
   it "can edit APO license content" do
     # Setup and login.
-    orig_license        = @hc.license         # cc-by  >  odc-odbl
-    orig_license_option = @hc.license_option  # fixed  >  varies
+    orig_license        = @hc.license         # original value = cc-by, will set to: odc-odbl
+    orig_license_label  = "CC BY Attribution"
+    orig_license_option = @hc.license_option  # original value = fixed, will set to: varies
     orig_check_field    = "hydrus_collection_license_option_#{orig_license_option}"
     new_license         = 'odc-odbl'
+    new_license_label   = 'ODC-ODbl Open Database License'
     new_license_option  = 'varies'
     new_check_field     = "hydrus_collection_license_option_#{new_license_option}"
     login_as_archivist1
@@ -120,21 +122,22 @@ describe("Collection edit", :type => :request, :integration => true) do
     visit edit_polymorphic_path(@hc)
     current_path.should == edit_polymorphic_path(@hc)
     page.should have_checked_field(orig_check_field)
-    page.should     have_xpath("//input[@value='#{orig_license}']")
-    page.should_not have_xpath("//input[@value='#{new_license}']")
+    page.has_select?("license_option_#{orig_license_option}", :selected => orig_license_label).should == true
+    find_field("license_option_#{orig_license_option}").value.should == 'cc-by'
+    page.has_select?("license_option_#{new_license_option}", :selected => nil).should == true
     # Make changes, save, and confirm redirect.
     choose(new_check_field)
-    fill_in("hydrus_collection_license", :with => new_license)
+    select(new_license_label, :from => "license_option_#{new_license_option}")
     click_button "Save"
     current_path.should == polymorphic_path(@hc)
-    # Visit view-page, and confirm that changes occured.
+    # Visit view page, and confirm that changes occured.
     visit polymorphic_path(@hc)
     find("div.collection-settings").should have_content(new_license)
     # Undo changes, and confirm.
     visit edit_polymorphic_path(@hc)
     current_path.should == edit_polymorphic_path(@hc)
     choose(orig_check_field)
-    fill_in("hydrus_collection_license", :with => orig_license)
+    select(orig_license_label, :from => "license_option_#{orig_license_option}")
     click_button "Save"
     current_path.should == polymorphic_path(@hc)
     find("div.collection-settings").should have_content(orig_license)

@@ -28,12 +28,13 @@ class Hydrus::Collection < Hydrus::GenericObject
   end
 
   def save_apo
-    remove_embargo_length_if_none_selected
+    remove_values_for_associated_attribute_with_value_none
     apo.save
   end
 
-  def remove_embargo_length_if_none_selected
+  def remove_values_for_associated_attribute_with_value_none
     self.embargo = nil if self.embargo_option == "none"
+    self.license = nil if self.license_option == "none"
   end
 
   def hydrus_items
@@ -49,7 +50,7 @@ class Hydrus::Collection < Hydrus::GenericObject
   # for APO administrativeMetadata
   
   # These getter and setter methods allow us to set a single value for the embargo 
-  #  period from two separate HTML select controls, based on the value of a radio button
+  #  period and license from two separate HTML select controls, based on the value of a radio button
   def embargo_varies
     embargo_option == "varies" ? embargo : ""
   end
@@ -64,6 +65,22 @@ class Hydrus::Collection < Hydrus::GenericObject
 
   def embargo_fixed= *args
     apo.embargo= *args if embargo_option == "fixed"  # only set the embargo period for this setter if the corresponding radio button is selected
+  end
+
+  def license_varies
+    license_option == "varies" ? license : ""
+  end
+
+  def license_fixed
+    license_option == "fixed" ? license : ""
+  end
+
+  def license_varies= *args
+    apo.license= *args if license_option == "varies" # only set the license for this setter if the corresponding radio button is selected
+  end
+
+  def license_fixed= *args
+    apo.license= *args if license_option == "fixed"  # only set the license for this setter if the corresponding radio button is selected
   end
   #############
 
