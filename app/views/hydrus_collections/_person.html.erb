@@ -1,14 +1,14 @@
 <div class="destroy-set">
   <div class="row person">
-    <%= hydrus_form_label do  %>
+    <%= hydrus_form_label do -%>
       <%= label :hydrus_collection, :"person_id_#{index}", "SUNet ID:" %>
     <%- end -%>
     <%= hydrus_form_value do -%>
       <%= text_field_tag :"hydrus_collection[person_id[#{index}]]", @document_fedora.person_id[index.to_i].strip %>
     <%- end -%>
   </div>
-  <div class="row person">
-    <%= hydrus_form_label do  %>
+  <div class="row role">
+    <%= hydrus_form_label do -%>
       <%= label :hydrus_collection, :"person_role_#{index}", "is" %>
     <%- end -%>
     <%= hydrus_form_value do -%>
