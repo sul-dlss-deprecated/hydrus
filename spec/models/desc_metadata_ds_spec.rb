@@ -115,6 +115,25 @@ describe Hydrus::DescMetadataDS do
       @dsdoc.ng_xml.should be_equivalent_to @exp_xml
     end
 
+    it "should be able to remove all nodes of a type using remove_nodes()" do
+      ab = '<abstract>abstract content</abstract>'
+      xml = <<-EOF
+        #{@mods_start}
+          <subject><topic>foo</topic></subject>
+          <subject><topic>bar</topic></subject>
+          <note type="preferred citation">pref_cite outer</note>
+          #{ab}
+          <note type="citation/reference">related_cite outer</note>
+          <subject><topic>blah</topic></subject>
+        </mods>
+      EOF
+      d = Hydrus::DescMetadataDS.from_xml(xml)
+      d.remove_nodes(:subject)
+      d.remove_nodes(:preferred_citation)
+      d.remove_nodes(:related_citation)
+      d.ng_xml.should be_equivalent_to "#{@mods_start}#{ab}</mods>"
+    end
+
   end
 
   context "Blank template" do
