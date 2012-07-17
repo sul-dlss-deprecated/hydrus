@@ -93,9 +93,9 @@ describe Hydrus::RoleMetadataDS do
       role_node1 = @rmdoc.insert_role('collection_manager')
       role_node2 = @rmdoc.insert_role('collection_reviewer')
       @rmdoc.insert_group(role_node2, 'stanford')
-      @rmdoc.insert_person(role_node2)
+      @rmdoc.insert_person(role_node2, "")
       @rmdoc.insert_group(role_node1, 'workgroup')
-      @rmdoc.insert_person(role_node1)
+      @rmdoc.insert_person(role_node1, "")
       @rmdoc.insert_group(role_node2, 'stanford')
       @rmdoc.ng_xml.should be_equivalent_to @exp_xml
     end
@@ -165,7 +165,7 @@ describe Hydrus::RoleMetadataDS do
       @exp_xml = noko_doc(exp_parts.join '')
       @rmdoc   = Hydrus::RoleMetadataDS.from_xml("#{@rmd_start}#{@rmd_end}")
       role_node = @rmdoc.insert_role('item_depositor')
-      @rmdoc.insert_person(role_node)
+      @rmdoc.insert_person(role_node, "")
       @rmdoc.ng_xml.should be_equivalent_to @exp_xml
     end
 

@@ -146,32 +146,32 @@ class Hydrus::Collection < Hydrus::GenericObject
     apo.person_id *args
   end
   
+  # note that we *really* update person_id using person_roles= below,
+  #  but this method is used to populate the UI form
   def person_id= *args
-#    args [{"0"=>"brown", "1"=>"xxxx", "2"=>"ggreen", "3"=>"abcde"}]
-    
-    # for each person in the lsit
-    #   get their role (using controller's person_role information)  NOTE:  may not work if you want to change a persons role
-    #   now ensure that roleMetadata has the person in the role in the xml
-    #  AND ensure that the roleMetadata does NOT have any persons that are NOT in our list
-     #   
- 
-#    apo.person_id= *args
-#    values = args.first
-#    values.each { |k, v|  
-#      apo.person_id= v
-#    }
+    apo.person_id= *args
+    values = args.first
+    values.each { |k, v|  
+      apo.person_id= v
+    }
   end
   
   def get_person_role *args
     apo.roleMetadata.get_person_role *args
   end
   
-  # NAOMI_MUST_COMMENT_THIS_METHOD
   def person_role= *args
-#    args [{"0"=>"collection-manager", "1"=>"collection-manager", "2"=>"collection-depositor", "3"=>"coll_cntlr_update_method_hardcoded"}]
-    
-#puts "DEBUG: person_role args are #{args.inspect}"
-#    apo.roleMetadata.add_person_of_role *args
+    # this is a no-op because we use the person_roles=  method below to assign roles 
+  end
+  
+  # given an Array with a single element of a Hash comprised of sunetids as keys and roles as values,
+  #  rewrite the entire roleMetadata datastream to reflect the contents of the hash
+  # args might be:  [{"brown"=>"collection-manager", "dblack"=>"collection-manager", "ggreen"=>"collection-depositor"}]
+  def person_roles= *args
+    apo.roleMetadata.remove_nodes(:role)
+    args.first.each_pair { |id, role|
+      apo.roleMetadata.add_person_with_role(id, role)
+    }
   end
 
 end

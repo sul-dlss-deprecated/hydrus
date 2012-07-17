@@ -47,17 +47,25 @@ class HydrusCollectionsController < ApplicationController
 
   def update
     notice = []
+
+    if params.has_key?("hydrus_collection") && 
+      (params["hydrus_collection"].has_key?('person_id') || params["hydrus_collection"].has_key?('person_role'))
+      # create hash with key of person_id and value of role
+      new_hash = {}
+      params["hydrus_collection"].values_at('person_id').first.each_pair.map { |i, id|
+        new_hash[id] = params["hydrus_collection"].values_at('person_role').first[i]
+      }
+      params["hydrus_collection"][:person_roles] = new_hash 
+    end
+    
     @document_fedora.update_attributes(params["hydrus_collection"]) if params.has_key?("hydrus_collection")
     if params.has_key?(:add_link)
       @document_fedora.descMetadata.insert_related_item
     elsif params.has_key?(:add_person)
-      @document_fedora.apo.roleMetadata.add_person_of_role('from_controller')
+# FIXME:  hardcoded role ...
+      @document_fedora.apo.roleMetadata.add_empty_person_of_role('from_controller')
     end
 #    logger.debug("attributes submitted: #{params['hydrus_collection'].inspect}")
-    
-    # TODO: validate doc!
-#    puts "DEBUG: before save: #{@document_fedora.apo.roleMetadata.to_xml}"
-#    puts "DEBUG: after save: #{@document_fedora.apo.roleMetadata.to_xml}"
     
     if @document_fedora.object_valid?
       @document_fedora.save

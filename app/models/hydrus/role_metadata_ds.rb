@@ -57,24 +57,30 @@ class Hydrus::RoleMetadataDS < ActiveFedora::NokogiriDatastream
 
   # Adding/removing nodes.
 
-  # if the role node exists, add a person node to it; otherwise, create the role node and then add
+  # if the role node exists, add the person node to it; otherwise, create the role node and then add
   #  the person node
-  def add_person_of_role(role_type)
+  def add_person_with_role(id, role_type)
     role_node = self.find_by_xpath("/roleMetadata/role[@type='#{toggle_hyphen_underscore(role_type)}']")
     if role_node.size == 0
       new_role_node = insert_role(role_type)
-      return insert_person(new_role_node)
+      return insert_person(new_role_node, id)
     else
-      return insert_person(role_node)
+      return insert_person(role_node, id)
     end
+  end  
+
+  # if the role node exists, add an empty person node to it; otherwise, create the role node and then add
+  #  an empty person node
+  def add_empty_person_of_role(role_type)
+    add_person_with_role("", role_type)
   end  
 
   def insert_role(role_type)
     add_hydrus_child_node(ng_xml.root, :role, toggle_hyphen_underscore(role_type))
   end
 
-  def insert_person(role_node)
-    add_hydrus_child_node(role_node, :person)
+  def insert_person(role_node, sunetid)
+    add_hydrus_child_node(role_node, :person, sunetid)
   end
 
   def insert_group(role_node, group_type)
@@ -89,9 +95,12 @@ class Hydrus::RoleMetadataDS < ActiveFedora::NokogiriDatastream
     return node
   end
 
-
-  # to do:  remove_person(id) method
-
+# FIXME: write test
+  def remove_nodes(term)
+    nodes = find_by_terms(term.to_sym)
+    nodes.each { |n| n.remove }
+    self.dirty = true
+  end
 
   def remove_node(term, index)
     # Tests postponed until we know what this method should do. MH 7/3.
@@ -108,9 +117,9 @@ class Hydrus::RoleMetadataDS < ActiveFedora::NokogiriDatastream
     xml.role(:type => role_type)
   end
 
-  define_template :person do |xml|
+  define_template :person do |xml, sunetid|
     xml.person {
-      xml.identifier(:type => 'sunetid')
+      xml.identifier(:type => 'sunetid') { xml.text(sunetid) }
       xml.name
     }
   end
