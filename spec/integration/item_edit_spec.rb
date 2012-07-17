@@ -15,29 +15,34 @@ describe("Item edit", :type => :request, :integration => true) do
     current_path.should == new_user_session_path
   end
 
-  it "Can edit basic content" do
-    new_name  = '  abcxyz123 '
-    orig_name = @hi.abstract
-
+  it "should be able to edit abstract and keywords" do
+    # Save copy of the original datastreams.
+    orig_item  = get_original_content(@hi, 'descMetadata')
+    new_ab     = 'abcxyz123'
+    new_kws    = %w(foo bar fubb)
+    comma_join = '  ,  '
+    # Visit edit page.
     login_as_archivist1
-
     visit edit_polymorphic_path(@hi)
     current_path.should == edit_polymorphic_path(@hi)
-
-    find_field("Abstract").value.strip.should == orig_name
-    fill_in "Abstract", :with => new_name
+    # Make sure the object does not have the new content yet.
+    @hi.abstract.should_not == new_ab
+    @hi.keywords.should_not == new_kws
+    find_field("Abstract").value.should_not include(new_ab)
+    find_field("Keywords").value.should_not include(new_kws[0])
+    # Submit some changes.
+    fill_in("Abstract", :with => "  #{new_ab}  ")
+    fill_in("Keywords", :with => "  #{new_kws.join(comma_join)}  ")
     click_button "Save"
-    page.should have_content(@notice)
-
+    # Confirm new location and flash message.
     current_path.should == polymorphic_path(@hi)
-    visit polymorphic_path(@hi)
-    page.should have_content(new_name.strip)
-
-    # Clean up.
-    visit edit_polymorphic_path(@hi)
-    current_path.should == edit_polymorphic_path(@hi)
-    fill_in "Abstract", :with => orig_name
-    click_button "Save"
+    page.should have_content(@notice)
+    # Confirm new content in fedora.
+    @hi = Hydrus::Item.find @druid
+    @hi.abstract.should == new_ab
+    @hi.keywords.should == new_kws
+    # Restore the original datastreams.
+    restore_original_content(@hi, orig_item)
   end
   
   it "People/Role editing" do
