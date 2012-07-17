@@ -29,7 +29,7 @@ class Hydrus::Item < Hydrus::GenericObject
            :at => [:item_depositor, :person, :name], :unique => true)
 
   def strip_whitespace
-     strip_whitespace_from_fields [:preferred_citation,:title,:abstract] # strip these fields on main object
+    strip_whitespace_from_fields [:preferred_citation,:title,:abstract,:contact]
   end
   
   def actors

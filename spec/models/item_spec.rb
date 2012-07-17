@@ -185,7 +185,7 @@ describe Hydrus::Item do
 
     it "keywords= should rewrite all <subject> nodes" do
       @hi.keywords = { 0 => 'foo', 1 => 'bar', 2 => 'quux' }
-      puts @dsdoc.ng_xml.should be_equivalent_to <<-EOF
+      @dsdoc.ng_xml.should be_equivalent_to <<-EOF
         #{@mods_start}
           <subject><topic>foo</topic></subject>
           <subject><topic>bar</topic></subject>

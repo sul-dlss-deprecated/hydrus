@@ -26,7 +26,7 @@
       Contact email
     <%- end -%>
     <%= hydrus_form_value(:class=>"short-textarea") do %>
-      <font color=red>#TODO: is this the contact for the Collection?</font>
+      <%= text_field_tag :"hydrus_item[contact]", (@document_fedora.contact || ""), :required => true %>
     <%- end -%>
   </div>
 
@@ -74,7 +74,7 @@
       <%= label_tag("hydrus_item_keywords", "Keywords") %>
     <%- end -%>
     <%= hydrus_form_value do  -%>
-      <%= text_field_tag("hydrus_item_keywords", @document_fedora.descMetadata.subject.topic.join(", ")) -%>
+      <%= text_field_tag("hydrus_item_keywords", @document_fedora.keywords.join(", ")) -%>
       <div class="help">separate keywords with commas</div>
     <%- end -%>    
   </div>

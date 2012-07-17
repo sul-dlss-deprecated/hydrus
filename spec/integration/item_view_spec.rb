@@ -23,6 +23,7 @@ describe("Item view", :type => :request, :integration => true) do
 
   it "Some of the expected info is displayed" do
     exp_content = [
+      'archivist1@example.com', # contact email
       "How Couples Meet and Stay Together", # title
       "The story of Pinocchio", #abstract
       @druid,

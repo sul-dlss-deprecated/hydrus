@@ -15,32 +15,42 @@ describe("Item edit", :type => :request, :integration => true) do
     current_path.should == new_user_session_path
   end
 
-  it "should be able to edit abstract and keywords" do
+  it "should be able to edit simple items: abstract, contact, keywords" do
     # Save copy of the original datastreams.
-    orig_item  = get_original_content(@hi, 'descMetadata')
-    new_ab     = 'abcxyz123'
-    new_kws    = %w(foo bar fubb)
-    comma_join = '  ,  '
+    orig_item = get_original_content(@hi, 'descMetadata')
+    # Set up the new values for the fields we will edit.
+    ni = {
+      :abstract => 'abcxyz123',
+      :contact  => 'ozzy@hell.com',
+      :keywords => %w(foo bar fubb),
+    }
+    NewInfo = Struct.new(*ni.keys)
+    ni      = NewInfo.new(*ni.values)
+    comma_join  = '  ,  '
     # Visit edit page.
     login_as_archivist1
     visit edit_polymorphic_path(@hi)
     current_path.should == edit_polymorphic_path(@hi)
     # Make sure the object does not have the new content yet.
-    @hi.abstract.should_not == new_ab
-    @hi.keywords.should_not == new_kws
-    find_field("Abstract").value.should_not include(new_ab)
-    find_field("Keywords").value.should_not include(new_kws[0])
+    @hi.abstract.should_not == ni.abstract
+    @hi.contact.should_not  == ni.contact
+    @hi.keywords.should_not == ni.keywords
+    find_field("Abstract").value.should_not include(ni.abstract)
+    find_field("hydrus_item_contact").value.should_not include(ni.contact)
+    find_field("Keywords").value.should_not include(ni.keywords[0])
     # Submit some changes.
-    fill_in("Abstract", :with => "  #{new_ab}  ")
-    fill_in("Keywords", :with => "  #{new_kws.join(comma_join)}  ")
+    fill_in("Abstract", :with => "  #{ni.abstract}  ")
+    fill_in("hydrus_item_contact", :with => "  #{ni.contact}  ")
+    fill_in("Keywords", :with => "  #{ni.keywords.join(comma_join)}  ")
     click_button "Save"
     # Confirm new location and flash message.
     current_path.should == polymorphic_path(@hi)
     page.should have_content(@notice)
     # Confirm new content in fedora.
     @hi = Hydrus::Item.find @druid
-    @hi.abstract.should == new_ab
-    @hi.keywords.should == new_kws
+    @hi.abstract.should == ni.abstract
+    @hi.contact.should  == ni.contact
+    @hi.keywords.should == ni.keywords
     # Restore the original datastreams.
     restore_original_content(@hi, orig_item)
   end

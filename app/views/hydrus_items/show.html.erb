@@ -41,7 +41,7 @@
     </dd>
 
     <dt>Contact email</dt>
-    <dd><font color=red>#TODO: is this the contact for the Collection?</font></dd>
+    <dd><%= mail_to(@document_fedora.contact) %></dd>
 
     <% @document_fedora.actors.each do |actor| %>
       <dt><%= actor.role %></dt>

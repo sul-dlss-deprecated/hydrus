@@ -22,8 +22,6 @@ Test to exercise the creation of a new Collection.
 Item edit: "Add Another Published work" button does not work if the user first
 deletes all of the related published works.
 
-Implement Item-level contact.
-
 ----------
 
 Only allow users to create new items if the underlying collection is set to published.
