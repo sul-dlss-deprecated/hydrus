@@ -5,6 +5,10 @@ describe Hydrus::RoleMetadataDS do
   before(:all) do
     @rmd_start = '<roleMetadata>'
     @rmd_end   = '</roleMetadata>'
+    @p1 = '<person><identifier type="sunetid">sunetid1</identifier><name/></person>'
+    @p2 = '<person><identifier type="sunetid">sunetid2</identifier><name/></person>'
+    @p3 = '<person><identifier type="sunetid">sunetid3</identifier><name/></person>'
+    @p4 = '<person><identifier type="sunetid">sunetid4</identifier><name/></person>'
   end
 
   context "APO role metadata" do
@@ -78,38 +82,6 @@ describe Hydrus::RoleMetadataDS do
       @rmdoc.get_person_role('ggreen').should == "collection-depositor"
     end
 
-    it "Should be able to insert new role, person, and group nodes" do
-      p = '<person><identifier type="sunetid"/><name/></person>'
-      gs = '<group><identifier type="stanford"/><name/></group>'
-      gw = '<group><identifier type="workgroup"/><name/></group>'
-      exp_parts = [
-        @rmd_start,
-        '<role type="collection-manager">',  gw, p,     '</role>',
-        '<role type="collection-reviewer">', gs, p, gs, '</role>',
-        @rmd_end,
-      ]
-      @exp_xml = noko_doc(exp_parts.join '')
-      @rmdoc   = Hydrus::RoleMetadataDS.from_xml("#{@rmd_start}#{@rmd_end}")
-      role_node1 = @rmdoc.insert_role('collection_manager')
-      role_node2 = @rmdoc.insert_role('collection_reviewer')
-      @rmdoc.insert_group(role_node2, 'stanford')
-      @rmdoc.insert_person(role_node2, "")
-      @rmdoc.insert_group(role_node1, 'workgroup')
-      @rmdoc.insert_person(role_node1, "")
-      @rmdoc.insert_group(role_node2, 'stanford')
-      @rmdoc.ng_xml.should be_equivalent_to @exp_xml
-    end
-
-    it "the blank template should match our expectations" do
-      exp_xml = %Q(
-        #{@rmd_start}
-        #{@rmd_end}
-      )
-      exp_xml = noko_doc(exp_xml)
-      @rmdoc = Hydrus::RoleMetadataDS.new(nil, nil)
-      @rmdoc.ng_xml.should be_equivalent_to exp_xml
-    end
-
     it "should be able to exercise to_solr()" do
       sdoc = @rmdoc.to_solr
       sdoc.should be_kind_of Hash
@@ -162,11 +134,11 @@ describe Hydrus::RoleMetadataDS do
         '<role type="item-depositor">',  p, '</role>',
         @rmd_end,
       ]
-      @exp_xml = noko_doc(exp_parts.join '')
-      @rmdoc   = Hydrus::RoleMetadataDS.from_xml("#{@rmd_start}#{@rmd_end}")
-      role_node = @rmdoc.insert_role('item_depositor')
-      @rmdoc.insert_person(role_node, "")
-      @rmdoc.ng_xml.should be_equivalent_to @exp_xml
+      exp_xml = noko_doc(exp_parts.join '')
+      rmdoc   = Hydrus::RoleMetadataDS.from_xml("#{@rmd_start}#{@rmd_end}")
+      role_node = rmdoc.insert_role('item_depositor')
+      rmdoc.insert_person(role_node, "")
+      rmdoc.ng_xml.should be_equivalent_to exp_xml
     end
 
     it "should be able to exercise to_solr()" do
@@ -183,7 +155,7 @@ describe Hydrus::RoleMetadataDS do
   end # context item object
 
   it "toggle_hyphen_underscore() should work correctly" do
-    @rmdoc = Hydrus::RoleMetadataDS.from_xml('')
+    rmdoc = Hydrus::RoleMetadataDS.from_xml('')
     tests = {
       # Should change.
       'item-foo'        => 'item_foo',
@@ -198,9 +170,150 @@ describe Hydrus::RoleMetadataDS do
       ''                => '',
     }
     tests.each do |input, exp|
-      @rmdoc.toggle_hyphen_underscore(input).should == exp
+      rmdoc.toggle_hyphen_underscore(input).should == exp
+    end    
+  end
+
+  context "inserting nodes" do
+    before(:all) do
+      # empty actor node xml strings
+      @ep = '<person><identifier type="sunetid"/><name/></person>'
+      @egs = '<group><identifier type="stanford"/><name/></group>'
+      @egw = '<group><identifier type="workgroup"/><name/></group>'
     end
     
+    it "Should be able to insert new role, person, and group nodes" do
+      exp_parts = [
+        @rmd_start,
+        '<role type="collection-manager">',  @egw, @ep,     '</role>',
+        '<role type="collection-reviewer">', @egs, @ep, @egs, '</role>',
+        @rmd_end,
+      ]
+      exp_xml = noko_doc(exp_parts.join '')
+      rmdoc   = Hydrus::RoleMetadataDS.from_xml("#{@rmd_start}#{@rmd_end}")
+      role_node1 = rmdoc.insert_role('collection_manager')
+      role_node2 = rmdoc.insert_role('collection_reviewer')
+      rmdoc.insert_group(role_node2, 'stanford')
+      rmdoc.insert_person(role_node2, "")
+      rmdoc.insert_group(role_node1, 'workgroup')
+      rmdoc.insert_person(role_node1, "")
+      rmdoc.insert_group(role_node2, 'stanford')
+      rmdoc.ng_xml.should be_equivalent_to exp_xml
+    end
+    
+    context "add_person_with_role" do
+      before(:each) do
+        xml = <<-EOF
+          #{@rmd_start}
+            <role type="collection-manager">
+              #{@p1}
+            </role>
+            <role type="collection-depositor">
+              #{@p3}
+            </role>
+          #{@rmd_end}
+        EOF
+        @rmdoc = Hydrus::RoleMetadataDS.from_xml(xml)
+      end
+      
+      it "should add the person node to an existing role node" do
+        exp_parts = [
+          @rmd_start,
+          '<role type="collection-manager">',  @p1, @p2, '</role>',
+          '<role type="collection-depositor">',  @p3, '</role>',
+          @rmd_end,
+        ]
+        exp_xml = noko_doc(exp_parts.join '')
+        @rmdoc.add_person_with_role("sunetid2", 'collection_manager')
+        @rmdoc.ng_xml.should be_equivalent_to exp_xml
+        exp_parts = [
+          @rmd_start,
+          '<role type="collection-manager">',  @p1, @p2, '</role>',
+          '<role type="collection-depositor">',  @p3, @p4, '</role>',
+          @rmd_end,
+        ]
+        exp_xml = noko_doc(exp_parts.join '')
+        @rmdoc.add_person_with_role("sunetid4", 'collection_depositor')
+        @rmdoc.ng_xml.should be_equivalent_to exp_xml
+      end
+      
+      it "should create the role node when none exists" do
+        exp_parts = [
+          @rmd_start,
+          '<role type="collection-manager">',  @p1, '</role>',
+          '<role type="collection-depositor">',  @p3, '</role>',
+          '<role type="collection-blah">',  @p2, '</role>',
+          @rmd_end,
+        ]
+        exp_xml = noko_doc(exp_parts.join '')
+        @rmdoc.add_person_with_role("sunetid2", 'collection_blah')
+        @rmdoc.ng_xml.should be_equivalent_to exp_xml
+      end
+      
+      it "add_empty_person_of_role should insert an empty person node as a child of the role node" do
+        exp_parts = [
+          @rmd_start,
+          '<role type="collection-manager">',  @p1, @ep, '</role>',
+          '<role type="collection-depositor">',  @p3, '</role>',
+          @rmd_end,
+        ]
+        exp_xml = noko_doc(exp_parts.join '')
+        @rmdoc.add_empty_person_of_role('collection_manager')
+        @rmdoc.ng_xml.should be_equivalent_to exp_xml
+      end  
+    end # context add_person_of_role
+  end # context inserting nodes
+
+  context "Remove nodes" do
+    before(:each) do
+      @start_xml = <<-EOF
+        #{@rmd_start}
+          <role type="collection-manager">
+            #{@p1}
+            #{@p2}
+          </role>
+          <role type="collection-depositor">
+            #{@p3}
+          </role>
+        #{@rmd_end}
+      EOF
+      @rmdoc = Hydrus::RoleMetadataDS.from_xml(@start_xml)
+    end
+
+    it "should be able to remove all nodes of a type using remove_nodes()" do
+      exp_xml = <<-EOF
+        #{@rmd_start}
+          <role type="collection-manager" />
+          <role type="collection-depositor" />
+        #{@rmd_end}
+      EOF
+      @rmdoc.remove_nodes(:person)
+      @rmdoc.ng_xml.should be_equivalent_to exp_xml
+      exp_xml = <<-EOF
+        #{@rmd_start}
+          <role type="collection-depositor" />
+        #{@rmd_end}
+      EOF
+      @rmdoc.remove_nodes(:collection_manager)
+      @rmdoc.ng_xml.should be_equivalent_to exp_xml
+      @rmdoc.remove_nodes(:role)
+      @rmdoc.ng_xml.should be_equivalent_to "#{@rmd_start}#{@rmd_end}"
+    end
+    it "should do nothing quietly when remove_nodes is called for nodes in terminology that don't exist in xml" do
+      @rmdoc.remove_nodes(:item_depositor)
+      @rmdoc.ng_xml.should be_equivalent_to @start_xml
+    end
+  end # context remove_nodes
+
+
+  it "the blank template should match our expectations" do
+    exp_xml = %Q(
+      #{@rmd_start}
+      #{@rmd_end}
+    )
+    exp_xml = noko_doc(exp_xml)
+    rmdoc = Hydrus::RoleMetadataDS.new(nil, nil)
+    rmdoc.ng_xml.should be_equivalent_to exp_xml
   end
 
 end

@@ -139,12 +139,16 @@ class Hydrus::DescMetadataDS < ActiveFedora::NokogiriDatastream
   end
   
   # Set dirty=true. Otherwise, inserting repeated nodes does not work.
+  # TODO: need to promote this code to some generic place for all of our stuff AND/OR put it in OM
+  #   will be put in OM/ActiveFedora.  See also RoleMetadataDS and specs
   def add_hydrus_child_node(*args)
     node = add_child_node(*args)
     self.dirty = true  
     return node
   end
 
+  # TODO: need to promote this code to some generic place for all of our stuff AND/OR put it in OM
+  #   will be put in OM/ActiveFedora.  See also RoleMetadataDS and specs
   def remove_node(term, index)
     node = find_by_terms(term.to_sym => index.to_i).first
     unless node.nil?
@@ -153,6 +157,8 @@ class Hydrus::DescMetadataDS < ActiveFedora::NokogiriDatastream
     end
   end
 
+  # TODO: need to promote this code to some generic place for all of our stuff AND/OR put it in OM
+  #   will be put in OM/ActiveFedora.  See also RoleMetadataDS and specs
   def remove_nodes(term)
     nodes = find_by_terms(term.to_sym)
     nodes.each { |n| n.remove }

@@ -102,15 +102,17 @@ describe Hydrus::DescMetadataDS do
 
    context "Remove nodes" do
 
-    it "Should be able to remove XML nodes" do
+    it "Should remove correct node from repeated XML nodes" do
       nm1 = '<name><namePart>Angus</namePart><role><roleTerm authority="marcrelator" type="text"/></role></name>'
       nm2 = '<name><namePart>John</namePart><role><roleTerm authority="marcrelator" type="text"/></role></name>'
-      @exp_xml = noko_doc([@mods_start, nm1, '</mods>'].join '')
+      @exp_xml = noko_doc([@mods_start, nm1, nm2, '</mods>'].join '')
       @dsdoc   = Hydrus::DescMetadataDS.from_xml("#{@mods_start}</mods>")
       @dsdoc.insert_person
       @dsdoc.name(0).namePart = 'Angus'
       @dsdoc.insert_person
-      @dsdoc.name(1).namePart = 'John'
+      @dsdoc.name(1).namePart = 'Fred'
+      @dsdoc.insert_person
+      @dsdoc.name(2).namePart = 'John'
       @dsdoc.remove_node(:name, 1)
       @dsdoc.ng_xml.should be_equivalent_to @exp_xml
     end
