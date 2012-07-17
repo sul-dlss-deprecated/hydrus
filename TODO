@@ -30,9 +30,6 @@ Store "agree to terms" checkbox for item.
 
 ==========
 
-
-local_ci task: figure out why setting Rails.env=true causes test failure on 2nd run.
-
 Fix visibility_types in hydrus_form_helper.rb.
 
 Assess Item and Collection controllers for test coverage.
