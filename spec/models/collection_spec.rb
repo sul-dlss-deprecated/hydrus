@@ -85,7 +85,7 @@ describe Hydrus::Collection do
 
     it "add_empty_person_to_role should work" do
       @hc.add_empty_person_to_role('collection-manager')
-      puts @rmdoc.ng_xml.should be_equivalent_to <<-EOF
+      @rmdoc.ng_xml.should be_equivalent_to <<-EOF
         <roleMetadata>
           <role type="collection-manager">
             <person><identifier type="sunetid">sunetid1</identifier><name/></person>
@@ -98,7 +98,7 @@ describe Hydrus::Collection do
         </roleMetadata>
       EOF
       @hc.add_empty_person_to_role('foo')
-      puts @rmdoc.ng_xml.should be_equivalent_to <<-EOF
+      @rmdoc.ng_xml.should be_equivalent_to <<-EOF
         <roleMetadata>
           <role type="collection-manager">
             <person><identifier type="sunetid">sunetid1</identifier><name/></person>
@@ -117,7 +117,7 @@ describe Hydrus::Collection do
 
     it "person_roles= should correctly update APO roleMetadtaDS" do
       @hc.person_roles = {"brown"=>"collection-manager", "dblack"=>"collection-manager", "ggreen"=>"collection-depositor"} 
-      puts @rmdoc.ng_xml.should be_equivalent_to <<-EOF
+      @rmdoc.ng_xml.should be_equivalent_to <<-EOF
         <roleMetadata>
           <role type="collection-manager">
             <person><identifier type="sunetid">brown</identifier><name/></person>

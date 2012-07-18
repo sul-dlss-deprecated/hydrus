@@ -19,8 +19,8 @@
       <% @collections.each do |c| %>
         <tr>
           <td><%= link_to(c.title, polymorphic_path(c)) %></td>
-          <td>owner</td>
-          <td>11 published, 1 draft</td>
+          <td><font color=red>#TODO</font></td>
+          <td><font color=red>#TODO</font></td>
           <td>
 					  <% if c.publish %>
 	            <form class="form-horizontal">
@@ -30,6 +30,8 @@
 	                <%= render :partial => "shared/add_content_options", :locals => {:parent => c} %>
 	              </div>
 	            </form>
+						 <% else %>
+							Collection is closed - <%= link_to('edit to open', edit_polymorphic_path(c)) %>
 		         <% end %>
           </td>
         </tr> 

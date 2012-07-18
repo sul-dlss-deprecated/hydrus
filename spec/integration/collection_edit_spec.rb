@@ -51,20 +51,34 @@ describe("Collection edit", :type => :request, :integration => true) do
     page.should_not have_content(new_contact)
   end
   
+  it "does not shows deletion link for a collection if it has any items in it" do
+    login_as_archivist1
+    visit edit_polymorphic_path(@hc)
+    page.should_not have_css(".discard-item")
+  end
+  
+  it "shows deletion link for a collection if it has no tiems in it" do
+    login_as_archivist1
+    @empty_hc    = Hydrus::Collection.find('druid:oo000oo0004')
+    visit edit_polymorphic_path(@empty_hc)
+    page.should have_css(".discard-item")
+  end
+  
   it "can open and close a collection and have the deposit status set correctly" do
     login_as_archivist1
     visit edit_polymorphic_path(@hc)
     current_path.should == edit_polymorphic_path(@hc)
     @hc.publish.should == true
     @hc.apo.deposit_status.should == "open"
-    # TODO Figure out why the click_button method cannot find the right buttons to complete this test
-    # click_button "Close Collection"
-    # @hc.publish.should == false
-    # @hc.apo.deposit_status.should == "closed"
-    # visit edit_polymorphic_path(@hc)
-    # click_button "Open Collection"    
-    # @hc.publish.should == true
-    # @hc.apo.deposit_status.should == "open"
+    click_button "Close Collection"
+    @hc    = Hydrus::Collection.find @druid
+    @hc.publish.should == false
+    @hc.apo.deposit_status.should == "closed"
+    visit edit_polymorphic_path(@hc)
+    click_button "Open Collection"    
+    @hc    = Hydrus::Collection.find @druid
+    @hc.publish.should == true
+    @hc.apo.deposit_status.should == "open"
   end
 
   it "can edit and delete multi-valued fields" do

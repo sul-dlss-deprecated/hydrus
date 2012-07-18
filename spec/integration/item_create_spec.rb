@@ -38,7 +38,7 @@ describe("Item create", :type => :request, :integration => true) do
     item.delete
   end
 
-  it "should be able to access create-new-Item screen via the Collection page" do
+  it "should be able to access create-new-Item screen via the Collection view page" do
     login_as_archivist1
     collection = Hydrus::Collection.find(@hc_druid)
     visit polymorphic_path(collection)

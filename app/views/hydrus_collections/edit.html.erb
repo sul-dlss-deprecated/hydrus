@@ -118,14 +118,15 @@
 	  <%= render "role_management"%>
   </div>
 
+  <noscript>
+    <%= render :partial => "actions_box", :locals => {:id=>"nojs"}%>
+  </noscript>
+
   <% render(
        :partial => "hydra/permissions/index", 
        :locals  => { :document => @document_fedora, :asset_id => params[:id] }
      )
   %>
-  <noscript>
-    <button type="submit" class="btn btn-small save-edits" name="save" id="save">Save</button>    
-    <button type="submit" class="btn btn-small" id="publish" name="publish">Publish</button>
-  </noscript>
+
 <% end %>
 <div id="druid-footer"><%= @document_fedora.pid %></div>

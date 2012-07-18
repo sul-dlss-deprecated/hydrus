@@ -102,12 +102,10 @@ function validate_hydrus_collection() {
 	if(all_required_filled) {
 		$("#hydrus_collection_publish").each(function(){
 			$(this).removeAttr("disabled");
-			$('#hydrus_collection_valid').attr('checked', true);
 		});
 	}else{
 		$("#hydrus_collection_publish").each(function(){
 			$(this).attr("disabled", "disabled");
-			$('#hydrus_collection_valid').attr('checked', false);
 		});
 	}
 }
