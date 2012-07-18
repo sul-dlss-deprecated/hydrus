@@ -14,7 +14,7 @@
     <div class="box-header">Status</div>
     <dl class="dl-horizontal">
       <dt>Submitted by:</dt>
-      <dd><font color=red>#TODO</font></dd>
+      <dd><%= @document_fedora.item_depositor_name %></dd>
       <dt>Submitted on:</dt>
       <dd><%= hydrus_format_date(@document_fedora.submit_time) %></dd>
       <dt>Release date:</dt>
