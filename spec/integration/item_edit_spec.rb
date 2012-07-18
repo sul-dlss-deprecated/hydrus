@@ -19,13 +19,11 @@ describe("Item edit", :type => :request, :integration => true) do
     # Save copy of the original datastreams.
     orig_item = get_original_content(@hi, 'descMetadata')
     # Set up the new values for the fields we will edit.
-    ni = {
+    ni = hash2struct(
       :abstract => 'abcxyz123',
       :contact  => 'ozzy@hell.com',
       :keywords => %w(foo bar fubb),
-    }
-    NewInfo = Struct.new(*ni.keys)
-    ni      = NewInfo.new(*ni.values)
+    )
     comma_join  = '  ,  '
     # Visit edit page.
     login_as_archivist1

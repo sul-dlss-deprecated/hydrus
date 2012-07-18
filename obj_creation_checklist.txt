@@ -1,0 +1,102 @@
+-----------------
+APO-of-Collection
+-----------------
+
+done by register_object():
+
+  assign druid: ok (druid:wx557cz2760)
+
+  identityMetadata:
+    objectLabel: currently "Hydrus"; do we want something else?
+    UUID: did not see one
+
+  workflows: not created
+
+  RELS-EXT
+    - created datastream
+    - did not see hydra:referencesAgreement
+
+  DC: ok
+      - should title change if user edits the title in the future?
+
+  descMetadata: not created
+
+augmeted by Hydrus app:
+
+  administrativeMetadata:
+    created: ok
+    default assembly workflow: not done
+    default common accessioning workflow: not done
+    roleMetadata: created, but <name> not set
+
+  defaultObjectRights: not created
+
+
+----------
+Collection
+----------
+
+done by register_object():
+
+  assign druid: ok (druid:xb912wj0872)
+
+  identityMetadata:
+    objectType=collection: ok
+    objectType=collection: not done
+    objectLabel:
+      - currently "Hydrus"
+      - should this change if user edits the title in the future?
+    UUID: did not see one
+    tag: currently is "Project : Hydrus" rather than "hydrus : collection"
+
+  workflows: created; currently empty
+
+  RELS-EXT: ok
+
+  DC: ok
+      - should title change if user edits the title in the future?
+
+  default hydrusAssemblyWF: not done
+
+augmeted by Hydrus app:
+
+  descMetadata: ok
+
+  events: not created
+
+  rightsMetadata: not created
+
+----
+Item
+----
+
+done by register_object():
+
+  assign druid: ok (druid:wg073cw8515)
+
+  identityMetadata:
+    objectType=item: ok
+    objectLabel:
+      - currently "Hydrus"
+      - should this change if user edits the title in the future?
+    UUID: did not see one
+    tag: currently is "Project : Hydrus" rather than "hydrus : [itemtype]"
+
+  workflows: created; currently empty
+
+  RELS-EXT: ok
+
+  DC: ok
+      - should title change if user edits the title in the future?
+
+  default hydrusAssemblyWF: not done
+
+augmeted by Hydrus app:
+
+  descMetadata: ok
+
+  events: not created
+
+  rightsMetadata: not created
+
+  roleMetadata: not created; should it be? (was not on the checklist)

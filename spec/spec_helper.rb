@@ -120,3 +120,8 @@ def restore_original_content(obj, orig)
   orig.each { |dsn, xml| obj.datastreams[dsn].content = xml }
   obj.save
 end
+
+# Takes a hash and returns a corresponding Struct.
+def hash2struct(h)
+  return Struct.new(*h.keys).new(*h.values)
+end
