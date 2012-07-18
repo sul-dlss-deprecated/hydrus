@@ -78,10 +78,10 @@
         <% visibility_types.each do |vis_opt, vis_text| %>
           <div class="row">
             <div class="span1 radio-input">
-              <%= f.radio_button 'visibility_option', vis_opt %>
+              <%= f.radio_button 'visibility_option_value', vis_opt %>
             </div>
             <div class="span7 radio-label">
-              <%= f.label        'visibility_option', vis_text, :value => vis_opt %>
+              <%= f.label        'visibility_option_value', vis_text, :value => vis_opt %>
             </div>
           </div>
         <% end %>
