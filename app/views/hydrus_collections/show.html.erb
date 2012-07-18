@@ -18,7 +18,7 @@
           <% end %>
         </dd>
         <dt>Visibility:</dt>
-        <dd><%= @document_fedora.visibility_option_value.capitalize %></dd>
+        <dd><%= collection_visibility(@document_fedora) %></dd>
         <dt>License:</dt>
         <dd><%= @document_fedora.license_option %>
           <% if @document_fedora.license %>
