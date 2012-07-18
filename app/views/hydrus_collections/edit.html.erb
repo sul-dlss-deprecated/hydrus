@@ -117,6 +117,11 @@
   <div id="role-management" class="destroy-group">
 	  <%= render "actors"%>
   </div>
+  <div class="row">
+    <div class="span8 offset1">
+      <%= button_tag("Add a person", :name=>"add_person", :"data-attribute" => "add_person", :id=>"add_person", :class=>"btn", :value=>@document_fedora.person_id.length) %>
+    </div>
+  </div>
 
   <noscript>
     <%= render :partial => "actions_box", :locals => {:id=>"nojs"}%>
