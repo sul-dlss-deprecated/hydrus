@@ -15,6 +15,15 @@ Collection edit: add functionality for role metadata section (and test!)
     collection-manager --> APO
     item-depositor --> item object
 
+----------
+
+Item view: release date. See Consul page. Date from "published" lifecycle when
+it exists, else "not released". Display format: 31-Jan-2012.
+
+Item view: visibility. See Consul page. Currently displayed value seems wrong.
+
+Rationalize date format across various pages.
+
 Test to exercise the creation of a new Collection.
 
 ----------
@@ -32,8 +41,6 @@ Store publish state for item and collection (collection publish state stored in 
 Store "agree to terms" checkbox for item.
 
 ==========
-
-Fix visibility_types in hydrus_form_helper.rb.
 
 Assess Item and Collection controllers for test coverage.
 

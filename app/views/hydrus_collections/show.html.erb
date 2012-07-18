@@ -18,7 +18,7 @@
           <% end %>
         </dd>
         <dt>Visibility:</dt>
-        <dd><%= @document_fedora.visibility %></dd>
+        <dd><%= @document_fedora.visibility_option_value.capitalize %></dd>
         <dt>License:</dt>
         <dd><%= @document_fedora.license_option %>
           <% if @document_fedora.license %>
@@ -96,7 +96,7 @@
           <% @document_fedora.hydrus_items.each do |item| %>
             <tr class="document <%= cycle("even","odd") %>">
               <td><%= link_to(item.title, polymorphic_path(item)) %></td>
-              <td><font color=red>#TODO</font></td>
+              <td><%= item.item_depositor_name %></td>
               <td><font color=red><%= item.object_type %></font></td>
               <td><font color=red>#TODO</font></td>
               <td><%= hydrus_format_date(item.submit_time) %></td>

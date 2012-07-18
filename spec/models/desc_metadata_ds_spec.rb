@@ -100,44 +100,6 @@ describe Hydrus::DescMetadataDS do
 
   end
 
-   context "Remove nodes" do
-
-    it "Should remove correct node from repeated XML nodes" do
-      nm1 = '<name><namePart>Angus</namePart><role><roleTerm authority="marcrelator" type="text"/></role></name>'
-      nm2 = '<name><namePart>John</namePart><role><roleTerm authority="marcrelator" type="text"/></role></name>'
-      @exp_xml = noko_doc([@mods_start, nm1, nm2, '</mods>'].join '')
-      @dsdoc   = Hydrus::DescMetadataDS.from_xml("#{@mods_start}</mods>")
-      @dsdoc.insert_person
-      @dsdoc.name(0).namePart = 'Angus'
-      @dsdoc.insert_person
-      @dsdoc.name(1).namePart = 'Fred'
-      @dsdoc.insert_person
-      @dsdoc.name(2).namePart = 'John'
-      @dsdoc.remove_node(:name, 1)
-      @dsdoc.ng_xml.should be_equivalent_to @exp_xml
-    end
-
-    it "should be able to remove all nodes of a type using remove_nodes()" do
-      ab = '<abstract>abstract content</abstract>'
-      xml = <<-EOF
-        #{@mods_start}
-          <subject><topic>foo</topic></subject>
-          <subject><topic>bar</topic></subject>
-          <note type="preferred citation">pref_cite outer</note>
-          #{ab}
-          <note type="citation/reference">related_cite outer</note>
-          <subject><topic>blah</topic></subject>
-        </mods>
-      EOF
-      d = Hydrus::DescMetadataDS.from_xml(xml)
-      d.remove_nodes(:subject)
-      d.remove_nodes(:preferred_citation)
-      d.remove_nodes(:related_citation)
-      d.ng_xml.should be_equivalent_to "#{@mods_start}#{ab}</mods>"
-    end
-
-  end
-
   context "Blank template" do
 
     it "should match our expectations" do
