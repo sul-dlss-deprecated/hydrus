@@ -134,14 +134,10 @@ class Hydrus::Collection < Hydrus::GenericObject
 
   # for APO roleMetadata 
    
-  def collection_manager *args
-    apo.collection_manager *args
+  def collection_owner *args
+    apo.collection_owner *args
   end
 
-  def collection_manager= *args
-    apo.collection_manager= *args
-  end
-  
   def person_id *args
     apo.person_id *args
   end
@@ -149,11 +145,7 @@ class Hydrus::Collection < Hydrus::GenericObject
   # note that we *really* update person_id using person_roles= below,
   #  but this method is used to populate the UI form
   def person_id= *args
-    apo.person_id= *args
-    values = args.first
-    values.each { |k, v|  
-      apo.person_id= v
-    }
+    # this is a no-op because we use the person_roles=  method below to assign ids 
   end
   
   def get_person_role *args

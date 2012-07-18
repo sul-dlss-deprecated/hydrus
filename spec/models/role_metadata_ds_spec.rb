@@ -60,6 +60,7 @@ describe Hydrus::RoleMetadataDS do
         [[:role, :person, :name], ["Brown, Malcolm", "Black, Delores", "Green, Greg"]],
         [[:collection_manager, :person, :identifier], %w(brown dblack)],
         [[:collection_manager, :group, :identifier], %w()],
+        [:collection_owner, %w(brown dblack)],
         [[:collection_depositor, :person, :identifier], %w(ggreen)],
         [[:collection_depositor, :group, :identifier], %w(pasig:2011attendees)],
         [[:collection_reviewer, :person, :identifier], %w()],
@@ -136,7 +137,7 @@ describe Hydrus::RoleMetadataDS do
       ]
       exp_xml = noko_doc(exp_parts.join '')
       rmdoc   = Hydrus::RoleMetadataDS.from_xml("#{@rmd_start}#{@rmd_end}")
-      role_node = rmdoc.insert_role('item_depositor')
+      role_node = rmdoc.insert_role('item-depositor')
       rmdoc.insert_person(role_node, "")
       rmdoc.ng_xml.should be_equivalent_to exp_xml
     end
@@ -191,8 +192,8 @@ describe Hydrus::RoleMetadataDS do
       ]
       exp_xml = noko_doc(exp_parts.join '')
       rmdoc   = Hydrus::RoleMetadataDS.from_xml("#{@rmd_start}#{@rmd_end}")
-      role_node1 = rmdoc.insert_role('collection_manager')
-      role_node2 = rmdoc.insert_role('collection_reviewer')
+      role_node1 = rmdoc.insert_role('collection-manager')
+      role_node2 = rmdoc.insert_role('collection-reviewer')
       rmdoc.insert_group(role_node2, 'stanford')
       rmdoc.insert_person(role_node2, "")
       rmdoc.insert_group(role_node1, 'workgroup')
@@ -224,7 +225,7 @@ describe Hydrus::RoleMetadataDS do
           @rmd_end,
         ]
         exp_xml = noko_doc(exp_parts.join '')
-        @rmdoc.add_person_with_role("sunetid2", 'collection_manager')
+        @rmdoc.add_person_with_role("sunetid2", 'collection-manager')
         @rmdoc.ng_xml.should be_equivalent_to exp_xml
         exp_parts = [
           @rmd_start,
@@ -233,7 +234,7 @@ describe Hydrus::RoleMetadataDS do
           @rmd_end,
         ]
         exp_xml = noko_doc(exp_parts.join '')
-        @rmdoc.add_person_with_role("sunetid4", 'collection_depositor')
+        @rmdoc.add_person_with_role("sunetid4", 'collection-depositor')
         @rmdoc.ng_xml.should be_equivalent_to exp_xml
       end
       
@@ -242,11 +243,11 @@ describe Hydrus::RoleMetadataDS do
           @rmd_start,
           '<role type="collection-manager">',  @p1, '</role>',
           '<role type="collection-depositor">',  @p3, '</role>',
-          '<role type="collection-blah">',  @p2, '</role>',
+          '<role type="foo-role">',  @p2, '</role>',
           @rmd_end,
         ]
         exp_xml = noko_doc(exp_parts.join '')
-        @rmdoc.add_person_with_role("sunetid2", 'collection_blah')
+        @rmdoc.add_person_with_role("sunetid2", 'foo-role')
         @rmdoc.ng_xml.should be_equivalent_to exp_xml
       end
       
@@ -258,7 +259,7 @@ describe Hydrus::RoleMetadataDS do
           @rmd_end,
         ]
         exp_xml = noko_doc(exp_parts.join '')
-        @rmdoc.add_empty_person_of_role('collection_manager')
+        @rmdoc.add_empty_person_of_role('collection-manager')
         @rmdoc.ng_xml.should be_equivalent_to exp_xml
       end  
     end # context add_person_of_role
