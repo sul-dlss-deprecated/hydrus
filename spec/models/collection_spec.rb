@@ -47,6 +47,55 @@ describe Hydrus::Collection do
     col.embargo='1 year'
     col.object_valid?.should == true
   end
+  
+  context "APO roleMetadataDS delegation-y methods" do
+    before(:each) do
+      @p1 = '<person><identifier type="sunetid">sunetid1</identifier><name/></person>'
+      @p2 = '<person><identifier type="sunetid">sunetid2</identifier><name/></person>'
+      @p3 = '<person><identifier type="sunetid">sunetid3</identifier><name/></person>'
+      @p4 = '<person><identifier type="sunetid">sunetid4</identifier><name/></person>'
+
+      @apo = Hydrus::AdminPolicyObject.new
+      @role_xml = <<-EOF
+        <roleMetadata>
+          <role type="collection-manager">
+            <person><identifier type="sunetid">sunetid1</identifier><name/></person>
+            <person><identifier type="sunetid">sunetid2</identifier><name/></person>
+          </role>
+          <role type="collection-depositor">
+            <person><identifier type="sunetid">sunetid3</identifier><name/></person>
+          </role>
+        </roleMetadata>
+      EOF
+      @rmdoc = Hydrus::RoleMetadataDS.from_xml(@role_xml)
+      @apo.stub(:roleMetadata).and_return(@rmdoc)
+      
+      @hc = Hydrus::Collection.new
+      @hc.stub(:apo).and_return(@apo)
+    end
+    
+    it "get_person_role should retrieve the correct value" do
+      @hc.get_person_role('sunetid1').should == 'collection-manager'
+      @hc.get_person_role('sunetid2').should == 'collection-manager'
+      @hc.get_person_role('sunetid3').should == 'collection-depositor'
+    end
+
+    it "person_roles= should correctly update APO roleMetadtaDS" do
+      @hc.person_roles = {"brown"=>"collection-manager", "dblack"=>"collection-manager", "ggreen"=>"collection-depositor"} 
+      puts @rmdoc.ng_xml.should be_equivalent_to <<-EOF
+        <roleMetadata>
+          <role type="collection-manager">
+            <person><identifier type="sunetid">brown</identifier><name/></person>
+            <person><identifier type="sunetid">dblack</identifier><name/></person>
+          </role>
+          <role type="collection-depositor">
+            <person><identifier type="sunetid">ggreen</identifier><name/></person>
+          </role>
+        </roleMetadata>
+      EOF
+    end
+  
+  end # context APO roleMetadataDS 
 
   
 end
