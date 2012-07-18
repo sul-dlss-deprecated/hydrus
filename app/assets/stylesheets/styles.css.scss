@@ -206,13 +206,15 @@ noscript #item-actions, noscript #collection-actions {
 	margin-right: 20px;
 	margin-top: 25px;
 	&.well {
-		padding: 12px 10px 0 15px;
+		padding: 0 10px 0 15px;
 	}
 	.box-header {
 		border-bottom: 1px dotted #CCC;
 		font-size: 120%;
 		line-height: 1.6em;
+		margin-top: 9px;
 	}
+	legend {margin-bottom: 0;}
 	dt, dd { 
 		line-height: 2em;
 		text-align: left;
@@ -224,7 +226,8 @@ noscript #item-actions, noscript #collection-actions {
 		margin-bottom: none;
 	}
 	button {
-		margin: 12px 0px 10px 18px;
+		display: block;
+		margin: 12px 0 10px 0;
 	}
 	label{
 		font-size: 75%;
