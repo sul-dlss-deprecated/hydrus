@@ -145,14 +145,16 @@ class Hydrus::Collection < Hydrus::GenericObject
     apo.person_id *args
   end
   
-  # note that we *really* update person_id using person_roles= below,
-  #  but this method is used to populate the UI form
   def person_id= *args
     # this is a no-op because we use the person_roles=  method below to assign ids 
   end
   
   def get_person_role *args
     apo.roleMetadata.get_person_role *args
+  end
+  
+  def add_empty_person_to_role *args
+    apo.roleMetadata.add_empty_person_to_role *args
   end
   
   def person_role= *args

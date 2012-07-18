@@ -251,7 +251,7 @@ describe Hydrus::RoleMetadataDS do
         @rmdoc.ng_xml.should be_equivalent_to exp_xml
       end
       
-      it "add_empty_person_of_role should insert an empty person node as a child of the role node" do
+      it "add_empty_person_to_role should insert an empty person node as a child of the role node" do
         exp_parts = [
           @rmd_start,
           '<role type="collection-manager">',  @p1, @ep, '</role>',
@@ -259,7 +259,7 @@ describe Hydrus::RoleMetadataDS do
           @rmd_end,
         ]
         exp_xml = noko_doc(exp_parts.join '')
-        @rmdoc.add_empty_person_of_role('collection-manager')
+        @rmdoc.add_empty_person_to_role('collection-manager')
         @rmdoc.ng_xml.should be_equivalent_to exp_xml
       end  
     end # context add_person_of_role

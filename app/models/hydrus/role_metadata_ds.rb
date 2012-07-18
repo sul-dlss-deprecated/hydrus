@@ -58,8 +58,8 @@ class Hydrus::RoleMetadataDS < ActiveFedora::NokogiriDatastream
 
   # Adding/removing nodes.
 
-  # if the role node exists, add the person node to it; otherwise, create the role node and then add
-  #  the person node.  This will be called with the hyphenated version, so no need to toggle to underscore
+  # if the role node exists, add the person node to it; 
+  #  otherwise, create the role node and then add the person node.  
   def add_person_with_role(id, role_type)
     role_node = self.find_by_xpath("/roleMetadata/role[@type='#{role_type}']")
     if role_node.size == 0
@@ -70,9 +70,9 @@ class Hydrus::RoleMetadataDS < ActiveFedora::NokogiriDatastream
     end
   end  
 
-  # if the role node exists, add an empty person node to it; otherwise, create the role node and then add
-  #  an empty person node
-  def add_empty_person_of_role(role_type)
+  # if the role node exists, add an empty person node to it; 
+  #  otherwise, create the role node and then add an empty person node
+  def add_empty_person_to_role(role_type)
     add_person_with_role("", role_type)
   end  
 
