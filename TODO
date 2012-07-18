@@ -17,8 +17,6 @@ Collection edit: add functionality for role metadata section (and test!)
 
 ----------
 
-Test to exercise the creation of a new Collection.
-
 If a Collection is missing some of the info in the "Collection Settings" box,
 the contents of the box do not align correctly.
 
