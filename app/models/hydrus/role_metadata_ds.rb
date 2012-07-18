@@ -1,6 +1,7 @@
 class Hydrus::RoleMetadataDS < ActiveFedora::NokogiriDatastream
 
   include SolrDocHelper
+  include Hydrus::GenericDS
   
   set_terminology do |t|
     t.root :path => 'roleMetadata'
@@ -86,33 +87,6 @@ class Hydrus::RoleMetadataDS < ActiveFedora::NokogiriDatastream
 
   def insert_group(role_node, group_type)
     add_hydrus_child_node(role_node, :group, group_type)
-  end
-
-  # TODO: need to promote this code to some generic place for all of our stuff AND/OR put it in OM
-  #   will be put in OM/ActiveFedora.  See also DescMetadataDS and specs
-  # Set dirty=true. Otherwise, inserting repeated nodes does not work.
-  def add_hydrus_child_node(*args)
-    node = add_child_node(*args)
-    self.dirty = true  
-    return node
-  end
-
-  # TODO: need to promote this code to some generic place for all of our stuff AND/OR put it in OM
-  #   will be put in OM/ActiveFedora.  See also DescMetadataDS and specs
-  def remove_nodes(term)
-    nodes = find_by_terms(term.to_sym)
-    nodes.each { |n| n.remove }
-    self.dirty = true
-  end
-
-# FIXME: is this useful?  If so, it should be pushed up to OM/ActiveFedora
-  def remove_node(term, index)
-    # Tests postponed until we know what this method should do. MH 7/3.
-    node = self.find_by_terms(term.to_sym => index.to_i).first
-    unless node.nil?
-      node.remove
-      self.dirty = true
-    end
   end
 
   # OM templates.

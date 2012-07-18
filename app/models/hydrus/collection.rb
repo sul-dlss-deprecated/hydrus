@@ -119,6 +119,29 @@ class Hydrus::Collection < Hydrus::GenericObject
     apo.visibility_option= *args
   end
 
+  def vov_lookup
+    return {
+      'everyone'       => 'fixed_world',
+      'varies'         => 'varies_world',
+      'stanford'       => 'fixed_stanford',
+      'fixed_world'    => 'everyone',
+      'varies_world'   => 'varies',
+      'fixed_stanford' => 'stanford',
+    }
+  end
+
+  def visibility_option_value *args
+    opt = apo.visibility_option # fixed or varies
+    vis = apo.visibility        # world or stanford
+    return vov_lookup["#{opt}_#{vis}"]
+  end
+
+  def visibility_option_value= *args
+    opt, vis              = vov_lookup[args.first].split('_')
+    apo.visibility_option = opt # fixed or varies
+    apo.visibility        = vis # world or stanford
+  end
+
   def license *args
     apo.license *args
   end
@@ -169,6 +192,11 @@ class Hydrus::Collection < Hydrus::GenericObject
     args.first.each_pair { |id, role|
       apo.roleMetadata.add_person_with_role(id, role)
     }
+  end
+  
+# FIXME: write test  
+  def remove_actor *args
+    apo.roleMetadata.delete_actor *args
   end
 
 end

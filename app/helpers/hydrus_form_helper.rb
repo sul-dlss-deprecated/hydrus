@@ -80,18 +80,16 @@ module HydrusFormHelper
   #  if you change these keys here, you need to update the collection model as well
   def embargo_types
     return {
-      'none'   => 'no delay -- release all items as soon as they are deposited',
-      'varies' => 'varies -- select a release date per item, from "now" to a maximum of',
-      'fixed'  => 'fixed -- delay release of all items for',
+      'none'   => 'No delay -- release all items as soon as they are deposited',
+      'varies' => 'Varies -- select a release date per item, from "now" to a maximum of',
+      'fixed'  => 'Fixed -- delay release of all items for',
     }
   end
 
   def visibility_types
     return {
-      'fixed' => 'everyone -- all items in this collection will be public',
-      'varies'   => 'varies -- default is public, but you can choose to restrict some items to Stanford community',
-      # FIXME:  this is wrong per https://consul.stanford.edu/display/HYDRUS/Create+a+Collection+-+notes+on+APO-related+fields
-      #   as both the first and this last value have option attr set to fixed ... but changes are expected.  2012-07-09
+      'everyone' => 'Everyone -- all items in this collection will be public',
+      'varies'   => 'Varies -- default is public, but you can choose to restrict some items to Stanford community',
       'stanford' => 'Stanford community -- all items will be visible only to Stanford-authenticated users',
     }
   end
