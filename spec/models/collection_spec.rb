@@ -129,6 +129,20 @@ describe Hydrus::Collection do
         </roleMetadata>
       EOF
     end
+    
+    it "remove_actor should correctly update APO roleMetadataDS" do
+      @hc.remove_actor('sunetid1')
+      @rmdoc.ng_xml.should be_equivalent_to <<-EOF
+        <roleMetadata>
+          <role type="collection-manager">
+            <person><identifier type="sunetid">sunetid2</identifier><name/></person>
+          </role>
+          <role type="collection-depositor">
+            <person><identifier type="sunetid">sunetid3</identifier><name/></person>
+          </role>
+        </roleMetadata>
+      EOF
+    end
   
   end # context APO roleMetadataDS 
 

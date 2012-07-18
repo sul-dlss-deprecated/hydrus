@@ -194,7 +194,6 @@ class Hydrus::Collection < Hydrus::GenericObject
     }
   end
   
-# FIXME: write test  
   def remove_actor *args
     apo.roleMetadata.delete_actor *args
   end

@@ -265,6 +265,79 @@ describe Hydrus::RoleMetadataDS do
     end # context add_person_of_role
   end # context inserting nodes
 
+  context "Remove nodes" do
+    before(:each) do
+      @start_xml = <<-EOF
+        #{@rmd_start}
+          <role type="collection-manager">
+            #{@p1}
+            #{@p2}
+          </role>
+          <role type="collection-depositor">
+            #{@p3}
+          </role>
+        #{@rmd_end}
+      EOF
+      @rmdoc = Hydrus::RoleMetadataDS.from_xml(@start_xml)
+    end
+
+    it "should be able to remove all nodes of a type using remove_nodes()" do
+      exp_xml = <<-EOF
+        #{@rmd_start}
+          <role type="collection-manager" />
+          <role type="collection-depositor" />
+        #{@rmd_end}
+      EOF
+      @rmdoc.remove_nodes(:person)
+      @rmdoc.ng_xml.should be_equivalent_to exp_xml
+      exp_xml = <<-EOF
+        #{@rmd_start}
+          <role type="collection-depositor" />
+        #{@rmd_end}
+      EOF
+      @rmdoc.remove_nodes(:collection_manager)
+      @rmdoc.ng_xml.should be_equivalent_to exp_xml
+      @rmdoc.remove_nodes(:role)
+      @rmdoc.ng_xml.should be_equivalent_to "#{@rmd_start}#{@rmd_end}"
+    end
+    it "should do nothing quietly when remove_nodes is called for nodes in terminology that don't exist in xml" do
+      @rmdoc.remove_nodes(:item_depositor)
+      @rmdoc.ng_xml.should be_equivalent_to @start_xml
+    end
+    
+    it "delete_actor should remove the correct actor node" do
+      exp_xml = <<-EOF
+        #{@rmd_start}
+          <role type="collection-manager">
+            #{@p1}
+          </role>
+          <role type="collection-depositor">
+            #{@p3}
+          </role>
+        #{@rmd_end}
+      EOF
+      @rmdoc.delete_actor('sunetid2')
+      @rmdoc.ng_xml.should be_equivalent_to exp_xml
+      exp_xml = <<-EOF
+        #{@rmd_start}
+          <role type="collection-manager">
+            #{@p1}
+          </role>
+          <role type="collection-depositor" />
+        #{@rmd_end}
+      EOF
+      @rmdoc.delete_actor('sunetid3')
+      # NOTE:  it is ok to have an empty role node
+      @rmdoc.ng_xml.should be_equivalent_to exp_xml
+    end
+    
+    it "delete_actor should do nothing quietly when it is called for non-existent actor identifier" do
+      @rmdoc.delete_actor('not_present')
+      @rmdoc.ng_xml.should be_equivalent_to @start_xml
+    end
+    
+  end # context remove_nodes
+
   it "the blank template should match our expectations" do
     exp_xml = %Q(
       #{@rmd_start}
