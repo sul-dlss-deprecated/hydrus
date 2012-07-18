@@ -1,12 +1,12 @@
 class ApplicationController < ActionController::Base
-
   include SulChrome::Controller
   include Blacklight::Controller  
   include Hydra::Controller::ControllerBehavior
   include Hydrus::ModelHelper
-  
+    
   helper_method :to_bool # defined in Hydra::ModelHelper so it can be used in models as well
   helper_method :is_production?
+  helper_method :current_user
   
   def layout_name
    'sul_chrome/application'
@@ -36,4 +36,14 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery
 
+  protected
+  
+  def current_user
+    if request.env["WEBAUTH_USER"]
+      current_user = WebAuthUser.new(request.env["WEBAUTH_USER"])
+    else
+      return super
+    end
+  end
+  
 end

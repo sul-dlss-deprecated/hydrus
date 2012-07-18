@@ -18,4 +18,8 @@ class User < ActiveRecord::Base
   def to_s
     email
   end
+  
+  def is_webauth?
+    false
+  end
 end
