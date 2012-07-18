@@ -1,19 +1,26 @@
 class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
 
   include Hydrus::ModelHelper
+  
+  validate :check_embargo_options, :if => :open_for_deposit?
+  validate :check_license_options, :if => :open_for_deposit?
+  validates :embargo_option, :presence => true, :if => :open_for_deposit?
+  validates :license_option, :presence => true, :if => :open_for_deposit?
 
-  attr_accessor :publish
-  
-  validate :check_embargo_options, :if => :clicked_publish?
-  
   def check_embargo_options
     if embargo_option != 'none' && embargo.blank?
       errors.add(:embargo, "must have a time period specified")
     end
   end
 
-  def clicked_publish?
-   to_bool(publish)
+  def check_license_options
+    if license_option != 'none' && license.blank?
+      errors.add(:license, "must be specified")
+    end
+  end
+
+  def open_for_deposit?
+   deposit_status == "open"
   end  
   
   has_metadata(
@@ -29,6 +36,9 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
     :control_group => 'M')
 
   # administrativeMetadata
+  delegate(:deposit_status, :to => "administrativeMetadata",
+           :at => [:hydrus, :depositStatus], :unique => true)
+             
   delegate(:embargo, :to => "administrativeMetadata",
            :at => [:hydrus, :embargo], :unique => true)
 

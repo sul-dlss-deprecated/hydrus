@@ -57,9 +57,14 @@ $(document).ready(function(){
 	});
   
   validate_hydrus_item();
+  validate_hydrus_collection();
+
 	$("#hydrus_items-edit form input, #hydrus_items-edit form textarea").live("blur", function(){
 	    validate_hydrus_item();
 	});
+	$("#hydrus_collections-edit form input, #hydrus_collections-edit form textarea").live("blur", function(){
+	    validate_hydrus_collection();
+	});	
 	$(".terms_of_deposit").each(function(){
 		$(this).click(function(){
 			validate_hydrus_item();
@@ -84,6 +89,25 @@ function validate_hydrus_item() {
 	}else{
 		$("#hydrus_item_publish").each(function(){
 			$(this).attr("disabled", "disabled");
+		});
+	}
+}
+function validate_hydrus_collection() {
+	var all_required_filled = true;
+	$("#hydrus_collections-edit form input:required, #hydrus_collections-edit form textarea:required").each(function(){
+		if($(this).attr("value") == "") {
+			all_required_filled = false;
+		}
+	});
+	if(all_required_filled) {
+		$("#hydrus_collection_publish").each(function(){
+			$(this).removeAttr("disabled");
+			$('#hydrus_collection_valid').attr('checked', true);
+		});
+	}else{
+		$("#hydrus_collection_publish").each(function(){
+			$(this).attr("disabled", "disabled");
+			$('#hydrus_collection_valid').attr('checked', false);
 		});
 	}
 }

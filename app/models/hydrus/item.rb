@@ -7,7 +7,15 @@ class Hydrus::Item < Hydrus::GenericObject
   validates :actors, :at_least_one=>true, :if => :clicked_publish?
   validates :files, :at_least_one=>true, :if => :clicked_publish?
   validates :terms_of_deposit, :presence => true, :if => :clicked_publish?
-
+  validate :collection_must_be_open, :on => :create
+  
+  # at least one of the associated collections must be open (published) to create a new item
+  def collection_must_be_open
+    if !collection.collect {|c| c.publish}.include?(true)
+      errors.add(:collection, "must be open to have new items added")
+    end
+  end
+  
   def files
     Hydrus::ObjectFile.find_all_by_pid(pid,:order=>'weight')  # coming from the database
   end

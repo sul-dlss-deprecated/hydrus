@@ -76,7 +76,7 @@ class HydrusCollectionsController < ApplicationController
         errors << "#{field.to_s.humanize.capitalize} #{error.join(', ')}"
       end
       flash[:error] = errors.join("<br/>").html_safe
-      redirect_to [:edit, @document_fedora] and return
+      render :edit and return
     end  
     
     notice << "Your changes have been saved."

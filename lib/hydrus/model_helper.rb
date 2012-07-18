@@ -9,7 +9,7 @@ module Hydrus
     end
     
     def to_bool(value)
-      value == "true" || value == true || value.to_i == 1 ? true : false
+      value == "true" || value == true ? true : false
     end
   
   end

@@ -22,13 +22,15 @@
           <td>owner</td>
           <td>11 published, 1 draft</td>
           <td>
-            <form class="form-horizontal">
-              <div class="btn-group">
-                <a class="btn" href="#">Add new &hellip;</a>
-                <a class="btn dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
-                <%= render :partial => "shared/add_content_options", :locals => {:parent => c} %>
-              </div>
-            </form>
+					  <% if c.publish %>
+	            <form class="form-horizontal">
+	              <div class="btn-group">
+	                <a class="btn" href="#">Add new &hellip;</a>
+	                <a class="btn dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
+	                <%= render :partial => "shared/add_content_options", :locals => {:parent => c} %>
+	              </div>
+	            </form>
+		         <% end %>
           </td>
         </tr> 
         <% end %>

@@ -1,5 +1,9 @@
 module HydrusFormHelper
   
+  def collection_button_text(value)
+    value ? "Close Collection" : "Open Collection"
+  end
+  
   def hydrus_form_label(opts={}, &block)
     html = ""
     html << "<div class='span#{opts.has_key?(:columns) ? opts[:columns] : "1"} form-label #{opts[:class] if opts.has_key?(:class)}'>"

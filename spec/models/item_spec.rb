@@ -26,18 +26,21 @@ describe Hydrus::Item do
 
   it "new items should be invalid if no files have been added yet" do
     item      = Hydrus::Item.new(:pid=>'druid:tt000tt0001')
-    item.should be_valid
     item.publish="true"
-    item.should_not be_valid
+    item.valid?.should == false
+    item.errors.messages[:collection].should_not be_nil
     item.errors.messages[:title].should_not be_nil
     item.errors.messages[:files].should_not be_nil    
     item.errors.messages[:terms_of_deposit].should_not be_nil    
     item.errors.messages[:abstract].should_not be_nil    
+    item.add_to_collection('druid:oo000oo0003') # now associate with an open collection and check if that message goes away
+    item.valid?.should == false
+    item.errors.messages[:collection].should be_nil
   end
   
   it "existing item should be invalid if required fields are missing (and publish/terms of deposit was selected)" do
     @item=Hydrus::Item.find('druid:oo000oo0001')
-    @item.should be_valid  # should start out as valid
+    @item.should be_valid  # should start out as invalid
     @item.publish = "true"
     @item.terms_of_deposit = "true"
     @item.title=''

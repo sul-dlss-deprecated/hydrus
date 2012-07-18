@@ -2,12 +2,13 @@ namespace :hydrus do
   FIXTURE_PIDS = [
     'druid:oo000oo0000', # The Ur-APO
     'druid:oo000oo0001', # Collection #1: Item #1
-    'druid:oo000oo0002', # APO
+    'druid:oo000oo0002', # APO for collecion druid:oo000oo0003
     'druid:oo000oo0003', # Collection #1
     'druid:oo000oo0004', # Collection #2
     'druid:oo000oo0005', # Collection #1: Item #2
     'druid:oo000oo0006', #  "             Item #3
     'druid:oo000oo0007', #  "             Item #4
+    'druid:oo000oo0008', # APO for collecion druid:oo000oo0004
   ]
 
 

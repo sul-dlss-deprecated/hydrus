@@ -1,6 +1,6 @@
 <%- @page_title = "Editing '#{@document_fedora.title}' - #{application_name}" -%>
 <%- object_type = @document_fedora.object_type -%>
-<%= form_for(@document_fedora, :method => 'PUT', :html => {:class => "step"}) do |f| -%>
+<%= form_for(@document_fedora, :method => 'PUT', :html => {:class => "step", :novalidate=>""}) do |f| -%>
 
 <%- sidebar_items << capture do -%>
 	<%= render :partial => "actions_box", :locals => {:f=>f, :id=>"js"}%>
@@ -17,7 +17,7 @@
       <%= f.label :title, "Collection name" %>
     <%- end -%>
     <%= hydrus_form_value do %>
-      <%= f.text_field :title, :value => @document_fedora.title || "" %>
+      <%= f.text_field :title, :value => (@document_fedora.title || ""), :required => true %>
     <%- end -%>
   </div>
   <div class="row">
@@ -25,7 +25,7 @@
       <%= f.label :abstract, "Description" %>
     <%- end -%>
     <%= hydrus_form_value(:class=>"short-textarea") do %>
-      <%= f.text_area :abstract, :value => @document_fedora.abstract || "" %>
+      <%= f.text_area :abstract, :value => (@document_fedora.abstract || ""),:required => true %>
     <%- end -%>
   </div>
   <div class="row">
@@ -33,7 +33,7 @@
       Contact email
     <%- end -%>
     <%= hydrus_form_value do %>
-      <%= f.text_field :contact, :value => @document_fedora.contact || ""%>
+      <%= f.text_field :contact, :value => (@document_fedora.contact || ""),:required => true%>
     <%- end -%>
   </div>
   

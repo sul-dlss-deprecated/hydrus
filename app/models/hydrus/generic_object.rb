@@ -4,7 +4,7 @@ class Hydrus::GenericObject < Dor::Item
   
   include Hydrus::ModelHelper
   include ActiveModel::Validations
-  validates :title, :abstract, :not_empty => true, :if => :clicked_publish?
+  validates :title, :abstract, :contact, :not_empty => true, :if => :clicked_publish?
   
   validates :pid, :is_druid=>true
   

@@ -2,12 +2,13 @@ class Hydrus::Collection < Hydrus::GenericObject
 
   # Any time we save a Collection, save its corresponding APO.
 
+  before_validation :remove_values_for_associated_attribute_with_value_none
   after_validation :strip_whitespace
   before_save :save_apo
   
   # this lets us check if both the apo and the collection are valid at once (used in the controller)
   def object_valid?
-    valid? # first run the validations on BOTH models specifically to collect all errors
+    valid? # first run the validations on BOTH collection and apo models specifically to collect all errors
     apo.valid?
     valid? && apo.valid? # then return true only if both are actually valid
   end
@@ -18,9 +19,12 @@ class Hydrus::Collection < Hydrus::GenericObject
   end
     
   def publish=(value)
-    # set the APO to published if the collection is published, since they are tied together, so that we only run validations when both are published
-    apo.publish=true if to_bool(value)
-    super
+    # set the APO deposit status to open if the collection is published, since they are tied together
+    apo.deposit_status = (to_bool(value) ? "open" : "closed")
+  end
+  
+  def publish
+    apo.deposit_status == "open" ? true : false
   end
   
   def strip_whitespace
@@ -28,7 +32,6 @@ class Hydrus::Collection < Hydrus::GenericObject
   end
 
   def save_apo
-    remove_values_for_associated_attribute_with_value_none
     apo.save
   end
 
@@ -83,7 +86,7 @@ class Hydrus::Collection < Hydrus::GenericObject
     apo.license= *args if license_option == "fixed"  # only set the license for this setter if the corresponding radio button is selected
   end
   #############
-
+  
   def embargo *args
     apo.embargo *args
   end

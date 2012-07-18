@@ -32,16 +32,19 @@
 
     <div class="well actions-box collection-actions">
       <div class="box-header">What you can do</div>
-      <p><%= link_to("Edit collection settings", "#") %></p>
-      <form class="form-horizontal">
-        <div class="btn-group">
-          <button class="btn btn-small">Add new &hellip;</button>
-          <button class="btn btn-small dropdown-toggle" data-toggle="dropdown">
-            <span class="caret"></span>
-          </button>
-          <%= render :partial => "shared/add_content_options", :locals => {:parent => @document_fedora} %>
-        </div>
-      </form>
+      <p><%= link_to("Edit collection settings",edit_polymorphic_path(@document_fedora, :viewing_context => 'edit'),
+              :class => 'edit toggle') %></p>
+			<% if @document_fedora.publish %>
+	      <form class="form-horizontal">
+	        <div class="btn-group">
+	          <button class="btn btn-small">Add new &hellip;</button>
+	          <button class="btn btn-small dropdown-toggle" data-toggle="dropdown">
+	            <span class="caret"></span>
+	          </button>
+	          <%= render :partial => "shared/add_content_options", :locals => {:parent => @document_fedora} %>
+	        </div>
+	      </form>
+			 <% end %>
     </div>
 
 <%- end -%>
