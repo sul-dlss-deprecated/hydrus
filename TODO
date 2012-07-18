@@ -21,16 +21,14 @@ Coll view: Items grid: display the depositor, using Item.roleMetadata.depositor.
 
 Item view: Submitted by: display the depositor, using Item.roleMetadata.depositor...
 
-Item view: release date. See Consul page. Date from "published" lifecycle when it exists, else "not released" 
-Display format: 31-Jan-2012.
+Item view: release date. See Consul page. Date from "published" lifecycle when
+it exists, else "not released". Display format: 31-Jan-2012.
 
 Item view: visibility. See Consul page. Currently displayed value seems wrong.
 
 Rationalize date format across various pages.
 
 Test to exercise the creation of a new Collection.
-
-Change dirty to content_will_change
 
 ----------
 
