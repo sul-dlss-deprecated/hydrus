@@ -15,6 +15,9 @@ describe("Collection edit", :type => :request, :integration => true) do
   end
 
   it "can edit Collection descMetadata content" do
+    
+    orig_item = get_original_content(@hc, 'descMetadata')
+    
     new_abstract  = '  foobarfubb '
     orig_abstract = @hc.abstract
     new_contact   = 'ted@gonzo.com'
@@ -38,17 +41,7 @@ describe("Collection edit", :type => :request, :integration => true) do
     visit polymorphic_path(@hc)
     page.should have_content(new_abstract.strip)
 
-    # Clean up and confirm.
-    visit edit_polymorphic_path(@hc)
-    current_path.should == edit_polymorphic_path(@hc)
-    fill_in "Description", :with => orig_abstract
-    fill_in "hydrus_collection_contact", :with => orig_contact
-    click_button "Save"
-    current_path.should == polymorphic_path(@hc)
-    page.should have_content(orig_abstract)
-    page.should have_content(orig_contact)
-    page.should_not have_content(new_abstract)
-    page.should_not have_content(new_contact)
+    restore_original_content(@hc, orig_item)
   end
   
   it "does not shows deletion link for a collection if it has any items in it" do

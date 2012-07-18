@@ -56,6 +56,9 @@ describe("Item edit", :type => :request, :integration => true) do
   end
   
   it "People/Role editing" do
+
+    orig_item = get_original_content(@hi, 'descMetadata')
+
     new_name  = "MY EDITIED PERSON"
     orig_name = "Rosenfeld, Michael J."
     field_np  = "hydrus_item_person_0"
@@ -82,11 +85,8 @@ describe("Item edit", :type => :request, :integration => true) do
     page.should have_content(new_role)
 
     # Clean up.
-    visit edit_polymorphic_path(@hi)
-    current_path.should == edit_polymorphic_path(@hi)
-    fill_in(field_np, :with => orig_name)
-    select(orig_role, :from => field_rt)
-    click_button "Save"
+    restore_original_content(@hi, orig_item)
+
   end
   
   it "People/Role adding and deleting" do
@@ -125,6 +125,8 @@ describe("Item edit", :type => :request, :integration => true) do
   end
 
   it "Related Content editing" do
+    orig_item = get_original_content(@hi, 'descMetadata')
+    
     orig_link   = @hi.descMetadata.relatedItem.location.url.first
     new_link    = "foo_LINK_bar"
     field_link  = "hydrus_item_related_item_url_0"
@@ -150,12 +152,7 @@ describe("Item edit", :type => :request, :integration => true) do
     page.should have_xpath("//dd/a[@href='#{new_link}']")
     page.should have_content(new_title)
 
-    # Clean up.
-    visit edit_polymorphic_path(@hi)
-    current_path.should == edit_polymorphic_path(@hi)
-    fill_in(field_link,  :with => orig_link)
-    fill_in(field_title, :with => orig_title)
-    click_button "Save"
+    restore_original_content(@hi, orig_item)
   end
   
   it "Related Content adding and deleting" do
@@ -203,6 +200,8 @@ describe("Item edit", :type => :request, :integration => true) do
   end
   
   it "editing related content w/o titles" do
+    orig_item = get_original_content(@hi, 'descMetadata')
+    
     object = Hydrus::Item.find("druid:oo000oo0005")
     title_field = "hydrus_item_related_item_title_0"
     url_field = "hydrus_item_related_item_url_0"
@@ -228,15 +227,13 @@ describe("Item edit", :type => :request, :integration => true) do
     page.should have_content new_title
     
     #cleanup
-    visit edit_polymorphic_path(object)
-    current_path.should == edit_polymorphic_path(object)
-    fill_in title_field, :with => old_title
-    fill_in url_field, :with => old_url
-    
-    click_button "Save"
+    restore_original_content(@hi, orig_item)
+
   end
 
   it "can edit preferred citation field" do
+    orig_item = get_original_content(@hi, 'descMetadata')
+    
     citation_field = "hydrus_item_preferred_citation"
     new_pref_cit  = "new_citation_FOO"
     orig_pref_cit = @hi.preferred_citation
@@ -255,14 +252,11 @@ describe("Item edit", :type => :request, :integration => true) do
     visit polymorphic_path(@hi)
     page.should have_content(new_pref_cit)
 
-    # Clean up.
-    visit edit_polymorphic_path(@hi)
-    current_path.should == edit_polymorphic_path(@hi)
-    fill_in citation_field, :with => orig_pref_cit
-    click_button "Save"
+    restore_original_content(@hi, orig_item)
   end
   
   it "Related citation adding and deleting" do
+    
     new_citation         = "hydrus_item_related_citation_2" 
     new_delete_button    = "remove_related_citation_2"
     new_citation_text    = " This is a citation for a related item! "
