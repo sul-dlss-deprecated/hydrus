@@ -39,12 +39,14 @@ describe("Collection view", :type => :request, :integration => true) do
     exp_content = [
       "How Couples Meet and Stay Together",
       "Ethnic Collective Action",
+      'Mascot, Harvard',
     ]
     login_as_archivist1
     visit polymorphic_path(@hc)
     current_path.should == polymorphic_path(@hc)
+    coll_items = find('div.collection-items')
     exp_content.each do |exp|
-      page.should have_content(exp)
+      coll_items.should have_content(exp)
     end
   end
 
