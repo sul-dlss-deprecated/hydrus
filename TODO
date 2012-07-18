@@ -1,4 +1,4 @@
-# Temporary to-do list as we work through varous model changes and related tests.
+# Temporary to-do list as we work through various model changes and related tests.
 
 Collection edit: add functionality for role metadata section (and test!)
   integration tests for collection/apo role metadata
@@ -36,8 +36,6 @@ deletes all of the related published works.
 
 ----------
 
-Only allow users to create new items if the underlying collection is set to published.
-Store publish state for item and collection (collection publish state stored in APO?)
 Store "agree to terms" checkbox for item.
 
 ==========
