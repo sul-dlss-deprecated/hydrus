@@ -1,6 +1,6 @@
 <div class="well actions-box" id="collection-actions">
+  <div class="box-header">Actions</div>
   <fieldset>
-    <legend class="box-header">Actions</legend>
 		<p> Collection is <%= collection_status(@document_fedora) %></p>
     <button type="submit" class="btn btn-small save-edits" name="save" id="save_<%= id %>">Save</button>
     <button type="submit" class="btn btn-small save-edits" name="hydrus_collection[publish]" value="<%=!@document_fedora.publish%>" id="hydrus_collection_publish"><%=collection_button_text(@document_fedora.publish)%></button>

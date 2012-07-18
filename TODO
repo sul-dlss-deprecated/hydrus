@@ -17,10 +17,6 @@ Collection edit: add functionality for role metadata section (and test!)
 
 ----------
 
-Coll view: Items grid: display the depositor, using Item.roleMetadata.depositor...
-
-Item view: Submitted by: display the depositor, using Item.roleMetadata.depositor...
-
 Item view: release date. See Consul page. Date from "published" lifecycle when
 it exists, else "not released". Display format: 31-Jan-2012.
 
