@@ -131,6 +131,9 @@ describe("Collection edit", :type => :request, :integration => true) do
   end
 
   it "can edit APO license content" do
+    orig_item = get_original_content(@hc, 'descMetadata')
+    orig_apo_item = get_original_content(@hc.apo, 'administrativeMetadata')
+    
     # Setup and login.
     orig_license        = @hc.license         # original value = cc-by, will set to: odc-odbl
     orig_license_label  = "CC BY Attribution"
@@ -157,16 +160,14 @@ describe("Collection edit", :type => :request, :integration => true) do
     visit polymorphic_path(@hc)
     find("div.collection-settings").should have_content(new_license)
     # Undo changes, and confirm.
-    visit edit_polymorphic_path(@hc)
-    current_path.should == edit_polymorphic_path(@hc)
-    choose(orig_check_field)
-    select(orig_license_label, :from => "license_option_#{orig_license_option}")
-    click_button "Save"
-    current_path.should == polymorphic_path(@hc)
-    find("div.collection-settings").should have_content(orig_license)
+    restore_original_content(@hc, orig_item)
+    restore_original_content(@hc.apo, orig_apo_item)
+
   end
 
   it "can edit APO embargo content" do
+    orig_item = get_original_content(@hc, 'descMetadata')
+    orig_apo_item = get_original_content(@hc.apo, 'administrativeMetadata')
     # Setup and login.
     orig_embargo        = @hc.embargo         # original value = 1 year, will set to 3 years
     orig_embargo_option = @hc.embargo_option  # original value = varies, will set to fixed
@@ -214,13 +215,9 @@ describe("Collection edit", :type => :request, :integration => true) do
     # verify embargo is now 'none'
     @hc.embargo == 'none'
     # Undo changes, and confirm.
-    visit edit_polymorphic_path(@hc)
-    current_path.should == edit_polymorphic_path(@hc)
-    choose("hydrus_collection_embargo_option_varies")
-    select("1 year", :from => "embargo_option_varies")
-    click_button "Save"
-    current_path.should == polymorphic_path(@hc)
-    find("div.collection-settings").should have_content("1 year")
+    # Undo changes, and confirm.
+    restore_original_content(@hc, orig_item)
+    restore_original_content(@hc.apo, orig_apo_item)
   end
   
 end
