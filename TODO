@@ -17,13 +17,6 @@ Collection edit: add functionality for role metadata section (and test!)
 
 ----------
 
-Item view: release date. See Consul page. Date from "published" lifecycle when
-it exists, else "not released". Display format: 31-Jan-2012.
-
-Item view: visibility. See Consul page. Currently displayed value seems wrong.
-
-Rationalize date format across various pages.
-
 Test to exercise the creation of a new Collection.
 
 ----------
@@ -40,14 +33,22 @@ Only allow users to create new items if the underlying collection is set to publ
 Store publish state for item and collection (collection publish state stored in APO?)
 Store "agree to terms" checkbox for item.
 
-==========
-
-Assess Item and Collection controllers for test coverage.
-
 ObjectFiles controller: destroy() lacks testing.
+
+
+-------
+WAITING
+-------
 
 Coll create: Initialize apo roleMetadata datastream with the collection-manager
 role for the current logged-in user (waiting on web auth).
 
 Item create: Create roleMetadata datastream with the item-depositor for the
 current logged-in user (waiting on web auth).
+
+Item view: release date. See Consul page. Date from "published" lifecycle when
+it exists, else "not released". Display format: 31-Jan-2012. [waiting on
+workflow discussion]
+
+Rationalize date format across various pages: 31-Jan-2012. [waiting on workflow
+discussion]
