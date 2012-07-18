@@ -22,6 +22,9 @@ Test to exercise the creation of a new Collection.
 Item edit: "Add Another Published work" button does not work if the user first
 deletes all of the related published works.
 
+Item edit: "Links to related content" button does not work if the user first
+deletes all of the related published works.
+
 ----------
 
 Only allow users to create new items if the underlying collection is set to published.
@@ -29,9 +32,6 @@ Store publish state for item and collection (collection publish state stored in 
 Store "agree to terms" checkbox for item.
 
 ==========
-
-
-local_ci task: figure out why setting Rails.env=true causes test failure on 2nd run.
 
 Fix visibility_types in hydrus_form_helper.rb.
 

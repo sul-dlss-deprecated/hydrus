@@ -6,9 +6,9 @@
       <div class="box-header">Collection Settings</div>
       <dl class="dl-horizontal">
         <dt>
-          <%= pluralize(@document_fedora.collection_manager.length, 'Owner').gsub(/^\d+\s/, "") %>:
+          <%= pluralize(@document_fedora.collection_owner.length, 'Owner').gsub(/^\d+\s/, "") %>:
         </dt>
-        <% @document_fedora.collection_manager.each do |cm| %>
+        <% @document_fedora.collection_owner.each do |cm| %>
           <dd><%= cm %></dd>
         <% end %>
         <dt>Embargo:</dt>

@@ -24,6 +24,7 @@ class Hydrus::RoleMetadataDS < ActiveFedora::NokogiriDatastream
     
     # APO roles
     t.collection_manager   :ref => [:role], :attributes => {:type => 'collection-manager'}
+    t.collection_owner    :proxy => [:collection_manager, :person, :identifier]
     t.collection_depositor :ref => [:role], :attributes => {:type => 'collection-depositor'}
     t.collection_reviewer  :ref => [:role], :attributes => {:type => 'collection-reviewer'}
     t.collection_viewer    :ref => [:role], :attributes => {:type => 'collection-viewer'}
@@ -58,9 +59,9 @@ class Hydrus::RoleMetadataDS < ActiveFedora::NokogiriDatastream
   # Adding/removing nodes.
 
   # if the role node exists, add the person node to it; otherwise, create the role node and then add
-  #  the person node
+  #  the person node.  This will be called with the hyphenated version, so no need to toggle to underscore
   def add_person_with_role(id, role_type)
-    role_node = self.find_by_xpath("/roleMetadata/role[@type='#{toggle_hyphen_underscore(role_type)}']")
+    role_node = self.find_by_xpath("/roleMetadata/role[@type='#{role_type}']")
     if role_node.size == 0
       new_role_node = insert_role(role_type)
       return insert_person(new_role_node, id)
@@ -76,7 +77,7 @@ class Hydrus::RoleMetadataDS < ActiveFedora::NokogiriDatastream
   end  
 
   def insert_role(role_type)
-    add_hydrus_child_node(ng_xml.root, :role, toggle_hyphen_underscore(role_type))
+    add_hydrus_child_node(ng_xml.root, :role, role_type)
   end
 
   def insert_person(role_node, sunetid)
@@ -104,7 +105,7 @@ class Hydrus::RoleMetadataDS < ActiveFedora::NokogiriDatastream
     self.dirty = true
   end
 
-# FIXME: is this useful?
+# FIXME: is this useful?  If so, it should be pushed up to OM/ActiveFedora
   def remove_node(term, index)
     # Tests postponed until we know what this method should do. MH 7/3.
     node = self.find_by_terms(term.to_sym => index.to_i).first
