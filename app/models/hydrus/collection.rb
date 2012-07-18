@@ -170,5 +170,10 @@ class Hydrus::Collection < Hydrus::GenericObject
       apo.roleMetadata.add_person_with_role(id, role)
     }
   end
+  
+# FIXME: write test  
+  def remove_actor *args
+    apo.roleMetadata.delete_actor *args
+  end
 
 end

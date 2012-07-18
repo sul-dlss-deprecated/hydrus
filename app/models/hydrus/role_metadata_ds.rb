@@ -105,14 +105,11 @@ class Hydrus::RoleMetadataDS < ActiveFedora::NokogiriDatastream
     self.dirty = true
   end
 
-# FIXME: is this useful?  If so, it should be pushed up to OM/ActiveFedora
-  def remove_node(term, index)
-    # Tests postponed until we know what this method should do. MH 7/3.
-    node = self.find_by_terms(term.to_sym => index.to_i).first
-    unless node.nil?
-      node.remove
-      self.dirty = true
-    end
+# FIXME: write test
+  def delete_actor(identifier)
+    person_node = self.find_by_xpath("/roleMetadata/role/person[identifier='#{identifier}']")
+    person_node.remove
+    self.dirty = true
   end
 
   # OM templates.

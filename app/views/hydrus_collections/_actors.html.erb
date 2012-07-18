@@ -1,6 +1,6 @@
 Select people who can add items to this collection, or modify the collection settings.
 <%- @document_fedora.person_id.each_with_index do |person, ix| -%>
-  <%= render :partial => "person", :locals => {:person=>person, :index=>ix} %>
+  <%= render :partial => "actor", :locals => {:person=>person, :index=>ix} %>
 <%- end -%>
 <div class="row">
   <div class="span8 offset1">
