@@ -113,11 +113,9 @@ class HydrusCollectionsController < ApplicationController
     end
   end
 
-# FIXME:  write test  
   # remove an 'actor' (person or group) form the roleMetadata
   def destroy_actor
     @document_fedora.remove_actor(params[:actor_id])
-    @document_fedora.apo.save
     @document_fedora.save
     respond_to do |want|
       want.html {redirect_to :back}
