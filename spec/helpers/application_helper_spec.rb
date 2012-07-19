@@ -22,16 +22,4 @@ describe ApplicationHelper do
     seen_beta_dialog?.should == true
   end
 
-  it "collection_visibility() should capitalize unless VOV is blank/nil" do
-    tests = {
-      nil       => 'unknown',
-      ''        => 'unknown',
-      'foo bar' => 'Foo bar',
-    }
-    tests.each do |input, exp|
-      obj = double('mock_collection', :visibility_option_value => input)
-      collection_visibility(obj).should == exp
-    end
-  end
-
 end

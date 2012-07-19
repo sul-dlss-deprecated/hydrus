@@ -22,17 +22,16 @@ module ApplicationHelper
     obj.publish ? "open" : "closed"
   end
 
-  def collection_visibility(obj)
-    v = obj.visibility_option_value
-    return (v.blank? ? "unknown" : v.capitalize)
-  end
-
   def render_head_content
     render_extra_head_content + content_for(:head)
   end
 
   def hydrus_signin_link
     link_to("Sign in", new_user_session_path, :class=>'signin_link', :"data-url" => new_signin_path)
+  end
+
+  def hydrus_object_setting_value(obj)
+    return (obj.blank? ? content_tag(:span, "not specified", :class => "unspecified") : obj)
   end
 
 end
