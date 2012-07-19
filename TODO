@@ -1,10 +1,8 @@
-Collection controller: 
-  tests for  destroy_actor method (and destroy_values ... and item controller destroy_values?)
-  integration tests for collection/apo role metadata
-    adding persons
-    removing persons
-    adding new role
-    removing all persons from role
+Integration tests for collection/apo role metadata: [#MH]
+  removing persons [in progress]
+  adding persons
+  adding new role
+  removing all persons from role
 
 ----------
 
@@ -12,8 +10,6 @@ If a Collection is missing some of the info in the "Collection Settings" box,
 the contents of the box do not align correctly.
 
 ----------
-
-Store "agree to terms" checkbox for item.
 
 ObjectFiles controller: destroy() lacks testing.
 
