@@ -2,34 +2,59 @@
 APO-of-Collection
 -----------------
 
+Revs-prod APO:
+  https://dor-prod.stanford.edu/fedora/objects/druid:qv648vd4392/datastreams
+
 done by register_object():
 
-  assign druid: ok (druid:wx557cz2760)
+  assign druid: ok
 
   identityMetadata:
     objectLabel: currently "Hydrus"; do we want something else?
+        - when Coll is published, refresh the APO title, based on Coll title
+        - title = "APO for #{coll.title}"
     UUID: did not see one
+        - possible bug for register_object(): Lynn will handle
 
-  workflows: not created
+  workflows: not created; should it be for an APO?
+        - possible bug for register_object(): Lynn will handle
 
   RELS-EXT
     - created datastream
     - did not see hydra:referencesAgreement
+        - new feature for register_object(): Lynn will handle
 
   DC: ok
-      - should title change if user edits the title in the future?
 
   descMetadata: not created
+    - when Coll is published, refresh the APO title, based on Coll title
+    - title = "APO for #{coll.title}"
+    - Lynn will give us a spec
 
 augmeted by Hydrus app:
 
   administrativeMetadata:
     created: ok
-    default assembly workflow: not done
-    default common accessioning workflow: not done
-    roleMetadata: created, but <name> not set
+    default assembly workflow: not done (##mh)
+      - workflow name = hydrusAssemblyWF
+      - currently the steps are called:
+          start-deposit
+            - upon initial creation of the Coll
+            - lifecycle = registered
+          submit
+            - when user clicks Publish
+          approve
+            - Reviewed (or could be autocompleted/skipped if Coll requires no approval)
+          start-accession
+            - triggered by last of the previous steps
+    default common accessioning workflow: not done (##mh)
+
+  roleMetadata: created, but <name> not set
+    - need to get name from webauth or LDAP
 
   defaultObjectRights: not created
+    - won't know until the Coll is published
+    - create this stream when user clicks Publish for the Coll
 
 
 ----------
@@ -38,33 +63,39 @@ Collection
 
 done by register_object():
 
-  assign druid: ok (druid:xb912wj0872)
+  assign druid: ok
 
   identityMetadata:
     objectType=collection: ok
-    objectType=collection: not done
+    objectType=set: not done
+        - Lynn will confirm
     objectLabel:
       - currently "Hydrus"
-      - should this change if user edits the title in the future?
+      - when Coll is published, refresh the title, based on Coll title
     UUID: did not see one
-    tag: currently is "Project : Hydrus" rather than "hydrus : collection"
+    tag: currently is "Project : Hydrus"
+    tag: also add this tag: "Hydrus : collection"
 
-  workflows: created; currently empty
+  workflows: created; currently empty; that's OK
 
   RELS-EXT: ok
 
   DC: ok
-      - should title change if user edits the title in the future?
 
-  default hydrusAssemblyWF: not done
+  default hydrusAssemblyWF:
+    will be handled by register_object() once we start putting workflows
+    in the Hydrus APOs
 
 augmeted by Hydrus app:
 
   descMetadata: ok
 
-  events: not created
+  events: not created (##mh)
 
   rightsMetadata: not created
+    will be handled by register_object() once we start putting default rights
+    in the Hydrus APOs
+
 
 ----
 Item
@@ -72,31 +103,53 @@ Item
 
 done by register_object():
 
-  assign druid: ok (druid:wg073cw8515)
+  assign druid: ok
 
   identityMetadata:
     objectType=item: ok
     objectLabel:
       - currently "Hydrus"
-      - should this change if user edits the title in the future?
+      - when Item is published, refresh the title, based on Item title
     UUID: did not see one
-    tag: currently is "Project : Hydrus" rather than "hydrus : [itemtype]"
+    tag: currently is "Project : Hydrus"
+    tag: also add another tag: "hydrus : [itemtype]"
+        - for now hard-code itemtype = dataset
+        - need to figure out where this info will be stored in object
 
   workflows: created; currently empty
 
   RELS-EXT: ok
 
   DC: ok
-      - should title change if user edits the title in the future?
 
-  default hydrusAssemblyWF: not done
+  default hydrusAssemblyWF
+    will be handled by register_object() once we start putting workflows
+    in the Hydrus APOs
 
 augmeted by Hydrus app:
 
   descMetadata: ok
 
-  events: not created
+  events: not created (##mh)
 
   rightsMetadata: not created
+    will be handled by register_object() once we start putting default rights
+    in the Hydrus APOs
 
-  roleMetadata: not created; should it be? (was not on the checklist)
+  roleMetadata: not created
+    - Hydrus code needs to do this
+    - tied to webauth
+
+
+-------------------------
+Assembly and accessioning
+-------------------------
+
+Where do Hydrus objects enter the larger DLSS pipeline: assembly or common-accessioning?
+  - maybe assembly, but Peter and Monty will assess
+
+  - checksums
+  - contentMetadata
+
+  - file transfer
+  - robot errors
