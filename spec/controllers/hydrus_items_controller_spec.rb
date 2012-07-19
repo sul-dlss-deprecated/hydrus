@@ -11,11 +11,22 @@ describe HydrusItemsController do
         :action     => 'show', 
         :id         => 'abc')
     end
+    
+    it "should map items destroy_value action correctly" do
+      { :get => "/items/abc/destroy_value" }.should route_to(
+        :controller => 'hydrus_items', 
+        :action     => 'destroy_value',
+        :id         => 'abc')
+    end
+    
+    it "should have the destroy_hydrus_item_value convenience url" do
+      destroy_hydrus_item_value_path("123").should match(/items\/123\/destroy_value/)
+    end
 
-  end
+  end # routes and mapping
 
   # SHOW ACTION.
-  describe "show action" do
+  describe "Show Action" do
 
     pid = 'druid:oo000oo0001'
 
@@ -27,7 +38,7 @@ describe HydrusItemsController do
     end
   end
 
-  describe "new" do
+  describe "New Action" do
     it "should do something" do
       controller.stub(:current_user).and_return(mock_user)
       get :new, :collection => "druid:oo000oo0003"
@@ -42,7 +53,7 @@ describe HydrusItemsController do
     end
   end
 
-  describe "update" do
+  describe "Update Action" do
     describe "file upload" do
       before(:all) do
         @pid = "druid:oo000oo0001"
