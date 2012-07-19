@@ -4,7 +4,7 @@
 		<p> Collection is <%= collection_status(@document_fedora) %></p>
     <button type="submit" class="btn btn-small save-edits" name="save" id="save_<%= id %>">Save</button>
     <button type="submit" class="btn btn-small save-edits" name="hydrus_collection[publish]" value="<%=!@document_fedora.publish%>" id="hydrus_collection_publish"><%=collection_button_text(@document_fedora.publish)%></button>
-    <% if @document_fedora.publish && @document_fedora.hydrus_items.size == 0%>
+    <% if !@document_fedora.publish && @document_fedora.hydrus_items.size == 0%>
 			<p class="discard-item"><i class="icon-trash"></i> <a href="#">Discard this <%=@document_fedora.object_type%></a></p>
     <% end %>
 </fieldset>
