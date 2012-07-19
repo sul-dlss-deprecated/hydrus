@@ -23,14 +23,11 @@ deletes all of the related published works.
 
 ----------
 
-Store "agree to terms" checkbox for item.
-
-ObjectFiles controller: destroy() lacks testing.
-
-
 -------
 WAITING
 -------
+
+Store "agree to terms" checkbox for item. -- We need a place to store this.
 
 Coll create: Initialize apo roleMetadata datastream with the collection-manager
 role for the current logged-in user (waiting on web auth).
