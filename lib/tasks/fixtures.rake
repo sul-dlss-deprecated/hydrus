@@ -36,6 +36,7 @@ namespace :hydrus do
   
   desc "reload test uploaded files to public/upload directory"
   task :refresh_upload_files do
+    puts "refreshing upload files"
     app_path=File.expand_path('../../../', __FILE__)
     source_base_path_to_files=File.join(app_path,'spec/fixtures/files')
     dest_base_path_to_files=File.join(app_path,'public/uploads')
@@ -44,7 +45,6 @@ namespace :hydrus do
       source_path_to_files=File.join(source_base_path_to_files,pid)
       dest_path_to_files=Druid.new(pid).path(dest_base_path_to_files)
       if File.exists?(source_path_to_files) && File.directory?(source_path_to_files)
-        # puts "#{source_path_to_files} found and is a directory"
         Dir.mkdir(dest_path_to_files) unless File.directory?(dest_path_to_files)
         copy_command="cp -fr #{source_path_to_files}/ #{dest_path_to_files}/"
         system copy_command
