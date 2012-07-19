@@ -89,23 +89,6 @@ class Hydrus::RoleMetadataDS < ActiveFedora::NokogiriDatastream
     add_hydrus_child_node(role_node, :group, group_type)
   end
 
-  # TODO: need to promote this code to some generic place for all of our stuff AND/OR put it in OM
-  #   will be put in OM/ActiveFedora.  See also DescMetadataDS and specs
-  # Set dirty=true. Otherwise, inserting repeated nodes does not work.
-  def add_hydrus_child_node(*args)
-    node = add_child_node(*args)
-    self.dirty = true  
-    return node
-  end
-
-  # TODO: need to promote this code to some generic place for all of our stuff AND/OR put it in OM
-  #   will be put in OM/ActiveFedora.  See also DescMetadataDS and specs
-  def remove_nodes(term)
-    nodes = find_by_terms(term.to_sym)
-    nodes.each { |n| n.remove }
-    self.dirty = true
-  end
-
   def delete_actor(identifier)
     person_node = self.find_by_xpath("/roleMetadata/role/person[identifier='#{identifier}']")
     person_node.remove
