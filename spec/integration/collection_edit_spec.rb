@@ -220,4 +220,48 @@ describe("Collection edit", :type => :request, :integration => true) do
     restore_original_content(@hc.apo, orig_apo_item)
   end
   
+  it "should be able to delete persons able to manage-edit-etc" do
+    # Save copy of the original datastreams.
+    apo = @hc.apo
+    orig_content = get_original_content(apo, 'roleMetadata')
+
+    # Visit edit page.
+    login_as_archivist1
+    visit edit_polymorphic_path(@hc)
+    current_path.should == edit_polymorphic_path(@hc)
+
+    # In the role-management section, we should find persons and role
+    # corresponding to the roleMetadata from the APO.
+    rmdiv        = find('div#role-management')
+    person_ids   = apo.person_id
+    person_roles = person_ids.map { |person| @hc.get_person_role(person) }
+    person_ids.each_with_index { |person,i|
+      pnode = rmdiv.find("input#hydrus_collection_person_id_#{i}")
+      rnode = rmdiv.find("input#hydrus_collection_person_role_#{i}")
+      pnode[:value].should == person
+      rnode[:value].should == person_roles[i]
+    }
+    # The role-management section should not contain any extra persons.
+    rmdiv.all("input[id^='hydrus_collection_person_id_']").size.should == person_ids.size
+
+    # Click link to remove a person, and confirm that 
+    [-1, 0].each do |i|
+      p = person_ids.delete_at(i)
+      person_roles.delete_at(i)
+      rmdiv.click_link("remove_#{p}")
+    end
+
+    rmdiv = find('div#role-management')
+    person_ids.each_with_index { |person,i|
+      pnode = rmdiv.find("input#hydrus_collection_person_id_#{i}")
+      rnode = rmdiv.find("input#hydrus_collection_person_role_#{i}")
+      pnode[:value].should == person
+      rnode[:value].should == person_roles[i]
+    }
+    rmdiv.all("input[id^='hydrus_collection_person_id_']").size.should == person_ids.size
+
+    # Restore the original datastreams.
+    restore_original_content(apo, orig_content)
+  end
+
 end

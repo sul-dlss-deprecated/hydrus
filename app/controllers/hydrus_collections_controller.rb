@@ -45,26 +45,37 @@ class HydrusCollectionsController < ApplicationController
     return apo
   end
 
+  def person_roles_data(phc)
+    # Takes a hash containing info like this:
+    #   {
+    #     "person_id"   => {"0"=>"ggreen",               "1"=>"bblack"},
+    #     "person_role" => {"0"=>"collection-depositor", "1"=>"collection-manager"},
+    #   }
+    # Uses that info to return hash with SUNETIDs as keys and roles as values.
+    h = {}
+    phc['person_id'].each { |i, id|
+      h[id] = phc['person_role'][i]
+    }
+    return h
+  end
+
   def update
     notice = []
+    phc = params["hydrus_collection"]
 
-    if params.has_key?("hydrus_collection") && 
-      (params["hydrus_collection"].has_key?('person_id') || params["hydrus_collection"].has_key?('person_role'))
-      # create hash with key of person_id and value of role
-      new_hash = {}
-      params["hydrus_collection"].values_at('person_id').first.each_pair.map { |i, id|
-        new_hash[id] = params["hydrus_collection"].values_at('person_role').first[i]
-      }
-      params["hydrus_collection"][:person_roles] = new_hash 
-    end
+    phc[:person_roles] = person_roles_data(phc) if (
+      phc and
+      (phc.has_key?('person_id') or phc.has_key?('person_role'))
+    )
     
-    @document_fedora.update_attributes(params["hydrus_collection"]) if params.has_key?("hydrus_collection")
+    @document_fedora.update_attributes(phc) if phc
     if params.has_key?(:add_link)
       @document_fedora.descMetadata.insert_related_item
     elsif params.has_key?(:add_person)
-# FIXME:  hardcoded role ...
+      # FIXME:  hardcoded role ...
       @document_fedora.add_empty_person_to_role('from_controller')
     end
+
 #    logger.debug("attributes submitted: #{params['hydrus_collection'].inspect}")
     
     if @document_fedora.object_valid?

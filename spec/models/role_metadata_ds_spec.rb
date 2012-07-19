@@ -265,7 +265,8 @@ describe Hydrus::RoleMetadataDS do
     end # context add_person_of_role
   end # context inserting nodes
 
-  context "Remove nodes" do
+  context "delete_actor()" do
+
     before(:each) do
       @start_xml = <<-EOF
         #{@rmd_start}
@@ -281,30 +282,6 @@ describe Hydrus::RoleMetadataDS do
       @rmdoc = Hydrus::RoleMetadataDS.from_xml(@start_xml)
     end
 
-    it "should be able to remove all nodes of a type using remove_nodes()" do
-      exp_xml = <<-EOF
-        #{@rmd_start}
-          <role type="collection-manager" />
-          <role type="collection-depositor" />
-        #{@rmd_end}
-      EOF
-      @rmdoc.remove_nodes(:person)
-      @rmdoc.ng_xml.should be_equivalent_to exp_xml
-      exp_xml = <<-EOF
-        #{@rmd_start}
-          <role type="collection-depositor" />
-        #{@rmd_end}
-      EOF
-      @rmdoc.remove_nodes(:collection_manager)
-      @rmdoc.ng_xml.should be_equivalent_to exp_xml
-      @rmdoc.remove_nodes(:role)
-      @rmdoc.ng_xml.should be_equivalent_to "#{@rmd_start}#{@rmd_end}"
-    end
-    it "should do nothing quietly when remove_nodes is called for nodes in terminology that don't exist in xml" do
-      @rmdoc.remove_nodes(:item_depositor)
-      @rmdoc.ng_xml.should be_equivalent_to @start_xml
-    end
-    
     it "delete_actor should remove the correct actor node" do
       exp_xml = <<-EOF
         #{@rmd_start}
@@ -336,7 +313,7 @@ describe Hydrus::RoleMetadataDS do
       @rmdoc.ng_xml.should be_equivalent_to @start_xml
     end
     
-  end # context remove_nodes
+  end
 
   it "the blank template should match our expectations" do
     exp_xml = %Q(

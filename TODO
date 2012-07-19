@@ -1,12 +1,8 @@
-# Temporary to-do list as we work through various model changes and related tests.
-
-Collection controller: 
-  tests for  destroy_actor method (and destroy_values ... and item controller destroy_values?)
-  integration tests for collection/apo role metadata
-    adding persons
-    removing persons
-    adding new role
-    removing all persons from role
+Integration tests for collection/apo role metadata: [#MH]
+  removing persons [in progress]
+  adding persons
+  adding new role
+  removing all persons from role
 
 ----------
 
@@ -15,13 +11,7 @@ the contents of the box do not align correctly.
 
 ----------
 
-Item edit: "Add Another Published work" button does not work if the user first
-deletes all of the related published works.
-
-Item edit: "Links to related content" button does not work if the user first
-deletes all of the related published works.
-
-----------
+ObjectFiles controller: destroy() lacks testing.
 
 -------
 WAITING
@@ -30,10 +20,10 @@ WAITING
 Store "agree to terms" checkbox for item. -- We need a place to store this.
 
 Coll create: Initialize apo roleMetadata datastream with the collection-manager
-role for the current logged-in user (waiting on web auth).
+role for the current logged-in user [waiting on web auth].
 
 Item create: Create roleMetadata datastream with the item-depositor for the
-current logged-in user (waiting on web auth).
+current logged-in user [waiting on web auth].
 
 Item view: release date. See Consul page. Date from "published" lifecycle when
 it exists, else "not released". Display format: 31-Jan-2012. [waiting on

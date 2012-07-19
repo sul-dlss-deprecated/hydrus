@@ -8,19 +8,24 @@
         <dt>
           <%= pluralize(@document_fedora.collection_owner.length, 'Owner').gsub(/^\d+\s/, "") %>:
         </dt>
-        <% @document_fedora.collection_owner.each do |cm| %>
-          <dd><%= cm %></dd>
+        <% if @document_fedora.collection_owner.length > 0 %>
+          <% @document_fedora.collection_owner.each do |cm| %>
+            <dd><%= cm %></dd>
+          <% end %>
+        <!-- TODO: remove else component once we have default collection owner -->
+        <% else %>
+          <dd><span class="unspecified">not specified</span></dd>
         <% end %>
         <dt>Embargo:</dt>
-        <dd><%= @document_fedora.embargo_option %>
+        <dd><%= hydrus_object_setting_value(@document_fedora.embargo_option) %>
           <% if @document_fedora.embargo %>
             <%= @document_fedora.embargo %>
           <% end %>
         </dd>
         <dt>Visibility:</dt>
-        <dd><%= collection_visibility(@document_fedora) %></dd>
+        <dd><%= hydrus_object_setting_value(@document_fedora.visibility_option_value) %></dd>
         <dt>License:</dt>
-        <dd><%= @document_fedora.license_option %>
+        <dd><%= hydrus_object_setting_value(@document_fedora.license_option) %>
           <% if @document_fedora.license %>
             <%= @document_fedora.license %>
           <% end %>

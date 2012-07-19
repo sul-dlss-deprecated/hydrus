@@ -184,12 +184,17 @@ class Hydrus::Collection < Hydrus::GenericObject
     # this is a no-op because we use the person_roles=  method below to assign roles 
   end
   
-  # given an Array with a single element of a Hash comprised of sunetids as keys and roles as values,
-  #  rewrite the entire roleMetadata datastream to reflect the contents of the hash
-  # args might be:  [{"brown"=>"collection-manager", "dblack"=>"collection-manager", "ggreen"=>"collection-depositor"}]
+  # Takes a hash of SUNETIDs and roles.
+  # Rewrites roleMetadata to reflect the contents of the hash.
+  # Example input
+  #   {
+  #     "brown"   => "collection-manager",
+  #     "dblack"  => "collection-manager",
+  #     "ggreen"  => "collection-depositor",
+  #   }
   def person_roles= *args
     apo.roleMetadata.remove_nodes(:role)
-    args.first.each_pair { |id, role|
+    args.first.each { |id, role|
       apo.roleMetadata.add_person_with_role(id, role)
     }
   end

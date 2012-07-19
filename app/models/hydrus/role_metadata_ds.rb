@@ -34,11 +34,11 @@ class Hydrus::RoleMetadataDS < ActiveFedora::NokogiriDatastream
   end
 
   def get_person_role(person_id)
-    self.find_by_xpath("/roleMetadata/role[person/identifier='#{person_id}']/@type").text
+    find_by_xpath("/roleMetadata/role[person/identifier='#{person_id}']/@type").text
   end
 
   def to_solr(solr_doc=Hash.new, *args)
-    self.find_by_xpath('/roleMetadata/role/*').each do |actor|
+    find_by_xpath('/roleMetadata/role/*').each do |actor|
       role_type = toggle_hyphen_underscore(actor.parent['type'])
       val = [actor.at_xpath('identifier/@type'),actor.at_xpath('identifier/text()')].join ':'
       add_solr_value(solr_doc, "apo_role_#{actor.name}_#{role_type}", val, :string, [:searchable, :facetable])
@@ -62,7 +62,7 @@ class Hydrus::RoleMetadataDS < ActiveFedora::NokogiriDatastream
   # if the role node exists, add the person node to it; 
   #  otherwise, create the role node and then add the person node.  
   def add_person_with_role(id, role_type)
-    role_node = self.find_by_xpath("/roleMetadata/role[@type='#{role_type}']")
+    role_node = find_by_xpath("/roleMetadata/role[@type='#{role_type}']")
     if role_node.size == 0
       new_role_node = insert_role(role_type)
       return insert_person(new_role_node, id)
@@ -89,28 +89,11 @@ class Hydrus::RoleMetadataDS < ActiveFedora::NokogiriDatastream
     add_hydrus_child_node(role_node, :group, group_type)
   end
 
-  # TODO: need to promote this code to some generic place for all of our stuff AND/OR put it in OM
-  #   will be put in OM/ActiveFedora.  See also DescMetadataDS and specs
-  # Set dirty=true. Otherwise, inserting repeated nodes does not work.
-  def add_hydrus_child_node(*args)
-    node = add_child_node(*args)
-    self.dirty = true  
-    return node
-  end
-
-  # TODO: need to promote this code to some generic place for all of our stuff AND/OR put it in OM
-  #   will be put in OM/ActiveFedora.  See also DescMetadataDS and specs
-  def remove_nodes(term)
-    nodes = find_by_terms(term.to_sym)
-    nodes.each { |n| n.remove }
-    self.dirty = true
-  end
-
   def delete_actor(identifier)
-    person_node = self.find_by_xpath("/roleMetadata/role/person[identifier='#{identifier}']")
+    # NOTE: does NOT remove role node if it becomes empty, which is OK.
+    person_node = find_by_xpath("/roleMetadata/role/person[identifier='#{identifier}']")
     person_node.remove
-    # NOTE:  this does NOT remove the role node if it becomes empty; ok to have an empty role node
-    self.dirty = true
+    content_will_change!
   end
 
   # OM templates.
