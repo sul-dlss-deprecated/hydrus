@@ -27,7 +27,7 @@ module ApplicationHelper
   end
 
   def hydrus_signin_link
-    link_to("Sign in", new_user_session_path, :class=>'signin_link', :"data-url" => new_signin_path)
+    link_to("Sign in", new_user_session_path(:referrer => request.fullpath), :class=>'signin_link', :"data-url" => new_signin_path(:referrer => request.fullpath))
   end
 
   def hydrus_object_setting_value(obj)

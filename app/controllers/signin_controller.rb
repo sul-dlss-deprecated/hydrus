@@ -4,6 +4,10 @@ class SigninController < ApplicationController
     
   end
   
+  def webauth
+    redirect_to params[:referrer]
+  end
+     
   protected  
   def resource_name
     :user

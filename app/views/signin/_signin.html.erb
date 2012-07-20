@@ -5,9 +5,11 @@
   </div>
   <%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
     <div class="modal-body">
-      <div class="row">
-        <div class="span2 offset2"><%= link_to("Sign in via WebAuth") %></div>
-      </div>
+      <%#- if current_user and !current_user.is_a?(WebAuthUser) -%>
+        <div class="row">
+          <div class="span2 offset2"><%= link_to("Sign in via WebAuth", webauth_path(:referrer => params[:referrer])) %></div>
+        </div>
+      <%#- end -%>
       <div class="row">
         <div class="span2"><%= f.label :email %></div>
         <div class="span2"><%= f.email_field :email %></div>
