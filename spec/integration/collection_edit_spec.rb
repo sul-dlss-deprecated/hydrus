@@ -201,13 +201,15 @@ describe("Collection edit", :type => :request, :integration => true) do
   context "modifying persons and roles" do
 
     def create_role_info(persons, roles)
+      # Takes two parallel lists: persons and their roles.
+      # Returns them as a hash, with persons as the keys.
       return Hash[ persons.zip(roles) ]
     end
 
     def check_role_management_div(role_info)
-      # Takes an array: [ [SUNET, role], [SUNET, role], etc. ]
+      # Takes some role info, structure like the return from create_role_info().
       # Confirms that the role-management section of the current page
-      # contains same info as the array.
+      # contains same information.
       rmdiv   = find('div#role-management')
       k       = "input[id^='hydrus_collection_person"
       persons = rmdiv.all("#{k}_id_']").map   { |n| n[:value] }
@@ -216,8 +218,8 @@ describe("Collection edit", :type => :request, :integration => true) do
     end
 
     def get_role_info_from_apo(coll)
-      # Takes a Collection. Returns an array of the person-role info
-      # like the array in check_role_management_div().
+      # Takes a Collection. Gets the persons and roles from the APO
+      # of the Collection. Returns the role info.
       persons = coll.apo.person_id
       roles   = persons.map { |i| coll.get_person_role(i) }
       return create_role_info(persons, roles)
