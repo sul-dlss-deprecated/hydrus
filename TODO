@@ -1,23 +1,14 @@
 Integration tests for collection/apo role metadata: [#MH]
-  removing persons [in progress]
   adding persons
   adding new role
   removing all persons from role
 
-----------
-
-If a Collection is missing some of the info in the "Collection Settings" box,
-the contents of the box do not align correctly.
-
-----------
-
-ObjectFiles controller: destroy() lacks testing.
 
 -------
 WAITING
 -------
 
-Store "agree to terms" checkbox for item. -- We need a place to store this.
+Store "agree to terms" checkbox for item [we need a place to store this].
 
 Coll create: Initialize apo roleMetadata datastream with the collection-manager
 role for the current logged-in user [waiting on web auth].

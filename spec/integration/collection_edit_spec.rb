@@ -5,7 +5,7 @@ describe("Collection edit", :type => :request, :integration => true) do
 
   before :each do
     @druid = 'druid:oo000oo0003'
-    @druid_no_files='druid:oo000oo0004'    
+    @druid_no_files='druid:oo000oo0004'
     @hc    = Hydrus::Collection.find @druid
   end
 
@@ -16,7 +16,7 @@ describe("Collection edit", :type => :request, :integration => true) do
   end
 
   it "can edit Collection descMetadata content" do
-    
+
     new_abstract  = '  foobarfubb '
     orig_abstract = @hc.abstract
     new_contact   = 'ted@gonzo.com'
@@ -40,37 +40,37 @@ describe("Collection edit", :type => :request, :integration => true) do
     visit polymorphic_path(@hc)
     page.should have_content(new_abstract.strip)
   end
-  
+
   it "does not shows deletion link for a collection if it has any items in it" do
     login_as_archivist1
     visit edit_polymorphic_path(@hc)
     page.should_not have_css(".discard-item")
   end
-  
+
   it "does not shows deletion link for a collection if has no items but is stil open" do
     login_as_archivist1
     @empty_hc    = Hydrus::Collection.find(@druid_no_files)
     visit edit_polymorphic_path(@empty_hc)
     page.should_not have_css(".discard-item")
   end
-  
+
   it "can open and close a collection and have the deposit status set correctly and show/hide deletion links as appropriate" do
     login_as_archivist1
-    @empty_hc    = Hydrus::Collection.find(@druid_no_files)    
+    @empty_hc    = Hydrus::Collection.find(@druid_no_files)
     visit edit_polymorphic_path(@empty_hc)
     current_path.should == edit_polymorphic_path(@empty_hc)
     @empty_hc.publish.should == true
     @empty_hc.apo.deposit_status.should == "open"
     page.should_not have_css(".discard-item")
     click_button "Close Collection"
-    @empty_hc    = Hydrus::Collection.find(@druid_no_files)  
-    visit edit_polymorphic_path(@empty_hc)      
+    @empty_hc    = Hydrus::Collection.find(@druid_no_files)
+    visit edit_polymorphic_path(@empty_hc)
     @empty_hc.publish.should == false
     @empty_hc.apo.deposit_status.should == "closed"
     page.should have_css(".discard-item")
     visit edit_polymorphic_path(@empty_hc)
-    click_button "Open Collection"    
-    @empty_hc    = Hydrus::Collection.find(@druid_no_files)    
+    click_button "Open Collection"
+    @empty_hc    = Hydrus::Collection.find(@druid_no_files)
     @empty_hc.publish.should == true
     @empty_hc.apo.deposit_status.should == "open"
   end
@@ -83,22 +83,22 @@ describe("Collection edit", :type => :request, :integration => true) do
     new_delete_link = "remove_relatedItem_2"
     original_url_field = "hydrus_collection_related_item_url_1"
     original_label_field = "hydrus_collection_related_item_title_1"
-    
+
     login_as_archivist1
-    
+
     visit edit_polymorphic_path(@hc)
     current_path.should == edit_polymorphic_path(@hc)
-    
+
     page.should_not have_css("##{new_url_field}")
     page.should_not have_css("##{new_label_field}")
     page.should_not have_css("##{new_delete_link}")
-    
+
     page.should have_css("##{original_url_field}")
     page.should have_css("##{original_label_field}")
-    
+
     page.should_not have_content new_url
     page.should_not have_content new_label
-    
+
     click_button "Add another link"
     current_path.should == edit_polymorphic_path(@hc)
 
@@ -108,23 +108,23 @@ describe("Collection edit", :type => :request, :integration => true) do
 
     fill_in("hydrus_collection_related_item_url_2", :with => new_url)
     fill_in("hydrus_collection_related_item_title_2", :with => new_label)
-    
+
     click_button "Save"
     current_path.should == polymorphic_path(@hc)
-    
+
     page.should have_content(new_label)
-    
+
     visit edit_polymorphic_path(@hc)
     current_path.should == edit_polymorphic_path(@hc)
-    
+
     page.should have_css("##{new_url_field}")
     page.should have_css("##{new_label_field}")
     page.should have_css("##{new_delete_link}")
-    
+
     click_link new_delete_link
-    
+
     current_path.should == edit_polymorphic_path(@hc)
-    
+
     page.should_not have_css("##{new_url_field}")
     page.should_not have_css("##{new_label_field}")
     page.should_not have_css("##{new_delete_link}")
@@ -190,7 +190,7 @@ describe("Collection edit", :type => :request, :integration => true) do
     visit edit_polymorphic_path(@hc)
     current_path.should == edit_polymorphic_path(@hc)
     page.has_select?('embargo_option_varies', :selected => nil).should == true
-    page.has_select?('embargo_option_fixed', :selected => "#{new_embargo} after deposit").should == true   
+    page.has_select?('embargo_option_fixed', :selected => "#{new_embargo} after deposit").should == true
     choose(orig_check_field)
     select(orig_embargo, :from => "embargo_option_#{orig_embargo_option}")
     click_button "Save"
@@ -199,7 +199,7 @@ describe("Collection edit", :type => :request, :integration => true) do
     # Set to no embargo after embargo was previously set and ensure there is no longer an embargo period set.
     visit edit_polymorphic_path(@hc)
     current_path.should == edit_polymorphic_path(@hc)
-    page.has_select?('embargo_option_varies', :selected => "#{orig_embargo} after deposit").should == true   
+    page.has_select?('embargo_option_varies', :selected => "#{orig_embargo} after deposit").should == true
     choose(no_embargo_check_field)
     click_button "Save"
     current_path.should == polymorphic_path(@hc)
@@ -207,44 +207,44 @@ describe("Collection edit", :type => :request, :integration => true) do
     # verify embargo is now 'none'
     @hc.embargo == 'none'
   end
-  
-  it "should be able to delete persons able to manage-edit-etc" do
-    apo = @hc.apo
 
-    # Visit edit page.
-    login_as_archivist1
-    visit edit_polymorphic_path(@hc)
-    current_path.should == edit_polymorphic_path(@hc)
-
-    # In the role-management section, we should find persons and role
-    # corresponding to the roleMetadata from the APO.
-    rmdiv        = find('div#role-management')
+  it "should be able to delete persons able to manage-edit-etc the Collection" do
+    # Setup: get persons and roles from the APO.roleMetadata.
+    rmdiv_css    = 'div#role-management'
+    apo          = @hc.apo
     person_ids   = apo.person_id
     person_roles = person_ids.map { |person| @hc.get_person_role(person) }
-    person_ids.each_with_index { |person,i|
-      pnode = rmdiv.find("input#hydrus_collection_person_id_#{i}")
-      rnode = rmdiv.find("input#hydrus_collection_person_role_#{i}")
-      pnode[:value].should == person
-      rnode[:value].should == person_roles[i]
+    n_person_ids = person_ids.size
+    # Visit edit page.
+    login_as_archivist1
+    should_visit_edit_page(@hc)
+    # Some code to confirm that the role-management section of the page
+    # contains same persons and roles, and no extras.
+    check_rm_section = lambda {
+      rmdiv = find(rmdiv_css)
+      person_ids.each_with_index { |person,i|
+        pnode = rmdiv.find("input#hydrus_collection_person_id_#{i}")
+        rnode = rmdiv.find("input#hydrus_collection_person_role_#{i}")
+        pnode[:value].should == person
+        rnode[:value].should == person_roles[i]
+      }
+      # No extras.
+      rmdiv.all("input[id^='hydrus_collection_person_id_']").size.should == person_ids.size
     }
-    # The role-management section should not contain any extra persons.
-    rmdiv.all("input[id^='hydrus_collection_person_id_']").size.should == person_ids.size
-
-    # Click link to remove a person, and confirm that 
-    [-1, 0].each do |i|
+    # Check before deletes.
+    check_rm_section.call
+    # Remove some persons.
+    delete_these = [-1,0]
+    delete_these.each do |i|
+      # From the two person lists.
       p = person_ids.delete_at(i)
       person_roles.delete_at(i)
-      rmdiv.click_link("remove_#{p}")
+      # And by clicking the delete link on the page.
+      find(rmdiv_css).click_link("remove_#{p}")
     end
-
-    rmdiv = find('div#role-management')
-    person_ids.each_with_index { |person,i|
-      pnode = rmdiv.find("input#hydrus_collection_person_id_#{i}")
-      rnode = rmdiv.find("input#hydrus_collection_person_role_#{i}")
-      pnode[:value].should == person
-      rnode[:value].should == person_roles[i]
-    }
-    rmdiv.all("input[id^='hydrus_collection_person_id_']").size.should == person_ids.size
+    # Check after deletes.
+    check_rm_section.call
+    person_ids.size.should == n_person_ids - delete_these.size
   end
 
 end
