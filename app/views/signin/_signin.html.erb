@@ -6,6 +6,9 @@
   <%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
     <div class="modal-body">
       <div class="row">
+        <div class="span2 offset2"><%= link_to("Sign in via WebAuth") %></div>
+      </div>
+      <div class="row">
         <div class="span2"><%= f.label :email %></div>
         <div class="span2"><%= f.email_field :email %></div>
       </div>
