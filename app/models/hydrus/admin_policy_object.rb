@@ -1,6 +1,9 @@
 class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
 
   include Hydrus::ModelHelper
+
+  # TODO: temporary fix until dor-services gem includes it in its APOs.
+  include Dor::Processable
   
   validate :check_embargo_options, :if => :open_for_deposit?
   validate :check_license_options, :if => :open_for_deposit?
