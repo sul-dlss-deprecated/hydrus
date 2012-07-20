@@ -7,7 +7,7 @@
     <div class="modal-body">
       <%#- if current_user and !current_user.is_a?(WebAuthUser) -%>
         <div class="row">
-          <div class="span2 offset2"><%= link_to("Sign in via WebAuth", webauth_path(:referrer => params[:referrer])) %></div>
+          <div class="span2 offset2"><%= link_to("Sign in via WebAuth", webauth_login_path(:referrer => params[:referrer])) %></div>
         </div>
       <%#- end -%>
       <div class="row">
