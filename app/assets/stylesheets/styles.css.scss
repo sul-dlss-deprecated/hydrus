@@ -367,7 +367,9 @@ noscript #item-actions, noscript #collection-actions {
 	label {text-align: right;}
 	.checkbox {text-align: left;}
 }
-
+.signin-label {
+	text-align: right;
+}
 /* SUL Chrome overrides */
 #hydra-attribution {
 	display: inline;

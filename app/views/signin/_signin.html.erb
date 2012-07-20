@@ -3,31 +3,5 @@
     <button type="button" class="close" data-dismiss="modal">×</button>
     <h2>Sign in</h2>
   </div>
-  <%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
-    <div class="modal-body">
-      <%#- if current_user and !current_user.is_a?(WebAuthUser) -%>
-        <div class="row">
-          <div class="span2 offset2"><%= link_to("Sign in via WebAuth", webauth_login_path(:referrer => params[:referrer])) %></div>
-        </div>
-      <%#- end -%>
-      <div class="row">
-        <div class="span2"><%= f.label :email %></div>
-        <div class="span2"><%= f.email_field :email %></div>
-      </div>
-
-      <div class="row">
-        <div class="span2"><%= f.label :password %></div>
-        <div class="span2"><%= f.password_field :password %></div>
-      </div>
-      <% if devise_mapping.rememberable? -%>
-        <div class="row">
-          <div class="span2"><%= f.label :remember_me %></div>
-          <div class="span2 checkbox"><%= f.check_box :remember_me %></div>
-        </div>
-      <% end -%>
-    </div>
-    <div class="modal-footer">
-      <%= f.submit "Sign in", :class=>"btn" %>
-    </div>
-  <% end %>
+  <%= render "signin_form" %>
 </div>

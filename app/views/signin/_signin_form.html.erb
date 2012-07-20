@@ -1,0 +1,41 @@
+<%- if current_user.is_a?(WebAuthUser) -%>
+  Already authenticated via WebAuth. Please <%= link_to("sign out", webauth_logout_path) %> in order to login as a local user.
+<%- else -%>
+  <%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
+    <div class="modal-body">    
+      <div class="row">
+        <div class="span2 offset2"><%= link_to("Sign in via WebAuth", webauth_login_path(:referrer => params[:referrer])) %></div>
+      </div>
+      <div class="row">
+        <div class="span2"><%= f.label :email %></div>
+        <div class="span2"><%= f.email_field :email %></div>
+      </div>
+
+      <div class="row">
+        <div class="span2"><%= f.label :password %></div>
+        <div class="span2"><%= f.password_field :password %></div>
+      </div>
+      <% if devise_mapping.rememberable? -%>
+        <div class="row">
+          <div class="span2"><%= f.label :remember_me %></div>
+          <div class="span2 checkbox"><%= f.check_box :remember_me %></div>
+        </div>
+      <% end -%>
+      <div class="row">
+        <div class="span2 signin-label">
+          <%- if devise_mapping.registerable? %>
+            <%= link_to "Sign up", new_registration_path(resource_name) %>
+          <% end -%>
+        </div>
+        <div class="span2">
+          <%- if devise_mapping.recoverable? %>
+            <%= link_to "Forgot your password?", new_password_path(resource_name) %>
+          <% end -%>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <%= f.submit "Sign in", :class=>"btn" %>
+    </div>
+  <% end %>
+<%- end -%>

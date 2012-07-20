@@ -46,7 +46,7 @@ $(document).ready(function(){
 	// Modal sign in
 	$(".signin_link").each(function(){
 		$(this).click(function(){
-			$.ajax($(this).attr("data-url"));
+			$.ajax($(this).attr("data-url") + "&format=js");
 			return false;
 	  });
 	});
