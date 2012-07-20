@@ -4,7 +4,7 @@ require 'rake'
 describe Hydrus::ObjectFile do
 
   fixtures :object_files
-    
+
   it "should find four files associated with the first item and it should grab the url of a given file" do
     pid = 'druid:oo000oo0001'
     files = Hydrus::ObjectFile.find_all_by_pid(pid)
@@ -22,8 +22,6 @@ describe Hydrus::ObjectFile do
     pid = 'druid:oo000oo0001'
     @hi=Hydrus::Item.find(pid)
     
-    orig_item = get_original_content(@hi, 'contentMetadata')
-
     files = @hi.files
     files.size.should == 4
     
@@ -42,8 +40,6 @@ describe Hydrus::ObjectFile do
     source_file_path="#{Rails.root}/spec/fixtures/files/#{pid.gsub('druid:','')}/#{filename}"
     system "cp #{source_file_path} #{full_file_path}"    
     File.exists?(full_file_path).should == true
-    restore_original_content(@hi, orig_item)
-    
   end
 
 end

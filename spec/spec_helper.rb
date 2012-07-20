@@ -59,6 +59,14 @@ RSpec.configure do |config|
   # automatically. This will be the default behavior in future versions of
   # rspec-rails.
   config.infer_base_class_for_anonymous_controllers = false
+
+  
+  config.around(:each) do |example|
+    ActiveFedora::Base.connection_for_pid(0).transaction do |t|
+      example.call
+      t.rollback
+    end
+  end
 end
 
 Dor::Config.configure.suri.mint_ids = false

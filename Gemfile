@@ -20,6 +20,7 @@ gem 'is_it_working-cbeer', "~> 1.0.13"
 
 gem 'blacklight', '~>3.5', :git => 'http://github.com/projectblacklight/blacklight.git'
 gem 'hydra-head', '~> 4.1.1'
+gem 'rubydora', '~> 0.5.11'
 gem 'devise'
 gem 'carrierwave'
 gem 'rails', '3.2.3'

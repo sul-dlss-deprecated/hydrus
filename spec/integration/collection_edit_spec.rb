@@ -17,8 +17,6 @@ describe("Collection edit", :type => :request, :integration => true) do
 
   it "can edit Collection descMetadata content" do
     
-    orig_item = get_original_content(@hc, 'descMetadata')
-    
     new_abstract  = '  foobarfubb '
     orig_abstract = @hc.abstract
     new_contact   = 'ted@gonzo.com'
@@ -41,8 +39,6 @@ describe("Collection edit", :type => :request, :integration => true) do
     current_path.should == polymorphic_path(@hc)
     visit polymorphic_path(@hc)
     page.should have_content(new_abstract.strip)
-
-    restore_original_content(@hc, orig_item)
   end
   
   it "does not shows deletion link for a collection if it has any items in it" do
@@ -136,9 +132,6 @@ describe("Collection edit", :type => :request, :integration => true) do
   end
 
   it "can edit APO license content" do
-    orig_item = get_original_content(@hc, 'descMetadata')
-    orig_apo_item = get_original_content(@hc.apo, 'administrativeMetadata')
-    
     # Setup and login.
     orig_license        = @hc.license         # original value = cc-by, will set to: odc-odbl
     orig_license_label  = "CC BY Attribution"
@@ -164,15 +157,9 @@ describe("Collection edit", :type => :request, :integration => true) do
     # Visit view page, and confirm that changes occured.
     visit polymorphic_path(@hc)
     find("div.collection-settings").should have_content(new_license)
-    # Undo changes, and confirm.
-    restore_original_content(@hc, orig_item)
-    restore_original_content(@hc.apo, orig_apo_item)
-
   end
 
   it "can edit APO embargo content" do
-    orig_item = get_original_content(@hc, 'descMetadata')
-    orig_apo_item = get_original_content(@hc.apo, 'administrativeMetadata')
     # Setup and login.
     orig_embargo        = @hc.embargo         # original value = 1 year, will set to 3 years
     orig_embargo_option = @hc.embargo_option  # original value = varies, will set to fixed
@@ -219,16 +206,10 @@ describe("Collection edit", :type => :request, :integration => true) do
     find("div.collection-settings").should_not have_content(orig_embargo)
     # verify embargo is now 'none'
     @hc.embargo == 'none'
-    # Undo changes, and confirm.
-    # Undo changes, and confirm.
-    restore_original_content(@hc, orig_item)
-    restore_original_content(@hc.apo, orig_apo_item)
   end
   
   it "should be able to delete persons able to manage-edit-etc" do
-    # Save copy of the original datastreams.
     apo = @hc.apo
-    orig_content = get_original_content(apo, 'roleMetadata')
 
     # Visit edit page.
     login_as_archivist1
@@ -264,9 +245,6 @@ describe("Collection edit", :type => :request, :integration => true) do
       rnode[:value].should == person_roles[i]
     }
     rmdiv.all("input[id^='hydrus_collection_person_id_']").size.should == person_ids.size
-
-    # Restore the original datastreams.
-    restore_original_content(apo, orig_content)
   end
 
 end

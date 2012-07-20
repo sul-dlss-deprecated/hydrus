@@ -164,6 +164,7 @@ GEM
     gyoku (0.4.6)
       builder (>= 2.1.2)
     hike (1.2.1)
+    hooks (0.2.0)
     httpi (1.1.1)
       rack
     hydra-access-controls (0.0.5)
@@ -223,7 +224,7 @@ GEM
     multi_json (1.3.6)
     mysql (2.8.1)
     nokogiri (1.5.5)
-    nori (1.1.2)
+    nori (1.1.3)
     om (1.6.1)
       mediashelf-loggable
       nokogiri (>= 1.4.2)
@@ -290,10 +291,12 @@ GEM
       rspec (~> 2.10.0)
     ruby-cache (0.3.0)
     ruby-graphviz (1.0.7)
-    rubydora (0.5.10)
+    rubydora (0.5.11)
       activemodel
       activesupport
+      deprecation
       fastercsv
+      hooks
       mime-types
       nokogiri
       rest-client
@@ -394,6 +397,7 @@ DEPENDENCIES
   quiet_assets
   rails (= 3.2.3)
   rspec-rails (>= 2.9.0)
+  rubydora (~> 0.5.11)
   sass-rails (~> 3.2.3)
   simplecov
   simplecov-rcov
