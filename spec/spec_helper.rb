@@ -111,24 +111,6 @@ def logout
   visit destroy_user_session_path
 end
 
-# Takes a fedora object and one or more datastream names.
-# Returns a hash of the content of those datastreams:
-#   {
-#     'descMetadata' => 'some XML',
-#     'roleMetadata' => 'some XML',
-#     etc.
-#   }
-def get_original_content(obj, *ds_names)
-  return Hash[ ds_names.map { |dsn| [dsn, obj.datastreams[dsn].content] } ]
-end
-
-# Takes a fedora object and a hash like that returned by get_original_content().
-# Restores the object's datastream content to the XML from the hash.
-def restore_original_content(obj, orig)
-  orig.each { |dsn, xml| obj.datastreams[dsn].content = xml }
-  obj.save
-end
-
 # Takes a hash and returns a corresponding Struct.
 def hash2struct(h)
   return Struct.new(*h.keys).new(*h.values)

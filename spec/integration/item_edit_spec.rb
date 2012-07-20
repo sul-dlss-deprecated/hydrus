@@ -186,9 +186,8 @@ describe("Item edit", :type => :request, :integration => true) do
 
   it "editing related content w/o titles" do
     # Save copy of the original datastreams.
-    @druid       = "druid:oo000oo0005"
-    @hi          = Hydrus::Item.find(@druid)
-    orig_content = get_original_content(@hi, 'descMetadata')
+    @druid = "druid:oo000oo0005"
+    @hi    = Hydrus::Item.find(@druid)
     # Set up the new values for the fields we will edit.
     ni = hash2struct(
       :ri_title => 'My URL title',
@@ -216,8 +215,6 @@ describe("Item edit", :type => :request, :integration => true) do
     find("dd a[href='#{ni.ri_url}']").should have_content ni.ri_title
     @hi = Hydrus::Item.find(@druid)
     @hi.related_item_title.first.should == ni.ri_title
-    # Restore the original datastreams.
-    restore_original_content(@hi, orig_content)
   end
 
   it "can edit preferred citation field" do
