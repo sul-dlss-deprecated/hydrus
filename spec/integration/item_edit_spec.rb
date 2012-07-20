@@ -183,31 +183,41 @@ describe("Item edit", :type => :request, :integration => true) do
     page.should_not have_css("##{new_url}")
     page.should_not have_css("##{new_delete_button}")
   end
-  
+
   it "editing related content w/o titles" do
-    object = Hydrus::Item.find("druid:oo000oo0005")
-    title_field = "hydrus_item_related_item_title_0"
-    url_field = "hydrus_item_related_item_url_0"
-    
+    # Save copy of the original datastreams.
+    @druid       = "druid:oo000oo0005"
+    @hi          = Hydrus::Item.find(@druid)
+    orig_content = get_original_content(@hi, 'descMetadata')
+    # Set up the new values for the fields we will edit.
+    ni = hash2struct(
+      :ri_title => 'My URL title',
+      :ri_url   => 'http://stanford.and.son',
+      :title_f  => "hydrus_item_related_item_title_0",
+      :url_f    => "hydrus_item_related_item_url_0",
+    )
+    # Visit edit page.
     login_as_archivist1
-    
-    visit edit_polymorphic_path(object)
-    current_path.should == edit_polymorphic_path(object)
-    
-    old_title = find_field(title_field).value
-    old_url = find_field(url_field).value
-    new_title = "My URL Title"
-    new_url = "http://library.stanford.edu"
-    
+    visit edit_polymorphic_path(@hi)
+    current_path.should == edit_polymorphic_path(@hi)
+    # Make sure the object does not have the new content yet.
+    old_title = find_field(ni.title_f).value
+    old_url = find_field(ni.url_f).value
     old_title.should be_blank
-    
-    fill_in title_field, :with => new_title
-    fill_in url_field, :with => new_url
-    
+    old_url.should_not == ni.ri_url
+    # Submit some changes.
+    fill_in ni.title_f, :with => ni.ri_title
+    fill_in ni.url_f, :with => ni.ri_url
     click_button "Save"
+    # Confirm new location and flash message.
+    current_path.should == polymorphic_path(@hi)
     page.should have_content(@notice)
-    
-    page.should have_content new_title
+    # Confirm new content on page and in fedora.
+    find("dd a[href='#{ni.ri_url}']").should have_content ni.ri_title
+    @hi = Hydrus::Item.find(@druid)
+    @hi.related_item_title.first.should == ni.ri_title
+    # Restore the original datastreams.
+    restore_original_content(@hi, orig_content)
   end
 
   it "can edit preferred citation field" do
