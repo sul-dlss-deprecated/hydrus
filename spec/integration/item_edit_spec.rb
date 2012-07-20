@@ -25,8 +25,7 @@ describe("Item edit", :type => :request, :integration => true) do
     comma_join  = '  ,  '
     # Visit edit page.
     login_as_archivist1
-    visit edit_polymorphic_path(@hi)
-    current_path.should == edit_polymorphic_path(@hi)
+    should_visit_edit_page(@hi)
     # Make sure the object does not have the new content yet.
     @hi.abstract.should_not == ni.abstract
     @hi.contact.should_not  == ni.contact
@@ -48,7 +47,7 @@ describe("Item edit", :type => :request, :integration => true) do
     @hi.contact.should  == ni.contact
     @hi.keywords.should == ni.keywords
   end
-  
+
   it "People/Role editing" do
 
     new_name  = "MY EDITIED PERSON"
@@ -59,9 +58,7 @@ describe("Item edit", :type => :request, :integration => true) do
     new_role  = "Collector"
 
     login_as_archivist1
-
-    visit edit_polymorphic_path(@hi)
-    current_path.should == edit_polymorphic_path(@hi)
+    should_visit_edit_page(@hi)
 
     find_field(field_np).value.should == orig_name
     page.should have_content(orig_role)
@@ -77,37 +74,34 @@ describe("Item edit", :type => :request, :integration => true) do
     page.should have_content(new_role)
 
   end
-  
+
   it "People/Role adding and deleting" do
     new_field = "hydrus_item_person_5"
     new_delete_button = "remove_name_5"
     person = "Mr. Test Person"
-    
+
     login_as_archivist1
-    
-    visit edit_polymorphic_path(@hi)
-    current_path.should == edit_polymorphic_path(@hi)
-    
+    should_visit_edit_page(@hi)
+
     page.should have_css("input#hydrus_item_person_4")
     page.should_not have_css("##{new_field}")
-    
+
     click_button "add_person"
     page.should have_css("##{new_field}")
     page.should have_css("##{new_delete_button}")
-    
+
     fill_in(new_field, :with => person)
     click_button "Save"
     page.should have_content(@notice)
-    
-    visit edit_polymorphic_path(@hi)
-    current_path.should == edit_polymorphic_path(@hi)
-    
+
+    should_visit_edit_page(@hi)
+
     page.should have_css("##{new_delete_button}")
     find_field(new_field).value.should == person
-    
+
     # delete
     click_link new_delete_button
-    
+
     current_path.should == edit_polymorphic_path(@hi)
     page.should_not have_css("##{new_field}")
     page.should_not have_css("##{new_delete_button}")
@@ -122,9 +116,7 @@ describe("Item edit", :type => :request, :integration => true) do
     field_title = "hydrus_item_related_item_title_0"
 
     login_as_archivist1
-
-    visit edit_polymorphic_path(@hi)
-    current_path.should == edit_polymorphic_path(@hi)
+    should_visit_edit_page(@hi)
 
     find_field(field_link).value.should == orig_link
     find_field(field_title).value.should == orig_title
@@ -139,45 +131,42 @@ describe("Item edit", :type => :request, :integration => true) do
     page.should have_xpath("//dd/a[@href='#{new_link}']")
     page.should have_content(new_title)
   end
-  
+
   it "Related Content adding and deleting" do
     new_label         = "hydrus_item_related_item_title_2"
     new_url           = "hydrus_item_related_item_url_2"
     new_delete_button = "remove_relatedItem_2"
     url               = "http://library.stanford.edu"
     label             = "Library Website"
-    
+
     login_as_archivist1
-    
-    visit edit_polymorphic_path(@hi)
-    current_path.should == edit_polymorphic_path(@hi)
-    
+    should_visit_edit_page(@hi)
+
     page.should have_css("input#hydrus_item_related_item_title_0")
     page.should have_css("input#hydrus_item_related_item_url_0")
     page.should_not have_css("##{new_label}")
     page.should_not have_css("##{new_url}")
-    
+
     click_button "add_link"
     page.should have_css("##{new_label}")
     page.should have_css("##{new_url}")
     page.should have_css("##{new_delete_button}")
-    
+
     fill_in(new_label, :with => label)
     fill_in(new_url, :with => url)
-    
+
     click_button "Save"
     page.should have_content(@notice)
-    
-    visit edit_polymorphic_path(@hi)
-    current_path.should == edit_polymorphic_path(@hi)
-    
+
+    should_visit_edit_page(@hi)
+
     page.should have_css("##{new_delete_button}")
     find_field(new_label).value.should == label
     find_field(new_url).value.should == url
-    
+
     # delete
     click_link new_delete_button
-    
+
     current_path.should == edit_polymorphic_path(@hi)
     page.should_not have_css("##{new_label}")
     page.should_not have_css("##{new_url}")
@@ -197,8 +186,7 @@ describe("Item edit", :type => :request, :integration => true) do
     )
     # Visit edit page.
     login_as_archivist1
-    visit edit_polymorphic_path(@hi)
-    current_path.should == edit_polymorphic_path(@hi)
+    should_visit_edit_page(@hi)
     # Make sure the object does not have the new content yet.
     old_title = find_field(ni.title_f).value
     old_url = find_field(ni.url_f).value
@@ -221,11 +209,9 @@ describe("Item edit", :type => :request, :integration => true) do
     citation_field = "hydrus_item_preferred_citation"
     new_pref_cit  = "new_citation_FOO"
     orig_pref_cit = @hi.preferred_citation
-    
-    login_as_archivist1
 
-    visit edit_polymorphic_path(@hi)
-    current_path.should == edit_polymorphic_path(@hi)
+    login_as_archivist1
+    should_visit_edit_page(@hi)
 
     find_field(citation_field).value.strip.should == orig_pref_cit
     fill_in citation_field, :with => new_pref_cit
@@ -236,48 +222,44 @@ describe("Item edit", :type => :request, :integration => true) do
     visit polymorphic_path(@hi)
     page.should have_content(new_pref_cit)
   end
-  
+
   it "Related citation adding and deleting" do
-    
-    new_citation         = "hydrus_item_related_citation_2" 
+
+    new_citation         = "hydrus_item_related_citation_2"
     new_delete_button    = "remove_related_citation_2"
     new_citation_text    = " This is a citation for a related item! "
-    
+
     login_as_archivist1
-    
-    visit edit_polymorphic_path(@hi)
-    current_path.should == edit_polymorphic_path(@hi)
-    
+    should_visit_edit_page(@hi)
+
     page.should have_css("textarea#hydrus_item_related_citation_0")
     page.should have_css("textarea#hydrus_item_related_citation_1")
-    
+
     page.should_not have_css("textarea##{new_citation}")
     page.should_not have_css("##{new_delete_button}")
-    
+
     click_button "add_related_citation"
     current_path.should == edit_polymorphic_path(@hi)
-    
+
     page.should have_css("##{new_citation}")
     page.should have_css("##{new_delete_button}")
-    
+
     fill_in(new_citation, :with => new_citation_text)
-    
+
     click_button "Save"
     page.should have_content(@notice)
-    
-    visit edit_polymorphic_path(@hi)
-    current_path.should == edit_polymorphic_path(@hi)
-    
+
+    should_visit_edit_page(@hi)
+
     page.should have_css("##{new_delete_button}")
     find_field(new_citation).value.strip.should == new_citation_text.strip
-    
+
     # delete
     click_link new_delete_button
-    
+
     current_path.should == edit_polymorphic_path(@hi)
     page.should_not have_css("##{new_citation}")
     page.should_not have_css("##{new_delete_button}")
   end
 
 end
-

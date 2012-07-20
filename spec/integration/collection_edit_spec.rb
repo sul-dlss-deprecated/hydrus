@@ -23,9 +23,7 @@ describe("Collection edit", :type => :request, :integration => true) do
     orig_contact  = @hc.contact
 
     login_as_archivist1
-
-    visit edit_polymorphic_path(@hc)
-    current_path.should == edit_polymorphic_path(@hc)
+    should_visit_edit_page(@hc)
 
     page.should have_content(orig_abstract)
     page.should have_xpath("//input[@value='#{orig_contact}']")
@@ -43,32 +41,31 @@ describe("Collection edit", :type => :request, :integration => true) do
 
   it "does not shows deletion link for a collection if it has any items in it" do
     login_as_archivist1
-    visit edit_polymorphic_path(@hc)
+    should_visit_edit_page(@hc)
     page.should_not have_css(".discard-item")
   end
 
   it "does not shows deletion link for a collection if has no items but is stil open" do
     login_as_archivist1
-    @empty_hc    = Hydrus::Collection.find(@druid_no_files)
-    visit edit_polymorphic_path(@empty_hc)
+    @hc = Hydrus::Collection.find(@druid_no_files)
+    should_visit_edit_page(@hc)
     page.should_not have_css(".discard-item")
   end
 
   it "can open and close a collection and have the deposit status set correctly and show/hide deletion links as appropriate" do
     login_as_archivist1
-    @empty_hc    = Hydrus::Collection.find(@druid_no_files)
-    visit edit_polymorphic_path(@empty_hc)
-    current_path.should == edit_polymorphic_path(@empty_hc)
+    @empty_hc = Hydrus::Collection.find(@druid_no_files)
+    should_visit_edit_page(@empty_hc)
     @empty_hc.publish.should == true
     @empty_hc.apo.deposit_status.should == "open"
     page.should_not have_css(".discard-item")
     click_button "Close Collection"
     @empty_hc    = Hydrus::Collection.find(@druid_no_files)
-    visit edit_polymorphic_path(@empty_hc)
+    should_visit_edit_page(@empty_hc)
     @empty_hc.publish.should == false
     @empty_hc.apo.deposit_status.should == "closed"
     page.should have_css(".discard-item")
-    visit edit_polymorphic_path(@empty_hc)
+    should_visit_edit_page(@empty_hc)
     click_button "Open Collection"
     @empty_hc    = Hydrus::Collection.find(@druid_no_files)
     @empty_hc.publish.should == true
@@ -85,9 +82,7 @@ describe("Collection edit", :type => :request, :integration => true) do
     original_label_field = "hydrus_collection_related_item_title_1"
 
     login_as_archivist1
-
-    visit edit_polymorphic_path(@hc)
-    current_path.should == edit_polymorphic_path(@hc)
+    should_visit_edit_page(@hc)
 
     page.should_not have_css("##{new_url_field}")
     page.should_not have_css("##{new_label_field}")
@@ -114,8 +109,7 @@ describe("Collection edit", :type => :request, :integration => true) do
 
     page.should have_content(new_label)
 
-    visit edit_polymorphic_path(@hc)
-    current_path.should == edit_polymorphic_path(@hc)
+    should_visit_edit_page(@hc)
 
     page.should have_css("##{new_url_field}")
     page.should have_css("##{new_label_field}")
@@ -143,8 +137,7 @@ describe("Collection edit", :type => :request, :integration => true) do
     new_check_field     = "hydrus_collection_license_option_#{new_license_option}"
     login_as_archivist1
     # Visit edit page, and confirm content.
-    visit edit_polymorphic_path(@hc)
-    current_path.should == edit_polymorphic_path(@hc)
+    should_visit_edit_page(@hc)
     page.should have_checked_field(orig_check_field)
     page.has_select?("license_option_#{orig_license_option}", :selected => orig_license_label).should == true
     find_field("license_option_#{orig_license_option}").value.should == 'cc-by'
@@ -172,8 +165,7 @@ describe("Collection edit", :type => :request, :integration => true) do
     no_embargo_check_field    = "hydrus_collection_embargo_option_#{no_embargo_option}"
     login_as_archivist1
     # Visit edit page, and confirm content.
-    visit edit_polymorphic_path(@hc)
-    current_path.should == edit_polymorphic_path(@hc)
+    should_visit_edit_page(@hc)
     page.should have_checked_field(orig_check_field)
     page.has_select?('embargo_option_varies').should == true
     page.has_select?('embargo_option_varies', :selected => "#{orig_embargo} after deposit").should == true
@@ -187,8 +179,7 @@ describe("Collection edit", :type => :request, :integration => true) do
     visit polymorphic_path(@hc)
     find("div.collection-settings").should have_content(new_embargo)
     # Undo changes, and confirm.
-    visit edit_polymorphic_path(@hc)
-    current_path.should == edit_polymorphic_path(@hc)
+    should_visit_edit_page(@hc)
     page.has_select?('embargo_option_varies', :selected => nil).should == true
     page.has_select?('embargo_option_fixed', :selected => "#{new_embargo} after deposit").should == true
     choose(orig_check_field)
@@ -197,8 +188,7 @@ describe("Collection edit", :type => :request, :integration => true) do
     current_path.should == polymorphic_path(@hc)
     find("div.collection-settings").should have_content(orig_embargo)
     # Set to no embargo after embargo was previously set and ensure there is no longer an embargo period set.
-    visit edit_polymorphic_path(@hc)
-    current_path.should == edit_polymorphic_path(@hc)
+    should_visit_edit_page(@hc)
     page.has_select?('embargo_option_varies', :selected => "#{orig_embargo} after deposit").should == true
     choose(no_embargo_check_field)
     click_button "Save"
