@@ -13,16 +13,15 @@ done by register_object():
     objectLabel: currently "Hydrus"; do we want something else?
         - when Coll is published, refresh the APO title, based on Coll title
         - title = "APO for #{coll.title}"
-    UUID: did not see one
-        - possible bug for register_object(): Lynn will handle
-
-  workflows: not created; should it be for an APO?
-        - possible bug for register_object(): Lynn will handle
 
   RELS-EXT
     - created datastream
-    - did not see hydra:referencesAgreement
-        - new feature for register_object(): Lynn will handle
+    - Hydrus app needs to add hydra:referencesAgreement:
+       <rdf:Description rdf:about="info:fedora/druid:[apo-id]">
+       <hydra:referencesAgreement rdf:resource="info:fedora/druid:mc322hh4254"/>
+
+    - Hydrus app should add the hydra namespace if not already there:
+        xmlns:hydra="http://projecthydra.org/ns/relations#"
 
   DC: ok
 
@@ -67,16 +66,14 @@ done by register_object():
 
   identityMetadata:
     objectType=collection: ok
-    objectType=set: not done
-        - Lynn will confirm
+    objectType=set: not done; need to do
     objectLabel:
       - currently "Hydrus"
       - when Coll is published, refresh the title, based on Coll title
-    UUID: did not see one
     tag: currently is "Project : Hydrus"
     tag: also add this tag: "Hydrus : collection"
 
-  workflows: created; currently empty; that's OK
+  workflows: ok
 
   RELS-EXT: ok
 
@@ -110,17 +107,17 @@ done by register_object():
     objectLabel:
       - currently "Hydrus"
       - when Item is published, refresh the title, based on Item title
-    UUID: did not see one
     tag: currently is "Project : Hydrus"
     tag: also add another tag: "hydrus : [itemtype]"
         - for now hard-code itemtype = dataset
         - need to figure out where this info will be stored in object
 
-  workflows: created; currently empty
-
   RELS-EXT: ok
 
   DC: ok
+
+  workflows:
+    - should get workflow from APO, once we have that working
 
   default hydrusAssemblyWF
     will be handled by register_object() once we start putting workflows
