@@ -198,43 +198,90 @@ describe("Collection edit", :type => :request, :integration => true) do
     @hc.embargo == 'none'
   end
 
-  it "should be able to delete persons able to manage-edit-etc the Collection" do
-    # Setup: get persons and roles from the APO.roleMetadata.
-    rmdiv_css    = 'div#role-management'
-    apo          = @hc.apo
-    person_ids   = apo.person_id
-    person_roles = person_ids.map { |person| @hc.get_person_role(person) }
-    n_person_ids = person_ids.size
-    # Visit edit page.
-    login_as_archivist1
-    should_visit_edit_page(@hc)
-    # Some code to confirm that the role-management section of the page
-    # contains same persons and roles, and no extras.
-    check_rm_section = lambda {
-      rmdiv = find(rmdiv_css)
-      person_ids.each_with_index { |person,i|
-        pnode = rmdiv.find("input#hydrus_collection_person_id_#{i}")
-        rnode = rmdiv.find("input#hydrus_collection_person_role_#{i}")
-        pnode[:value].should == person
-        rnode[:value].should == person_roles[i]
-      }
-      # No extras.
-      rmdiv.all("input[id^='hydrus_collection_person_id_']").size.should == person_ids.size
-    }
-    # Check before deletes.
-    check_rm_section.call
-    # Remove some persons.
-    delete_these = [-1,0]
-    delete_these.each do |i|
-      # From the two person lists.
-      p = person_ids.delete_at(i)
-      person_roles.delete_at(i)
-      # And by clicking the delete link on the page.
-      find(rmdiv_css).click_link("remove_#{p}")
+  context "modifying persons and roles" do
+
+    def create_role_info(persons, roles)
+      return Hash[ persons.zip(roles) ]
     end
-    # Check after deletes.
-    check_rm_section.call
-    person_ids.size.should == n_person_ids - delete_these.size
+
+    def check_role_management_div(role_info)
+      # Takes an array: [ [SUNET, role], [SUNET, role], etc. ]
+      # Confirms that the role-management section of the current page
+      # contains same info as the array.
+      rmdiv   = find('div#role-management')
+      k       = "input[id^='hydrus_collection_person"
+      persons = rmdiv.all("#{k}_id_']").map   { |n| n[:value] }
+      roles   = rmdiv.all("#{k}_role_']").map { |n| n[:value] }
+      create_role_info(persons, roles).should == role_info
+    end
+
+    def get_role_info_from_apo(coll)
+      # Takes a Collection. Returns an array of the person-role info
+      # like the array in check_role_management_div().
+      persons = coll.apo.person_id
+      roles   = persons.map { |i| coll.get_person_role(i) }
+      return create_role_info(persons, roles)
+    end
+
+    it "should be able to delete persons from the Collection" do
+      # Get persons and roles from the APO.roleMetadata.
+      role_info = get_role_info_from_apo(@hc)
+      # Visit edit page.
+      login_as_archivist1
+      should_visit_edit_page(@hc)
+      # Check role-management section before deletes.
+      check_role_management_div(role_info)
+      # Remove some persons.
+      delete_these = [role_info.keys.first, role_info.keys.last]
+      delete_these.each do |person|
+        role_info.delete(person)
+        find('div#role-management').click_link("remove_#{person}")
+      end
+      # Check role-management section after deletes.
+      check_role_management_div(role_info)
+      # After saving, confirm new content in fedora,
+      click_button "Save"
+      @hc = Hydrus::Collection.find @druid
+      new_role_info = get_role_info_from_apo(@hc)
+      new_role_info.should == role_info
+
+      puts @hc.apo.roleMetadata.to_xml
+    end
+    
+    it "should be able to add persons to the Collection" do
+      # Get persons and roles from the APO.roleMetadata.
+      role_info = get_role_info_from_apo(@hc)
+      # Visit edit page.
+      login_as_archivist1
+      should_visit_edit_page(@hc)
+      # Check role-management section before additions.
+      check_role_management_div(role_info)
+      # Add some persons.
+      add_these = {
+        'john'   => 'collection-manager',
+        'paul'   => 'collection-depositor',
+        'george' => 'item-depositor',
+        'ringo'  => 'item-depositor',
+      }
+      i = role_info.keys.size
+      k = "hydrus_collection_person"
+      add_these.each do |person, role|
+        role_info[person] = role
+        click_button("Add a person")
+        fill_in("#{k}_id_#{i}",   :with => person)
+        fill_in("#{k}_role_#{i}", :with => role)
+        i += 1
+      end
+      # Check role-management section after additions.
+      click_button "Save"
+      should_visit_edit_page(@hc)
+      check_role_management_div(role_info)
+      # Confirm new content in fedora,
+      @hc = Hydrus::Collection.find @druid
+      new_role_info = get_role_info_from_apo(@hc)
+      new_role_info.should == role_info
+    end
+    
   end
 
 end
