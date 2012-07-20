@@ -5,6 +5,7 @@ describe("Collection edit", :type => :request, :integration => true) do
 
   before :each do
     @druid = 'druid:oo000oo0003'
+    @druid_no_files='druid:oo000oo0004'    
     @hc    = Hydrus::Collection.find @druid
   end
 
@@ -50,28 +51,32 @@ describe("Collection edit", :type => :request, :integration => true) do
     page.should_not have_css(".discard-item")
   end
   
-  it "shows deletion link for a collection if it has no tiems in it" do
+  it "does not shows deletion link for a collection if has no items but is stil open" do
     login_as_archivist1
-    @empty_hc    = Hydrus::Collection.find('druid:oo000oo0004')
+    @empty_hc    = Hydrus::Collection.find(@druid_no_files)
     visit edit_polymorphic_path(@empty_hc)
-    page.should have_css(".discard-item")
+    page.should_not have_css(".discard-item")
   end
   
-  it "can open and close a collection and have the deposit status set correctly" do
+  it "can open and close a collection and have the deposit status set correctly and show/hide deletion links as appropriate" do
     login_as_archivist1
-    visit edit_polymorphic_path(@hc)
-    current_path.should == edit_polymorphic_path(@hc)
-    @hc.publish.should == true
-    @hc.apo.deposit_status.should == "open"
+    @empty_hc    = Hydrus::Collection.find(@druid_no_files)    
+    visit edit_polymorphic_path(@empty_hc)
+    current_path.should == edit_polymorphic_path(@empty_hc)
+    @empty_hc.publish.should == true
+    @empty_hc.apo.deposit_status.should == "open"
+    page.should_not have_css(".discard-item")
     click_button "Close Collection"
-    @hc    = Hydrus::Collection.find @druid
-    @hc.publish.should == false
-    @hc.apo.deposit_status.should == "closed"
-    visit edit_polymorphic_path(@hc)
+    @empty_hc    = Hydrus::Collection.find(@druid_no_files)  
+    visit edit_polymorphic_path(@empty_hc)      
+    @empty_hc.publish.should == false
+    @empty_hc.apo.deposit_status.should == "closed"
+    page.should have_css(".discard-item")
+    visit edit_polymorphic_path(@empty_hc)
     click_button "Open Collection"    
-    @hc    = Hydrus::Collection.find @druid
-    @hc.publish.should == true
-    @hc.apo.deposit_status.should == "open"
+    @empty_hc    = Hydrus::Collection.find(@druid_no_files)    
+    @empty_hc.publish.should == true
+    @empty_hc.apo.deposit_status.should == "open"
   end
 
   it "can edit and delete multi-valued fields" do
