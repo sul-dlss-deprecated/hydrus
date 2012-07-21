@@ -2,20 +2,14 @@
 APO-of-Collection
 -----------------
 
-Revs-prod APO:
-  https://dor-prod.stanford.edu/fedora/objects/druid:qv648vd4392/datastreams
+For reference, see the Revs APO:
+    https://dor-prod.stanford.edu/fedora/objects/druid:qv648vd4392/datastreams
 
-done by register_object():
+identityMetadata:
+    - refresh objectLabel when Collection is published
+        objectLabel = "APO for #{Collection.title}"
 
-  assign druid: ok
-
-  identityMetadata:
-    objectLabel: currently "Hydrus"; do we want something else?
-        - when Coll is published, refresh the APO title, based on Coll title
-        - title = "APO for #{coll.title}"
-
-  RELS-EXT
-    - created datastream
+RELS-EXT:
     - Hydrus app needs to add hydra:referencesAgreement:
        <rdf:Description rdf:about="info:fedora/druid:[apo-id]">
        <hydra:referencesAgreement rdf:resource="info:fedora/druid:mc322hh4254"/>
@@ -23,130 +17,97 @@ done by register_object():
     - Hydrus app should add the hydra namespace if not already there:
         xmlns:hydra="http://projecthydra.org/ns/relations#"
 
-  DC: ok
+descMetadata:
+    - needs to be created
+    - Lynn will give us a spec for this.
+    - refresh title when Collection is published
+        title = "APO for #{coll.title}"
 
-  descMetadata: not created
-    - when Coll is published, refresh the APO title, based on Coll title
-    - title = "APO for #{coll.title}"
-    - Lynn will give us a spec
+administrativeMetadata:
+    - create hydrusAssemblyWF with these steps:
+      start-deposit
+        - upon initial creation of the Coll
+        - lifecycle = registered
+      submit
+        - when user clicks Publish
+      approve
+        - when user finished Review
+        - step could be autocompleted/skipped if Collection requires no approval
+      start-accession
+        - triggered when all previous steps are finished
 
-augmeted by Hydrus app:
+    - create common accessioning workflow
 
-  administrativeMetadata:
-    created: ok
-    default assembly workflow: not done (##mh)
-      - workflow name = hydrusAssemblyWF
-      - currently the steps are called:
-          start-deposit
-            - upon initial creation of the Coll
-            - lifecycle = registered
-          submit
-            - when user clicks Publish
-          approve
-            - Reviewed (or could be autocompleted/skipped if Coll requires no approval)
-          start-accession
-            - triggered by last of the previous steps
-    default common accessioning workflow: not done (##mh)
+roleMetadata:
+    - set the collection-manager as the current logged-in user (done already?)
+    - set the value of <name> (need to get from webauth or LDAP)
 
-  roleMetadata: created, but <name> not set
-    - need to get name from webauth or LDAP
-
-  defaultObjectRights: not created
-    - won't know until the Coll is published
-    - create this stream when user clicks Publish for the Coll
+defaultObjectRights:
+    - create this stream when user clicks Publish for the Collection
 
 
 ----------
 Collection
 ----------
 
-done by register_object():
+identityMetadata:
+    - objectType: needs to be set to both 'collection' and 'set'
+    - refresh objectLabel when Collection is published
+    - add another tag: "Hydrus : collection"
 
-  assign druid: ok
+workflows:
+    - should be handled automatically as soon as APO has this WF
 
-  identityMetadata:
-    objectType=collection: ok
-    objectType=set: not done; need to do
-    objectLabel:
-      - currently "Hydrus"
-      - when Coll is published, refresh the title, based on Coll title
-    tag: currently is "Project : Hydrus"
-    tag: also add this tag: "Hydrus : collection"
+events:
+    - create the datastream
+    - start adding events
+    - need to determine what the relevant events are
 
-  workflows: ok
+rightsMetadata:
+    - should be handled automatically as soon as APO has defaultObjectRights
 
-  RELS-EXT: ok
+Collection approval/review
+    - need place to store whether Collection requires approval/review
+    - need UI component
 
-  DC: ok
+roleMetadata:
+    - create the datastream
 
-  default hydrusAssemblyWF:
-    will be handled by register_object() once we start putting workflows
-    in the Hydrus APOs
-
-augmeted by Hydrus app:
-
-  descMetadata: ok
-
-  events: not created (##mh)
-
-  rightsMetadata: not created
-    will be handled by register_object() once we start putting default rights
-    in the Hydrus APOs
 
 
 ----
 Item
 ----
 
-done by register_object():
-
-  assign druid: ok
-
-  identityMetadata:
-    objectType=item: ok
-    objectLabel:
-      - currently "Hydrus"
-      - when Item is published, refresh the title, based on Item title
-    tag: currently is "Project : Hydrus"
-    tag: also add another tag: "hydrus : [itemtype]"
+identityMetadata:
+    - refresh objectLabel when Item is published
+    - add another tag: "hydrus : [itemtype]"
         - for now hard-code itemtype = dataset
         - need to figure out where this info will be stored in object
 
-  RELS-EXT: ok
+workflows:
+    - should be handled automatically as soon as APO has this WF
 
-  DC: ok
+events:
+    - create the datastream
+    - start adding events
+    - need to determine what the relevant events are
 
-  workflows:
-    - should get workflow from APO, once we have that working
+rightsMetadata:
+    - should be handled automatically as soon as APO has defaultObjectRights
 
-  default hydrusAssemblyWF
-    will be handled by register_object() once we start putting workflows
-    in the Hydrus APOs
-
-augmeted by Hydrus app:
-
-  descMetadata: ok
-
-  events: not created (##mh)
-
-  rightsMetadata: not created
-    will be handled by register_object() once we start putting default rights
-    in the Hydrus APOs
-
-  roleMetadata: not created
-    - Hydrus code needs to do this
-    - tied to webauth
+roleMetadata:
+    - create the datastream
+    - set the item-depositor as the current logged-in user
 
 
 -------------------------
 Assembly and accessioning
 -------------------------
 
-Where do Hydrus objects enter the larger DLSS pipeline: assembly or common-accessioning?
-  - maybe assembly, but Peter and Monty will assess
+Entry into the larger DLSS pipeline: assembly or common-accessioning?
+  - Peter and Monty will assess, and then discuss with Lynn, etc.
 
-  - checksums
-  - contentMetadata
+File transfer, copying, etc.
 
-  - file transfer
-  - robot errors
+Robot failures?

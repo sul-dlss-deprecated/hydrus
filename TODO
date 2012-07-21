@@ -5,15 +5,6 @@ WAITING
 
 Store "agree to terms" checkbox for item [we need a place to store this].
 
-Coll create: Initialize apo roleMetadata datastream with the collection-manager
-role for the current logged-in user [waiting on web auth].
-
-Item create: Create roleMetadata datastream with the item-depositor for the
-current logged-in user [waiting on web auth].
-
 Item view: release date. See Consul page. Date from "published" lifecycle when
 it exists, else "not released". Display format: 31-Jan-2012. [waiting on
 workflow discussion]
-
-Rationalize date format across various pages: 31-Jan-2012. [waiting on workflow
-discussion]
