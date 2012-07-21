@@ -246,8 +246,6 @@ describe("Collection edit", :type => :request, :integration => true) do
       @hc = Hydrus::Collection.find @druid
       new_role_info = get_role_info_from_apo(@hc)
       new_role_info.should == role_info
-
-      puts @hc.apo.roleMetadata.to_xml
     end
     
     it "should be able to add persons to the Collection" do
