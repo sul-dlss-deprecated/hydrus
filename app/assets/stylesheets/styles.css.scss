@@ -60,9 +60,6 @@ form.step .people-select {
 	input[type=text] {
 	  width: 64.5%;
 	}
-	.delete-node {
-		margin-bottom: 9px;
-	}
 }
 form.step .related-citation {
 	textarea {
@@ -73,19 +70,16 @@ form.step .related-item {
 	input[type=text] {
 		width: 90%;
 	}
-	.delete-node {
-		margin-bottom: 9px;
-	}
 }
 form.step #file-upload {
 	input[type=text] {
 		width: 88%;
 	}
-	.delete-file {
-		margin-bottom: 9px;
-	}
 }
 
+.delete-node, .delete-file {
+	margin-bottom: 9px;
+}
 
 form .help {
 	margin-top: -9px;
@@ -167,6 +161,13 @@ table form {
 		padding-top: 4px;
 	}
 	optgroup option {background-color: white;}
+}
+
+/* APO Actors */
+form.step .actor {
+	margin-left: 30px;
+	select, input, label {display:inline;}
+	input {width: auto;}
 }
 
 /* search results pagination */

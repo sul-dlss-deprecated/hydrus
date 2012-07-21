@@ -1,19 +1,12 @@
 <div class="destroy-set">
   <div class="row actor">
-    <%= hydrus_form_label do -%>
+    <div class="span9">
+      <%- role = @document_fedora.get_person_role(@document_fedora.person_id[index.to_i].strip).strip -%>
       <%= label :hydrus_collection, :"person_id_#{index}", "SUNet ID:" %>
-    <%- end -%>
-    <%= hydrus_form_value do -%>
       <%= text_field_tag :"hydrus_collection[person_id[#{index}]]", @document_fedora.person_id[index.to_i].strip %>
-    <%- end -%>
-  </div>
-  <div class="row actor">
-    <%= hydrus_form_label do -%>
-      <%= label :hydrus_collection, :"person_role_#{index}", "is" %>
-    <%- end -%>
-    <%= hydrus_form_value do -%>
-    	<%= text_field_tag :"hydrus_collection[person_role[#{index}]]", @document_fedora.get_person_role(@document_fedora.person_id[index.to_i].strip) %>
+      <%= label :hydrus_collection, :"person_role_#{index}", "is" %> <%= select_tag :"hydrus_collection[person_role[#{index}]]", options_for_select(Hydrus::AdminPolicyObject.roles, role) %>
       <%= link_to('<i class="icon-trash"></i>'.html_safe, destroy_hydrus_collection_actor_path(:actor_id=>@document_fedora.person_id[index.to_i].strip, :type=>"actor"), :class=>"delete-node btn", :id=>"remove_#{@document_fedora.person_id[index.to_i].strip}")  %>
-    <%- end -%>
+    </div>
   </div>
 </div>
+

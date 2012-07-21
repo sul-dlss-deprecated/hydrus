@@ -211,9 +211,8 @@ describe("Collection edit", :type => :request, :integration => true) do
       # Confirms that the role-management section of the current page
       # contains same information.
       rmdiv   = find('div#role-management')
-      k       = "input[id^='hydrus_collection_person"
-      persons = rmdiv.all("#{k}_id_']").map   { |n| n[:value] }
-      roles   = rmdiv.all("#{k}_role_']").map { |n| n[:value] }
+      persons = rmdiv.all("input[id^='hydrus_collection_person_id_']").map   { |n| n[:value] }
+      roles   = rmdiv.all("select[id^='hydrus_collection_person_role_']").map  { |n| n[:value] }
       create_role_info(persons, roles).should == role_info
     end
 
@@ -269,7 +268,7 @@ describe("Collection edit", :type => :request, :integration => true) do
         role_info[person] = role
         click_button("Add a person")
         fill_in("#{k}_id_#{i}",   :with => person)
-        fill_in("#{k}_role_#{i}", :with => role)
+        select(role, :from => "#{k}_role_#{i}")
         i += 1
       end
       # Check role-management section after additions.

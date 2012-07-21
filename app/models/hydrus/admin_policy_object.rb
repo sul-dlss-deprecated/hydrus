@@ -66,5 +66,8 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
 
   delegate(:person_id, :to => "roleMetadata",
            :at => [:role, :person, :identifier])
-           
+  
+  def self.roles
+    ["collection-manager", "collection-depositor", "item-depositor"]
+  end    
 end

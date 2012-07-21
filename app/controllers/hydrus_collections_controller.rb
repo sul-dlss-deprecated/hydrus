@@ -72,8 +72,7 @@ class HydrusCollectionsController < ApplicationController
     if params.has_key?(:add_link)
       @document_fedora.descMetadata.insert_related_item
     elsif params.has_key?(:add_person)
-      # FIXME:  hardcoded role ...
-      @document_fedora.add_empty_person_to_role('from_controller')
+      @document_fedora.add_empty_person_to_role("from_controller")
     end
 
 #    logger.debug("attributes submitted: #{params['hydrus_collection'].inspect}")
