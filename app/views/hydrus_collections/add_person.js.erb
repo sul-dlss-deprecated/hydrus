@@ -1,2 +1,2 @@
-$("#role-management").append("<%= escape_javascript(render :partial => 'actor', :locals=>{:index=>index}) %>");
+$("#role-management").html("<%= escape_javascript(render :partial => 'actors') %>");
 validate_hydrus_collection();
