@@ -19,4 +19,12 @@ describe Hydrus::Collection do
     hc.hydrus_items.should == []
   end
 
+  it "should be able to create a Collection object, with an APO" do
+    user = 'foo@bar.com'
+    coll  = Hydrus::Collection.create(user)
+    coll.should be_instance_of Hydrus::Collection
+    coll.admin_policy_object_ids.should == [coll.apo.pid]
+    coll.delete
+  end
+
 end

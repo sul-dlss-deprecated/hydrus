@@ -6,6 +6,16 @@ class Hydrus::Collection < Hydrus::GenericObject
   after_validation :strip_whitespace
   before_save :save_apo
   
+  def self.create(user)
+    apo = Hydrus::AdminPolicyObject.create(user)
+    dor_obj = Hydrus::GenericObject.register_dor_object(user, 'collection', apo.pid)
+    collection = dor_obj.adapt_to(Hydrus::Collection)
+    collection.remove_relationship :has_model, 'info:fedora/afmodel:Dor_Collection'
+    collection.assert_content_model
+    collection.save
+    return collection
+  end
+
   # this lets us check if both the apo and the collection are valid at once (used in the controller)
   def object_valid?
     valid? # first run the validations on BOTH collection and apo models specifically to collect all errors

@@ -25,24 +25,8 @@ class HydrusCollectionsController < ApplicationController
   end
 
   def new
-    apo = create_apo(current_user)
-    dor_obj = Hydrus::GenericObject.register_dor_object(current_user, 'collection', apo.pid)
-    collection = dor_obj.adapt_to(Hydrus::Collection)
-    collection.remove_relationship :has_model, 'info:fedora/afmodel:Dor_Collection'
-    collection.assert_content_model
-    #TODO:  Initialize roleMetadata datastream with the collection-manager role for the current logged-in user
-    collection.save
+    collection = Hydrus::Collection.create(current_user)
     redirect_to edit_polymorphic_path(collection)
-  end
-
-  def create_apo(user)
-    args = [user, 'adminPolicy', Dor::Config.ur_apo_druid]
-    apo  = Hydrus::GenericObject.register_dor_object(*args)
-    apo  = apo.adapt_to(Hydrus::AdminPolicyObject)
-    apo.remove_relationship :has_model, 'info:fedora/afmodel:Dor_AdminPolicyObject'
-    apo.assert_content_model
-    apo.save
-    return apo
   end
 
   def person_roles_data(phc)
@@ -132,7 +116,5 @@ class HydrusCollectionsController < ApplicationController
       want.js
     end
   end
-
-  protected :create_apo
 
 end

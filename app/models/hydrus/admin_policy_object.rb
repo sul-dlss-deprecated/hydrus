@@ -10,6 +10,16 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
   validates :embargo_option, :presence => true, :if => :open_for_deposit?
   validates :license_option, :presence => true, :if => :open_for_deposit?
 
+  def self.create(user)
+    args = [user, 'adminPolicy', Dor::Config.ur_apo_druid]
+    apo  = Hydrus::GenericObject.register_dor_object(*args)
+    apo  = apo.adapt_to(Hydrus::AdminPolicyObject)
+    apo.remove_relationship :has_model, 'info:fedora/afmodel:Dor_AdminPolicyObject'
+    apo.assert_content_model
+    apo.save
+    return apo
+  end
+
   def check_embargo_options
     if embargo_option != 'none' && embargo.blank?
       errors.add(:embargo, "must have a time period specified")
