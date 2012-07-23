@@ -5,10 +5,6 @@ APO-of-Collection
 For reference, see the Revs APO:
     https://dor-prod.stanford.edu/fedora/objects/druid:qv648vd4392/datastreams
 
-identityMetadata:
-    - refresh objectLabel when Collection is published
-        objectLabel = "APO for #{Collection.title}"
-
 RELS-EXT:
     - Hydrus app needs to add hydra:referencesAgreement:
        <rdf:Description rdf:about="info:fedora/druid:[apo-id]">
@@ -18,32 +14,39 @@ RELS-EXT:
         xmlns:hydra="http://projecthydra.org/ns/relations#"
 
 descMetadata:
-    - needs to be created
-    - Lynn will give us a spec for this.
-    - refresh title when Collection is published
-        title = "APO for #{coll.title}"
+    - needs to be created: for now just a title node.
+    - Lynn will give us a spec for the rest.
 
-administrativeMetadata:
-    - create hydrusAssemblyWF with these steps:
-      start-deposit
-        - upon initial creation of the Coll
-        - lifecycle = registered
-      submit
-        - when user clicks Publish
-      approve
-        - when user finished Review
-        - step could be autocompleted/skipped if Collection requires no approval
-      start-accession
-        - triggered when all previous steps are finished
-
+administrativeMetadata: [waiting on discussion of Hydrus and DLSS pipeline]
+    - create common assembly workflow?
     - create common accessioning workflow
 
 roleMetadata:
     - set the collection-manager as the current logged-in user (done already?)
     - set the value of <name> (need to get from webauth or LDAP)
 
-defaultObjectRights:
-    - create this stream when user clicks Publish for the Collection
+
+--------------------------------
+Advancing hydrusAssemblyWF steps
+--------------------------------
+
+When Coll/Item is published:
+    submit  = completed
+    approve = completed  # If approval/review not needed
+
+When Coll/Item is approved (either automatically or by user)
+    start-accession = completed
+
+
+-----------------------------------------
+Updating info when Coll/Item is published
+-----------------------------------------
+
+APO.identityMetadata.objectLabel = "APO for #{Collection.title}"
+
+APO.descMetadata.title = "APO for #{Collection.title}"
+
+APO.defaultObjectRights: create datastream.
 
 
 ----------
@@ -57,6 +60,8 @@ identityMetadata:
 
 workflows:
     - should be handled automatically as soon as APO has this WF
+      - check workflow XML generally
+      - check lifecycle=registered
 
 events:
     - create the datastream
@@ -74,7 +79,6 @@ roleMetadata:
     - create the datastream
 
 
-
 ----
 Item
 ----
@@ -87,6 +91,8 @@ identityMetadata:
 
 workflows:
     - should be handled automatically as soon as APO has this WF
+      - check workflow XML generally
+      - check lifecycle=registered
 
 events:
     - create the datastream

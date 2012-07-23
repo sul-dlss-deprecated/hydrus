@@ -19,11 +19,17 @@ describe Hydrus::AdministrativeMetadataDS do
           <visibility option="fixed">stanford</visibility>
           <license option="fixed">cc-by</license>
         </hydrus>
+        <hydrusAssembly>
+          <workflow id="hydrusAssemblyWF">
+            <process name="start-deposit" status="completed" lifecycle="registered"/>
+            <process name="submit" status="waiting"/>
+          </workflow>
+        </hydrusAssembly>
       #{@amd_end}
     EOF
-    @amdoc = Hydrus::AdministrativeMetadataDS.from_xml(xml)
+    @amdoc = Hydrus::AdministrativeMetadataDS.from_xml(noko_doc(xml))
   end
-  
+
   it "should get expected values from OM terminology" do
     tests = [
       [[:hydrus, :depositStatus], %w(open)],
@@ -33,6 +39,9 @@ describe Hydrus::AdministrativeMetadataDS do
       [[:hydrus, :embargo, :option], %w(varies)],
       [[:hydrus, :visibility, :option], %w(fixed)],
       [[:hydrus, :license, :option], %w(fixed)],
+      [[:hydrusAssembly, :workflow, :process, :name], %w(start-deposit submit)],
+      [[:hydrusAssembly, :workflow, :process, :status], %w(completed waiting)],
+      [[:hydrusAssembly, :workflow, :process, :lifecycle], %w(registered)],
     ]
     tests.each do |terms, exp|
       @amdoc.term_values(*terms).should == exp
@@ -56,6 +65,18 @@ describe Hydrus::AdministrativeMetadataDS do
     exp_xml = noko_doc(exp_xml)
     @amdoc = Hydrus::AdministrativeMetadataDS.new(nil, nil)
     @amdoc.ng_xml.should be_equivalent_to exp_xml
+  end
+
+  it "insert_hydrus_assembly_wf() should add workflow info to the APO" do
+    # Create an empty doc.
+    xml = "#{@amd_start}#{@amd_end}"
+    @amdoc = Hydrus::AdministrativeMetadataDS.from_xml(noko_doc(xml))
+    # Should have no workflow steps yet.
+    @amdoc.hydrusAssembly.workflow.process.name.should == []
+    # Insert the hydrusAssemblyWF, and check for workflow steps.
+    @amdoc.insert_hydrus_assembly_wf
+    exp = Dor::Config.hydrus_assembly_wf_steps.map { |s| s[:name] }
+    @amdoc.hydrusAssembly.workflow.process.name.should == exp
   end
 
 end

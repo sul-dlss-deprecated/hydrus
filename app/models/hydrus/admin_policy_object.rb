@@ -11,11 +11,15 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
   validates :license_option, :presence => true, :if => :open_for_deposit?
 
   def self.create(user)
+    # Create the object, with the correct model.
     args = [user, 'adminPolicy', Dor::Config.ur_apo_druid]
     apo  = Hydrus::GenericObject.register_dor_object(*args)
     apo  = apo.adapt_to(Hydrus::AdminPolicyObject)
     apo.remove_relationship :has_model, 'info:fedora/afmodel:Dor_AdminPolicyObject'
     apo.assert_content_model
+    # Add the default hydrusAssemblyWF.
+    apo.administrativeMetadata.insert_hydrus_assembly_wf
+    # Save and return.
     apo.save
     return apo
   end

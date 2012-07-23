@@ -42,7 +42,14 @@ Dor::Config.configure do
     
   workflow.url 'http://lyberservices-dev.stanford.edu/workflow/'
 
-  # TODO: this will probably need to vary by environment.
+  # TODO: this druid will probably need to vary by environment.
   ur_apo_druid 'druid:oo000oo0000'
+
+  hydrus_assembly_wf_steps [
+    { :name => "start-deposit",   :status => "completed", :lifecycle => "registered" },
+    { :name => "submit",          :status => "waiting", },
+    { :name => "approve",         :status => "waiting", },
+    { :name => "start-accession", :status => "waiting", },
+  ]
 
 end
