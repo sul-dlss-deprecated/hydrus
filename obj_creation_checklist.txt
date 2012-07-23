@@ -60,7 +60,7 @@ identityMetadata:
 
 workflows:
     - should be handled automatically as soon as APO has this WF
-      - check workflow XML generally
+      - write integration test to cxonfirm
       - check lifecycle=registered
 
 events:
@@ -91,7 +91,7 @@ identityMetadata:
 
 workflows:
     - should be handled automatically as soon as APO has this WF
-      - check workflow XML generally
+      - write integration test to cxonfirm
       - check lifecycle=registered
 
 events:
