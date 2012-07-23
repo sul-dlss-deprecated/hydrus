@@ -77,6 +77,11 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
   delegate(:person_id, :to => "roleMetadata",
            :at => [:role, :person, :identifier])
   
+  # Will be "item-depositor" for now per spec. Test will determine if it changes in the future.
+  def self.default_role
+    self.roles.last
+  end
+  
   def self.roles
     ["collection-manager", "collection-depositor", "item-depositor"]
   end    
