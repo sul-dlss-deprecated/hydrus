@@ -115,6 +115,75 @@
       <%= button_tag("Add another link", :name=>"add_link", :"data-attribute" => "add_link", :id=>"add_link", :class=>"btn", :value=>@document_fedora.related_items.length) %>
     </div>
   </div>
+
+<%= hydrus_form_header{"Release and visibility of content"} %>
+  <!-- Embargo -->
+  <div class="row">
+    <div class="span9 sub-section">
+    <% case @document_fedora.collection[0].embargo_option %>
+    <% when 'none' %>
+      This item will be released for discovery and download 
+      <span class="highlight-value">
+        as soon as it is published.
+      </span>
+    <% when 'varies' %>
+      This item will be released for discovery and download 
+      [radio buttons and datepicker]
+    <% when 'fixed' %>
+      This item will be released for discovery and download 
+      <span class="highlight-value">
+        <%= @document_fedora.collection[0].embargo %>
+        after deposit.
+      </span>
+    <% end %>
+    </div>
+  </div>
+  <!-- Visiblity -->
+  <div class="row">
+    <div class="span9">
+    <% case @document_fedora.collection[0].visibility_option_value %>
+    <% when 'everyone' %>
+      After its release, this item can be downloaded and discovered by 
+      <span class="highlight-value">
+        everyone.
+      </span>
+    <% when 'varies' %>
+      After its release, this item can be downloaded and discovered by 
+      [select dropdown of visibility options]
+    <% when 'stanford' %>
+      After its release, this item can be downloaded and discovered by 
+      <span class="highlight-value">
+        the Stanford community.
+      </span>
+    <% end %>
+    </div>
+  </div>
+
+ <%= hydrus_form_header{"License"} %>
+  <div class="row">
+    <div class="span9">
+    <% case @document_fedora.collection[0].license_option %>
+    <% when 'none' %>
+      No license will be applied to this item. All rights reserved by content creator.
+    <% when 'varies' %>
+      This item will be licensed under [select dropdown of licenses]
+    <% when 'fixed' %>
+      This work will be licensed under a 
+      <span class="highlight-value">
+        <!-- TODO: This needs to show full license text -->
+        <%= @document_fedora.collection[0].license %>
+      </span>
+    <% end %>
+    </div>
+  </div>
+
+  <%= hydrus_form_header{"Terms of Use"} %>
+  <div class="row">
+    <div class="span9">
+      People who can discover and download this item will agree to these <a href="#">Terms of Use</a>.
+    </div>
+  </div>
+
   <noscript>
     <%= render :partial => "actions_box", :locals => {:id=>"nojs"}%>
   </noscript>

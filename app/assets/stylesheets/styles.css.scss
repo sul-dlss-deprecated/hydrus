@@ -95,6 +95,9 @@ form .dropdown-menu a {border-bottom: none;}
 form .dropdown-menu .disabled a {color: #cccccc;}
 form .dropdown-menu li.disabled:hover, form .dropdown-menu .disabled a:hover {cursor: default; background: none;}
 
+form .highlight-value {font-weight: bold;}
+form .sub-section {margin-bottom: 12px;}
+
 /* forms on search results */
 #sortAndPerPage {
 	form, label {display:inline;}
