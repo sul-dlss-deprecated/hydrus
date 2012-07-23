@@ -94,6 +94,14 @@
             <visibility option="fixed">stanford</visibility>
             <license option="fixed">cc-by</license>
           </hydrus>
+          <hydrusAssembly>
+            <workflow id="hydrusAssemblyWF">
+              <process name="start-deposit" status="completed" lifecycle="registered"/>
+              <process name="submit" status="waiting"/>
+              <process name="approve" status="waiting"/>
+              <process name="start-accession" status="waiting"/>
+            </workflow>
+          </hydrusAssembly>
         </administrativeMetadata>
       </foxml:xmlContent>
     </foxml:datastreamVersion>
