@@ -102,6 +102,15 @@
               <process name="start-assembly" status="waiting"/>
             </workflow>
           </hydrusAssembly>
+          <assembly>
+            <workflow id="assemblyWF">
+              <process name="start-assembly" status="completed" lifecycle="inprocess"/>
+              <process name="jp2-create" status="completed"/>
+              <process name="checksum-compute" status="waiting"/>
+              <process name="exif-collect" status="waiting"/>
+              <process name="accessioning-initiate" status="waiting"/>
+            </workflow>
+          </assembly>
         </administrativeMetadata>
       </foxml:xmlContent>
     </foxml:datastreamVersion>

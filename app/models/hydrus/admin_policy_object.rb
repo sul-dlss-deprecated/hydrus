@@ -17,8 +17,10 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
     apo  = apo.adapt_to(Hydrus::AdminPolicyObject)
     apo.remove_relationship :has_model, 'info:fedora/afmodel:Dor_AdminPolicyObject'
     apo.assert_content_model
-    # Add the default hydrusAssemblyWF.
-    apo.administrativeMetadata.insert_hydrus_assembly_wf
+    # Add the default workflows.
+    Dor::Config.hydrus.workflow_steps.keys.each do |wf_name|
+      apo.administrativeMetadata.insert_workflow(wf_name)
+    end
     # Save and return.
     apo.save
     return apo

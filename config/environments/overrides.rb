@@ -36,20 +36,31 @@ Dor::Config.configure do
     pass yaml['password']
   end
   
-
   yaml = load_yaml_config.call('solr.yml')
   solrizer.url yaml['url']
     
+  # TODO: this URL will need to vary by environment.
   workflow.url 'http://lyberservices-dev.stanford.edu/workflow/'
 
-  # TODO: this druid will probably need to vary by environment.
+  # TODO: this druid will need to vary by environment.
   ur_apo_druid 'druid:oo000oo0000'
 
-  hydrus_assembly_wf_steps [
-    { :name => "start-deposit",   :status => "completed", :lifecycle => "registered" },
-    { :name => "submit",          :status => "waiting", },
-    { :name => "approve",         :status => "waiting", },
-    { :name => "start-accession", :status => "waiting", },
-  ]
+  hydrus do
+    workflow_steps({
+      :hydrusAssemblyWF => [
+        { :name => "start-deposit",   :status => "completed", :lifecycle => "registered" },
+        { :name => "submit",          :status => "waiting", },
+        { :name => "approve",         :status => "waiting", },
+        { :name => "start-assembly",  :status => "waiting", },
+      ],
+      :assemblyWF => [
+        { :name => "start-assembly",        :status => "completed", :lifecycle => "inprocess" },
+        { :name => "jp2-create",            :status => "completed", },
+        { :name => "checksum-compute",      :status => "waiting", },
+        { :name => "exif-collect",          :status => "waiting", },
+        { :name => "accessioning-initiate", :status => "waiting", },
+      ],
+    })
+  end
 
 end

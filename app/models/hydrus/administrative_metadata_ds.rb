@@ -23,21 +23,31 @@ class Hydrus::AdministrativeMetadataDS < ActiveFedora::NokogiriDatastream
         }
       end
     end
+    t.assembly do
+      t.workflow do
+        t.process {
+          t.name      :path => {:attribute => 'name'}
+          t.status    :path => {:attribute => 'status'}
+          t.lifecycle :path => {:attribute => 'lifecycle'}
+        }
+      end
+    end
 
   end
   
-  def insert_hydrus_assembly_wf
-    add_hydrus_child_node(ng_xml.root, :hydrus_assembly_wf)
+  def insert_workflow(wf_name)
+    add_hydrus_child_node(ng_xml.root, wf_name)
   end
 
-  define_template(:hydrus_assembly_wf) do |xml|
-    xml.hydrusAssembly {
-      xml.workflow(:id => 'hydrusAssemblyWF') {
-        Dor::Config.hydrus_assembly_wf_steps.each do |step|
-          xml.process(step)
-        end
+  # Call define_template() for all of the workflows.
+  Dor::Config.hydrus.workflow_steps.each do |wf_name, steps|
+    define_template(wf_name) do |xml|
+      xml.send(wf_name.to_s[0..-3]) {
+        xml.workflow(:id => wf_name.to_s) {
+          steps.each { |s| xml.process(s) }
+        }
       }
-    }
+    end
   end
 
   def self.xml_template

@@ -25,6 +25,12 @@ describe Hydrus::AdministrativeMetadataDS do
             <process name="submit" status="waiting"/>
           </workflow>
         </hydrusAssembly>
+        <assembly>
+          <workflow id="assemblyWF">
+            <process name="start-assembly" status="completed" lifecycle="inprocess"/>
+            <process name="checksum-compute" status="waiting"/>
+          </workflow>
+        </assembly>
       #{@amd_end}
     EOF
     @amdoc = Hydrus::AdministrativeMetadataDS.from_xml(noko_doc(xml))
@@ -42,6 +48,7 @@ describe Hydrus::AdministrativeMetadataDS do
       [[:hydrusAssembly, :workflow, :process, :name], %w(start-deposit submit)],
       [[:hydrusAssembly, :workflow, :process, :status], %w(completed waiting)],
       [[:hydrusAssembly, :workflow, :process, :lifecycle], %w(registered)],
+      [[:assembly, :workflow, :process, :lifecycle], %w(inprocess)],
     ]
     tests.each do |terms, exp|
       @amdoc.term_values(*terms).should == exp
@@ -67,16 +74,18 @@ describe Hydrus::AdministrativeMetadataDS do
     @amdoc.ng_xml.should be_equivalent_to exp_xml
   end
 
-  it "insert_hydrus_assembly_wf() should add workflow info to the APO" do
+  it "insert_workflow() should add workflow info to the APO" do
     # Create an empty doc.
     xml = "#{@amd_start}#{@amd_end}"
     @amdoc = Hydrus::AdministrativeMetadataDS.from_xml(noko_doc(xml))
     # Should have no workflow steps yet.
     @amdoc.hydrusAssembly.workflow.process.name.should == []
-    # Insert the hydrusAssemblyWF, and check for workflow steps.
-    @amdoc.insert_hydrus_assembly_wf
-    exp = Dor::Config.hydrus_assembly_wf_steps.map { |s| s[:name] }
-    @amdoc.hydrusAssembly.workflow.process.name.should == exp
+    # Insert the workflows, and check for the steps.
+    Dor::Config.hydrus.workflow_steps.each do |wf_name, steps|
+      @amdoc.insert_workflow(wf_name)
+      exp = steps.map { |s| s[:name] }
+      @amdoc.send(wf_name.to_s[0..-3]).workflow.process.name.should == exp
+    end
   end
 
 end
