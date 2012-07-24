@@ -70,5 +70,16 @@ class Hydrus::Item < Hydrus::GenericObject
     descMetadata.remove_nodes(:subject)
     args.first.values.each { |kw| descMetadata.insert_topic(kw)  }
   end
+  
+  def self.roles
+    [ "Author",
+      "Creator",
+      "Collector",
+      "Contributing Author",
+      "Distributor",
+      "Principal Investigator",
+      "Publisher",
+      "Sponsor" ]
+  end
 
 end

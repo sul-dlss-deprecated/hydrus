@@ -68,6 +68,24 @@ class Hydrus::GenericObject < Dor::Item
     return Dor::RegistrationService.register_object(params)
   end
 
+  def self.licenses
+    {
+      'Creative Commons Licenses' =>  [
+        ['CC BY Attribution'                                 , 'cc-by'],
+        ['CC BY-SA Attribution Share Alike'                  , 'cc-by-sa'],
+        ['CC BY-ND Attribution-NoDerivs'                     , 'cc-by-nd'],
+        ['CC BY-NC Attribution-NonCommercial'                , 'cc-by-nc'],
+        ['CC BY-NC-SA Attribution-NonCommercial-ShareAlike'  , 'cc-by-nc-sa'],
+        ['CC BY-NC-ND Attribution-NonCommercial-NoDerivs'    , 'cc-by-nc-nd'],
+      ],
+      'Open Data Commons Licenses'  =>  [
+        ['PDDL Public Domain Dedication and License'         , 'pddl'],
+        ['ODC-By Attribution License'                        , 'odc-by'],
+        ['ODC-ODbl Open Database License'                    , 'odc-odbl'],
+      ]
+    }
+  end
+
   private
 
   # Returns a hash of info needed to register a Dor object.

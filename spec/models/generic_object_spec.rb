@@ -80,5 +80,11 @@ describe Hydrus::GenericObject do
     end
 
   end
-
+  
+  describe "class methods" do
+    it "should define a licenses hash" do
+      Hydrus::GenericObject.licenses.should be_a Hash
+    end
+    
+  end
 end

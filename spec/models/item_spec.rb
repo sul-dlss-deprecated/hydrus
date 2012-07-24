@@ -198,4 +198,10 @@ describe Hydrus::Item do
     end
 
   end
+  
+  describe "class methods" do
+    it "should provide an array of roles" do
+      Hydrus::Item.roles.should be_a Array
+    end
+  end
 end

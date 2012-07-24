@@ -39,12 +39,4 @@ describe HydrusFormHelper do
     end
   end
   
-  it "can exercise methods returning simple data structures" do
-    people_roles.should be_instance_of Array
-    license_types.should be_instance_of Hash
-    embargo_types.should be_instance_of Hash
-    visibility_types.should be_instance_of Hash
-    embargo_terms.should be_instance_of Hash
-  end
-
 end
