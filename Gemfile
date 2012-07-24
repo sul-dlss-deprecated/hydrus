@@ -13,7 +13,7 @@ source "http://sulair-rails-dev.stanford.edu"
 # end
 
 gem 'dor-services', ">= 3.5.1"  # , dor_services_gem_params
-gem 'druid-tools'
+gem 'druid-tools', '>= 0.2.0'
 gem 'sul_chrome'
 gem 'about_page'
 gem 'is_it_working-cbeer', "~> 1.0.13"

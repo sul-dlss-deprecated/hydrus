@@ -20,7 +20,7 @@ class FileUploader < CarrierWave::Uploader::Base
   # Override the directory where uploaded files will be stored.
   # This is a sensible default for uploaders that are meant to be mounted:
   def store_dir
-    Druid.new(model.pid).path(Hydrus::Application.config.file_upload_path)
+    DruidTools::Druid.new(model.pid,Hydrus::Application.config.file_upload_path).path()
   end
 
   # Provide a default URL as a default if there hasn't been a file uploaded:
