@@ -17,8 +17,8 @@ descMetadata:
     - needs to be created: for now just a title node.
     - Lynn will give us a spec for the rest.
 
-administrativeMetadata: [waiting on discussion of Hydrus and DLSS pipeline]
-    - create common assembly workflow?
+administrativeMetadata
+    - create common assembly workflow
     - create common accessioning workflow
 
 roleMetadata:
@@ -99,21 +99,14 @@ events:
     - start adding events
     - need to determine what the relevant events are
 
+embargo datastream:
+    - create the DS, using default embargo info from APO
+    - ask Willy about services available for embargo management
+
 rightsMetadata:
     - should be handled automatically as soon as APO has defaultObjectRights
+    - this DS will contain the Item-level license info
 
 roleMetadata:
     - create the datastream
     - set the item-depositor as the current logged-in user
-
-
--------------------------
-Assembly and accessioning
--------------------------
-
-Entry into the larger DLSS pipeline: assembly or common-accessioning?
-  - Peter and Monty will assess, and then discuss with Lynn, etc.
-
-File transfer, copying, etc.
-
-Robot failures?

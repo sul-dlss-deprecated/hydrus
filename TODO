@@ -1,10 +1,13 @@
 RoleMD only takes two empty nodes per role.
 
-Collection Edit integration test for roles uses index for filling out form but data added is not necessarily sequential.
+Collection Edit integration test for roles uses index for filling out form but
+data added is not necessarily sequential.
 
 Move hash/arrays from hydrus_form_helper to applicable models.
 
-Submit relevant (or all) form data on addition of multi-valued fields (issues w/ non-linear indexed role MD)
+Submit relevant (or all) form data on addition of multi-valued fields (issues
+w/ non-linear indexed role MD)
+
 
 -------
 WAITING
