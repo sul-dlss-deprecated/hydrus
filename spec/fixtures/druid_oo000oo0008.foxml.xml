@@ -99,7 +99,7 @@
               <process name="start-deposit" status="completed" lifecycle="registered"/>
               <process name="submit" status="waiting"/>
               <process name="approve" status="waiting"/>
-              <process name="start-accession" status="waiting"/>
+              <process name="start-assembly" status="waiting"/>
             </workflow>
           </hydrusAssembly>
         </administrativeMetadata>

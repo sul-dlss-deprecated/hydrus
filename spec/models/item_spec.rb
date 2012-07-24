@@ -11,7 +11,7 @@ describe Hydrus::Item do
           <process datetime="1234" name="start-deposit"/>
           <process datetime="9999" name="submit"/>
           <process datetime="1234" name="approve"/>
-          <process datetime="1234" name="start-accession"/>
+          <process datetime="1234" name="start-assembly"/>
         </workflow>
       </workflows>
     END
