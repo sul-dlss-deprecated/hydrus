@@ -8,6 +8,30 @@ Move hash/arrays from hydrus_form_helper to applicable models.
 Submit relevant (or all) form data on addition of multi-valued fields (issues
 w/ non-linear indexed role MD)
 
+Collection View: Without javascript: Make sure Open Collection button is not 
+enabled until all required fields are filled out (currently, it is enabled with 
+empty form).
+
+Move Open Collection/Close Collection button and delete collection trash icon 
+and associated text to Collection View "What you can do" box from Collection 
+Edit Actions box.
+
+Collection View: "What you can do"  box should show trash icon with "Cannot 
+discard collection because it contains items." label under Open Collection 
+button if collection has items.
+
+Collection and Item View pages: Improve display of main content area for both 
+so that only required fields and fields with values are shown. Display 
+"not specified" for required field values that are empty.
+
+Collection Edit: Do some minor styling to add space around form elements in 
+Roles section.
+
+Item View sidebar Status box: Update so there are no empty values for displayed
+fields.
+
+Item Edit: form for a new item should be populated with default values for the 
+embargo and license fields.
 
 -------
 WAITING
