@@ -49,16 +49,29 @@ Dor::Config.configure do
     workflow_steps({
       :hydrusAssemblyWF => [
         { :name => "start-deposit",   :status => "completed", :lifecycle => "registered" },
-        { :name => "submit",          :status => "waiting", },
-        { :name => "approve",         :status => "waiting", },
-        { :name => "start-assembly",  :status => "waiting", },
+        { :name => "submit",          :status => "waiting" },
+        { :name => "approve",         :status => "waiting" },
+        { :name => "start-assembly",  :status => "waiting" },
       ],
       :assemblyWF => [
         { :name => "start-assembly",        :status => "completed", :lifecycle => "inprocess" },
         { :name => "jp2-create",            :status => "completed", },
-        { :name => "checksum-compute",      :status => "waiting", },
-        { :name => "exif-collect",          :status => "waiting", },
-        { :name => "accessioning-initiate", :status => "waiting", },
+        { :name => "checksum-compute",      :status => "waiting" },
+        { :name => "exif-collect",          :status => "waiting" },
+        { :name => "accessioning-initiate", :status => "waiting" },
+      ],
+      :accessionWF => [
+        { :name => "start-accession",      :status => "completed", :lifecycle => "submitted" },
+        { :name => "content-metadata",     :status => "waiting" },
+        { :name => "descriptive-metadata", :status => "waiting",   :lifecycle => "described" },
+        { :name => "rights-metadata",      :status => "waiting" },
+        { :name => "technical-metadata",   :status => "waiting" },
+        { :name => "provenance-metadata",  :status => "waiting" },
+        { :name => "remediate-object",     :status => "waiting" },
+        { :name => "shelve",               :status => "waiting" },
+        { :name => "publish",              :status => "waiting",   :lifecycle => "published" },
+        { :name => "sdr-ingest-transfer",  :status => "waiting" },
+        { :name => "cleanup",              :status => "waiting",   :lifecycle => "accessioned" },
       ],
     })
   end

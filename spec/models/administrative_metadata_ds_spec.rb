@@ -31,6 +31,12 @@ describe Hydrus::AdministrativeMetadataDS do
             <process name="checksum-compute" status="waiting"/>
           </workflow>
         </assembly>
+        <accession>
+          <workflow id="accessionWF">
+            <process name="start-accession" status="completed" lifecycle="submitted"/>
+            <process name="descriptive-metadata" status="waiting" lifecycle="described"/>
+          </workflow>
+        </accession>
       #{@amd_end}
     EOF
     @amdoc = Hydrus::AdministrativeMetadataDS.from_xml(noko_doc(xml))
@@ -48,7 +54,8 @@ describe Hydrus::AdministrativeMetadataDS do
       [[:hydrusAssembly, :workflow, :process, :name], %w(start-deposit submit)],
       [[:hydrusAssembly, :workflow, :process, :status], %w(completed waiting)],
       [[:hydrusAssembly, :workflow, :process, :lifecycle], %w(registered)],
-      [[:assembly, :workflow, :process, :lifecycle], %w(inprocess)],
+      [[:assembly,  :workflow, :process, :lifecycle], %w(inprocess)],
+      [[:accession, :workflow, :process, :lifecycle], %w(submitted described)],
     ]
     tests.each do |terms, exp|
       @amdoc.term_values(*terms).should == exp
@@ -84,7 +91,8 @@ describe Hydrus::AdministrativeMetadataDS do
     Dor::Config.hydrus.workflow_steps.each do |wf_name, steps|
       @amdoc.insert_workflow(wf_name)
       exp = steps.map { |s| s[:name] }
-      @amdoc.send(wf_name.to_s[0..-3]).workflow.process.name.should == exp
+      swf = Hydrus::AdministrativeMetadataDS.short_wf(wf_name)
+      @amdoc.send(swf).workflow.process.name.should == exp
     end
   end
 

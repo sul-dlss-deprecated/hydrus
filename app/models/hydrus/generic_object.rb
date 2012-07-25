@@ -90,7 +90,7 @@ class Hydrus::GenericObject < Dor::Item
 
   # Returns a hash of info needed to register a Dor object.
   def self.dor_registration_params(user_string, object_type, apo_pid)
-    wfs = object_type == 'adminPolicy' ? [] : Dor::Config.hydrus.workflow_steps.keys
+    wfs = object_type == 'adminPolicy' ? [] : [:hydrusAssemblyWF]
     return {
       :object_type       => object_type,
       :admin_policy      => apo_pid,

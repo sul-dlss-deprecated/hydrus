@@ -5,6 +5,11 @@ APO-of-Collection
 For reference, see the Revs APO:
     https://dor-prod.stanford.edu/fedora/objects/druid:qv648vd4392/datastreams
 
+workflows:
+    - write integration test to confirm that new Collection has hydrusAssemblyWF
+    - write integration test to confirm that new Item has hydrusAssemblyWF
+    - also check lifecycle=registered
+
 RELS-EXT:
     - Hydrus app needs to add hydra:referencesAgreement:
        <rdf:Description rdf:about="info:fedora/druid:[apo-id]">
@@ -17,10 +22,6 @@ descMetadata:
     - needs to be created: for now just a title node.
     - Lynn will give us a spec for the rest.
 
-administrativeMetadata
-    - create common assembly workflow
-    - create common accessioning workflow
-
 roleMetadata:
     - set the collection-manager as the current logged-in user (done already?)
     - set the value of <name> (need to get from webauth or LDAP)
@@ -30,12 +31,15 @@ roleMetadata:
 Advancing hydrusAssemblyWF steps
 --------------------------------
 
-When Coll/Item is published:
+When Coll/Item is published, use workflow service to advance hydrusAssemblyWF:
     submit  = completed
     approve = completed  # If approval/review not needed
 
-When Coll/Item is approved (either automatically or by user)
-    start-accession = completed
+When Coll/Item is approved (either automatically or by user), use workflow service to:
+    advance hydrusAssemblyWF
+        start-assembly = completed
+    initialice the assemblyWF
+        "#{Dor::Config.dor.service_root}/dor/v1/objects/#{@pid}/apo_workflows/assemblyWF"
 
 
 -----------------------------------------
@@ -57,11 +61,6 @@ identityMetadata:
     - objectType: needs to be set to both 'collection' and 'set'
     - refresh objectLabel when Collection is published
     - add another tag: "Hydrus : collection"
-
-workflows:
-    - should be handled automatically as soon as APO has this WF
-      - write integration test to cxonfirm
-      - check lifecycle=registered
 
 events:
     - create the datastream
@@ -89,11 +88,6 @@ identityMetadata:
         - for now hard-code itemtype = dataset
         - need to figure out where this info will be stored in object
 
-workflows:
-    - should be handled automatically as soon as APO has this WF
-      - write integration test to cxonfirm
-      - check lifecycle=registered
-
 events:
     - create the datastream
     - start adding events
@@ -106,6 +100,7 @@ embargo datastream:
 rightsMetadata:
     - should be handled automatically as soon as APO has defaultObjectRights
     - this DS will contain the Item-level license info
+    - this DS will contain the Item-level visibility info [confirm with Lynn]
 
 roleMetadata:
     - create the datastream
