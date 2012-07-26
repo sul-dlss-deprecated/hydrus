@@ -1,4 +1,4 @@
-var group = $("#remove_<%= escape_javascript(params[:actor_id]) %>").parents(".destroy-group");
+var group = $("#remove_<%= escape_javascript("#{params[:actor_id]}_#{params[:role]}") %>").parents(".destroy-group");
 $("#remove_<%= escape_javascript(params[:actor_id]) %>").parents(".destroy-set").remove();
 group.html("<%= escape_javascript(render params[:type].pluralize) %>");
 validate_hydrus_collection();

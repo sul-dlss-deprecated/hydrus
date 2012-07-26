@@ -200,60 +200,46 @@ describe("Collection edit", :type => :request, :integration => true) do
 
   context "modifying persons and roles" do
 
-    def create_role_info(persons, roles)
-      # Takes two parallel lists: persons and their roles.
-      # Returns them as a hash, with persons as the keys.
-      return Hash[ persons.zip(roles) ]
-    end
-
     def check_role_management_div(role_info)
       # Takes some role info, structure like the return from create_role_info().
       # Confirms that the role-management section of the current page
       # contains same information.
       rmdiv   = find('div#role-management')
-      persons = rmdiv.all("input[id^='hydrus_collection_person_id_']").map   { |n| n[:value] }
-      roles   = rmdiv.all("select[id^='hydrus_collection_person_role_']").map  { |n| n[:value] }
-      create_role_info(persons, roles).should == role_info
-    end
-
-    def get_role_info_from_apo(coll)
-      # Takes a Collection. Gets the persons and roles from the APO
-      # of the Collection. Returns the role info.
-      persons = coll.apo.person_id
-      roles   = persons.map { |i| coll.get_person_role(i) }
-      return create_role_info(persons, roles)
+      k       = 'hydrus_collection_person_roles_'
+      persons = rmdiv.all("input[id^='#{k}']").map   { |n| n[:value] }
+      roles   = rmdiv.all("select[id^='#{k}']").map  { |n| n[:value] }
+      h       = {}
+      persons.zip(roles).each { |p,r| (h[r] ||= {})[p] = true }
+      h.should == role_info
     end
 
     it "should be able to delete persons from the Collection" do
-      # Get persons and roles from the APO.roleMetadata.
-      role_info = get_role_info_from_apo(@hc)
       # Visit edit page.
       login_as_archivist1
       should_visit_edit_page(@hc)
       # Check role-management section before deletes.
+      role_info = @hc.person_roles
       check_role_management_div(role_info)
       # Remove some persons.
-      delete_these = [role_info.keys.first, role_info.keys.last]
-      delete_these.each do |person|
-        role_info.delete(person)
-        find('div#role-management').click_link("remove_#{person}")
+      role = 'collection-manager'
+      role_info[role].keys.each do |person|
+        find('div#role-management').click_link("remove_#{person}_#{role}")
       end
+      role_info.delete(role)
       # Check role-management section after deletes.
       check_role_management_div(role_info)
       # After saving, confirm new content in fedora,
       click_button "Save"
       @hc = Hydrus::Collection.find @druid
-      new_role_info = get_role_info_from_apo(@hc)
-      new_role_info.should == role_info
+      @hc.person_roles.should == role_info
     end
     
     it "should be able to add persons to the Collection" do
-      # Get persons and roles from the APO.roleMetadata.
-      role_info = get_role_info_from_apo(@hc)
       # Visit edit page.
       login_as_archivist1
       should_visit_edit_page(@hc)
       # Check role-management section before additions.
+      role_info = @hc.person_roles
       check_role_management_div(role_info)
       # Add some persons.
       add_these = {
@@ -262,13 +248,13 @@ describe("Collection edit", :type => :request, :integration => true) do
         'george' => 'item-depositor',
         'ringo'  => 'item-depositor',
       }
-      i = role_info.keys.size
-      k = "hydrus_collection_person"
+      i = @hc.person_id.size
+      k = "hydrus_collection_person_roles"
       add_these.each do |person, role|
-        role_info[person] = role
+        (role_info[role] ||= {})[person] = true
         click_button("Add a person")
-        fill_in("#{k}_id_#{i}",   :with => person)
-        select(role, :from => "#{k}_role_#{i}")
+        fill_in("#{k}_#{i}_id",   :with => person)
+        select(role, :from => "#{k}_#{i}_role")
         i += 1
       end
       # Check role-management section after additions.
@@ -277,8 +263,7 @@ describe("Collection edit", :type => :request, :integration => true) do
       check_role_management_div(role_info)
       # Confirm new content in fedora,
       @hc = Hydrus::Collection.find @druid
-      new_role_info = get_role_info_from_apo(@hc)
-      new_role_info.should == role_info
+      @hc.person_roles.should == role_info
     end
     
   end

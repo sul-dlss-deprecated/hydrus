@@ -77,11 +77,11 @@ describe Hydrus::RoleMetadataDS do
       end
     end
     
-    it "should be able to retrieve the role for a person identifier" do
-      @rmdoc.get_person_role('brown').should == "collection-manager"
-      @rmdoc.get_person_role('dblack').should == "collection-manager"
-      @rmdoc.get_person_role('ggreen').should == "collection-depositor"
-    end
+    # it "should be able to retrieve the role for a person identifier" do
+    #   @rmdoc.get_person_role('brown').should == "collection-manager"
+    #   @rmdoc.get_person_role('dblack').should == "collection-manager"
+    #   @rmdoc.get_person_role('ggreen').should == "collection-depositor"
+    # end
 
     it "should be able to exercise to_solr()" do
       sdoc = @rmdoc.to_solr
@@ -293,7 +293,7 @@ describe Hydrus::RoleMetadataDS do
           </role>
         #{@rmd_end}
       EOF
-      @rmdoc.delete_actor('sunetid2')
+      @rmdoc.delete_actor('sunetid2', 'collection-manager')
       @rmdoc.ng_xml.should be_equivalent_to exp_xml
       exp_xml = <<-EOF
         #{@rmd_start}
@@ -303,13 +303,13 @@ describe Hydrus::RoleMetadataDS do
           <role type="collection-depositor" />
         #{@rmd_end}
       EOF
-      @rmdoc.delete_actor('sunetid3')
+      @rmdoc.delete_actor('sunetid3', 'collection-depositor')
       # NOTE:  it is ok to have an empty role node
       @rmdoc.ng_xml.should be_equivalent_to exp_xml
     end
     
     it "delete_actor should do nothing quietly when it is called for non-existent actor identifier" do
-      @rmdoc.delete_actor('not_present')
+      @rmdoc.delete_actor('not_present', 'blah')
       @rmdoc.ng_xml.should be_equivalent_to @start_xml
     end
     

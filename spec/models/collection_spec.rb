@@ -77,11 +77,11 @@ describe Hydrus::Collection do
       @hc.stub(:apo).and_return(apo)
     end
     
-    it "get_person_role should retrieve the correct value" do
-      @hc.get_person_role('sunetid1').should == 'collection-manager'
-      @hc.get_person_role('sunetid2').should == 'collection-manager'
-      @hc.get_person_role('sunetid3').should == 'collection-depositor'
-    end
+    # it "get_person_role should retrieve the correct value" do
+    #   @hc.get_person_role('sunetid1').should == 'collection-manager'
+    #   @hc.get_person_role('sunetid2').should == 'collection-manager'
+    #   @hc.get_person_role('sunetid3').should == 'collection-depositor'
+    # end
 
     it "add_empty_person_to_role should work" do
       @hc.add_empty_person_to_role('collection-manager')
@@ -116,7 +116,20 @@ describe Hydrus::Collection do
     end
 
     it "person_roles= should correctly update APO roleMetadtaDS" do
-      @hc.person_roles = {"brown"=>"collection-manager", "dblack"=>"collection-manager", "ggreen"=>"collection-depositor"} 
+      @hc.person_roles = {
+        '0' => {
+          'id'   => "brown",
+          'role' => "collection-manager",
+        },
+        '1' => {
+          'id'   => "dblack",
+          'role' => "collection-manager",
+        },
+        '2' => {
+          'id'   => "ggreen",
+          'role' => "collection-depositor",
+        },
+      } 
       @rmdoc.ng_xml.should be_equivalent_to <<-EOF
         <roleMetadata>
           <role type="collection-manager">
@@ -131,7 +144,7 @@ describe Hydrus::Collection do
     end
     
     it "remove_actor should correctly update APO roleMetadataDS" do
-      @hc.remove_actor('sunetid1')
+      @hc.remove_actor('sunetid1', 'collection-manager')
       @rmdoc.ng_xml.should be_equivalent_to <<-EOF
         <roleMetadata>
           <role type="collection-manager">

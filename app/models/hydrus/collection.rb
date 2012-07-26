@@ -169,7 +169,10 @@ class Hydrus::Collection < Hydrus::GenericObject
   end
 
   # for APO roleMetadata 
-   
+  def add_empty_person_to_role *args
+    apo.roleMetadata.add_empty_person_to_role *args
+  end
+
   def collection_owner *args
     apo.collection_owner *args
   end
@@ -178,34 +181,28 @@ class Hydrus::Collection < Hydrus::GenericObject
     apo.person_id *args
   end
   
-  def person_id= *args
-    # this is a no-op because we use the person_roles=  method below to assign ids 
-  end
-  
-  def get_person_role *args
-    apo.roleMetadata.get_person_role *args
-  end
-  
-  def add_empty_person_to_role *args
-    apo.roleMetadata.add_empty_person_to_role *args
-  end
-  
-  def person_role= *args
-    # this is a no-op because we use the person_roles=  method below to assign roles 
+  # Returns of hash of role info. Also see person_roles=
+  def person_roles
+    h = {}
+    apo.roleMetadata.find_by_terms(:role, :person, :identifier).each do |n|
+      id   = n.text
+      role = n.parent.parent[:type]
+      h[role] ||= {}
+      h[role][id] = true
+    end
+    return h
   end
   
   # Takes a hash of SUNETIDs and roles.
   # Rewrites roleMetadata to reflect the contents of the hash.
-  # Example input
-  #   {
-  #     "brown"   => "collection-manager",
-  #     "dblack"  => "collection-manager",
-  #     "ggreen"  => "collection-depositor",
-  #   }
+  # Example input: TODO (also see unit test).
   def person_roles= *args
     apo.roleMetadata.remove_nodes(:role)
-    args.first.each { |id, role|
-      apo.roleMetadata.add_person_with_role(id, role)
+    h = args.first
+    h.keys.sort { |a,b| a.to_i <=> b.to_i }.each { |k|
+      id   = h[k]['id'].strip
+      role = h[k]['role'].strip
+      apo.roleMetadata.add_person_with_role(id, role) unless id == ''
     }
   end
   

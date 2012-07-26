@@ -29,29 +29,10 @@ class HydrusCollectionsController < ApplicationController
     redirect_to edit_polymorphic_path(collection)
   end
 
-  def person_roles_data(phc)
-    # Takes a hash containing info like this:
-    #   {
-    #     "person_id"   => {"0"=>"ggreen",               "1"=>"bblack"},
-    #     "person_role" => {"0"=>"collection-depositor", "1"=>"collection-manager"},
-    #   }
-    # Uses that info to return hash with SUNETIDs as keys and roles as values.
-    h = {}
-    phc['person_id'].each { |i, id|
-      h[id] = phc['person_role'][i]
-    }
-    return h
-  end
-
   def update
     notice = []
     phc = params["hydrus_collection"]
 
-    phc[:person_roles] = person_roles_data(phc) if (
-      phc and
-      (phc.has_key?('person_id') or phc.has_key?('person_role'))
-    )
-    
     @document_fedora.update_attributes(phc) if phc
     if params.has_key?(:add_link)
       @document_fedora.descMetadata.insert_related_item
@@ -90,7 +71,7 @@ class HydrusCollectionsController < ApplicationController
         if params.has_key?(:add_link)
           render "add_link", :locals=>{:index=>@document_fedora.related_item_title.length-1}
         elsif params.has_key?(:add_person)
-          render "add_person", :locals=>{:index=>@document_fedora.person_id.length-1}
+          render "add_person", :locals=>{:add_index=>@document_fedora.person_id.length-1}
         else
           render :json => tidy_response_from_update(@response)
         end
@@ -109,7 +90,7 @@ class HydrusCollectionsController < ApplicationController
 
   # remove an 'actor' (person or group) form the roleMetadata
   def destroy_actor
-    @document_fedora.remove_actor(params[:actor_id])
+    @document_fedora.remove_actor(params[:actor_id], params[:role])
     @document_fedora.save
     respond_to do |want|
       want.html {redirect_to :back}

@@ -33,9 +33,9 @@ class Hydrus::RoleMetadataDS < ActiveFedora::NokogiriDatastream
     t.item_depositor       :ref => [:role], :attributes => {:type => 'item-depositor'}
   end
 
-  def get_person_role(person_id)
-    find_by_xpath("/roleMetadata/role[person/identifier='#{person_id}']/@type").text
-  end
+  # def get_person_role(person_id)
+  #   find_by_xpath("/roleMetadata/role[person/identifier='#{person_id}']/@type").text
+  # end
 
   def to_solr(solr_doc=Hash.new, *args)
     find_by_xpath('/roleMetadata/role/*').each do |actor|
@@ -89,10 +89,18 @@ class Hydrus::RoleMetadataDS < ActiveFedora::NokogiriDatastream
     add_hydrus_child_node(role_node, :group, group_type)
   end
 
-  def delete_actor(identifier)
+  # def get_person_roles(person)
+  #   q = "//role/person[identifier='#{person}']"
+  #   nodes = find_by_xpath(q)
+  #   return nodes.map { |n| n.parent['type'] }
+  # end
+
+  def delete_actor(identifier, role)
     # NOTE: does NOT remove role node if it becomes empty, which is OK.
-    person_node = find_by_xpath("/roleMetadata/role/person[identifier='#{identifier}']")
-    person_node.remove
+    q = "/roleMetadata/role[@type='#{role}']/person[identifier='#{identifier}']"
+    node = find_by_xpath(q).first
+    return unless node
+    node.remove
     content_will_change!
   end
 
