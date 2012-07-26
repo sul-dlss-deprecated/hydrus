@@ -40,3 +40,6 @@ it exists, else "not released". Display format: 31-Jan-2012. [waiting on
 workflow discussion]
 
 Use reified WFs rather than putting them in the APO.
+
+Collection create: APO.roleMetadata: set the value of <name> for the
+collection-manager [waiting on LDAP].

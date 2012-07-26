@@ -15,7 +15,7 @@ describe("Collection create", :type => :request, :integration => true) do
     Dor::Config.configure.suri.mint_ids = @prev_mint_ids
   end
 
-  it "should be able to create a new Collection, with APO and workflows" do
+  it "should be able to create a new Collection, with APO and related info" do
     ni = hash2struct(
       :title    => 'title_foo',
       :abstract => 'abstract_foo',
@@ -45,6 +45,8 @@ describe("Collection create", :type => :request, :integration => true) do
     wf_nodes = coll.workflows.find_by_terms(:workflow)
     wf_nodes.size.should == 1
     wf_nodes.first[:id].should == 'hydrusAssemblyWF'
+    # Check person roles of the APO.roleMetadata.
+    coll.person_roles.should == { "collection-manager" => { "archivist1" => true } } 
     # Delete objects.
     coll.delete
     apo.delete

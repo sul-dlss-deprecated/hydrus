@@ -21,6 +21,10 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
     Dor::Config.hydrus.workflow_steps.keys.each do |wf_name|
       apo.administrativeMetadata.insert_workflow(wf_name)
     end
+    # Add descMetadata.
+
+    # Add roleMetadata with current user and collection-manager.
+    apo.roleMetadata.add_person_with_role(user, 'collection-manager')
     # Save and return.
     apo.save
     return apo

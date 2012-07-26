@@ -17,10 +17,6 @@ descMetadata:
     - needs to be created: for now just a title node.
     - Lynn will give us a spec for the rest.
 
-roleMetadata:
-    - create datastream and set the collection-manager as the current logged-in user
-    - set the value of <name> (need to get from webauth or LDAP)
-
 
 --------------------------------
 Advancing hydrusAssemblyWF steps
