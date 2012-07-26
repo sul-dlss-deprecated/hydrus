@@ -12,17 +12,18 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
 
   def self.create(user)
     # Create the object, with the correct model.
-    args = [user, 'adminPolicy', Dor::Config.ur_apo_druid]
+    dconf = Dor::Config
+    args = [user, 'adminPolicy', dconf.ur_apo_druid]
     apo  = Hydrus::GenericObject.register_dor_object(*args)
     apo  = apo.adapt_to(Hydrus::AdminPolicyObject)
     apo.remove_relationship :has_model, 'info:fedora/afmodel:Dor_AdminPolicyObject'
     apo.assert_content_model
     # Add the default workflows.
-    Dor::Config.hydrus.workflow_steps.keys.each do |wf_name|
+    dconf.hydrus.workflow_steps.keys.each do |wf_name|
       apo.administrativeMetadata.insert_workflow(wf_name)
     end
-    # Add descMetadata.
-
+    # Add minimal descMetadata with a title.
+    apo.title = dconf.hydrus.initial_apo_title
     # Add roleMetadata with current user and collection-manager.
     apo.roleMetadata.add_person_with_role(user, 'collection-manager')
     # Save and return.
@@ -47,6 +48,12 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
   end  
   
   has_metadata(
+    :name => "descMetadata",
+    :type => Hydrus::DescMetadataDS,
+    :label => 'Descriptive Metadata',
+    :control_group => 'M')
+
+  has_metadata(
     :name => "administrativeMetadata",
     :type => Hydrus::AdministrativeMetadataDS,
     :label => 'Administrative Metadata',
@@ -57,6 +64,9 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
     :type => Hydrus::RoleMetadataDS,
     :label => 'Role Metadata',
     :control_group => 'M')
+
+  # descMetadata
+  delegate :title, :to => "descMetadata", :unique => true
 
   # administrativeMetadata
   delegate(:deposit_status, :to => "administrativeMetadata",

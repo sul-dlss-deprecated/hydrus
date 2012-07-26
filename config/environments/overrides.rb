@@ -74,6 +74,8 @@ Dor::Config.configure do
         { :name => "cleanup",              :status => "waiting",   :lifecycle => "accessioned" },
       ],
     })
+
+    initial_apo_title('Intial Hydrus APO title')
   end
 
 end

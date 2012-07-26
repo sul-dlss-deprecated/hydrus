@@ -44,9 +44,11 @@ describe("Collection create", :type => :request, :integration => true) do
     # Check workflow of Collection.
     wf_nodes = coll.workflows.find_by_terms(:workflow)
     wf_nodes.size.should == 1
-    wf_nodes.first[:id].should == 'hydrusAssemblyWF'
+    wf_nodes.first[:id].should == Dor::Config.hydrus.workflow_steps.keys.first.to_s
     # Check person roles of the APO.roleMetadata.
     coll.person_roles.should == { "collection-manager" => { "archivist1" => true } } 
+    # Check APO.descMetadata.
+    apo.title.should == Dor::Config.hydrus.initial_apo_title
     # Delete objects.
     coll.delete
     apo.delete
