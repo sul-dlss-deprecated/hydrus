@@ -4,16 +4,16 @@ without clicking Save after each one.
 Submit relevant (or all) form data on addition of multi-valued fields (issues
 w/ non-linear indexed role MD)
 
-Collection View: Without javascript: Make sure Open Collection button is not 
-enabled until all required fields are filled out (currently, it is enabled with 
+Collection View: Without javascript: Make sure Open Collection button is not
+enabled until all required fields are filled out (currently, it is enabled with
 empty form).
 
-Move Open Collection/Close Collection button and delete collection trash icon 
-and associated text to Collection View "What you can do" box from Collection 
+Move Open Collection/Close Collection button and delete collection trash icon
+and associated text to Collection View "What you can do" box from Collection
 Edit Actions box.
 
-Collection View: "What you can do"  box should show trash icon with "Cannot 
-discard collection because it contains items." label under Open Collection 
+Collection View: "What you can do" box should show trash icon with "Cannot
+discard collection because it contains items." label under Open Collection
 button if collection has items.
 
 Collection and Item View pages: Improve display of main content area for both 
@@ -29,9 +29,94 @@ fields.
 Item Edit: form for a new item should be populated with default values for the 
 embargo and license fields.
 
+
+--------------------------------------------------
+Updating info when Collections/Items are published
+--------------------------------------------------
+
+When Coll/Item is published, use workflow service to advance hydrusAssemblyWF:
+ submit = completed
+ approve = completed # If approval/review not needed
+
+When Coll/Item is approved (either automatically or by user), use workflow service to:
+ advance hydrusAssemblyWF
+ start-assembly = completed
+ initialice the assemblyWF
+ "#{Dor::Config.dor.service_root}/dor/v1/objects/#{@pid}/apo_workflows/assemblyWF"
+
+APO.identityMetadata.objectLabel = "APO for #{Collection.title}"
+
+APO.descMetadata.title = "APO for #{Collection.title}"
+
+APO.defaultObjectRights: create datastream.
+
+
+------------
+APO creation
+------------
+
+For reference, see the Revs APO:
+ https://dor-prod.stanford.edu/fedora/objects/druid:qv648vd4392/datastreams
+
+RELS-EXT:
+ - Hydrus app needs to add hydra:referencesAgreement:
+ <rdf:Description rdf:about="info:fedora/druid:[apo-id]">
+ <hydra:referencesAgreement rdf:resource="info:fedora/druid:mc322hh4254"/>
+
+ - Hydrus app should add the hydra namespace if not already there:
+ xmlns:hydra="http://projecthydra.org/ns/relations#"
+
+
+-------------------
+Collection creation
+-------------------
+
+identityMetadata:
+ - objectType: needs to be set to both 'collection' and 'set'
+ - refresh objectLabel when Collection is published
+ - add another tag: "Hydrus : collection"
+
+rightsMetadata:
+ - should be handled automatically as soon as APO has defaultObjectRights
+ - but APO does not get that stream until user clicks publish? [ask Lynn]
+
+roleMetadata:
+ - create the datastream? [not in checklist; ask Lynn]
+
+
+-------------
+Item creation
+-------------
+
+identityMetadata:
+ - refresh objectLabel when Item is published
+ - add another tag: "hydrus : [itemtype]"
+ - for now hard-code itemtype = dataset
+ - need to figure out where this info will be stored in object
+
+embargo datastream:
+ - create the DS, using default embargo info from APO
+ - ask Willy about services available for embargo management
+
+rightsMetadata:
+ - should be handled automatically as soon as APO has defaultObjectRights
+ - this DS will contain the Item-level license info
+ - this DS will contain the Item-level visibility info [confirm with Lynn]
+
+roleMetadata:
+ - create the datastream
+ - set the item-depositor as the current logged-in user
+
+
 -------
 WAITING
 -------
+
+Events datastreams for Collections and Items: create datastreams and add events
+to them. [waiting on spec for the relevant events and the stream content]
+
+Collection create/edit: need place to store whether Collection requires
+approval/review. Also need UI component.
 
 Store "agree to terms" checkbox for item [we need a place to store this].
 
@@ -43,3 +128,5 @@ Use reified WFs rather than putting them in the APO.
 
 Collection create: APO.roleMetadata: set the value of <name> for the
 collection-manager [waiting on LDAP].
+
+Collection create: APO.descMetadata. Flesh out. [waiting on spec from Lynn]
