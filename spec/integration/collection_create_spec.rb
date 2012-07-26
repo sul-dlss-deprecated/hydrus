@@ -15,7 +15,7 @@ describe("Collection create", :type => :request, :integration => true) do
     Dor::Config.configure.suri.mint_ids = @prev_mint_ids
   end
 
-  it "should be able to create a new Collection and an new APO" do
+  it "should be able to create a new Collection, with APO and workflows" do
     ni = hash2struct(
       :title    => 'title_foo',
       :abstract => 'abstract_foo',
@@ -41,6 +41,10 @@ describe("Collection create", :type => :request, :integration => true) do
     # Get the APO of the Collection.
     apo = coll.apo
     apo.should be_instance_of Hydrus::AdminPolicyObject
+    # Check workflow of Collection.
+    wf_nodes = coll.workflows.find_by_terms(:workflow)
+    wf_nodes.size.should == 1
+    wf_nodes.first[:id].should == 'hydrusAssemblyWF'
     # Delete objects.
     coll.delete
     apo.delete

@@ -1,9 +1,5 @@
-RoleMD only takes two empty nodes per role.
-
-Collection Edit integration test for roles uses index for filling out form but
-data added is not necessarily sequential.
-
-Move hash/arrays from hydrus_form_helper to applicable models.
+Collection Edit: with Javascript enabled, cannot add more than one person-role
+without clicking Save after each one.
 
 Submit relevant (or all) form data on addition of multi-valued fields (issues
 w/ non-linear indexed role MD)
@@ -42,3 +38,5 @@ Store "agree to terms" checkbox for item [we need a place to store this].
 Item view: release date. See Consul page. Date from "published" lifecycle when
 it exists, else "not released". Display format: 31-Jan-2012. [waiting on
 workflow discussion]
+
+Use reified WFs rather than putting them in the APO.

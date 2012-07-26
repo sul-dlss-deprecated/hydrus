@@ -5,11 +5,6 @@ APO-of-Collection
 For reference, see the Revs APO:
     https://dor-prod.stanford.edu/fedora/objects/druid:qv648vd4392/datastreams
 
-workflows:
-    - write integration test to confirm that new Collection has hydrusAssemblyWF
-    - write integration test to confirm that new Item has hydrusAssemblyWF
-    - also check lifecycle=registered
-
 RELS-EXT:
     - Hydrus app needs to add hydra:referencesAgreement:
        <rdf:Description rdf:about="info:fedora/druid:[apo-id]">
@@ -23,7 +18,7 @@ descMetadata:
     - Lynn will give us a spec for the rest.
 
 roleMetadata:
-    - set the collection-manager as the current logged-in user (done already?)
+    - create datastream and set the collection-manager as the current logged-in user
     - set the value of <name> (need to get from webauth or LDAP)
 
 
@@ -75,7 +70,7 @@ Collection approval/review
     - need UI component
 
 roleMetadata:
-    - create the datastream
+    - create the datastream? [not in checklist]
 
 
 ----
