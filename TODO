@@ -50,6 +50,10 @@ APO.descMetadata.title = "APO for #{Collection.title}"
 
 APO.defaultObjectRights: create datastream.
 
+Collection.identityMetadata.objectLabel = Collection.title
+
+Item.identityMetadata.objectLabel = Item.title
+
 
 ------------
 APO creation
@@ -73,7 +77,6 @@ Collection creation
 
 identityMetadata:
  - objectType: needs to be set to both 'collection' and 'set'
- - refresh objectLabel when Collection is published
  - add another tag: "Hydrus : collection"
 
 rightsMetadata:
@@ -81,7 +84,8 @@ rightsMetadata:
  - but APO does not get that stream until user clicks publish? [ask Lynn]
 
 roleMetadata:
- - create the datastream? [not in checklist; ask Lynn]
+ - create the datastream
+ - set the collection-depositor as the current logged-in user
 
 
 -------------
@@ -89,7 +93,6 @@ Item creation
 -------------
 
 identityMetadata:
- - refresh objectLabel when Item is published
  - add another tag: "hydrus : [itemtype]"
  - for now hard-code itemtype = dataset
  - need to figure out where this info will be stored in object
