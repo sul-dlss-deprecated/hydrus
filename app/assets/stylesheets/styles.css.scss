@@ -283,7 +283,6 @@ noscript #item-actions, noscript #collection-actions {
 }
 .actions-box.item-status,
 .actions-box.collection-settings {
-	.unspecified {font-style: italic;}
 	.dl-horizontal:after {
 	  display: table;
 	  content: "";
@@ -312,6 +311,8 @@ noscript #item-actions, noscript #collection-actions {
 }
 
 /* object view */
+.unspecified {font-style: italic;}
+
 #hydrus_items-show {
 	#sidebar {margin-top: 25px;}
 	table.hydrus-striped-table {

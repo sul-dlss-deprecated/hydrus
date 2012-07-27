@@ -64,13 +64,13 @@
 
   <dl class="dl-horizontal object-view">
 
-    <h3><%= @document_fedora.title %></h3>
+    <h3><%= hydrus_object_setting_value(@document_fedora.title) %></h3>
 
     <dt>Description</dt>
-    <dd><%= @document_fedora.abstract %></dd>
+    <dd><%= hydrus_object_setting_value(@document_fedora.abstract) %></dd>
 
     <dt>Contact</dt>
-    <dd><%= @document_fedora.contact %></dd>
+    <dd><%= hydrus_object_setting_value(@document_fedora.contact) %></dd>
 
     <%- @document_fedora.related_items.each_with_index do |related_item, index| -%>
       <dt class="<%= 'hidden-label' if index > 0 %>">Related links</dt>
