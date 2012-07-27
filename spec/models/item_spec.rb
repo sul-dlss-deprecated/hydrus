@@ -199,6 +199,23 @@ describe Hydrus::Item do
 
   end
   
+  describe "license" do
+    subject {Hydrus::Item.new}
+    it "should set the human readable version properly" do
+      subject.rightsMetadata.use.human.first.should be_blank
+      subject.license = "cc-by-nc"
+      subject.rightsMetadata.use.human.first.should == "CC BY-NC Attribution-NonCommercial"
+    end
+    it "should set the type attribute properly depending on the license applied" do
+       subject.rightsMetadata.use.human.first.should be_blank
+       subject.license = "cc-by-nc"
+       subject.rightsMetadata.ng_xml.to_s.should match(/type=\"creativeCommons\"/)
+       subject.license = "odc-odbl"
+       subject.rightsMetadata.ng_xml.to_s.should_not match(/type=\"creativeCommons\"/)
+       subject.rightsMetadata.ng_xml.to_s.should match(/type=\"openDataCommons\"/)
+    end
+  end
+  
   describe "class methods" do
     it "should provide an array of roles" do
       Hydrus::Item.roles.should be_a Array

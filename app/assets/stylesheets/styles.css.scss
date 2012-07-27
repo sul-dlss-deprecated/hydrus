@@ -173,6 +173,11 @@ form.step .actor {
 	input {width: auto;}
 }
 
+/* Item level embargo editing */
+.embargo label {
+	display: inline;
+}
+
 /* search results pagination */
 .pagination {
 	h2 {@include hidden-label;}

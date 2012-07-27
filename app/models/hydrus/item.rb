@@ -16,6 +16,35 @@ class Hydrus::Item < Hydrus::GenericObject
     end
   end
   
+  def license *args
+    unless (rightsMetadata.use.machine *args).first.blank?
+      (rightsMetadata.use.machine *args).first
+    else
+      # Use the collection's license as a default in the absense of an item level license.
+      collection[0].license
+    end
+  end
+  
+  def license= *args
+    rightsMetadata.remove_nodes(:use)
+    Hydrus::Collection.licenses.each do |type,licenses|
+      licenses.each do |license| 
+        if license.last == args.first
+          # I would like to do this type_attribute part better.
+          # Maybe infer the insert method and call send on rightsMetadata.
+          type_attribute = Hydrus::Collection.license_commons[type]
+          if type_attribute == "creativeCommons"
+            rightsMetadata.insert_creative_commons
+          elsif type_attribute == "openDataCommons"
+            rightsMetadata.insert_open_data_commons
+          end
+          rightsMetadata.use.machine = *args
+          rightsMetadata.use.human = license.first
+        end
+      end
+    end
+  end
+  
   def files
     Hydrus::ObjectFile.find_all_by_pid(pid,:order=>'weight')  # coming from the database
   end
@@ -30,6 +59,12 @@ class Hydrus::Item < Hydrus::GenericObject
     :type => Hydrus::RoleMetadataDS,
     :label => 'Role Metadata',
     :control_group => 'M')
+  
+  has_metadata(
+    :name => "rightsMetadata",
+    :type => Hydrus::RightsMetadataDS,
+    :label => 'Rights Metadata',
+    :control_group => "M")
 
   delegate(:item_depositor_id, :to => "roleMetadata",
            :at => [:item_depositor, :person, :identifier], :unique => true)
@@ -80,6 +115,10 @@ class Hydrus::Item < Hydrus::GenericObject
       "Principal Investigator",
       "Publisher",
       "Sponsor" ]
+  end
+  
+  def self.discovery_roles
+    ["everyone", "Stanford only"]
   end
 
 end

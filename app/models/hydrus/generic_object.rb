@@ -85,6 +85,19 @@ class Hydrus::GenericObject < Dor::Item
       ]
     }
   end
+  
+  def self.license_human(code)
+    licenses.each do |type, license|
+      license.each do |lic|
+        return lic.first if code == lic.last
+      end
+    end
+  end
+  
+  def self.license_commons
+    {'Creative Commons Licenses' => "creativeCommons",
+      'Open Data Commons Licenses' => "openDataCommons"}
+  end
 
   private
 

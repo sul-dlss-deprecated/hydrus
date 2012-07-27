@@ -118,7 +118,7 @@
 
 <%= hydrus_form_header{"Release and visibility of content"} %>
   <!-- Embargo -->
-  <div class="row">
+  <div class="row embargo">
     <div class="span9 sub-section">
     <% case @document_fedora.collection[0].embargo_option %>
     <% when 'none' %>
@@ -128,7 +128,8 @@
       </span>
     <% when 'varies' %>
       This item will be released for discovery and download 
-      [radio buttons and datepicker]
+      <%#= f.radio_button :embargo, "immediate" %> <%= f.label :embargo_immediate, "immediately" %>
+      <%#= f.radio_button :embargo, "future" %> <%= f.label :embargo_future, "on this date" %>
     <% when 'fixed' %>
       This item will be released for discovery and download 
       <span class="highlight-value">
@@ -149,7 +150,7 @@
       </span>
     <% when 'varies' %>
       After its release, this item can be downloaded and discovered by 
-      [select dropdown of visibility options]
+      <%#= f.select :visibility, options_for_select(Hydrus::Item.discovery_roles, @document_fedora.visibility) %>
     <% when 'stanford' %>
       After its release, this item can be downloaded and discovered by 
       <span class="highlight-value">
@@ -166,12 +167,12 @@
     <% when 'none' %>
       No license will be applied to this item. All rights reserved by content creator.
     <% when 'varies' %>
-      This item will be licensed under [select dropdown of licenses]
+      This item will be licensed under 
+      <%= f.select :license, grouped_options_for_select(Hydrus::Collection.licenses, @document_fedora.license), {:prompt => 'Select license'}, {:class => 'inline-select right', :id => "license_option_" } %>
     <% when 'fixed' %>
       This work will be licensed under a 
       <span class="highlight-value">
-        <!-- TODO: This needs to show full license text -->
-        <%= @document_fedora.collection[0].license %>
+        <%= Hydrus::Collection.license_human(@document_fedora.collection[0].license) %>
       </span>
     <% end %>
     </div>
@@ -188,11 +189,5 @@
     <%= render :partial => "actions_box", :locals => {:id=>"nojs"}%>
   </noscript>
 <%- end -%>
-
-<% render(
-     :partial => "hydra/permissions/index", 
-     :locals  => { :document => @document_fedora, :asset_id => params[:id] }
-   )
-%>
 
 <div id="druid-footer"><%= @document_fedora.pid %></div>

@@ -85,6 +85,18 @@ describe Hydrus::GenericObject do
     it "should define a licenses hash" do
       Hydrus::GenericObject.licenses.should be_a Hash
     end
-    
+    describe "license_commons" do
+      it "should define be a hash" do
+        Hydrus::GenericObject.license_commons.should be_a Hash
+      end
+      it "keys should all match license types" do
+        Hydrus::GenericObject.license_commons.keys.should == Hydrus::GenericObject.licenses.keys
+      end
+    end
+    it "should have a license_human method that will return a human readible value for a license code" do
+      Hydrus::GenericObject.license_human("cc-by").should == "CC BY Attribution"
+      Hydrus::GenericObject.license_human("cc-by-nc-sa").should == "CC BY-NC-SA Attribution-NonCommercial-ShareAlike"
+      Hydrus::GenericObject.license_human("odc-odbl").should == "ODC-ODbl Open Database License"
+    end
   end
 end

@@ -29,7 +29,6 @@ fields.
 Item Edit: form for a new item should be populated with default values for the 
 embargo and license fields.
 
-
 --------------------------------------------------
 Updating info when Collections/Items are published
 --------------------------------------------------
@@ -109,6 +108,7 @@ rightsMetadata:
 roleMetadata:
  - create the datastream
  - set the item-depositor as the current logged-in user
+ - add namespace
 
 
 -------
