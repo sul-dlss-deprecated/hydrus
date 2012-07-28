@@ -24,6 +24,9 @@ so that only required fields and fields with values are shown. Display
     "unspecified" attribute (i.e., attribute that should respond positively
     to .blank? but doesn't because it contains empty string(s)) difficult.
 
+Write tests to be sure correct thing is happening when displaying "not
+specified" for empty fields.
+
 Collection Edit: Do some minor styling to add space around form elements in 
 Roles section.
 
