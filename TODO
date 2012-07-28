@@ -16,15 +16,16 @@ Collection View: "What you can do" box should show trash icon with "Cannot
 discard collection because it contains items." label under Open Collection
 button if collection has items.
 
-Collection and Item View pages: Improve display of main content area for both 
-so that only required fields and fields with values are shown. Display 
+Collection and Item View pages: Improve display of main content area for both
+so that only required fields and fields with values are shown. Display
 "not specified" for required field values that are empty.
+  - Need way to handle the fact that saving a collection creates one empty
+    (invalid) related item, actor, etc., which makes checking for an
+    "unspecified" attribute (i.e., attribute that should respond positively
+    to .blank? but doesn't because it contains empty string(s)) difficult.
 
 Collection Edit: Do some minor styling to add space around form elements in 
 Roles section.
-
-Item View sidebar Status box: Update so there are no empty values for displayed
-fields.
 
 Item Edit: form for a new item should be populated with default values for the 
 embargo and license fields.
