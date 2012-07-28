@@ -216,6 +216,22 @@ describe Hydrus::Item do
     end
   end
   
+  describe "visibility" do
+    subject {Hydrus::Item.new}
+    it "should remove the stanford group when set to world/everyone and should remove the world group when set to stanford" do
+      subject.rightsMetadata.read_access.machine.world.should == []
+      subject.rightsMetadata.read_access.machine.group.include?("stanford").should_not be_true
+      subject.visibility = "stanford"
+      subject.rightsMetadata.read_access.machine.world.should == []
+      subject.rightsMetadata.read_access.machine.group.include?("stanford").should be_true
+      subject.visibility = "world"
+      subject.visibility.should == ["world"]
+      subject.rightsMetadata.read_access.machine.world.should_not be_blank
+      subject.rightsMetadata.read_access.machine.group.include?("stanford").should_not be_true
+    end
+  end
+  
+  
   describe "class methods" do
     it "should provide an array of roles" do
       Hydrus::Item.roles.should be_a Array

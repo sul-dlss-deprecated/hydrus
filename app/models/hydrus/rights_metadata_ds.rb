@@ -6,7 +6,10 @@ class Hydrus::RightsMetadataDS < ActiveFedora::NokogiriDatastream
     
     t.access do
       t.human
-      t.machine
+      t.machine do
+        t.world
+        t.group
+      end
     end
     
     t.discover_access :ref => [:access], :attributes => {:type => "discover"}
@@ -38,6 +41,16 @@ class Hydrus::RightsMetadataDS < ActiveFedora::NokogiriDatastream
   
   def insert_open_data_commons
     add_hydrus_child_node(ng_xml.root, :open_data_commons)
+  end
+  
+  def remove_world_node(type)
+    ns = "xmlns:"
+    find_by_xpath("/#{ns}rightsMetadata/#{ns}access[@type='#{type}']/#{ns}machine/#{ns}world").remove
+  end
+  
+  def remove_group_node(type,group)
+    ns = "xmlns:"
+    find_by_xpath("/#{ns}rightsMetadata/#{ns}access[@type='#{type}']/#{ns}machine/#{ns}group[text()='#{group}']").remove
   end
   
   

@@ -150,7 +150,7 @@
       </span>
     <% when 'varies' %>
       After its release, this item can be downloaded and discovered by 
-      <%#= f.select :visibility, options_for_select(Hydrus::Item.discovery_roles, @document_fedora.visibility) %>
+      <%= f.select :visibility, options_for_select(Hydrus::Item.discovery_roles.to_a, @document_fedora.visibility) %>
     <% when 'stanford' %>
       After its release, this item can be downloaded and discovered by 
       <span class="highlight-value">

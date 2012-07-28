@@ -45,6 +45,23 @@ class Hydrus::Item < Hydrus::GenericObject
     end
   end
   
+  def visibility *args
+    groups = []
+    (rightsMetadata.read_access.machine.group *args).collect{|g| groups << g}
+    (rightsMetadata.read_access.machine.world *args).collect{|g| groups << "world" if g.blank?}
+    groups
+  end
+  
+  def visibility= *args
+    if args.first == "world"
+      rightsMetadata.remove_group_node("read", "stanford")
+      rightsMetadata.read_access.machine.world = ""
+    elsif args.first == "stanford"
+      rightsMetadata.remove_world_node("read")
+      rightsMetadata.read_access.machine.group = rightsMetadata.read_access.machine.group << args.first
+    end
+  end
+  
   def files
     Hydrus::ObjectFile.find_all_by_pid(pid,:order=>'weight')  # coming from the database
   end
@@ -118,7 +135,7 @@ class Hydrus::Item < Hydrus::GenericObject
   end
   
   def self.discovery_roles
-    ["everyone", "Stanford only"]
+    {"everyone" => "world", "Stanford only" => "stanford"}
   end
 
 end
