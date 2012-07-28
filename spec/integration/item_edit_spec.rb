@@ -261,5 +261,42 @@ describe("Item edit", :type => :request, :integration => true) do
     page.should_not have_css("##{new_citation}")
     page.should_not have_css("##{new_delete_button}")
   end
+  
+  it "should have editible license information once the parent collection's license is set to varies" do
+    varies_radio = "hydrus_collection_license_option_varies"
+    collection_licenses = "license_option_varies"
+    new_collection_license = "CC BY-NC Attribution-NonCommercial"
+    item_licenses = "hydrus_item_license"
+    new_item_license = "PDDL Public Domain Dedication and License"
+    
+    login_as_archivist1
+    should_visit_edit_page(Hydrus::Collection.find("druid:oo000oo0003"))
+    
+    choose varies_radio
+    select new_collection_license , :from => collection_licenses
+    click_button "Save"
+    page.should have_content(@notice)
+    
+    should_visit_edit_page(@hi)
+    page.should have_selector("##{item_licenses}")
+
+    # verifying that the default license set is from the collection
+    within("select##{item_licenses}") do
+      selected_license = find("optgroup/option[@selected='selected']").text
+      selected_license.should == new_collection_license
+    end
+    
+    select new_item_license, :from => item_licenses
+
+    click_button "Save"
+    page.should have_content(@notice)
+    
+    should_visit_edit_page(@hi)
+    
+    within("select##{item_licenses}") do
+      selected_license = find("optgroup/option[@selected='selected']").text
+      selected_license.should == new_item_license
+    end
+  end
 
 end

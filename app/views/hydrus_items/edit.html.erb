@@ -168,7 +168,7 @@
       No license will be applied to this item. All rights reserved by content creator.
     <% when 'varies' %>
       This item will be licensed under 
-      <%= f.select :license, grouped_options_for_select(Hydrus::Collection.licenses, @document_fedora.license), {:prompt => 'Select license'}, {:class => 'inline-select right', :id => "license_option_" } %>
+      <%= f.select :license, grouped_options_for_select(Hydrus::Collection.licenses, @document_fedora.license), {:prompt => 'Select license'}, {:class => 'inline-select right' } %>
     <% when 'fixed' %>
       This work will be licensed under a 
       <span class="highlight-value">
