@@ -27,9 +27,6 @@ so that only required fields and fields with values are shown. Display
 Write tests to be sure correct thing is happening when displaying "not
 specified" for empty fields.
 
-Collection Edit: Do some minor styling to add space around form elements in 
-Roles section.
-
 Item Edit: form for a new item should be populated with default values for the 
 embargo and license fields.
 
