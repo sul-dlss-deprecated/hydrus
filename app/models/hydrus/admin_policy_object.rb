@@ -24,7 +24,7 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
     end
     # Add minimal descMetadata with a title.
     apo.title = dconf.hydrus.initial_apo_title
-    # Add roleMetadata with current user and collection-manager.
+    # Add roleMetadata with current user as collection-manager.
     apo.roleMetadata.add_person_with_role(user, 'collection-manager')
     # Save and return.
     apo.save

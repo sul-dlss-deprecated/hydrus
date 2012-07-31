@@ -20,6 +20,8 @@ class Hydrus::Item < Hydrus::GenericObject
     item.add_to_collection(coll.pid)
     # Add some Hydrus-specific info to identityMetadata.
     item.augment_identity_metadata(:dataset)  # TODO: hard-coded value.
+    # Add roleMetadata with current user as item-depositor.
+    # item.roleMetadata.add_person_with_role(user, 'item-depositor')
     # Save and return.
     item.save
     return item

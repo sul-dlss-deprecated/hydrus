@@ -44,7 +44,8 @@
           <objectLabel>How Couples Meet and Stay Together</objectLabel>
           <objectCreator>DOR</objectCreator>
           <otherId name="uuid">cea858c0-9ff1-11e1-baef-02231e89cef0</otherId>
-          <tag>Project : DOR</tag>
+          <tag>Project : Hydrus</tag>
+          <tag>Hydrus : dataset</tag>
         </identityMetadata>
       </foxml:xmlContent>
     </foxml:datastreamVersion>

@@ -25,10 +25,12 @@
         <identityMetadata>
           <objectId>druid:oo000oo0004</objectId>
           <objectType>collection</objectType>
+          <objectType>set</objectType>
           <objectLabel>Large Network Dataset Collection</objectLabel>
           <objectCreator>DOR</objectCreator>
           <otherId name="uuid">d96e19f2-9ff1-11e1-86c5-02231e89cec5</otherId>
-          <tag>Project : DOR</tag>
+          <tag>Project : Hydrus</tag>
+          <tag>Hydrus : collection</tag>
         </identityMetadata>
       </foxml:xmlContent>
     </foxml:datastreamVersion>
@@ -65,6 +67,20 @@
           <note type="contact">Contact Superman</note>
           <!-- <accessCondition displayLabel="Terms of Use" type="useAndReproduction">Data cannot be used to identify individuals. Data cannot be redistributed for a fee. Please inform the collection contact by email about research or other work derived from use of this data, and please use the preferred citation as provided.</accessCondition> -->
         </mods>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+  <foxml:datastream ID="roleMetadata" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
+    <foxml:datastreamVersion ID="roleMetadata.0" LABEL="Role Metadata" CREATED="2011-07-05T20:47:26.359Z" MIMETYPE="text/xml" SIZE="405">
+      <foxml:xmlContent>
+        <roleMetadata objectId="druid:oo000oo0004">
+          <role type="collection-depositor">
+             <person>
+                <identifier type="sunetid">ggreen</identifier>
+                <name>Green, Greg</name>
+             </person>
+          </role>
+        </roleMetadata>
       </foxml:xmlContent>
     </foxml:datastreamVersion>
   </foxml:datastream>
