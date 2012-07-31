@@ -30,6 +30,7 @@ specified" for empty fields.
 Item Edit: form for a new item should be populated with default values for the 
 embargo and license fields.
 
+
 --------------------------------------------------
 Updating info when Collections/Items are published
 --------------------------------------------------
@@ -55,66 +56,52 @@ Collection.identityMetadata.objectLabel = Collection.title
 Item.identityMetadata.objectLabel = Item.title
 
 
-------------
-APO creation
-------------
+----------------------------
+Collection and Item creation  # MH
+----------------------------
 
-For reference, see the Revs APO:
- https://dor-prod.stanford.edu/fedora/objects/druid:qv648vd4392/datastreams
-
-RELS-EXT:
- - Hydrus app needs to add hydra:referencesAgreement:
- <rdf:Description rdf:about="info:fedora/druid:[apo-id]">
- <hydra:referencesAgreement rdf:resource="info:fedora/druid:mc322hh4254"/>
-
- - Hydrus app should add the hydra namespace if not already there:
- xmlns:hydra="http://projecthydra.org/ns/relations#"
-
-
--------------------
-Collection creation
--------------------
-
-identityMetadata:
+Collection.identityMetadata:
  - objectType: needs to be set to both 'collection' and 'set'
  - add another tag: "Hydrus : collection"
 
-rightsMetadata:
- - should be handled automatically as soon as APO has defaultObjectRights
- - but APO does not get that stream until user clicks publish? [ask Lynn]
-
-roleMetadata:
- - create the datastream
- - set the collection-depositor as the current logged-in user
-
-
--------------
-Item creation
--------------
-
-identityMetadata:
+Item.identityMetadata:
  - add another tag: "hydrus : [itemtype]"
  - for now hard-code itemtype = dataset
  - need to figure out where this info will be stored in object
 
-embargo datastream:
- - create the DS, using default embargo info from APO
- - ask Willy about services available for embargo management
+Collection.roleMetadata:
+ - create the datastream
+ - set the collection-depositor as the current logged-in user
 
-rightsMetadata:
- - should be handled automatically as soon as APO has defaultObjectRights
- - this DS will contain the Item-level license info
- - this DS will contain the Item-level visibility info [confirm with Lynn]
-
-roleMetadata:
+Item.roleMetadata:
  - create the datastream
  - set the item-depositor as the current logged-in user
  - add namespace
+
+Item.embargo datastream:
+ - create the DS, using default embargo info from APO
+ - ask Willy about services available for embargo management
 
 
 -------
 WAITING
 -------
+
+APO RELS-EXT datastream needs to add a child node to <rdf:Description>:
+<hydra:referencesAgreement rdf:resource="info:fedora/druid:XXX"/>, where XXX is
+the PID of the global Hydrus Agreement object. [The Hydrus agreement object
+needs to be created -- need more details].
+
+Create new Collection: rightsMetadata should be created automatically, as soon
+as the corresponding APO has the defaultObjectRights datastream. However, my
+understanding is that the APO won't get this datastream until the user clicks
+Publish. [need more details from Lynn]
+
+Create new Item: rightsMetadata should be created automatically, as soon as the
+corresponding APO has the defaultObjectRights datastream. The rightsMetadata
+will contain the Item-level license and visibility info (confirm the latter).
+However, my understanding is that the APO won't get the defaultObjectRights
+datastream until the user clicks Publish. [need more details from Lynn]
 
 Events datastreams for Collections and Items: create datastreams and add events
 to them. [waiting on spec for the relevant events and the stream content]
@@ -128,7 +115,8 @@ Item view: release date. See Consul page. Date from "published" lifecycle when
 it exists, else "not released". Display format: 31-Jan-2012. [waiting on
 workflow discussion]
 
-Use reified WFs rather than putting them in the APO.
+Use reified WFs rather than putting them in the APO. [Need more info on how
+this works and its relative priority]
 
 Collection create: APO.roleMetadata: set the value of <name> for the
 collection-manager [waiting on LDAP].
