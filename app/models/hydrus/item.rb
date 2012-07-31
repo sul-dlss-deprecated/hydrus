@@ -8,6 +8,22 @@ class Hydrus::Item < Hydrus::GenericObject
   validates :files, :at_least_one=>true, :if => :clicked_publish?
   validates :terms_of_deposit, :presence => true, :if => :clicked_publish?
   validate :collection_must_be_open, :on => :create
+
+  def self.create(collection_pid, user)
+    # Create the object, with the correct model.
+    coll     = Hydrus::Collection.find(collection_pid)
+    dor_item = Hydrus::GenericObject.register_dor_object(user, 'item', coll.apo_pid)
+    item     = dor_item.adapt_to(Hydrus::Item)
+    item.remove_relationship :has_model, 'info:fedora/afmodel:Dor_Item'
+    item.assert_content_model
+    # Add the Item to the Collection.
+    item.add_to_collection(coll.pid)
+    # Add some Hydrus-specific info to identityMetadata.
+    item.augment_identity_metadata(:dataset)  # TODO: hard-coded value.
+    # Save and return.
+    item.save
+    return item
+  end
   
   # at least one of the associated collections must be open (published) to create a new item
   def collection_must_be_open

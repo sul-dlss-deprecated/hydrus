@@ -7,13 +7,17 @@ class Hydrus::Collection < Hydrus::GenericObject
   before_save :save_apo
   
   def self.create(user)
-    apo = Hydrus::AdminPolicyObject.create(user)
+    # Create the object, with the correct model.
+    apo     = Hydrus::AdminPolicyObject.create(user)
     dor_obj = Hydrus::GenericObject.register_dor_object(user, 'collection', apo.pid)
-    collection = dor_obj.adapt_to(Hydrus::Collection)
-    collection.remove_relationship :has_model, 'info:fedora/afmodel:Dor_Collection'
-    collection.assert_content_model
-    collection.save
-    return collection
+    coll    = dor_obj.adapt_to(Hydrus::Collection)
+    coll.remove_relationship :has_model, 'info:fedora/afmodel:Dor_Collection'
+    coll.assert_content_model
+    # Add some Hydrus-specific info to identityMetadata.
+    coll.augment_identity_metadata(:collection)
+    # Save and return.
+    coll.save
+    return coll
   end
 
   # this lets us check if both the apo and the collection are valid at once (used in the controller)

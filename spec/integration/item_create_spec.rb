@@ -38,6 +38,8 @@ describe("Item create", :type => :request, :integration => true) do
     wf_nodes = item.workflows.find_by_terms(:workflow)
     wf_nodes.size.should == 1
     wf_nodes.first[:id].should == 'hydrusAssemblyWF'
+    # Check identityMetadata of Item.
+    item.identityMetadata.tag.should include("Hydrus : dataset", "Project : Hydrus")
     # Delete object.
     item.delete
   end

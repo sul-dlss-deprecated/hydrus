@@ -52,14 +52,21 @@ class Hydrus::GenericObject < Dor::Item
     return rightsMetadata.discover_access.first
   end
 
-   def url
-     "http://purl.stanford.edu/#{pid}"
-   end
+  def url
+   "http://purl.stanford.edu/#{pid}"
+  end
 
   def related_items
     @related_items ||= descMetadata.find_by_terms(:relatedItem).map { |n|
       Hydrus::RelatedItem.new_from_node(n)
     }
+  end
+
+  # Adds some Hydrus-specific information to the identityMetadata.
+  def augment_identity_metadata(object_type)
+    identityMetadata.add_value(:objectType, 'set') if object_type == :collection
+    identityMetadata.add_value(:tag, "Hydrus : #{object_type}")
+    identityMetadata.content_will_change!
   end
 
   # Registers an object in Dor, and returns it.
@@ -95,21 +102,24 @@ class Hydrus::GenericObject < Dor::Item
   end
   
   def self.license_commons
-    {'Creative Commons Licenses' => "creativeCommons",
-      'Open Data Commons Licenses' => "openDataCommons"}
+    return {
+      'Creative Commons Licenses'  => "creativeCommons",
+      'Open Data Commons Licenses' => "openDataCommons",
+    }
   end
 
   private
 
   # Returns a hash of info needed to register a Dor object.
   def self.dor_registration_params(user_string, object_type, apo_pid)
-    wfs = object_type == 'adminPolicy' ? [] : [:hydrusAssemblyWF]
+    proj = 'Hydrus'
+    wfs  = object_type == 'adminPolicy' ? [] : [:hydrusAssemblyWF]
     return {
       :object_type       => object_type,
       :admin_policy      => apo_pid,
-      :source_id         => { "Hydrus" => "#{object_type}-#{user_string}-#{Time.now}" },
-      :label             => "Hydrus",
-      :tags              => ["Project : Hydrus"],
+      :source_id         => { proj => "#{object_type}-#{user_string}-#{Time.now}" },
+      :label             => proj,
+      :tags              => ["Project : #{proj}"],
       :initiate_workflow => wfs,
     }
   end

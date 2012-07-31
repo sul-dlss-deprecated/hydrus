@@ -28,13 +28,7 @@ class HydrusItemsController < ApplicationController
   end
   
   def new
-    collection = Hydrus::Collection.find(params[:collection])
-    dor_item   = Hydrus::GenericObject.register_dor_object(current_user, 'item', collection.apo_pid)
-    item       = dor_item.adapt_to(Hydrus::Item)
-    item.remove_relationship :has_model, 'info:fedora/afmodel:Dor_Item'
-    item.assert_content_model
-    item.add_to_collection(collection.pid)
-    item.save
+    item = Hydrus::Item.create(params[:collection], current_user)
     redirect_to edit_polymorphic_path(item)
   end
 

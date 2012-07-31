@@ -57,17 +57,8 @@ Item.identityMetadata.objectLabel = Item.title
 
 
 ----------------------------
-Collection and Item creation  # MH
+Collection and Item creation
 ----------------------------
-
-Collection.identityMetadata:
- - objectType: needs to be set to both 'collection' and 'set'
- - add another tag: "Hydrus : collection"
-
-Item.identityMetadata:
- - add another tag: "hydrus : [itemtype]"
- - for now hard-code itemtype = dataset
- - need to figure out where this info will be stored in object
 
 Collection.roleMetadata:
  - create the datastream

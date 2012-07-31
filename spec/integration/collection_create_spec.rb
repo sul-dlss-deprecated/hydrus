@@ -45,6 +45,9 @@ describe("Collection create", :type => :request, :integration => true) do
     wf_nodes = coll.workflows.find_by_terms(:workflow)
     wf_nodes.size.should == 1
     wf_nodes.first[:id].should == Dor::Config.hydrus.workflow_steps.keys.first.to_s
+    # Check identityMetadata of Collection.
+    coll.identityMetadata.tag.should include("Hydrus : collection", "Project : Hydrus")
+    coll.identityMetadata.objectType.should include('collection', 'set')
     # Check person roles of the APO.roleMetadata.
     coll.person_roles.should == { "collection-manager" => { "archivist1" => true } } 
     # Check APO.descMetadata.

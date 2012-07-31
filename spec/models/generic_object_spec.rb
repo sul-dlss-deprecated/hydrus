@@ -99,4 +99,20 @@ describe Hydrus::GenericObject do
       Hydrus::GenericObject.license_human("odc-odbl").should == "ODC-ODbl Open Database License"
     end
   end
+
+  it "augment_identity_metadata() should add correct tags and objectTypes" do
+    tests = {
+      :collection => '<tag>Hydrus : collection</tag><objectType>set</objectType>',
+      :dataset    => '<tag>Hydrus : dataset</tag>',
+    }
+    tests.each do |object_type, xml|
+      exp  = "<identityMetadata>#{xml}</identityMetadata>"
+      obj  = Hydrus::GenericObject.new
+      idmd = Dor::IdentityMetadataDS.new(nil, nil)
+      obj.stub(:identityMetadata).and_return(idmd)
+      obj.augment_identity_metadata(object_type)
+      idmd.ng_xml.should be_equivalent_to exp
+    end
+  end
+
 end
