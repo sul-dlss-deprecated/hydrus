@@ -1,7 +1,7 @@
 # A mixin for roleMetadata stuff.
 module Hydrus::Responsible
 
-  # Returns of hash of role info. Also see person_roles=
+  # Returns of hash of role info. See unit tests for an example.
   def person_roles
     h = {}
     roleMetadata.find_by_terms(:role, :person, :identifier).each do |n|
@@ -13,11 +13,10 @@ module Hydrus::Responsible
     return h
   end
   
-  # Takes a hash of SUNETIDs and roles.
-  # Rewrites roleMetadata to reflect the contents of the hash.
-  # Example input: TODO (also see unit test).
+  # Takes a hash of SUNETIDs and roles. See unit test for an example.
+  # Rewrites roleMetadata <person> nodes to reflect the contents of the hash.
   def person_roles= *args
-    roleMetadata.remove_nodes(:role)
+    roleMetadata.remove_nodes(:role, :person)
     h = args.first
     h.keys.sort { |a,b| a.to_i <=> b.to_i }.each { |k|
       id   = h[k]['id'].strip

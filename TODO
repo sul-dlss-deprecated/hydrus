@@ -48,8 +48,6 @@ Item.identityMetadata.objectLabel = Item.title
 Collection and Item creation
 ----------------------------
 
-Responsible: tests (relocate from elsewhere?)
-
 roleMetadata: add namespaces to fixtures.
 
 Item.embargo datastream:

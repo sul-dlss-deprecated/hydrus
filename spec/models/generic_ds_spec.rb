@@ -52,6 +52,17 @@ describe Hydrus::GenericDS do
       @rmdoc.ng_xml.should be_equivalent_to "#{@rmd_start}#{@rmd_end}"
     end
 
+    it "should be able to pass multiple terms into the method" do
+      exp_xml = <<-EOF
+        #{@rmd_start}
+          <role type="collection-manager" />
+          <role type="collection-depositor" />
+        #{@rmd_end}
+      EOF
+      @rmdoc.remove_nodes(:role, :person)
+      @rmdoc.ng_xml.should be_equivalent_to exp_xml
+    end
+
     it "should do nothing quietly called for nodes that do not exist in xml" do
       @rmdoc.remove_nodes(:item_depositor)
       @rmdoc.ng_xml.should be_equivalent_to @rmd_xml

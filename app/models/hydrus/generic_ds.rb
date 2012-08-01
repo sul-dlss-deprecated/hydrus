@@ -16,8 +16,9 @@ module Hydrus::GenericDS
     end
   end
 
-  def remove_nodes(term)
-    nodes = find_by_terms(term.to_sym)
+  def remove_nodes(*terms)
+    terms = terms.map { |t| t.to_sym }
+    nodes = find_by_terms(*terms)
     nodes.each { |n| n.remove }
     content_will_change!
   end
