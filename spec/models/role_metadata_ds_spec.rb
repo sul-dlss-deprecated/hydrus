@@ -77,12 +77,6 @@ describe Hydrus::RoleMetadataDS do
       end
     end
     
-    # it "should be able to retrieve the role for a person identifier" do
-    #   @rmdoc.get_person_role('brown').should == "collection-manager"
-    #   @rmdoc.get_person_role('dblack').should == "collection-manager"
-    #   @rmdoc.get_person_role('ggreen').should == "collection-depositor"
-    # end
-
     it "should be able to exercise to_solr()" do
       sdoc = @rmdoc.to_solr
       sdoc.should be_kind_of Hash

@@ -1,7 +1,7 @@
 <p>Select people who can add items to this collection, or modify the collection settings.</p>
 <%-
     ix = -1
-    @document_fedora.person_roles.each do |role, persons|
+    @document_fedora.apo_person_roles.each do |role, persons|
       persons.keys.each do |person|
         ix += 1
 -%>

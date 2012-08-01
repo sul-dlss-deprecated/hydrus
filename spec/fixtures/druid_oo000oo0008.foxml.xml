@@ -134,17 +134,7 @@
     <foxml:datastreamVersion ID="roleMetadata.0" LABEL="Role Metadata" CREATED="2011-07-05T20:47:26.359Z" MIMETYPE="text/xml" SIZE="405">
       <foxml:xmlContent>
         <roleMetadata objectId="druid:oo000oo0008">
-          <role type="collection-manager">
-             <person>
-                <identifier type="sunetid">brown</identifier>
-                <name>Brown, Malcolm</name>
-             </person>
-             <person>
-                <identifier type="sunetid">dblack</identifier>
-                <name>Black, Delores</name>
-             </person>
-          </role>
-          <role type="collection-depositor">
+          <role type="item-depositor">
              <person>
                 <identifier type="sunetid">ggreen</identifier>
                 <name>Green, Greg</name>

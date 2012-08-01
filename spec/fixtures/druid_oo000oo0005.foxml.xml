@@ -45,7 +45,8 @@
             Data on Conflicts and Protests</objectLabel>
           <objectCreator>DOR</objectCreator>
           <otherId name="uuid">need_new</otherId>
-          <tag>Project : DOR</tag>
+          <tag>Project : Hydrus</tag>
+          <tag>Hydrus : dataset</tag>
         </identityMetadata>
       </foxml:xmlContent>
     </foxml:datastreamVersion>

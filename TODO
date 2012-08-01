@@ -67,7 +67,8 @@ Collection.roleMetadata:
 Item.roleMetadata:
  - create the datastream
  - set the item-depositor as the current logged-in user
- - add namespace
+
+roleMetadata: add namespaces to fixtures.
 
 Item.embargo datastream:
  - create the DS, using default embargo info from APO

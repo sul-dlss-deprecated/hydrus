@@ -185,7 +185,7 @@ describe("Collection edit", :type => :request, :integration => true) do
       # Confirms that the role-management section of the current page
       # contains same information.
       rmdiv   = find('div#role-management')
-      k       = 'hydrus_collection_person_roles_'
+      k       = 'hydrus_collection_apo_person_roles_'
       persons = rmdiv.all("input[id^='#{k}']").map   { |n| n[:value] }
       roles   = rmdiv.all("select[id^='#{k}']").map  { |n| n[:value] }
       h       = {}
@@ -198,7 +198,7 @@ describe("Collection edit", :type => :request, :integration => true) do
       login_as_archivist1
       should_visit_edit_page(@hc)
       # Check role-management section before deletes.
-      role_info = @hc.person_roles
+      role_info = @hc.apo_person_roles
       check_role_management_div(role_info)
       # Remove some persons.
       role = 'collection-manager'
@@ -211,7 +211,7 @@ describe("Collection edit", :type => :request, :integration => true) do
       # After saving, confirm new content in fedora,
       click_button "Save"
       @hc = Hydrus::Collection.find @druid
-      @hc.person_roles.should == role_info
+      @hc.apo_person_roles.should == role_info
     end
     
     it "should be able to add persons to the Collection" do
@@ -219,7 +219,7 @@ describe("Collection edit", :type => :request, :integration => true) do
       login_as_archivist1
       should_visit_edit_page(@hc)
       # Check role-management section before additions.
-      role_info = @hc.person_roles
+      role_info = @hc.apo_person_roles
       check_role_management_div(role_info)
       # Add some persons.
       add_these = {
@@ -229,7 +229,7 @@ describe("Collection edit", :type => :request, :integration => true) do
         'ringo'  => 'item-depositor',
       }
       i = @hc.person_id.size
-      k = "hydrus_collection_person_roles"
+      k = "hydrus_collection_apo_person_roles"
       add_these.each do |person, role|
         (role_info[role] ||= {})[person] = true
         click_button("Add a person")
@@ -243,7 +243,7 @@ describe("Collection edit", :type => :request, :integration => true) do
       check_role_management_div(role_info)
       # Confirm new content in fedora,
       @hc = Hydrus::Collection.find @druid
-      @hc.person_roles.should == role_info
+      @hc.apo_person_roles.should == role_info
     end
     
   end

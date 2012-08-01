@@ -33,10 +33,6 @@ class Hydrus::RoleMetadataDS < ActiveFedora::NokogiriDatastream
     t.item_depositor       :ref => [:role], :attributes => {:type => 'item-depositor'}
   end
 
-  # def get_person_role(person_id)
-  #   find_by_xpath("/roleMetadata/role[person/identifier='#{person_id}']/@type").text
-  # end
-
   def to_solr(solr_doc=Hash.new, *args)
     find_by_xpath('/roleMetadata/role/*').each do |actor|
       role_type = toggle_hyphen_underscore(actor.parent['type'])
@@ -88,12 +84,6 @@ class Hydrus::RoleMetadataDS < ActiveFedora::NokogiriDatastream
   def insert_group(role_node, group_type)
     add_hydrus_child_node(role_node, :group, group_type)
   end
-
-  # def get_person_roles(person)
-  #   q = "//role/person[identifier='#{person}']"
-  #   nodes = find_by_xpath(q)
-  #   return nodes.map { |n| n.parent['type'] }
-  # end
 
   def delete_actor(identifier, role)
     # NOTE: does NOT remove role node if it becomes empty, which is OK.
