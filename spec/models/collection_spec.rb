@@ -77,12 +77,6 @@ describe Hydrus::Collection do
       @hc.stub(:apo).and_return(apo)
     end
     
-    # it "get_person_role should retrieve the correct value" do
-    #   @hc.get_person_role('sunetid1').should == 'collection-manager'
-    #   @hc.get_person_role('sunetid2').should == 'collection-manager'
-    #   @hc.get_person_role('sunetid3').should == 'collection-depositor'
-    # end
-
     it "add_empty_person_to_role should work" do
       @hc.add_empty_person_to_role('collection-manager')
       @rmdoc.ng_xml.should be_equivalent_to <<-EOF
@@ -115,8 +109,8 @@ describe Hydrus::Collection do
       EOF
     end
 
-    it "person_roles= should correctly update APO roleMetadtaDS" do
-      @hc.person_roles = {
+    it "apo_person_roles= should correctly update APO roleMetadtaDS" do
+      @hc.apo_person_roles = {
         '0' => {
           'id'   => "brown",
           'role' => "collection-manager",

@@ -1,5 +1,7 @@
 class Hydrus::Collection < Hydrus::GenericObject
 
+  include Hydrus::Rollable
+
   # Any time we save a Collection, save its corresponding APO.
 
   before_validation :remove_values_for_associated_attribute_with_value_none
@@ -187,29 +189,12 @@ class Hydrus::Collection < Hydrus::GenericObject
     apo.person_id *args
   end
   
-  # Returns of hash of role info. Also see person_roles=
-  def person_roles
-    h = {}
-    apo.roleMetadata.find_by_terms(:role, :person, :identifier).each do |n|
-      id   = n.text
-      role = n.parent.parent[:type]
-      h[role] ||= {}
-      h[role][id] = true
-    end
-    return h
+  def apo_person_roles
+    return apo.person_roles
   end
   
-  # Takes a hash of SUNETIDs and roles.
-  # Rewrites roleMetadata to reflect the contents of the hash.
-  # Example input: TODO (also see unit test).
-  def person_roles= *args
-    apo.roleMetadata.remove_nodes(:role)
-    h = args.first
-    h.keys.sort { |a,b| a.to_i <=> b.to_i }.each { |k|
-      id   = h[k]['id'].strip
-      role = h[k]['role'].strip
-      apo.roleMetadata.add_person_with_role(id, role) unless id == ''
-    }
+  def apo_person_roles= *args
+    apo.person_roles= args.first
   end
   
   def remove_actor *args
