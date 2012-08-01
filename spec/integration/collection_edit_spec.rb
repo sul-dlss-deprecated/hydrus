@@ -52,26 +52,6 @@ describe("Collection edit", :type => :request, :integration => true) do
     page.should_not have_css(".discard-item")
   end
 
-  it "can open and close a collection and have the deposit status set correctly and show/hide deletion links as appropriate" do
-    login_as_archivist1
-    @empty_hc = Hydrus::Collection.find(@druid_no_files)
-    should_visit_edit_page(@empty_hc)
-    @empty_hc.publish.should == true
-    @empty_hc.apo.deposit_status.should == "open"
-    page.should_not have_css(".discard-item")
-    click_button "Close Collection"
-    @empty_hc    = Hydrus::Collection.find(@druid_no_files)
-    should_visit_edit_page(@empty_hc)
-    @empty_hc.publish.should == false
-    @empty_hc.apo.deposit_status.should == "closed"
-    page.should have_css(".discard-item")
-    should_visit_edit_page(@empty_hc)
-    click_button "Open Collection"
-    @empty_hc    = Hydrus::Collection.find(@druid_no_files)
-    @empty_hc.publish.should == true
-    @empty_hc.apo.deposit_status.should == "open"
-  end
-
   it "can edit and delete multi-valued fields" do
     new_url = "http://library.stanford.edu"
     new_label = "Library Website"

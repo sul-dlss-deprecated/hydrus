@@ -9,6 +9,20 @@ class Hydrus::Item < Hydrus::GenericObject
   validates :terms_of_deposit, :presence => true, :if => :clicked_publish?
   validate :collection_must_be_open, :on => :create
 
+  # check to see if object is "publishable" (basically valid, but setting publish to true to run validations properly)
+  def publishable?
+    case publish
+      when true
+         self.valid?
+      else 
+        # we need to set publish to true to run validations
+        self.publish=true
+        result=self.valid?  
+        self.publish=false
+        return result
+      end
+  end
+  
   def self.create(collection_pid, user)
     # Create the object, with the correct model.
     coll     = Hydrus::Collection.find(collection_pid)

@@ -7,7 +7,7 @@ module HydraHelper
   end
   
   def edit_and_browse_links
-    if params[:action] == "edit"
+    if params[:action] == "edit" || params[:action] == "update"
       link_to("Switch to browse view", 
               polymorphic_path(@document_fedora, :viewing_context => 'browse'),
               :class => 'browse toggle')

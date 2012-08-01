@@ -6,9 +6,30 @@ describe("Collection view", :type => :request, :integration => true) do
   before :each do
     @apo_druid = 'druid:oo000oo0002'
     @druid = 'druid:oo000oo0003'
+    @druid_no_files='druid:oo000oo0004'    
     @hc    = Hydrus::Collection.find @druid
   end
 
+  it "can open and close a collection and have the deposit status set correctly and show/hide deletion links as appropriate" do
+    login_as_archivist1
+    @empty_hc = Hydrus::Collection.find(@druid_no_files)
+    visit polymorphic_path(@empty_hc)
+    @empty_hc.publish.should == true
+    @empty_hc.apo.deposit_status.should == "open"
+    page.should_not have_css(".discard-item")
+    click_button "Close Collection"
+    @empty_hc    = Hydrus::Collection.find(@druid_no_files)
+    visit polymorphic_path(@empty_hc)
+    @empty_hc.publish.should == false
+    @empty_hc.apo.deposit_status.should == "closed"
+    page.should have_css(".discard-item")
+    visit polymorphic_path(@empty_hc)
+    click_button "Open Collection"
+    @empty_hc    = Hydrus::Collection.find(@druid_no_files)
+    @empty_hc.publish.should == true
+    @empty_hc.apo.deposit_status.should == "open"
+  end
+  
   it "If not logged in, should be redirected to sign-in page" do
     logout
     visit polymorphic_url(@hc)

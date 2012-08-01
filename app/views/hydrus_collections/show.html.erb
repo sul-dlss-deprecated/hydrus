@@ -41,6 +41,28 @@
       <div class="box-header">What you can do</div>
       <p><%= link_to("Edit collection settings",edit_polymorphic_path(@document_fedora, :viewing_context => 'edit'),
               :class => 'edit toggle') %></p>
+				<%= form_for(@document_fedora, :method => 'PUT', :html => {:class => "step", :novalidate=>""}) do |f| -%>
+					<% if @document_fedora.publish %>
+					  <p><button type="submit" class="btn btn-small save-edits" name="hydrus_collection[publish]" value="false" id="hydrus_collection_publish">Close Collection</button></p>
+					<% elsif @document_fedora.publishable? # collection is not yet published, check it's validity now %>
+				  	<p><button type="submit" class="btn btn-small save-edits" name="hydrus_collection[publish]" value="true" id="hydrus_collection_publish">Open Collection</button></p>
+					<% else %>
+							<p>To open the collection, you must fix the following:
+								<%
+								errors = []  
+					      @document_fedora.object_error_messages.each do |field, error|
+					        errors << "<li class='errors'>#{field.to_s.humanize.capitalize} #{error.join}</li>"
+					      end
+								%>
+								<%="<ul>#{errors.join}</ul>".html_safe%>
+						  </p>
+					<% 
+					end # end check for published
+				end # end form %>
+
+		    <% if !@document_fedora.destroyable? %>
+					<p class="discard-item"><i class="icon-trash"></i> <a href="#">Discard this <%=@document_fedora.object_type%></a></p>
+		    <% end # end check for item can be deleted %>
 			<% if @document_fedora.publish %>
 	      <form class="form-horizontal">
 	        <div class="btn-group">
@@ -51,9 +73,9 @@
 	          <%= render :partial => "shared/add_content_options", :locals => {:parent => @document_fedora} %>
 	        </div>
 	      </form>
-			 <% end %>
+			 <% end # end check for published%>
     </div>
-
+		
 <%- end -%>
 
 <div>

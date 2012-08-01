@@ -31,6 +31,24 @@ class Hydrus::Collection < Hydrus::GenericObject
     # grab all error messages from both collection and the apo to show to the user
     errors.messages.merge(apo.errors.messages)
   end
+  
+  # check to see if object is "publishable" (basically valid, but setting publish to true to run validations properly)
+  def publishable?
+    case publish
+      when true
+         object_valid?
+      else 
+        # we need to set publish to true to run validations
+        self.publish=true
+        result=object_valid?  
+        self.publish=false
+        return result
+      end
+  end
+
+  def destroyable?
+    self.publish && self.hydrus_items.size == 0  
+  end
     
   def publish=(value)
     # set the APO deposit status to open if the collection is published, since they are tied together

@@ -36,8 +36,8 @@ function item_edit_init(){
 // this is loaded on each page
 $(document).ready(function(){
 
-	if ($('#hydrus_collections-edit').length == 1) {collection_edit_init();}
-	if ($('#hydrus_items-edit').length == 1) {item_edit_init();}
+	if ($('#hydrus_collections-edit').length == 1 || $('#hydrus_collections-update').length == 1) {collection_edit_init();}
+	if ($('#hydrus_items-edit').length == 1 || $('#hydrus_items-update').length == 1) {item_edit_init();}
 
 	$(".abstract").truncate({max_length: 350});
 
@@ -93,7 +93,7 @@ function activate_edit_controls() {
 
 function validate_hydrus_item() {
 	var all_required_filled = true;
-	$("#hydrus_items-edit form input:required, #hydrus_items-edit form textarea:required").each(function(){
+	$("#hydrus_items-edit form input:required, #hydrus_items-edit form textarea:required, #hydrus_items-update form input:required, #hydrus_items-update form textarea:required").each(function(){
 		if($(this).attr("value") == "") {
 			all_required_filled = false;
 		}
@@ -114,18 +114,9 @@ function validate_hydrus_item() {
 
 function validate_hydrus_collection() {
 	var all_required_filled = true;
-	$("#hydrus_collections-edit form input:required, #hydrus_collections-edit form textarea:required").each(function(){
+	$("#hydrus_collections-edit form input:required, #hydrus_collections-edit form textarea:required,#hydrus_collections-update form input:required, #hydrus_collections-update form textarea:required").each(function(){
 		if($(this).attr("value") == "") {
 			all_required_filled = false;
 		}
 	});
-	if(all_required_filled) {
-		$("#hydrus_collection_publish").each(function(){
-			$(this).removeAttr("disabled");
-		});
-	}else{
-		$("#hydrus_collection_publish").each(function(){
-			$(this).attr("disabled", "disabled");
-		});
-	}
 }
