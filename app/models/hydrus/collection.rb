@@ -1,6 +1,6 @@
 class Hydrus::Collection < Hydrus::GenericObject
 
-  include Hydrus::Rollable
+  include Hydrus::Responsible
 
   # Any time we save a Collection, save its corresponding APO.
 

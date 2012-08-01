@@ -1,4 +1,5 @@
-module Hydrus::Rollable
+# A mixin for roleMetadata stuff.
+module Hydrus::Responsible
 
   # Returns of hash of role info. Also see person_roles=
   def person_roles

@@ -1,6 +1,6 @@
 class Hydrus::Item < Hydrus::GenericObject
 
-  include Hydrus::Rollable
+  include Hydrus::Responsible
   
   after_validation :strip_whitespace
       
