@@ -15,7 +15,7 @@ describe("Collection create", :type => :request, :integration => true) do
     Dor::Config.configure.suri.mint_ids = @prev_mint_ids
   end
 
-  it "should be able to create a new Collection, with APO and related info" do
+  it "should be able to create a new Collection, with APO, and with expected datastreams" do
     ni = hash2struct(
       :title    => 'title_foo',
       :abstract => 'abstract_foo',
@@ -50,7 +50,7 @@ describe("Collection create", :type => :request, :integration => true) do
     coll.identityMetadata.objectType.should include('collection', 'set')
     # Check person roles of the roleMetadata in APO and Collection.
     coll.apo_person_roles.should == { "collection-manager"   => { "archivist1" => true } }
-    # apo.person_roles.should == { "collection-depositor" => { "archivist1" => true } }
+    coll.person_roles.should     == { "collection-depositor" => { "archivist1" => true } }
     # Check APO.descMetadata.
     apo.title.should == Dor::Config.hydrus.initial_apo_title
     # Delete objects.

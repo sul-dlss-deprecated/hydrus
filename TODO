@@ -48,13 +48,7 @@ Item.identityMetadata.objectLabel = Item.title
 Collection and Item creation
 ----------------------------
 
-Collection.roleMetadata:
- - create the datastream
- - set the collection-depositor as the current logged-in user
-
-Item.roleMetadata:
- - create the datastream
- - set the item-depositor as the current logged-in user
+Responsible: tests (relocate from elsewhere?)
 
 roleMetadata: add namespaces to fixtures.
 

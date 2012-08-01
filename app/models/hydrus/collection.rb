@@ -18,7 +18,7 @@ class Hydrus::Collection < Hydrus::GenericObject
     # Add some Hydrus-specific info to identityMetadata.
     coll.augment_identity_metadata(:collection)
     # Add roleMetadata with current user as collection-depositor.
-    # coll.roleMetadata.add_person_with_role(user, 'collection-depositor')
+    coll.roleMetadata.add_person_with_role(user, 'collection-depositor')
     # Save and return.
     coll.save
     return coll

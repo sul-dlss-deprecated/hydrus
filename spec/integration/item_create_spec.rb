@@ -16,7 +16,7 @@ describe("Item create", :type => :request, :integration => true) do
     Dor::Config.configure.suri.mint_ids = @prev_mint_ids
   end
 
-  it "should be able to create a new Item, with workflows" do
+  it "should be able to create a new Item, with expected datastreams" do
     # Login, go to new Item page, and store the druid of the new Item.
     login_as_archivist1
     visit new_hydrus_item_path(:collection => @hc_druid)
@@ -40,6 +40,8 @@ describe("Item create", :type => :request, :integration => true) do
     wf_nodes.first[:id].should == 'hydrusAssemblyWF'
     # Check identityMetadata of Item.
     item.identityMetadata.tag.should include("Hydrus : dataset", "Project : Hydrus")
+    # Check person roles of the Item.
+    item.person_roles.should == { "item-depositor" => { "archivist1" => true } }
     # Delete object.
     item.delete
   end
