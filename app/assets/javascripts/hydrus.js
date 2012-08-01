@@ -3,7 +3,7 @@ function collection_edit_init(){
 	// this method is called when the collection edit page is fully loaded
 	validate_hydrus_collection();
 	activate_edit_controls();
-	$("#hydrus_collections-edit form input, #hydrus_collections-edit form textarea").live("blur", function(){
+	$("#hydrus_collections-edit form input, #hydrus_collections-edit form textarea, #hydrus_collections-update form input, #hydrus_collections-update form textarea").live("blur", function(){
 	    validate_hydrus_collection();
 	});	
 	
@@ -28,7 +28,7 @@ function item_edit_init(){
 			validate_hydrus_item();
 		});
 	});
-	$("#hydrus_items-edit form input, #hydrus_items-edit form textarea").live("blur", function(){
+	$("#hydrus_items-edit form input, #hydrus_items-edit form textarea, #hydrus_items-update form input, #hydrus_items-update form textarea").live("blur", function(){
 	    validate_hydrus_item();
 	});
 }

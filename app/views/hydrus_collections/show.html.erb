@@ -60,9 +60,11 @@
 					end # end check for published
 				end # end form %>
 
-		    <% if !@document_fedora.destroyable? %>
+		    <% if @document_fedora.destroyable? %>
 					<p class="discard-item"><i class="icon-trash"></i> <a href="#">Discard this <%=@document_fedora.object_type%></a></p>
-		    <% end # end check for item can be deleted %>
+		    <% elsif !@document_fedora.publish && @document_fedora.hydrus_items.size > 0  %>
+					<p class="discard-item"><i class="icon-trash"></i> Cannot	discard collection because it contains items.</p>		
+				<% end # end check for item can be deleted %>
 			<% if @document_fedora.publish %>
 	      <form class="form-horizontal">
 	        <div class="btn-group">

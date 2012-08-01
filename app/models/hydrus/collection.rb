@@ -51,7 +51,7 @@ class Hydrus::Collection < Hydrus::GenericObject
   end
 
   def destroyable?
-    self.publish && self.hydrus_items.size == 0  
+    !self.publish && self.hydrus_items.size == 0  
   end
     
   def publish=(value)
