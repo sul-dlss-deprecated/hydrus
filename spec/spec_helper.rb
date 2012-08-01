@@ -120,4 +120,3 @@ def should_visit_edit_page(obj)
   visit edit_polymorphic_path(obj)
   current_path.should == edit_polymorphic_path(obj)
 end
-

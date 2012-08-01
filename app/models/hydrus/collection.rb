@@ -57,6 +57,10 @@ class Hydrus::Collection < Hydrus::GenericObject
   def publish=(value)
     # set the APO deposit status to open if the collection is published, since they are tied together
     apo.deposit_status = (to_bool(value) ? "open" : "closed")
+    # At the moment of publication, we refresh various titles.
+    apo.identityMetadata.objectLabel = "APO for #{title}"
+    apo.descMetadata.title           = "APO for #{title}"
+    identityMetadata.objectLabel     = title
   end
   
   def publish

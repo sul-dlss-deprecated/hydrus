@@ -1,3 +1,5 @@
+Item.embargo datastream: create the DS, using default embargo info from APO.
+
 Collection Edit: with Javascript enabled, cannot add more than one person-role
 without clicking Save after each one.  
 
@@ -10,6 +12,12 @@ w/ non-linear indexed role MD)
 
 Item Edit: form for a new item should be populated with default values for the 
 embargo and license fields.
+
+Create new Collection: create rightsMetadata.
+
+Create new Item: create rightsMetadata. The rightsMetadata will contain the
+Item-level license and visibility info (confirm the latter).
+
 
 --------------------------------------------------
 Updating info when Collections/Items are published
@@ -25,24 +33,7 @@ When Coll/Item is approved (either automatically or by user), use workflow servi
  initialice the assemblyWF
  "#{Dor::Config.dor.service_root}/dor/v1/objects/#{@pid}/apo_workflows/assemblyWF"
 
-APO.identityMetadata.objectLabel = "APO for #{Collection.title}"
-
-APO.descMetadata.title = "APO for #{Collection.title}"
-
-APO.defaultObjectRights: create datastream.
-
-Collection.identityMetadata.objectLabel = Collection.title
-
 Item.identityMetadata.objectLabel = Item.title
-
-
-----------------------------
-Collection and Item creation
-----------------------------
-
-roleMetadata: add namespaces to fixtures.
-
-Item.embargo datastream: create the DS, using default embargo info from APO.
 
 
 -------
@@ -53,17 +44,6 @@ APO RELS-EXT datastream needs to add a child node to <rdf:Description>:
 <hydra:referencesAgreement rdf:resource="info:fedora/druid:XXX"/>, where XXX is
 the PID of the global Hydrus Agreement object. [The Hydrus agreement object
 needs to be created -- need more details].
-
-Create new Collection: rightsMetadata should be created automatically, as soon
-as the corresponding APO has the defaultObjectRights datastream. However, my
-understanding is that the APO won't get this datastream until the user clicks
-Publish. [need more details from Lynn]
-
-Create new Item: rightsMetadata should be created automatically, as soon as the
-corresponding APO has the defaultObjectRights datastream. The rightsMetadata
-will contain the Item-level license and visibility info (confirm the latter).
-However, my understanding is that the APO won't get the defaultObjectRights
-datastream until the user clicks Publish. [need more details from Lynn]
 
 Events datastreams for Collections and Items: create datastreams and add events
 to them. [waiting on spec for the relevant events and the stream content]
@@ -85,3 +65,6 @@ Collection create: APO.roleMetadata: set the value of <name> for the
 collection-manager [waiting on LDAP].
 
 Collection create: APO.descMetadata. Flesh out. [waiting on spec from Lynn]
+
+Should roleMetadata have an XML namespace? If so, what should it be? Could
+not find any definitive examples in Consul. [Ask Lynn]

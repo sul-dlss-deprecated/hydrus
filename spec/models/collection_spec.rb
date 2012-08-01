@@ -56,6 +56,21 @@ describe Hydrus::Collection do
     col.object_valid?.should == true
   end
   
+  it "publishing an object should update APO and identityMetadata titles" do
+    col = Hydrus::Collection.new(:pid=>'druid:tt000tt0001')
+    # Before publishing.
+    col.apo.identityMetadata.objectLabel.should == []
+    col.apo.title.should == ""
+    col.identityMetadata.objectLabel.should == []
+    # After publishing.
+    t           = 'FOOBAR'
+    col.title   = t
+    col.publish = 'true'
+    col.apo.identityMetadata.objectLabel.should == ["APO for #{t}"]
+    col.apo.title.should == "APO for #{t}"
+    col.identityMetadata.objectLabel.should == [t]
+  end
+  
   context "APO roleMetadataDS delegation-y methods" do
     before(:each) do
       apo = Hydrus::AdminPolicyObject.new
