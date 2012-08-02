@@ -25,6 +25,11 @@ class Hydrus::Item < Hydrus::GenericObject
       end
   end
   
+  # def publish=(value)
+  #   # At the moment of publication, we refresh various titles.
+  #   identityMetadata.objectLabel = title
+  # end
+  
   def self.create(collection_pid, user)
     # Create the object, with the correct model.
     coll     = Hydrus::Collection.find(collection_pid)

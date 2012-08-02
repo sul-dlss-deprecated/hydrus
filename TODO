@@ -33,7 +33,7 @@ When Coll/Item is approved (either automatically or by user), use workflow servi
  initialice the assemblyWF
  "#{Dor::Config.dor.service_root}/dor/v1/objects/#{@pid}/apo_workflows/assemblyWF"
 
-Item.identityMetadata.objectLabel = Item.title
+Item.identityMetadata.objectLabel = Item.title. [Need to set up workflow first].
 
 
 -------

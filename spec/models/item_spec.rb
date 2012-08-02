@@ -24,6 +24,20 @@ describe Hydrus::Item do
     @hi.submit_time.should == "9999"
   end
 
+  it "publishing an object should update identityMetadata title" do
+    # TODO: waiting until Item.publish refactor
+    next
+
+    itm = Hydrus::Item.new(:pid=>'druid:tt000tt0001')
+    # Before publishing.
+    itm.identityMetadata.objectLabel.should == []
+    # After publishing.
+    t           = 'FOOBAR'
+    itm.title   = t
+    itm.publish = 'true'
+    itm.identityMetadata.objectLabel.should == [t]
+  end
+  
   it "new items should be invalid if no files have been added yet" do
     item      = Hydrus::Item.new(:pid=>'druid:tt000tt0001')
     item.publish="true"
