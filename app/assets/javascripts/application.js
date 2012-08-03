@@ -13,20 +13,16 @@
 //= require jquery
 //= require jquery_ujs
 // Required by Hydra
-//= require 'jquery.ui.datepicker.js'      
-
 //
-// Required by Blacklight
-//= require jquery-ui
-//= require blacklight/blacklight
 //= require about_page
 // Required by Hydrus:
 //= require jquery.truncator
 // Required by SULChrome:
 //= require sul_chrome/sul_chrome_base
 //= require bootstrap-all
+//= require bootstrap-datepicker
 //= require_tree .
 
 
 /* Eliminate JavaScript functionality provided by Blacklight */
-Blacklight.do_search_context_behavior = function(){};  
+//Blacklight.do_search_context_behavior = function(){};  

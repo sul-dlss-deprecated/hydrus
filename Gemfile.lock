@@ -72,6 +72,8 @@ GEM
     bcrypt-ruby (3.0.1)
     block_helpers (0.3.3)
       activesupport (>= 2.0)
+    bootstrap-datepicker-rails (0.6.16)
+      railties (>= 3.0)
     builder (3.0.0)
     cancan (1.6.8)
     capybara (1.1.2)
@@ -394,6 +396,7 @@ DEPENDENCIES
   about_page
   awesome_print
   blacklight (~> 3.5)!
+  bootstrap-datepicker-rails
   carrierwave
   coffee-rails (~> 3.2.1)
   compass-rails (~> 1.0.0)
