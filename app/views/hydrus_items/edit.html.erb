@@ -86,7 +86,7 @@
       <%= f.label :preferred_citation, "Cite this #{object_type}", :class => "visible-tablet" %>
     <%- end -%>
     <%= hydrus_form_value(:class=>"short-textarea") do  -%>
-      <%= f.text_area :preferred_citation, :value=>(@document_fedora.preferred_citation.strip if @document_fedora.preferred_citation) %>
+      <%= f.text_area :preferred_citation, :value=>hydrus_strip(@document_fedora.preferred_citation) %>
     <%- end -%>
   </div>
   <div class="row">

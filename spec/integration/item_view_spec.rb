@@ -21,7 +21,7 @@ describe("Item view", :type => :request, :integration => true) do
     current_path.should == polymorphic_path(@hi)    
   end
 
-  it "Some of the expected info is displayed" do
+  it "Some of the expected info is displayed, and disappers if blank" do
     exp_content = [
       'archivist1@example.com', # contact email
       "How Couples Meet and Stay Together", # title
@@ -33,6 +33,7 @@ describe("Item view", :type => :request, :integration => true) do
       'US National Science Foundation, award SES-0751613', # actor
       'wooden boys', # keyword
       'Related links', # relatedItem label
+      'Keywords', # keywords label
       'story by Jennifer Ludden August 16, 2010', # relatedItem title
       'pinocchio.htm', # file
     ]
@@ -42,6 +43,20 @@ describe("Item view", :type => :request, :integration => true) do
     exp_content.each do |exp|
       page.should have_content(exp)
     end
+    
+    # now let's delete the related items, contact email and the keywords, and go back to the view page and make sure those fields don't show up or are listed as "not specified" as required
+    visit edit_polymorphic_path(@hi)
+    click_link "remove_relatedItem_0" # remove both related items
+    click_link "remove_relatedItem_0"        
+    fill_in "hydrus_item_keywords", :with => " "
+    fill_in "hydrus_item_contact", :with => " "
+    click_button "Save"    
+    visit polymorphic_path(@hi)
+    page.should_not have_content('Related links')
+    page.should_not have_content('Keywords')
+    page.should_not have_content('story by Jennifer Ludden August 16, 2010') # relatedItem title
+    page.should have_content('not specified') # for contact
+    
   end
 
   it "some of the expected info is displayed in the Item status box" do

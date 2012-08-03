@@ -59,15 +59,19 @@
 
   <dl class="dl-horizontal object-view clearfix">
 
-    <h3><%= @document_fedora.title %></h3>
+    <h3><%= hydrus_object_setting_value(@document_fedora.title) %></h3>
 
     <dt>PURL</dt>
     <dd>
-      <%=link_to(@document_fedora.url, @document_fedora.url)%>
-    </dd>
+      <% if @document_fedora.publish %>
+				<%=link_to(@document_fedora.url, @document_fedora.url)%>
+    	<% else %>
+				Not published yet
+			<% end %>
+		</dd>
 
     <dt>Contact email</dt>
-    <dd><%= mail_to(@document_fedora.contact) %></dd>
+    <dd><%= @document_fedora.contact.blank? ? hydrus_object_setting_value(@document_fedora.contact) : mail_to(@document_fedora.contact) %></dd>
 
     <% @document_fedora.actors.each do |actor| %>
       <dt><%= actor.role %></dt>
@@ -77,27 +81,29 @@
     <dt>Abstract</dt>
     <dd class="abstract"><%= hydrus_object_setting_value(@document_fedora.abstract) %></dd>
 
-    <dt>Keywords</dt>
-    <dd>
-      <%= @document_fedora.keywords.map {|topic| link_to(topic, "#")}.join(", ").html_safe %>
-    </dd>
-
-    <% unless @document_fedora.preferred_citation.blank? %>
+		<% unless hydrus_is_empty?(@document_fedora.keywords) %>
+	    <dt>Keywords</dt>
+	    <dd>
+	      <%= @document_fedora.keywords.map {|topic| link_to(topic, "#")}.join(", ").html_safe %>
+	    </dd>
+		<% end %>
+		
+    <% unless hydrus_is_empty?(@document_fedora.preferred_citation) %>
       <dt>Cite this item as</dt>
       <dd><%= @document_fedora.preferred_citation %></dd>
     <% end %>
 
-    <% unless @document_fedora.related_citation.blank? %>
+    <% unless hydrus_is_empty?(@document_fedora.related_citation) %>
       <% @document_fedora.related_citation.each_with_index do |related_citation, index| %>
         <dt class="<%= 'hidden-label' if index > 0 %>">Related published work</dt>
         <dd><%= related_citation %></dd>
       <% end %>
     <% end %>
 
-    <% unless @document_fedora.related_items.blank? %>
+    <% unless hydrus_is_empty?(@document_fedora.related_items) %>
       <% @document_fedora.related_items.each_with_index do |related_item, index| %>
         <dt class="<%= 'hidden-label' if index > 0 %>">Related links</dt>
-        <dd><%= link_to(related_item.title, related_item.url) %></dd>
+        <dd><%= related_item.url.blank? ? hydrus_object_setting_value(related_item.url) : link_to(related_item.title, related_item.url) %></dd>
       <% end %>
     <% end %>
 

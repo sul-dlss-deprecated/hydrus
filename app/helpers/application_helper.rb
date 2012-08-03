@@ -4,7 +4,7 @@ module ApplicationHelper
   def application_name
     'Stanford Digital Repository'
   end
-
+  
   def hydrus_format_date(input_string)
     input_string.blank? ? '' : input_string.to_date.strftime("%b %d, %Y")
   end
@@ -29,9 +29,13 @@ module ApplicationHelper
   def hydrus_signin_link
     link_to("Sign in", new_signin_path(:referrer => request.fullpath), :class=>'signin_link', :"data-url" => new_signin_path(:referrer => request.fullpath))
   end
-
+  
+  def hydrus_strip(value)
+    value.nil? ? "" : value.strip
+  end
+  
   def hydrus_object_setting_value(obj)
-    return (obj.blank? ? content_tag(:span, "not specified", :class => "unspecified") : obj)
+    hydrus_is_empty?(obj) ? content_tag(:span, "not specified", :class => "unspecified") : obj
   end
 
 end

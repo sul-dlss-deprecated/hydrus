@@ -127,7 +127,13 @@ class Hydrus::Item < Hydrus::GenericObject
   end
   
   def actors
-    @actors ||= descMetadata.find_by_terms(:name).collect {|name_node| Hydrus::Actor.new(:name=>name_node.at_css('namePart').content,:role=>name_node.at_css('role roleTerm').content)}
+    @actors ||= descMetadata.find_by_terms(:name).collect do |actor_node| 
+      name_node=actor_node.at_css('namePart')
+      role_node=actor_node.at_css('role roleTerm')
+      name = (name_node.respond_to?(:content) and !name_node.content.blank?)     ? name_node.content : ''
+      role = (role_node.respond_to?(:content) and !role_node.content.blank?) ? role_node.content : ''
+      Hydrus::Actor.new(:name=>name,:role=>role)
+    end
   end
     
   def submit_time

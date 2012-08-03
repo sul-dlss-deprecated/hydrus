@@ -5,11 +5,35 @@ class ApplicationController < ActionController::Base
   include Hydrus::ModelHelper
     
   helper_method :to_bool # defined in Hydra::ModelHelper so it can be used in models as well
-  helper_method :is_production?
-  helper_method :current_user
+  helper_method :is_production?, :current_user,:hydrus_is_empty?,:hydrus_is_object_empty?
   
   def layout_name
    'sul_chrome/application'
+  end
+
+  # this returns an array of the attributes that have setter methods on any arbitrary object (stripping out attribures you don't want), "=" stripped out as well
+  def get_attributes(obj)
+    obj.methods.grep(/\w=$/).collect{|method| method.to_s.gsub('=','')}-['validation_context','_validate_callbacks','_validators']
+  end
+  
+  # this checks to see if the object passed in is "empty", which could be nil, a blank string, an array of strings with all elements that are blank, 
+  # an arbitrary object whose attributes are all blank, or an array of arbitrary objects whose attributes are all blank
+  def hydrus_is_empty?(obj)
+    if obj.nil? # nil case
+      is_blank=true
+    elsif obj.class == Array # arrays      
+      is_blank=obj.all? {|element| hydrus_is_empty?(element)}
+    elsif obj.class == String # strings
+      is_blank=obj.blank?
+    else # case of abitrary object
+      is_blank=hydrus_is_object_empty?(obj) 
+    end
+    return is_blank
+   end
+  
+  # this checks to see if the object passed in has attributes that are all blank
+  def hydrus_is_object_empty?(obj)
+    !get_attributes(obj).collect{|attribute| obj.send(attribute).blank?}.include?(false)
   end
   
   # used to determine if we should show beta message in UI
