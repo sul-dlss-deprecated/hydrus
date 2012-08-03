@@ -58,7 +58,9 @@ class Hydrus::RightsMetadataDS < ActiveFedora::NokogiriDatastream
   def self.xml_template
     Nokogiri::XML::Builder.new do |xml|
       xml.rightsMetadata(:xmlns=>"http://hydra-collab.stanford.edu/schemas/rightsMetadata/v1", :version => "0.1"){
-        xml.access(:type => "discover")
+        xml.access(:type => "discover") {
+          xml.world # at Stanford metadata is publicly visible by policy
+        }
         xml.access(:type => "read")
         xml.access(:type => "edit")
         xml.use {
