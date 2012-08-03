@@ -174,10 +174,12 @@ form.step .actor {
 }
 
 /* Item level embargo editing */
-.embargo label {
+.embargo label, .embargo .embargo-section {
 	display: inline;
 }
-
+form.step .embargo .datepicker {
+	width: 75px;
+}
 /* search results pagination */
 .pagination {
 	h2 {@include hidden-label;}

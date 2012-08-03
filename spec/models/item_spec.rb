@@ -7,11 +7,11 @@ describe Hydrus::Item do
     @workflow_xml = <<-END
       <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
       <workflows objectId="druid:oo000oo0001">
-        <workflow repository="dor" objectId="druid:oo000oo0001" id="sdrDepositWF">
-          <process datetime="1234" name="start-deposit"/>
-          <process datetime="9999" name="submit"/>
-          <process datetime="1234" name="approve"/>
-          <process datetime="1234" name="start-assembly"/>
+        <workflow repository="dor" objectId="druid:oo000oo0001" id="hydrusAssemblyWF">
+          <process version="1" lifecycle="registered" elapsed="0.0" attempts="0" datetime="1234" status="completed" name="start-deposit"/>
+          <process version="1" elapsed="0.0" attempts="0" datetime="9999" status="completed" name="submit"/>
+          <process version="1" elapsed="0.0" attempts="0" datetime="1234" name="approve"/>
+          <process version="1" elapsed="0.0" attempts="0" datetime="1234" name="start-assembly"/>
         </workflow>
       </workflows>
     END
@@ -242,6 +242,42 @@ describe Hydrus::Item do
       subject.visibility.should == ["world"]
       subject.rightsMetadata.read_access.machine.world.should_not be_blank
       subject.rightsMetadata.read_access.machine.group.include?("stanford").should_not be_true
+    end
+  end
+  
+  describe "embargo" do
+    subject {Hydrus::Item.new}
+    it "should store the embargo_release_date element in the XML properly" do
+      subject.rightsMetadata.read_access.machine.embargo_release_date.should == []
+      subject.embargo_date= "8/1/2012"
+      subject.rightsMetadata.read_access.machine.embargo_release_date.should == ["2012-08-01"]
+      subject.rightsMetadata.ng_xml.to_s.should match(/embargoReleaseDate/)
+    end
+    it "should remove the embargo release date if the immediate radio button is selected (embargo= 'immediate')" do
+      subject.rightsMetadata.read_access.machine.embargo_release_date.should == []
+      subject.embargo_date= "8/1/2012"
+      subject.rightsMetadata.read_access.machine.embargo_release_date.should == ["2012-08-01"]
+      subject.embargo= 'immediate'
+      subject.rightsMetadata.read_access.machine.embargo_release_date.should == []
+    end
+    describe "date ranges" do
+      it "should return today's date if there is no completed submit time in the workflowDataStream" do
+        subject.beginning_of_embargo_range.should == Date.today.strftime("%m/%d/%Y")
+      end
+      it "should return the submit time if one is available" do
+        subject.stub(:submit_time).and_return(Date.strptime("08/01/2012", "%m/%d/%Y").to_s)
+        subject.beginning_of_embargo_range.should == "08/01/2012"
+      end
+      
+      it "should get the end date range properly based on the collection's APO" do
+        subject.stub(:beginning_of_embargo_range).and_return("08/01/2012")
+        subject.stub_chain([:collection, :first, :apo, :embargo]).and_return("6 months")
+        subject.end_of_embargo_range.should == "02/01/2013"
+        subject.stub_chain([:collection, :first, :apo, :embargo]).and_return("1 year")
+        subject.end_of_embargo_range.should == "08/01/2013"
+        subject.stub_chain([:collection, :first, :apo, :embargo]).and_return("5 years")
+        subject.end_of_embargo_range.should == "08/01/2017"
+      end
     end
   end
   

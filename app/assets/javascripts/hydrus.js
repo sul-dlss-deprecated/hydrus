@@ -31,6 +31,13 @@ function item_edit_init(){
 	$("form input, form textarea").live("blur", function(){
 	    validate_hydrus_item();
 	});
+	$('[data-behavior="datepicker"]').each(function(){
+		$(this).datepicker({
+			endDate:   $(this).attr("data-end-date"),
+			startDate: $(this).attr("data-start-date")
+		});
+	});
+	manage_radio_groups();
 }
 
 // this is loaded on each page
@@ -52,6 +59,25 @@ $(document).ready(function(){
 	});
 	
 });
+
+// Manage groups of radio buttons that have related fields that need to be disabled.
+function manage_radio_groups() {
+	$('[data-behavior="radio-group"]').each(function(){
+		var group = $(this)
+		// Disable all selects and inputs (except radio buttons)
+		$('select, input:not([type="radio"])', group).each(function(){
+			// Don't disable an input/select if we have a selected radio button in the grouping.
+			if($('input:radio:checked', $(this).parents('[data-behavior="radio-option"]')).length == 0){
+  			$(this).prop("disabled",true);
+			}
+		});
+		// Add click function to all radio buttons in group to enable related selects/inputs
+		$('input:radio', group).live("click",function(){
+			$('select, input:not([type="radio"])', group).prop("disabled", true);
+			$(this).parents('[data-behavior="radio-option"]').children('select, input').prop("disabled", false);
+		});
+	});
+}
 
 function activate_edit_controls() {
 

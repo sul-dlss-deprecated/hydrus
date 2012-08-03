@@ -8,8 +8,9 @@ class Hydrus::Item < Hydrus::GenericObject
   
   validates :actors, :at_least_one=>true, :if => :clicked_publish?
   validates :files, :at_least_one=>true, :if => :clicked_publish?
+  #validate  :embargo_date_is_correct_format # TODO
   validates :terms_of_deposit, :presence => true, :if => :clicked_publish?
-  validate :collection_must_be_open, :on => :create
+  validate  :collection_must_be_open, :on => :create
 
   # check to see if object is "publishable" (basically valid, but setting publish to true to run validations properly)
   def publishable?
@@ -97,7 +98,56 @@ class Hydrus::Item < Hydrus::GenericObject
       rightsMetadata.read_access.machine.world = ""
     elsif args.first == "stanford"
       rightsMetadata.remove_world_node("read")
+      # I'm not sure how this will work with groups that have existing attributes.
+      # We may need to create an add-node method.
       rightsMetadata.read_access.machine.group = rightsMetadata.read_access.machine.group << args.first
+    end
+  end
+  
+  # We're simply using embargo for the immediate/future radio buttons.
+  # Those radio buttons base their selected state on the existence 
+  # of embargo_date so we don't really need to store anything.
+  def embargo *args
+    # no-op
+  end
+  
+  def embargo= *args
+    case args.first
+      when "immediate"
+        rightsMetadata.read_access.machine.embargo_release_date= ""
+        # TODO: Remove embargoAccess block from embargoDS
+      when "future"
+        # TODO: Add embargoAccess block to embargoDS
+    end
+  end
+    
+  def embargo_date *args
+    date = (rightsMetadata.read_access.machine.embargo_release_date *args).first
+    Date.parse(date).strftime("%m/%d/%Y") unless date.blank?
+  end
+  
+  def embargo_date= *args
+    date = args.first.blank? ? "" : Date.strptime(args.first, "%m/%d/%Y").to_s
+    (rightsMetadata.read_access.machine.embargo_release_date= date)
+  end
+    
+  def beginning_of_embargo_range
+    submit_time ? Date.parse(submit_time).strftime("%m/%d/%Y") : Date.today.strftime("%m/%d/%Y")
+  end
+  
+  def end_of_embargo_range
+    length = collection.first.apo.embargo
+    number = length.split(" ").first.to_i
+    increment = length.split(" ").last
+    # number.send(increment) is essentially doing 6.months, 2.years, etc.
+    # This works because rails extends Fixnum to respond to things like #months, #years etc.
+    (Date.strptime(beginning_of_embargo_range, "%m/%d/%Y") + number.send(increment)).strftime("%m/%d/%Y")
+  end
+  
+  def embargo_date_is_correct_format
+    # TODO: This isn't really working when a bad date is entered. This doesn't end up erroring out and it errors up in embargo_date instead
+    if ((Date.strptime(embargo_date, "%m/%d/%Y") rescue ArgumentError) == ArgumentError)
+      errors.add(:embargo_date, 'must be a valid date')
     end
   end
   
@@ -142,7 +192,7 @@ class Hydrus::Item < Hydrus::GenericObject
   end
     
   def submit_time
-    query = '//workflow[@id="hydrusAssemblyWF"]/process[@name="submit" and @status="complete"]'
+    query = '//workflow[@id="hydrusAssemblyWF"]/process[@name="submit" and @status="completed"]'
     time=workflows.ng_xml.at_xpath(query)
     return (time ? time['datetime'] : nil)
   end

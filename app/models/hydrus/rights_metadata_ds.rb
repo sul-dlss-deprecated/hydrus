@@ -9,6 +9,7 @@ class Hydrus::RightsMetadataDS < ActiveFedora::NokogiriDatastream
       t.machine do
         t.world
         t.group
+        t.embargo_release_date(:path => "embargoReleaseDate")
       end
     end
     
