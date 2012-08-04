@@ -46,6 +46,10 @@ Dor::Config.configure do
   ur_apo_druid 'druid:oo000oo0000'
 
   hydrus do
+    initial_apo_title('Intial Hydrus APO title')
+    app_workflow(:hydrusAssemblyWF)
+    start_common_assembly(false)
+
     workflow_steps({
       :hydrusAssemblyWF => [
         { :name => "start-deposit",   :status => "completed", :lifecycle => "registered" },
@@ -74,8 +78,6 @@ Dor::Config.configure do
         { :name => "cleanup",              :status => "waiting",   :lifecycle => "accessioned" },
       ],
     })
-
-    initial_apo_title('Intial Hydrus APO title')
   end
 
 end

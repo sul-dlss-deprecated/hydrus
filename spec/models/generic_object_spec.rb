@@ -115,4 +115,73 @@ describe Hydrus::GenericObject do
     end
   end
 
+  describe "approve()" do
+    
+    before(:each) do
+      @prev_conf = Dor::Config.hydrus.start_common_assembly
+    end
+      
+    after(:each) do
+      Dor::Config.hydrus.start_common_assembly(@prev_conf)
+    end
+      
+    it "should make expected calls (start_common_assembly = false)" do
+      Dor::Config.hydrus.start_common_assembly(false)
+      @hi.should_receive(:complete_workflow_step).with('approve').once
+      @hi.should_not_receive(:initiate_apo_workflow)
+      @hi.approve()
+    end
+
+    it "should make expected calls (start_common_assembly = true)" do
+      Dor::Config.hydrus.start_common_assembly(true)
+      @hi.should_receive(:complete_workflow_step).with('approve').once
+      @hi.should_receive(:complete_workflow_step).with('start-assembly').once
+      @hi.should_receive(:initiate_apo_workflow).once
+      @hi.approve()
+    end
+
+  end
+
+  describe "workflow stuff" do
+
+    before(:each) do
+      xml = <<-EOXML
+        <workflows>
+          <workflow id="foo">
+            <process status="waiting" name="aa"/>
+            <process status="waiting" name="bb"/>
+          </workflow>
+          <workflow id="hydrusAssemblyWF">
+            <process status="completed" name="start-deposit" lifecycle="registered"/>
+            <process status="waiting"   name="submit"/>
+            <process status="waiting"   name="approve"/>
+            <process status="waiting"   name="start-assembly"/>
+          </workflow>
+        </workflows>
+      EOXML
+      @workflow = Dor::WorkflowDs.from_xml(noko_doc(xml))
+      @hi = Hydrus::Item.new
+      @hi.stub(:workflows).and_return(@workflow)
+    end
+
+    it "get_workflow_node() should return a node with correct id attribute" do
+      node = @hi.get_workflow_node
+      node.should be_instance_of Nokogiri::XML::Element
+      node['id'].should == Dor::Config.hydrus.app_workflow.to_s
+    end
+
+    it "get_workflow_step() should return a node with correct name attribute" do
+      node = @hi.get_workflow_step('approve')
+      node.should be_instance_of Nokogiri::XML::Element
+      node['name'].should == 'approve'
+    end
+
+    it "get_workflow_status() should return the current status of a step" do
+      @hi.get_workflow_status('start-deposit').should == 'completed'
+      @hi.get_workflow_status('submit').should        == 'waiting'
+      @hi.get_workflow_status('blort').should         == nil
+    end
+
+  end
+
 end

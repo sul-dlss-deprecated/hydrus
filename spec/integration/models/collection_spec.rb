@@ -1,8 +1,5 @@
 require 'spec_helper'
 
-# These are integration tests, because we want to exercise 
-# the actual solr query to retrieve the Items for a Collection.
-
 describe Hydrus::Collection do
   
   it "should be able to find its member Hydrus::Items" do

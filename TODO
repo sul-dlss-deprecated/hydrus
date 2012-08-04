@@ -23,15 +23,17 @@ Item-level license and visibility info (confirm the latter).
 Updating info when Collections/Items are published
 --------------------------------------------------
 
+next: refactor publis to use the new workflow code
+
 When Coll/Item is published, use workflow service to advance hydrusAssemblyWF:
  submit = completed
  approve = completed # If approval/review not needed
 
 When Coll/Item is approved (either automatically or by user), use workflow service to:
+ # mostly done
  advance hydrusAssemblyWF
  start-assembly = completed
  initialice the assemblyWF
- "#{Dor::Config.dor.service_root}/dor/v1/objects/#{@pid}/apo_workflows/assemblyWF"
 
 Item.identityMetadata.objectLabel = Item.title. [Need to set up workflow first].
 

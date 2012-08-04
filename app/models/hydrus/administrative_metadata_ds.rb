@@ -6,7 +6,7 @@ class Hydrus::AdministrativeMetadataDS < ActiveFedora::NokogiriDatastream
   def self.short_wf(wf_name)
     # Used to convert a workflow ID to the name of the parent node in
     # the APO adminMD. For example:
-    #   :hydrusAssemblyWF >> 'hydrusAssembly'
+    #   :fooWF >> 'foo'
     return wf_name.to_s[0..-3]
   end
 

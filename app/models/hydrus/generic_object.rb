@@ -69,12 +69,6 @@ class Hydrus::GenericObject < Dor::Item
     identityMetadata.content_will_change!
   end
 
-  # Registers an object in Dor, and returns it.
-  def self.register_dor_object(*args)
-    params = self.dor_registration_params(*args)
-    return Dor::RegistrationService.register_object(params)
-  end
-
   def self.licenses
     {
       'Creative Commons Licenses' =>  [
@@ -108,12 +102,16 @@ class Hydrus::GenericObject < Dor::Item
     }
   end
 
-  private
+  # Registers an object in Dor, and returns it.
+  def self.register_dor_object(*args)
+    params = self.dor_registration_params(*args)
+    return Dor::RegistrationService.register_object(params)
+  end
 
   # Returns a hash of info needed to register a Dor object.
   def self.dor_registration_params(user_string, object_type, apo_pid)
     proj = 'Hydrus'
-    wfs  = object_type == 'adminPolicy' ? [] : [:hydrusAssemblyWF]
+    wfs  = object_type == 'adminPolicy' ? [] : [Dor::Config.hydrus.app_workflow]
     return {
       :object_type       => object_type,
       :admin_policy      => apo_pid,
@@ -122,6 +120,44 @@ class Hydrus::GenericObject < Dor::Item
       :tags              => ["Project : #{proj}"],
       :initiate_workflow => wfs,
     }
+  end
+
+  # Approves an object by marking the 'approve' step in the Hydrus workflow as
+  # completed. If the app is configured to start the common assembly workflow,
+  # additional calls will be made to the workflow service to begin that
+  # process as well.
+  def approve
+    complete_workflow_step('approve')
+    return unless Dor::Config.hydrus.start_common_assembly
+    complete_workflow_step('start-assembly')
+    initiate_apo_workflow('assemblyWF')
+  end
+
+  # Takes the name of a step in the Hydrus workflow.
+  # Calls the workflow service to mark that step as completed.
+  def complete_workflow_step(step)
+    hawf = Dor::Config.hydrus.app_workflow
+    Dor::WorkflowService.update_workflow_status('dor', pid, hawf, step, 'completed')
+  end
+
+  # Returns the hydrusAssemblyWF node from the object's workflows.
+  def get_workflow_node
+    wf = Dor::Config.hydrus.app_workflow
+    q = "//workflow[@id='#{wf}']"
+    return workflows.find_by_xpath(q).first
+  end
+
+  # Takes the name of a hydrusAssemblyWF step.
+  # Returns the corresponding process node.
+  def get_workflow_step(step)
+    return get_workflow_node.at_xpath("//process[@name='#{step}']")
+  end
+
+  # Takes the name of a hydrusAssemblyWF step.
+  # Returns the staus of the corresponding process node.
+  def get_workflow_status(step)
+    node = get_workflow_step(step)
+    return node ? node['status'] : nil
   end
 
 end
