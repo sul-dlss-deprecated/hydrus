@@ -1,10 +1,10 @@
 class Hydrus::Item < Hydrus::GenericObject
-
+  include Hydrus::EmbargoMetadataDsExtension
   include Hydrus::Responsible
   
   after_validation :strip_whitespace
       
-  attr_accessor :terms_of_deposit
+  attr_accessor :terms_of_deposit, :embargo
   
   validates :actors, :at_least_one=>true, :if => :clicked_publish?
   validates :files, :at_least_one=>true, :if => :clicked_publish?
@@ -87,37 +87,44 @@ class Hydrus::Item < Hydrus::GenericObject
   
   def visibility *args
     groups = []
-    (rightsMetadata.read_access.machine.group *args).collect{|g| groups << g}
-    (rightsMetadata.read_access.machine.world *args).collect{|g| groups << "world" if g.blank?}
+    # if the embargoMD has future world read access
+    if embargoMetadata.release_access_node.at_xpath('//access[@type="read"]/machine/world')
+      groups << "world" 
+    else
+      (rightsMetadata.read_access.machine.group *args).collect{|g| groups << g}
+      (rightsMetadata.read_access.machine.world *args).collect{|g| groups << "world" if g.blank?}
+    end
     groups
   end
   
   def visibility= *args
     if args.first == "world"
-      rightsMetadata.remove_group_node("read", "stanford")
-      rightsMetadata.read_access.machine.world = ""
+      if embargo == "immediate"
+        # make the current rightsMD world
+        rightsMetadata.remove_group_node("read", "stanford")
+        rightsMetadata.read_access.machine.world = ""
+        # remove embargo metadata from the rights and embargo datastreams.
+        rightsMetadata.read_access.machine.embargo_release_date = ""
+        embargoMetadata.release_date = Date.today
+        embargoMetadata.release_access_node = Nokogiri::XML("<releaseAccess/>")
+      elsif embargo == "future"
+        # Add stanford to current groups in read access.
+        rightsMetadata.read_access.machine.group = rightsMetadata.read_access.machine.group << "stanford" # I'm not sure how this will work with groups that have existing attributes.
+        # add the world XML to embargoMD then set the release date
+        embargoMetadata.release_access_node = Nokogiri::XML(world_release_access_node_xml)
+        embargoMetadata.release_date = Date.strptime(embargo_date, "%m/%d/%Y")
+      end
     elsif args.first == "stanford"
       rightsMetadata.remove_world_node("read")
-      # I'm not sure how this will work with groups that have existing attributes.
-      # We may need to create an add-node method.
-      rightsMetadata.read_access.machine.group = rightsMetadata.read_access.machine.group << args.first
-    end
-  end
-  
-  # We're simply using embargo for the immediate/future radio buttons.
-  # Those radio buttons base their selected state on the existence 
-  # of embargo_date so we don't really need to store anything.
-  def embargo *args
-    # no-op
-  end
-  
-  def embargo= *args
-    case args.first
-      when "immediate"
-        rightsMetadata.read_access.machine.embargo_release_date= ""
-        # TODO: Remove embargoAccess block from embargoDS
-      when "future"
-        # TODO: Add embargoAccess block to embargoDS
+      rightsMetadata.read_access.machine.group = rightsMetadata.read_access.machine.group << args.first # I'm not sure how this will work with groups that have existing attributes.
+      if embargo == "immediate"
+        rightsMetadata.read_access.machine.embargo_release_date = ""
+        embargoMetadata.release_date = Date.today
+        embargoMetadata.release_access_node = Nokogiri::XML("<releaseAccess/>")
+      elsif embargo == "future"
+        embargoMetadata.release_access_node = Nokogiri::XML(stanford_release_access_node_xml)
+        embargoMetadata.release_date = Date.strptime(embargo_date, "%m/%d/%Y")
+      end
     end
   end
     
@@ -128,7 +135,7 @@ class Hydrus::Item < Hydrus::GenericObject
   
   def embargo_date= *args
     date = args.first.blank? ? "" : Date.strptime(args.first, "%m/%d/%Y").to_s
-    (rightsMetadata.read_access.machine.embargo_release_date= date)
+    (rightsMetadata.read_access.machine.embargo_release_date= date) unless date.blank?
   end
     
   def beginning_of_embargo_range
