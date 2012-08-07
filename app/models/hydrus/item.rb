@@ -108,15 +108,16 @@ class Hydrus::Item < Hydrus::GenericObject
         embargoMetadata.release_date = Date.today
         embargoMetadata.release_access_node = Nokogiri::XML("<releaseAccess/>")
       elsif embargo == "future"
+        rightsMetadata.remove_world_node("read")
         # Add stanford to current groups in read access.
-        rightsMetadata.read_access.machine.group = rightsMetadata.read_access.machine.group << "stanford" # I'm not sure how this will work with groups that have existing attributes.
+        rightsMetadata.read_access.machine.group = rightsMetadata.read_access.machine.group << "stanford" unless rightsMetadata.read_access.machine.group.include?("stanford")
         # add the world XML to embargoMD then set the release date
         embargoMetadata.release_access_node = Nokogiri::XML(world_release_access_node_xml)
         embargoMetadata.release_date = Date.strptime(embargo_date, "%m/%d/%Y")
       end
     elsif args.first == "stanford"
       rightsMetadata.remove_world_node("read")
-      rightsMetadata.read_access.machine.group = rightsMetadata.read_access.machine.group << args.first # I'm not sure how this will work with groups that have existing attributes.
+      rightsMetadata.read_access.machine.group = rightsMetadata.read_access.machine.group << args.first
       if embargo == "immediate"
         rightsMetadata.read_access.machine.embargo_release_date = ""
         embargoMetadata.release_date = Date.today
