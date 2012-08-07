@@ -41,6 +41,7 @@ log/*
 tmp
 nohup.out
 *~
+tags
 
 public/plugin_assets
 public/plugin_assets/
