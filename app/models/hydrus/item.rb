@@ -87,46 +87,32 @@ class Hydrus::Item < Hydrus::GenericObject
   
   def visibility *args
     groups = []
-    # if the embargoMD has future world read access
-    if embargoMetadata.release_access_node.at_xpath('//access[@type="read"]/machine/world')
-      groups << "world" 
+    if embargo_date
+      if embargoMetadata.release_access_node.at_xpath('//access[@type="read"]/machine/world')
+        groups << "world"
+      else
+        groups << embargoMetadata.release_access_node.at_xpath('//access[@type="read"]/machine/group').text
+      end
     else
-      (rightsMetadata.read_access.machine.group *args).collect{|g| groups << g}
-      (rightsMetadata.read_access.machine.world *args).collect{|g| groups << "world" if g.blank?}
+      (rightsMetadata.read_access.machine.group).collect{|g| groups << g}
+      (rightsMetadata.read_access.machine.world).collect{|g| groups << "world" if g.blank?}      
     end
     groups
   end
   
   def visibility= *args
-    if args.first == "world"
-      if embargo == "immediate"
-        # make the current rightsMD world
-        rightsMetadata.remove_group_node("read", "stanford")
-        rightsMetadata.read_access.machine.world = ""
-        # remove embargo metadata from the rights and embargo datastreams.
-        rightsMetadata.read_access.machine.embargo_release_date = ""
-        embargoMetadata.release_date = Date.today
-        embargoMetadata.release_access_node = Nokogiri::XML("<releaseAccess/>")
-      elsif embargo == "future"
-        rightsMetadata.remove_world_node("read")
-        # Add stanford to current groups in read access.
-        rightsMetadata.read_access.machine.group = rightsMetadata.read_access.machine.group << "stanford" unless rightsMetadata.read_access.machine.group.include?("stanford")
-        # add the world XML to embargoMD then set the release date
-        embargoMetadata.release_access_node = Nokogiri::XML(world_release_access_node_xml)
-        embargoMetadata.release_date = Date.strptime(embargo_date, "%m/%d/%Y")
-      end
-    elsif args.first == "stanford"
-      rightsMetadata.remove_world_node("read")
-      rightsMetadata.read_access.machine.group = rightsMetadata.read_access.machine.group << args.first
-      if embargo == "immediate"
-        rightsMetadata.read_access.machine.embargo_release_date = ""
-        embargoMetadata.release_date = Date.today
-        embargoMetadata.release_access_node = Nokogiri::XML("<releaseAccess/>")
-      elsif embargo == "future"
-        embargoMetadata.release_access_node = Nokogiri::XML(stanford_release_access_node_xml)
-        embargoMetadata.release_date = Date.strptime(embargo_date, "%m/%d/%Y")
-      end
-    end
+    embargoMetadata.release_access_node = Nokogiri::XML(generic_release_access_xml) unless embargoMetadata.ng_xml.at_xpath("//access")
+    if embargo == "immediate"
+      embargoMetadata.release_access_node = Nokogiri::XML("<releaseAccess/>")
+      rightsMetadata.remove_embargo_date
+      embargoMetadata.remove_embargo_date
+      update_access_blocks(rightsMetadata, args.first)
+    elsif embargo == "future"
+      rightsMetadata.remove_world_read_access
+      rightsMetadata.remove_all_group_read_nodes
+      update_access_blocks(embargoMetadata, args.first)
+      embargoMetadata.release_date = Date.strptime(embargo_date, "%m/%d/%Y")
+    end    
   end
     
   def embargo_date *args
@@ -224,6 +210,15 @@ class Hydrus::Item < Hydrus::GenericObject
   def keywords=(*args)
     descMetadata.remove_nodes(:subject)
     args.first.values.each { |kw| descMetadata.insert_topic(kw)  }
+  end
+  
+  def update_access_blocks(ds,group)
+    if group == "world"
+      ds.send(:make_world_readable)
+    else
+      ds.send(:remove_world_read_access)
+      ds.send(:add_read_group, group)
+    end
   end
   
   def self.roles

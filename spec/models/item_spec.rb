@@ -244,9 +244,11 @@ describe Hydrus::Item do
             subject.embargo = "future"
             subject.embargo_date = (Date.today + 2.years).strftime("%m/%d/%Y")
           end
-          it "should add the stanford group to the read access block" do
-            subject.visibility = "world"
+          it "should remove any groups from the rightsMetadata read block" do
+            subject.rightsMetadata.read_access.machine.group = "stanford"
             subject.rightsMetadata.read_access.machine.group.include?("stanford").should be_true
+            subject.visibility = "world"
+            subject.rightsMetadata.read_access.machine.group.include?("stanford").should be_false
           end
           it "should add the world releasable XML to the embargoMetadata" do
             subject.visibility = "world"
@@ -261,11 +263,11 @@ describe Hydrus::Item do
       describe "stanford only" do
         subject {Hydrus::Item.new}
         it "should remove any world read node from rightsMD" do
-          subject.embargo = "immedate"
-          subject.visibility = "world"
-          subject.rightsMetadata.read_access.machine.world.should_not be_blank
+          subject.embargo = "immediate"
+          subject.rightsMetadata.read_access.machine.world = ""
+          subject.rightsMetadata.read_access.machine.world.should == [""]
           subject.visibility = "stanford"
-          subject.rightsMetadata.read_access.machine.world.first.should be_blank
+          subject.rightsMetadata.read_access.machine.world.should == []
           subject.rightsMetadata.read_access.machine.group.include?("stanford").should be_true
         end
         describe "immediate embargo" do
@@ -275,10 +277,6 @@ describe Hydrus::Item do
           it "should remove the embargo release date in rightsMD" do
             subject.visibility = "stanford"
             subject.rightsMetadata.read_access.machine.embargo_release_date.first.should be_blank
-          end
-          it "should set the release date in the embargoMD to today" do
-            subject.visibility = "stanford"
-            subject.embargoMetadata.release_date.should == Date.today.beginning_of_day.utc.xmlschema
           end
           it "should set the releaseAccess node to an empty node in the embargoMD" do
             subject.visibility = "stanford"
@@ -305,7 +303,6 @@ describe Hydrus::Item do
           subject.rightsMetadata.read_access.machine.group.include?("stanford").should_not be_true
           subject.visibility = "stanford"
           subject.rightsMetadata.read_access.machine.world.should == []
-          subject.rightsMetadata.read_access.machine.group.include?("stanford").should be_true
           subject.embargo = "immediate"
           subject.visibility = "world"
           subject.visibility.should == ["world"]
