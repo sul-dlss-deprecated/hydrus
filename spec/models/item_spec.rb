@@ -216,98 +216,103 @@ describe Hydrus::Item do
   
   describe "item level APO information" do
     describe "visibility" do
-      describe "world" do
-        describe "immediate embargo" do
-          subject {Hydrus::Item.new}
-          before(:each) do
-            subject.embargo = "immediate"
-          end
-          it "should set the read access to world in rightsMetadata" do
-            subject.visibility = "world"
-            subject.rightsMetadata.read_access.machine.world.should_not be_blank
-            subject.visibility.should == ["world"]
-          end
-          it "should set the remove any stanford groups" do
-            subject.visibility = "stanford"
-            subject.rightsMetadata.read_access.machine.group.include?("stanford").should be_true
-            subject.visibility = "world"
-            subject.rightsMetadata.read_access.machine.group.include?("stanford").should_not be_true
-          end
-          it "should get a blank releaseAccess node from embargoMD" do
-            subject.visibility = "world"
-            subject.embargoMetadata.ng_xml.to_s.should match(/<releaseAccess\/>/)
-          end
-        end
-        describe "future embargo" do
-          subject {Hydrus::Item.new}
-          before(:each) do
-            subject.embargo = "future"
-            subject.embargo_date = (Date.today + 2.years).strftime("%m/%d/%Y")
-          end
-          it "should remove any groups from the rightsMetadata read block" do
-            subject.rightsMetadata.read_access.machine.group = "stanford"
-            subject.rightsMetadata.read_access.machine.group.include?("stanford").should be_true
-            subject.visibility = "world"
-            subject.rightsMetadata.read_access.machine.group.include?("stanford").should be_false
-          end
-          it "should add the world releasable XML to the embargoMetadata" do
-            subject.visibility = "world"
-            subject.embargoMetadata.ng_xml.at_xpath('//access[@type="read"]/machine/world').should_not be_nil
-          end
-          it "should set the release date properly" do
-            subject.visibility = "world"
-            subject.embargoMetadata.release_date.should == (Date.today + 2.years).beginning_of_day.utc.xmlschema
-          end
-        end
-      end
-      describe "stanford only" do
-        subject {Hydrus::Item.new}
-        it "should remove any world read node from rightsMD" do
+      subject {Hydrus::Item.new}
+      describe "immediate" do
+        it "should remove the releaseAccess node from embargoMD" do
+          subject.embargo = "future"
+          subject.embargo_date = (Date.today + 2.days).strftime("%m/%d/%Y")
+          subject.visibility = "world"
+          subject.embargoMetadata.ng_xml.to_s.should match(/<releaseAccess>/)
           subject.embargo = "immediate"
-          subject.rightsMetadata.read_access.machine.world = ""
-          subject.rightsMetadata.read_access.machine.world.should == [""]
+          subject.visibility = "world"
+          subject.embargoMetadata.ng_xml.to_s.should match(/<releaseAccess\/>/)
+        end
+        it "should remove the embargo date from both the rightsMD and embargoMD" do
+          subject.embargo = "future"
+          subject.embargo_date = (Date.today + 2.days).strftime("%m/%d/%Y")
+          subject.visibility = "world"
+          subject.embargoMetadata.ng_xml.to_s.should match(/<releaseDate>#{(Date.today + 2.days).beginning_of_day.utc.xmlschema}<\/releaseDate>/)
+          subject.rightsMetadata.ng_xml.to_s.should match(/<embargoReleaseDate>#{(Date.today + 2.days).to_s}<\/embargoReleaseDate>/)
+          subject.embargo = "immediate"
+          subject.visibility = "world"
+          subject.embargoMetadata.ng_xml.to_s.should_not match(/<releaseDate/)
+          subject.rightsMetadata.ng_xml.to_s.should_not match(/<embargoReleaseDate/)
+        end
+        it "should set the current rightsMD to world readable for world" do
+          subject.embargo = "future"
+          subject.embargo_date = (Date.today + 2.days).strftime("%m/%d/%Y")
           subject.visibility = "stanford"
-          subject.rightsMetadata.read_access.machine.world.should == []
-          subject.rightsMetadata.read_access.machine.group.include?("stanford").should be_true
-        end
-        describe "immediate embargo" do
-          before(:each) do
-            subject.embargo = "immediate"
-          end
-          it "should remove the embargo release date in rightsMD" do
-            subject.visibility = "stanford"
-            subject.rightsMetadata.read_access.machine.embargo_release_date.first.should be_blank
-          end
-          it "should set the releaseAccess node to an empty node in the embargoMD" do
-            subject.visibility = "stanford"
-            subject.embargoMetadata.ng_xml.to_s.should match(/<releaseAccess\/>/)
-          end
-        end
-        describe "future embargo" do
-          before(:each) do
-            subject.embargo = "future"
-            subject.embargo_date = (Date.today + 2.years).strftime("%m/%d/%Y")
-          end
-          it "should set the stanford release XML in the embargoDS" do
-            subject.visibility = "stanford"
-            subject.embargoMetadata.ng_xml.at_xpath('//access[@type="read"]/machine/group[text()="stanford"]').should_not be_nil
-          end
-          it "should set the embargo date properly in the embargoDS" do
-            subject.visibility = "stanford"
-            subject.embargoMetadata.release_date.should == (Date.today + 2.years).beginning_of_day.utc.xmlschema
-          end
-        end
-        
-        it "should remove the stanford group when set to world/everyone and should remove the world group when set to stanford" do
-          subject.rightsMetadata.read_access.machine.world.should == []
-          subject.rightsMetadata.read_access.machine.group.include?("stanford").should_not be_true
-          subject.visibility = "stanford"
+          subject.embargoMetadata.ng_xml.to_s.should match(/<group>stanford<\/group>/)
           subject.rightsMetadata.read_access.machine.world.should == []
           subject.embargo = "immediate"
           subject.visibility = "world"
-          subject.visibility.should == ["world"]
-          subject.rightsMetadata.read_access.machine.world.should_not be_blank
-          subject.rightsMetadata.read_access.machine.group.include?("stanford").should_not be_true
+          subject.embargoMetadata.ng_xml.to_s.should_not match(/<group>stanford<\/group>/)
+          subject.embargoMetadata.ng_xml.to_s.should match(/<releaseAccess\/>/)
+          subject.rightsMetadata.read_access.machine.world.should == [""]
+        end
+        it "should set the given group in rightsMD and remove world readability for groups being set" do
+          subject.embargo = "future"
+          subject.embargo_date = (Date.today + 2.days).strftime("%m/%d/%Y")
+          subject.visibility = "stanford"
+          subject.embargoMetadata.ng_xml.to_s.should match(/<world\/>/)
+          subject.embargo = "immediate"
+          subject.visibility = "stanford"
+          subject.embargoMetadata.ng_xml.to_s.should_not match(/<world\/>/)
+          subject.embargoMetadata.ng_xml.to_s.should match(/<releaseAccess\/>/)
+          subject.rightsMetadata.read_access.machine.group.include?("stanford").should be_true
+        end
+      end
+      
+      describe "future" do
+        it "should remove the world read access from rightsMD" do
+          subject.embargo = "immediate"
+          subject.visibility = "world"
+          subject.rightsMetadata.ng_xml.to_s.should match(/<world\/>/)
+          subject.embargo = "future"
+          subject.embargo_date = (Date.today + 2.days).strftime("%m/%d/%Y")
+          subject.visibility = "world"
+          subject.rightsMetadata.read_access.machine.world.should == []
+          subject.embargoMetadata.ng_xml.to_s.should match(/<world\/>/)
+        end
+        it "should remove groups from the read access of the rightsMD" do
+          subject.embargo = "immediate"
+          subject.visibility = "stanford"
+          subject.rightsMetadata.read_access.machine.group.include?("stanford").should be_true
+          subject.embargo = "future"
+          subject.embargo_date = (Date.today + 2.days).strftime("%m/%d/%Y")
+          subject.visibility = "stanford"
+          subject.rightsMetadata.read_access.machine.group.include?("stanford").should be_false
+          subject.embargoMetadata.ng_xml.to_s.should match(/<group>stanford<\/group>/)
+        end
+        it "should set the current embargoMD to world readable for world" do
+          subject.embargo = "immediate"
+          subject.visibility = "stanford"
+          subject.rightsMetadata.read_access.machine.group.include?("stanford").should be_true
+          subject.embargo = "future"
+          subject.embargo_date = (Date.today + 2.days).strftime("%m/%d/%Y")
+          subject.visibility = "world"
+          subject.embargoMetadata.ng_xml.to_s.should match(/<releaseAccess>/)
+          subject.embargoMetadata.ng_xml.at_xpath("//access[@type='read']/machine/world").should_not be_nil
+          subject.rightsMetadata.ng_xml.to_s.should_not match(/<group>stanford<\/group>/)
+        end
+        it "should set the given group in emargoMD and remove world readability for groups being set" do
+          subject.embargo = "immediate"
+          subject.visibility = "world"
+          subject.rightsMetadata.read_access.machine.world.should == [""]
+          subject.embargo = "future"
+          subject.embargo_date = (Date.today + 2.days).strftime("%m/%d/%Y")
+          subject.visibility = "stanford"
+          subject.rightsMetadata.read_access.machine.world.should == []
+          subject.embargoMetadata.ng_xml.to_s.should match(/<releaseAccess>/)
+          subject.embargoMetadata.ng_xml.at_xpath("//access[@type='read']/machine/group[text()='stanford']").should_not be_nil
+          subject.rightsMetadata.read_access.machine.group.include?("stanford").should be_false
+        end
+        it "should set the embargo date in the rights and embargo datastreams" do
+          subject.embargo = "future"
+          subject.embargo_date = (Date.today + 2.days).strftime("%m/%d/%Y")
+          subject.visibility = "stanford"
+          subject.embargoMetadata.release_date.should == (Date.today + 2.days).beginning_of_day.utc.xmlschema
+          subject.rightsMetadata.read_access.machine.embargo_release_date.first.should == (Date.today + 2.days).to_s
         end
       end
     end
