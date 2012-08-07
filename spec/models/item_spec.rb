@@ -216,18 +216,102 @@ describe Hydrus::Item do
   
   describe "item level APO information" do
     describe "visibility" do
-      subject {Hydrus::Item.new}
-      it "should remove the stanford group when set to world/everyone and should remove the world group when set to stanford" do
-        subject.rightsMetadata.read_access.machine.world.should == []
-        subject.rightsMetadata.read_access.machine.group.include?("stanford").should_not be_true
-        subject.visibility = "stanford"
-        subject.rightsMetadata.read_access.machine.world.should == []
-        subject.rightsMetadata.read_access.machine.group.include?("stanford").should be_true
-        subject.embargo = "immediate"
-        subject.visibility = "world"
-        subject.visibility.should == ["world"]
-        subject.rightsMetadata.read_access.machine.world.should_not be_blank
-        subject.rightsMetadata.read_access.machine.group.include?("stanford").should_not be_true
+      describe "world" do
+        describe "immediate embargo" do
+          subject {Hydrus::Item.new}
+          before(:each) do
+            subject.embargo = "immediate"
+          end
+          it "should set the read access to world in rightsMetadata" do
+            subject.visibility = "world"
+            subject.rightsMetadata.read_access.machine.world.should_not be_blank
+            subject.visibility.should == ["world"]
+          end
+          it "should set the remove any stanford groups" do
+            subject.visibility = "stanford"
+            subject.rightsMetadata.read_access.machine.group.include?("stanford").should be_true
+            subject.visibility = "world"
+            subject.rightsMetadata.read_access.machine.group.include?("stanford").should_not be_true
+          end
+          it "should get a blank releaseAccess node from embargoMD" do
+            subject.visibility = "world"
+            subject.embargoMetadata.ng_xml.to_s.should match(/<releaseAccess\/>/)
+          end
+        end
+        describe "future embargo" do
+          subject {Hydrus::Item.new}
+          before(:each) do
+            subject.embargo = "future"
+            subject.embargo_date = (Date.today + 2.years).strftime("%m/%d/%Y")
+          end
+          it "should add the stanford group to the read access block" do
+            subject.visibility = "world"
+            subject.rightsMetadata.read_access.machine.group.include?("stanford").should be_true
+          end
+          it "should add the world releasable XML to the embargoMetadata" do
+            subject.visibility = "world"
+            subject.embargoMetadata.ng_xml.at_xpath('//access[@type="read"]/machine/world').should_not be_nil
+          end
+          it "should set the release date properly" do
+            subject.visibility = "world"
+            subject.embargoMetadata.release_date.should == (Date.today + 2.years).beginning_of_day.utc.xmlschema
+          end
+        end
+      end
+      describe "stanford only" do
+        subject {Hydrus::Item.new}
+        it "should remove any world read node from rightsMD" do
+          subject.embargo = "immedate"
+          subject.visibility = "world"
+          subject.rightsMetadata.read_access.machine.world.should_not be_blank
+          subject.visibility = "stanford"
+          subject.rightsMetadata.read_access.machine.world.first.should be_blank
+          subject.rightsMetadata.read_access.machine.group.include?("stanford").should be_true
+        end
+        describe "immediate embargo" do
+          before(:each) do
+            subject.embargo = "immediate"
+          end
+          it "should remove the embargo release date in rightsMD" do
+            subject.visibility = "stanford"
+            subject.rightsMetadata.read_access.machine.embargo_release_date.first.should be_blank
+          end
+          it "should set the release date in the embargoMD to today" do
+            subject.visibility = "stanford"
+            subject.embargoMetadata.release_date.should == Date.today.beginning_of_day.utc.xmlschema
+          end
+          it "should set the releaseAccess node to an empty node in the embargoMD" do
+            subject.visibility = "stanford"
+            subject.embargoMetadata.ng_xml.to_s.should match(/<releaseAccess\/>/)
+          end
+        end
+        describe "future embargo" do
+          before(:each) do
+            subject.embargo = "future"
+            subject.embargo_date = (Date.today + 2.years).strftime("%m/%d/%Y")
+          end
+          it "should set the stanford release XML in the embargoDS" do
+            subject.visibility = "stanford"
+            subject.embargoMetadata.ng_xml.at_xpath('//access[@type="read"]/machine/group[text()="stanford"]').should_not be_nil
+          end
+          it "should set the embargo date properly in the embargoDS" do
+            subject.visibility = "stanford"
+            subject.embargoMetadata.release_date.should == (Date.today + 2.years).beginning_of_day.utc.xmlschema
+          end
+        end
+        
+        it "should remove the stanford group when set to world/everyone and should remove the world group when set to stanford" do
+          subject.rightsMetadata.read_access.machine.world.should == []
+          subject.rightsMetadata.read_access.machine.group.include?("stanford").should_not be_true
+          subject.visibility = "stanford"
+          subject.rightsMetadata.read_access.machine.world.should == []
+          subject.rightsMetadata.read_access.machine.group.include?("stanford").should be_true
+          subject.embargo = "immediate"
+          subject.visibility = "world"
+          subject.visibility.should == ["world"]
+          subject.rightsMetadata.read_access.machine.world.should_not be_blank
+          subject.rightsMetadata.read_access.machine.group.include?("stanford").should_not be_true
+        end
       end
     end
 
