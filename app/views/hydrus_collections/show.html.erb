@@ -33,7 +33,7 @@
         <dt>User's status:</dt>
         <dd><font color=red>#TODO</font></dd>
         <dt>Collection status:</dt>
-        <dd><%= collection_status(@document_fedora) %></dd>
+        <dd><%= @document_fedora.deposit_status %></dd>
       </dl>
     </div>
 
@@ -42,30 +42,30 @@
       <p><%= link_to("Edit collection settings",edit_polymorphic_path(@document_fedora, :viewing_context => 'edit'),
               :class => 'edit toggle') %></p>
 				<%= form_for(@document_fedora, :method => 'PUT', :html => {:class => "step", :novalidate=>""}) do |f| -%>
-					<% if @document_fedora.publish %>
+					<% if @document_fedora.is_open %>
 					  <p><button type="submit" class="btn btn-small save-edits" name="hydrus_collection[publish]" value="false" id="hydrus_collection_publish">Close Collection</button></p>
-					<% elsif @document_fedora.publishable? # collection is not yet published, check it's validity now %>
+					<% elsif @document_fedora.is_publishable %>
 				  	<p><button type="submit" class="btn btn-small save-edits" name="hydrus_collection[publish]" value="true" id="hydrus_collection_publish">Open Collection</button></p>
 					<% else %>
 							<p>To open the collection, you must fix the following:
 								<%
 								errors = []  
-					      @document_fedora.object_error_messages.each do |field, error|
+					      @document_fedora.errors.messages.each do |field, error|
 					        errors << "<li class='errors'>#{field.to_s.humanize.capitalize} #{error.join}</li>"
 					      end
 								%>
 								<%="<ul>#{errors.join}</ul>".html_safe%>
 						  </p>
 					<% 
-					end # end check for published
-				end # end form %>
+					end
+				end %>
 
-		    <% if @document_fedora.destroyable? %>
-					<p class="discard-item"><i class="icon-trash"></i> <a href="#">Discard this <%=@document_fedora.object_type%></a></p>
-		    <% elsif !@document_fedora.publish && @document_fedora.hydrus_items.size > 0  %>
+		    <% if @document_fedora.is_destroyable %>
+					<p class="discard-item"><i class="icon-trash"></i> <a href="#">Discard <%=@document_fedora.object_type%></a></p>
+		    <% elsif !@document_fedora.is_published && @document_fedora.has_items  %>
 					<p class="discard-item"><i class="icon-trash"></i> Cannot	discard collection because it contains items.</p>		
-				<% end # end check for item can be deleted %>
-			<% if @document_fedora.publish %>
+				<% end %>
+			<% if @document_fedora.is_open %>
 	      <form class="form-horizontal">
 	        <div class="btn-group">
 	          <button class="btn btn-small">Add new &hellip;</button>
@@ -75,7 +75,7 @@
 	          <%= render :partial => "shared/add_content_options", :locals => {:parent => @document_fedora} %>
 	        </div>
 	      </form>
-			 <% end # end check for published%>
+			 <% end %>
     </div>
 		
 <%- end -%>

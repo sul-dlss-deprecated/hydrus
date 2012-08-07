@@ -6,30 +6,27 @@ class Hydrus::Item < Hydrus::GenericObject
       
   attr_accessor :embargo
   
-  validates :actors, :at_least_one=>true, :if => :clicked_publish?
-  validates :files, :at_least_one=>true, :if => :clicked_publish?
+  validate :collection_is_open, :on => :create
+  validates :actors, :at_least_one=>true, :if => :should_validate
+  validates :files, :at_least_one=>true, :if => :should_validate
   #validate  :embargo_date_is_correct_format # TODO
   validate  :must_accept_terms_of_deposit, :if => :clicked_publish?
-  validate  :collection_must_be_open, :on => :create
 
-  # check to see if object is "publishable" (basically valid, but setting publish to true to run validations properly)
-  def publishable?
-    case publish
-      when true
-         self.valid?
-      else 
-        # we need to set publish to true to run validations
-        self.publish=true
-        result=self.valid?  
-        self.publish=false
-        return result
-      end
+  # Collections can be opened, but not Items. We define this method here
+  # so that is_publishable can be written generically.
+  def is_open
+    return false
   end
-  
-  # def publish=(value)
-  #   # At the moment of publication, we refresh various titles.
-  #   identityMetadata.objectLabel = title
-  # end
+
+  # Publish the Item.
+  def publish(value)
+    # At the moment of publication, we refresh various titles.
+    identityMetadata.objectLabel = title
+    # Advance workflow to record that the object has been published.
+    s = 'submit'
+    complete_workflow_step(s) unless workflow_step_is_done(s)
+    approve() unless requires_human_approval
+  end
   
   def self.create(collection_pid, user)
     # Create the object, with the correct model.
@@ -49,11 +46,11 @@ class Hydrus::Item < Hydrus::GenericObject
     return item
   end
   
-  # at least one of the associated collections must be open (published) to create a new item
-  def collection_must_be_open
-    if !collection.collect {|c| c.publish}.include?(true)
-      errors.add(:collection, "must be open to have new items added")
-    end
+  # Returns true only if the Item has an open Collection.
+  def collection_is_open
+    return true if collection.any? { |c| c.is_open }
+    errors.add(:collection, "must be open to have new items added")
+    return false
   end
 
   # the user must have accepted the terms of deposit to publish

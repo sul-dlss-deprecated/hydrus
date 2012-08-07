@@ -1,7 +1,7 @@
 require 'spec_helper'
 
-describe Hydrus::Collection do
-  
+describe(Hydrus::Collection, :integration => true) do
+
   it "should be able to find its member Hydrus::Items" do
     druid = 'druid:oo000oo0003'
     hc    = Hydrus::Collection.find druid

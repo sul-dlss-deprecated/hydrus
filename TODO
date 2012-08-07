@@ -18,24 +18,35 @@ Create new Collection: create rightsMetadata.
 Create new Item: create rightsMetadata. The rightsMetadata will contain the
 Item-level license and visibility info (confirm the latter).
 
+Item view: release date. See Consul page. Date from "published" lifecycle when
+it exists, else "not released". Display format: 31-Jan-2012.
+
 
 --------------------------------------------------
 Updating info when Collections/Items are published
 --------------------------------------------------
 
-next: refactor publis to use the new workflow code
+Identify needed tests.
 
-When Coll/Item is published, use workflow service to advance hydrusAssemblyWF:
- submit = completed
- approve = completed # If approval/review not needed
 
-When Coll/Item is approved (either automatically or by user), use workflow service to:
- # mostly done
- advance hydrusAssemblyWF
- start-assembly = completed
- initialice the assemblyWF
+---------------------------
+hydrusProperties datastream
+---------------------------
 
-Item.identityMetadata.objectLabel = Item.title. [Need to set up workflow first].
+Create hydrusProperties datastream.
+
+Store whether user has checked the "agree to terms" checkbox. Use the hydrusProperties
+datastream. Also uncomment the validation connected to the checkbox.
+
+Consider putting additional info in hydrusProperties datastream, such as: submit time,
+published status, release date.
+
+Collection create/edit: store whether Collection requires approval/review.
+
+Whether collection requires approval: need UI component.
+
+Whether item requires approval: (1) will this exist; (2) if so, use
+hydrusProperties datastream; (3) need UI component.
 
 -------
 BUGS
@@ -46,16 +57,15 @@ When javascript is disabled, it is not possible to add new items.  The drop down
 WAITING
 -------
 
+Need a place to store Item types. Currently hardcoded to :dataset.
+
 APO RELS-EXT datastream needs to add a child node to <rdf:Description>:
 <hydra:referencesAgreement rdf:resource="info:fedora/druid:XXX"/>, where XXX is
 the PID of the global Hydrus Agreement object. [The Hydrus agreement object
 needs to be created -- need more details].
 
 Events datastreams for Collections and Items: create datastreams and add events
-to them. [waiting on spec for the relevant events and the stream content]
-
-Collection create/edit: need place to store whether Collection requires
-approval/review. Also need UI component.
+to them. See Consul Hydrus+Event+History. [Waiting Lynn and Hannah to finalize].
 
 Item view: release date. See Consul page. Date from "published" lifecycle when
 it exists, else "not released". Display format: 31-Jan-2012. [waiting on
@@ -72,3 +82,7 @@ Collection create: APO.descMetadata. Flesh out. [waiting on spec from Lynn]
 
 Should roleMetadata have an XML namespace? If so, what should it be? Could
 not find any definitive examples in Consul. [Ask Lynn]
+
+Qualify roles by their domain: for example, "hydrus:collection_creator". See
+Consul Repository+Roles+and+Permissions. [Waiting on Lynn and Hannah to
+finalize.]

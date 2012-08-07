@@ -42,14 +42,10 @@ class HydrusCollectionsController < ApplicationController
 
 #    logger.debug("attributes submitted: #{params['hydrus_collection'].inspect}")
     
-    if @document_fedora.object_valid?
-      @document_fedora.save
-    else
-      # invalid collection, generate errors to display to user
-      errors = []  
-      @document_fedora.object_error_messages.each do |field, error|
-        errors << "#{field.to_s.humanize.capitalize} #{error.join(', ')}"
-      end
+    unless @document_fedora.save
+      errors = @document_fedora.errors.messages.map { |field, error|
+        "#{field.to_s.humanize.capitalize} #{error.join(', ')}"
+      }
       flash[:error] = errors.join("<br/>").html_safe
       render :edit and return
     end  

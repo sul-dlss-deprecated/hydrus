@@ -18,10 +18,6 @@ module ApplicationHelper
     end
   end
 
-  def collection_status(obj)
-    obj.publish ? "open" : "closed"
-  end
-
   def render_head_content
     render_extra_head_content + content_for(:head)
   end

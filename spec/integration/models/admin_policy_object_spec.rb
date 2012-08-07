@@ -1,7 +1,7 @@
 require 'spec_helper'
 
-describe Hydrus::AdminPolicyObject do
-  
+describe(Hydrus::AdminPolicyObject, :integration => true) do
+
   it "should be able to create an APO object, whose APO is the Ur-APO" do
     # Create an APO.
     user = 'foo@bar.com'

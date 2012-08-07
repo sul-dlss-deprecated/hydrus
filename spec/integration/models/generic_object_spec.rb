@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Hydrus::GenericObject do
+describe(Hydrus::GenericObject, :integration => true) do
  
   describe "approve()" do
     

@@ -7,7 +7,7 @@ class Hydrus::Collection < Hydrus::GenericObject
   before_validation :remove_values_for_associated_attribute_with_value_none
   after_validation :strip_whitespace
   before_save :save_apo
-  
+
   def self.create(user)
     # Create the object, with the correct model.
     apo     = Hydrus::AdminPolicyObject.create(user)
@@ -24,49 +24,49 @@ class Hydrus::Collection < Hydrus::GenericObject
     return coll
   end
 
-  # this lets us check if both the apo and the collection are valid at once (used in the controller)
-  def object_valid?
-    valid? # first run the validations on BOTH collection and apo models specifically to collect all errors
-    apo.valid?
-    valid? && apo.valid? # then return true only if both are actually valid
-  end
-  
-  def object_error_messages
-    # grab all error messages from both collection and the apo to show to the user
-    errors.messages.merge(apo.errors.messages)
-  end
-  
-  # check to see if object is "publishable" (basically valid, but setting publish to true to run validations properly)
-  def publishable?
-    case publish
-      when true
-         object_valid?
-      else 
-        # we need to set publish to true to run validations
-        self.publish=true
-        result=object_valid?  
-        self.publish=false
-        return result
-      end
+  # Returns true only if the Collection and its APO are valid.
+  # Note that we want both validations to run (even if the first fails)
+  # so that APO error messages can be merged into those of the Collection.
+  def valid?(*args)
+    v1 = super
+    v2 = apo.valid?
+    errors.messages.merge!(apo.errors.messages)
+    return v1 && v2
   end
 
-  def destroyable?
-    !self.publish && self.hydrus_items.size == 0  
+  # Returns true only if the Collection is not published and has no Items.
+  def is_destroyable
+    return not(is_published or has_items)
   end
-    
-  def publish=(value)
-    # set the APO deposit status to open if the collection is published, since they are tied together
-    apo.deposit_status = (to_bool(value) ? "open" : "closed")
-    # At the moment of publication, we refresh various titles.
-    apo.identityMetadata.objectLabel = "APO for #{title}"
-    apo.descMetadata.title           = "APO for #{title}"
-    identityMetadata.objectLabel     = title
+
+  # Returns true only if the Collection has items.
+  def has_items
+    return hydrus_items.size > 0
   end
-  
-  def publish
-    apo.deposit_status == "open" ? true : false
+
+  # Open or close the Collection.
+  # Opening also has the effect of publishing it.
+  # Unlike open-close, which the user can toggle, publishing is irreversible.
+  def publish(value)
+    if to_bool(value)
+      apo.deposit_status = 'open'
+      # At the moment of publication, we refresh various titles.
+      apo.identityMetadata.objectLabel = "APO for #{title}"
+      apo.descMetadata.title           = "APO for #{title}"
+      identityMetadata.objectLabel     = title
+      # Advance the workflow to record that the object has been published.
+      s = 'submit'
+      complete_workflow_step(s) unless workflow_step_is_done(s)
+      approve() unless requires_human_approval
+    else
+      apo.deposit_status = 'closed'
+    end
   end
-  
+
+  def is_open
+    return apo.deposit_status == "open" ? true : false
+  end
+
   def strip_whitespace
      strip_whitespace_from_fields [:title,:abstract,:contact]
   end
@@ -90,9 +90,13 @@ class Hydrus::Collection < Hydrus::GenericObject
   # These getters and setters are needed because the ActiveFedora delegate()
   # does not work when we need to delegate through to the APO.
 
+  def deposit_status *args
+    apo.deposit_status *args
+  end
+
   # for APO administrativeMetadata
-  
-  # These getter and setter methods allow us to set a single value for the embargo 
+
+  # These getter and setter methods allow us to set a single value for the embargo
   #  period and license from two separate HTML select controls, based on the value of a radio button
   def embargo_varies
     embargo_option == "varies" ? embargo : ""
@@ -126,7 +130,7 @@ class Hydrus::Collection < Hydrus::GenericObject
     apo.license= *args if license_option == "fixed"  # only set the license for this setter if the corresponding radio button is selected
   end
   #############
-  
+
   def embargo *args
     apo.embargo *args
   end
@@ -198,7 +202,7 @@ class Hydrus::Collection < Hydrus::GenericObject
     apo.license_option= *args
   end
 
-  # for APO roleMetadata 
+  # for APO roleMetadata
   def add_empty_person_to_role *args
     apo.roleMetadata.add_empty_person_to_role *args
   end
@@ -210,15 +214,15 @@ class Hydrus::Collection < Hydrus::GenericObject
   def person_id *args
     apo.person_id *args
   end
-  
+
   def apo_person_roles
     return apo.person_roles
   end
-  
+
   def apo_person_roles= *args
     apo.person_roles= args.first
   end
-  
+
   def remove_actor *args
     apo.roleMetadata.delete_actor *args
   end

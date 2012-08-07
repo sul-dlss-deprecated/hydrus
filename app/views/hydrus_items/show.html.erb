@@ -30,24 +30,32 @@
 	  <div class="box-header">What you can do</div>
 	  <p><%= link_to("Edit item",edit_polymorphic_path(@document_fedora, :viewing_context => 'edit'),
 	          :class => 'edit toggle') %></p>
-			<% if @document_fedora.publishable? # item is not yet published, check it's validity now %>
+      <%
+          if @document_fedora.is_published
+           # Do nothing.
+      %>
+			<% elsif @document_fedora.is_publishable %>
 		  	<p><button type="submit" class="btn btn-small save-edits" name="hydrus_item[publish]" value="true" id="hydrus_item_publish">Publish Item</button></p>
 			<% else %>
 					<p>To publish the item, you must fix the following:
 						<%
-						errors = []  
-			      @document_fedora.errors.messages.each do |field, error|
-			        errors << "<li class='errors'>#{field.to_s.humanize.capitalize} #{error.join}</li>"
-			      end
+            errors = @document_fedora.errors.messages.map { |field, error|
+			        "<li class='errors'>#{field.to_s.humanize.capitalize} #{error.join}</li>"
+            }
 						%>
 						<%="<ul>#{errors.join}</ul>".html_safe%>
 				  </p>
 			<% 
-			end # end check for publishable
+			end
+      unless @document_fedora.is_published
 			%>
-			<p class="discard-item"><i class="icon-trash"></i> <a href="#">Discard this <%=@document_fedora.object_type%></a></p>
+        <p class="discard-item">
+          <i class="icon-trash"></i>
+          <a href="#">Discard <%=@document_fedora.object_type%></a>
+        </p>
+			<% end %>
 	</div>
-	<% end # end form %>
+	<% end %>
 <%- end -%>
 
 
@@ -63,7 +71,7 @@
 
     <dt>PURL</dt>
     <dd>
-      <% if @document_fedora.publish %>
+      <% if @document_fedora.is_published %>
 				<%=link_to(@document_fedora.url, @document_fedora.url)%>
     	<% else %>
 				Not published yet

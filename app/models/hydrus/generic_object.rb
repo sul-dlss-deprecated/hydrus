@@ -1,13 +1,11 @@
 class Hydrus::GenericObject < Dor::Item
-    
-  attr_accessor :publish
-  
+
   include Hydrus::ModelHelper
   include ActiveModel::Validations
-  validates :title, :abstract, :contact, :not_empty => true, :if => :clicked_publish?
-  
+
+  validates :title, :abstract, :contact, :not_empty => true, :if => :should_validate
   validates :pid, :is_druid=>true
-  
+
   attr_accessor :apo_pid
 
   has_metadata(
@@ -28,12 +26,46 @@ class Hydrus::GenericObject < Dor::Item
     :label => 'Hydrus Properties',
     :control_group => 'M')
 
-  def object_type
-    identityMetadata.objectType.first
+  def initialize(*args)
+    super
+    @should_validate = false
   end
-    
-  def clicked_publish?
-    to_bool(publish)
+
+  def object_type
+    return identityMetadata.objectType.first
+  end
+
+  # This method allows us to run validations without actually publishing.
+  def should_validate
+    return (@should_validate or is_published)
+  end
+
+  # Returns true only if the object is open and valid.
+  def is_publishable
+    if is_open
+      return valid?
+    else
+      # Temporarily set @should_validate to true so that validations
+      # will be run and errors collected.
+      prev = @should_validate
+      @should_validate = true
+      v = valid?
+      @should_validate = prev
+      return v
+    end
+  end
+
+  def is_published
+    return (@is_published ||= workflow_step_is_done('submit'))
+  end
+
+  def is_approved
+    return is_published && workflow_step_is_done('approve')
+  end
+
+  # The controller will call this method, which we pass on publish().
+  def publish=(value)
+    publish(value)
   end
 
   delegate :accepted_terms_of_deposit, :to => "hydrusProperties", :unique => true
@@ -43,7 +75,7 @@ class Hydrus::GenericObject < Dor::Item
   delegate :related_item_title, :to => "descMetadata", :at => [:relatedItem, :titleInfo, :title]
   delegate :related_item_url, :to => "descMetadata", :at => [:relatedItem, :location, :url]
   delegate :contact, :to => "descMetadata", :unique => true
-    
+
   def apo
     @apo ||= (apo_pid ? get_fedora_item(apo_pid) : Hydrus::AdminPolicyObject.new)
   end
@@ -94,7 +126,7 @@ class Hydrus::GenericObject < Dor::Item
       ]
     }
   end
-  
+
   def self.license_human(code)
     licenses.each do |type, license|
       license.each do |lic|
@@ -102,7 +134,7 @@ class Hydrus::GenericObject < Dor::Item
       end
     end
   end
-  
+
   def self.license_commons
     return {
       'Creative Commons Licenses'  => "creativeCommons",
@@ -128,6 +160,11 @@ class Hydrus::GenericObject < Dor::Item
       :tags              => ["Project : #{proj}"],
       :initiate_workflow => wfs,
     }
+  end
+
+  def requires_human_approval
+    # TODO: hard-coded until we know where this info will be stored.
+    return false
   end
 
   # Approves an object by marking the 'approve' step in the Hydrus workflow as
@@ -166,6 +203,12 @@ class Hydrus::GenericObject < Dor::Item
   def get_workflow_status(step)
     node = get_workflow_step(step)
     return node ? node['status'] : nil
+  end
+
+  # Takes the name of a hydrusAssemblyWF step.
+  # Returns the staus of the corresponding process node.
+  def workflow_step_is_done(step)
+    return get_workflow_status(step) == 'completed'
   end
 
 end
