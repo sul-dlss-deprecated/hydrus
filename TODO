@@ -53,8 +53,6 @@ to them. [waiting on spec for the relevant events and the stream content]
 Collection create/edit: need place to store whether Collection requires
 approval/review. Also need UI component.
 
-Store "agree to terms" checkbox for item [we need a place to store this].
-
 Item view: release date. See Consul page. Date from "published" lifecycle when
 it exists, else "not released". Display format: 31-Jan-2012. [waiting on
 workflow discussion]

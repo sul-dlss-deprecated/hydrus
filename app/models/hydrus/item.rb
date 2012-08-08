@@ -4,12 +4,12 @@ class Hydrus::Item < Hydrus::GenericObject
   
   after_validation :strip_whitespace
       
-  attr_accessor :terms_of_deposit, :embargo
+  attr_accessor :embargo
   
   validates :actors, :at_least_one=>true, :if => :clicked_publish?
   validates :files, :at_least_one=>true, :if => :clicked_publish?
   #validate  :embargo_date_is_correct_format # TODO
-  validates :terms_of_deposit, :presence => true, :if => :clicked_publish?
+  validate  :must_accept_terms_of_deposit, :if => :clicked_publish?
   validate  :collection_must_be_open, :on => :create
 
   # check to see if object is "publishable" (basically valid, but setting publish to true to run validations properly)
@@ -53,6 +53,13 @@ class Hydrus::Item < Hydrus::GenericObject
   def collection_must_be_open
     if !collection.collect {|c| c.publish}.include?(true)
       errors.add(:collection, "must be open to have new items added")
+    end
+  end
+
+  # the user must have accepted the terms of deposit to publish
+  def must_accept_terms_of_deposit
+    if to_bool(accepted_terms_of_deposit) != true
+      errors.add(:terms_of_deposit, "must be accepted")
     end
   end
   

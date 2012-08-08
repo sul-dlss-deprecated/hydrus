@@ -22,6 +22,12 @@ class Hydrus::GenericObject < Dor::Item
     :label => 'Role Metadata',
     :control_group => 'M')
 
+  has_metadata(
+    :name => "hydrusProperties",
+    :type => Hydrus::HydrusPropertiesDS,
+    :label => 'Hydrus Properties',
+    :control_group => 'M')
+
   def object_type
     identityMetadata.objectType.first
   end
@@ -29,7 +35,9 @@ class Hydrus::GenericObject < Dor::Item
   def clicked_publish?
     to_bool(publish)
   end
-  
+
+  delegate :accepted_terms_of_deposit, :to => "hydrusProperties", :unique => true
+  delegate :requires_human_approval, :to => "hydrusProperties", :unique => true
   delegate :abstract, :to => "descMetadata", :unique => true
   delegate :title, :to => "descMetadata", :unique => true
   delegate :related_item_title, :to => "descMetadata", :at => [:relatedItem, :titleInfo, :title]
