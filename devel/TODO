@@ -26,7 +26,30 @@ it exists, else "not released". Display format: 31-Jan-2012.
 Updating info when Collections/Items are published
 --------------------------------------------------
 
-Identify needed tests.
+Collection
+  valid?
+  is_destroyable
+  has_items
+  publish(value)
+  is_open
+  deposit_status
+  deal with commented tests
+
+Item
+  is_open
+  publish
+  collection_is_open
+  deal with commented tests
+
+integration tests
+  complete_workflow_step
+  is_publishable
+  is_published
+  is_approved
+  collection view
+    deal with commented tests
+
+is_druid_validator.rb. Remove unneeded conditional.
 
 
 ---------------------------
@@ -57,7 +80,8 @@ When javascript is disabled, it is not possible to add new items.  The drop down
 WAITING
 -------
 
-Need a place to store Item types. Currently hardcoded to :dataset.
+Need a place to store Item types. Currently hardcoded to :dataset. Also see object_type()
+in GenericObject.
 
 APO RELS-EXT datastream needs to add a child node to <rdf:Description>:
 <hydra:referencesAgreement rdf:resource="info:fedora/druid:XXX"/>, where XXX is

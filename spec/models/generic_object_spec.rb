@@ -3,52 +3,52 @@ require 'spec_helper'
 describe Hydrus::GenericObject do
 
   before(:each) do
-    @hi      = Hydrus::GenericObject.new
+    @go      = Hydrus::GenericObject.new
     @apo_pid = 'druid:oo000oo0002'
   end
   
   it "apo() should return a new blank apo if the apo_pid is nil" do
-    @hi.apo.class.should == Hydrus::AdminPolicyObject 
+    @go.apo.class.should == Hydrus::AdminPolicyObject 
   end
 
   it "apo() should return fedora object if the apo_pid is defined" do
     mfo = double('mock_fedora_object')
-    @hi.apo_pid = @apo_pid
-    @hi.stub(:get_fedora_item).and_return mfo
-    @hi.apo.should == mfo
+    @go.apo_pid = @apo_pid
+    @go.stub(:get_fedora_item).and_return mfo
+    @go.apo.should == mfo
   end
 
   it "apo_pid() should get the correct PID from admin_policy_object_ids()" do
     exp = 'foobar'
-    @hi.stub(:admin_policy_object_ids).and_return [exp, 11, 22]
-    @hi.should_receive :admin_policy_object_ids
-    @hi.apo_pid.should == exp
+    @go.stub(:admin_policy_object_ids).and_return [exp, 11, 22]
+    @go.should_receive :admin_policy_object_ids
+    @go.apo_pid.should == exp
   end
 
   it "apo_pid() should get PID directly from @apo_pid when it is defined" do
     exp = 'foobarfubb'
-    @hi.apo_pid = exp
-    @hi.stub(:admin_policy_object_ids).and_return ['doh', 11, 22]
-    @hi.should_not_receive :admin_policy_object_ids
-    @hi.apo_pid.should == exp
+    @go.apo_pid = exp
+    @go.stub(:admin_policy_object_ids).and_return ['doh', 11, 22]
+    @go.should_not_receive :admin_policy_object_ids
+    @go.apo_pid.should == exp
   end
 
   it "can exercise discover_access()" do
-    @hi.discover_access.should == ""
+    @go.discover_access.should == ""
   end
 
   it "can exercise object_type()" do
     fake_imd = double('fake_imd', :objectType => [123,456])
-    @hi.should_receive(:identityMetadata).and_return(fake_imd)
-    @hi.object_type.should == 123
+    @go.should_receive(:identityMetadata).and_return(fake_imd)
+    @go.object_type.should == 123
   end
 
   it "can exercise url()" do
-    @hi.url.should == "http://purl.stanford.edu/__DO_NOT_USE__"
+    @go.url.should == "http://purl.stanford.edu/__DO_NOT_USE__"
   end
 
   it "can exercise related_items()" do
-    ris = @hi.related_items
+    ris = @go.related_items
     ris.size.should == 1
     ri = ris.first
     ri.title.should == ''
@@ -127,17 +127,17 @@ describe Hydrus::GenericObject do
       
     it "should make expected calls (start_common_assembly = false)" do
       Dor::Config.hydrus.start_common_assembly(false)
-      @hi.should_receive(:complete_workflow_step).with('approve').once
-      @hi.should_not_receive(:initiate_apo_workflow)
-      @hi.approve()
+      @go.should_receive(:complete_workflow_step).with('approve').once
+      @go.should_not_receive(:initiate_apo_workflow)
+      @go.approve()
     end
 
     it "should make expected calls (start_common_assembly = true)" do
       Dor::Config.hydrus.start_common_assembly(true)
-      @hi.should_receive(:complete_workflow_step).with('approve').once
-      @hi.should_receive(:complete_workflow_step).with('start-assembly').once
-      @hi.should_receive(:initiate_apo_workflow).once
-      @hi.approve()
+      @go.should_receive(:complete_workflow_step).with('approve').once
+      @go.should_receive(:complete_workflow_step).with('start-assembly').once
+      @go.should_receive(:initiate_apo_workflow).once
+      @go.approve()
     end
 
   end
@@ -160,28 +160,104 @@ describe Hydrus::GenericObject do
         </workflows>
       EOXML
       @workflow = Dor::WorkflowDs.from_xml(noko_doc(xml))
-      @hi = Hydrus::Item.new
-      @hi.stub(:workflows).and_return(@workflow)
+      @go = Hydrus::GenericObject.new
+      @go.stub(:workflows).and_return(@workflow)
     end
 
     it "get_workflow_node() should return a node with correct id attribute" do
-      node = @hi.get_workflow_node
+      node = @go.get_workflow_node
       node.should be_instance_of Nokogiri::XML::Element
       node['id'].should == Dor::Config.hydrus.app_workflow.to_s
     end
 
     it "get_workflow_step() should return a node with correct name attribute" do
-      node = @hi.get_workflow_step('approve')
+      node = @go.get_workflow_step('approve')
       node.should be_instance_of Nokogiri::XML::Element
       node['name'].should == 'approve'
     end
 
     it "get_workflow_status() should return the current status of a step" do
-      @hi.get_workflow_status('start-deposit').should == 'completed'
-      @hi.get_workflow_status('submit').should        == 'waiting'
-      @hi.get_workflow_status('blort').should         == nil
+      @go.get_workflow_status('start-deposit').should == 'completed'
+      @go.get_workflow_status('submit').should        == 'waiting'
+      @go.get_workflow_status('blort').should         == nil
     end
 
+    it "workflow_step_is_done() should return correct value" do
+      @go.workflow_step_is_done('start-deposit').should == true
+      @go.workflow_step_is_done('submit').should        == false
+    end
+
+    it "can exercise complete_workflow_step(), stubbed" do
+      step = 'submit'
+      args = ['dor', @go.pid, kind_of(Symbol), step, 'completed']
+      Dor::WorkflowService.should_receive(:update_workflow_status).with(*args)
+      @go.complete_workflow_step(step)
+    end
+
+    describe "is_published()" do
+      
+      it "should return false when submit step is waiting" do
+        @go.is_published.should == false
+      end
+
+      it "should return true when submit step is completed" do
+        @workflow.find_by_xpath('//process[@name="submit"]').first['status'] = 'completed'
+        @go.is_published.should == true
+      end
+
+      it "should not call workflow_step_is_done() a second time" do
+        @go.should_receive(:workflow_step_is_done).once.and_return(false)
+        @go.is_published.should == false
+        @go.is_published.should == false
+      end
+
+    end
+
+    describe "is_approved()" do
+      
+      it "should not call workflow_step_is_done() unless the object is published" do
+        @go.should_not_receive(:workflow_step_is_done)
+        @go.instance_variable_set('@is_published', false)
+        @go.is_approved.should == false
+      end
+
+      it "should return false if approved step is not completed" do
+        @go.stub(:is_published).and_return(true)
+        @go.is_approved.should == false
+      end
+
+      it "should return true if approved step is completed" do
+        @go.stub(:is_published).and_return(true)
+        @workflow.find_by_xpath('//process[@name="approve"]').first['status'] = 'completed'
+        @go.is_approved.should == true
+      end
+
+    end
+
+    it "is_publishable() should return the value of valid?" do
+      @go.stub(:pid).and_return('blah')
+      @go.valid?.should == false    # Bad PID.
+      @go.stub(:pid).and_return('druid:oo000oo0001')
+      @go.valid?.should == true     # OK PID.
+    end
+
+  end
+
+  describe "should_validate()" do
+
+    it "should not call is_published() when @should_validate is true" do
+      @go.instance_variable_set('@should_validate', true)
+      @go.should_not_receive(:is_published)
+      @go.should_validate.should == true
+    end
+    
+    it "should return the value of is_published() when @should_validate is false" do
+      [false, true].each do |exp|
+        @go.stub(:is_published).and_return(exp)
+        @go.should_validate.should == exp
+      end
+    end
+    
   end
 
 end

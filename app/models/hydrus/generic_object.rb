@@ -28,44 +28,43 @@ class Hydrus::GenericObject < Dor::Item
 
   def initialize(*args)
     super
-    @should_validate = false
+    @should_validate = false   # See should_validate().
   end
 
-  def object_type
-    return identityMetadata.objectType.first
-  end
-
-  # This method allows us to run validations without actually publishing.
+  # This method is used to control whether validations are run.
+  # The typical criterion is whether the object is published.
+  # However, the is_publishable method needs to run validations on
+  # unpublished objects -- hence the @should_validate instance variable.
   def should_validate
     return (@should_validate or is_published)
   end
 
-  # Returns true only if the object is open and valid.
+  # Returns true only if the object is valid.
   def is_publishable
-    if is_open
-      return valid?
-    else
-      # Temporarily set @should_validate to true so that validations
-      # will be run and errors collected.
-      prev = @should_validate
-      @should_validate = true
-      v = valid?
-      @should_validate = prev
-      return v
-    end
+    @should_validate = true    # See should_validate().
+    v = valid?
+    @should_validate = false
+    return v
   end
 
   def is_published
-    return (@is_published ||= workflow_step_is_done('submit'))
+    @is_published = workflow_step_is_done('submit') unless defined?(@is_published)
+    return @is_published
   end
 
   def is_approved
-    return is_published && workflow_step_is_done('approve')
+    return (is_published and workflow_step_is_done('approve'))
   end
 
-  # The controller will call this method, which we pass on publish().
-  def publish=(value)
-    publish(value)
+  # The controller will call this method, which we simply forward to
+  # publish() in the Collection or Item class.
+  def publish=(val)
+    publish(val)
+  end
+
+  def object_type
+    # TODO: this is not what we want.
+    return identityMetadata.objectType.first
   end
 
   delegate :accepted_terms_of_deposit, :to => "hydrusProperties", :unique => true
@@ -181,8 +180,8 @@ class Hydrus::GenericObject < Dor::Item
   # Takes the name of a step in the Hydrus workflow.
   # Calls the workflow service to mark that step as completed.
   def complete_workflow_step(step)
-    hawf = Dor::Config.hydrus.app_workflow
-    Dor::WorkflowService.update_workflow_status('dor', pid, hawf, step, 'completed')
+    awf = Dor::Config.hydrus.app_workflow
+    Dor::WorkflowService.update_workflow_status('dor', pid, awf, step, 'completed')
   end
 
   # Returns the hydrusAssemblyWF node from the object's workflows.
