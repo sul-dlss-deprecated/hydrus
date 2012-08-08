@@ -1,0 +1,10 @@
+August 2012
+
+- Spec, design, build Events (LM & HF, GG, MH)
+- Wrap up Create Collection to-dos (MH)
+- Design Terms of Deposit (HF & GG)
+- Re-design/rationalize left sidebar (HF & GG)
+- Spec file management across Hydrus, DOR, Digital Stacks (LM, MH, PM)
+- Finish spec for Roles and Permissions (LM)
+- Re-factor Javascript multi-value fields (JK)
+- Rework role assignment UI (GG)
