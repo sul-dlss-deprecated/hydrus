@@ -151,10 +151,11 @@ class Hydrus::GenericObject < Dor::Item
   def self.dor_registration_params(user_string, object_type, apo_pid)
     proj = 'Hydrus'
     wfs  = object_type == 'adminPolicy' ? [] : [Dor::Config.hydrus.app_workflow]
+    tm   = Time.now.strftime('%Y-%m-%d %H:%M:%S.%L %z')  # With milliseconds.
     return {
       :object_type       => object_type,
       :admin_policy      => apo_pid,
-      :source_id         => { proj => "#{object_type}-#{user_string}-#{Time.now}" },
+      :source_id         => { proj => "#{object_type}-#{user_string}-#{tm}" },
       :label             => proj,
       :tags              => ["Project : #{proj}"],
       :initiate_workflow => wfs,
