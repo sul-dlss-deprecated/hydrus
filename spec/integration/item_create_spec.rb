@@ -42,8 +42,6 @@ describe("Item create", :type => :request, :integration => true) do
     item.identityMetadata.tag.should include("Hydrus : dataset", "Project : Hydrus")
     # Check person roles of the Item.
     item.person_roles.should == { "item-depositor" => { "archivist1" => true } }
-    # Delete object.
-    item.delete
   end
 
   it "should be able to access create-new-Item screen via the Collection view page" do
@@ -52,10 +50,6 @@ describe("Item create", :type => :request, :integration => true) do
     visit polymorphic_path(collection)
     click_link('item')
     current_path.should =~ @edit_path_regex
-    # Delete object.
-    druid = @edit_path_regex.match(current_path)[1]
-    Hydrus::Item.find(druid).delete
-    # Other editing functionality is tested elsewhere.
   end
 
 end

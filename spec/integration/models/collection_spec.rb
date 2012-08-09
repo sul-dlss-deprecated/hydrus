@@ -29,7 +29,6 @@ describe(Hydrus::Collection, :integration => true) do
     coll  = Hydrus::Collection.create(user)
     coll.should be_instance_of Hydrus::Collection
     coll.admin_policy_object_ids.should == [coll.apo.pid]
-    coll.delete
   end
 
 end

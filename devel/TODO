@@ -25,14 +25,9 @@ Item valiation. The :actors validation does not do anything, because the xml
 template for descMD always includes an actor (with a blank role and name). If we
 care about the test, it needs to do more (or we need to modify descMD and/or UI?).
 
-
---------------------------------------------------
-Updating info when Collections/Items are published
---------------------------------------------------
-
-Remove OBJ.delete from integration tests.
-
 item_create_spec.rb: scenario similar to collection_create (publish)
+
+Assess test coverage.
 
 
 ---------------------------

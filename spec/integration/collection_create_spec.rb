@@ -50,9 +50,6 @@ describe("Collection create", :type => :request, :integration => true) do
     coll.person_roles.should     == { "collection-depositor" => { "archivist1" => true } }
     # Check APO.descMetadata.
     apo.title.should == Dor::Config.hydrus.initial_apo_title
-    # Delete objects.
-    coll.delete
-    apo.delete
   end
 
   it "should be able to create a new Collection, publish, close, etc" do

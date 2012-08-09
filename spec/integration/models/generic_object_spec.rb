@@ -39,8 +39,6 @@ describe(Hydrus::GenericObject, :integration => true) do
       hi.approve()
       exp['start-assembly'] = 'completed'
       check_statuses.call()
-      # Wrap up.
-      hi.delete
     end
 
   end
