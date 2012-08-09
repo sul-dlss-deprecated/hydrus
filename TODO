@@ -37,6 +37,10 @@ When Coll/Item is approved (either automatically or by user), use workflow servi
 
 Item.identityMetadata.objectLabel = Item.title. [Need to set up workflow first].
 
+-------
+BUGS
+-------
+When javascript is disabled, it is not possible to add new items.  The drop down menus in "what you can do" don't work correctly with JS off.
 
 -------
 WAITING

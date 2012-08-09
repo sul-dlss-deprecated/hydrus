@@ -3,7 +3,8 @@
   <fieldset>
     <button type="submit" class="btn btn-small save-edits" name="save" id="save_<%= id %>">Save</button>
     <label class="checkbox">
-      <input type="checkbox" name="hydrus_item[accepted_terms_of_deposit]" value="<%=@document_fedora.accepted_terms_of_deposit%>" class="terms_of_deposit" id="terms_<%= id %>" /> I agree to the <a href="#">terms of deposit</a> for the Stanford Digital Repository
+      <%#= check_box_tag :hydrus_item, :accepted_terms_of_deposit %>
+			<input type="checkbox" <%="checked disabled" if to_bool(@document_fedora.accepted_terms_of_deposit)%>  name="hydrus_item[accepted_terms_of_deposit]" value="true" class="terms_of_deposit" id="terms_<%= id %>" /> I agree to the <a href="#">terms of deposit</a> for the Stanford Digital Repository
     </label>
     <button type="submit" id="hydrus_item_publish" class="btn btn-small publish" name="hydrus_item[publish]" value="true">Save and Publish</button>
     <p class="discard-item"><i class="icon-trash"></i> <a href="#">Discard this <%=@document_fedora.object_type%></a></p>

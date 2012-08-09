@@ -97,6 +97,7 @@ function activate_edit_controls() {
 	// javascript form submission
 	$("#item-actions, #collection-actions").toggle();
 	$("#item-actions button[type=submit], #collection-actions button[type=submit]").click(function(){
+		$("form.step").append("<input type='hidden' value='" + $("input#terms_js").is(":checked") + "' name='" + $('input#terms_js').attr('name') + "' />");	
 		$("form.step").append("<input type='hidden' value='" + $(this).attr('value') + "' name='" + $(this).attr('name') + "' />");	
   	$("form.step").submit();
 	});
