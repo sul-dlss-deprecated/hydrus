@@ -1,16 +1,21 @@
 module Hydrus
+
   module ModelHelper
 
-    # strip whitespace from any attributes passed in
-    def strip_whitespace_from_fields(fields)
-      fields.each do |field|
-        eval("self.#{field} = self.#{field}.strip") if self.send(field).respond_to?('strip')  # we can't just call a strip directly on the field due to OM?
+    # Takes an array of OM terms.
+    # Removes leading and trailing whitespace from the values referenced
+    # by those terms.
+    def strip_whitespace_from_fields(terms)
+      terms.each do |term|
+        v = send(term)
+        send(:"#{term}=", v.strip) if v.respond_to?(:strip)
       end
     end
 
-    def to_bool(value)
-      value == "true" || value == true ? true : false
+    def to_bool(val)
+      return (val == "true" || val == true)
     end
 
   end
+
 end
