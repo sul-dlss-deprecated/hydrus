@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 # A mock class to use while testing out mixin.
-class MockObject
+class MockResponsible
 
   include Hydrus::Responsible
 
@@ -43,7 +43,7 @@ end
 describe Hydrus::Responsible do
 
   before(:each) do
-    @obj = MockObject.new
+    @obj = MockResponsible.new
   end
 
   it "person_roles() should return the expected hash" do
