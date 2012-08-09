@@ -120,3 +120,17 @@ def should_visit_edit_page(obj)
   visit edit_polymorphic_path(obj)
   current_path.should == edit_polymorphic_path(obj)
 end
+
+# Some integration tests requires the minting of a valid druid in
+# order to pass validations. This method can be used to set the mint_ids
+# configuration to true, and then latter restore the previous value.
+def config_mint_ids(prev = nil)
+  dcc = Dor::Config.configure
+  if prev.nil?
+    prev = dcc.suri.mint_ids
+    dcc.suri.mint_ids = true
+  else
+    dcc.suri.mint_ids = prev
+  end
+  return prev
+end

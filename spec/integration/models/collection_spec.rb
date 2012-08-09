@@ -2,6 +2,14 @@ require 'spec_helper'
 
 describe(Hydrus::Collection, :integration => true) do
 
+  before(:all) do
+    @prev_mint_ids = config_mint_ids()
+  end
+
+  after(:all) do
+    config_mint_ids(@prev_mint_ids)
+  end
+
   it "should be able to find its member Hydrus::Items" do
     druid = 'druid:oo000oo0003'
     hc    = Hydrus::Collection.find druid

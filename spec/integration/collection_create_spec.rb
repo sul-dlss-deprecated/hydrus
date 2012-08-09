@@ -2,17 +2,14 @@ require 'spec_helper'
 
 describe("Collection create", :type => :request, :integration => true) do
 
-  before(:all) do
-    @notice = "Your changes have been saved."
+  before(:each) do
+    @notice = "Your changes have been saved"
     @edit_path_regex = Regexp.new('/collections/(druid:\w{11})/edit')
-    # Need to mint an actual druid in order to pass validation.
-    @prev_mint_ids = Dor::Config.configure.suri.mint_ids
-    Dor::Config.configure.suri.mint_ids = true
+    @prev_mint_ids = config_mint_ids()
   end
 
-  after(:all) do
-    # Restore mint_ids setting.
-    Dor::Config.configure.suri.mint_ids = @prev_mint_ids
+  after(:each) do
+    config_mint_ids(@prev_mint_ids)
   end
 
   it "should be able to create a new Collection, with APO, and with expected datastreams" do
