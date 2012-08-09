@@ -3,13 +3,14 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
   include Hydrus::ModelHelper
   include Hydrus::Responsible
 
-  # TODO: temporary fix until dor-services gem includes it in its APOs.
+  # TODO: temporary fix until dor-services gem includes Dor::Processable in its APOs.
   include Dor::Processable
   
-  validate :check_embargo_options, :if => :open_for_deposit?
-  validate :check_license_options, :if => :open_for_deposit?
-  validates :embargo_option, :presence => true, :if => :open_for_deposit?
-  validates :license_option, :presence => true, :if => :open_for_deposit?
+  validates :pid, :is_druid => true
+  validate  :check_embargo_options, :if => :is_open
+  validate  :check_license_options, :if => :is_open
+  validates :embargo_option, :presence => true, :if => :is_open
+  validates :license_option, :presence => true, :if => :is_open
 
   def self.create(user)
     # Create the object, with the correct model.
@@ -44,8 +45,8 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
     end
   end
 
-  def open_for_deposit?
-   deposit_status == "open"
+  def is_open
+    return deposit_status == "open"
   end  
   
   has_metadata(

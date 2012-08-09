@@ -24,7 +24,7 @@ class Hydrus::Collection < Hydrus::GenericObject
     return coll
   end
 
-  # Returns true only if the Collection and its APO are valid.
+  # Returns true only if both the Collection and its APO are valid.
   # Note that we want both validations to run (even if the first fails)
   # so that APO error messages can be merged into those of the Collection.
   def valid?(*args)
@@ -34,7 +34,7 @@ class Hydrus::Collection < Hydrus::GenericObject
     return v1 && v2
   end
 
-  # Returns true only if the Collection is not published and has no Items.
+  # Returns true only if the Collection is unpublished and has no Items.
   def is_destroyable
     return not(is_published or has_items)
   end
@@ -64,7 +64,7 @@ class Hydrus::Collection < Hydrus::GenericObject
   end
 
   def is_open
-    return apo.deposit_status == "open" ? true : false
+    return apo.is_open
   end
 
   def strip_whitespace

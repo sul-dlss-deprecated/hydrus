@@ -4,7 +4,7 @@ class Hydrus::GenericObject < Dor::Item
   include ActiveModel::Validations
 
   validates :title, :abstract, :contact, :not_empty => true, :if => :should_validate
-  validates :pid, :is_druid=>true
+  validates :pid, :is_druid => true
 
   attr_accessor :apo_pid
 

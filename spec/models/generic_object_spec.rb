@@ -6,9 +6,9 @@ describe Hydrus::GenericObject do
     @go      = Hydrus::GenericObject.new
     @apo_pid = 'druid:oo000oo0002'
   end
-  
+
   it "apo() should return a new blank apo if the apo_pid is nil" do
-    @go.apo.class.should == Hydrus::AdminPolicyObject 
+    @go.apo.class.should == Hydrus::AdminPolicyObject
   end
 
   it "apo() should return fedora object if the apo_pid is defined" do
@@ -58,13 +58,13 @@ describe Hydrus::GenericObject do
   describe "registration" do
 
     it "dor_registration_params() should return the expected hash" do
-      # Non-APO: hash should include initiate_workflow. 
+      # Non-APO: hash should include initiate_workflow.
       args = %w(whobar item somePID)
       drp = Hydrus::GenericObject.dor_registration_params(*args)
       drp.should be_instance_of Hash
       drp[:admin_policy].should == args.last
       drp.should include(:initiate_workflow)
-      # APO: hash should not includes initiate_workflow. 
+      # APO: hash should not includes initiate_workflow.
       args = %w(whobar adminPolicy somePID)
       drp = Hydrus::GenericObject.dor_registration_params(*args)
       drp.should be_instance_of Hash
@@ -80,7 +80,7 @@ describe Hydrus::GenericObject do
     end
 
   end
-  
+
   describe "class methods" do
     it "should define a licenses hash" do
       Hydrus::GenericObject.licenses.should be_a Hash
@@ -116,15 +116,15 @@ describe Hydrus::GenericObject do
   end
 
   describe "approve()" do
-    
+
     before(:each) do
       @prev_conf = Dor::Config.hydrus.start_common_assembly
     end
-      
+
     after(:each) do
       Dor::Config.hydrus.start_common_assembly(@prev_conf)
     end
-      
+
     it "should make expected calls (start_common_assembly = false)" do
       Dor::Config.hydrus.start_common_assembly(false)
       @go.should_receive(:complete_workflow_step).with('approve').once
@@ -195,7 +195,7 @@ describe Hydrus::GenericObject do
     end
 
     describe "is_published()" do
-      
+
       it "should return false when submit step is waiting" do
         @go.is_published.should == false
       end
@@ -214,7 +214,7 @@ describe Hydrus::GenericObject do
     end
 
     describe "is_approved()" do
-      
+
       it "should not call workflow_step_is_done() unless the object is published" do
         @go.should_not_receive(:workflow_step_is_done)
         @go.instance_variable_set('@is_published', false)
@@ -250,14 +250,39 @@ describe Hydrus::GenericObject do
       @go.should_not_receive(:is_published)
       @go.should_validate.should == true
     end
-    
+
     it "should return the value of is_published() when @should_validate is false" do
       [false, true].each do |exp|
         @go.stub(:is_published).and_return(exp)
         @go.should_validate.should == exp
       end
     end
-    
+
+  end
+
+  describe "validations" do
+
+    before(:each) do
+      @exp = [:pid, :title, :abstract, :contact]
+      @go.instance_variable_set('@should_validate', true)
+    end
+
+    it "blank slate object (should_validate=false) should include only the :pid error" do
+      @go.stub(:should_validate).and_return(false)
+      @go.valid?.should == false
+      @go.errors.messages.keys.should == [@exp.first]
+    end
+
+    it "blank slate object should include all validation errors" do
+      @go.valid?.should == false
+      @go.errors.messages.should include(*@exp)
+    end
+
+    it "fully populated object should be valid" do
+      dru = 'druid:ll000ll0001'
+      @exp.each { |e| @go.stub(e).and_return(dru) }
+      @go.valid?.should == true
+    end
   end
 
 end

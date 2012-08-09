@@ -1,75 +1,86 @@
 require 'spec_helper'
 
 describe Hydrus::Collection do
-    
-  # it "should be valid unless publish is set on both the apo and the collection" do
-  #   col=Hydrus::Collection.new(:pid=>'druid:tt000tt0001')
-  #   col.should be_valid
-  #   col.apo.should be_valid
-  #   col.object_valid?.should == true  
-  # end
 
-  # it "should have the associated apo deposit status set correctly when the collection is published" do
-  #   col=Hydrus::Collection.new(:pid=>'druid:tt000tt0001')
-  #   col.publish.should == false
-  #   col.apo.deposit_status.should == ''
-  #   col.clicked_publish?.should == false
-  #   col.publish="true"
-  #   col.apo.deposit_status.should == 'open'
-  #   col.apo.open_for_deposit?.should == true
-  #   col.publish="false"
-  #   col.apo.deposit_status.should == 'closed'
-  #   col.apo.open_for_deposit?.should == false
-  # end
+  before(:each) do
+    @hc = Hydrus::Collection.new
+  end
 
-  # it "new collections that are published should be invalid if required fields are not set, including those on the APO" do
-  #   col=Hydrus::Collection.new(:pid=>'druid:tt000tt0001')
-  #   col.should be_valid
-  #   col.apo.should be_valid
-  #   col.object_valid?.should == true
-  #   col.apo.deposit_status.should == ''
-  #   col.apo.open_for_deposit?.should == false
-  #   col.publish=true
-  #   col.apo.deposit_status.should == 'open'
-  #   col.apo.open_for_deposit?.should == true    
-  #   col.should_not be_valid
-  #   col.apo.should_not be_valid
-  #   col.object_valid?.should == false
-  #   col.object_error_messages[:title].should_not be_nil
-  #   col.object_error_messages[:embargo].should_not be_nil    
-  #   col.object_error_messages[:abstract].should_not be_nil    
-  # end
+  describe "valid?()" do
 
-  # it "new collections that are published should be valid when options are correctly set" do
-  #   col=Hydrus::Collection.new(:pid=>'druid:tt000tt0001')
-  #   col.publish="true"
-  #   col.object_valid?.should == false
-  #   col.title='title'
-  #   col.abstract='abstract'
-  #   col.contact='test@test.com'
-  #   col.embargo_option='none'
-  #   col.license_option='none'
-  #   col.object_valid?.should == true    
-  #   col.embargo_option='varies'
-  #   col.object_valid?.should == false    
-  #   col.embargo='1 year'
-  #   col.object_valid?.should == true
-  # end
+    before(:each) do
+      xml = <<-EOXML
+        <workflows>
+          <workflow id="foo">
+            <process status="waiting" name="aa"/>
+            <process status="waiting" name="bb"/>
+          </workflow>
+          <workflow id="hydrusAssemblyWF">
+            <process status="completed" name="start-deposit" lifecycle="registered"/>
+            <process status="waiting"   name="submit"/>
+            <process status="waiting"   name="approve"/>
+            <process status="waiting"   name="start-assembly"/>
+          </workflow>
+        </workflows>
+      EOXML
+      @workflow = Dor::WorkflowDs.from_xml(noko_doc(xml))
+      @apo      = Hydrus::AdminPolicyObject.new
+      @apo.stub(:is_open).and_return(true)
+      @hc.stub(:workflows).and_return(@workflow)
+      @hc.stub(:apo).and_return(@apo)
+    end
+
+    it "should validate both Collection and its APO, and merge their errors" do
+      @hc.valid?.should == false
+      es = @hc.errors.messages
+      es.should include(:pid, :embargo)
+    end
+
+    it "should get only the Collection errors when the APO is valid" do
+      @apo.stub(:'valid?').and_return(true)
+      @hc.valid?.should == false
+      es = @hc.errors.messages
+      es.should     include(:pid)
+      es.should_not include(:embargo)
+    end
+
+    it "should return true when both Collection and APO are valid" do
+      @hc.stub(:pid).and_return('druid:tt000tt0001')
+      @apo.stub(:'valid?').and_return(true)
+      @hc.valid?.should == true
+    end
+
+  end
+
+  it "is_destroyable() should return true only if Collection is unpublished with 0 Items" do
+    tests = [
+      [false, false, true],
+      [false, true,  false],
+      [true,  false, false],
+      [false, false, true],
+    ]
+    tests.each do |is_p, has_i, exp|
+      @hc.stub(:is_published).and_return(is_p)
+      @hc.stub(:has_items).and_return(has_i)
+      @hc.is_destroyable.should == exp
+    end
+  end
+
+  it "has_items() should return true only if Collection has Items" do
+    @hc.stub(:hydrus_items).and_return([])
+    @hc.has_items.should == false
+    @hc.stub(:hydrus_items).and_return([0, 11, 22])
+    @hc.has_items.should == true
+  end
   
-  # it "publishing an object should update APO and identityMetadata titles" do
-  #   col = Hydrus::Collection.new(:pid=>'druid:tt000tt0001')
-  #   # Before publishing.
-  #   col.apo.identityMetadata.objectLabel.should == []
-  #   col.apo.title.should == ""
-  #   col.identityMetadata.objectLabel.should == []
-  #   # After publishing.
-  #   t           = 'FOOBAR'
-  #   col.title   = t
-  #   col.publish = 'true'
-  #   col.apo.identityMetadata.objectLabel.should == ["APO for #{t}"]
-  #   col.apo.title.should == "APO for #{t}"
-  #   col.identityMetadata.objectLabel.should == [t]
-  # end
+  it "is_open() should delegate to the APO" do
+    apo = double('apo', :is_open => false)
+    @hc.stub(:apo).and_return(apo)
+    @hc.is_open.should == false
+    apo = double('apo', :is_open => true)
+    @hc.stub(:apo).and_return(apo)
+    @hc.is_open.should == true
+  end
   
   context "APO roleMetadataDS delegation-y methods" do
     before(:each) do

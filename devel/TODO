@@ -27,15 +27,13 @@ Updating info when Collections/Items are published
 --------------------------------------------------
 
 Collection
-  valid?
-  is_destroyable
-  has_items
   publish(value)
-  is_open
-  deposit_status
-  deal with commented tests
 
 Item
+  validate :collection_is_open, :on => :create
+  validates :actors, :at_least_one=>true, :if => :should_validate
+  validates :files, :at_least_one=>true, :if => :should_validate
+
   is_open
   publish
   collection_is_open
@@ -48,8 +46,11 @@ integration tests
   is_approved
   collection view
     deal with commented tests
-
-is_druid_validator.rb. Remove unneeded conditional.
+  collection
+    valid?
+    is_destroyable
+    publish
+    is_open
 
 
 ---------------------------
