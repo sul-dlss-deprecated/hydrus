@@ -42,22 +42,22 @@ describe Hydrus::AdminPolicyObject do
 
     before(:each) do
       @exp = [:pid, :embargo, :license, :embargo_option, :license_option]
-      @apo.instance_variable_set('@should_validate', true)
-      @apo.stub(:is_open).and_return(true)
     end
 
-    it "blank slate APO (closed) should include only the :pid error" do
-      @apo.stub(:is_open).and_return(false)
+    it "blank slate APO (should_validate=false) should include only the :pid error" do
+      @apo.stub(:should_validate).and_return(false)
       @apo.valid?.should == false
       @apo.errors.messages.keys.should == [@exp.first]
     end
 
     it "blank slate APO (open) should include all validation errors" do
+      @apo.stub(:should_validate).and_return(true)
       @apo.valid?.should == false
       @apo.errors.messages.keys.should include(*@exp)
     end
 
     it "fully populated APO should be valid" do
+      @apo.stub(:should_validate).and_return(true)
       dru = 'druid:ll000ll0001'
       @exp.each { |e| @apo.stub(e).and_return(dru) }
       @apo.valid?.should == true

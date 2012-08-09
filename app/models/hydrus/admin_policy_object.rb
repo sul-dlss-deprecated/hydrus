@@ -2,15 +2,19 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
 
   include Hydrus::ModelHelper
   include Hydrus::Responsible
+  include Hydrus::Publishable
+  include Dor::Processable  # TODO: needed until dor-services gem includes in its APOs.
 
-  # TODO: temporary fix until dor-services gem includes Dor::Processable in its APOs.
-  include Dor::Processable
-  
   validates :pid, :is_druid => true
-  validate  :check_embargo_options, :if => :is_open
-  validate  :check_license_options, :if => :is_open
-  validates :embargo_option, :presence => true, :if => :is_open
-  validates :license_option, :presence => true, :if => :is_open
+  validate  :check_embargo_options, :if => :should_validate
+  validate  :check_license_options, :if => :should_validate
+  validates :embargo_option, :presence => true, :if => :should_validate
+  validates :license_option, :presence => true, :if => :should_validate
+
+  def initialize(*args)
+    super
+    @should_validate = false
+  end
 
   def self.create(user)
     # Create the object, with the correct model.
@@ -45,10 +49,14 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
     end
   end
 
+  def is_published
+    return is_open
+  end
+
   def is_open
     return deposit_status == "open"
-  end  
-  
+  end
+
   has_metadata(
     :name => "descMetadata",
     :type => Hydrus::DescMetadataDS,
@@ -73,7 +81,7 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
   # administrativeMetadata
   delegate(:deposit_status, :to => "administrativeMetadata",
            :at => [:hydrus, :depositStatus], :unique => true)
-             
+
   delegate(:embargo, :to => "administrativeMetadata",
            :at => [:hydrus, :embargo], :unique => true)
 
@@ -98,16 +106,16 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
 
   delegate(:person_id, :to => "roleMetadata",
            :at => [:role, :person, :identifier])
-  
+
   # Will be "item-depositor" for now per spec. Test will determine if it changes in the future.
   def self.default_role
     self.roles.last
   end
-  
+
   def self.roles
     ["collection-manager", "collection-depositor", "item-depositor"]
-  end    
-  
+  end
+
   # Returns a hash of info needed for licenses in the APO.
   # Keys correspond to the license_option in the OM terminology.
   # Values are displayed in the web form.
@@ -116,8 +124,8 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
      'varies' => 'varies -- select a default below; contributor may change it for each item',
      'fixed'  => 'required license -- apply the selected license to all items in the collection'}
   end
-  
-  # WARNING - the keys of this hash (which appear in the radio buttons in the colelction edit page) 
+
+  # WARNING - the keys of this hash (which appear in the radio buttons in the colelction edit page)
   #   are used in the collection model to trigger specific getting and setting behavior of embargo lengths
   #  if you change these keys here, you need to update the collection model as well
   def self.embargo_types
@@ -125,18 +133,18 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
      'varies' => 'Varies -- select a release date per item, from "now" to a maximum of',
      'fixed'  => 'Fixed -- delay release of all items for'}
   end
-  
+
   def self.visibility_types
     {'everyone' => 'Everyone -- all items in this collection will be public',
      'varies'   => 'Varies -- default is public, but you can choose to restrict some items to Stanford community',
      'stanford' => 'Stanford community -- all items will be visible only to Stanford-authenticated users'}
   end
-  
+
   def self.embargo_terms
     {'6 months after deposit' => '6 months',
      '1 year after deposit'   => '1 year',
      '2 years after deposit'  => '2 years',
      '3 years after deposit'  => '3 years'}
   end
-  
+
 end

@@ -12,12 +12,6 @@ class Hydrus::Item < Hydrus::GenericObject
   #validate  :embargo_date_is_correct_format # TODO
   validate  :must_accept_terms_of_deposit, :if => :clicked_publish?
 
-  # Collections can be opened, but not Items. We define this method here
-  # so that is_publishable can be written generically.
-  def is_open
-    return false
-  end
-
   # Publish the Item.
   def publish(value)
     # At the moment of publication, we refresh various titles.

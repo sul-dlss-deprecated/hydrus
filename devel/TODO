@@ -30,6 +30,20 @@ care about the test, it needs to do more (or we need to modify descMD and/or UI?
 Updating info when Collections/Items are published
 --------------------------------------------------
 
+Collection
+  create
+  add title
+  save
+  expect
+    no open link
+    messages: Abstract cannot be blank; Contact cannot be blank
+  edit
+  add title and abstract
+  save
+  expect
+    open link
+  open
+
 integration tests
   complete_workflow_step
   is_publishable
@@ -61,12 +75,12 @@ datastream. Also uncomment the validation connected to the checkbox.
 Consider putting additional info in hydrusProperties datastream, such as: submit time,
 published status, release date.
 
-Collection create/edit: store whether Collection requires approval/review.
+Collection create/edit: store whether Collection requires human approval.
 
 Whether collection requires approval: need UI component.
 
-Whether item requires approval: (1) will this exist; (2) if so, use
-hydrusProperties datastream; (3) need UI component.
+Item approval: (1) inherited from the Collection (not an Item-level piece of
+info); (2) need UI component.
 
 -------
 BUGS

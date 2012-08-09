@@ -1,6 +1,7 @@
 class Hydrus::GenericObject < Dor::Item
 
   include Hydrus::ModelHelper
+  include Hydrus::Publishable
   include ActiveModel::Validations
 
   validates :title, :abstract, :contact, :not_empty => true, :if => :should_validate
@@ -28,23 +29,7 @@ class Hydrus::GenericObject < Dor::Item
 
   def initialize(*args)
     super
-    @should_validate = false   # See should_validate().
-  end
-
-  # This method is used to control whether validations are run.
-  # The typical criterion is whether the object is published.
-  # However, the is_publishable method needs to run validations on
-  # unpublished objects -- hence the @should_validate instance variable.
-  def should_validate
-    return (@should_validate or is_published)
-  end
-
-  # Returns true only if the object is valid.
-  def is_publishable
-    @should_validate = true    # See should_validate().
-    v = valid?
-    @should_validate = false
-    return v
+    @should_validate = false   # See Hydrus::Publishable.
   end
 
   def is_published

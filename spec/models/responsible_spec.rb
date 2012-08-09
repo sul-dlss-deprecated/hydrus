@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 # A mock class to use while testing out mixin.
-class MockItem
+class MockObject
 
   include Hydrus::Responsible
 
@@ -43,11 +43,11 @@ end
 describe Hydrus::Responsible do
 
   before(:each) do
-    @item = MockItem.new
+    @obj = MockObject.new
   end
 
   it "person_roles() should return the expected hash" do
-    @item.person_roles.should == {
+    @obj.person_roles.should == {
       "collection-manager"   => {"brown"=>true, "dblack"=>true},
       "collection-depositor" => {"ggreen"=>true},
     }
@@ -76,7 +76,7 @@ describe Hydrus::Responsible do
         </role>
       </roleMetadata>
     EOF
-    @item.person_roles= {
+    @obj.person_roles= {
       "0" => {
         "id"   => "archivist1", 
         "role" => "collection-manager",
@@ -86,7 +86,7 @@ describe Hydrus::Responsible do
         "role" => "item-depositor",
       },
     }
-    @item.roleMetadata.ng_xml.should be_equivalent_to(exp)
+    @obj.roleMetadata.ng_xml.should be_equivalent_to(exp)
   end
 
 end

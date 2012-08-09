@@ -2,11 +2,9 @@ class Hydrus::Collection < Hydrus::GenericObject
 
   include Hydrus::Responsible
 
-  # Any time we save a Collection, save its corresponding APO.
-
+  before_save :save_apo
   before_validation :remove_values_for_associated_attribute_with_value_none
   after_validation :strip_whitespace
-  before_save :save_apo
 
   def self.create(user)
     # Create the object, with the correct model.
