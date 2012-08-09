@@ -9,8 +9,8 @@ class Hydrus::Item < Hydrus::GenericObject
   validate :collection_is_open, :on => :create
   validates :actors, :at_least_one=>true, :if => :should_validate
   validates :files, :at_least_one=>true, :if => :should_validate
-  #validate  :embargo_date_is_correct_format # TODO
-  validate  :must_accept_terms_of_deposit, :if => :clicked_publish?
+  validate  :must_accept_terms_of_deposit, :if => :should_validate
+  # validate  :embargo_date_is_correct_format # TODO
 
   # Publish the Item.
   def publish(value)

@@ -3,9 +3,11 @@ Item.embargo datastream: create the DS, using default embargo info from APO.
 Collection Edit: with Javascript enabled, cannot add more than one person-role
 without clicking Save after each one.  
 
-Item Edit: When adding people, if a row with no name field is present when the 
+Item Edit: When adding people, if a row with no name field is present when the
 form is saved, that row should not be stored at all.  There is currently a bug
-which occurs if you add a blank row (i.e. no no name), and then add another row with a name and then save.  Strange things happen (the role field and/or name value is lost).
+which occurs if you add a blank row (i.e. no no name), and then add another row
+with a name and then save.  Strange things happen (the role field and/or name
+value is lost).
 
 Submit relevant (or all) form data on addition of multi-valued fields (issues
 w/ non-linear indexed role MD)
@@ -57,7 +59,9 @@ info); (2) need UI component.
 -------
 BUGS
 -------
-When javascript is disabled, it is not possible to add new items.  The drop down menus in "what you can do" don't work correctly with JS off.
+
+When javascript is disabled, it is not possible to add new items.  The drop
+down menus in "what you can do" don't work correctly with JS off.
 
 -------
 WAITING

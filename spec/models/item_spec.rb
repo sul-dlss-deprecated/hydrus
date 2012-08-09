@@ -343,7 +343,7 @@ describe Hydrus::Item do
   describe "validations" do
 
     before(:each) do
-      @exp = [:pid, :collection, :files, :title, :abstract, :contact]
+      @exp = [:pid, :collection, :files, :title, :abstract, :contact, :terms_of_deposit]
       @hi.instance_variable_set('@should_validate', true)
     end
 
@@ -358,9 +358,10 @@ describe Hydrus::Item do
       @hi.errors.messages.keys.should include(*@exp)
     end
 
-    it "fully populated APO should be valid" do
+    it "fully populated Item should be valid" do
       dru = 'druid:ll000ll0001'
       @hi.stub(:collection_is_open).and_return(true)
+      @hi.stub(:accepted_terms_of_deposit).and_return(true)
       @exp.each { |e| @hi.stub(e).and_return(dru) }
       @hi.valid?.should == true
     end
