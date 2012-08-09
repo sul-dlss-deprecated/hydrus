@@ -377,4 +377,29 @@ describe Hydrus::Item do
       Hydrus::Item.roles.should be_a Array
     end
   end
+
+  describe "strip_whitespace_from_fields()" do
+    
+    before(:each) do
+      xml = <<-eos
+       <mods xmlns="http://www.loc.gov/mods/v3">
+          <abstract>  Blah blah  </abstract>
+          <titleInfo><title>  Learn VB in 21 Days  </title></titleInfo>
+       </mods>
+      eos
+      dmd = Hydrus::DescMetadataDS.from_xml(xml)
+      @hi = Hydrus::Item.new
+      @hi.stub(:descMetadata).and_return(dmd)
+    end
+
+    it "should be able to call method on a Hydrus::Item to remove whitespace" do
+      a = @hi.abstract
+      t = @hi.title
+      @hi.strip_whitespace_from_fields([:abstract, :title])
+      @hi.abstract.should == a.strip
+      @hi.title.should == t.strip
+    end
+
+  end
+
 end
