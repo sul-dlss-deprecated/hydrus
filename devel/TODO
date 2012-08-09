@@ -21,23 +21,14 @@ Item-level license and visibility info (confirm the latter).
 Item view: release date. See Consul page. Date from "published" lifecycle when
 it exists, else "not released". Display format: 31-Jan-2012.
 
+Item valiation. The :actors validation does not do anything, because the xml
+template for descMD always includes an actor (with a blank role and name). If we
+care about the test, it needs to do more (or we need to modify descMD and/or UI?).
+
 
 --------------------------------------------------
 Updating info when Collections/Items are published
 --------------------------------------------------
-
-Collection
-  publish(value)
-
-Item
-  validate :collection_is_open, :on => :create
-  validates :actors, :at_least_one=>true, :if => :should_validate
-  validates :files, :at_least_one=>true, :if => :should_validate
-
-  is_open
-  publish
-  collection_is_open
-  deal with commented tests
 
 integration tests
   complete_workflow_step
@@ -50,7 +41,12 @@ integration tests
     valid?
     is_destroyable
     publish
+    approve
     is_open
+  item
+    valid?
+    publish
+    approve
 
 
 ---------------------------

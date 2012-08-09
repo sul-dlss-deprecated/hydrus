@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Hydrus::Item do
   
   before(:each) do
-    @hi      = Hydrus::Item.new
+    @hi = Hydrus::Item.new
     @workflow_xml = <<-END
       <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
       <workflows objectId="druid:oo000oo0001">
@@ -24,68 +24,6 @@ describe Hydrus::Item do
     @hi.submit_time.should == "9999"
   end
 
-  # it "publishing an object should update identityMetadata title" do
-  #   # TODO: waiting until Item.publish refactor
-  #   next
-
-  #   itm = Hydrus::Item.new(:pid=>'druid:tt000tt0001')
-  #   # Before publishing.
-  #   itm.identityMetadata.objectLabel.should == []
-  #   # After publishing.
-  #   t           = 'FOOBAR'
-  #   itm.title   = t
-  #   itm.publish = 'true'
-  #   itm.identityMetadata.objectLabel.should == [t]
-  # end
-  
-  # it "new items should be invalid if no files have been added yet" do
-  #   item      = Hydrus::Item.new(:pid=>'druid:tt000tt0001')
-  #   item.publish="true"
-  #   item.valid?.should == false
-  #   item.errors.messages[:collection].should_not be_nil
-  #   item.errors.messages[:title].should_not be_nil
-  #   item.errors.messages[:files].should_not be_nil    
-  #   item.errors.messages[:terms_of_deposit].should_not be_nil    
-  #   item.errors.messages[:abstract].should_not be_nil    
-  #   item.add_to_collection('druid:oo000oo0003') # now associate with an open collection and check if that message goes away
-  #   item.valid?.should == false
-  #   item.errors.messages[:collection].should be_nil
-  # end
-  
-  # it "existing item should be invalid if required fields are missing (and publish/terms of deposit was selected)" do
-  #   @item=Hydrus::Item.find('druid:oo000oo0001')
-  #   @item.should be_valid  # should start out as invalid
-  #   @item.publish = "true"
-  #   @item.terms_of_deposit = "true"
-  #   @item.title=''
-  #   @item.should_not be_valid # invalid!
-  #   @item.title='ok'
-  #   @item.should be_valid  # valid!
-  #   @item.abstract=''  
-  #   @item.should_not be_valid  # invalid!
-  #   @item.abstract='ok'  
-  #   @item.should be_valid  # valid!
-  #   # @item.actors << Hydrus::Actor.new
-  #   # @item.should_not be_valid  # invalid!
-  # end
-  
-  # it "should invalidate any item when terms of deposit hasn't been selected" do
-  #   @item=Hydrus::Item.find('druid:oo000oo0001')
-  #   @item.should be_valid  # should start out as valid
-  #   @item.publish = "true"
-  #   @item.should_not be_valid
-  # end
-  # it "should not try to validate required fields when publish was not pressed and terms of deposit was not selected" do
-  #   @item=Hydrus::Item.find('druid:oo000oo0001')
-  #   @item.should be_valid  # should start out as valid
-  #   @item.title = ""
-  #   @item.should be_valid
-  #   @item.abstract = ""
-  #   @item.should be_valid
-  #   # @item.actors << Hydrus::Actor.new
-  #   # @item.should be_valid
-  # end
-  
   it "should be able to add and remove an item from a collection" do
     collection_pid = 'druid:xx99xx9999'
     exp_uri        = "info:fedora/#{collection_pid}"
@@ -398,6 +336,57 @@ describe Hydrus::Item do
       @hi.strip_whitespace_from_fields([:abstract, :title])
       @hi.abstract.should == a.strip
       @hi.title.should == t.strip
+    end
+
+  end
+
+  describe "validations" do
+
+    before(:each) do
+      @exp = [:pid, :collection, :files, :title, :abstract, :contact]
+      @hi.instance_variable_set('@should_validate', true)
+    end
+
+    it "blank slate Item (should_validate=false) should include only two errors" do
+      @hi.stub(:should_validate).and_return(false)
+      @hi.valid?.should == false
+      @hi.errors.messages.keys.should include(*@exp[0..1])
+    end
+
+    it "blank slate Item (should_validate=true) should include all errors" do
+      @hi.valid?.should == false
+      @hi.errors.messages.keys.should include(*@exp)
+    end
+
+    it "fully populated APO should be valid" do
+      dru = 'druid:ll000ll0001'
+      @hi.stub(:collection_is_open).and_return(true)
+      @exp.each { |e| @hi.stub(e).and_return(dru) }
+      @hi.valid?.should == true
+    end
+
+  end
+
+  describe "collection_is_open()" do
+
+    before(:each) do
+      vs = [false, false, false, true, false]
+      @mock_colls = vs.map { |v| double('collection', :is_open => v) }
+    end
+
+    it "should return true if any of the collections are open" do
+      @hi.stub(:collection).and_return(@mock_colls)
+      @hi.collection_is_open.should == true
+    end
+
+    it "should return false if none of the collections are open" do
+      @hi.stub(:collection).and_return(@mock_colls.reject { |c| c.is_open })
+      @hi.collection_is_open.should == false
+    end
+
+    it "should return false if Item has no collections" do
+      @hi.stub(:collection).and_return([])
+      @hi.collection_is_open.should == false
     end
 
   end
