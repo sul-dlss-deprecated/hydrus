@@ -18,12 +18,6 @@ describe Hydrus::Item do
     @workflow_xml = noko_doc(@workflow_xml)
   end
   
-  it "submit_time() should return the expect value from the workflow XML" do
-    mock_wf = double('fake_workflows', :ng_xml => @workflow_xml)
-    @hi.stub(:workflows).and_return(mock_wf)
-    @hi.submit_time.should == "9999"
-  end
-
   it "should be able to add and remove an item from a collection" do
     collection_pid = 'druid:xx99xx9999'
     exp_uri        = "info:fedora/#{collection_pid}"

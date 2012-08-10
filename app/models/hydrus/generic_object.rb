@@ -180,7 +180,8 @@ class Hydrus::GenericObject < Dor::Item
   # Takes the name of a hydrusAssemblyWF step.
   # Returns the corresponding process node.
   def get_workflow_step(step)
-    return get_workflow_node.at_xpath("//process[@name='#{step}']")
+    node = get_workflow_node()
+    return node ? node.at_xpath("//process[@name='#{step}']") : nil
   end
 
   # Takes the name of a hydrusAssemblyWF step.
@@ -194,6 +195,19 @@ class Hydrus::GenericObject < Dor::Item
   # Returns the staus of the corresponding process node.
   def workflow_step_is_done(step)
     return get_workflow_status(step) == 'completed'
+  end
+
+  def submit_time
+    s = 'submit'
+    return nil unless workflow_step_is_done(s)
+    return get_workflow_step(s)['datetime']
+  end
+
+  def publish_lifecycle_time
+    q = "//process[@lifecycle='published']"
+    node = workflows.find_by_xpath(q).first
+    return nil unless (node and node['status'] == 'completed')
+    return node['datetime']
   end
 
 end

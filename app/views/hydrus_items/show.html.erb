@@ -18,7 +18,10 @@
       <dt>Submitted on:</dt>
       <dd><%= hydrus_object_setting_value(hydrus_format_date(@document_fedora.submit_time)) %></dd>
       <dt>Release date:</dt>
-      <dd><font color=red>#TODO</font></dd>
+      <dd><%=
+        d = formatted_date(@document_fedora.publish_lifecycle_time)
+        hydrus_object_setting_value(d)
+      %></dd>
       <dt>Visibility:</dt>
       <dd><%= hydrus_object_setting_value(@document_fedora.discover_access) %></dd>
     </dl>

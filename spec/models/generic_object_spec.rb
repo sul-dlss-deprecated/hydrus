@@ -157,6 +157,10 @@ describe Hydrus::GenericObject do
             <process status="waiting"   name="approve"/>
             <process status="waiting"   name="start-assembly"/>
           </workflow>
+          <workflow id="accessionWF">
+            <process status="waiting" name="publish" lifecycle="published"/>
+            <process status="waiting" name="bar"/>
+          </workflow>
         </workflows>
       EOXML
       @workflow = Dor::WorkflowDs.from_xml(noko_doc(xml))
@@ -249,6 +253,38 @@ describe Hydrus::GenericObject do
 
     it "can exercise requires_human_approval(), currently hard-coded to false" do
       @go.requires_human_approval.should == false
+    end
+
+    describe "submit_time()" do
+
+      it "should return nil if Item is unpublished" do
+        @go.submit_time.should == nil
+      end
+
+      it "should return the datetime of the submit step, but only if step is completed" do
+        # Set datetime of step, but don't complete it.
+        d = '1999-01-01 00:00:01'
+        node = @workflow.find_by_xpath('//process[@name="submit"]').first
+        node['datetime'] = d
+        @go.submit_time.should == nil
+        # Complete the step.
+        node['status'] = 'completed'
+        @go.submit_time.should == d
+      end
+
+    end
+
+    it "publish_lifecycle_time() should return datetime only if published step is completed" do
+      # The publish lifecycle not completed yet.
+      d = '1999-01-01'
+      @go.publish_lifecycle_time().should == nil
+      node = @workflow.find_by_xpath('//process[@lifecycle="published"]').first
+      # Still not completed, even though we have a datetime.
+      node['datetime'] = d
+      @go.publish_lifecycle_time().should == nil
+      # Complete the step.
+      node['status'] = 'completed'
+      @go.publish_lifecycle_time().should == d
     end
 
   end

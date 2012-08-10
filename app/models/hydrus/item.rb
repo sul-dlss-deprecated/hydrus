@@ -183,12 +183,6 @@ class Hydrus::Item < Hydrus::GenericObject
     end
   end
     
-  def submit_time
-    query = '//workflow[@id="hydrusAssemblyWF"]/process[@name="submit" and @status="completed"]'
-    time=workflows.ng_xml.at_xpath(query)
-    return (time ? time['datetime'] : nil)
-  end
-   
   def add_to_collection(pid)
     uri = "info:fedora/#{pid}"
     add_relationship_by_name('set', uri)

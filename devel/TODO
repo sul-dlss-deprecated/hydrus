@@ -20,28 +20,18 @@ Create new Collection: create rightsMetadata.
 Create new Item: create rightsMetadata. The rightsMetadata will contain the
 Item-level license and visibility info (confirm the latter).
 
+Standardize date formats in the app: 31-Jan-2012. Search for strptime, and see
+formatted_date() in application_helper.rb.
 
---
-MH
---
 
-create
-  APO
-  Collection
-  Item
-
-publish
-  Collection
-  Item
-
-Collection
-  hydrus_items
-  OM getters/setters
+------
+Events
+------
 
 item_create_spec.rb: scenario similar to collection_create (publish)
 
-Item view: release date. See Consul page. Date from "published" lifecycle when
-it exists, else "not released". Display format: 31-Jan-2012.
+Events datastreams for Collections and Items: create datastreams and add events
+to them. See Consul Hydrus+Event+History and mockup from Gary.
 
 
 ---------------------------
@@ -63,12 +53,14 @@ Whether collection requires approval: need UI component.
 Item approval: (1) inherited from the Collection (not an Item-level piece of
 info); (2) need UI component.
 
+
 -------
 BUGS
 -------
 
-When javascript is disabled, it is not possible to add new items.  The drop
+When javascript is disabled, it is not possible to add new items. The drop
 down menus in "what you can do" don't work correctly with JS off.
+
 
 -------
 WAITING
@@ -76,7 +68,7 @@ WAITING
 
 Item valiation. The :actors validation does impose much of a test, because the xml
 template for descMD always includes an actor (with a blank role and name). If we
-care about the test, it needs to do more (or we need to modify descMD and/or UI?).
+Hcare about the test, it needs to do more (or we need to modify descMD and/or UI?).
 [Waiting until JK refactors handling of multi-valued fields, Javascript, etc.]
 
 Need a place to store Item types. Currently hardcoded to :dataset. Also see object_type()
@@ -87,13 +79,6 @@ APO RELS-EXT datastream needs to add a child node to <rdf:Description>:
 the PID of the global Hydrus Agreement object. [The Hydrus agreement object
 needs to be created -- need more details].
 
-Events datastreams for Collections and Items: create datastreams and add events
-to them. See Consul Hydrus+Event+History. [Waiting Lynn and Hannah to finalize].
-
-Item view: release date. See Consul page. Date from "published" lifecycle when
-it exists, else "not released". Display format: 31-Jan-2012. [waiting on
-workflow discussion]
-
 Use reified WFs rather than putting them in the APO. [Need more info on how
 this works and its relative priority. Also waiting on some work Willy is doing
 in dor-services.]
@@ -101,10 +86,11 @@ in dor-services.]
 Collection create: APO.roleMetadata: set the value of <name> for the
 collection-manager [waiting on LDAP].
 
-Collection create: APO.descMetadata. Flesh out. [waiting on spec from Lynn]
+Collection create: APO.descMetadata. Flesh out. [waiting on spec from Lynn;
+emailed Aug 10]
 
 Should roleMetadata have an XML namespace? If so, what should it be? Could
-not find any definitive examples in Consul. [Ask Lynn]
+not find any definitive examples in Consul. [Ask Lynn; emailed Aug 10]
 
 Qualify roles by their domain: for example, "hydrus:collection_creator". See
 Consul Repository+Roles+and+Permissions. [Waiting on Lynn and Hannah to

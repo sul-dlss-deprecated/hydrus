@@ -34,4 +34,14 @@ module ApplicationHelper
     hydrus_is_empty?(obj) ? content_tag(:span, "not specified", :class => "unspecified") : obj
   end
 
+  # Take a datetime string.
+  # Returns a string using the default Hydrus date format.
+  def formatted_date(datetime)
+    begin
+      return Time.parse(datetime).strftime(Dor::Config.hydrus.default_date_format)
+    rescue
+      return nil
+    end
+  end
+
 end

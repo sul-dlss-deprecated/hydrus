@@ -49,6 +49,7 @@ Dor::Config.configure do
     initial_apo_title('Intial Hydrus APO title')
     app_workflow(:hydrusAssemblyWF)
     start_common_assembly(false)
+    default_date_format('%d-%b-%Y')
 
     workflow_steps({
       :hydrusAssemblyWF => [
