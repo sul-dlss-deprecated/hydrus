@@ -23,12 +23,7 @@ Item-level license and visibility info (confirm the latter).
 Standardize date formats in the app: 31-Jan-2012. Search for strptime, and see
 formatted_date() in application_helper.rb.
 
-
-------
-Events
-------
-
-item_create_spec.rb: scenario similar to collection_create (publish)
+Item view page: the actions box div is called "div.collection-actions". Do we care?
 
 Events datastreams for Collections and Items: create datastreams and add events
 to them. See Consul Hydrus+Event+History and mockup from Gary.

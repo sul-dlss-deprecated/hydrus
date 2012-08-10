@@ -40,6 +40,11 @@ class Hydrus::Item < Hydrus::GenericObject
     return item
   end
   
+  # Returns true only if the Item is unpublished.
+  def is_destroyable
+    return not(is_published)
+  end
+
   # Returns true only if the Item has an open Collection.
   def collection_is_open
     return true if collection.any? { |c| c.is_open }
