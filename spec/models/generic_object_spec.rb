@@ -241,6 +241,16 @@ describe Hydrus::GenericObject do
       @go.valid?.should == true     # OK PID.
     end
 
+    it "publish=() should delegate to publish()" do
+      v = 9876
+      @go.should_receive(:publish).with(v)
+      @go.publish= v
+    end
+
+    it "can exercise requires_human_approval(), currently hard-coded to false" do
+      @go.requires_human_approval.should == false
+    end
+
   end
 
   describe "should_validate()" do

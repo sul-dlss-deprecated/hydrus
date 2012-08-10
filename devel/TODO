@@ -20,21 +20,28 @@ Create new Collection: create rightsMetadata.
 Create new Item: create rightsMetadata. The rightsMetadata will contain the
 Item-level license and visibility info (confirm the latter).
 
-Item view: release date. See Consul page. Date from "published" lifecycle when
-it exists, else "not released". Display format: 31-Jan-2012.
 
+--
+MH
+--
 
----------------
-Testing backlog
----------------
+create
+  APO
+  Collection
+  Item
 
-Item valiation. The :actors validation does not do anything, because the xml
-template for descMD always includes an actor (with a blank role and name). If we
-care about the test, it needs to do more (or we need to modify descMD and/or UI?).
+publish
+  Collection
+  Item
+
+Collection
+  hydrus_items
+  OM getters/setters
 
 item_create_spec.rb: scenario similar to collection_create (publish)
 
-Assess test coverage.
+Item view: release date. See Consul page. Date from "published" lifecycle when
+it exists, else "not released". Display format: 31-Jan-2012.
 
 
 ---------------------------
@@ -66,6 +73,11 @@ down menus in "what you can do" don't work correctly with JS off.
 -------
 WAITING
 -------
+
+Item valiation. The :actors validation does impose much of a test, because the xml
+template for descMD always includes an actor (with a blank role and name). If we
+care about the test, it needs to do more (or we need to modify descMD and/or UI?).
+[Waiting until JK refactors handling of multi-valued fields, Javascript, etc.]
 
 Need a place to store Item types. Currently hardcoded to :dataset. Also see object_type()
 in GenericObject.

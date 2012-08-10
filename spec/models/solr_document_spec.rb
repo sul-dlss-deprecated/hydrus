@@ -14,4 +14,12 @@ describe SolrDocument do
     end
   end
 
+  it "can exercise to_model(), stubbed" do
+    sdoc = SolrDocument.new
+    id = 998877
+    sdoc.stub(:id).and_return(id)
+    ActiveFedora::Base.should_receive(:load_instance_from_solr).with(id, sdoc)
+    sdoc.to_model()
+  end
+
 end

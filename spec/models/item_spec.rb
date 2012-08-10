@@ -392,4 +392,8 @@ describe Hydrus::Item do
 
   end
 
+  it "can exercise discovery_roles()" do
+    Hydrus::Item.discovery_roles.should be_instance_of(Hash)
+  end
+
 end
