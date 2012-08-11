@@ -1,4 +1,5 @@
 class Hydrus::Item < Hydrus::GenericObject
+
   include Hydrus::EmbargoMetadataDsExtension
   include Hydrus::Responsible
   
@@ -18,8 +19,11 @@ class Hydrus::Item < Hydrus::GenericObject
     identityMetadata.objectLabel = title
     # Advance workflow to record that the object has been published.
     s = 'submit'
-    complete_workflow_step(s) unless workflow_step_is_done(s)
-    approve() unless requires_human_approval
+    unless workflow_step_is_done(s)
+      complete_workflow_step(s)
+      events.add('Item published', :who => @current_user)
+      approve() unless requires_human_approval
+    end
   end
   
   def self.create(collection_pid, user)
@@ -35,6 +39,8 @@ class Hydrus::Item < Hydrus::GenericObject
     item.augment_identity_metadata(:dataset)  # TODO: hard-coded value.
     # Add roleMetadata with current user as item-depositor.
     item.roleMetadata.add_person_with_role(user, 'item-depositor')
+    # Add event.
+    item.events.add('Item created', :who => user)
     # Save and return.
     item.save
     return item

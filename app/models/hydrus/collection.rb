@@ -17,6 +17,8 @@ class Hydrus::Collection < Hydrus::GenericObject
     coll.augment_identity_metadata(:collection)
     # Add roleMetadata with current user as collection-depositor.
     coll.roleMetadata.add_person_with_role(user, 'collection-depositor')
+    # Add event.
+    coll.events.add('Collection created', :who => user)
     # Save and return.
     coll.save
     return coll
@@ -54,10 +56,14 @@ class Hydrus::Collection < Hydrus::GenericObject
       identityMetadata.objectLabel     = title
       # Advance the workflow to record that the object has been published.
       s = 'submit'
-      complete_workflow_step(s) unless workflow_step_is_done(s)
-      approve() unless requires_human_approval
+      events.add('Collection opened', :who => @current_user)
+      unless workflow_step_is_done(s)
+        complete_workflow_step(s)
+        approve() unless requires_human_approval
+      end
     else
       apo.deposit_status = 'closed'
+      events.add('Collection closed', :who => @current_user)
     end
   end
 

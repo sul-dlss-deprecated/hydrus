@@ -19,6 +19,7 @@ class HydrusItemsController < ApplicationController
 
   def setup_attributes
     @document_fedora = Hydrus::Item.find(params[:id])
+    @document_fedora.current_user = current_user
   end
 
   def show
@@ -29,6 +30,7 @@ class HydrusItemsController < ApplicationController
   
   def new
     item = Hydrus::Item.create(params[:collection], current_user)
+    item.current_user = current_user
     redirect_to edit_polymorphic_path(item)
   end
 

@@ -7,7 +7,7 @@ class Hydrus::GenericObject < Dor::Item
   validates :title, :abstract, :contact, :not_empty => true, :if => :should_validate
   validates :pid, :is_druid => true
 
-  attr_accessor :apo_pid
+  attr_accessor(:apo_pid, :current_user)
 
   has_metadata(
     :name => "descMetadata",
@@ -27,9 +27,16 @@ class Hydrus::GenericObject < Dor::Item
     :label => 'Hydrus Properties',
     :control_group => 'M')
 
+  has_metadata(
+    :name => "events",
+    :type => Hydrus::EventsDS,
+    :label => 'Events',
+    :control_group => 'M')
+
   def initialize(*args)
     super
-    @should_validate = false   # See Hydrus::Publishable.
+    @should_validate = false # See Hydrus::Publishable.
+    @current_user    = nil   # Allows event logging to know current user via controller.
   end
 
   def is_published
@@ -158,6 +165,7 @@ class Hydrus::GenericObject < Dor::Item
   # process as well.
   def approve
     complete_workflow_step('approve')
+    events.add('Approved', :who => @current_user)
     return unless Dor::Config.hydrus.start_common_assembly
     complete_workflow_step('start-assembly')
     initiate_apo_workflow('assemblyWF')
@@ -208,6 +216,10 @@ class Hydrus::GenericObject < Dor::Item
     node = workflows.find_by_xpath(q).first
     return nil unless (node and node['status'] == 'completed')
     return node['datetime']
+  end
+
+  def get_events
+    return events.find_by_terms(:event).map { |node| Hydrus::Event.new(node) }
   end
 
 end

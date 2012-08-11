@@ -1,3 +1,5 @@
+Events: collection and item view beautification.
+
 Item.embargo datastream: create the DS, using default embargo info from APO.
 
 Collection Edit: with Javascript enabled, cannot add more than one person-role
@@ -20,13 +22,11 @@ Create new Collection: create rightsMetadata.
 Create new Item: create rightsMetadata. The rightsMetadata will contain the
 Item-level license and visibility info (confirm the latter).
 
-Standardize date formats in the app: 31-Jan-2012. Search for strptime, and see
-formatted_date() in application_helper.rb.
+Standardize date formats in the app. Search for strptime for items need fixes.
+See formatted_datetime() in application_helper.rb for the format from the
+mockups.
 
 Item view page: the actions box div is called "div.collection-actions". Do we care?
-
-Events datastreams for Collections and Items: create datastreams and add events
-to them. See Consul Hydrus+Event+History and mockup from Gary.
 
 
 ---------------------------
@@ -60,6 +60,8 @@ down menus in "what you can do" don't work correctly with JS off.
 -------
 WAITING
 -------
+
+Events. Add more events. [waiting on Lynn and Hannah]
 
 Item valiation. The :actors validation does impose much of a test, because the xml
 template for descMD always includes an actor (with a blank role and name). If we

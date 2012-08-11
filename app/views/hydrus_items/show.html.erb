@@ -19,7 +19,7 @@
       <dd><%= hydrus_object_setting_value(hydrus_format_date(@document_fedora.submit_time)) %></dd>
       <dt>Release date:</dt>
       <dd><%=
-        d = formatted_date(@document_fedora.publish_lifecycle_time)
+        d = formatted_datetime(@document_fedora.publish_lifecycle_time, :date)
         hydrus_object_setting_value(d)
       %></dd>
       <dt>Visibility:</dt>
@@ -121,23 +121,27 @@
   </dl>
 
   <% unless @document_fedora.files.size == 0 %>
-    <table class="hydrus-striped-table table-striped table-condensed">
-      <thead>
-        <th>File (Download)</th>
-        <th>Description</th>
-      </thead>
-      <tbody>
-        <% 
-          @document_fedora.files.each do |file|
-        %>
-            <tr class="document <%= cycle("even","odd") %>">
-              <td><%= link_to(file.filename, file.url) %></td>
-              <td><%= file.label %></td>
-            </tr>
-        <% end %>
-      </tbody>
-    </table>
+    <div class="item-files">
+      <table class="hydrus-striped-table table-striped table-condensed">
+        <thead>
+          <th>File (Download)</th>
+          <th>Description</th>
+        </thead>
+        <tbody>
+          <% 
+            @document_fedora.files.each do |file|
+          %>
+              <tr class="document <%= cycle("even","odd") %>">
+                <td><%= link_to(file.filename, file.url) %></td>
+                <td><%= file.label %></td>
+              </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
   <% end %>
+
+  <%= render(:partial => 'shared/events') %>
 
   <div id="druid-footer"><%= @document_fedora.pid %></div>
 

@@ -42,6 +42,13 @@ describe("Item create", :type => :request, :integration => true) do
     item.identityMetadata.tag.should include("Hydrus : dataset", "Project : Hydrus")
     # Check person roles of the Item.
     item.person_roles.should == { "item-depositor" => { "archivist1" => true } }
+    # Check events.
+    es = item.get_events
+    es.size.should == 1
+    e = es.first
+    e.text.should =~ /\AItem created/
+    e.who.should == 'archivist1'
+    e.type.should == 'hydrus'
   end
 
   it "should be able to access create-new-Item screen via the Collection view page" do
@@ -130,6 +137,14 @@ describe("Item create", :type => :request, :integration => true) do
     click_button "Save"
     page.should_not have_content(@notice)
     find('div.alert').should have_content('Title cannot be blank')
+    # Check events.
+    exp = [
+      /\AItem created/,
+      /\AItem published/,
+      /\AApproved/,
+    ]
+    es = item.get_events
+    es[0...exp.size].zip(exp).each { |e, exp| e.text.should =~ exp  }
   end
 
 end

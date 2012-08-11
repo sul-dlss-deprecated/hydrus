@@ -331,4 +331,31 @@ describe Hydrus::GenericObject do
     end
   end
 
+  describe "events stuff" do
+
+    before(:each) do
+      xml = <<-EOF
+        <events>
+          <event type="hydrus" who="sunetid:foo" when="2011">blah</event>
+          <event type="hydrus" who="sunetid:foo" when="2012">blort</event>
+        </events>
+      EOF
+      @events = Hydrus::EventsDS.from_xml(noko_doc(xml))
+      @go = Hydrus::GenericObject.new
+      @go.stub(:events).and_return(@events)
+    end
+
+    it "get_workflow_node() should return a node with correct id attribute" do
+      es = @go.get_events
+      es.size.should == 2
+      e = es.first
+      e.should be_instance_of Hydrus::Event
+      e.type.should == 'hydrus'
+      e.who.should  == 'sunetid:foo'
+      e.when.should == '2011'
+      e.text.should == 'blah'
+    end
+  
+  end
+
 end

@@ -22,15 +22,16 @@ describe ApplicationHelper do
     seen_beta_dialog?.should == true
   end
 
-  it "formatted_date() should return formatted date strings" do
-    tests = {
-      '2012-08-10T09:11:57-0700' => '10-Aug-2012',
-      '2011-01-01 09:11:57'      => '01-Jan-2011',
-      'blah'                     => nil,
-      nil                        => nil,
-    }
-    tests.each do |input, exp|
-      formatted_date(input).should == exp
+  it "formatted_datetime() should return formatted date strings" do
+    tests = [
+      ['2012-08-10T06:11:57-0700', :date,     '10-Aug-2012'],
+      ['2012-08-10T06:11:57-0700', :time,     '06:11 am'],
+      ['2012-08-10T06:11:57-0700', :datetime, '10-Aug-2012 06:11 am'],
+      ['blah'                    , nil,        nil],
+      [nil                       , nil,        nil],
+    ]
+    tests.each do |input, fmt, exp|
+      formatted_datetime(input, fmt).should == exp
     end
   end
 

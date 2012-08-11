@@ -36,12 +36,17 @@ module ApplicationHelper
 
   # Take a datetime string.
   # Returns a string using the default Hydrus date format.
-  def formatted_date(datetime)
+  def formatted_datetime(datetime, k = :datetime)
     begin
-      return Time.parse(datetime).strftime(Dor::Config.hydrus.default_date_format)
+      return Time.parse(datetime).strftime(datetime_format(k))
     rescue
       return nil
     end
+  end
+
+  def datetime_format(k)
+    return (k == :date ? '%d-%b-%Y' :
+            k == :time ? '%I:%M %P' : '%d-%b-%Y %I:%M %P')
   end
 
 end

@@ -15,7 +15,8 @@ class HydrusCollectionsController < ApplicationController
   end
 
   def setup_attributes
-    @document_fedora  = Hydrus::Collection.find(params[:id])
+    @document_fedora = Hydrus::Collection.find(params[:id])
+    @document_fedora.current_user = current_user
   end
 
   def show
@@ -26,6 +27,7 @@ class HydrusCollectionsController < ApplicationController
 
   def new
     collection = Hydrus::Collection.create(current_user)
+    collection.current_user = current_user
     redirect_to edit_polymorphic_path(collection)
   end
 

@@ -50,6 +50,13 @@ describe("Collection create", :type => :request, :integration => true) do
     coll.person_roles.should     == { "collection-depositor" => { "archivist1" => true } }
     # Check APO.descMetadata.
     apo.title.should == Dor::Config.hydrus.initial_apo_title
+    # Check events.
+    es = coll.get_events
+    es.size.should == 1
+    e = es.first
+    e.text.should =~ /\ACollection created/
+    e.who.should == 'archivist1'
+    e.type.should == 'hydrus'
   end
 
   it "should be able to create a new Collection, publish, close, etc" do
@@ -157,6 +164,15 @@ describe("Collection create", :type => :request, :integration => true) do
     click_button "Save"
     page.should_not have_content(@notice)
     find('div.alert').should have_content('Title cannot be blank')
+    # Check events.
+    exp = [
+      /\ACollection created/,
+      /\ACollection opened/,
+      /\AApproved/,
+      /\ACollection closed/,
+    ]
+    es = coll.get_events
+    es[0...exp.size].zip(exp).each { |e, exp| e.text.should =~ exp  }
   end
 
 end
