@@ -6,6 +6,8 @@ class Hydrus::Collection < Hydrus::GenericObject
   before_validation :remove_values_for_associated_attribute_with_value_none
   after_validation :strip_whitespace
 
+  delegate :requires_human_approval, :to => "hydrusProperties", :unique => true
+
   def self.create(user)
     # Create the object, with the correct model.
     apo     = Hydrus::AdminPolicyObject.create(user)

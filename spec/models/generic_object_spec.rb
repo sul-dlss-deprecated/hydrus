@@ -251,10 +251,6 @@ describe Hydrus::GenericObject do
       @go.publish= v
     end
 
-    it "can exercise requires_human_approval(), currently hard-coded to false" do
-      @go.requires_human_approval.should == false
-    end
-
     describe "submit_time()" do
 
       it "should return nil if Item is unpublished" do

@@ -29,16 +29,6 @@ Item view page: the actions box div is called "div.collection-actions". Do we ca
 hydrusProperties datastream
 ---------------------------
 
-Create hydrusProperties datastream.
-
-Store whether user has checked the "agree to terms" checkbox. Use the hydrusProperties
-datastream. Also uncomment the validation connected to the checkbox.
-
-Consider putting additional info in hydrusProperties datastream, such as: submit time,
-published status, release date.
-
-Collection create/edit: store whether Collection requires human approval.
-
 Whether collection requires approval: need UI component.
 
 Item approval: (1) inherited from the Collection (not an Item-level piece of

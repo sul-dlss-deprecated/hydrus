@@ -27,12 +27,6 @@ class Hydrus::GenericObject < Dor::Item
     :label => 'Hydrus Properties',
     :control_group => 'M')
 
-  # has_metadata(
-  #   :name => "events",
-  #   :type => Hydrus::EventsDS,
-  #   :label => 'Events',
-  #   :control_group => 'M')
-
   def initialize(*args)
     super
     @should_validate = false # See Hydrus::Publishable.
@@ -59,8 +53,6 @@ class Hydrus::GenericObject < Dor::Item
     return identityMetadata.objectType.first
   end
 
-  delegate :accepted_terms_of_deposit, :to => "hydrusProperties", :unique => true
-  delegate :requires_human_approval, :to => "hydrusProperties", :unique => true
   delegate :abstract, :to => "descMetadata", :unique => true
   delegate :title, :to => "descMetadata", :unique => true
   delegate :related_item_title, :to => "descMetadata", :at => [:relatedItem, :titleInfo, :title]
@@ -152,11 +144,6 @@ class Hydrus::GenericObject < Dor::Item
       :tags              => ["Project : #{proj}"],
       :initiate_workflow => wfs,
     }
-  end
-
-  def requires_human_approval
-    # TODO: hard-coded until we know where this info will be stored.
-    return false
   end
 
   # Approves an object by marking the 'approve' step in the Hydrus workflow as

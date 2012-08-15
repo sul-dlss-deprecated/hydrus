@@ -247,7 +247,6 @@
       <foxml:xmlContent>
         <hydrusProperties>
           <acceptedTermsOfDeposit>true</acceptedTermsOfDeposit>
-          <requiresHumanApproval>false</requiresHumanApproval>
         </hydrusProperties>
       </foxml:xmlContent>
     </foxml:datastreamVersion>

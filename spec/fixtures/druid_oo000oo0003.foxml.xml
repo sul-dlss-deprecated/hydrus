@@ -118,7 +118,6 @@
       CREATED="2011-07-05T20:49:25.801Z" MIMETYPE="text/xml" SIZE="345">
       <foxml:xmlContent>
         <hydrusProperties>
-          <acceptedTermsOfDeposit>true</acceptedTermsOfDeposit>
           <requiresHumanApproval>false</requiresHumanApproval>
         </hydrusProperties>
       </foxml:xmlContent>

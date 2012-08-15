@@ -13,6 +13,8 @@ class Hydrus::Item < Hydrus::GenericObject
   validate  :must_accept_terms_of_deposit, :if => :should_validate
   # validate  :embargo_date_is_correct_format # TODO
 
+  delegate :accepted_terms_of_deposit, :to => "hydrusProperties", :unique => true
+
   # Publish the Item.
   def publish(value)
     # At the moment of publication, we refresh various titles.
@@ -24,6 +26,12 @@ class Hydrus::Item < Hydrus::GenericObject
       events.add_event('hydrus', @current_user, 'Item published')
       approve() unless requires_human_approval
     end
+  end
+  
+  # TODO - an item can be in more than one collection, for now, we just check the first collection associated with the item to see if
+  #  that collection requires approval, this might have to get more intelligent later to account for items in multiple collections
+  def requires_human_approval
+    to_bool(collection.first.requires_human_approval)
   end
   
   def self.create(collection_pid, user)
