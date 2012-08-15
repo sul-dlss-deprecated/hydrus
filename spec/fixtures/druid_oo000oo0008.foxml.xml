@@ -161,4 +161,14 @@
       <foxml:contentLocation TYPE="URL" REF="http://sul-lyberservices-dev.stanford.edu/workflow/dor/objects/druid:oo000oo0003/workflows" />
     </foxml:datastreamVersion>
   </foxml:datastream>
+  <foxml:datastream ID="events" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
+    <foxml:datastreamVersion ID="events.0" LABEL="Events"
+      CREATED="2011-07-05T20:46:24.337Z" MIMETYPE="text/xml" SIZE="293">
+      <foxml:xmlContent>
+        <events>
+          <event type="hydrus" when="2012-08-15T10:12:31-07:00" who="archivist1">Item created</event>
+        </events>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
 </foxml:digitalObject>
