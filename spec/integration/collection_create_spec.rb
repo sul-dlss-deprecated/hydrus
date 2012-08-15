@@ -51,7 +51,7 @@ describe("Collection create", :type => :request, :integration => true) do
     # Check APO.descMetadata.
     apo.title.should == Dor::Config.hydrus.initial_apo_title
     # Check events.
-    es = coll.get_events
+    es = coll.get_hydrus_events
     es.size.should == 1
     e = es.first
     e.text.should =~ /\ACollection created/
@@ -171,7 +171,7 @@ describe("Collection create", :type => :request, :integration => true) do
       /\AApproved/,
       /\ACollection closed/,
     ]
-    es = coll.get_events
+    es = coll.get_hydrus_events
     es[0...exp.size].zip(exp).each { |e, exp| e.text.should =~ exp  }
   end
 

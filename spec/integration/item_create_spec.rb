@@ -43,7 +43,7 @@ describe("Item create", :type => :request, :integration => true) do
     # Check person roles of the Item.
     item.person_roles.should == { "item-depositor" => { "archivist1" => true } }
     # Check events.
-    es = item.get_events
+    es = item.get_hydrus_events
     es.size.should == 1
     e = es.first
     e.text.should =~ /\AItem created/
@@ -143,7 +143,7 @@ describe("Item create", :type => :request, :integration => true) do
       /\AItem published/,
       /\AApproved/,
     ]
-    es = item.get_events
+    es = item.get_hydrus_events
     es[0...exp.size].zip(exp).each { |e, exp| e.text.should =~ exp  }
   end
 

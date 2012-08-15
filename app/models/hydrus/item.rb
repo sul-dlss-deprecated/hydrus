@@ -21,7 +21,7 @@ class Hydrus::Item < Hydrus::GenericObject
     s = 'submit'
     unless workflow_step_is_done(s)
       complete_workflow_step(s)
-      events.add('Item published', :who => @current_user)
+      events.add_event('hydrus', @current_user, 'Item published')
       approve() unless requires_human_approval
     end
   end
@@ -40,7 +40,7 @@ class Hydrus::Item < Hydrus::GenericObject
     # Add roleMetadata with current user as item-depositor.
     item.roleMetadata.add_person_with_role(user, 'item-depositor')
     # Add event.
-    item.events.add('Item created', :who => user)
+    item.events.add_event('hydrus', user, 'Item created')
     # Save and return.
     item.save
     return item

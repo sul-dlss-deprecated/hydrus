@@ -44,19 +44,18 @@ describe("Item view", :type => :request, :integration => true) do
       page.should have_content(exp)
     end
     
-    # now let's delete the related items, contact email and the keywords, and go back to the view page and make sure those fields don't show up or are listed as "not specified" as required
-    visit edit_polymorphic_path(@hi)
+    # now let's delete the related items and the keywords, and go back to the view page and make sure those fields don't show up or are listed as "not specified" as required
+    should_visit_edit_page(@hi)
     click_link "remove_relatedItem_0" # remove both related items
     click_link "remove_relatedItem_0"        
     fill_in "hydrus_item_keywords", :with => " "
     fill_in "hydrus_item_contact", :with => " "
-    click_button "Save"    
-    visit polymorphic_path(@hi)
+    click_button "Save"
+    should_visit_view_page(@hi)
     page.should_not have_content('Related links')
     page.should_not have_content('Keywords')
     page.should_not have_content('story by Jennifer Ludden August 16, 2010') # relatedItem title
     page.should have_content('not specified') # for contact
-    
   end
 
   it "some of the expected info is displayed in the Item status box" do

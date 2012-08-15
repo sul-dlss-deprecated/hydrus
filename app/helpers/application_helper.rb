@@ -38,7 +38,7 @@ module ApplicationHelper
   # Returns a string using the default Hydrus date format.
   def formatted_datetime(datetime, k = :datetime)
     begin
-      return Time.parse(datetime).strftime(datetime_format(k))
+      return Time.parse(datetime.to_s).strftime(datetime_format(k))
     rescue
       return nil
     end

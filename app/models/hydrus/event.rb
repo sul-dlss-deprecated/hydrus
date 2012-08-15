@@ -2,11 +2,11 @@ class Hydrus::Event
 
   attr_reader(:text, :who, :when, :type)
 
-  def initialize(node)
-    @text = node.text
-    @who  = node['who']
-    @when = node['when']
-    @type = node['type']
+  def initialize(who, whe, text)
+    @text = text
+    @who  = who
+    @when = whe
+    @type = 'hydrus'
   end
 
 end

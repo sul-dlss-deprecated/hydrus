@@ -27,11 +27,11 @@ class Hydrus::GenericObject < Dor::Item
     :label => 'Hydrus Properties',
     :control_group => 'M')
 
-  has_metadata(
-    :name => "events",
-    :type => Hydrus::EventsDS,
-    :label => 'Events',
-    :control_group => 'M')
+  # has_metadata(
+  #   :name => "events",
+  #   :type => Hydrus::EventsDS,
+  #   :label => 'Events',
+  #   :control_group => 'M')
 
   def initialize(*args)
     super
@@ -165,7 +165,7 @@ class Hydrus::GenericObject < Dor::Item
   # process as well.
   def approve
     complete_workflow_step('approve')
-    events.add('Approved', :who => @current_user)
+    events.add_event('hydrus', @current_user, 'Approved')
     return unless Dor::Config.hydrus.start_common_assembly
     complete_workflow_step('start-assembly')
     initiate_apo_workflow('assemblyWF')
@@ -218,8 +218,12 @@ class Hydrus::GenericObject < Dor::Item
     return node['datetime']
   end
 
-  def get_events
-    return events.find_by_terms(:event).map { |node| Hydrus::Event.new(node) }
+  def get_hydrus_events
+    es = []
+    events.find_events_by_type('hydrus') do |who, whe, msg|
+      es.push(Hydrus::Event.new(who, whe, msg))
+    end
+    return es
   end
 
 end

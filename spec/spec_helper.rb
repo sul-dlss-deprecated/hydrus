@@ -117,6 +117,11 @@ def hash2struct(h)
   return Struct.new(*h.keys).new(*h.values)
 end
 
+def should_visit_view_page(obj)
+  visit polymorphic_path(obj)
+  current_path.should == polymorphic_path(obj)
+end
+
 def should_visit_edit_page(obj)
   visit edit_polymorphic_path(obj)
   current_path.should == edit_polymorphic_path(obj)
