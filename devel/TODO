@@ -1,5 +1,3 @@
-Events: add to fixture objects
-
 Events: collection and item view beautification.
 
 Item.embargo datastream: create the DS, using default embargo info from APO.
