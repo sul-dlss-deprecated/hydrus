@@ -21,6 +21,11 @@ class Hydrus::Collection < Hydrus::GenericObject
     coll.roleMetadata.add_person_with_role(user, 'collection-depositor')
     # Add event.
     coll.events.add_event('hydrus', user, 'Collection created')
+    # Set defaults for visability, embargo, etc.
+    coll.visibility_option_value = 'everyone'
+    coll.embargo_option          = 'none'
+    coll.requires_human_approval = 'no'
+    coll.license_option          = 'none'
     # Save and return.
     coll.save
     return coll
@@ -61,7 +66,7 @@ class Hydrus::Collection < Hydrus::GenericObject
       events.add_event('hydrus', @current_user, 'Collection opened')
       unless workflow_step_is_done(s)
         complete_workflow_step(s)
-        approve() unless requires_human_approval
+        approve() unless to_bool(requires_human_approval)
       end
     else
       apo.deposit_status = 'closed'

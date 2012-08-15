@@ -88,6 +88,23 @@
       <% end %>
     </div>
 
+    <p class="form-section-para">Before being released, content in this collection must be 
+                                 approved by the collection manager or a reviewer:</p>
+    <div class="row">
+      <%= hydrus_form_value do %>
+        <% %w(no yes).each do |opt| %>
+          <div class="row">
+            <div class="span1 radio-input">
+              <%= f.radio_button 'requires_human_approval', opt %>
+            </div>
+            <div class="span7 radio-label">
+              <%= f.label 'requires_human_approval', opt.capitalize, :value => opt %>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+
   </div>
 
   <%= hydrus_form_header {"License"} %>

@@ -24,23 +24,18 @@ Item-level license and visibility info.
 
 Item view page: the actions box div is called "div.collection-actions". Do we care?
 
+When javascript is disabled, it is not possible to add new items. The drop
+down menus in "what you can do" don't work correctly with JS off.
 
----------------------------
-hydrusProperties datastream
----------------------------
 
-Whether collection requires approval: need UI component.
+--
+MH
+--
 
 Item approval: (1) inherited from the Collection (not an Item-level piece of
 info); (2) need UI component.
 
-
--------
-BUGS
--------
-
-When javascript is disabled, it is not possible to add new items. The drop
-down menus in "what you can do" don't work correctly with JS off.
+roleMD: implement new mockup: http://goo.gl/itA3a.
 
 
 -------

@@ -13,7 +13,7 @@ module Hydrus
     end
 
     def to_bool(val)
-      return (val == "true" || val == true)
+      return (val == "true" || val == true || val == 'yes')
     end
 
   end

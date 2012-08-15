@@ -84,10 +84,10 @@ describe("Collection create", :type => :request, :integration => true) do
     exp = [
       /^Abstract/,
       /^Contact/,
-      /^Embargo must/,
-      /^License must/,
-      /^Embargo option/,
-      /^License option/,
+      # /^Embargo must/,
+      # /^License must/,
+      # /^Embargo option/,
+      # /^License option/,
     ]
     exp.each { |e| err_msgs.should =~ e }
     # Get the Collection and APO objects from fedora.
