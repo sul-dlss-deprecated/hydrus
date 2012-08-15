@@ -1,6 +1,6 @@
 GIT
   remote: http://github.com/projectblacklight/blacklight.git
-  revision: 7d80a036f5b9e03d2f4ca677b94b2f27ffc215aa
+  revision: 351e3f4bd3d9206f401c8428a4ecffa6e087f3b3
   specs:
     blacklight (3.5.0)
       compass-rails (~> 1.0.0)
@@ -65,6 +65,10 @@ GEM
       gyoku (>= 0.4.0)
       nokogiri (>= 1.4.0)
     arel (3.0.2)
+    assembly-objectfile (1.3.2)
+      mime-types
+      mini_exiftool
+      nokogiri
     awesome_print (1.0.2)
     backports (2.6.3)
     bagit (0.2.0)
@@ -86,9 +90,9 @@ GEM
     carrierwave (0.6.2)
       activemodel (>= 3.2.0)
       activesupport (>= 3.2.0)
-    childprocess (0.3.4)
+    childprocess (0.3.5)
       ffi (~> 1.0, >= 1.0.6)
-    chunky_png (1.2.5)
+    chunky_png (1.2.6)
     coffee-rails (3.2.2)
       coffee-script (>= 2.2.0)
       railties (~> 3.2.0)
@@ -164,7 +168,7 @@ GEM
     execjs (1.4.0)
       multi_json (~> 1.0)
     fastercsv (1.5.5)
-    ffi (1.1.0)
+    ffi (1.1.5)
     fssm (0.2.9)
     gherkin (2.11.1)
       json (>= 1.4.6)
@@ -199,7 +203,7 @@ GEM
       active-fedora (~> 4.1)
     i18n (0.6.0)
     is_it_working-cbeer (1.0.15)
-    jettywrapper (1.3.1)
+    jettywrapper (1.3.2)
       activesupport (>= 3.0.0)
       childprocess
       i18n
@@ -215,7 +219,7 @@ GEM
       activesupport (>= 3.0.0)
       railties (>= 3.0.0)
     libv8 (3.3.10.4)
-    libwebsocket (0.1.4)
+    libwebsocket (0.1.5)
       addressable
     libxml-ruby (2.3.3)
     logger (1.2.8)
@@ -232,6 +236,7 @@ GEM
     marc (0.5.0)
     mediashelf-loggable (0.4.9)
     mime-types (1.19)
+    mini_exiftool (1.6.0)
     moab-versioning (0.8.7)
       confstruct
       happymapper
@@ -301,7 +306,7 @@ GEM
       rspec-expectations (~> 2.11.0)
       rspec-mocks (~> 2.11.0)
     rspec-core (2.11.1)
-    rspec-expectations (2.11.1)
+    rspec-expectations (2.11.2)
       diff-lcs (~> 1.1.3)
     rspec-mocks (2.11.1)
     rspec-rails (2.11.0)
@@ -366,7 +371,7 @@ GEM
       compass_twitter_bootstrap
       rails (>= 3.1.0)
     systemu (2.5.2)
-    therubyracer (0.10.1)
+    therubyracer (0.10.2)
       libv8 (~> 3.3.10)
     thor (0.14.6)
     tilt (1.3.3)
@@ -374,10 +379,10 @@ GEM
       polyglot
       polyglot (>= 0.3.1)
     tzinfo (0.3.33)
-    uglifier (1.2.6)
+    uglifier (1.2.7)
       execjs (>= 0.3.0)
       multi_json (~> 1.3)
-    unicode (0.4.2)
+    unicode (0.4.3)
     uuidtools (2.1.3)
     validatable (1.6.7)
     warden (1.2.1)
@@ -394,6 +399,7 @@ PLATFORMS
 
 DEPENDENCIES
   about_page
+  assembly-objectfile (>= 1.3.2)
   awesome_print
   blacklight (~> 3.5)!
   bootstrap-datepicker-rails

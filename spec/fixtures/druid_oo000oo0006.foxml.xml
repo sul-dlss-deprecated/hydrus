@@ -184,31 +184,7 @@
     <foxml:datastreamVersion ID="contentMetadata.0" LABEL="Content Metadata"
       CREATED="2012-05-02T23:10:37.034Z" MIMETYPE="text/xml" SIZE="928">
       <foxml:xmlContent>
-        <contentMetadata objectId="druid:oo000oo0006" type="file">
-          <resource id="file1" type="file" sequence="1">
-            <label>Some manual</label>
-            <file id="manual_foo.htm" filesize="262979" mimetype="text/html"
-              publish="yes" shelve="yes" preserve="yes">
-              <checksum type="md5">b409fde7ff1d2b650b0d2647175641e9</checksum>
-              <checksum type="sha1">88f259289a3d012b09477948888fcda2cb87feea</checksum>
-            </file>
-          </resource>
-          <resource id="file2" type="file" sequence="2">
-            <label>Some article</label>
-            <file id="article_foo.pdf" filesize="3622063" mimetype="application/pdf"
-              publish="yes" shelve="yes" preserve="yes">
-              <checksum type="md5">da2ccda82d1e6bba71b7a92dd38b4b71</checksum>
-              <checksum type="sha1">62f3fe2cea13cacf110c96d279ae7a45fa962407</checksum>
-            </file>
-          </resource>
-          <resource id="file3" type="file" sequence="3">
-            <label>Some data</label>
-            <file id="dataset_foo.txt" filesize="239350" mimetype="text/plain"
-              publish="yes" shelve="yes" preserve="yes">
-              <checksum type="md5">bffc0a355ce783a6709117e61c221724</checksum>
-              <checksum type="sha1">afa18147ee5735641141b2046576af390ec120bd</checksum>
-            </file>
-          </resource>
+	      <contentMetadata>
         </contentMetadata>
       </foxml:xmlContent>
     </foxml:datastreamVersion>

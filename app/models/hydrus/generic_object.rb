@@ -156,6 +156,7 @@ class Hydrus::GenericObject < Dor::Item
     return unless Dor::Config.hydrus.start_common_assembly
     complete_workflow_step('start-assembly')
     initiate_apo_workflow('assemblyWF')
+    update_content_metadata if self.class == Hydrus::Item
   end
 
   # Takes the name of a step in the Hydrus workflow.

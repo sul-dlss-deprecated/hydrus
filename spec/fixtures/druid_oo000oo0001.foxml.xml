@@ -188,42 +188,7 @@
     <foxml:datastreamVersion ID="contentMetadata.0" LABEL="Content Metadata"
       CREATED="2012-05-02T23:10:37.034Z" MIMETYPE="text/xml" SIZE="928">
       <foxml:xmlContent>
-        <contentMetadata objectId="druid:oo000oo0001" type="file">
-          <resource id="file1" type="file" sequence="1">
-            <label>Main survey -- formatted in HTML</label>
-            <file id="pinocchio.htm" filesize="262979" mimetype="text/html"
-              publish="yes" shelve="yes" preserve="yes">
-              <checksum type="md5">b409fde7ff1d2b650b0d2647175641e9</checksum>
-              <checksum type="sha1">88f259289a3d012b09477948888fcda2cb87feea</checksum>
-            </file>
-          </resource>
-          <resource id="file2" type="file" sequence="2">
-            <label>Main survey -- as PDF (prepared May 17, 2012)</label>
-            <file id="pinocchio characters tc in file name.pdf"
-              filesize="3622063" mimetype="application/pdf" publish="yes"
-              shelve="yes" preserve="yes">
-              <checksum type="md5">da2ccda82d1e6bba71b7a92dd38b4b71</checksum>
-              <checksum type="sha1">62f3fe2cea13cacf110c96d279ae7a45fa962407</checksum>
-            </file>
-          </resource>
-          <resource id="file3" type="file" sequence="3">
-            <label>Main survey -- as plain text (extracted into CSV
-              tables)</label>
-            <file id="pinocchio.-punctuation_in=file.name.txt" filesize="239350"
-              mimetype="text/plain" publish="yes" shelve="yes" preserve="yes">
-              <checksum type="md5">bffc0a355ce783a6709117e61c221724</checksum>
-              <checksum type="sha1">afa18147ee5735641141b2046576af390ec120bd</checksum>
-            </file>
-          </resource>
-          <resource id="file4" type="file" sequence="4">
-            <label>Imagine this is a set of data samples</label>
-            <file id="pinocchio_using_a_rather_long_filename-2012-05-17.zip"
-              filesize="90095" mimetype="application/zip" publish="yes"
-              shelve="yes" preserve="yes">
-              <checksum type="md5">654a54fcf531c78c3efff916db332017</checksum>
-              <checksum type="sha1">f80ab50a5599b1ecf92c1d8d6a38a409b4801b53</checksum>
-            </file>
-          </resource>
+        <contentMetadata>
         </contentMetadata>
       </foxml:xmlContent>
     </foxml:datastreamVersion>

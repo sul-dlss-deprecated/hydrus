@@ -33,7 +33,7 @@ class Hydrus::Item < Hydrus::GenericObject
   def requires_human_approval
     to_bool(collection.first.requires_human_approval)
   end
-  
+
   def self.create(collection_pid, user)
     # Create the object, with the correct model.
     coll     = Hydrus::Collection.find(collection_pid)
@@ -52,6 +52,16 @@ class Hydrus::Item < Hydrus::GenericObject
     # Save and return.
     item.save
     return item
+  end
+
+  def update_content_metadata
+    xml=create_content_metadata
+    self.datastreams['contentMetadata'].content=xml  # generate new content metadata and replace datastream
+  end
+  
+  def create_content_metadata
+    objects=self.files.collect{|file| Assembly::ObjectFile.new(file.current_path,:label=>file.label)}
+    objects.empty? ? '' : Assembly::ContentMetadata.create_content_metadata(:druid=>pid,:objects=>objects,:style=>:file,:include_root_xml=>false)  
   end
   
   # Returns true only if the Item is unpublished.
