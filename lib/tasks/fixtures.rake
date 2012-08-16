@@ -51,7 +51,7 @@ namespace :hydrus do
       dest_path_to_files=DruidTools::Druid.new(pid,dest_base_path_to_files).path()
       if File.exists?(source_path_to_files) && File.directory?(source_path_to_files)
         FileUtils.mkdir_p(dest_path_to_files) unless File.directory?(dest_path_to_files)
-        copy_command="cp -fr #{source_path_to_files}/ #{dest_path_to_files}/"
+        copy_command="cp -fr #{source_path_to_files}/* #{dest_path_to_files}/"
         system copy_command
       end
     }
