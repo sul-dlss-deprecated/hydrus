@@ -15,26 +15,6 @@ class Hydrus::Item < Hydrus::GenericObject
 
   delegate :accepted_terms_of_deposit, :to => "hydrusProperties", :unique => true
 
-  # Publish the Item.
-  def publish(value)
-    # At the moment of publication, we refresh various titles.
-    identityMetadata.objectLabel = title
-    # Advance workflow to record that the object has been published.
-    s = 'submit'
-    unless workflow_step_is_done(s)
-      complete_workflow_step(s)
-      events.add_event('hydrus', @current_user, 'Item published')
-      approve() unless requires_human_approval
-    end
-  end
-  
-  # Returns true if the Item's Collection requires items to be reviewed/approved
-  # before ultimate release.
-  # TODO: for now, we assume the first collection is the relevant one for Hydrus.
-  def requires_human_approval
-    to_bool(collection.first.requires_human_approval)
-  end
-
   def self.create(collection_pid, user)
     # Create the object, with the correct model.
     coll     = Hydrus::Collection.find(collection_pid)
@@ -55,6 +35,31 @@ class Hydrus::Item < Hydrus::GenericObject
     return item
   end
 
+  # Publish the Item.
+  def publish(value)
+    # At the moment of publication, we refresh various titles.
+    identityMetadata.objectLabel = title
+    # Advance workflow to record that the object has been published.
+    s = 'submit'
+    unless workflow_step_is_done(s)
+      complete_workflow_step(s)
+      events.add_event('hydrus', @current_user, 'Item published')
+      approve() unless requires_human_approval
+    end
+  end
+  
+  # Returns true if the Item's Collection requires items to be
+  # reviewed/approved before ultimate release.
+  def requires_human_approval
+    to_bool(collection.requires_human_approval)
+  end
+
+  # Returns the Item's Collection.
+  def collection
+    cs = super       # Get all collections.
+    return cs.first  # In Hydrus, we assume there is just one (for now).
+  end
+
   def update_content_metadata
     xml=create_content_metadata
     self.datastreams['contentMetadata'].content=xml  # generate new content metadata and replace datastream
@@ -72,7 +77,8 @@ class Hydrus::Item < Hydrus::GenericObject
 
   # Returns true only if the Item has an open Collection.
   def collection_is_open
-    return true if collection.any? { |c| c.is_open }
+    c = collection
+    return true if c && c.is_open
     errors.add(:collection, "must be open to have new items added")
     return false
   end
@@ -89,7 +95,7 @@ class Hydrus::Item < Hydrus::GenericObject
       (rightsMetadata.use.machine *args).first
     else
       # Use the collection's license as a default in the absense of an item level license.
-      collection[0].license
+      collection.license
     end
   end
   
@@ -158,7 +164,7 @@ class Hydrus::Item < Hydrus::GenericObject
   end
   
   def end_of_embargo_range
-    length = collection.first.apo.embargo
+    length = collection.apo.embargo
     number = length.split(" ").first.to_i
     increment = length.split(" ").last
     # number.send(increment) is essentially doing 6.months, 2.years, etc.

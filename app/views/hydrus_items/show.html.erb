@@ -4,9 +4,12 @@
 
   <dl>
     <dt><h6>Collection</h6></dt>
-    <% @document_fedora.collection.each do |c| %>
-      <dd class="collection"><%= link_to(c.title, polymorphic_path(c)) %></dd>
-    <% end %>
+    <dd class="collection">
+      <%= 
+        c = @document_fedora.collection 
+        link_to(c.title, polymorphic_path(c))
+      %>
+    </dd>
   </dl>
 
 

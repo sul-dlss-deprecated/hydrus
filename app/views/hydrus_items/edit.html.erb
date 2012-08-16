@@ -120,7 +120,7 @@
   <!-- Embargo -->
   <div class="row embargo">
     <div class="span9 sub-section">
-    <% case @document_fedora.collection[0].embargo_option %>
+    <% case @document_fedora.collection.embargo_option %>
     <% when 'none' %>
       This item will be released for discovery and download 
       <span class="highlight-value">
@@ -138,7 +138,7 @@
     <% when 'fixed' %>
       This item will be released for discovery and download 
       <span class="highlight-value">
-        <%= @document_fedora.collection[0].embargo %>
+        <%= @document_fedora.collection.embargo %>
         after deposit.
       </span>
     <% end %>
@@ -147,7 +147,7 @@
   <!-- Visiblity -->
   <div class="row">
     <div class="span9">
-    <% case @document_fedora.collection[0].visibility_option_value %>
+    <% case @document_fedora.collection.visibility_option_value %>
     <% when 'everyone' %>
       After its release, this item can be downloaded and discovered by 
       <span class="highlight-value">
@@ -170,7 +170,7 @@
  <%= hydrus_form_header{"License"} %>
   <div class="row">
     <div class="span9">
-    <% case @document_fedora.collection[0].license_option %>
+    <% case @document_fedora.collection.license_option %>
     <% when 'none' %>
       No license will be applied to this item. All rights reserved by content creator.
     <% when 'varies' %>
@@ -179,7 +179,7 @@
     <% when 'fixed' %>
       This work will be licensed under a 
       <span class="highlight-value">
-        <%= Hydrus::Collection.license_human(@document_fedora.collection[0].license) %>
+        <%= Hydrus::Collection.license_human(@document_fedora.collection.license) %>
       </span>
     <% end %>
     </div>

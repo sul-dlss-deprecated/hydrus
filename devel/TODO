@@ -42,7 +42,7 @@ Hcare about the test, it needs to do more (or we need to modify descMD and/or UI
 [Waiting until JK refactors handling of multi-valued fields, Javascript, etc.]
 
 Need a place to store Item types. Currently hardcoded to :dataset. Also see object_type()
-in GenericObject.
+in GenericObject. [Lynn and Hannah will discuss]
 
 APO RELS-EXT datastream needs to add a child node to <rdf:Description>:
 <hydra:referencesAgreement rdf:resource="info:fedora/druid:XXX"/>, where XXX is
@@ -56,11 +56,10 @@ in dor-services.]
 Collection create: APO.roleMetadata: set the value of <name> for the
 collection-manager [waiting on LDAP].
 
-Collection create: APO.descMetadata. Flesh out. [waiting on spec from Lynn;
-emailed Aug 10]
+Collection create: APO.descMetadata. Flesh out. [waiting on spec from Lynn]
 
 Should roleMetadata have an XML namespace? If so, what should it be? Could
-not find any definitive examples in Consul. [Ask Lynn; emailed Aug 10]
+not find any definitive examples in Consul. [waiting on response from Lynn]
 
 Qualify roles by their domain: for example, "hydrus:collection_creator". See
 Consul Repository+Roles+and+Permissions. [Waiting on Lynn and Hannah to

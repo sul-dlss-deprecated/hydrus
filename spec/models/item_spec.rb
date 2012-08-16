@@ -312,11 +312,11 @@ describe Hydrus::Item do
 
         it "should get the end date range properly based on the collection's APO" do
           subject.stub(:beginning_of_embargo_range).and_return("08/01/2012")
-          subject.stub_chain([:collection, :first, :apo, :embargo]).and_return("6 months")
+          subject.stub_chain([:collection, :apo, :embargo]).and_return("6 months")
           subject.end_of_embargo_range.should == "02/01/2013"
-          subject.stub_chain([:collection, :first, :apo, :embargo]).and_return("1 year")
+          subject.stub_chain([:collection, :apo, :embargo]).and_return("1 year")
           subject.end_of_embargo_range.should == "08/01/2013"
-          subject.stub_chain([:collection, :first, :apo, :embargo]).and_return("5 years")
+          subject.stub_chain([:collection, :apo, :embargo]).and_return("5 years")
           subject.end_of_embargo_range.should == "08/01/2017"
         end
       end
@@ -398,28 +398,16 @@ describe Hydrus::Item do
 
   end
 
-  describe "collection_is_open()" do
-
-    before(:each) do
-      vs = [false, false, false, true, false]
-      @mock_colls = vs.map { |v| double('collection', :is_open => v) }
+  it "collection_is_open() should return true only if the Item is in an open Collection" do
+    n  = 0
+    [true, false, nil].each do |stub_val|
+      c    = double('collection', :is_open => stub_val)
+      exp  = not(not(stub_val))
+      n   += 1 unless exp
+      @hi.stub(:collection).and_return(c)
+      @hi.collection_is_open.should == exp
+      @hi.errors.size.should == n
     end
-
-    it "should return true if any of the collections are open" do
-      @hi.stub(:collection).and_return(@mock_colls)
-      @hi.collection_is_open.should == true
-    end
-
-    it "should return false if none of the collections are open" do
-      @hi.stub(:collection).and_return(@mock_colls.reject { |c| c.is_open })
-      @hi.collection_is_open.should == false
-    end
-
-    it "should return false if Item has no collections" do
-      @hi.stub(:collection).and_return([])
-      @hi.collection_is_open.should == false
-    end
-
   end
 
   it "can exercise discovery_roles()" do
