@@ -251,6 +251,12 @@ describe Hydrus::GenericObject do
       @go.publish= v
     end
 
+    it "approve=() should delegate to approve()" do
+      v = 9876
+      @go.should_receive(:approve).with(no_args)
+      @go.approve= v
+    end
+
     describe "submit_time()" do
 
       it "should return nil if Item is unpublished" do

@@ -34,11 +34,23 @@
 	  <p><%= link_to("Edit item",edit_polymorphic_path(@document_fedora, :viewing_context => 'edit'),
 	          :class => 'edit toggle') %></p>
       <%
-          if @document_fedora.is_published
-           # Do nothing.
+         if @document_fedora.is_published
+           unless @document_fedora.is_approved
+      %>
+            <p>
+              <button type="submit" class="btn btn-small save-edits" 
+                      name="hydrus_item[approve]" value="true" 
+                      id="hydrus_item_approve">Approve Item</button>
+            </p>
+      <%
+           end
       %>
 			<% elsif @document_fedora.is_publishable %>
-		  	<p><button type="submit" class="btn btn-small save-edits" name="hydrus_item[publish]" value="true" id="hydrus_item_publish">Publish Item</button></p>
+          <p>
+            <button type="submit" class="btn btn-small save-edits" 
+                    name="hydrus_item[publish]" value="true" 
+                    id="hydrus_item_publish">Publish Item</button>
+          </p>
 			<% else %>
 					<p>To publish the item, you must fix the following:
 						<%

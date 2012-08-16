@@ -65,7 +65,12 @@ describe("Item create", :type => :request, :integration => true) do
       :abstract => 'abstract_foo',
       :contact  => 'ozzy@hell.com',
     )
-    publish_button  = "Publish Item"
+    publish_button = "Publish Item"
+    approve_button = "Approve"
+    # Force Items to receive human approval.
+    coll = Hydrus::Collection.find(@hc_druid)
+    coll.requires_human_approval = 'yes'
+    coll.save
     # Login, go to new Item page, and store the druid of the new Item.
     login_as_archivist1
     visit new_hydrus_item_path(:collection => @hc_druid)
@@ -128,7 +133,7 @@ describe("Item create", :type => :request, :integration => true) do
     # Check various Item attributes and methods.
     item.is_publishable.should == true
     item.is_published.should == true
-    item.is_approved.should == true     # human approval was not required
+    item.is_approved.should == false
     item.is_destroyable.should == false
     item.valid?.should == true
     # Return to edit page, and try to save Item with an empty title.
@@ -137,6 +142,17 @@ describe("Item create", :type => :request, :integration => true) do
     click_button "Save"
     page.should_not have_content(@notice)
     find('div.alert').should have_content('Title cannot be blank')
+    # Fill in the title and save.
+    fill_in "hydrus_item_title", :with => ni.title
+    click_button "Save"
+    page.should have_content(@notice)
+    # Approve the Item.
+    click_button(approve_button)
+    page.should have_content(@notice)
+    # The view page should not offer the Publish or Approve buttons.
+    div_cs = find("div.collection-actions")
+    div_cs.should_not have_button(publish_button)
+    div_cs.should_not have_button(approve_button)
     # Check events.
     exp = [
       /\AItem created/,

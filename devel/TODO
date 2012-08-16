@@ -27,14 +27,6 @@ Item view page: the actions box div is called "div.collection-actions". Do we ca
 When javascript is disabled, it is not possible to add new items. The drop
 down menus in "what you can do" don't work correctly with JS off.
 
-
---
-MH
---
-
-Item approval: (1) inherited from the Collection (not an Item-level piece of
-info); (2) need UI component.
-
 roleMD: implement new mockup: http://goo.gl/itA3a.
 
 

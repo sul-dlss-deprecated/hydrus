@@ -48,6 +48,12 @@ class Hydrus::GenericObject < Dor::Item
     publish(val)
   end
 
+  # The controller will call this method, which we simply forward to
+  # approve() in the Collection or Item class.
+  def approve=(val)
+    approve
+  end
+
   def object_type
     # TODO: this is not what we want.
     return identityMetadata.objectType.first

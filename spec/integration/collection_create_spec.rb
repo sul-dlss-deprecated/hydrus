@@ -65,8 +65,9 @@ describe("Collection create", :type => :request, :integration => true) do
       :abstract => 'abstract_foo',
       :contact  => 'ozzy@hell.com',
     )
-    open_button  = "Open Collection"
-    close_button = "Close Collection"
+    open_button    = "Open Collection"
+    close_button   = "Close Collection"
+    approve_button = "Approve"
     # Login, go to new Collection page, and store the druid of the new Collection.
     login_as_archivist1
     visit new_hydrus_collection_path()
@@ -74,6 +75,7 @@ describe("Collection create", :type => :request, :integration => true) do
     druid = @edit_path_regex.match(current_path)[1]
     # Fill in form and save.
     fill_in "hydrus_collection_title", :with => ni.title
+    choose "hydrus_collection_requires_human_approval_yes"
     click_button "Save"
     page.should have_content(@notice)
     # The view page should display some validation error messages, and should not
@@ -84,10 +86,6 @@ describe("Collection create", :type => :request, :integration => true) do
     exp = [
       /^Abstract/,
       /^Contact/,
-      # /^Embargo must/,
-      # /^License must/,
-      # /^Embargo option/,
-      # /^License option/,
     ]
     exp.each { |e| err_msgs.should =~ e }
     # Get the Collection and APO objects from fedora.
@@ -105,9 +103,6 @@ describe("Collection create", :type => :request, :integration => true) do
     should_visit_edit_page(coll)
     fill_in "hydrus_collection_abstract", :with => ni.abstract
     fill_in "hydrus_collection_contact",  :with => ni.contact
-    choose "hydrus_collection_embargo_option_none"
-    choose "hydrus_collection_visibility_option_value_everyone"
-    choose "hydrus_collection_license_option_none"
     click_button "Save"
     page.should have_content(@notice)
     # The view page should now offer the Open Collection button.
@@ -130,13 +125,14 @@ describe("Collection create", :type => :request, :integration => true) do
     # The view page should now offer the Close Collection button.
     div_cs = find("div.collection-actions")
     div_cs.should have_button(close_button)
+    div_cs.should have_button(approve_button)
     # Get the Collection and APO objects from fedora.
     coll = Hydrus::Collection.find(druid)
     apo = coll.apo
     # Check various Collection attributes and methods.
     coll.is_publishable.should == true
     coll.is_published.should == true
-    coll.is_approved.should == true     # human approval was not required
+    coll.is_approved.should == false
     coll.is_destroyable.should == false
     coll.valid?.should == true
     coll.is_open.should == true
@@ -147,13 +143,14 @@ describe("Collection create", :type => :request, :integration => true) do
     # The view page should now offer the Open Collection button.
     div_cs = find("div.collection-actions")
     div_cs.should have_button(open_button)
+    div_cs.should_not have_button(approve_button)
     # Get the Collection and APO objects from fedora.
     coll = Hydrus::Collection.find(druid)
     apo = coll.apo
     # Check various Collection attributes and methods.
     coll.is_publishable.should == true
     coll.is_published.should == true
-    coll.is_approved.should == true
+    coll.is_approved.should == false
     coll.is_destroyable.should == false
     coll.valid?.should == true
     coll.is_open.should == false
@@ -164,12 +161,37 @@ describe("Collection create", :type => :request, :integration => true) do
     click_button "Save"
     page.should_not have_content(@notice)
     find('div.alert').should have_content('Title cannot be blank')
+    # Fill in the title and save.
+    fill_in "hydrus_collection_title", :with => ni.title
+    click_button "Save"
+    page.should have_content(@notice)
+    # Open and approve the Collection.
+    click_button(open_button)
+    page.should have_content(@notice)
+    click_button(approve_button)
+    page.should have_content(@notice)
+    # The view page should now offer the Close Collection button.
+    div_cs = find("div.collection-actions")
+    div_cs.should have_button(close_button)
+    div_cs.should_not have_button(approve_button)
+    # Get the Collection and APO objects from fedora.
+    coll = Hydrus::Collection.find(druid)
+    apo = coll.apo
+    # Check various Collection attributes and methods.
+    coll.is_publishable.should == true
+    coll.is_published.should == true
+    coll.is_approved.should == true
+    coll.is_destroyable.should == false
+    coll.valid?.should == true
+    coll.is_open.should == true
+    apo.is_open.should == true
     # Check events.
     exp = [
       /\ACollection created/,
       /\ACollection opened/,
-      /\AApproved/,
       /\ACollection closed/,
+      /\ACollection opened/,
+      /\AApproved/,
     ]
     es = coll.get_hydrus_events
     es[0...exp.size].zip(exp).each { |e, exp| e.text.should =~ exp  }

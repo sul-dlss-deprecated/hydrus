@@ -28,8 +28,9 @@ class Hydrus::Item < Hydrus::GenericObject
     end
   end
   
-  # TODO - an item can be in more than one collection, for now, we just check the first collection associated with the item to see if
-  #  that collection requires approval, this might have to get more intelligent later to account for items in multiple collections
+  # Returns true if the Item's Collection requires items to be reviewed/approved
+  # before ultimate release.
+  # TODO: for now, we assume the first collection is the relevant one for Hydrus.
   def requires_human_approval
     to_bool(collection.first.requires_human_approval)
   end
