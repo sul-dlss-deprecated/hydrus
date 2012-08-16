@@ -18,4 +18,15 @@ describe Hydrus::AccessControlsEnforcement do
     tests.each { |inp, exp| to_bool(inp).should == exp }
   end
 
+  it "parse_comma_delimited() should work as expected" do
+    tests = {
+      '  a  , b, c  '       => %w(a b c),
+      ' a b  , c, d e  f  ' => ['a b', 'c', 'd e  f'],
+      ' a b '               => ['a b'],
+      ' foo '               => ['foo'],
+      '  '                  => [],
+    }
+    tests.each { |inp, exp| parse_comma_delimited(inp).should == exp }
+  end
+
 end

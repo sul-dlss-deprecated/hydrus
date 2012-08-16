@@ -169,7 +169,7 @@ describe Hydrus::Item do
     end
 
     it "keywords= should rewrite all <subject> nodes" do
-      @hi.keywords = { 0 => 'foo', 1 => 'bar', 2 => 'quux' }
+      @hi.keywords = ' foo , bar , quux  '
       @dsdoc.ng_xml.should be_equivalent_to <<-EOF
         #{@mods_start}
           <subject><topic>foo</topic></subject>
@@ -177,6 +177,13 @@ describe Hydrus::Item do
           <subject><topic>quux</topic></subject>
         </mods>
       EOF
+    end
+
+    it "keywords= should not modify descMD if the keywords are same as existing" do
+      kws = %w(foo bar)
+      @hi.stub(:keywords).and_return(kws)
+      @hi.should_not_receive(:descMetadata)
+      @hi.keywords = kws.join(',')
     end
 
   end

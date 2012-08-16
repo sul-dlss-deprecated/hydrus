@@ -4,7 +4,6 @@ class HydrusItemsController < ApplicationController
   include Hydra::AssetsControllerHelper  # This is to get apply_depositor_metadata method
   include Hydra::Controller::UploadBehavior
   include Hydrus::AccessControlsEnforcement
-  include Hydrus::ControllerHelper
 
   #prepend_before_filter :sanitize_update_params, :only => :update
   before_filter :enforce_access_controls
@@ -37,12 +36,6 @@ class HydrusItemsController < ApplicationController
   def update
     notice = []
     
-    # Handle keywords (topics), which user supplies as a comma-delimited string.
-    if params.has_key?("hydrus_item_keywords")
-      kws = parse_keywords(params['hydrus_item_keywords'])
-      params["hydrus_item"]["keywords"] = kws unless @document_fedora.keywords == kws.values
-    end
-
     # Files from the file input.
     if params.has_key?("files")
       params["files"].each do |file|

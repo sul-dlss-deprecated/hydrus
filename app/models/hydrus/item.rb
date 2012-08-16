@@ -235,9 +235,14 @@ class Hydrus::Item < Hydrus::GenericObject
     descMetadata.subject.topic(*args)
   end
 
-  def keywords=(*args)
+  # Takes a comma-delimited string.
+  # Parses the string and rewrites the Item's descMD subject nodes
+  # (but only if the parsed keywords differ from the current subject nodes).
+  def keywords=(val)
+    kws = parse_comma_delimited(val)
+    return if keywords == kws
     descMetadata.remove_nodes(:subject)
-    args.first.values.each { |kw| descMetadata.insert_topic(kw)  }
+    kws.each { |kw| descMetadata.insert_topic(kw)  }
   end
   
   def update_access_blocks(ds,group)

@@ -74,7 +74,7 @@
       <%= label_tag("hydrus_item_keywords", "Keywords") %>
     <%- end -%>
     <%= hydrus_form_value do  -%>
-      <%= text_field_tag("hydrus_item_keywords", @document_fedora.keywords.join(", ")) -%>
+      <%= text_field_tag("hydrus_item[keywords]", @document_fedora.keywords.join(", ")) -%>
       <div class="help">separate keywords with commas</div>
     <%- end -%>    
   </div>
