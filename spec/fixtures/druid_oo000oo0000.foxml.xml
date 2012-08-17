@@ -184,16 +184,6 @@
               <name>McRae, Lynn</name>
             </person>
           </role>
-          <role type="collection-depositor">
-            <person>
-              <identifier type="sunetid">labware</identifier>
-              <name>Labware, Hydra</name>
-            </person>
-            <group>
-              <identifier type="workgroup">dlss:labstaff</identifier>
-              <name>Scanning Lab Staff</name>
-            </group>
-          </role>
         </roleMetadata>
       </foxml:xmlContent>
     </foxml:datastreamVersion>

@@ -131,13 +131,24 @@
   </div>
 
   <%= hydrus_form_header {"Allow others to contribute to this collection"} %>
-  <div id="role-management" class="destroy-group">
-	  <%= render "actors"%>
-  </div>
-  <div class="row">
-    <div class="span8 offset1">
-      <%= button_tag("Add a person", :name=>"add_person", :"data-attribute" => "add_person", :id=>"add_person", :class=>"btn", :value=>@document_fedora.person_id.length) %>
-    </div>
+
+  <div id="role-management">
+    <p>Provide a SUNet ID for each person who can view, add, or review items in this
+       collection, or who can manage the collection. Separate multiple IDs with a comma
+       or enter on a separate line.</p>
+
+    <% Hydrus::AdminPolicyObject.roles.each do |role, role_label| %>
+      <% k = :"apo_person_roles[#{role}]" %>
+        <div class="row">
+          <%= hydrus_form_label do %>
+            <%= f.label k, role_label %>
+          <%- end %>
+          <%- pwr = @document_fedora.apo_persons_with_role(role) %>
+          <%= hydrus_form_value do %>
+            <%= f.text_field k, :value => pwr.join(', ') %>
+          <%- end %>
+        </div>
+    <% end %>
   </div>
 
   <noscript>

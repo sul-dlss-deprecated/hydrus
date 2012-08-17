@@ -85,15 +85,6 @@ class Hydrus::RoleMetadataDS < ActiveFedora::NokogiriDatastream
     add_hydrus_child_node(role_node, :group, group_type)
   end
 
-  def delete_actor(identifier, role)
-    # NOTE: does NOT remove role node if it becomes empty, which is OK.
-    q = "/roleMetadata/role[@type='#{role}']/person[identifier='#{identifier}']"
-    node = find_by_xpath(q).first
-    return unless node
-    node.remove
-    content_will_change!
-  end
-
   # OM templates.
 
   define_template :role do |xml, role_type|

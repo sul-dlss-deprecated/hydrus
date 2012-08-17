@@ -16,10 +16,11 @@ module Hydrus
       return (val == "true" || val == true || val == 'yes')
     end
 
-    # Takes a comma-delimited string (eg, of keywords as entered on Item edit page).
+    # Takes a delimited string (eg, of keywords as entered on Item edit page).
     # Returns an array of elements obtained by parsing the string.
-    def parse_comma_delimited(cds)
-      return cds.strip.split(/\s*,\s*/)
+    # Allowed delimiters: comma, semi-colon, newlines.
+    def parse_delimited(cds)
+      return cds.split(/[,;\n\r]/).each { |s| s.strip! }.select { |s| s.length > 0 }
     end
 
   end

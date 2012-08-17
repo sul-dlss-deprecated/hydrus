@@ -14,8 +14,8 @@ describe Hydrus::AdminPolicyObject do
         Hydrus::AdminPolicyObject.default_role.should == "item-depositor"
       end
 
-      it "should have an array of possible roles" do
-        Hydrus::AdminPolicyObject.roles.should be_a Array
+      it "should have a hash of possible roles" do
+        Hydrus::AdminPolicyObject.roles.should be_a Hash
       end
 
     end
@@ -36,7 +36,7 @@ describe Hydrus::AdminPolicyObject do
       Hydrus::AdminPolicyObject.embargo_terms.should be_a Hash
     end
 
-  end  
+  end
 
   describe "validations" do
 

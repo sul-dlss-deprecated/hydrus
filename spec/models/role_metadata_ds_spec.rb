@@ -259,56 +259,6 @@ describe Hydrus::RoleMetadataDS do
     end # context add_person_of_role
   end # context inserting nodes
 
-  context "delete_actor()" do
-
-    before(:each) do
-      @start_xml = <<-EOF
-        #{@rmd_start}
-          <role type="collection-manager">
-            #{@p1}
-            #{@p2}
-          </role>
-          <role type="collection-depositor">
-            #{@p3}
-          </role>
-        #{@rmd_end}
-      EOF
-      @rmdoc = Hydrus::RoleMetadataDS.from_xml(@start_xml)
-    end
-
-    it "delete_actor should remove the correct actor node" do
-      exp_xml = <<-EOF
-        #{@rmd_start}
-          <role type="collection-manager">
-            #{@p1}
-          </role>
-          <role type="collection-depositor">
-            #{@p3}
-          </role>
-        #{@rmd_end}
-      EOF
-      @rmdoc.delete_actor('sunetid2', 'collection-manager')
-      @rmdoc.ng_xml.should be_equivalent_to exp_xml
-      exp_xml = <<-EOF
-        #{@rmd_start}
-          <role type="collection-manager">
-            #{@p1}
-          </role>
-          <role type="collection-depositor" />
-        #{@rmd_end}
-      EOF
-      @rmdoc.delete_actor('sunetid3', 'collection-depositor')
-      # NOTE:  it is ok to have an empty role node
-      @rmdoc.ng_xml.should be_equivalent_to exp_xml
-    end
-    
-    it "delete_actor should do nothing quietly when it is called for non-existent actor identifier" do
-      @rmdoc.delete_actor('not_present', 'blah')
-      @rmdoc.ng_xml.should be_equivalent_to @start_xml
-    end
-    
-  end
-
   it "the blank template should match our expectations" do
     exp_xml = %Q(
       #{@rmd_start}

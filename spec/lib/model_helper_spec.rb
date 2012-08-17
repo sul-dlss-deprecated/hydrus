@@ -18,15 +18,18 @@ describe Hydrus::AccessControlsEnforcement do
     tests.each { |inp, exp| to_bool(inp).should == exp }
   end
 
-  it "parse_comma_delimited() should work as expected" do
+  it "parse_delimited() should work as expected" do
     tests = {
-      '  a  , b, c  '       => %w(a b c),
-      ' a b  , c, d e  f  ' => ['a b', 'c', 'd e  f'],
-      ' a b '               => ['a b'],
-      ' foo '               => ['foo'],
-      '  '                  => [],
+      '  a  , b, c  '           => %w(a b c),
+      'a,b,c;'                  => %w(a b c),
+      "  a  \n b \n c  "        => %w(a b c),
+      ' a b  , c, d e  f  '     => ['a b', 'c', 'd e  f'],
+      ' a b '                   => ['a b'],
+      ' foo '                   => ['foo'],
+      '  '                      => [],
+      "  a,,; b \n\r  , c\nd  " => %w(a b c d),
     }
-    tests.each { |inp, exp| parse_comma_delimited(inp).should == exp }
+    tests.each { |inp, exp| parse_delimited(inp).should == exp }
   end
 
 end

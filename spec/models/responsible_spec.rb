@@ -4,6 +4,7 @@ require 'spec_helper'
 class MockResponsible
 
   include Hydrus::Responsible
+  include Hydrus::ModelHelper
 
   attr_reader(:roleMetadata)
 
@@ -24,7 +25,7 @@ class MockResponsible
               <name>Black, Delores</name>
            </person>
         </role>
-        <role type="collection-depositor">
+        <role type="item-reviewer">
            <person>
               <identifier type="sunetid">ggreen</identifier>
               <name>Green, Greg</name>
@@ -33,6 +34,12 @@ class MockResponsible
               <identifier type="workgroup">pasig:2011attendees</identifier>
               <name>Conference attendees</name>
             </group>
+        </role>
+        <role type="item-depositor">
+           <person>
+              <identifier type="sunetid">bblue</identifier>
+              <name>Blue, Bill</name>
+           </person>
         </role>
       </roleMetadata>
     EOF
@@ -44,13 +51,21 @@ describe Hydrus::Responsible do
 
   before(:each) do
     @obj = MockResponsible.new
+    @orig_roles = {
+      "collection-manager" => ["brown", "dblack"],
+      "item-reviewer"      => ["ggreen"],
+      "item-depositor"     => ["bblue"],
+    }
   end
 
   it "person_roles() should return the expected hash" do
-    @obj.person_roles.should == {
-      "collection-manager"   => {"brown"=>true, "dblack"=>true},
-      "collection-depositor" => {"ggreen"=>true},
-    }
+    @obj.person_roles.should == @orig_roles
+  end
+
+  it "persons_with_role() should return expected IDs" do
+    @orig_roles.each do |role, ids|
+      @obj.persons_with_role(role).should == ids
+    end
   end
 
   it "person_roles= should rewrite the <person> nodes, but not <group> nodes" do
@@ -62,29 +77,32 @@ describe Hydrus::Responsible do
             <name/>
           </person>
         </role>
-        <role type="collection-depositor">
+        <role type="item-reviewer">
           <group>
             <identifier type="workgroup">pasig:2011attendees</identifier>
             <name>Conference attendees</name>
           </group>
+          <person>
+            <identifier type="sunetid">ggreen</identifier>
+            <name/>
+          </person>
         </role>
         <role type="item-depositor">
           <person>
             <identifier type="sunetid">foo</identifier>
             <name/>
           </person>
+          <person>
+            <identifier type="sunetid">bar</identifier>
+            <name/>
+          </person>
         </role>
       </roleMetadata>
     EOF
     @obj.person_roles= {
-      "0" => {
-        "id"   => "archivist1", 
-        "role" => "collection-manager",
-      },
-      "1" => {
-        "id"   => "foo",
-        "role" => "item-depositor",
-      },
+      "collection-manager" => "archivist1", 
+      "item-reviewer"      => "ggreen", 
+      "item-depositor"     => "foo,bar",
     }
     @obj.roleMetadata.ng_xml.should be_equivalent_to(exp)
   end

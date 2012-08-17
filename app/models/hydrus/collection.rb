@@ -213,7 +213,6 @@ class Hydrus::Collection < Hydrus::GenericObject
     apo.license_option= *args
   end
 
-  # for APO roleMetadata
   def add_empty_person_to_role *args
     apo.roleMetadata.add_empty_person_to_role *args
   end
@@ -234,8 +233,8 @@ class Hydrus::Collection < Hydrus::GenericObject
     apo.person_roles= args.first
   end
 
-  def remove_actor *args
-    apo.roleMetadata.delete_actor *args
+  def apo_persons_with_role(role)
+    return apo.persons_with_role(role)
   end
 
 end

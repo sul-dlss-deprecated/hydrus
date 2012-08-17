@@ -27,17 +27,17 @@ Item view page: the actions box div is called "div.collection-actions". Do we ca
 When javascript is disabled, it is not possible to add new items, because the drop
 down menus don't work. Applies to home page and Collection view page.
 
-Qualify roles by their domain: for example, "hydrus_collection_creator". See
-Consul Repository+Roles+and+Permissions.
+Events. Add more events. See Consul: HYDRUS/Hydrus+Event+History.
 
-roleMD: implement new mockup: http://goo.gl/itA3a.
+Qualify roles by their domain: for example, "hydrus_collection_creator". See
+Consul Repository+Roles+and+Permissions. Also note that roles now use
+underscores rather than hyphens, and that the roles differ slightly from those
+currently in the app.
 
 
 -------
 WAITING
 -------
-
-Events. Add more events. [waiting on Lynn and Hannah]
 
 Item valiation. The :actors validation does impose much of a test, because the xml
 template for descMD always includes an actor (with a blank role and name). If we
@@ -63,3 +63,5 @@ Collection create: APO.descMetadata. Flesh out. [waiting on spec from Lynn]
 
 Should roleMetadata have an XML namespace? If so, what should it be? Could
 not find any definitive examples in Consul. [waiting on response from Lynn]
+
+Assess whether we can speed up the integration test suite.

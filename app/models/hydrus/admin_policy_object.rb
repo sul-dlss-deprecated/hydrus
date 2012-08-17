@@ -107,13 +107,17 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
   delegate(:person_id, :to => "roleMetadata",
            :at => [:role, :person, :identifier])
 
-  # Will be "item-depositor" for now per spec. Test will determine if it changes in the future.
-  def self.default_role
-    self.roles.last
+  def self.roles
+     return {
+       'collection-manager' => "Manage collection",
+       'item-reviewer'      => "Review items",
+       'item-depositor'     => "Deposit items",
+       'item-viewer'        => "View items",
+     }
   end
 
-  def self.roles
-    ["collection-manager", "collection-depositor", "item-depositor"]
+  def self.default_role
+    return "item-depositor"
   end
 
   # Returns a hash of info needed for licenses in the APO.

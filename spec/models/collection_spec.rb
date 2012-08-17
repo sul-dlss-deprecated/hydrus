@@ -91,7 +91,7 @@ describe Hydrus::Collection do
             <person><identifier type="sunetid">sunetid1</identifier><name/></person>
             <person><identifier type="sunetid">sunetid2</identifier><name/></person>
           </role>
-          <role type="collection-depositor">
+          <role type="item-depositor">
             <person><identifier type="sunetid">sunetid3</identifier><name/></person>
           </role>
         </roleMetadata>
@@ -112,7 +112,7 @@ describe Hydrus::Collection do
             <person><identifier type="sunetid">sunetid2</identifier><name/></person>
             <person><identifier type="sunetid" /><name/></person>
           </role>
-          <role type="collection-depositor">
+          <role type="item-depositor">
             <person><identifier type="sunetid">sunetid3</identifier><name/></person>
           </role>
         </roleMetadata>
@@ -125,7 +125,7 @@ describe Hydrus::Collection do
             <person><identifier type="sunetid">sunetid2</identifier><name/></person>
             <person><identifier type="sunetid" /><name/></person>
           </role>
-          <role type="collection-depositor">
+          <role type="item-depositor">
             <person><identifier type="sunetid">sunetid3</identifier><name/></person>
           </role>
           <role type="foo">
@@ -137,18 +137,8 @@ describe Hydrus::Collection do
 
     it "apo_person_roles= should correctly update APO roleMetadtaDS" do
       @hc.apo_person_roles = {
-        '0' => {
-          'id'   => "brown",
-          'role' => "collection-manager",
-        },
-        '1' => {
-          'id'   => "dblack",
-          'role' => "collection-manager",
-        },
-        '2' => {
-          'id'   => "ggreen",
-          'role' => "collection-depositor",
-        },
+        'collection-manager' => 'brown, dblack',
+        'item-depositor'     => 'bblue',
       } 
       @rmdoc.ng_xml.should be_equivalent_to <<-EOF
         <roleMetadata>
@@ -156,28 +146,21 @@ describe Hydrus::Collection do
             <person><identifier type="sunetid">brown</identifier><name/></person>
             <person><identifier type="sunetid">dblack</identifier><name/></person>
           </role>
-          <role type="collection-depositor">
-            <person><identifier type="sunetid">ggreen</identifier><name/></person>
+          <role type="item-depositor">
+            <person><identifier type="sunetid">bblue</identifier><name/></person>
           </role>
         </roleMetadata>
       EOF
     end
     
-    it "remove_actor should correctly update APO roleMetadataDS" do
-      @hc.remove_actor('sunetid1', 'collection-manager')
-      @rmdoc.ng_xml.should be_equivalent_to <<-EOF
-        <roleMetadata>
-          <role type="collection-manager">
-            <person><identifier type="sunetid">sunetid2</identifier><name/></person>
-          </role>
-          <role type="collection-depositor">
-            <person><identifier type="sunetid">sunetid3</identifier><name/></person>
-          </role>
-        </roleMetadata>
-      EOF
+    it "apo_persons_with_role() should delegate to apo.persons_with_role()" do
+      role = 'foo_role'
+      apo = double('apo')
+      apo.should_receive(:persons_with_role).with(role)
+      @hc.stub(:apo).and_return(apo)
+      @hc.apo_persons_with_role(role)
     end
-  
-  end # context APO roleMetadataDS 
 
-  
+  end
+
 end

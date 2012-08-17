@@ -19,8 +19,18 @@ module Hydrus::GenericDS
   def remove_nodes(*terms)
     terms = terms.map { |t| t.to_sym }
     nodes = find_by_terms(*terms)
-    nodes.each { |n| n.remove }
-    content_will_change!
+    if nodes.size > 0
+      nodes.each { |n| n.remove }
+      content_will_change!
+    end
+  end
+
+  def remove_nodes_by_xpath(query)
+    nodes = find_by_xpath(query)
+    if nodes.size > 0
+      nodes.each { |n| n.remove }
+      content_will_change!
+    end
   end
 
 end

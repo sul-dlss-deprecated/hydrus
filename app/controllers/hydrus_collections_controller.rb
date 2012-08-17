@@ -86,14 +86,4 @@ class HydrusCollectionsController < ApplicationController
     end
   end
 
-  # remove an 'actor' (person or group) form the roleMetadata
-  def destroy_actor
-    @document_fedora.remove_actor(params[:actor_id], params[:role])
-    @document_fedora.save
-    respond_to do |want|
-      want.html {redirect_to :back}
-      want.js
-    end
-  end
-
 end

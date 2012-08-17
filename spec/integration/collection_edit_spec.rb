@@ -4,9 +4,9 @@ describe("Collection edit", :type => :request, :integration => true) do
   fixtures :users
 
   before :each do
-    @druid = 'druid:oo000oo0003'
-    @druid_no_files='druid:oo000oo0004'
-    @hc    = Hydrus::Collection.find @druid
+    @druid          = 'druid:oo000oo0003'
+    @druid_no_files = 'druid:oo000oo0004'
+    @hc             = Hydrus::Collection.find @druid
   end
 
   it "if not logged in, should be redirected to sign-in page" do
@@ -181,67 +181,44 @@ describe("Collection edit", :type => :request, :integration => true) do
   context "modifying persons and roles" do
 
     def check_role_management_div(role_info)
-      # Takes some role info, structure like the return from create_role_info().
+      # Takes a role info hash, like that returned by apo_person_roles().
       # Confirms that the role-management section of the current page
       # contains same information.
-      rmdiv   = find('div#role-management')
-      k       = 'hydrus_collection_apo_person_roles_'
-      persons = rmdiv.all("input[id^='#{k}']").map   { |n| n[:value] }
-      roles   = rmdiv.all("select[id^='#{k}']").map  { |n| n[:value] }
-      h       = {}
-      persons.zip(roles).each { |p,r| (h[r] ||= {})[p] = true }
+      rmdiv = find('div#role-management')
+      dk    = 'hydrus_collection_apo_person_roles'
+      h     = {}
+      Hydrus::AdminPolicyObject.roles.each do |role, v|
+        ids = rmdiv.find("input[id^='#{dk}[#{role}]']")[:value]
+        ids = @hc.parse_delimited(ids)
+        h[role] = ids if ids.length > 0
+      end
       h.should == role_info
     end
 
-    it "should be able to delete persons from the Collection" do
+    it "should be able to add/remove persons with various roles" do
       # Visit edit page.
       login_as_archivist1
       should_visit_edit_page(@hc)
-      # Check role-management section before deletes.
+      # Check the initial role-management section.
       role_info = @hc.apo_person_roles
       check_role_management_div(role_info)
-      # Remove some persons.
-      role = 'collection-manager'
-      role_info[role].keys.each do |person|
-        find('div#role-management').click_link("remove_#{person}_#{role}")
-      end
-      role_info.delete(role)
-      # Check role-management section after deletes.
-      check_role_management_div(role_info)
-      # After saving, confirm new content in fedora,
-      click_button "Save"
-      @hc = Hydrus::Collection.find @druid
-      @hc.apo_person_roles.should == role_info
-    end
-    
-    it "should be able to add persons to the Collection" do
-      # Visit edit page.
-      login_as_archivist1
-      should_visit_edit_page(@hc)
-      # Check role-management section before additions.
-      role_info = @hc.apo_person_roles
-      check_role_management_div(role_info)
-      # Add some persons.
-      add_these = {
-        'john'   => 'collection-manager',
-        'paul'   => 'collection-depositor',
-        'george' => 'item-depositor',
-        'ringo'  => 'item-depositor',
+      # Modify the roles.
+      role_info = {
+        'collection-manager' => %w(aa bb),
+        'item-reviewer'      => %w(cc dd ee),
+        'item-depositor'     => %w(ff),
+        'item-viewer'        => %w(gg hh ii),
       }
-      i = @hc.person_id.size
-      k = "hydrus_collection_apo_person_roles"
-      add_these.each do |person, role|
-        (role_info[role] ||= {})[person] = true
-        click_button("Add a person")
-        fill_in("#{k}_#{i}_id",   :with => person)
-        select(role, :from => "#{k}_#{i}_role")
-        i += 1
+      rmdiv = find('div#role-management')
+      dk    = 'hydrus_collection_apo_person_roles'
+      role_info.each do |role,ids|
+        rmdiv.fill_in("#{dk}[#{role}]", :with => ids.join(', '))
       end
       # Check role-management section after additions.
       click_button "Save"
       should_visit_edit_page(@hc)
       check_role_management_div(role_info)
-      # Confirm new content in fedora,
+      # Confirm new content in fedora.
       @hc = Hydrus::Collection.find @druid
       @hc.apo_person_roles.should == role_info
     end

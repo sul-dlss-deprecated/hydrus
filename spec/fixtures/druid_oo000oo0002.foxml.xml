@@ -144,7 +144,7 @@
                 <name>Black, Delores</name>
              </person>
           </role>
-          <role type="collection-depositor">
+          <role type="item-depositor">
              <person>
                 <identifier type="sunetid">ggreen</identifier>
                 <name>Green, Greg</name>
