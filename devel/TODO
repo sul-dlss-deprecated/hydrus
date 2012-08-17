@@ -2,9 +2,6 @@ Events: collection and item view beautification.
 
 Item.embargo datastream: create the DS, using default embargo info from APO.
 
-Collection Edit: with Javascript enabled, cannot add more than one person-role
-without clicking Save after each one.  
-
 Item Edit: When adding people, if a row with no name field is present when the
 form is saved, that row should not be stored at all.  There is currently a bug
 which occurs if you add a blank row (i.e. no no name), and then add another row
@@ -29,15 +26,15 @@ down menus don't work. Applies to home page and Collection view page.
 
 Events. Add more events. See Consul: HYDRUS/Hydrus+Event+History.
 
-Qualify roles by their domain: for example, "hydrus_collection_creator". See
-Consul Repository+Roles+and+Permissions. Also note that roles now use
-underscores rather than hyphens, and that the roles differ slightly from those
-currently in the app.
-
 
 -------
 WAITING
 -------
+
+Qualify roles by their domain: for example, "hydrus_collection_creator". See
+Consul Repository+Roles+and+Permissions. Also note that roles now use
+underscores rather than hyphens, and that the roles differ slightly from those
+currently in the app. [waiting for response from Lynn]
 
 Item valiation. The :actors validation does impose much of a test, because the xml
 template for descMD always includes an actor (with a blank role and name). If we
