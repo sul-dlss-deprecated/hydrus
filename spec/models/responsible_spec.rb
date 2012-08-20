@@ -15,7 +15,7 @@ class MockResponsible
   def rmd_xml
     return <<-EOF
       <roleMetadata>
-        <role type="collection-manager">
+        <role type="hydrus-collection-manager">
            <person>
               <identifier type="sunetid">brown</identifier>
               <name>Brown, Malcolm</name>
@@ -25,7 +25,7 @@ class MockResponsible
               <name>Black, Delores</name>
            </person>
         </role>
-        <role type="item-reviewer">
+        <role type="hydrus-item-reviewer">
            <person>
               <identifier type="sunetid">ggreen</identifier>
               <name>Green, Greg</name>
@@ -35,7 +35,7 @@ class MockResponsible
               <name>Conference attendees</name>
             </group>
         </role>
-        <role type="item-depositor">
+        <role type="hydrus-item-depositor">
            <person>
               <identifier type="sunetid">bblue</identifier>
               <name>Blue, Bill</name>
@@ -52,9 +52,9 @@ describe Hydrus::Responsible do
   before(:each) do
     @obj = MockResponsible.new
     @orig_roles = {
-      "collection-manager" => ["brown", "dblack"],
-      "item-reviewer"      => ["ggreen"],
-      "item-depositor"     => ["bblue"],
+      "hydrus-collection-manager" => ["brown", "dblack"],
+      "hydrus-item-reviewer"      => ["ggreen"],
+      "hydrus-item-depositor"     => ["bblue"],
     }
   end
 
@@ -71,13 +71,13 @@ describe Hydrus::Responsible do
   it "person_roles= should rewrite the <person> nodes, but not <group> nodes" do
     exp = <<-EOF
       <roleMetadata>
-        <role type="collection-manager">
+        <role type="hydrus-collection-manager">
           <person>
             <identifier type="sunetid">archivist1</identifier>
             <name/>
           </person>
         </role>
-        <role type="item-reviewer">
+        <role type="hydrus-item-reviewer">
           <group>
             <identifier type="workgroup">pasig:2011attendees</identifier>
             <name>Conference attendees</name>
@@ -87,7 +87,7 @@ describe Hydrus::Responsible do
             <name/>
           </person>
         </role>
-        <role type="item-depositor">
+        <role type="hydrus-item-depositor">
           <person>
             <identifier type="sunetid">foo</identifier>
             <name/>
@@ -100,9 +100,9 @@ describe Hydrus::Responsible do
       </roleMetadata>
     EOF
     @obj.person_roles= {
-      "collection-manager" => "archivist1", 
-      "item-reviewer"      => "ggreen", 
-      "item-depositor"     => "foo,bar",
+      "hydrus-collection-manager" => "archivist1", 
+      "hydrus-item-reviewer"      => "ggreen", 
+      "hydrus-item-depositor"     => "foo,bar",
     }
     @obj.roleMetadata.ng_xml.should be_equivalent_to(exp)
   end

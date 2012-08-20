@@ -74,7 +74,7 @@
     <foxml:datastreamVersion ID="roleMetadata.0" LABEL="Role Metadata" CREATED="2011-07-05T20:47:26.359Z" MIMETYPE="text/xml" SIZE="405">
       <foxml:xmlContent>
         <roleMetadata objectId="druid:oo000oo0004">
-          <role type="collection-depositor">
+          <role type="hydrus-collection-depositor">
              <person>
                 <identifier type="sunetid">ggreen</identifier>
                 <name>Green, Greg</name>
@@ -130,7 +130,7 @@
         <events>
           <event type="hydrus" when="2012-08-15T10:12:31-07:00" who="archivist1">Collection created</event>
           <event type="hydrus" when="2012-08-15T10:13:27-07:00" who="archivist1">Collection opened</event>
-          <event type="hydrus" when="2012-08-15T10:13:29-07:00" who="archivist1">Approved</event>
+          <event type="hydrus" when="2012-08-15T10:13:29-07:00" who="archivist1">Collection approved</event>
         </events>
       </foxml:xmlContent>
     </foxml:datastreamVersion>

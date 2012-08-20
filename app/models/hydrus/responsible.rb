@@ -9,8 +9,8 @@ module Hydrus::Responsible
 
   # Returns of hash of role info.
   #   {
-  #     'collection-manager' => ['willy',   'naomi'],
-  #     'item-depositor'     => ['hindman', 'cbeer'],
+  #     'hydrus-collection-manager' => ['willy',   'naomi'],
+  #     'hydrus-item-depositor'     => ['hindman', 'cbeer'],
   #     etc.
   #   }
   def person_roles
@@ -27,8 +27,8 @@ module Hydrus::Responsible
 
   # Takes a hash of roles and SUNETIDs.
   #   {
-  #     'collection-manager' => 'willy,naomi',
-  #     'item-depositor'     => 'hindman,cbeer',
+  #     'hydrus-collection-manager' => 'willy,naomi',
+  #     'hydrus-item-depositor'     => 'hindman,cbeer',
   #     etc.
   #   }
   # Rewrites roleMetadata <person> nodes to reflect the contents of the hash.

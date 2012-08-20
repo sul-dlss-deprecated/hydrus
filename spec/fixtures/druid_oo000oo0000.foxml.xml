@@ -174,7 +174,7 @@
       CREATED="2011-05-23T18:08:21.810Z" MIMETYPE="text/xml" SIZE="568">
       <foxml:xmlContent>
         <roleMetadata>
-          <role type="collection-manager">
+          <role type="hydrus-collection-manager">
             <person>
               <identifier type="sunetid">mbklein</identifier>
               <name>Klein, Michael</name>

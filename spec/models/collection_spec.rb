@@ -87,11 +87,11 @@ describe Hydrus::Collection do
       apo = Hydrus::AdminPolicyObject.new
       role_xml = <<-EOF
         <roleMetadata>
-          <role type="collection-manager">
+          <role type="hydrus-collection-manager">
             <person><identifier type="sunetid">sunetid1</identifier><name/></person>
             <person><identifier type="sunetid">sunetid2</identifier><name/></person>
           </role>
-          <role type="item-depositor">
+          <role type="hydrus-item-depositor">
             <person><identifier type="sunetid">sunetid3</identifier><name/></person>
           </role>
         </roleMetadata>
@@ -104,15 +104,15 @@ describe Hydrus::Collection do
     end
     
     it "add_empty_person_to_role should work" do
-      @hc.add_empty_person_to_role('collection-manager')
+      @hc.add_empty_person_to_role('hydrus-collection-manager')
       @rmdoc.ng_xml.should be_equivalent_to <<-EOF
         <roleMetadata>
-          <role type="collection-manager">
+          <role type="hydrus-collection-manager">
             <person><identifier type="sunetid">sunetid1</identifier><name/></person>
             <person><identifier type="sunetid">sunetid2</identifier><name/></person>
             <person><identifier type="sunetid" /><name/></person>
           </role>
-          <role type="item-depositor">
+          <role type="hydrus-item-depositor">
             <person><identifier type="sunetid">sunetid3</identifier><name/></person>
           </role>
         </roleMetadata>
@@ -120,12 +120,12 @@ describe Hydrus::Collection do
       @hc.add_empty_person_to_role('foo')
       @rmdoc.ng_xml.should be_equivalent_to <<-EOF
         <roleMetadata>
-          <role type="collection-manager">
+          <role type="hydrus-collection-manager">
             <person><identifier type="sunetid">sunetid1</identifier><name/></person>
             <person><identifier type="sunetid">sunetid2</identifier><name/></person>
             <person><identifier type="sunetid" /><name/></person>
           </role>
-          <role type="item-depositor">
+          <role type="hydrus-item-depositor">
             <person><identifier type="sunetid">sunetid3</identifier><name/></person>
           </role>
           <role type="foo">
@@ -137,16 +137,16 @@ describe Hydrus::Collection do
 
     it "apo_person_roles= should correctly update APO roleMetadtaDS" do
       @hc.apo_person_roles = {
-        'collection-manager' => 'brown, dblack',
-        'item-depositor'     => 'bblue',
+        'hydrus-collection-manager' => 'brown, dblack',
+        'hydrus-item-depositor'     => 'bblue',
       } 
       @rmdoc.ng_xml.should be_equivalent_to <<-EOF
         <roleMetadata>
-          <role type="collection-manager">
+          <role type="hydrus-collection-manager">
             <person><identifier type="sunetid">brown</identifier><name/></person>
             <person><identifier type="sunetid">dblack</identifier><name/></person>
           </role>
-          <role type="item-depositor">
+          <role type="hydrus-item-depositor">
             <person><identifier type="sunetid">bblue</identifier><name/></person>
           </role>
         </roleMetadata>

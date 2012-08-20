@@ -117,23 +117,15 @@ describe Hydrus::GenericObject do
 
   describe "approve()" do
 
-    before(:each) do
-      @prev_conf = Dor::Config.hydrus.start_common_assembly
-    end
-
-    after(:each) do
-      Dor::Config.hydrus.start_common_assembly(@prev_conf)
-    end
-
     it "should make expected calls (start_common_assembly = false)" do
-      Dor::Config.hydrus.start_common_assembly(false)
+      @go.stub(:should_start_common_assembly).and_return(false)
       @go.should_receive(:complete_workflow_step).with('approve').once
       @go.should_not_receive(:initiate_apo_workflow)
       @go.approve()
     end
 
     it "should make expected calls (start_common_assembly = true)" do
-      Dor::Config.hydrus.start_common_assembly(true)
+      @go.stub(:should_start_common_assembly).and_return(true)
       @go.should_receive(:complete_workflow_step).with('approve').once
       @go.should_receive(:complete_workflow_step).with('start-assembly').once
       @go.should_receive(:initiate_apo_workflow).once
@@ -360,6 +352,35 @@ describe Hydrus::GenericObject do
       e.text.should == 'blah'
     end
   
+  end
+
+  it "is_hydrus_item() should work as expected" do
+    tests = {
+      Hydrus::Item       => true,
+      Hydrus::Collection => false,
+      String             => false,
+    }
+    tests.each do |cls, exp|
+      @go.stub(:class).and_return(cls)
+      @go.is_hydrus_item.should == exp
+    end
+  end
+
+  it "hydrus_class_to_s() should work as expected" do
+    tests = {
+      Hydrus::Item       => 'Item',
+      Hydrus::Collection => 'Collection',
+      String             => 'String',
+      Dor::EventsDS      => 'Dor::EventsDS',
+    }
+    tests.each do |cls, exp|
+      @go.stub(:class).and_return(cls)
+      @go.hydrus_class_to_s.should == exp
+    end
+  end
+
+  it "can exercise should_start_common_assembly()" do
+    @go.should_start_common_assembly.should == Dor::Config.hydrus.start_common_assembly
   end
 
 end

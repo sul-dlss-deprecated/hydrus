@@ -24,33 +24,40 @@ class Hydrus::RoleMetadataDS < ActiveFedora::NokogiriDatastream
     end
     
     # APO roles
-    t.collection_manager   :ref => [:role], :attributes => {:type => 'collection-manager'}
+    t.collection_manager   :ref => [:role], :attributes => {:type => 'hydrus-collection-manager'}
+    t.collection_depositor :ref => [:role], :attributes => {:type => 'hydrus-collection-depositor'}
+    t.collection_reviewer  :ref => [:role], :attributes => {:type => 'hydrus-collection-reviewer'}
+    t.collection_viewer    :ref => [:role], :attributes => {:type => 'hydrus-collection-viewer'}
     t.collection_owner    :proxy => [:collection_manager, :person, :identifier]
-    t.collection_depositor :ref => [:role], :attributes => {:type => 'collection-depositor'}
-    t.collection_reviewer  :ref => [:role], :attributes => {:type => 'collection-reviewer'}
-    t.collection_viewer    :ref => [:role], :attributes => {:type => 'collection-viewer'}
     # item object roles
-    t.item_depositor       :ref => [:role], :attributes => {:type => 'item-depositor'}
+    t.item_depositor       :ref => [:role], :attributes => {:type => 'hydrus-item-depositor'}
   end
 
   def to_solr(solr_doc=Hash.new, *args)
     find_by_xpath('/roleMetadata/role/*').each do |actor|
-      role_type = toggle_hyphen_underscore(actor.parent['type'])
-      val = [actor.at_xpath('identifier/@type'),actor.at_xpath('identifier/text()')].join ':'
-      add_solr_value(solr_doc, "apo_role_#{actor.name}_#{role_type}", val, :string, [:searchable, :facetable])
-      add_solr_value(solr_doc, "apo_role_#{role_type}", val, :string, [:searchable, :facetable])
-      if ['collection_manager','collection_depositor'].include? role_type
+      role_type = toggle_hyphen_underscore(actor.parent['type']) # eg hydrus_item_depositor
+      val = [
+        actor.at_xpath('identifier/@type'),  # eg sunetid
+        actor.at_xpath('identifier/text()')  # eg ggreen
+      ].join ':'
+      f1 = "apo_role_#{actor.name}_#{role_type}" # eg apo_role_person_hydrus_collection_manager
+      f2 = "apo_role_#{role_type}"               # eg apo_role_hydrus_collection_manager
+      add_solr_value(solr_doc, f1, val, :string, [:searchable, :facetable])
+      add_solr_value(solr_doc, f2, val, :string, [:searchable, :facetable])
+      if ['hydrus_collection_manager','hydrus_collection_depositor'].include? role_type
         add_solr_value(solr_doc, "apo_register_permissions", val, :string, [:searchable, :facetable])
       end
     end
     solr_doc
   end
 
-  # Takes a string       (eg, item-foo or collection_bar)
-  # Returns a new string (eg, item_foo or collection-bar).
-  TOGGLE_HYPHEN_REGEX = / \A (collection|item) ([_\-]) ([a-z]) /ix
+  # Takes a string       (eg, hydrus-item-foo or hydrus_collection_bar)
+  # Returns a new string (eg, hydrus_item_foo or hydrus-collection-bar).
+  TOGGLE_HYPHEN_REGEX = / \A (hydrus) ([_\-]) (collection|item) \2 ([a-z]) /ix
   def toggle_hyphen_underscore(role_type)
-    role_type.sub(TOGGLE_HYPHEN_REGEX) { "#{$1}#{$2 == '_' ? '-' : '_'}#{$3}" }
+    role_type.sub(TOGGLE_HYPHEN_REGEX) {
+      [$1, $3, $4].join($2 == '_' ? '-' : '_')
+    }
   end
 
   # Adding/removing nodes.

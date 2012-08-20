@@ -15,16 +15,26 @@ Implement editing events. Collection: modify description, visibility,
 license, release, roles. Item: modify description, files, license, release,
 roles; and upload/replace/delete a file.
 
-Qualify roles by their domain: for example, "hydrus-collection-creator". See
-Consul Repository+Roles+and+Permissions. Also note that the roles differ
-slightly from those currently in the app.
-
 Implement "Reject" button, to be used when a reviewer does not approve.
+
+Assess whether we can speed up the integration test suite: rspec --profile.
+
+Add Hannah's fixtures.
 
 
 -------
 WAITING
 -------
+
+There is some mismatch between the current Hydrus app/UI and the roles defined
+in Consul. Currently, Hydrus understands 5 roles: hydrus-collection-depositor,
+hydrus-collection-manager, hydrus-item-reviewer, hydrus-item-depositor,
+hydrus-item-viewer (see the Collection Edit page for the UI to specify persons
+having the last 4 of those roles). Meanwhile, The Consul page
+(Repository+Roles+and+Permissions) mentions various other roles: hydrus-viewer,
+hydrus-collection-creator, hydrus-collection-reviewer,
+hydrus-collection-viewer, hydrus-item-depositor, hydrus-item-manager. [Need a
+short discussion/meeting to nail down our plan.]
 
 Create new Collection/Item: create rightsMetadata. The rightsMetadata will
 contain the Item-level license and visibility info.  [Need more info: I assume
@@ -59,8 +69,6 @@ Collection create: APO.descMetadata. Flesh out. [waiting on spec from Lynn]
 
 Should roleMetadata have an XML namespace? If so, what should it be? Could not
 find any definitive examples in Consul. [waiting on response from Lynn]
-
-Assess whether we can speed up the integration test suite.
 
 Item view page: the actions box div is called "div.collection-actions".
 [Postpone this until we have GG's new design for sidebar, etc.]
