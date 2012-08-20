@@ -1,16 +1,34 @@
 namespace :hydrus do
 
   FIXTURE_PIDS = [
-    'druid:oo000oo0000', # The Ur-APO
-    'druid:oo000oo0001', # Collection #1: Item #1
-    'druid:oo000oo0002', # APO for collecion druid:oo000oo0003
-    'druid:oo000oo0003', # Collection #1
-    'druid:oo000oo0004', # Collection #2
-    'druid:oo000oo0005', # Collection #1: Item #2
-    'druid:oo000oo0006', #  "             Item #3
-    'druid:oo000oo0007', #  "             Item #4
-    'druid:oo000oo0008', # APO for collecion druid:oo000oo0004
+    'druid:oo000oo0000',  # See :helpfix below for info.
+    'druid:oo000oo0001',
+    'druid:oo000oo0002',
+    'druid:oo000oo0003',
+    'druid:oo000oo0004',
+    'druid:oo000oo0005',
+    'druid:oo000oo0006',
+    'druid:oo000oo0007',
+    'druid:oo000oo0008',
+    'druid:oo000oo0009',
+    'druid:oo000oo0010',
+    'druid:oo000oo0011',
+    'druid:oo000oo0012',
+    'druid:oo000oo0013',
   ]
+
+  desc "hydrus fixture info"
+  task :helpfix do
+    puts <<-EOF.gsub(/^ {6}/, '')
+      Ur-APO:       00
+      APOs:             02  08  09
+      Collections:      03  04  10
+      Items:            01      11
+                        05      12
+                        06      13
+                        07
+    EOF
+  end
 
   desc "load hydrus fixtures"
   task :loadfix do

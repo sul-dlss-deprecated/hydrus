@@ -61,7 +61,6 @@ RSpec.configure do |config|
   # rspec-rails.
   config.infer_base_class_for_anonymous_controllers = false
 
-  
   config.around(:each) do |example|
     ActiveFedora::Base.connection_for_pid(0).transaction do |t|
       example.call

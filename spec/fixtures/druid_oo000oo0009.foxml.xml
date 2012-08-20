@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<foxml:digitalObject VERSION="1.1" PID="druid:oo000oo0009" xmlns:foxml="info:fedora/fedora-system:def/foxml#" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/definitions/1/0/foxml1-1.xsd">
+  <foxml:objectProperties>
+    <foxml:property NAME="info:fedora/fedora-system:def/model#state" VALUE="Active" />
+    <foxml:property NAME="info:fedora/fedora-system:def/model#label" VALUE="APO for Hydrus SSDS Social Science Data Collection" />
+    <foxml:property NAME="info:fedora/fedora-system:def/model#ownerId" VALUE="DOR" />
+    <foxml:property NAME="info:fedora/fedora-system:def/model#createdDate" VALUE="2011-07-05T17:12:18.757Z" />
+    <foxml:property NAME="info:fedora/fedora-system:def/view#lastModifiedDate" VALUE="2011-07-25T20:32:10.617Z" />
+  </foxml:objectProperties>
+  <foxml:datastream ID="RELS-EXT" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
+    <foxml:datastreamVersion ID="RELS-EXT.0" LABEL="RDF Statements about this object" CREATED="2011-07-25T20:32:10.617Z" MIMETYPE="application/rdf+xml" FORMAT_URI="info:fedora/fedora-system:FedoraRELSExt-1.0" SIZE="424">
+      <foxml:xmlContent>
+        <rdf:RDF xmlns:fedora-model="info:fedora/fedora-system:def/model#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rel="info:fedora/fedora-system:def/relations-external#" xmlns:hydra="http://projecthydra.org/ns/relations#">
+          <rdf:Description rdf:about="info:fedora/druid:oo000oo0009">
+            <hydra:isGovernedBy rdf:resource="info:fedora/druid:hv992ry2431" />
+            <hasModel xmlns="info:fedora/fedora-system:def/model#" rdf:resource="info:fedora/afmodel:Hydrus_AdminPolicyObject" />
+          </rdf:Description>
+        </rdf:RDF>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+  <foxml:datastream ID="identityMetadata" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
+    <foxml:datastreamVersion ID="identityMetadata.0" LABEL="Identity Metadata" CREATED="2011-07-05T20:49:25.801Z" MIMETYPE="text/xml" SIZE="345">
+      <foxml:xmlContent>
+        <identityMetadata>
+          <objectId>druid:oo000oo0009</objectId>
+          <objectType>adminPolicy</objectType>
+          <objectLabel>APO for Hydrus Physics Honors Theses Collection</objectLabel>
+          <objectCreator>DOR</objectCreator>
+          <otherId name="uuid">cd838e54-9ffd-11e1-bc41-02231e89cef1</otherId>
+          <tag>Project : DOR</tag>
+        </identityMetadata>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+  <foxml:datastream ID="DC" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
+    <foxml:datastreamVersion ID="DC.0" LABEL="Dublin Core Record for this object" CREATED="2011-07-05T20:50:11.624Z" MIMETYPE="text/xml" FORMAT_URI="http://www.openarchives.org/OAI/2.0/oai_dc/" SIZE="459">
+      <foxml:xmlContent>
+        <oai_dc:dc xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:title>APO for Hydrus Physics Honors Theses Collection</dc:title>
+          <dc:identifier>druid:oo000oo0009</dc:identifier>
+        </oai_dc:dc>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+  <foxml:datastream ID="descMetadata" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
+    <foxml:datastreamVersion ID="descMetadata.0" LABEL="Descriptive Metadata" CREATED="2011-07-05T20:50:24.156Z" MIMETYPE="text/xml" SIZE="377">
+      <foxml:xmlContent>
+        <mods xmlns="http://www.loc.gov/mods/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.3" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-3.xsd">
+          <titleInfo>
+            <title>APO for Hydrus Physics Honors Theses Collection</title>
+          </titleInfo>
+          <identifier type="druid">oo000oo0009</identifier>
+        </mods>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+  <foxml:datastream ID="rightsMetadata" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
+    <foxml:datastreamVersion ID="rightsMetadata.0" LABEL="Rights Metadata" CREATED="2011-07-05T20:46:24.337Z" MIMETYPE="text/xml" SIZE="293">
+      <foxml:xmlContent>
+        <rightsMetadata xmlns="http://hydra-collab.stanford.edu/schemas/rightsMetadata/v1" version="0.1" objectId="druid:oo000oo0009">
+          <access type="discover">
+            <machine>
+              <group>public</group>
+            </machine>
+          </access>
+          <access type="read">
+            <machine>
+              <group>public</group>
+            </machine>
+          </access>
+          <access type="edit">
+            <machine>
+              <group>public</group>
+            </machine>
+          </access>
+        </rightsMetadata>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+  <foxml:datastream ID="administrativeMetadata" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
+    <foxml:datastreamVersion ID="administrativeMetadata.0" LABEL="Administrative Metadata" CREATED="2011-07-05T20:59:01.385Z" MIMETYPE="text/xml" SIZE="1186">
+      <foxml:xmlContent>
+        <administrativeMetadata objectId="druid:oo000oo0009">
+          <relationships xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:fedora="info:fedora/fedora-system:def/relations-external#">
+            <fedora:isMemberOf rdf:resource="info:fedora/druid:oo000oo0010" />
+            <fedora:isMemberOfCollection rdf:resource="info:fedora/druid:oo000oo0010" />
+          </relationships>
+          <hydrus>
+            <depositStatus>open</depositStatus>
+            <reviewRequired>no</reviewRequired>
+            <termsOfDeposit>When depositing stuff, you must agree to the terms.</termsOfDeposit>
+            <embargo option="varies">1 year</embargo>
+            <visibility option="fixed">stanford</visibility>
+            <license option="fixed">cc-by</license>
+          </hydrus>
+          <hydrusAssembly>
+            <workflow id="hydrusAssemblyWF">
+              <process name="start-deposit" status="completed" lifecycle="registered"/>
+              <process name="submit" status="waiting"/>
+              <process name="approve" status="waiting"/>
+              <process name="start-assembly" status="waiting"/>
+            </workflow>
+          </hydrusAssembly>
+          <assembly>
+            <workflow id="assemblyWF">
+              <process name="start-assembly" status="completed" lifecycle="inprocess"/>
+              <process name="jp2-create" status="completed"/>
+              <process name="checksum-compute" status="waiting"/>
+              <process name="exif-collect" status="waiting"/>
+              <process name="accessioning-initiate" status="waiting"/>
+            </workflow>
+          </assembly>
+          <accession>
+            <workflow id="accessionWF">
+              <process name="start-accession" status="completed" lifecycle="submitted"/>
+              <process name="content-metadata" status="waiting"/>
+              <process name="descriptive-metadata" status="waiting" lifecycle="described"/>
+              <process name="rights-metadata" status="waiting"/>
+              <process name="technical-metadata" status="waiting"/>
+              <process name="provenance-metadata" status="waiting"/>
+              <process name="remediate-object" status="waiting"/>
+              <process name="shelve" status="waiting"/>
+              <process name="publish" status="waiting" lifecycle="published"/>
+              <process name="sdr-ingest-transfer" status="waiting"/>
+              <process name="cleanup" status="waiting" lifecycle="accessioned"/>
+            </workflow>
+          </accession>
+        </administrativeMetadata>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+  <foxml:datastream ID="roleMetadata" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
+    <foxml:datastreamVersion ID="roleMetadata.0" LABEL="Role Metadata" CREATED="2011-07-05T20:47:26.359Z" MIMETYPE="text/xml" SIZE="405">
+      <foxml:xmlContent>
+        <roleMetadata objectId="druid:oo000oo0009">
+          <role type="hydrus-collection-manager">
+             <person>
+                <identifier type="sunetid">skota</identifier>
+                <name>Ota, Stella</name>
+             </person>
+          </role>
+          <role type="hydrus-item-depositor">
+             <person>
+                <identifier type="sunetid">pgallagher</identifier>
+                <name>Gallagher, Patrick</name>
+             </person>
+          </role>
+          <role type="hydrus-item-depositor">
+             <person>
+                <identifier type="sunetid">mshapiro</identifier>
+                <name>Shapiro, Maxwell C.</name>
+             </person>
+          </role>
+          <role type="hydrus-item-depositor">
+             <person>
+                <identifier type="sunetid">jbrown</identifier>
+                <name>Brown, Jefferson</name>
+             </person>
+          </role>          
+        </roleMetadata>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+  <foxml:datastream ID="workflows" STATE="A" CONTROL_GROUP="E" VERSIONABLE="false">
+    <foxml:datastreamVersion ID="workflows.0" LABEL="Workflows" CREATED="2012-04-11T18:09:43.955Z" MIMETYPE="application/xml">
+      <foxml:contentLocation TYPE="URL" REF="http://sul-lyberservices-dev.stanford.edu/workflow/dor/objects/druid:oo000oo0009/workflows" />
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+</foxml:digitalObject>

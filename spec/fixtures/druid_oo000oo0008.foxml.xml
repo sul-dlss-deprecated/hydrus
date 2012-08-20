@@ -89,7 +89,7 @@
           <hydrus>
             <depositStatus>open</depositStatus>
             <reviewRequired>yes</reviewRequired>
-            <termsOfDeposit>By depositing stuff you agree.</termsOfDeposit>
+            <termsOfDeposit>When depositing stuff, you must agree to the terms.</termsOfDeposit>
             <embargo option="varies">1 year</embargo>
             <visibility option="fixed">stanford</visibility>
             <license option="fixed">cc-by</license>

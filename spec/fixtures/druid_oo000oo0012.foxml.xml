@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<foxml:digitalObject VERSION="1.1" PID="druid:oo000oo0012"
+  xmlns:foxml="info:fedora/fedora-system:def/foxml#"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/definitions/1/0/foxml1-1.xsd">
+  <foxml:objectProperties>
+    <foxml:property NAME="info:fedora/fedora-system:def/model#state" VALUE="Active"/>
+    <foxml:property NAME="info:fedora/fedora-system:def/model#label" VALUE="GROWTH AND CHARACTERIZATION OF RUBIDIUM COPPER SULFIDE"/>
+    <foxml:property NAME="info:fedora/fedora-system:def/model#ownerId" VALUE="DOR"/>
+    <foxml:property NAME="info:fedora/fedora-system:def/model#createdDate" VALUE="2011-07-05T17:12:18.757Z"/>
+    <foxml:property NAME="info:fedora/fedora-system:def/view#lastModifiedDate" VALUE="2011-07-25T20:32:10.617Z"/>
+  </foxml:objectProperties>
+  <foxml:datastream ID="RELS-EXT" STATE="A" CONTROL_GROUP="X"
+    VERSIONABLE="false">
+    <foxml:datastreamVersion ID="RELS-EXT.0"
+      LABEL="RDF Statements about this object"
+      CREATED="2011-07-25T20:32:10.617Z" MIMETYPE="application/rdf+xml"
+      FORMAT_URI="info:fedora/fedora-system:FedoraRELSExt-1.0" SIZE="424">
+      <foxml:xmlContent>
+        <rdf:RDF
+          xmlns:fedora="info:fedora/fedora-system:def/relations-external#"
+          xmlns:hydra="http://projecthydra.org/ns/relations#"
+          xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+          <rdf:Description rdf:about="info:fedora/druid:oo000oo0012">
+            <hydra:isGovernedBy rdf:resource="info:fedora/druid:oo000oo0009"/>
+            <fedora:isMemberOf rdf:resource="info:fedora/druid:oo000oo0010"/>
+            <fedora:isMemberOfCollection
+              rdf:resource="info:fedora/druid:oo000oo0010"/>
+            <hasModel xmlns="info:fedora/fedora-system:def/model#"
+              rdf:resource="info:fedora/afmodel:Hydrus_Item"/>
+          </rdf:Description>
+        </rdf:RDF>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+  <foxml:datastream ID="identityMetadata" STATE="A" CONTROL_GROUP="X"
+    VERSIONABLE="false">
+    <foxml:datastreamVersion ID="identityMetadata.0" LABEL="Identity Metadata"
+      CREATED="2011-07-05T20:49:25.801Z" MIMETYPE="text/xml" SIZE="345">
+      <foxml:xmlContent>
+        <identityMetadata>
+          <objectId>druid:oo000oo0012</objectId>
+          <objectType>item</objectType>
+          <objectLabel>GROWTH AND CHARACTERIZATION OF RUBIDIUM COPPER SULFIDE</objectLabel>
+          <objectCreator>DOR</objectCreator>
+          <otherId name="uuid">cea858c0-9ff1-11e1-baef-02231e89cef4</otherId>
+          <tag>Project : Hydrus</tag>
+          <tag>Hydrus : student thesis</tag>
+          <tag>Project : Physics Honors Theses</tag>          
+        </identityMetadata>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+  <foxml:datastream ID="hydrusProperties" STATE="A" CONTROL_GROUP="X"
+    VERSIONABLE="false">
+    <foxml:datastreamVersion ID="hydrusProperties.0" LABEL="Hydrus Properties"
+      CREATED="2011-07-05T20:49:25.801Z" MIMETYPE="text/xml" SIZE="345">
+      <foxml:xmlContent>
+        <hydrusProperties>
+          <acceptedTermsOfDeposit>true</acceptedTermsOfDeposit>
+        </hydrusProperties>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+  <foxml:datastream ID="DC" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
+    <foxml:datastreamVersion ID="DC.0"
+      LABEL="Dublin Core Record for this object"
+      CREATED="2011-07-05T20:50:11.624Z" MIMETYPE="text/xml"
+      FORMAT_URI="http://www.openarchives.org/OAI/2.0/oai_dc/" SIZE="459">
+      <foxml:xmlContent>
+        <oai_dc:dc xmlns:dc="http://purl.org/dc/elements/1.1/"
+          xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+          <dc:title>GROWTH AND CHARACTERIZATION OF RUBIDIUM COPPER SULFIDE</dc:title>
+          <dc:identifier>druid:oo000oo0012</dc:identifier>
+        </oai_dc:dc>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+  <foxml:datastream ID="descMetadata" STATE="A" CONTROL_GROUP="X"
+    VERSIONABLE="false">
+    <foxml:datastreamVersion ID="descMetadata.0" LABEL="Descriptive Metadata"
+      CREATED="2011-07-05T20:50:24.156Z" MIMETYPE="text/xml" SIZE="377">
+      <foxml:xmlContent>
+        <mods xmlns="http://www.loc.gov/mods/v3"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.3"
+          xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-3.xsd">
+          <titleInfo>
+            <title>GROWTH AND CHARACTERIZATION OF RUBIDIUM COPPER SULFIDE</title>
+          </titleInfo>
+          <name type="personal">
+            <namePart>Shapiro, Maxwell</namePart>
+            <role>
+              <roleTerm authority="marcrelator" type="text">Author</roleTerm>
+            </role>
+          </name>
+          <name type="personal">
+            <namePart>Fisher, Ian R.</namePart>
+            <role>
+              <roleTerm authority="marcrelator" type="text">Thesis advisor</roleTerm>
+            </role>
+          </name>
+          <name type="corporate">
+            <namePart>Stanford University Department of Physics</namePart>
+            <role>
+              <roleTerm authority="marcrelator" type="text">Contributor</roleTerm>
+            </role>
+          </name>
+          <typeOfResource>Text</typeOfResource>
+          <originInfo>
+            <dateOther type="released">TO DO</dateOther>
+          </originInfo>
+          <abstract>In this thesis I describe the synthesis and physical properties of a novel ternary compound RbCu4S3. The material is a bilayer variant of the familiar ThCr2Si2 structure (adopted, for instance, by several members of the iron-pnictide family of superconductors, including BaFe2As2 [HYDRANGEA:1]). Interest in this quasi-low-dimensional compound revolves around its potential to harbor an electronic instability, for example a charge density wave. After establishing a suitable procedure to grow high quality single crystals, my ongoing experiments have probed the nature of the RbCu4S3 ground state via a combination of transport and thermodynamic measurements. The results of these experiments have been compared with band structure calculations performed using the WIEN2K software package. Additional x-ray diffraction and transmission electron microscopy (TEM) structural characterization has been performed by collaborators.
+
+The calculated Fermi surface of RbCu4S3 reveals one three-dimensional pocket and two quasi-two-dimensional pockets with considerable potential for nesting. However, neither single crystal x-ray diffraction refinements nor high resolution TEM measurements indicate the presence of a lattice modulation in this material. The electrical resistivity is that of a good metal, with a very low residual resistivity and a correspondingly high residual resistance ratio (RRRtypical = (300K) 0 600). Such high quality samples permit the observation of quantum oscillatory effects in high magnetic fields, providing a direct probe of the Fermi surface morphology and the quasiparticle effective mass
+</abstract>
+          <subject>
+            <topic>RbCu4S3</topic>
+          </subject>
+          <subject>
+            <topic>electronic instability</topic>
+          </subject>
+          <note type="preferred citation">Shapiro, Maxwell. 2010. Growth and Characterization of Rubidium Copper Sulfide. Stanford, CA: Department of Physics, Stanford University. http://purl.stanford.edu/oo000oo0012</note>
+          <note type="citation/reference">None</note>
+          <note type="contact">archivist1@example.com</note>
+          <relatedItem type="references">
+            <titleInfo>
+              <title>a related Google hit</title>
+            </titleInfo>
+            <location>
+              <url>http://prl.aps.org/abstract/PRL/v96/i10/e107601</url>
+            </location>
+          </relatedItem>
+          <relatedItem type="references">
+            <titleInfo>
+              <title>My advisor's web page</title>
+            </titleInfo>
+            <location>
+              <url>http://www.stanford.edu/group/fisher/people/Ian.html/</url>
+            </location>
+          </relatedItem>
+        </mods>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+  <foxml:datastream ID="roleMetadata" STATE="A" CONTROL_GROUP="M" VERSIONABLE="false">
+    <foxml:datastreamVersion ID="roleMetadata.0" LABEL="Role Metadata"
+      CREATED="2011-07-10T11:22:33.666Z" MIMETYPE="text/xml" SIZE="377">
+      <foxml:xmlContent>
+        <roleMetadata>
+          <role type="item-depositor">
+             <person>
+                <identifier type="sunetid">student2</identifier>
+                <name>Shapiro, Maxwell</name>
+             </person>
+          </role>
+        </roleMetadata>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+  <foxml:datastream ID="contentMetadata" STATE="A" CONTROL_GROUP="X"
+    VERSIONABLE="false">
+    <foxml:datastreamVersion ID="contentMetadata.0" LABEL="Content Metadata"
+      CREATED="2012-05-02T23:10:37.034Z" MIMETYPE="text/xml" SIZE="928">
+      <foxml:xmlContent>
+        <contentMetadata>
+        </contentMetadata>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+  <foxml:datastream ID="rightsMetadata" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
+    <foxml:datastreamVersion ID="rightsMetadata.0" LABEL="Rights Metadata"
+      CREATED="2011-07-05T20:46:24.337Z" MIMETYPE="text/xml" SIZE="293">
+      <foxml:xmlContent>
+        <rightsMetadata
+          xmlns="http://hydra-collab.stanford.edu/schemas/rightsMetadata/v1"
+          version="0.1" objectId="druid:oo000oo0012">
+          <access type="discover">
+            <machine>
+              <group>archivist</group>
+            </machine>
+          </access>
+          <access type="read">
+            <machine>
+              <group>archivist</group>
+            </machine>
+          </access>
+          <access type="edit">
+            <machine>
+              <group>archivist</group>
+            </machine>
+          </access>
+        </rightsMetadata>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+  <foxml:datastream ID="workflows" STATE="A" CONTROL_GROUP="E" VERSIONABLE="false">
+    <foxml:datastreamVersion ID="workflows.0" LABEL="Workflows" CREATED="2012-04-11T18:09:43.955Z" MIMETYPE="application/xml">
+      <foxml:contentLocation TYPE="URL" REF="http://sul-lyberservices-dev.stanford.edu/workflow/dor/objects/druid:oo000oo0012/workflows" />
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+  <foxml:datastream ID="events" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
+    <foxml:datastreamVersion ID="events.0" LABEL="Events"
+      CREATED="2011-07-05T20:46:24.337Z" MIMETYPE="text/xml" SIZE="293">
+      <foxml:xmlContent>
+        <events>
+          <event type="hydrus" when="2012-08-15T10:12:31-07:00" who="student2">Item created</event>
+          <event type="hydrus" when="2012-08-16T10:14:01-07:00" who="student2">Item submitted</event>
+        </events>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+</foxml:digitalObject>
