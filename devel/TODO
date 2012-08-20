@@ -15,16 +15,22 @@ Implement editing events. Collection: modify description, visibility,
 license, release, roles. Item: modify description, files, license, release,
 roles; and upload/replace/delete a file.
 
-Qualify roles by their domain: for example, "hydrus-collection-creator". See
-Consul Repository+Roles+and+Permissions. Also note that the roles differ
-slightly from those currently in the app.
-
 Implement "Reject" button, to be used when a reviewer does not approve.
 
 
 -------
 WAITING
 -------
+
+There is some mismatch between the current Hydrus app/UI and the roles defined
+in Consul. Currently, Hydrus understands 5 roles: hydrus-collection-depositor,
+hydrus-collection-manager, hydrus-item-reviewer, hydrus-item-depositor,
+hydrus-item-viewer (see the Collection Edit page for the UI to specify persons
+having the last 4 of those roles). Meanwhile, The Consul page
+(Repository+Roles+and+Permissions) mentions various other roles: hydrus-viewer,
+hydrus-collection-creator, hydrus-collection-reviewer,
+hydrus-collection-viewer, hydrus-item-depositor, hydrus-item-manager. [Need a
+short discussion/meeting to nail down our plan.]
 
 Create new Collection/Item: create rightsMetadata. The rightsMetadata will
 contain the Item-level license and visibility info.  [Need more info: I assume

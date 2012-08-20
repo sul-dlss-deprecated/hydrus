@@ -169,7 +169,7 @@
       CREATED="2011-07-10T11:22:33.666Z" MIMETYPE="text/xml" SIZE="377">
       <foxml:xmlContent>
         <roleMetadata>
-          <role type="item-depositor">
+          <role type="hydrus-item-depositor">
              <person>
                 <identifier type="sunetid">cornellian</identifier>
                 <name>Color, Cornell</name>

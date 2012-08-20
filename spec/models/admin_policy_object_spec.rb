@@ -10,8 +10,8 @@ describe Hydrus::AdminPolicyObject do
 
     describe "roles" do
 
-      it "should have a default role of item-depositor" do
-        Hydrus::AdminPolicyObject.default_role.should == "item-depositor"
+      it "should have a default role of hydrus-item-depositor" do
+        Hydrus::AdminPolicyObject.default_role.should == "hydrus-item-depositor"
       end
 
       it "should have a hash of possible roles" do

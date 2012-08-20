@@ -204,10 +204,10 @@ describe("Collection edit", :type => :request, :integration => true) do
       check_role_management_div(role_info)
       # Modify the roles.
       role_info = {
-        'collection-manager' => %w(aa bb),
-        'item-reviewer'      => %w(cc dd ee),
-        'item-depositor'     => %w(ff),
-        'item-viewer'        => %w(gg hh ii),
+        'hydrus-collection-manager' => %w(aa bb),
+        'hydrus-item-reviewer'      => %w(cc dd ee),
+        'hydrus-item-depositor'     => %w(ff),
+        'hydrus-item-viewer'        => %w(gg hh ii),
       }
       rmdiv = find('div#role-management')
       dk    = 'hydrus_collection_apo_person_roles'

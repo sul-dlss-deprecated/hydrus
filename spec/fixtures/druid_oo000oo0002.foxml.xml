@@ -134,7 +134,7 @@
     <foxml:datastreamVersion ID="roleMetadata.0" LABEL="Role Metadata" CREATED="2011-07-05T20:47:26.359Z" MIMETYPE="text/xml" SIZE="405">
       <foxml:xmlContent>
         <roleMetadata objectId="druid:oo000oo0002">
-          <role type="collection-manager">
+          <role type="hydrus-collection-manager">
              <person>
                 <identifier type="sunetid">brown</identifier>
                 <name>Brown, Malcolm</name>
@@ -144,7 +144,7 @@
                 <name>Black, Delores</name>
              </person>
           </role>
-          <role type="item-depositor">
+          <role type="hydrus-item-depositor">
              <person>
                 <identifier type="sunetid">ggreen</identifier>
                 <name>Green, Greg</name>
