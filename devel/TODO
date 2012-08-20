@@ -1,48 +1,47 @@
-Events: collection and item view beautification.
+Events: collection and item view beautification/tabification.
 
 Item.embargo datastream: create the DS, using default embargo info from APO.
 
 Item Edit: When adding people, if a row with no name field is present when the
-form is saved, that row should not be stored at all.  There is currently a bug
+form is saved, that row should not be stored at all. There is currently a bug
 which occurs if you add a blank row (i.e. no no name), and then add another row
-with a name and then save.  Strange things happen (the role field and/or name
+with a name and then save. Strange things happen (the role field and/or name
 value is lost).
 
 Submit relevant (or all) form data on addition of multi-valued fields (issues
 w/ non-linear indexed role MD)
 
-Item Edit: form for a new item should be populated with default values for the 
-embargo and license fields.
+Implement editing events. Collection: modify description, visibility,
+license, release, roles. Item: modify description, files, license, release,
+roles; and upload/replace/delete a file.
 
-Create new Collection: create rightsMetadata.
+Qualify roles by their domain: for example, "hydrus-collection-creator". See
+Consul Repository+Roles+and+Permissions. Also note that the roles differ
+slightly from those currently in the app.
 
-Create new Item: create rightsMetadata. The rightsMetadata will contain the
-Item-level license and visibility info.
-
-Item view page: the actions box div is called "div.collection-actions". Do we care?
-
-When javascript is disabled, it is not possible to add new items, because the drop
-down menus don't work. Applies to home page and Collection view page.
-
-Events. Add more events. See Consul: HYDRUS/Hydrus+Event+History.
+Implement "Reject" button, to be used when a reviewer does not approve.
 
 
 -------
 WAITING
 -------
 
-Qualify roles by their domain: for example, "hydrus_collection_creator". See
-Consul Repository+Roles+and+Permissions. Also note that roles now use
-underscores rather than hyphens, and that the roles differ slightly from those
-currently in the app. [waiting for response from Lynn]
+Create new Collection/Item: create rightsMetadata. The rightsMetadata will
+contain the Item-level license and visibility info.  [Need more info: I assume
+we will use Stanford-flavored rightsMetadata. Any other requirements?]
 
-Item valiation. The :actors validation does impose much of a test, because the xml
-template for descMD always includes an actor (with a blank role and name). If we
-Hcare about the test, it needs to do more (or we need to modify descMD and/or UI?).
-[Waiting until JK refactors handling of multi-valued fields, Javascript, etc.]
+When javascript is disabled, it is not possible to add new items, because the
+drop down menus don't work. Applies to home page and Collection view page.
+[Postpone this until we have GG's new design for sidebar, etc.]
 
-Need a place to store Item types. Currently hardcoded to :dataset. Also see object_type()
-in GenericObject. [Lynn and Hannah will discuss]
+Item valiation. The :actors validation does not impose much of a test, because
+the xml template for descMD always includes an actor (with a blank role and
+name). If we care about the test, it needs to do more (or we need to modify
+descMD and/or UI?). [Waiting until JK refactors handling of multi-valued
+fields, Javascript, etc.]
+
+Need a place to store Item types. Currently hardcoded to :dataset. Also see
+object_type() in GenericObject. [Lynn and Hannah will discuss]
 
 APO RELS-EXT datastream needs to add a child node to <rdf:Description>:
 <hydra:referencesAgreement rdf:resource="info:fedora/druid:XXX"/>, where XXX is
@@ -58,7 +57,10 @@ collection-manager [waiting on LDAP].
 
 Collection create: APO.descMetadata. Flesh out. [waiting on spec from Lynn]
 
-Should roleMetadata have an XML namespace? If so, what should it be? Could
-not find any definitive examples in Consul. [waiting on response from Lynn]
+Should roleMetadata have an XML namespace? If so, what should it be? Could not
+find any definitive examples in Consul. [waiting on response from Lynn]
 
 Assess whether we can speed up the integration test suite.
+
+Item view page: the actions box div is called "div.collection-actions".
+[Postpone this until we have GG's new design for sidebar, etc.]
