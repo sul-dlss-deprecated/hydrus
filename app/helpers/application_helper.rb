@@ -34,6 +34,12 @@ module ApplicationHelper
     hydrus_is_empty?(obj) ? content_tag(:span, "not specified", :class => "unspecified") : obj
   end
 
+  # a helper to create links to items that may or may not have titles yet
+  def item_title_link(item)
+    title_text=item.title.blank? ? 'new item' : item.title
+    return link_to(title_text, polymorphic_path(item))
+  end
+  
   # Take a datetime string.
   # Returns a string using the default Hydrus date format.
   def formatted_datetime(datetime, k = :datetime)

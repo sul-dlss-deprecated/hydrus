@@ -63,6 +63,7 @@ class Hydrus::Item < Hydrus::GenericObject
   def update_content_metadata
     xml=create_content_metadata
     self.datastreams['contentMetadata'].content=xml  # generate new content metadata and replace datastream
+    self.save
   end
   
   def create_content_metadata

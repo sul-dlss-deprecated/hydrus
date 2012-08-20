@@ -22,6 +22,28 @@ namespace :hydrus do
   }
   end
 
+  # call with rake hydrus:export_object['druid:xx00oo0001','/tmp']
+  desc "export object to foxml"
+  task :export_object, :pid, :output_dir do |t, args|
+    require File.expand_path('config/environments/overrides')
+    output_dir=args[:output_dir] || File.join(Rails.root.to_s,"tmp")
+    pid=args[:pid]
+    ActiveFedora::FixtureExporter.export_to_path(pid, output_dir)  
+  end
+
+  # call with rake hydrus:import_objects['/tmp']
+  desc "import foxml objects from directory into dor"
+  task :import_objects, :source_dir do |t,args|
+    require File.expand_path('config/environments/overrides')
+    source_dir=args[:source_dir]
+    Dir.chdir(source_dir)
+    files=Dir.glob('*.foxml.xml')
+    files.each do |file|
+      pid = ActiveFedora::FixtureLoader.import_to_fedora(File.join(source_dir,file))
+      ActiveFedora::FixtureLoader.index(pid)
+    end
+  end
+
   desc "delete hydrus fixtures"
   task :deletefix do
     FIXTURE_PIDS.each { |pid|
@@ -48,7 +70,7 @@ namespace :hydrus do
     FIXTURE_PIDS.each { |pid|
       pid.gsub!('druid:','')
       source_path_to_files=File.join(source_base_path_to_files,pid)
-      dest_path_to_files=DruidTools::Druid.new(pid,dest_base_path_to_files).path()
+      dest_path_to_files=DruidTools::Druid.new(pid,dest_base_path_to_files).path('content')
       if File.exists?(source_path_to_files) && File.directory?(source_path_to_files)
         FileUtils.mkdir_p(dest_path_to_files) unless File.directory?(dest_path_to_files)
         copy_command="cp -fr #{source_path_to_files}/* #{dest_path_to_files}/"

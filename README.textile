@@ -12,6 +12,8 @@ h2. Getting your environment setup:
 
 	rvm install 1.9.3
 
+  brew install exiftool
+
 	git clone git@github.com:sul-dlss/hydrus.git
 	cd hydrus
 

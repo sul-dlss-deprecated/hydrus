@@ -10,7 +10,7 @@ describe Hydrus::ObjectFile do
     files = Hydrus::ObjectFile.find_all_by_pid(pid)
     files.size.should == 4
     f = files[0]
-    exp_url = '/uploads/oo/000/oo/0001/oo000oo0001/pinocchio.htm'
+    exp_url = '/uploads/oo/000/oo/0001/oo000oo0001/content/pinocchio.htm'
     f.url.should == exp_url
     f.current_path.should == "#{Rails.root}/public#{exp_url}"
     files[1].filename.should == %q{pinocchio characters tc in file name.pdf}

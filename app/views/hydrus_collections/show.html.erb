@@ -133,7 +133,7 @@
           <!-- Can use Hydrus::Item.milestones.last to get status. Speak with Lynn. -->
           <% @document_fedora.hydrus_items.each do |item| %>
             <tr class="document <%= cycle("even","odd") %>">
-              <td><%= link_to(item.title, polymorphic_path(item)) %></td>
+              <td><%= item_title_link(item) %></td>
               <td><%= item.item_depositor_name %></td>
               <td><font color=red><%= item.object_type %></font></td>
               <td><font color=red>#TODO</font></td>
