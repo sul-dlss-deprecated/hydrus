@@ -17,6 +17,10 @@ roles; and upload/replace/delete a file.
 
 Implement "Reject" button, to be used when a reviewer does not approve.
 
+Assess whether we can speed up the integration test suite: rspec --profile.
+
+Add Hannah's fixtures.
+
 
 -------
 WAITING
@@ -65,8 +69,6 @@ Collection create: APO.descMetadata. Flesh out. [waiting on spec from Lynn]
 
 Should roleMetadata have an XML namespace? If so, what should it be? Could not
 find any definitive examples in Consul. [waiting on response from Lynn]
-
-Assess whether we can speed up the integration test suite.
 
 Item view page: the actions box div is called "div.collection-actions".
 [Postpone this until we have GG's new design for sidebar, etc.]

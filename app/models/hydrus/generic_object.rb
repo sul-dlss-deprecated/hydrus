@@ -158,11 +158,29 @@ class Hydrus::GenericObject < Dor::Item
   # process as well.
   def approve
     complete_workflow_step('approve')
-    events.add_event('hydrus', @current_user, 'Approved')
-    return unless Dor::Config.hydrus.start_common_assembly
-    complete_workflow_step('start-assembly')
-    initiate_apo_workflow('assemblyWF')
-    update_content_metadata if self.class == Hydrus::Item
+    events.add_event('hydrus', @current_user, "#{hydrus_class_to_s()} approved")
+    if should_start_common_assembly
+      update_content_metadata if is_hydrus_item()
+      complete_workflow_step('start-assembly')
+      initiate_apo_workflow('assemblyWF')
+    end
+  end
+
+  # Returns value of Dor::Config.hydrus.start_common_assembly.
+  # Wrapped in method to simplify testing stubs.
+  def should_start_common_assembly
+    return Dor::Config.hydrus.start_common_assembly
+  end
+
+  # Returns true if object is a Hydrus::Item.
+  def is_hydrus_item
+    return self.class == Hydrus::Item
+  end
+
+  # Returns string representation of the class, minus the Hydrus:: prefix.
+  # For example: Hydrus::Collection -> 'Collection'.
+  def hydrus_class_to_s
+    return self.class.to_s.sub(/\AHydrus::/, '')
   end
 
   # Takes the name of a step in the Hydrus workflow.

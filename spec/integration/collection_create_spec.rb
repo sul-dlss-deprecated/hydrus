@@ -191,7 +191,7 @@ describe("Collection create", :type => :request, :integration => true) do
       /\ACollection opened/,
       /\ACollection closed/,
       /\ACollection opened/,
-      /\AApproved/,
+      /\ACollection approved/,
     ]
     es = coll.get_hydrus_events
     es[0...exp.size].zip(exp).each { |e, exp| e.text.should =~ exp  }

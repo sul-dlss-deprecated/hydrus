@@ -157,7 +157,7 @@ describe("Item create", :type => :request, :integration => true) do
     exp = [
       /\AItem created/,
       /\AItem published/,
-      /\AApproved/,
+      /\AItem approved/,
     ]
     es = item.get_hydrus_events
     es[0...exp.size].zip(exp).each { |e, exp| e.text.should =~ exp  }

@@ -130,7 +130,7 @@
         <events>
           <event type="hydrus" when="2012-08-15T10:12:31-07:00" who="archivist1">Collection created</event>
           <event type="hydrus" when="2012-08-15T10:13:27-07:00" who="archivist1">Collection opened</event>
-          <event type="hydrus" when="2012-08-15T10:13:29-07:00" who="archivist1">Approved</event>
+          <event type="hydrus" when="2012-08-15T10:13:29-07:00" who="archivist1">Collection approved</event>
         </events>
       </foxml:xmlContent>
     </foxml:datastreamVersion>

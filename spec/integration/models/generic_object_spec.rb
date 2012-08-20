@@ -4,14 +4,6 @@ describe(Hydrus::GenericObject, :integration => true) do
  
   describe "approve()" do
     
-    before(:each) do
-      @prev_conf = Dor::Config.hydrus.start_common_assembly
-    end
-      
-    after(:each) do
-      Dor::Config.hydrus.start_common_assembly(@prev_conf)
-    end
-      
     it "should modify workflows as expected" do
       # Setup.
       druid = 'druid:oo000oo0003'
@@ -29,12 +21,12 @@ describe(Hydrus::GenericObject, :integration => true) do
       exp['start-deposit'] = 'completed'
       check_statuses.call()
       # After approval (with start_common_assembly=false).
-      Dor::Config.hydrus.start_common_assembly(false)
+      hi.stub(:should_start_common_assembly).and_return(false)
       hi.approve()
       exp['approve'] = 'completed'
       check_statuses.call()
       # After approval (with start_common_assembly=true).
-      Dor::Config.hydrus.start_common_assembly(true)
+      hi.stub(:should_start_common_assembly).and_return(true)
       hi.should_receive(:initiate_apo_workflow).once
       hi.approve()
       exp['start-assembly'] = 'completed'
