@@ -46,7 +46,7 @@ namespace :hydrus do
     require File.expand_path('config/environments/overrides')
     output_dir=args[:output_dir] || File.join(Rails.root.to_s,"tmp")
     pid=args[:pid]
-    ActiveFedora::FixtureExporter.export_to_path(pid, output_dir)  
+    ActiveFedora::FixtureExporter.export_to_path(pid, output_dir)
   end
 
   # call with rake hydrus:import_objects['/tmp']
@@ -81,20 +81,23 @@ namespace :hydrus do
 
   desc "reload test uploaded files to public/upload directory"
   task :refresh_upload_files do
+    # Copies fixture files from source control to the app's public area:
+    #   source: spec/fixtures/files/DRUID/*
+    #   dest:   public/uploads/DRUID...TREE/content/*
     puts "refreshing upload files"
-    app_path=File.expand_path('../../../', __FILE__)
-    source_base_path_to_files=File.join(app_path,'spec/fixtures/files')
-    dest_base_path_to_files=File.join(app_path,'public/uploads')
-    FIXTURE_PIDS.each { |pid|
-      pid.gsub!('druid:','')
-      source_path_to_files=File.join(source_base_path_to_files,pid)
-      dest_path_to_files=DruidTools::Druid.new(pid,dest_base_path_to_files).path('content')
-      if File.exists?(source_path_to_files) && File.directory?(source_path_to_files)
-        FileUtils.mkdir_p(dest_path_to_files) unless File.directory?(dest_path_to_files)
-        copy_command="cp -fr #{source_path_to_files}/* #{dest_path_to_files}/"
-        system copy_command
+    app_base = File.expand_path('../../../', __FILE__)
+    src_base = File.join(app_base, 'spec/fixtures/files')
+    dst_base = File.join(app_base, 'public/uploads')
+    FIXTURE_PIDS.each do |pid|
+      pid.gsub!('druid:', '')
+      src = File.join(src_base, pid)
+      dst = DruidTools::Druid.new(pid, dst_base).path('content')
+      if File.exists?(src) && File.directory?(src)
+        FileUtils.mkdir_p(dst) unless File.directory?(dst)
+        cmd = "cp -fr #{src}/* #{dst}/"
+        system cmd
       end
-    }
+    end
   end
 
   desc "refresh workflow datastreams"

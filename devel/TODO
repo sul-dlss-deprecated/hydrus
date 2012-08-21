@@ -15,11 +15,13 @@ Implement editing events. Collection: modify description, visibility,
 license, release, roles. Item: modify description, files, license, release,
 roles; and upload/replace/delete a file.
 
-Implement "Reject" button, to be used when a reviewer does not approve.
+Deploy to -dev and -test.
 
-Assess whether we can speed up the integration test suite: rspec --profile.
+Merge to master.
 
-Add Hannah's fixtures.
+Implement "Reject", to be used when a reviewer does not approve an item.
+
+Remove approve from Collections.
 
 
 -------
@@ -37,7 +39,7 @@ hydrus-collection-viewer, hydrus-item-depositor, hydrus-item-manager. [Need a
 short discussion/meeting to nail down our plan.]
 
 Create new Collection/Item: create rightsMetadata. The rightsMetadata will
-contain the Item-level license and visibility info.  [Need more info: I assume
+contain the Item-level license and visibility info. [Need more info: I assume
 we will use Stanford-flavored rightsMetadata. Any other requirements?]
 
 When javascript is disabled, it is not possible to add new items, because the

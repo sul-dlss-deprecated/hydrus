@@ -15,7 +15,7 @@ file2:
   label:      "Main survey -- as PDF (prepared May 17, 2012)"
   file:       "pinocchio characters tc in file name.pdf"
   weight:     3
-  
+
 file3:
   id:         3
   pid:        "druid:oo000oo0001"
@@ -24,7 +24,7 @@ file3:
   label:      "Main survey -- as plain text (extracted into CSV tables)"
   file:       "pinocchio.-punctuation_in=file.name.txt"
   weight:     2
-  
+
 file4:
   id:         4
   pid:        "druid:oo000oo0001"
@@ -32,4 +32,31 @@ file4:
   updated_at: <%=Time.now%>
   label:      "Imagine this is a set of data samples"
   file:       "pinocchio_using_a_rather_long_filename-2012-05-17.zip"
-  weight:     99
+  weight:     1
+
+file5:
+  id:         5
+  pid:        "druid:oo000oo0011"
+  created_at: <%=Time.now%>
+  updated_at: <%=Time.now%>
+  label:      "Patrick_Gallagher Honors Thesis"
+  file:       "Patrick_Gallagher.honors_thesis.pdf"
+  weight:     1
+
+file6:
+  id:         6
+  pid:        "druid:oo000oo0012"
+  created_at: <%=Time.now%>
+  updated_at: <%=Time.now%>
+  label:      "Maxwell Shapiro Thesis"
+  file:       "Maxwell_Shapiro_Thesis_GrowthAndCharacterizationOfRbCu4S3.pdf"
+  weight:     1
+
+file7:
+  id:         7
+  pid:        "druid:oo000oo0013"
+  created_at: <%=Time.now%>
+  updated_at: <%=Time.now%>
+  label:      "Jefferson Brown Honors Thesis"
+  file:       "jefferson_brown_honors_thesis_final.pdf"
+  weight:     1
