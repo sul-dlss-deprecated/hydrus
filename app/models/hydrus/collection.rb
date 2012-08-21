@@ -66,7 +66,7 @@ class Hydrus::Collection < Hydrus::GenericObject
       events.add_event('hydrus', @current_user, 'Collection opened')
       unless workflow_step_is_done(s)
         complete_workflow_step(s)
-        approve() unless to_bool(requires_human_approval)
+        approve() # Collections never require human approval, even when their Items do.
       end
     else
       apo.deposit_status = 'closed'

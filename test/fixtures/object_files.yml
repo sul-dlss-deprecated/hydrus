@@ -32,7 +32,7 @@ file4:
   updated_at: <%=Time.now%>
   label:      "Imagine this is a set of data samples"
   file:       "pinocchio_using_a_rather_long_filename-2012-05-17.zip"
-  weight:     1
+  weight:     99
 
 file5:
   id:         5

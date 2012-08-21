@@ -43,14 +43,11 @@
               :class => 'edit toggle') %></p>
 				<%= form_for(@document_fedora, :method => 'PUT', :html => {:class => "step", :novalidate=>""}) do |f| -%>
 					<% if @document_fedora.is_open %>
-            <% unless @document_fedora.is_approved %>
-              <p><button type="submit" class="btn btn-small save-edits"
-                         name="hydrus_collection[approve]" value="false"
-                         id="hydrus_collection_approve">Approve</button></p>
-            <% end %>
-            <p><button type="submit" class="btn btn-small save-edits"
-                       name="hydrus_collection[publish]" value="false"
-                      id="hydrus_collection_publish">Close Collection</button></p>
+            <p> 
+              <button type="submit" class="btn btn-small save-edits"
+                      name="hydrus_collection[publish]" value="false"
+                      id="hydrus_collection_publish">Close Collection</button>
+            </p>
 					<% elsif @document_fedora.is_publishable %>
 				  	<p><button type="submit" class="btn btn-small save-edits" name="hydrus_collection[publish]" value="true" id="hydrus_collection_publish">Open Collection</button></p>
 					<% else %>
