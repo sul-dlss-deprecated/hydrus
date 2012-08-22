@@ -70,4 +70,11 @@ Hydrus::Application.configure do
   # config.active_record.auto_explain_threshold_in_seconds = 0.5
 end
 
+Dor::Config.configure do
+  
+  hydrus do
+    start_common_assembly(false)
+  end
+
+end
 require File.expand_path(File.join(File.dirname(__FILE__), 'override_solr_connection'))

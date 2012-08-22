@@ -76,10 +76,12 @@ class Hydrus::Item < Hydrus::GenericObject
   def update_content_metadata
     xml=create_content_metadata #generate new content metadata
     
-    # write xml to a file
-    Dir.mkdir(metadata_directory) unless File.directory? metadata_directory
-    File.open(File.join(metadata_directory, 'contentMetadata.xml'),'w') { |fh| fh.puts xml }
-    
+    if !xml.strip.blank? && DruidTools::Druid.valid?(self.pid)
+      # write xml to a file
+      Dir.mkdir(metadata_directory) unless File.directory? metadata_directory
+      File.open(File.join(metadata_directory, 'contentMetadata.xml'),'w') { |fh| fh.puts xml }
+    end
+  
     self.datastreams['contentMetadata'].content=xml  # replace datastream
     self.save
     
@@ -87,7 +89,7 @@ class Hydrus::Item < Hydrus::GenericObject
   
   def create_content_metadata
     objects=self.files.collect{|file| Assembly::ObjectFile.new(file.current_path,:label=>file.label)}
-    objects.empty? ? '' : Assembly::ContentMetadata.create_content_metadata(:druid=>pid,:objects=>objects,:style=>:file,:include_root_xml=>false)  
+    objects.empty? ? '' : Assembly::ContentMetadata.create_content_metadata(:druid=>pid,:objects=>objects,:style=>Hydrus::Application.config.cm_style,:file_attributes=>Hydrus::Application.config.cm_file_attributes,:include_root_xml=>false)  
   end
   
   # Returns true only if the Item is unpublished.

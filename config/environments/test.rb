@@ -35,7 +35,12 @@ Hydrus::Application.configure do
   # Print deprecation notices to the stderr
   config.active_support.deprecation = :stderr
   
-  # this is the path from the root of the public folder into which file uploads will be stored
-  config.file_upload_path = 'uploads'
+end
+
+Dor::Config.configure do
   
+  hydrus do
+    start_common_assembly(false)
+  end
+
 end

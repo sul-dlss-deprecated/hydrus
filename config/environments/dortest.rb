@@ -34,10 +34,13 @@ Hydrus::Application.configure do
 
   # Expands the lines which load the assets
   config.assets.debug = true
-  
-  config.resource_base_path = '/dor/assembly'
 
-  # this is the path from the root of the public folder into which file uploads will be stored
-  config.file_upload_path = 'uploads'
+end
+
+Dor::Config.configure do
   
+  hydrus do
+    start_common_assembly(true)
+  end
+
 end

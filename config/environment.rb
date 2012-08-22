@@ -5,6 +5,18 @@ if %w{development test prod_w_local_dor}.include?(Rails.env)
   require File.expand_path(File.join(File.dirname(__FILE__), 'override_solr_connection'))
 end
 
+Hydrus::Application.configure do
+ 
+  config.resource_base_path = '/dor/assembly'
+
+  # this is the path from the root of the public folder into which file uploads will be stored
+  config.file_upload_path = 'uploads'
+ 
+  config.cm_file_attributes = {'default'=>{:publish=>'yes',:preserve=>'yes',:shelve=>'yes'}} # file attributes by mimetype, including defaults, to use when generating content metadata
+  config.cm_style = :file # style of content metadata to generate
+  
+end
+
 Dor::Config.configure do
 
   cert_dir File.join(File.dirname(__FILE__), "certs")
@@ -51,7 +63,6 @@ Dor::Config.configure do
   hydrus do
     initial_apo_title('Intial Hydrus APO title')
     app_workflow(:hydrusAssemblyWF)
-    start_common_assembly(true)
 
     workflow_steps({
       :hydrusAssemblyWF => [

@@ -17,7 +17,7 @@ gem 'druid-tools', '>= 0.2.0'
 gem 'sul_chrome'
 gem 'about_page'
 gem 'is_it_working-cbeer', "~> 1.0.13"
-gem 'assembly-objectfile', ">= 1.3.2"
+gem 'assembly-objectfile', ">= 1.3.6"
 
 gem 'blacklight', '~>3.5', :git => 'http://github.com/projectblacklight/blacklight.git'
 gem 'hydra-head', '~> 4.1.1'
