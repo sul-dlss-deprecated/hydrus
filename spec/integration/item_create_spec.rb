@@ -64,9 +64,11 @@ describe("Item create", :type => :request, :integration => true) do
       :title    => 'title_foo',
       :abstract => 'abstract_foo',
       :contact  => 'ozzy@hell.com',
+      :reason   => 'Idiota',
     )
-    publish_button = "Publish Item"
-    approve_button = "Approve"
+    publish_button    = "Publish Item"
+    approve_button    = "Approve"
+    disapprove_button = "Disapprove"
     # Force Items to receive human approval.
     coll = Hydrus::Collection.find(@hc_druid)
     coll.requires_human_approval = 'yes'
@@ -92,12 +94,12 @@ describe("Item create", :type => :request, :integration => true) do
       /^Terms/,
     ]
     exp.each { |e| err_msgs.should =~ e }
-    # Get Item out of fedora.
-    item = Hydrus::Item.find(druid)
     # Check various Item attributes and methods.
+    item = Hydrus::Item.find(druid)
     item.is_publishable.should == false
     item.is_published.should == false
     item.is_approved.should == false
+    item.is_disapproved.should == false
     item.is_destroyable.should == true
     item.valid?.should == true  # Because unpublished, so validation is limited.
     # Go back to edit page and fill in required elements.
@@ -114,12 +116,12 @@ describe("Item create", :type => :request, :integration => true) do
     # The view page should now offer the Publish button.
     div_cs = find("div.collection-actions")
     div_cs.should have_button(publish_button)
-    # Get the Item and APO objects from fedora.
-    item = Hydrus::Item.find(druid)
     # Check various Item attributes and methods.
+    item = Hydrus::Item.find(druid)
     item.is_publishable.should == true
     item.is_published.should == false
     item.is_approved.should == false
+    item.is_disapproved.should == false
     item.is_destroyable.should == true
     item.valid?.should == true
     # Publish the Item.
@@ -128,12 +130,12 @@ describe("Item create", :type => :request, :integration => true) do
     # The view page should not offer the Publish button.
     div_cs = find("div.collection-actions")
     div_cs.should_not have_button(publish_button)
-    # Get the Item and APO objects from fedora.
-    item = Hydrus::Item.find(druid)
     # Check various Item attributes and methods.
+    item = Hydrus::Item.find(druid)
     item.is_publishable.should == true
     item.is_published.should == true
     item.is_approved.should == false
+    item.is_disapproved.should == false
     item.is_destroyable.should == false
     item.valid?.should == true
     # Return to edit page, and try to save Item with an empty title.
@@ -146,17 +148,40 @@ describe("Item create", :type => :request, :integration => true) do
     fill_in "hydrus_item_title", :with => ni.title
     click_button "Save"
     page.should have_content(@notice)
+    # Disapprove the Item.
+    fill_in "hydrus_item_approve_reason", :with => ni.reason
+    click_button(disapprove_button)
+    # Check various Item attributes and methods.
+    item = Hydrus::Item.find(druid)
+    item.is_publishable.should == true
+    item.is_published.should == true
+    item.is_approved.should == false
+    item.is_disapproved.should == true
+    item.is_destroyable.should == false
+    item.valid?.should == true
+    item.disapproval_reason.should == ni.reason
     # Approve the Item.
     click_button(approve_button)
     page.should have_content(@notice)
-    # The view page should not offer the Publish or Approve buttons.
+    # The view page should not offer the Publish, Approve, or Disapprove buttons.
     div_cs = find("div.collection-actions")
     div_cs.should_not have_button(publish_button)
     div_cs.should_not have_button(approve_button)
+    div_cs.should_not have_button(disapprove_button)
+    # Check various Item attributes and methods.
+    item = Hydrus::Item.find(druid)
+    item.is_publishable.should == true
+    item.is_published.should == true
+    item.is_approved.should == true
+    item.is_disapproved.should == false
+    item.is_destroyable.should == false
+    item.valid?.should == true
+    item.disapproval_reason.should == nil
     # Check events.
     exp = [
       /\AItem created/,
       /\AItem published/,
+      /\AItem disapproved/,
       /\AItem approved/,
     ]
     es = item.get_hydrus_events

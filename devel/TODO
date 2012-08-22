@@ -1,3 +1,7 @@
+Item view page. The "Test Version" image in the top left corner interferes with
+the user's ability to click the Collection hyperlink when the Collection has a
+short title.
+
 Events: collection and item view beautification/tabification.
 
 Item.embargo datastream: create the DS, using default embargo info from APO.
@@ -11,22 +15,13 @@ value is lost).
 Submit relevant (or all) form data on addition of multi-valued fields (issues
 w/ non-linear indexed role MD)
 
-Implement editing events. Collection: modify description, visibility,
-license, release, roles. Item: modify description, files, license, release,
-roles; and upload/replace/delete a file.
+Implement editing events. Collection: modify description, visibility, license,
+release, roles. Item: modify description, files, license, release, roles; and
+upload/replace/delete a file.
 
-Deploy to -dev and -test.
+Upon publish, call OBJ.label = title.
 
-Merge to master.
-
-Item view page. Hyperlink to the Collection does not work.
-
-Email
-  rails runner devel/create_test_item.rb
-  rake hydrus:helpfix
-
-Implement "Reject", to be used when a reviewer does not approve an item.
-  Item integration test
+For items requiring human approval change button from "Publish" to something else.
 
 
 -------
