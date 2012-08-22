@@ -59,7 +59,10 @@
           <p>
             <button type="submit" class="btn btn-small save-edits"
                     name="hydrus_item[publish]" value="true"
-                    id="hydrus_item_publish">Publish Item</button>
+                    id="hydrus_item_publish">
+              <%= @document_fedora.requires_human_approval ?
+                    'Submit for Approval' : 'Publish Item'  %>
+            </button>
           </p>
 			<% else %>
 					<p>To publish the item, you must fix the following:

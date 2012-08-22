@@ -19,8 +19,6 @@ Implement editing events. Collection: modify description, visibility, license,
 release, roles. Item: modify description, files, license, release, roles; and
 upload/replace/delete a file.
 
-For items requiring human approval change button from "Publish" to something else.
-
 
 -------
 WAITING
