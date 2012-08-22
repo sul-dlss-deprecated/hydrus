@@ -60,10 +60,28 @@ class Hydrus::Item < Hydrus::GenericObject
     return cs.first  # In Hydrus, we assume there is just one (for now).
   end
 
+  def base_file_directory
+    DruidTools::Druid.new(self.pid,File.join(Rails.root,"public",Hydrus::Application.config.file_upload_path)).path
+  end
+  
+  def content_directory
+    File.join(base_file_directory,"content")
+  end
+
+  def metadata_directory
+    File.join(base_file_directory,"metadata")
+  end
+  
   def update_content_metadata
-    xml=create_content_metadata
-    self.datastreams['contentMetadata'].content=xml  # generate new content metadata and replace datastream
+    xml=create_content_metadata #generate new content metadata
+    
+    # write xml to a file
+    Dir.mkdir(metadata_directory) unless File.directory? metadata_directory
+    File.open(File.join(metadata_directory, 'contentMetadata.xml'),'w') { |fh| fh.puts xml }
+    
+    self.datastreams['contentMetadata'].content=xml  # replace datastream
     self.save
+    
   end
   
   def create_content_metadata
