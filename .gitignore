@@ -19,6 +19,11 @@ config/suri.yml
 config/database.yml
 config/fedora.yml
 config/solr.yml
+config/ur_apo_druid.yml
+config/workflow.yml
+config/ssl_certs.yml
+config/certs/*
+
 
 ## Cucumber
 rerun.txt

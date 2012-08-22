@@ -39,5 +39,3 @@ Hydrus::Application.configure do
   config.file_upload_path = 'uploads'
   
 end
-
-require File.expand_path(File.join(File.dirname(__FILE__), 'overrides'))

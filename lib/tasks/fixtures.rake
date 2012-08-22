@@ -43,7 +43,7 @@ namespace :hydrus do
   # call with rake hydrus:export_object['druid:xx00oo0001','/tmp']
   desc "export object to foxml"
   task :export_object, :pid, :output_dir do |t, args|
-    require File.expand_path('config/environments/overrides')
+    require File.expand_path('config/environment')
     output_dir=args[:output_dir] || File.join(Rails.root.to_s,"tmp")
     pid=args[:pid]
     ActiveFedora::FixtureExporter.export_to_path(pid, output_dir)
@@ -52,7 +52,7 @@ namespace :hydrus do
   # call with rake hydrus:import_objects['/tmp']
   desc "import foxml objects from directory into dor"
   task :import_objects, :source_dir do |t,args|
-    require File.expand_path('config/environments/overrides')
+    require File.expand_path('config/environment')
     source_dir=args[:source_dir]
     Dir.chdir(source_dir)
     files=Dir.glob('*.foxml.xml')
@@ -102,7 +102,7 @@ namespace :hydrus do
 
   desc "refresh workflow datastreams"
   task :refresh_workflows do
-    require File.expand_path('config/environments/overrides')
+    require File.expand_path('config/environment')
     repo    = 'dor'
     wf_name = 'hydrusAssemblyWF'
     steps   = [
