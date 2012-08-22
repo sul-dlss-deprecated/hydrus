@@ -18,7 +18,7 @@ namespace :jetty do
     run "if [ -d #{deploy_to}/current ]; then cd #{deploy_to}/current && rake jetty:stop; fi"
   end
   task :ingest_fixtures do
-    run "cd #{deploy_to}/current && rake hydrus:loadfix"
+    run "cd #{deploy_to}/current && rake hydrus:refreshfix"
   end
 end
 

@@ -1,6 +1,7 @@
 h1. Hydrus
 
-A Hydra application enabling deposit of digital objects into the Stanford Digital Repository for preservation and access.
+A Hydra application enabling deposit of digital objects into the Stanford
+Digital Repository for preservation and access.
 
 This code has dependencies on non-public code:
 <ul>
@@ -44,7 +45,9 @@ Go to http://localhost:3000
 
 h2. Default user
 
-Note that you will need to be logged in to see any objects, since there is an authentication and permissions system preventing read access to the default fixtures.  Login with the following default user:
+Note that you will need to be logged in to see any objects, since there is an
+authentication and permissions system preventing read access to the default
+fixtures.  Login with the following default user:
 
 username: archivist1@example.com
 password: beatcal
@@ -81,7 +84,8 @@ Recommended workflow:
  git merge working
  git push origin develop
 
-If you get a conflict on the push to origin (last line), you'll need to rebase your local changes on top of the remote branch:
+If you get a conflict on the push to origin (last line), you'll need to rebase
+your local changes on top of the remote branch:
 
 	git rebase origin/develop
 	
@@ -98,7 +102,15 @@ Skip step 3b and go to 4
 
 You can use "gitx --all" at any time to see the history of each branch.
 	
-4. When you're ready to develop more code, go back to step 1.	You can use multiple working branches if you are developing multiple features at once that you don't want to mix together.  Just create a different local branch and replace "working" above with your local branch name.
+4. When you're ready to develop more code, go back to step 1.	You can use
+multiple working branches if you are developing multiple features at once that
+you don't want to mix together.  Just create a different local branch and
+replace "working" above with your local branch name.
+
+h2. Deploying
+
+  cd deploy
+  cap dev deploy
 
 h2. Useful commands
 
@@ -110,9 +122,11 @@ h3. Dropping databases entirely:
 
 	rake db:drop:all
 	
-Most of the rake commands are environment specific, so they can be run in test environment by adding 'RAILS_ENV=test' to the end.
+Most of the rake commands are environment specific, so they can be run in test
+environment by adding 'RAILS_ENV=test' to the end.
 
-h3. Migrating databases to the latest version (which will also set them up if they don't exist, assuming you are using sqllite):
+h3. Migrating databases to the latest version (which will also set them up if
+they don't exist, assuming you are using sqllite):
 
 	rake db:migrate
 
