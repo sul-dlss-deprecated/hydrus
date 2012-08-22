@@ -19,14 +19,15 @@ Implement editing events. Collection: modify description, visibility, license,
 release, roles. Item: modify description, files, license, release, roles; and
 upload/replace/delete a file.
 
-Upon publish, call OBJ.label = title.
-
 For items requiring human approval change button from "Publish" to something else.
 
 
 -------
 WAITING
 -------
+
+Deployment to hydrus-test.stanford.edu is a hassle. In particular, it's not easy
+to get the latest fixture/file content up-to-date.
 
 There is some mismatch between the current Hydrus app/UI and the roles defined
 in Consul. Currently, Hydrus understands 5 roles: hydrus-collection-depositor,
