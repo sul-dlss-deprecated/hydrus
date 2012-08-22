@@ -63,6 +63,7 @@ class Hydrus::Collection < Hydrus::GenericObject
       apo.identityMetadata.objectLabel = "APO for #{title}"
       apo.descMetadata.title           = "APO for #{title}"
       identityMetadata.objectLabel     = title
+      self.label                       = title # The label in Fedora's foxml:objectProperties.
       # Advance the workflow to record that the object has been published.
       s = 'submit'
       events.add_event('hydrus', @current_user, 'Collection opened')

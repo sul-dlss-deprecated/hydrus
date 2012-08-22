@@ -66,7 +66,7 @@ describe("Item create", :type => :request, :integration => true) do
       :contact  => 'ozzy@hell.com',
       :reason   => 'Idiota',
     )
-    publish_button    = "Publish Item"
+    publish_button    = "Submit for Approval"
     approve_button    = "Approve"
     disapprove_button = "Disapprove"
     # Force Items to receive human approval.
