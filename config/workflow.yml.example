@@ -1,10 +1,11 @@
 development:
   url: http://lyberservices-dev.stanford.edu/workflow/
+
 dortest:
   url: https://sul-lyberservices-test.stanford.edu/workflow/
-test: &TEST
+
+test:
   url: http://lyberservices-dev.stanford.edu/workflow/
-cucumber:
-  <<: *TEST
+
 production:
   url: http://your.production.server:8080/workflow

@@ -1,10 +1,11 @@
 development:
-  druid: 'druid:oo000oo0000'
+  druid: "druid:oo000oo0000"
+  
 dortest:
-	druid: 'druid:oo000oo0000'
-test: &TEST
-	druid: 'druid:oo000oo0000'
-cucumber:
-  <<: *TEST
+  druid: "druid:oo000oo0000"
+  
+test: 
+  druid: "druid:oo000oo0000"
+  
 production:
-	druid: 'druid:oo000oo0000'
+  druid: "druid:oo000oo0000"
