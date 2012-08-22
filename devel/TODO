@@ -19,7 +19,14 @@ Deploy to -dev and -test.
 
 Merge to master.
 
+Item view page. Hyperlink to the Collection does not work.
+
+Email
+  rails runner devel/create_test_item.rb
+  rake hydrus:helpfix
+
 Implement "Reject", to be used when a reviewer does not approve an item.
+  Item integration test
 
 
 -------

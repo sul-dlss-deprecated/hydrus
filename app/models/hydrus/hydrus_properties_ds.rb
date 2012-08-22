@@ -5,8 +5,9 @@ class Hydrus::HydrusPropertiesDS < ActiveFedora::NokogiriDatastream
   set_terminology do |t|
     t.root :path => 'hydrusProperties'
     
-    t.accepted_terms_of_deposit :path=>'acceptedTermsOfDeposit'
-    t.requires_human_approval :path=>'requiresHumanApproval'
+    t.accepted_terms_of_deposit :path => 'acceptedTermsOfDeposit'
+    t.requires_human_approval :path => 'requiresHumanApproval'
+    t.disapproval_reason :path => 'disapprovalReason'
   end
 
   # Empty XML document.

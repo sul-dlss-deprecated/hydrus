@@ -117,11 +117,37 @@ describe Hydrus::GenericObject do
 
   describe "approve()" do
 
+    it "approve() should dispatch to do_approve() when passed no arguments" do
+      @go.should_receive(:do_approve).once
+      @go.approve
+    end
+
+    it "approve() should dispatch to do_approve() when value is true-ish" do
+      tests = ['yes', 'true', true]
+      @go.should_receive(:do_approve).exactly(tests.length).times
+      tests.each do |v|
+        @go.approve('value' => v, 'reason' => 'fooblah')
+      end
+    end
+
+    it "approve() should dispatch to do_disapprove() when value is false-ish" do
+      tests = ['no', 'false', false]
+      r = 'fooblah'
+      @go.should_receive(:do_disapprove).exactly(tests.length).times.with(r)
+      tests.each do |v|
+        @go.approve('value' => v, 'reason' => r)
+      end
+    end
+
+  end
+
+  describe "do_approve()" do
+
     it "should make expected calls (start_common_assembly = false)" do
       @go.stub(:should_start_common_assembly).and_return(false)
       @go.should_receive(:complete_workflow_step).with('approve').once
       @go.should_not_receive(:initiate_apo_workflow)
-      @go.approve()
+      @go.do_approve()
     end
 
     it "should make expected calls (start_common_assembly = true)" do
@@ -129,9 +155,14 @@ describe Hydrus::GenericObject do
       @go.should_receive(:complete_workflow_step).with('approve').once
       @go.should_receive(:complete_workflow_step).with('start-assembly').once
       @go.should_receive(:initiate_apo_workflow).once
-      @go.approve()
+      @go.do_approve()
     end
 
+  end
+
+  it "do_disapprove()" do
+    @go.do_disapprove('foo')
+    @go.disapproval_reason.should == 'foo'
   end
 
   describe "workflow stuff" do
@@ -245,8 +276,20 @@ describe Hydrus::GenericObject do
 
     it "approve=() should delegate to approve()" do
       v = 9876
-      @go.should_receive(:approve).with(no_args)
+      @go.should_receive(:approve).with(v)
       @go.approve= v
+    end
+
+    it "is_disapproved() should return true if disapproval_reason has length" do
+      tests = {
+        'blah' => true,
+        ''     => false,
+        nil    => false,
+      }
+      tests.each do |reason, exp|
+        @go.stub(:disapproval_reason).and_return(reason)
+        @go.is_disapproved.should == exp
+      end
     end
 
     describe "submit_time()" do

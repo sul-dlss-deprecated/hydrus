@@ -5,8 +5,8 @@
   <dl>
     <dt><h6>Collection</h6></dt>
     <dd class="collection">
-      <%= 
-        c = @document_fedora.collection 
+      <%=
+        c = @document_fedora.collection
         link_to(c.title, polymorphic_path(c))
       %>
     </dd>
@@ -40,18 +40,25 @@
          if @document_fedora.is_published
            unless @document_fedora.is_approved
       %>
-            <p>
-              <button type="submit" class="btn btn-small save-edits" 
-                      name="hydrus_item[approve]" value="true" 
-                      id="hydrus_item_approve">Approve Item</button>
-            </p>
-      <%
-           end
-      %>
+             <p>
+               <button type="submit" class="btn btn-small save-edits"
+                       name="hydrus_item[approve][value]" value="yes"
+                       id="hydrus_item_approve">Approve Item</button>
+             </p>
+             <p>
+               <button type="submit" class="btn btn-small save-edits"
+                       name="hydrus_item[approve][value]" value="no"
+                       id="hydrus_item_disapprove">Disapprove Item</button>
+             </p>
+             <p>
+                 <%= label_tag("hydrus_item_disapproval_reason", "Disapproval reason") %>
+                 <%= text_field_tag("hydrus_item[approve][reason]", @document_fedora.disapproval_reason) -%>
+             </p>
+          <% end %>
 			<% elsif @document_fedora.is_publishable %>
           <p>
-            <button type="submit" class="btn btn-small save-edits" 
-                    name="hydrus_item[publish]" value="true" 
+            <button type="submit" class="btn btn-small save-edits"
+                    name="hydrus_item[publish]" value="true"
                     id="hydrus_item_publish">Publish Item</button>
           </p>
 			<% else %>
@@ -63,7 +70,7 @@
 						%>
 						<%="<ul>#{errors.join}</ul>".html_safe%>
 				  </p>
-			<% 
+			<%
 			end
       unless @document_fedora.is_published
 			%>
@@ -143,7 +150,7 @@
           <th>Description</th>
         </thead>
         <tbody>
-          <% 
+          <%
             @document_fedora.files.each do |file|
           %>
               <tr class="document <%= cycle("even","odd") %>">

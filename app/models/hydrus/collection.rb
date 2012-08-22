@@ -8,6 +8,8 @@ class Hydrus::Collection < Hydrus::GenericObject
 
   delegate :requires_human_approval, :to => "hydrusProperties", :unique => true
 
+  has_relationship 'hydrus_items', :is_member_of_collection, :inbound => true
+
   def self.create(user)
     # Create the object, with the correct model.
     apo     = Hydrus::AdminPolicyObject.create(user)
@@ -91,12 +93,12 @@ class Hydrus::Collection < Hydrus::GenericObject
     self.license = nil if self.license_option == "none"
   end
 
-  def hydrus_items
-    query = %Q(is_member_of_collection_s:"info:fedora/#{pid}")
-    resp  = Blacklight.solr.find('q'.to_sym => query)
-    items = resp.docs.map { |d| Hydrus::Item.find(d.id) }
-    return items
-  end
+  # def hydrus_items
+  #   query = %Q(is_member_of_collection_s:"info:fedora/#{pid}")
+  #   resp  = Blacklight.solr.find('q'.to_sym => query)
+  #   items = resp.docs.map { |d| Hydrus::Item.find(d.id) }
+  #   return items
+  # end
 
   # These getters and setters are needed because the ActiveFedora delegate()
   # does not work when we need to delegate through to the APO.

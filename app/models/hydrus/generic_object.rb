@@ -42,17 +42,10 @@ class Hydrus::GenericObject < Dor::Item
     return (is_published and workflow_step_is_done('approve'))
   end
 
-  # The controller will call this method, which we simply forward to
-  # publish() in the Collection or Item class.
-  def publish=(val)
-    publish(val)
-  end
-
-  # The controller will call this method, which we simply forward to
-  # approve() in the Collection or Item class.
-  def approve=(val)
-    approve
-  end
+  # The controller will call these methods, which we simply forward to
+  # the Collection or Item class.
+  def publish=(val) publish(val) end
+  def approve=(val) approve(val) end
 
   def object_type
     # TODO: this is not what we want.
@@ -64,6 +57,7 @@ class Hydrus::GenericObject < Dor::Item
   delegate :related_item_title, :to => "descMetadata", :at => [:relatedItem, :titleInfo, :title]
   delegate :related_item_url, :to => "descMetadata", :at => [:relatedItem, :location, :url]
   delegate :contact, :to => "descMetadata", :unique => true
+  delegate :disapproval_reason, :to => "hydrusProperties", :unique => true
 
   def apo
     @apo ||= (apo_pid ? get_fedora_item(apo_pid) : Hydrus::AdminPolicyObject.new)
@@ -152,18 +146,42 @@ class Hydrus::GenericObject < Dor::Item
     }
   end
 
+  # Optionally takes a hash like this: 
+  #   { 'value'  => 'yes|no', 'reason' => 'blah blah' }
+  # Implements approve/disapprove accordingly.
+  def approve(h = nil)
+    if h.nil? or to_bool(h['value'])
+      do_approve()
+    else
+      do_disapprove(h['reason'])
+    end
+  end
+
   # Approves an object by marking the 'approve' step in the Hydrus workflow as
   # completed. If the app is configured to start the common assembly workflow,
   # additional calls will be made to the workflow service to begin that
-  # process as well.
-  def approve
+  # process as well. In that case, we also generate content metadata.
+  def do_approve
+    is_item = is_hydrus_item()
     complete_workflow_step('approve')
     events.add_event('hydrus', @current_user, "#{hydrus_class_to_s()} approved")
+    hydrusProperties.remove_nodes(:disapproval_reason)
     if should_start_common_assembly
-      update_content_metadata if is_hydrus_item()
+      update_content_metadata if is_item
       complete_workflow_step('start-assembly')
       initiate_apo_workflow('assemblyWF')
     end
+  end
+
+  # Disapproves an object by setting the reason is the hydrusProperties datastream.
+  def do_disapprove(reason)
+    events.add_event('hydrus', @current_user, "Item disapproved")
+    self.disapproval_reason = reason
+  end
+
+  # Returns true if there is a non-blank disapproval_reason.
+  def is_disapproved
+    return not(disapproval_reason.blank?)
   end
 
   # Returns value of Dor::Config.hydrus.start_common_assembly.

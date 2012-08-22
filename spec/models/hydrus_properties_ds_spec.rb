@@ -9,6 +9,7 @@ describe Hydrus::HydrusPropertiesDS do
       #{@ds_start}
         <acceptedTermsOfDeposit>true</acceptedTermsOfDeposit>
         <requiresHumanApproval>false</requiresHumanApproval>
+        <disapprovalReason>Idiota</disapprovalReason>
       #{@ds_end}
     EOF
     @dsdoc = Hydrus::HydrusPropertiesDS.from_xml(xml)
@@ -18,6 +19,7 @@ describe Hydrus::HydrusPropertiesDS do
     tests = [
       [:accepted_terms_of_deposit, ["true"]],
       [:requires_human_approval, ["false"]],
+      [:disapproval_reason, ["Idiota"]],
     ]
     tests.each do |terms, exp|
       @dsdoc.term_values(*terms).should == exp

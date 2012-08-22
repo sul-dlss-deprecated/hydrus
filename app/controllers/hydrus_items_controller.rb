@@ -35,7 +35,7 @@ class HydrusItemsController < ApplicationController
 
   def update
     notice = []
-    
+
     # Files from the file input.
     if params.has_key?("files")
       params["files"].each do |file|
@@ -44,7 +44,6 @@ class HydrusItemsController < ApplicationController
         new_file.label = params["file_label"][new_file.id] if params.has_key?("file_label") and params["file_label"][new_file.id]
         new_file.file = file
         new_file.save
-        new_file.label
         notice << "'#{file.original_filename}' uploaded."
       end
     end
@@ -68,10 +67,7 @@ class HydrusItemsController < ApplicationController
     end
 #    logger.debug("attributes submitted: #{params['hydrus_item'].inspect}")
     
-    if @document_fedora.valid?
-      @document_fedora.save
-    else
-      # invalid item, generate errors to display to user
+    unless @document_fedora.save
       errors = []  
       @document_fedora.errors.messages.each do |field, error|
         errors << "#{field.to_s.humanize.capitalize} #{error.join(', ')}"
@@ -79,8 +75,7 @@ class HydrusItemsController < ApplicationController
       flash[:error] = errors.join("<br/>").html_safe
       render :edit and return
     end  
-      
-    
+
     notice << "Your changes have been saved."
     flash[:notice] = notice.join("<br/>").html_safe unless notice.blank?
     
