@@ -43,12 +43,17 @@ describe("Item create", :type => :request, :integration => true) do
     # Check person roles of the Item.
     item.person_roles.should == { "hydrus-item-depositor" => ["archivist1"] }
     # Check events.
+    exp = [
+      /\AItem created/,
+      /\AItem modified/,
+    ]
     es = item.get_hydrus_events
-    es.size.should == 1
-    e = es.first
-    e.text.should =~ /\AItem created/
-    e.who.should == 'archivist1'
-    e.type.should == 'hydrus'
+    es.size.should == exp.size
+    es[0...exp.size].zip(exp).each do |e, exp|
+      e.text.should =~ exp
+      e.who.should == 'archivist1'
+      e.type.should == 'hydrus'
+    end
   end
 
   it "should be able to access create-new-Item screen via the Collection view page" do
@@ -180,6 +185,8 @@ describe("Item create", :type => :request, :integration => true) do
     # Check events.
     exp = [
       /\AItem created/,
+      /\AItem modified/,
+      /\AItem modified/,
       /\AItem published/,
       /\AItem disapproved/,
       /\AItem approved/,

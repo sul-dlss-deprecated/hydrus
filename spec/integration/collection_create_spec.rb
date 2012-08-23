@@ -51,12 +51,17 @@ describe("Collection create", :type => :request, :integration => true) do
     # Check APO.descMetadata.
     apo.title.should == Dor::Config.hydrus.initial_apo_title
     # Check events.
+    exp = [
+      /\ACollection created/,
+      /\ACollection modified/,
+    ]
     es = coll.get_hydrus_events
-    es.size.should == 1
-    e = es.first
-    e.text.should =~ /\ACollection created/
-    e.who.should == 'archivist1'
-    e.type.should == 'hydrus'
+    es.size.should == exp.size
+    es[0...exp.size].zip(exp).each { |e, exp|
+      e.text.should =~ exp
+      e.who.should == 'archivist1'
+      e.type.should == 'hydrus'
+    }
   end
 
   it "should be able to create a new Collection, publish, close, etc" do
@@ -182,6 +187,8 @@ describe("Collection create", :type => :request, :integration => true) do
     # Check events.
     exp = [
       /\ACollection created/,
+      /\ACollection modified/,
+      /\ACollection modified/,
       /\ACollection opened/,
       /\ACollection approved/,
       /\ACollection closed/,

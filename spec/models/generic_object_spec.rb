@@ -1,5 +1,6 @@
 require 'spec_helper'
 
+
 describe Hydrus::GenericObject do
 
   before(:each) do
@@ -13,7 +14,7 @@ describe Hydrus::GenericObject do
 
   it "apo() should return fedora object if the apo_pid is defined" do
     mfo = double('mock_fedora_object')
-    @go.apo_pid = @apo_pid
+    @go.instance_variable_set('@apo_pid', @apo_pid)
     @go.stub(:get_fedora_item).and_return mfo
     @go.apo.should == mfo
   end
@@ -27,7 +28,7 @@ describe Hydrus::GenericObject do
 
   it "apo_pid() should get PID directly from @apo_pid when it is defined" do
     exp = 'foobarfubb'
-    @go.apo_pid = exp
+    @go.instance_variable_set('@apo_pid', exp)
     @go.stub(:admin_policy_object_ids).and_return ['doh', 11, 22]
     @go.should_not_receive :admin_policy_object_ids
     @go.apo_pid.should == exp

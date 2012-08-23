@@ -11,6 +11,26 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
   validates :embargo_option, :presence => true, :if => :should_validate
   validates :license_option, :presence => true, :if => :should_validate
 
+  delegate(:title, :to => "descMetadata", :unique => true)
+  delegate(:deposit_status, :to => "administrativeMetadata",
+           :at => [:hydrus, :depositStatus], :unique => true)
+  delegate(:embargo, :to => "administrativeMetadata",
+           :at => [:hydrus, :embargo], :unique => true)
+  delegate(:embargo_option, :to => "administrativeMetadata",
+           :at => [:hydrus, :embargo, :option], :unique => true)
+  delegate(:license, :to => "administrativeMetadata",
+           :at => [:hydrus, :license], :unique => true)
+  delegate(:license_option, :to => "administrativeMetadata",
+           :at => [:hydrus, :license, :option], :unique => true)
+  delegate(:visibility, :to => "administrativeMetadata",
+           :at => [:hydrus, :visibility], :unique => true)
+  delegate(:visibility_option, :to => "administrativeMetadata",
+           :at => [:hydrus, :visibility, :option], :unique => true)
+  delegate(:collection_owner, :to => "roleMetadata",
+           :at => :collection_owner)
+  delegate(:person_id, :to => "roleMetadata",
+           :at => [:role, :person, :identifier])
+
   def initialize(*args)
     super
     @should_validate = false
@@ -74,38 +94,6 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
     :type => Hydrus::RoleMetadataDS,
     :label => 'Role Metadata',
     :control_group => 'M')
-
-  # descMetadata
-  delegate :title, :to => "descMetadata", :unique => true
-
-  # administrativeMetadata
-  delegate(:deposit_status, :to => "administrativeMetadata",
-           :at => [:hydrus, :depositStatus], :unique => true)
-
-  delegate(:embargo, :to => "administrativeMetadata",
-           :at => [:hydrus, :embargo], :unique => true)
-
-  delegate(:embargo_option, :to => "administrativeMetadata",
-           :at => [:hydrus, :embargo, :option], :unique => true)
-
-  delegate(:license, :to => "administrativeMetadata",
-           :at => [:hydrus, :license], :unique => true)
-
-  delegate(:license_option, :to => "administrativeMetadata",
-           :at => [:hydrus, :license, :option], :unique => true)
-
-  delegate(:visibility, :to => "administrativeMetadata",
-           :at => [:hydrus, :visibility], :unique => true)
-
-  delegate(:visibility_option, :to => "administrativeMetadata",
-           :at => [:hydrus, :visibility, :option], :unique => true)
-
-  # roleMetadata
-  delegate(:collection_owner, :to => "roleMetadata",
-           :at => :collection_owner)
-
-  delegate(:person_id, :to => "roleMetadata",
-           :at => [:role, :person, :identifier])
 
   def self.roles
      return {

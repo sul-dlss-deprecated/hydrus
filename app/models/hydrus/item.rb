@@ -14,6 +14,14 @@ class Hydrus::Item < Hydrus::GenericObject
   # validate  :embargo_date_is_correct_format # TODO
 
   delegate :accepted_terms_of_deposit, :to => "hydrusProperties", :unique => true
+  delegate :preferred_citation, :to => "descMetadata", :unique => true
+  delegate :related_citation, :to => "descMetadata"
+  delegate :person, :to => "descMetadata", :at => [:name, :namePart]
+  delegate :person_role, :to => "descMetadata", :at => [:name, :role, :roleTerm]
+  delegate(:item_depositor_id, :to => "roleMetadata",
+           :at => [:item_depositor, :person, :identifier], :unique => true)
+  delegate(:item_depositor_name, :to => "roleMetadata",
+           :at => [:item_depositor, :person, :name], :unique => true)
 
   def self.create(collection_pid, user)
     # Create the object, with the correct model.
@@ -205,11 +213,6 @@ class Hydrus::Item < Hydrus::GenericObject
     Hydrus::ObjectFile.find_all_by_pid(pid,:order=>'weight')  # coming from the database
   end
   
-  delegate :preferred_citation, :to => "descMetadata", :unique => true
-  delegate :related_citation, :to => "descMetadata"
-  delegate :person, :to => "descMetadata", :at => [:name, :namePart]
-  delegate :person_role, :to => "descMetadata", :at => [:name, :role, :roleTerm]
-
   has_metadata(
     :name => "roleMetadata",
     :type => Hydrus::RoleMetadataDS,
@@ -221,11 +224,6 @@ class Hydrus::Item < Hydrus::GenericObject
     :type => Hydrus::RightsMetadataDS,
     :label => 'Rights Metadata',
     :control_group => "M")
-
-  delegate(:item_depositor_id, :to => "roleMetadata",
-           :at => [:item_depositor, :person, :identifier], :unique => true)
-  delegate(:item_depositor_name, :to => "roleMetadata",
-           :at => [:item_depositor, :person, :name], :unique => true)
 
   def strip_whitespace
     strip_whitespace_from_fields [:preferred_citation,:title,:abstract,:contact]

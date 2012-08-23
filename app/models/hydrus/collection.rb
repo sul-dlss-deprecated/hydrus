@@ -60,10 +60,12 @@ class Hydrus::Collection < Hydrus::GenericObject
     if to_bool(value)
       apo.deposit_status = 'open'
       # At the moment of publication, we refresh various titles.
-      apo.identityMetadata.objectLabel = "APO for #{title}"
-      apo.descMetadata.title           = "APO for #{title}"
+      apo_title = "APO for #{title}"
+      apo.identityMetadata.objectLabel = apo_title
+      apo.descMetadata.title           = apo_title
       identityMetadata.objectLabel     = title
-      self.label                       = title # The label in Fedora's foxml:objectProperties.
+      self.label                       = title     # The label in Fedora's foxml:objectProperties.
+      apo.label                        = apo_title # Ditto.
       # Advance the workflow to record that the object has been published.
       s = 'submit'
       events.add_event('hydrus', @current_user, 'Collection opened')
@@ -94,13 +96,6 @@ class Hydrus::Collection < Hydrus::GenericObject
     self.license = nil if self.license_option == "none"
   end
 
-  # def hydrus_items
-  #   query = %Q(is_member_of_collection_s:"info:fedora/#{pid}")
-  #   resp  = Blacklight.solr.find('q'.to_sym => query)
-  #   items = resp.docs.map { |d| Hydrus::Item.find(d.id) }
-  #   return items
-  # end
-
   # These getters and setters are needed because the ActiveFedora delegate()
   # does not work when we need to delegate through to the APO.
 
@@ -110,8 +105,10 @@ class Hydrus::Collection < Hydrus::GenericObject
 
   # for APO administrativeMetadata
 
-  # These getter and setter methods allow us to set a single value for the embargo
-  #  period and license from two separate HTML select controls, based on the value of a radio button
+  # These getter and setter methods allow us to set a single value for the
+  # embargo period and license from two separate HTML select controls, based on
+  # the value of a radio button.
+
   def embargo_varies
     embargo_option == "varies" ? embargo : ""
   end
@@ -121,11 +118,15 @@ class Hydrus::Collection < Hydrus::GenericObject
   end
 
   def embargo_varies= *args
-    apo.embargo= *args if embargo_option == "varies" # only set the embargo period for this setter if the corresponding radio button is selected
+    # only set the embargo period for this setter if the corresponding radio
+    # button is selected
+    apo.embargo= *args if embargo_option == "varies" 
   end
 
   def embargo_fixed= *args
-    apo.embargo= *args if embargo_option == "fixed"  # only set the embargo period for this setter if the corresponding radio button is selected
+    # only set the embargo period for this setter if the corresponding radio
+    # button is selected
+    apo.embargo= *args if embargo_option == "fixed"  
   end
 
   def license_varies
@@ -143,6 +144,7 @@ class Hydrus::Collection < Hydrus::GenericObject
   def license_fixed= *args
     apo.license= *args if license_option == "fixed"  # only set the license for this setter if the corresponding radio button is selected
   end
+
   #############
 
   def embargo *args

@@ -15,10 +15,25 @@ value is lost).
 Submit relevant (or all) form data on addition of multi-valued fields (issues
 w/ non-linear indexed role MD)
 
-Implement editing events. Collection: modify description, visibility, license,
-release, roles. Item: modify description, files, license, release, roles; and
-upload/replace/delete a file.
+Implement editing events.
+               Coll   Item
+  title        x      x       # done
+  description  x      x       # done
+  license      x      x
+  release      x      x
+  roles        x      x
+  visibility   x
+  files               x
 
+  def editing_events
+  def current_user
+  def current_user=(val)
+  def log_editing_events
+  def title *args
+  def title= *args
+  def abstract *args
+  def abstract= *args
+  
 
 -------
 WAITING
