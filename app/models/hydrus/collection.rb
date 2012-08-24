@@ -118,15 +118,13 @@ class Hydrus::Collection < Hydrus::GenericObject
   end
 
   def embargo_varies= *args
-    # only set the embargo period for this setter if the corresponding radio
-    # button is selected
-    apo.embargo= *args if embargo_option == "varies" 
+    # only set the embargo period if the corresponding radio button is selected
+    apo.embargo= *args if embargo_option == "varies"
   end
 
   def embargo_fixed= *args
-    # only set the embargo period for this setter if the corresponding radio
-    # button is selected
-    apo.embargo= *args if embargo_option == "fixed"  
+    # only set the embargo period if the corresponding radio button is selected
+    apo.embargo= *args if embargo_option == "fixed"
   end
 
   def license_varies
@@ -138,11 +136,13 @@ class Hydrus::Collection < Hydrus::GenericObject
   end
 
   def license_varies= *args
-    apo.license= *args if license_option == "varies" # only set the license for this setter if the corresponding radio button is selected
+    # only set the license if the corresponding radio button is selected
+    apo.license= *args if license_option == "varies"
   end
 
   def license_fixed= *args
-    apo.license= *args if license_option == "fixed"  # only set the license for this setter if the corresponding radio button is selected
+    # only set the license if the corresponding radio button is selected
+    apo.license= *args if license_option == "fixed"
   end
 
   #############

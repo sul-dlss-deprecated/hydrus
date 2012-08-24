@@ -15,15 +15,24 @@ value is lost).
 Submit relevant (or all) form data on addition of multi-valued fields (issues
 w/ non-linear indexed role MD)
 
+Modify roles: change 'hydrus-item-reviewer' to 'hydrus-collection-reviewer';
+and change 'hydrus-item-viewer' to 'hydrus-viewer'.
+
 Implement editing events.
                Coll   Item
   title        x      x       # done
   description  x      x       # done
+
+  embargo      x      x
+  visibility   x      x
   license      x      x
-  release      x      x
+
   roles        x      x
-  visibility   x
   files               x
+
+  hydrus_collection   embargo_option           varies
+  hydrus_collection   visibility_option_value  varies
+  hydrus_collection   license_option           varies
 
   def editing_events
   def current_user
@@ -41,16 +50,6 @@ WAITING
 
 Deployment to hydrus-test.stanford.edu is a hassle. In particular, it's not easy
 to get the latest fixture/file content up-to-date.
-
-There is some mismatch between the current Hydrus app/UI and the roles defined
-in Consul. Currently, Hydrus understands 5 roles: hydrus-collection-depositor,
-hydrus-collection-manager, hydrus-item-reviewer, hydrus-item-depositor,
-hydrus-item-viewer (see the Collection Edit page for the UI to specify persons
-having the last 4 of those roles). Meanwhile, The Consul page
-(Repository+Roles+and+Permissions) mentions various other roles: hydrus-viewer,
-hydrus-collection-creator, hydrus-collection-reviewer,
-hydrus-collection-viewer, hydrus-item-depositor, hydrus-item-manager. [Need a
-short discussion/meeting to nail down our plan.]
 
 Create new Collection/Item: create rightsMetadata. The rightsMetadata will
 contain the Item-level license and visibility info. [Need more info: I assume

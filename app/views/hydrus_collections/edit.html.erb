@@ -36,7 +36,7 @@
       <%= f.text_field :contact, :value => (@document_fedora.contact || ""),:required => true%>
     <%- end -%>
   </div>
-  
+
   <%= hydrus_form_header {"Links to related information"} %>
   <div id="related-items" class="destroy-group">
     <%= render "related_items" %>
@@ -45,7 +45,7 @@
     <div class="span8 offset1">
       <%= button_tag("Add another link", :name=>"add_link", :"data-attribute" => "add_link", :id=>"add_link", :class=>"btn", :value=>@document_fedora.related_items.length) %>
     </div>
-  </div>  
+  </div>
 
   <%= hydrus_form_header {"Release and visibility of content"} %>
   <div id="content-visibility">
@@ -88,7 +88,7 @@
       <% end %>
     </div>
 
-    <p class="form-section-para">Before being released, content in this collection must be 
+    <p class="form-section-para">Before being released, content in this collection must be
                                  approved by the collection manager or a reviewer:</p>
     <div class="row">
       <%= hydrus_form_value do %>
@@ -118,10 +118,19 @@
               <%= f.radio_button 'license_option', lic_opt %>
             </div>
             <div class="span7 radio-label">
-              <%= f.label        'license_option', lic_text, :value => lic_opt %>
+              <%= f.label('license_option', lic_text, :value => lic_opt) %>
               <%# Don't include license select dropdown if license type is 'no license' %>
               <% unless lic_opt == 'none' %>
-                <%= f.select "license_#{lic_opt}".to_sym, grouped_options_for_select(Hydrus::Collection.licenses, @document_fedora.send("license_#{lic_opt}")), {:prompt => 'Select license'}, {:class => 'inline-select right', :id => "license_option_#{lic_opt}" } %>
+                <%= f.select(
+                      "license_#{lic_opt}".to_sym,
+                      grouped_options_for_select(
+                        Hydrus::Collection.licenses,
+                        @document_fedora.send("license_#{lic_opt}")
+                      ),
+                      {:prompt => 'Select license'},
+                      {:class => 'inline-select right', :id => "license_option_#{lic_opt}" }
+                    )
+                %>
               <% end %>
             </div>
           </div>
@@ -156,7 +165,7 @@
   </noscript>
 
   <% render(
-       :partial => "hydra/permissions/index", 
+       :partial => "hydra/permissions/index",
        :locals  => { :document => @document_fedora, :asset_id => params[:id] }
      )
   %>

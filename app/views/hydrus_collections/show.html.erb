@@ -43,7 +43,7 @@
               :class => 'edit toggle') %></p>
 				<%= form_for(@document_fedora, :method => 'PUT', :html => {:class => "step", :novalidate=>""}) do |f| -%>
 					<% if @document_fedora.is_open %>
-            <p> 
+            <p>
               <button type="submit" class="btn btn-small save-edits"
                       name="hydrus_collection[publish]" value="false"
                       id="hydrus_collection_publish">Close Collection</button>
@@ -53,14 +53,14 @@
 					<% else %>
 							<p>To open the collection, you must fix the following:
 								<%
-								errors = []  
+								errors = []
 					      @document_fedora.errors.messages.each do |field, error|
 					        errors << "<li class='errors'>#{field.to_s.humanize.capitalize} #{error.join}</li>"
 					      end
 								%>
 								<%="<ul>#{errors.join}</ul>".html_safe%>
 						  </p>
-					<% 
+					<%
 					end
 				end %>
 
@@ -103,7 +103,7 @@
 		<% unless hydrus_is_empty?(@document_fedora.related_items) %>
 	    <%- @document_fedora.related_items.each_with_index do |related_item, index| -%>
 	      <dt class="<%= 'hidden-label' if index > 0 %>">Related links</dt>
-	      <dd>&raquo; <%= related_item.url.blank? ? hydrus_object_setting_value(related_item.url) : link_to(related_item.title, related_item.url) %></dd>  
+	      <dd>&raquo; <%= related_item.url.blank? ? hydrus_object_setting_value(related_item.url) : link_to(related_item.title, related_item.url) %></dd>
 	    <%- end -%>
 		<% end %>
 
