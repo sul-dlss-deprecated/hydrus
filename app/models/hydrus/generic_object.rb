@@ -7,6 +7,8 @@ class Hydrus::GenericObject < Dor::Item
   validates :title, :abstract, :contact, :not_empty => true, :if => :should_validate
   validates :pid, :is_druid => true
 
+  delegate :title,    :to => "descMetadata", :unique => true
+  delegate :abstract, :to => "descMetadata", :unique => true
   delegate :related_item_title, :to => "descMetadata", :at => [:relatedItem, :titleInfo, :title]
   delegate :related_item_url, :to => "descMetadata", :at => [:relatedItem, :location, :url]
   delegate :contact, :to => "descMetadata", :unique => true
@@ -18,19 +20,15 @@ class Hydrus::GenericObject < Dor::Item
   # are not saved to Fedora. Possible bug in ActiveFedora (could not confirm
   # this in an Rspec test in ActiveFedora). Maybe we're doing something wrong
   # in Hydrus?
-  def save
-    log_editing_events()
-    super
+  def save(log_edits = true)
+    log_editing_events() if log_edits
+    super()
   end
 
-  # Some lazy initializers for instance variables.
+  # Lazy initializers for instance variables.
   # We cannot set these value within a constructor, because
   # some Items and Collections are obtained in ways that won't call
   # our constructor code -- for example, Hydrus::Item.find().
-  def editing_events
-    return (@editing_events ||= [])
-  end
-
   def current_user
     return (@current_user ||= '')
   end
@@ -38,41 +36,6 @@ class Hydrus::GenericObject < Dor::Item
   def current_user=(val)
     @current_user = val
   end
-
-
-  def log_editing_events
-    return unless editing_events.length > 0
-    es  = @editing_events.map { |e| e.to_s }.join(', ')
-    msg = "#{hydrus_class_to_s()} modified: #{es}"
-    events.add_event('hydrus', @current_user, msg)
-    @editing_events = []
-  end
-
-  def title *args
-    return descMetadata.title(*args).first
-  end
-
-  def title= *args
-    o = title()
-    n = args.first.strip
-    return if o == n
-    n = nil if n == ''
-    descMetadata.title = n
-    editing_events.push(:title)
-  end
-
-  def abstract *args
-    return descMetadata.abstract(*args).first
-  end
-
-  def abstract= *args
-    o = abstract()
-    n = args.first.strip
-    return if o == n
-    descMetadata.abstract = n
-    editing_events.push(:abstract)
-  end
-
 
   has_metadata(
     :name => "descMetadata",
@@ -306,6 +269,30 @@ class Hydrus::GenericObject < Dor::Item
       es.push(Hydrus::Event.new(who, whe, msg))
     end
     return es
+  end
+
+  def log_editing_events
+    cfs = changed_fields()
+    return if cfs.length == 0
+    events.add_event('hydrus', @current_user, editing_event_message(cfs))
+  end
+
+  def changed_fields
+    old = old_object()
+    cfs = []
+    tracked_fields.each do |k,fs|
+      cfs.push(k) unless fs.all? { |f| old.send(f) == self.send(f) }
+    end
+    return cfs
+  end
+
+  def old_object
+    return self.class.find(pid)
+  end
+
+  def editing_event_message(fields)
+    fs = fields.map { |e| e.to_s }.join(', ')
+    return "#{hydrus_class_to_s()} modified: #{fs}"
   end
 
 end

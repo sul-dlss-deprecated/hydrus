@@ -39,7 +39,7 @@ class Hydrus::Item < Hydrus::GenericObject
     # Add event.
     item.events.add_event('hydrus', user, 'Item created')
     # Save and return.
-    item.save
+    item.save(false)
     return item
   end
 
@@ -155,7 +155,8 @@ class Hydrus::Item < Hydrus::GenericObject
       if embargoMetadata.release_access_node.at_xpath('//access[@type="read"]/machine/world')
         groups << "world"
       else
-        groups << embargoMetadata.release_access_node.at_xpath('//access[@type="read"]/machine/group').text
+        node = embargoMetadata.release_access_node.at_xpath('//access[@type="read"]/machine/group')
+        groups << node.text if node
       end
     else
       (rightsMetadata.read_access.machine.group).collect{|g| groups << g}
@@ -275,18 +276,32 @@ class Hydrus::Item < Hydrus::GenericObject
   end
   
   def self.roles
-    [ "Author",
+    return [
+      "Author",
       "Creator",
       "Collector",
       "Contributing Author",
       "Distributor",
       "Principal Investigator",
       "Publisher",
-      "Sponsor" ]
+      "Sponsor",
+    ]
   end
   
   def self.discovery_roles
-    {"everyone" => "world", "Stanford only" => "stanford"}
+    { "everyone" => "world", "Stanford only" => "stanford" }
+  end
+
+  def tracked_fields
+    return {
+      :title      => [:title],
+      :abstract   => [:abstract],
+      :files      => [:files],        # Not working.
+      :embargo    => [:embargo_date],
+      :visibility => [:visibility],
+      :license    => [:license],
+    }
+
   end
 
 end

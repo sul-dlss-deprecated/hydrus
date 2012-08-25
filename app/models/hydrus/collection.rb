@@ -29,7 +29,7 @@ class Hydrus::Collection < Hydrus::GenericObject
     coll.requires_human_approval = 'no'
     coll.license_option          = 'none'
     # Save and return.
-    coll.save
+    coll.save(false)
     return coll
   end
 
@@ -240,6 +240,17 @@ class Hydrus::Collection < Hydrus::GenericObject
 
   def apo_persons_with_role(role)
     return apo.persons_with_role(role)
+  end
+
+  def tracked_fields
+    return {
+      :title       => [:title],
+      :description => [:abstract],
+      :embargo     => [:embargo_option, :embargo],
+      :visibility  => [:visibility_option, :visibility],
+      :license     => [:license_option, :license],
+      :roles       => [:apo_person_roles],
+    }
   end
 
 end

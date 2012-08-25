@@ -1,3 +1,6 @@
+Item edit. You can't add a description to an uploaded file when you first
+upload it.  You have to click Save and go back into editing mode.
+
 Item view page. The "Test Version" image in the top left corner interferes with
 the user's ability to click the Collection hyperlink when the Collection has a
 short title.
@@ -19,9 +22,14 @@ Modify roles: change 'hydrus-item-reviewer' to 'hydrus-collection-reviewer';
 and change 'hydrus-item-viewer' to 'hydrus-viewer'.
 
 Implement editing events.
+  * Not working for Item.files. Perhaps they are saved too early?
+  * old_object raises exception on a unit test. Handle failed find()?
+  * Coll/Item create: integration tests: expected events are no longer complete
+  * tests
+
                Coll   Item
-  title        x      x       # done
-  description  x      x       # done
+  title        x      x
+  description  x      x
 
   embargo      x      x
   visibility   x      x
@@ -30,19 +38,17 @@ Implement editing events.
   roles        x      x
   files               x
 
-  hydrus_collection   embargo_option           varies
-  hydrus_collection   visibility_option_value  varies
-  hydrus_collection   license_option           varies
+  current_user
+  current_user=(val)
+  log_editing_events
+  changed_fields
+  old_object
+  editing_event_message
+  tracked_fields
+  save(false)
 
-  def editing_events
-  def current_user
-  def current_user=(val)
-  def log_editing_events
-  def title *args
-  def title= *args
-  def abstract *args
-  def abstract= *args
-  
+rightsMD: (a) tests; (b) refactor to take advantage of OM and generic_ds.rb.
+
 
 -------
 WAITING
