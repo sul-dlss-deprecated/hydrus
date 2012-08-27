@@ -4,6 +4,8 @@ class Hydrus::GenericObject < Dor::Item
   include Hydrus::Publishable
   include ActiveModel::Validations
 
+  attr_accessor :files_were_changed
+
   validates :title, :abstract, :contact, :not_empty => true, :if => :should_validate
   validates :pid, :is_druid => true
 
@@ -16,7 +18,7 @@ class Hydrus::GenericObject < Dor::Item
 
   # We override save() so we can control whether editing events are logged.
   def save(opts = {})
-    log_editing_events() if opts[:log_editing_events]
+    log_editing_events() unless opts[:no_edit_logging]
     super()
   end
 

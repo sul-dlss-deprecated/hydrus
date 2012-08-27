@@ -10,11 +10,11 @@ class HydrusItemsController < ApplicationController
   before_filter :setup_attributes, :except => :new
   before_filter :check_for_collection, :only => :new
   before_filter :redirect_if_not_correct_object_type, :only => [:edit,:show,:update]
-  
+
   def index
     flash[:warning]="You need to log in."
     redirect_to new_user_session_path
-  end  
+  end
 
   def setup_attributes
     @document_fedora = Hydrus::Item.find(params[:id])
@@ -26,7 +26,7 @@ class HydrusItemsController < ApplicationController
 
   def edit
   end
-  
+
   def new
     item = Hydrus::Item.create(params[:collection], current_user)
     item.current_user = current_user
@@ -45,19 +45,25 @@ class HydrusItemsController < ApplicationController
         new_file.file = file
         new_file.save
         notice << "'#{file.original_filename}' uploaded."
+        @document_fedora.files_were_changed = true
       end
     end
-    
+
     # The file labels.
     if params.has_key?("file_label")
       params["file_label"].each do |id,label|
         file = Hydrus::ObjectFile.find(id)
-        file.label = label
-        file.save
+        unless file.label == label
+          file.label = label
+          file.save
+          @document_fedora.files_were_changed = true
+        end
       end
     end
-    
+
     @document_fedora.update_attributes(params["hydrus_item"]) if params.has_key?("hydrus_item")
+    @document_fedora.files_were_changed = nil  # Prevents two editing events.
+
     if params.has_key?(:add_person)
       @document_fedora.descMetadata.insert_person
     elsif params.has_key?(:add_link)
@@ -65,20 +71,21 @@ class HydrusItemsController < ApplicationController
     elsif params.has_key?(:add_related_citation)
       @document_fedora.descMetadata.insert_related_citation
     end
-#    logger.debug("attributes submitted: #{params['hydrus_item'].inspect}")
-    
+
+    # logger.debug("attributes submitted: #{params['hydrus_item'].inspect}")
+
     unless @document_fedora.save
-      errors = []  
+      errors = []
       @document_fedora.errors.messages.each do |field, error|
         errors << "#{field.to_s.humanize.capitalize} #{error.join(', ')}"
       end
       flash[:error] = errors.join("<br/>").html_safe
       render :edit and return
-    end  
+    end
 
     notice << "Your changes have been saved."
     flash[:notice] = notice.join("<br/>").html_safe unless notice.blank?
-    
+
     respond_to do |want|
       want.html {
         if params.has_key?(:add_person) or params.has_key?(:add_link) or params.has_key?(:add_related_citation)
@@ -108,12 +115,12 @@ class HydrusItemsController < ApplicationController
     @document_fedora.save
     respond_to do |want|
       want.html {redirect_to :back}
-      want.js 
+      want.js
     end
   end
 
   protected
-  
+
   def check_for_collection
     unless params.has_key?(:collection)
       flash[:error] = "You cannot create an item without specifying a collection."

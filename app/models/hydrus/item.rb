@@ -39,7 +39,7 @@ class Hydrus::Item < Hydrus::GenericObject
     # Add event.
     item.events.add_event('hydrus', user, 'Item created')
     # Save and return.
-    coll.save(:log_editing_events => false)
+    item.save(:no_edit_logging => true)
     return item
   end
 
@@ -295,7 +295,7 @@ class Hydrus::Item < Hydrus::GenericObject
     return {
       :title      => [:title],
       :abstract   => [:abstract],
-      :files      => [:files],        # Not working.
+      :files      => [:files_were_changed],
       :embargo    => [:embargo_date],
       :visibility => [:visibility],
       :license    => [:license],
@@ -304,3 +304,7 @@ class Hydrus::Item < Hydrus::GenericObject
   end
 
 end
+
+class Hydrus::ItemWithoutCollectionError < StandardError
+end
+
