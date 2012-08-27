@@ -39,7 +39,7 @@ class Hydrus::Item < Hydrus::GenericObject
     # Add event.
     item.events.add_event('hydrus', user, 'Item created')
     # Save and return.
-    item.save(false)
+    coll.save(:log_editing_events => false)
     return item
   end
 

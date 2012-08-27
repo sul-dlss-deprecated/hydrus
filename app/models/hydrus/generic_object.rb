@@ -14,14 +14,9 @@ class Hydrus::GenericObject < Dor::Item
   delegate :contact, :to => "descMetadata", :unique => true
   delegate :disapproval_reason, :to => "hydrusProperties", :unique => true
 
-  # TODO: We would like to do this:
-  #   before_save :log_editing_events
-  # However, when you modify an object within a before_save call, the changes
-  # are not saved to Fedora. Possible bug in ActiveFedora (could not confirm
-  # this in an Rspec test in ActiveFedora). Maybe we're doing something wrong
-  # in Hydrus?
-  def save(log_edits = true)
-    log_editing_events() if log_edits
+  # We override save() so we can control whether editing events are logged.
+  def save(opts = {})
+    log_editing_events() if opts[:log_editing_events]
     super()
   end
 

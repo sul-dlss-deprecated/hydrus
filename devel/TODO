@@ -32,7 +32,7 @@ Implement editing events.
   old_object
   editing_event_message
   tracked_fields
-  save(false)
+  save(opts = {})
   equal_when_stripped?(v1, v2)
 
 rightsMD: (a) tests; (b) refactor to take advantage of OM and generic_ds.rb.

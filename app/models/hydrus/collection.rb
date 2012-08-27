@@ -29,7 +29,7 @@ class Hydrus::Collection < Hydrus::GenericObject
     coll.requires_human_approval = 'no'
     coll.license_option          = 'none'
     # Save and return.
-    coll.save(false)
+    coll.save(:log_editing_events => false)
     return coll
   end
 
