@@ -281,7 +281,8 @@ class Hydrus::GenericObject < Dor::Item
     old = old_object()
     cfs = []
     tracked_fields.each do |k,fs|
-      cfs.push(k) unless fs.all? { |f| old.send(f) == self.send(f) }
+      next if fs.all? { |f| equal_when_stripped? old.send(f), self.send(f) }
+      cfs.push(k)
     end
     return cfs
   end

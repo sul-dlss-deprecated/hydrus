@@ -23,6 +23,15 @@ module Hydrus
       return cds.split(/[,;\n\r]/).each { |s| s.strip! }.select { |s| s.length > 0 }
     end
 
+    # Takes two values.
+    # Returns true if they are equal, ignoring leading and trailing whitespace
+    # for values that respond to strip().
+    def equal_when_stripped?(v1, v2)
+      v1 = v1.strip if v1.respond_to?(:strip)
+      v2 = v2.strip if v2.respond_to?(:strip)
+      return v1 == v2
+    end
+
   end
 
 end

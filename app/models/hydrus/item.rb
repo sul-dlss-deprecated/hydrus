@@ -2,11 +2,11 @@ class Hydrus::Item < Hydrus::GenericObject
 
   include Hydrus::EmbargoMetadataDsExtension
   include Hydrus::Responsible
-  
+
   after_validation :strip_whitespace
-      
+
   attr_accessor :embargo
-  
+
   validate :collection_is_open, :on => :create
   validates :actors, :at_least_one=>true, :if => :should_validate
   validates :files, :at_least_one=>true, :if => :should_validate
@@ -56,7 +56,7 @@ class Hydrus::Item < Hydrus::GenericObject
       approve() unless requires_human_approval
     end
   end
-  
+
   # Returns true if the Item's Collection requires items to be
   # reviewed/approved before ultimate release.
   def requires_human_approval
@@ -91,15 +91,14 @@ class Hydrus::Item < Hydrus::GenericObject
     end
   
     self.datastreams['contentMetadata'].content=xml  # replace datastream
-    self.save
-    
+    # self.save
   end
-  
+
   def create_content_metadata
     objects=self.files.collect{|file| Assembly::ObjectFile.new(file.current_path,:label=>file.label)}
     objects.empty? ? '' : Assembly::ContentMetadata.create_content_metadata(:druid=>pid,:objects=>objects,:style=>Hydrus::Application.config.cm_style,:file_attributes=>Hydrus::Application.config.cm_file_attributes,:include_root_xml=>false)  
   end
-  
+
   # Returns true only if the Item is unpublished.
   def is_destroyable
     return not(is_published)
@@ -119,7 +118,7 @@ class Hydrus::Item < Hydrus::GenericObject
       errors.add(:terms_of_deposit, "must be accepted")
     end
   end
-  
+
   def license *args
     unless (rightsMetadata.use.machine *args).first.blank?
       (rightsMetadata.use.machine *args).first
@@ -128,11 +127,11 @@ class Hydrus::Item < Hydrus::GenericObject
       collection.license
     end
   end
-  
+
   def license= *args
     rightsMetadata.remove_nodes(:use)
     Hydrus::Collection.licenses.each do |type,licenses|
-      licenses.each do |license| 
+      licenses.each do |license|
         if license.last == args.first
           # I would like to do this type_attribute part better.
           # Maybe infer the insert method and call send on rightsMetadata.
@@ -148,7 +147,7 @@ class Hydrus::Item < Hydrus::GenericObject
       end
     end
   end
-  
+
   def visibility *args
     groups = []
     if embargo_date
@@ -160,11 +159,11 @@ class Hydrus::Item < Hydrus::GenericObject
       end
     else
       (rightsMetadata.read_access.machine.group).collect{|g| groups << g}
-      (rightsMetadata.read_access.machine.world).collect{|g| groups << "world" if g.blank?}      
+      (rightsMetadata.read_access.machine.world).collect{|g| groups << "world" if g.blank?}
     end
     groups
   end
-  
+
   def visibility= *args
     embargoMetadata.release_access_node = Nokogiri::XML(generic_release_access_xml) unless embargoMetadata.ng_xml.at_xpath("//access")
     if embargo == "immediate"
@@ -177,23 +176,23 @@ class Hydrus::Item < Hydrus::GenericObject
       rightsMetadata.remove_all_group_read_nodes
       update_access_blocks(embargoMetadata, args.first)
       embargoMetadata.release_date = Date.strptime(embargo_date, "%m/%d/%Y")
-    end    
+    end
   end
-    
+
   def embargo_date *args
     date = (rightsMetadata.read_access.machine.embargo_release_date *args).first
     Date.parse(date).strftime("%m/%d/%Y") unless date.blank?
   end
-  
+
   def embargo_date= *args
     date = args.first.blank? ? "" : Date.strptime(args.first, "%m/%d/%Y").to_s
     (rightsMetadata.read_access.machine.embargo_release_date= date) unless date.blank?
   end
-    
+
   def beginning_of_embargo_range
     submit_time ? Date.parse(submit_time).strftime("%m/%d/%Y") : Date.today.strftime("%m/%d/%Y")
   end
-  
+
   def end_of_embargo_range
     length = collection.apo.embargo
     number = length.split(" ").first.to_i
@@ -202,24 +201,24 @@ class Hydrus::Item < Hydrus::GenericObject
     # This works because rails extends Fixnum to respond to things like #months, #years etc.
     (Date.strptime(beginning_of_embargo_range, "%m/%d/%Y") + number.send(increment)).strftime("%m/%d/%Y")
   end
-  
+
   def embargo_date_is_correct_format
     # TODO: This isn't really working when a bad date is entered. This doesn't end up erroring out and it errors up in embargo_date instead
     if ((Date.strptime(embargo_date, "%m/%d/%Y") rescue ArgumentError) == ArgumentError)
       errors.add(:embargo_date, 'must be a valid date')
     end
   end
-  
+
   def files
     Hydrus::ObjectFile.find_all_by_pid(pid,:order=>'weight')  # coming from the database
   end
-  
+
   has_metadata(
     :name => "roleMetadata",
     :type => Hydrus::RoleMetadataDS,
     :label => 'Role Metadata',
     :control_group => 'M')
-  
+
   has_metadata(
     :name => "rightsMetadata",
     :type => Hydrus::RightsMetadataDS,
@@ -229,9 +228,9 @@ class Hydrus::Item < Hydrus::GenericObject
   def strip_whitespace
     strip_whitespace_from_fields [:preferred_citation,:title,:abstract,:contact]
   end
-  
+
   def actors
-    @actors ||= descMetadata.find_by_terms(:name).collect do |actor_node| 
+    @actors ||= descMetadata.find_by_terms(:name).collect do |actor_node|
       name_node=actor_node.at_css('namePart')
       role_node=actor_node.at_css('role roleTerm')
       name = (name_node.respond_to?(:content) and !name_node.content.blank?)     ? name_node.content : ''
@@ -239,7 +238,7 @@ class Hydrus::Item < Hydrus::GenericObject
       Hydrus::Actor.new(:name=>name,:role=>role)
     end
   end
-    
+
   def add_to_collection(pid)
     uri = "info:fedora/#{pid}"
     add_relationship_by_name('set', uri)
@@ -265,7 +264,7 @@ class Hydrus::Item < Hydrus::GenericObject
     descMetadata.remove_nodes(:subject)
     kws.each { |kw| descMetadata.insert_topic(kw)  }
   end
-  
+
   def update_access_blocks(ds,group)
     if group == "world"
       ds.send(:make_world_readable)
@@ -274,7 +273,7 @@ class Hydrus::Item < Hydrus::GenericObject
       ds.send(:add_read_group, group)
     end
   end
-  
+
   def self.roles
     return [
       "Author",
@@ -287,7 +286,7 @@ class Hydrus::Item < Hydrus::GenericObject
       "Sponsor",
     ]
   end
-  
+
   def self.discovery_roles
     { "everyone" => "world", "Stanford only" => "stanford" }
   end

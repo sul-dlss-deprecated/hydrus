@@ -23,20 +23,7 @@ and change 'hydrus-item-viewer' to 'hydrus-viewer'.
 
 Implement editing events.
   * Not working for Item.files. Perhaps they are saved too early?
-  * old_object raises exception on a unit test. Handle failed find()?
-  * Coll/Item create: integration tests: expected events are no longer complete
   * tests
-
-               Coll   Item
-  title        x      x
-  description  x      x
-
-  embargo      x      x
-  visibility   x      x
-  license      x      x
-
-  roles        x      x
-  files               x
 
   current_user
   current_user=(val)
@@ -46,6 +33,7 @@ Implement editing events.
   editing_event_message
   tracked_fields
   save(false)
+  equal_when_stripped?(v1, v2)
 
 rightsMD: (a) tests; (b) refactor to take advantage of OM and generic_ds.rb.
 
