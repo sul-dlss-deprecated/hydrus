@@ -27,6 +27,8 @@ and change 'hydrus-item-viewer' to 'hydrus-viewer'.
 
 rightsMD: (a) tests; (b) refactor to take advantage of OM and generic_ds.rb.
 
+Merge, rebase, etc.
+
 Implement editing events:
   write tests
     current_user
@@ -38,9 +40,6 @@ Implement editing events:
     tracked_fields
     save(opts = {})
     equal_when_stripped?(v1, v2)
-
-Collection controller: currently they are saving objects twice. Mimic the
-refactor that was done in the Item controller.
 
 
 -------
