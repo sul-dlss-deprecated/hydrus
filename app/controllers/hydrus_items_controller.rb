@@ -65,18 +65,11 @@ class HydrusItemsController < ApplicationController
     end
 
     ####
-    # Save the object and keep track of its success/failure.
+    # Update attributes without saving.
     ####
 
-    save_ok = true
     if params.has_key?("hydrus_item")
-      save_ok = save_ok && @document_fedora.update_attributes(params["hydrus_item"])
-      # Unset @files_were_changed to prevent repeated editing events for :files.
-      # That can occur when the object is saved twice, which occurs when:
-      #   (a) Javascript is disabled
-      #   (b) User edts some fields -- hence update_attributes() ran above.
-      #   (b) User asks to add another multi-valued field -- hence save() runs below.
-      @document_fedora.files_were_changed = nil
+      @document_fedora.attributes = params["hydrus_item"]
     end
 
     ####
@@ -90,7 +83,6 @@ class HydrusItemsController < ApplicationController
     )
 
     if has_mvf
-      # Add the new field.
       if params.has_key?(:add_person)
         @document_fedora.descMetadata.insert_person
       elsif params.has_key?(:add_link)
@@ -98,21 +90,19 @@ class HydrusItemsController < ApplicationController
       elsif params.has_key?(:add_related_citation)
         @document_fedora.descMetadata.insert_related_citation
       end
-      # Save the object and update our success/failure indicator.
-      save_ok = save_ok && @document_fedora.save
     end
 
     ####
-    # Handle failure of update_attributes() or save().
+    # Try to save(), and handle failure.
     ####
 
-    unless save_ok
-      errors = []
-      @document_fedora.errors.messages.each do |field, error|
-        errors << "#{field.to_s.humanize.capitalize} #{error.join(', ')}"
-      end
+    unless @document_fedora.save
+      errors = @document_fedora.errors.messages.map { |field, error|
+        "#{field.to_s.humanize.capitalize} #{error.join(', ')}"
+      }
       flash[:error] = errors.join("<br/>").html_safe
-      render :edit and return
+      render :edit
+      return
     end
 
     ####
@@ -125,8 +115,6 @@ class HydrusItemsController < ApplicationController
     respond_to do |want|
       want.html {
         if has_mvf
-          # if we want to pass on parameters to edit screen we'll need to use the named route
-          # redirect_to edit_polymorphic_path(@document_fedora, :my_param=>"oh-hai-there")
           redirect_to [:edit, @document_fedora]
         else
           redirect_to @document_fedora
@@ -144,6 +132,7 @@ class HydrusItemsController < ApplicationController
         end
       }
     end
+
   end
 
   def destroy_value

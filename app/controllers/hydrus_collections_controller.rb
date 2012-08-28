@@ -32,34 +32,57 @@ class HydrusCollectionsController < ApplicationController
   end
 
   def update
-    notice = []
-    phc = params["hydrus_collection"]
 
-    @document_fedora.update_attributes(phc) if phc
-    if params.has_key?(:add_link)
-      @document_fedora.descMetadata.insert_related_item
-    elsif params.has_key?(:add_person)
-      @document_fedora.add_empty_person_to_role(Hydrus::AdminPolicyObject.default_role)
+    notice = []
+
+    ####
+    # Update attributes without saving.
+    ####
+
+    if params.has_key?("hydrus_collection")
+      @document_fedora.attributes = params["hydrus_collection"]
     end
 
-#    logger.debug("attributes submitted: #{params['hydrus_collection'].inspect}")
-    
+    ####
+    # Handle requests to add to multi-valued fields.
+    ####
+
+    has_mvf = (
+      params.has_key?(:add_link) or
+      params.has_key?(:add_person)
+    )
+
+    if has_mvf
+      if params.has_key?(:add_link)
+        @document_fedora.descMetadata.insert_related_item
+      elsif params.has_key?(:add_person)
+        @document_fedora.add_empty_person_to_role(Hydrus::AdminPolicyObject.default_role)
+      end
+    end
+
+    ####
+    # Try to save(), and handle failure.
+    ####
+
     unless @document_fedora.save
       errors = @document_fedora.errors.messages.map { |field, error|
         "#{field.to_s.humanize.capitalize} #{error.join(', ')}"
       }
       flash[:error] = errors.join("<br/>").html_safe
-      render :edit and return
-    end  
-    
+      render :edit
+      return
+    end
+
+    ####
+    # Otherwise, render the successful response.
+    ####
+
     notice << "Your changes have been saved."
     flash[:notice] = notice.join("<br/>").html_safe unless notice.blank?
-    
+
     respond_to do |want|
       want.html {
-        if params.has_key?(:add_link) or params.has_key?(:add_person)
-          # if we want to pass on parameters to edit screen we'll need to use the named route
-          #redirect_to edit_polymorphic_path(@document_fedora, :person_role=>"collection_viewer")
+        if has_mvf
           redirect_to [:edit, @document_fedora]
         else
           redirect_to @document_fedora
@@ -75,7 +98,8 @@ class HydrusCollectionsController < ApplicationController
         end
       }
     end
-  end # update
+
+  end
 
   def destroy_value
     @document_fedora.descMetadata.remove_node(params[:term], params[:term_index])
