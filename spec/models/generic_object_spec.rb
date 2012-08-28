@@ -395,7 +395,7 @@ describe Hydrus::GenericObject do
       e.when.day.should   == 15
       e.text.should == 'blah'
     end
-  
+
   end
 
   it "is_hydrus_item() should work as expected" do
@@ -425,6 +425,22 @@ describe Hydrus::GenericObject do
 
   it "can exercise should_start_common_assembly()" do
     @go.should_start_common_assembly.should == Dor::Config.hydrus.start_common_assembly
+  end
+
+  describe "current_user" do
+
+    it "@current_user should be initialized in a lazy fashion" do
+      @go.instance_variable_get('@current_user').should == nil
+      @go.current_user.should == ''
+      @go.instance_variable_get('@current_user').should == ''
+    end
+
+    it "can exercise current_user=()" do
+      @go.instance_variable_get('@current_user').should == nil
+      @go.current_user = 123
+      @go.instance_variable_get('@current_user').should == 123
+    end
+
   end
 
 end

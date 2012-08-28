@@ -27,12 +27,10 @@ and change 'hydrus-item-viewer' to 'hydrus-viewer'.
 
 rightsMD: (a) tests; (b) refactor to take advantage of OM and generic_ds.rb.
 
-Merge, rebase, etc.
+Merge, push, etc.
 
 Implement editing events:
   write tests
-    current_user
-    current_user=(val)
     log_editing_events
     changed_fields
     old_object
