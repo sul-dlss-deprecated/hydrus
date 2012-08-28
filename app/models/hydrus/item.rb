@@ -70,33 +70,40 @@ class Hydrus::Item < Hydrus::GenericObject
   end
 
   def base_file_directory
-    DruidTools::Druid.new(self.pid,File.join(Rails.root,"public",Hydrus::Application.config.file_upload_path)).path
+    f = File.join(Rails.root, "public", Hydrus::Application.config.file_upload_path)
+    DruidTools::Druid.new(pid, f).path
   end
-  
+
   def content_directory
-    File.join(base_file_directory,"content")
+    File.join(base_file_directory, "content")
   end
 
   def metadata_directory
-    File.join(base_file_directory,"metadata")
+    File.join(base_file_directory, "metadata")
   end
-  
+
   def update_content_metadata
-    xml=create_content_metadata #generate new content metadata
-    
+    xml = create_content_metadata
     if !xml.strip.blank? && DruidTools::Druid.valid?(self.pid)
       # write xml to a file
       Dir.mkdir(metadata_directory) unless File.directory? metadata_directory
-      File.open(File.join(metadata_directory, 'contentMetadata.xml'),'w') { |fh| fh.puts xml }
+      f = File.join(metadata_directory, 'contentMetadata.xml')
+      File.open(f, 'w') { |fh| fh.puts xml }
     end
-  
-    self.datastreams['contentMetadata'].content=xml  # replace datastream
-    # self.save
+    datastreams['contentMetadata'].content = xml
   end
 
   def create_content_metadata
-    objects=self.files.collect{|file| Assembly::ObjectFile.new(file.current_path,:label=>file.label)}
-    objects.empty? ? '' : Assembly::ContentMetadata.create_content_metadata(:druid=>pid,:objects=>objects,:style=>Hydrus::Application.config.cm_style,:file_attributes=>Hydrus::Application.config.cm_file_attributes,:include_root_xml=>false)  
+    objects = files.collect { |file|
+      Assembly::ObjectFile.new(file.current_path, :label=>file.label)
+    }
+    return '' if objects.empty?
+    return Assembly::ContentMetadata.create_content_metadata(
+      :druid            => pid,
+      :objects          => objects,
+      :style            => Hydrus::Application.config.cm_style,
+      :file_attributes  => Hydrus::Application.config.cm_file_attributes,
+      :include_root_xml => false)
   end
 
   # Returns true only if the Item is unpublished.
