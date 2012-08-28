@@ -1,6 +1,8 @@
 Item edit. You can't add a description to an uploaded file when you first
 upload it.  You have to click Save and go back into editing mode.
 
+Item edit. You can't add more people.
+
 Item view page. The "Test Version" image in the top left corner interferes with
 the user's ability to click the Collection hyperlink when the Collection has a
 short title.
@@ -18,8 +20,7 @@ value is lost).
 Submit relevant (or all) form data on addition of multi-valued fields (issues
 w/ non-linear indexed role MD)
 
-Collection/Item controllers: currently they are saving objects twice, once
-with update_attributes() and then again with save().
+Coll event when an Item is added to it?
 
 Modify roles: change 'hydrus-item-reviewer' to 'hydrus-collection-reviewer';
 and change 'hydrus-item-viewer' to 'hydrus-viewer'.
@@ -37,6 +38,9 @@ Implement editing events:
     tracked_fields
     save(opts = {})
     equal_when_stripped?(v1, v2)
+
+Collection controller: currently they are saving objects twice. Mimic the
+refactor that was done in the Item controller.
 
 
 -------

@@ -34,9 +34,13 @@ class HydrusItemsController < ApplicationController
   end
 
   def update
+
     notice = []
 
-    # Files from the file input.
+    ####
+    # Save uploaded files and their labels.
+    ####
+
     if params.has_key?("files")
       params["files"].each do |file|
         new_file = Hydrus::ObjectFile.new
@@ -45,36 +49,64 @@ class HydrusItemsController < ApplicationController
         new_file.file = file
         new_file.save
         notice << "'#{file.original_filename}' uploaded."
-        @document_fedora.files_were_changed = true
+        @document_fedora.files_were_changed = true  # To log an editing event.
       end
     end
 
-    # The file labels.
     if params.has_key?("file_label")
       params["file_label"].each do |id,label|
         file = Hydrus::ObjectFile.find(id)
         unless file.label == label
           file.label = label
           file.save
-          @document_fedora.files_were_changed = true
+          @document_fedora.files_were_changed = true  # To log an editing event.
         end
       end
     end
 
-    @document_fedora.update_attributes(params["hydrus_item"]) if params.has_key?("hydrus_item")
-    @document_fedora.files_were_changed = nil  # Prevents two editing events.
+    ####
+    # Save the object and keep track of its success/failure.
+    ####
 
-    if params.has_key?(:add_person)
-      @document_fedora.descMetadata.insert_person
-    elsif params.has_key?(:add_link)
-      @document_fedora.descMetadata.insert_related_item
-    elsif params.has_key?(:add_related_citation)
-      @document_fedora.descMetadata.insert_related_citation
+    save_ok = true
+    if params.has_key?("hydrus_item")
+      save_ok = save_ok && @document_fedora.update_attributes(params["hydrus_item"])
+      # Unset @files_were_changed to prevent repeated editing events for :files.
+      # That can occur when the object is saved twice, which occurs when:
+      #   (a) Javascript is disabled
+      #   (b) User edts some fields -- hence update_attributes() ran above.
+      #   (b) User asks to add another multi-valued field -- hence save() runs below.
+      @document_fedora.files_were_changed = nil
     end
 
-    # logger.debug("attributes submitted: #{params['hydrus_item'].inspect}")
+    ####
+    # Handle requests to add to multi-valued fields.
+    ####
 
-    unless @document_fedora.save
+    has_mvf = (
+      params.has_key?(:add_person) or
+      params.has_key?(:add_link) or
+      params.has_key?(:add_related_citation)
+    )
+
+    if has_mvf
+      # Add the new field.
+      if params.has_key?(:add_person)
+        @document_fedora.descMetadata.insert_person
+      elsif params.has_key?(:add_link)
+        @document_fedora.descMetadata.insert_related_item
+      elsif params.has_key?(:add_related_citation)
+        @document_fedora.descMetadata.insert_related_citation
+      end
+      # Save the object and update our success/failure indicator.
+      save_ok = save_ok && @document_fedora.save
+    end
+
+    ####
+    # Handle failure of update_attributes() or save().
+    ####
+
+    unless save_ok
       errors = []
       @document_fedora.errors.messages.each do |field, error|
         errors << "#{field.to_s.humanize.capitalize} #{error.join(', ')}"
@@ -83,14 +115,18 @@ class HydrusItemsController < ApplicationController
       render :edit and return
     end
 
+    ####
+    # Otherwise, render the successful response.
+    ####
+
     notice << "Your changes have been saved."
     flash[:notice] = notice.join("<br/>").html_safe unless notice.blank?
 
     respond_to do |want|
       want.html {
-        if params.has_key?(:add_person) or params.has_key?(:add_link) or params.has_key?(:add_related_citation)
+        if has_mvf
           # if we want to pass on parameters to edit screen we'll need to use the named route
-          #redirect_to edit_polymorphic_path(@document_fedora, :my_param=>"oh-hai-there")
+          # redirect_to edit_polymorphic_path(@document_fedora, :my_param=>"oh-hai-there")
           redirect_to [:edit, @document_fedora]
         else
           redirect_to @document_fedora
