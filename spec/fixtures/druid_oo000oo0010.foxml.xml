@@ -127,8 +127,9 @@
       <foxml:xmlContent>
         <events>
           <event type="hydrus" when="2012-08-15T10:12:31-07:00" who="skota">Collection created</event>
-          <event type="hydrus" when="2012-08-15T10:13:27-09:00" who="skota">Collection opened</event>
-          <event type="hydrus" when="2012-08-15T10:13:29-07:00" who="skota">Collection approved</event>
+          <event type="hydrus" when="2012-08-15T10:12:32-07:00" who="skota">Collection modified: title, description</event>
+          <event type="hydrus" when="2012-08-15T10:13:33-09:00" who="skota">Collection opened</event>
+          <event type="hydrus" when="2012-08-15T10:13:34-07:00" who="skota">Collection approved</event>
         </events>
       </foxml:xmlContent>
     </foxml:datastreamVersion>

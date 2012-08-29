@@ -207,7 +207,7 @@
       <foxml:xmlContent>
         <events>
           <event type="hydrus" when="2012-08-15T10:12:31-07:00" who="student3">Item created</event>
-          <event type="hydrus" when="2012-08-16T10:14:01-07:00" who="student3">Item submitted</event>
+          <event type="hydrus" when="2012-08-15T10:12:32-07:00" who="student3">Item modified: title, abstract, files</event>
         </events>
       </foxml:xmlContent>
     </foxml:datastreamVersion>
