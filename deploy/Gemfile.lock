@@ -21,7 +21,7 @@ GEM
     lyberteam-devel (0.8.0)
       lyberteam-capistrano-devel
       lyberteam-gems-devel
-    lyberteam-gems-devel (0.8.0)
+    lyberteam-gems-devel (0.8.1)
       rake (>= 0.8.7)
       rest-client
     mime-types (1.19)
@@ -47,5 +47,6 @@ DEPENDENCIES
   capistrano
   capistrano-ext
   lyberteam-devel (>= 0.7.0)
+  lyberteam-gems-devel (>= 0.8.1)
   net-ssh-kerberos
   rvm-capistrano

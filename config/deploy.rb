@@ -16,11 +16,25 @@ require 'capistrano/ext/multistage'
 after "deploy:assets:symlink", "rvm:trust_rvmrc"
 #after "deploy:restart", "dlss:log_release"
 
-set :shared_children, %w(log config/certs config/environments config/database.yml config/solr.yml config/fedora.yml config/suri.yml)
+set :shared_children, %w(
+  log 
+  config/certs
+  config/environments
+  config/database.yml
+  config/solr.yml
+  config/fedora.yml
+  config/suri.yml
+  config/ur_apo_druid.yml
+  config/workflow.yml
+  config/ssl_certs.yml
+)
 
 set :user, "lyberadmin" 
 set :runner, "lyberadmin"
-set :ssh_options, {:auth_methods => %w(gssapi-with-mic publickey hostbased), :forward_agent => true}
+set :ssh_options, {
+  :auth_methods  => %w(gssapi-with-mic publickey hostbased),
+  :forward_agent => true
+}
 
 set :destination, "/var/home/lyberadmin"
 set :application, "hydrus"
