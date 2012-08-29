@@ -27,8 +27,6 @@ rightsMD: (a) tests; (b) refactor to take advantage of OM and generic_ds.rb.
 Modify roles: change 'hydrus-item-reviewer' to 'hydrus-collection-reviewer';
 and change 'hydrus-item-viewer' to 'hydrus-viewer'.
 
-Coll event when an Item is added to it?
-
 
 -------
 WAITING

@@ -25,7 +25,7 @@ class MockResponsible
               <name>Black, Delores</name>
            </person>
         </role>
-        <role type="hydrus-item-reviewer">
+        <role type="hydrus-collection-reviewer">
            <person>
               <identifier type="sunetid">ggreen</identifier>
               <name>Green, Greg</name>
@@ -52,9 +52,9 @@ describe Hydrus::Responsible do
   before(:each) do
     @obj = MockResponsible.new
     @orig_roles = {
-      "hydrus-collection-manager" => ["brown", "dblack"],
-      "hydrus-item-reviewer"      => ["ggreen"],
-      "hydrus-item-depositor"     => ["bblue"],
+      "hydrus-collection-manager"  => ["brown", "dblack"],
+      "hydrus-collection-reviewer" => ["ggreen"],
+      "hydrus-item-depositor"      => ["bblue"],
     }
   end
 
@@ -77,7 +77,7 @@ describe Hydrus::Responsible do
             <name/>
           </person>
         </role>
-        <role type="hydrus-item-reviewer">
+        <role type="hydrus-collection-reviewer">
           <group>
             <identifier type="workgroup">pasig:2011attendees</identifier>
             <name>Conference attendees</name>
@@ -100,9 +100,9 @@ describe Hydrus::Responsible do
       </roleMetadata>
     EOF
     @obj.person_roles= {
-      "hydrus-collection-manager" => "archivist1", 
-      "hydrus-item-reviewer"      => "ggreen", 
-      "hydrus-item-depositor"     => "foo,bar",
+      "hydrus-collection-manager"  => "archivist1", 
+      "hydrus-collection-reviewer" => "ggreen", 
+      "hydrus-item-depositor"      => "foo,bar",
     }
     @obj.roleMetadata.ng_xml.should be_equivalent_to(exp)
   end

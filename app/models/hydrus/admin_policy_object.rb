@@ -97,10 +97,10 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
 
   def self.roles
      return {
-       'hydrus-collection-manager' => "Manage collection",
-       'hydrus-item-reviewer'      => "Review items",
-       'hydrus-item-depositor'     => "Deposit items",
-       'hydrus-item-viewer'        => "View items",
+       'hydrus-collection-manager'  => "Manage collection",
+       'hydrus-collection-reviewer' => "Review items",
+       'hydrus-item-depositor'      => "Deposit items",
+       'hydrus-viewer'              => "View items",
      }
   end
 
