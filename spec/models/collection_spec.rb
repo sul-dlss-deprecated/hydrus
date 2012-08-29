@@ -163,4 +163,8 @@ describe Hydrus::Collection do
 
   end
 
+  it "can exercise tracked_fields()" do
+    @hc.tracked_fields.should be_an_instance_of(Hash)
+  end
+
 end

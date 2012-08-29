@@ -268,14 +268,20 @@ class Hydrus::GenericObject < Dor::Item
     return es
   end
 
+  # If the current object differs from the object's old self in federa,
+  # editing events are logged.
   def log_editing_events
     cfs = changed_fields()
     return if cfs.length == 0
     events.add_event('hydrus', @current_user, editing_event_message(cfs))
   end
 
+  # Compares the current object to its old self in fedora.
+  # Returns the list of fields for which differences are found.
+  # The comparisons are driven by the hash-of-arrays returned by
+  # tracked_fields() from the Item or Collection class.
   def changed_fields
-    old = old_object()
+    old = old_self()
     cfs = []
     tracked_fields.each do |k,fs|
       next if fs.all? { |f| equal_when_stripped? old.send(f), self.send(f) }
@@ -284,10 +290,14 @@ class Hydrus::GenericObject < Dor::Item
     return cfs
   end
 
-  def old_object
+  # Returns the version of the object as it exists in fedora.
+  def old_self
     return self.class.find(pid)
   end
 
+  # Takes a list of fields that were changed by the user and
+  # returns a string used in event logging. For example:
+  #   "Item modified: title, abstract, license"
   def editing_event_message(fields)
     fs = fields.map { |e| e.to_s }.join(', ')
     return "#{hydrus_class_to_s()} modified: #{fs}"

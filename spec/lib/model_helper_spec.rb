@@ -32,4 +32,16 @@ describe Hydrus::AccessControlsEnforcement do
     tests.each { |inp, exp| parse_delimited(inp).should == exp }
   end
 
+  it "equal_when_stripped?" do
+    tests = [
+      [' hi ', 'hi', true],
+      [' hi ', 'HI', false],
+      [[1,2], [1,2], true],
+      [['hi'], ['hi '], false],
+    ]
+    tests.each do |v1, v2, exp|
+      equal_when_stripped?(v1, v2).should == exp
+    end
+  end
+
 end

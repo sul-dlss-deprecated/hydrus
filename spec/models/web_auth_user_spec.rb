@@ -18,9 +18,9 @@ describe WebAuthUser do
   
   describe "w/o enviornment variable set" do
     it "should raise an error" do
-      lambda{WebAuthUser.new("")}.should raise_error
-      lambda{WebAuthUser.new(nil)}.should raise_error
-      lambda{WebAuthUser.new}.should raise_error
+      expect{WebAuthUser.new("")}.to raise_error
+      expect{WebAuthUser.new(nil)}.to raise_error
+      expect{WebAuthUser.new}.to raise_error
     end
   end
 end

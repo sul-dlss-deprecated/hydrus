@@ -443,4 +443,66 @@ describe Hydrus::GenericObject do
 
   end
 
+  it "old_self() should call find() with the object's pid" do
+    pid = @go.pid
+    r = 'blah blah!!'
+    Hydrus::GenericObject.should_receive(:find).with(pid).and_return(r)
+    @go.old_self.should == r
+  end
+
+  it "editing_event_message() should return expected string" do
+    fs  = [:foo, :bar, :quux]
+    exp = "GenericObject modified: foo, bar, quux"
+    @go.editing_event_message(fs).should == exp
+  end
+
+  it "changed_fields() should return ..." do
+    tf = {
+      :a   => [:aa],
+      :bb  => [:ba, :bb],
+      :ccc => [:ca, :cb, :cc],
+      :ddd => [:da, :db],
+    }
+    @go.stub(:tracked_fields).and_return(tf)
+    old = double('old_self')
+    exp_diff = [:a, :ccc]
+    tf.each do |k,vs|
+      vs.each do |v|
+        old.stub(v).and_return(v.to_s)
+        @go.stub(v).and_return(exp_diff.include?(k) ? 'new_val' : v.to_s)
+      end
+    end
+    @go.stub(:old_self).and_return(old)
+    @go.changed_fields.should == exp_diff
+  end
+
+  it "GenericObject does not implement tracked_fields()" do
+    expect{ @go.tracked_fields }.to raise_error(NoMethodError)
+  end
+
+  describe "log_editing_events()" do
+
+    it "should do nothing if there are no changed fields" do
+      @go.stub(:changed_fields).and_return([])
+      @go.should_not_receive(:events)
+      @go.log_editing_events
+    end
+
+    it "should add an editing event if there are changed fields" do
+      @go.stub(:changed_fields).and_return([:aa, :bb])
+      @go.get_hydrus_events.size.should == 0
+      @go.log_editing_events
+      es = @go.get_hydrus_events
+      es.size.should == 1
+      es.first.text.should == 'GenericObject modified: aa, bb'
+    end
+
+  end
+
+  it "save() should not invoke log_editing_events() if no_edit_logging is true" do
+    @go.should_receive(:log_editing_events).once
+    @go.save
+    @go.save(:no_edit_logging => true)
+  end
+
 end
