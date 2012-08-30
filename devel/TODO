@@ -11,10 +11,13 @@ Applies to home page and Collection view page.
 
 UI redesign: side bar and tabs.
 
+Item.embargo datastream: create the DS, using default embargo info from APO.
+
 Deployment to hydrus-test.stanford.edu is a hassle. In particular, it's not easy
 to get the latest fixture/file content up-to-date.
 
-Item.embargo datastream: create the DS, using default embargo info from APO.
+Unit tests. We have some tests that are slow and should be converted to
+integration tests.
 
 descMD template. Don't start with an empty person. Related issues:
   - Item valiation. The :actors validation does not impose much of a test,
@@ -25,7 +28,7 @@ descMD template. Don't start with an empty person. Related issues:
 
 rightsMD: (a) tests; (b) refactor to take advantage of OM and generic_ds.rb.
 
-Check test coverage in models: admin_policy_object.rb, collection.rb.
+Unit tests: collection.rb.
 
 
 -------

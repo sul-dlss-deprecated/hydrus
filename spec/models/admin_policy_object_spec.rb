@@ -6,6 +6,30 @@ describe Hydrus::AdminPolicyObject do
     @apo = Hydrus::AdminPolicyObject.new
   end
 
+  it "can exercise a stubbed version of create()" do
+    # More substantive testing is done at integration level.
+    druid = 'druid:BLAH'
+    stubs = [
+      :remove_relationship,
+      :assert_content_model,
+      :save,
+    ]
+    stubs.each { |s| @apo.should_receive(s) }
+    @apo.stub(:pid).and_return(druid)
+    @apo.stub(:adapt_to).and_return(@apo)
+    Hydrus::GenericObject.stub(:register_dor_object).and_return(@apo)
+    @apo.administrativeMetadata.find_by_xpath('//workflow').size.should == 0
+    @apo.title.should == ''
+    @apo.roleMetadata.find_by_xpath('//role').size.should == 0
+    Hydrus::AdminPolicyObject.create('USERFOO').pid.should == druid
+    exp_size = Dor::Config.hydrus.workflow_steps.keys.size
+    @apo.administrativeMetadata.find_by_xpath('//workflow').size.should == exp_size
+    @apo.title.should == Dor::Config.hydrus.initial_apo_title
+    role_nodes = @apo.roleMetadata.find_by_xpath('//role')
+    role_nodes.size.should == 1
+    role_nodes.first['type'].should == 'hydrus-collection-manager'
+  end
+
   describe "class methods" do
 
     describe "roles" do
