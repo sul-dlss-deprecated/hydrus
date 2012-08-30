@@ -1,6 +1,3 @@
-Item edit. You can't add a description to an uploaded file when you first
-upload it.  You have to click Save and go back into editing mode.
-
 Item edit. You can't add more people.
 
 Item view page. The "Test Version" image in the top left corner interferes with
@@ -11,6 +8,10 @@ Events: collection and item view beautification/tabification.
 
 Item.embargo datastream: create the DS, using default embargo info from APO.
 
+When javascript is disabled, it is not possible to add new Items to a
+Collection, because the drop down menus don't work. Applies to home page and
+Collection view page.
+
 Item Edit: When adding people, if a row with no name field is present when the
 form is saved, that row should not be stored at all. There is currently a bug
 which occurs if you add a blank row (i.e. no no name), and then add another row
@@ -20,12 +21,9 @@ value is lost).
 Submit relevant (or all) form data on addition of multi-valued fields (issues
 w/ non-linear indexed role MD)
 
-Check test coverage in models: item.rb, admin_policy_object.rb, collection.rb.
+Check test coverage in models: admin_policy_object.rb, collection.rb.
 
 rightsMD: (a) tests; (b) refactor to take advantage of OM and generic_ds.rb.
-
-Modify roles: change 'hydrus-item-reviewer' to 'hydrus-collection-reviewer';
-and change 'hydrus-item-viewer' to 'hydrus-viewer'.
 
 
 -------
@@ -38,10 +36,6 @@ to get the latest fixture/file content up-to-date.
 Create new Collection/Item: create rightsMetadata. The rightsMetadata will
 contain the Item-level license and visibility info. [Need more info: I assume
 we will use Stanford-flavored rightsMetadata. Any other requirements?]
-
-When javascript is disabled, it is not possible to add new items, because the
-drop down menus don't work. Applies to home page and Collection view page.
-[Postpone this until we have GG's new design for sidebar, etc.]
 
 Item valiation. The :actors validation does not impose much of a test, because
 the xml template for descMD always includes an actor (with a blank role and

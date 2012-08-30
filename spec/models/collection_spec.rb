@@ -6,6 +6,74 @@ describe Hydrus::Collection do
     @hc = Hydrus::Collection.new
   end
 
+  it "can exercise a stubbed version of create()" do
+    # More substantive testing is done at integration level.
+    druid = 'druid:BLAH'
+    stubs = [
+      :remove_relationship,
+      :assert_content_model,
+      :augment_identity_metadata,
+    ]
+    stubs.each { |s| @hc.should_receive(s) }
+    @hc.should_receive(:save).with(:no_edit_logging => true)
+    @hc.stub(:pid).and_return(druid)
+    @hc.stub(:adapt_to).and_return(@hc)
+    apo = Hydrus::AdminPolicyObject.new
+    Hydrus::AdminPolicyObject.stub(:create).and_return(apo)
+    Hydrus::GenericObject.stub(:register_dor_object).and_return(@hc)
+    Hydrus::Collection.create('USERFOO').pid.should == druid
+  end
+
+  describe "publish()" do
+
+    # More substantive testing is done at integration level.
+
+    before(:each) do
+      apo_druid = 'druid:oo000oo9991'
+      apo = Hydrus::AdminPolicyObject.new(:pid => apo_druid)
+      @hc.stub(:apo).and_return(apo)
+    end
+    
+    it "publish(no) should set deposit_status to closed, and add an event" do
+      @hc.apo.deposit_status.should == ''
+      @hc.get_hydrus_events.size.should == 0
+      @hc.should_not_receive(:workflow_step_is_done)
+      @hc.publish('no')
+      @hc.apo.deposit_status.should == 'closed'
+      @hc.get_hydrus_events.size.should > 0
+    end
+    
+    it "if already published, should set titles but not call approve" do
+      hc_title      = 'blah blah blah'
+      apo_title     = "APO for #{hc_title}"
+      @hc.title     = hc_title
+      @hc.apo.title = apo_title
+      @hc.apo.deposit_status.should == ''
+      @hc.get_hydrus_events.size.should == 0
+      @hc.stub(:workflow_step_is_done).and_return(true)
+      @hc.should_not_receive(:approve)
+      @hc.should_not_receive(:complete_workflow_step)
+      @hc.publish('yes')
+      @hc.apo.deposit_status.should == 'open'
+      @hc.get_hydrus_events.size.should > 0
+      @hc.apo.identityMetadata.objectLabel.should == [apo_title]
+      @hc.apo.descMetadata.title.should           == [apo_title]
+      @hc.identityMetadata.objectLabel.should     == [hc_title]
+      @hc.label.should                            == hc_title
+      @hc.apo.label.should                        == apo_title
+    end
+    
+    it "if not published, should call approve" do
+      @hc.stub(:workflow_step_is_done).and_return(false)
+      @hc.should_receive(:approve)
+      @hc.should_receive(:complete_workflow_step)
+      @hc.publish('yes')
+      @hc.apo.deposit_status.should == 'open'
+      @hc.get_hydrus_events.size.should > 0
+    end
+    
+  end
+
   describe "valid?()" do
 
     before(:each) do

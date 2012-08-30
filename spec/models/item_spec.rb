@@ -17,7 +17,26 @@ describe Hydrus::Item do
     END
     @workflow_xml = noko_doc(@workflow_xml)
   end
-  
+
+  it "can exercise a stubbed version of create()" do
+    # More substantive testing is done at integration level.
+    druid = 'druid:BLAH'
+    stubs = [
+      :remove_relationship,
+      :assert_content_model,
+      :add_to_collection,
+      :augment_identity_metadata,
+    ]
+    stubs.each { |s| @hi.should_receive(s) }
+    @hi.should_receive(:save).with(:no_edit_logging => true)
+    @hi.stub(:pid).and_return(druid)
+    @hi.stub(:adapt_to).and_return(@hi)
+    hc = Hydrus::Collection.new
+    Hydrus::Collection.stub(:find).and_return(hc)
+    Hydrus::GenericObject.stub(:register_dor_object).and_return(@hi)
+    Hydrus::Item.create(hc.pid, 'USERFOO').pid.should == druid
+  end
+
   it "should be able to add and remove an item from a collection" do
     collection_pid = 'druid:xx99xx9999'
     exp_uri        = "info:fedora/#{collection_pid}"
@@ -329,13 +348,32 @@ describe Hydrus::Item do
       end
     end
     
-    describe "license" do
+    describe "license() and license=" do
+
       subject {Hydrus::Item.new}
+
+      describe "license()" do
+
+        it "Item-level license is present: just return it" do
+          exp = 'foo COLL_LICENSE'
+          subject.stub_chain(:collection, :license).and_return(exp)
+          subject.license.should == exp
+        end
+
+        it "Item-level license is blank: return Collection-level license" do
+          exp = 'foo ITEM_LICENSE'
+          subject.stub_chain(:rightsMetadata, :use, :machine).and_return([exp])
+          subject.license.should == exp
+        end
+        
+      end
+
       it "should set the human readable version properly" do
         subject.rightsMetadata.use.human.first.should be_blank
         subject.license = "cc-by-nc"
         subject.rightsMetadata.use.human.first.should == "CC BY-NC Attribution-NonCommercial"
       end
+
       it "should set the type attribute properly depending on the license applied" do
          subject.rightsMetadata.use.human.first.should be_blank
          subject.license = "cc-by-nc"
@@ -344,6 +382,7 @@ describe Hydrus::Item do
          subject.rightsMetadata.ng_xml.to_s.should_not match(/type=\"creativeCommons\"/)
          subject.rightsMetadata.ng_xml.to_s.should match(/type=\"openDataCommons\"/)
       end
+
     end  
   end
     
@@ -423,6 +462,72 @@ describe Hydrus::Item do
 
   it "can exercise tracked_fields()" do
     @hi.tracked_fields.should be_an_instance_of(Hash)
+  end
+
+  it "is_destroyable() should return the negative of is_published" do
+    @hi.stub(:is_published).and_return(false)
+    @hi.is_destroyable.should == true
+    @hi.stub(:is_published).and_return(false)
+    @hi.is_destroyable.should == true
+  end
+
+  it "content_directory()" do
+    dru = 'oo000oo9999'
+    @hi.stub(:pid).and_return("druid:#{dru}")
+    @hi.content_directory.should == File.join(
+      File.expand_path('public/uploads'),
+      'oo/000/oo/9999',
+      dru,
+      'content'
+    )
+  end
+
+  describe "publish()" do
+
+    # More substantive testing is done at integration level.
+
+    it "if already published, just set titles" do
+      @hi.stub(:workflow_step_is_done).and_return(true)
+      exp_title = 'blah blah blah'
+      @hi.title = exp_title
+      @hi.should_not_receive(:approve)
+      @hi.should_not_receive(:complete_workflow_step)
+      @hi.publish
+      @hi.identityMetadata.objectLabel.should == [exp_title]
+      @hi.label.should == exp_title
+    end
+    
+    it "if not published, should set titles and call approve" do
+      @hi.stub(:workflow_step_is_done).and_return(false)
+      @hi.stub(:requires_human_approval).and_return(false)
+      exp_title = 'blah blah blah'
+      @hi.title = exp_title
+      @hi.should_receive(:complete_workflow_step).with('submit')
+      @hi.should_receive(:approve)
+      @hi.publish
+      @hi.identityMetadata.objectLabel.should == [exp_title]
+      @hi.label.should == exp_title
+    end
+    
+  end
+
+  it "embargo_date_is_correct_format() should add an error if embargo_date is bogus" do
+    k = :embargo_date
+    # Valid date.
+    @hi.stub(k).and_return('12/31/2012')
+    @hi.embargo_date_is_correct_format
+    @hi.errors.messages.should_not include(k)
+    # Invalid date.
+    @hi.stub(k).and_return('blah!!')
+    @hi.embargo_date_is_correct_format
+    @hi.errors.messages.should include(k)
+  end
+
+  it "requires_human_approval() should delegate to the collection" do
+    [true, false, true].each { |exp|
+      @hi.stub_chain(:collection, :requires_human_approval).and_return(exp)
+      @hi.requires_human_approval.should == exp
+    }
   end
 
 end

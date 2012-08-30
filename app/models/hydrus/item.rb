@@ -44,7 +44,7 @@ class Hydrus::Item < Hydrus::GenericObject
   end
 
   # Publish the Item.
-  def publish(value)
+  def publish(value = nil)
     # At the moment of publication, we refresh various titles.
     identityMetadata.objectLabel = title
     self.label                   = title # The label in Fedora's foxml:objectProperties.
@@ -126,13 +126,12 @@ class Hydrus::Item < Hydrus::GenericObject
     end
   end
 
+  # Returns the Item's license, if present.
+  # Otherwise, return's the Collection's license.
   def license *args
-    unless (rightsMetadata.use.machine *args).first.blank?
-      (rightsMetadata.use.machine *args).first
-    else
-      # Use the collection's license as a default in the absense of an item level license.
-      collection.license
-    end
+    lic = rightsMetadata.use.machine(*args).first
+    return lic unless lic.blank?
+    return collection.license
   end
 
   def license= *args
@@ -210,8 +209,11 @@ class Hydrus::Item < Hydrus::GenericObject
   end
 
   def embargo_date_is_correct_format
-    # TODO: This isn't really working when a bad date is entered. This doesn't end up erroring out and it errors up in embargo_date instead
-    if ((Date.strptime(embargo_date, "%m/%d/%Y") rescue ArgumentError) == ArgumentError)
+    # TODO: This isn't really working when a bad date is entered.
+    # This doesn't end up erroring out and it errors up in embargo_date instead
+    begin
+      Date.strptime(embargo_date, "%m/%d/%Y")
+    rescue ArgumentError
       errors.add(:embargo_date, 'must be a valid date')
     end
   end
