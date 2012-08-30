@@ -1,22 +1,27 @@
-Item edit. You can't add more people.
-
 Item view page. The "Test Version" image in the top left corner interferes with
-the user's ability to click the Collection hyperlink when the Collection has a
-very short title.
+the user's ability to click the Collection hyperlink, especially when the
+Collection has a very short title.
+
+Item and Collect edit. When you click one of the "Add..." or "Delete..."
+buttons, we should give the user some visual feedback so they don't think
+nothing happened.
+
+Add Item to Collection. Drop down does not work when javascript is disabled.
+Applies to home page and Collection view page.
 
 UI redesign: side bar and tabs.
 
+Deployment to hydrus-test.stanford.edu is a hassle. In particular, it's not easy
+to get the latest fixture/file content up-to-date.
+
 Item.embargo datastream: create the DS, using default embargo info from APO.
 
-When javascript is disabled, it is not possible to add new Items to a
-Collection, because the drop down menus don't work. Applies to home page and
-Collection view page.
-
-Item Edit: When adding people, if a row with no name field is present when the
-form is saved, that row should not be stored at all. There is currently a bug
-which occurs if you add a blank row (i.e. no no name), and then add another row
-with a name and then save. Strange things happen (the role field and/or name
-value is lost).
+descMD template. Don't start with an empty person. Related issues:
+  - Item valiation. The :actors validation does not impose much of a test,
+    because the xml template for descMD always includes an actor (with a blank
+    role and name).
+  - Item Edit: Don't a a person to the descMD if the name is left blank when
+    the user saves the form
 
 rightsMD: (a) tests; (b) refactor to take advantage of OM and generic_ds.rb.
 
@@ -27,19 +32,6 @@ Check test coverage in models: admin_policy_object.rb, collection.rb.
 WAITING
 -------
 
-Deployment to hydrus-test.stanford.edu is a hassle. In particular, it's not easy
-to get the latest fixture/file content up-to-date.
-
-Create new Collection/Item: create rightsMetadata. The rightsMetadata will
-contain the Item-level license and visibility info. [Need more info: I assume
-we will use Stanford-flavored rightsMetadata. Any other requirements?]
-
-Item valiation. The :actors validation does not impose much of a test, because
-the xml template for descMD always includes an actor (with a blank role and
-name). If we care about the test, it needs to do more (or we need to modify
-descMD and/or UI?). [Waiting until JK refactors handling of multi-valued
-fields, Javascript, etc.]
-
 Need a place to store Item types. Currently hardcoded to :dataset. Also see
 object_type() in GenericObject. [Lynn and Hannah will discuss]
 
@@ -48,9 +40,8 @@ APO RELS-EXT datastream needs to add a child node to <rdf:Description>:
 the PID of the global Hydrus Agreement object. [The Hydrus agreement object
 needs to be created -- need more details].
 
-Use reified WFs rather than putting them in the APO. [Need more info on how
-this works and its relative priority. Also waiting on some work Willy is doing
-in dor-services.]
+Use reified WFs rather than putting them in the APO. (a) Set up WF objects
+on -dev. (b) Work with Willy to deploy the feature to -dev.
 
 Collection create: APO.roleMetadata: set the value of <name> for the
 collection-manager [waiting on LDAP].
