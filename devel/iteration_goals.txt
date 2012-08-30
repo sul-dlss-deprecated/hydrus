@@ -1,4 +1,34 @@
+--------------
+September 2012
+--------------
+
+* Roles
+- Implement gated discovery: Solr fields, etc.
+- Implement Hydrus app behaviours based on user ID, roles, and permissions.
+- Plan/spec the multi-author role issue [Hannah and Lynn].
+
+* UI Redesign
+- Complete the design of new tab and sidebars.
+- Implement new tab and sidebars.
+- Design dashboard/home page.
+- Implement dashboard/home page.
+
+* Integration with DOR
+- Set up needed file mounts [waiting on sys admins].
+- Provde that we can publish some Hydrus items and run them through assembly/accessioning.
+
+* PURL app
+- Review existing behaviors spec any needed new behaviors for Hydrus objects (datasets).
+
+* Technical debt
+- Fix Javascript and multi-valued field glitches on Item edit page.
+- Support ability to add Item to Collection when Javascript is disabled.
+- Smooth out difficulties in deployment to hydrus-test.
+
+
+-----------
 August 2012
+-----------
 
 - Spec, design, build Events (LM & HF, GG, MH)
 - Wrap up Create Collection to-dos (MH)

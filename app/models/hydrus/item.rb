@@ -134,11 +134,11 @@ class Hydrus::Item < Hydrus::GenericObject
     return collection.license
   end
 
-  def license= *args
+  def license= val
     rightsMetadata.remove_nodes(:use)
     Hydrus::Collection.licenses.each do |type,licenses|
       licenses.each do |license|
-        if license.last == args.first
+        if license.last == val
           # I would like to do this type_attribute part better.
           # Maybe infer the insert method and call send on rightsMetadata.
           type_attribute = Hydrus::Collection.license_commons[type]
@@ -147,7 +147,7 @@ class Hydrus::Item < Hydrus::GenericObject
           elsif type_attribute == "openDataCommons"
             rightsMetadata.insert_open_data_commons
           end
-          rightsMetadata.use.machine = *args
+          rightsMetadata.use.machine = val
           rightsMetadata.use.human = license.first
         end
       end
@@ -170,17 +170,17 @@ class Hydrus::Item < Hydrus::GenericObject
     groups
   end
 
-  def visibility= *args
+  def visibility= val
     embargoMetadata.release_access_node = Nokogiri::XML(generic_release_access_xml) unless embargoMetadata.ng_xml.at_xpath("//access")
     if embargo == "immediate"
       embargoMetadata.release_access_node = Nokogiri::XML("<releaseAccess/>")
       rightsMetadata.remove_embargo_date
       embargoMetadata.remove_embargo_date
-      update_access_blocks(rightsMetadata, args.first)
+      update_access_blocks(rightsMetadata, val)
     elsif embargo == "future"
       rightsMetadata.remove_world_read_access
       rightsMetadata.remove_all_group_read_nodes
-      update_access_blocks(embargoMetadata, args.first)
+      update_access_blocks(embargoMetadata, val)
       embargoMetadata.release_date = Date.strptime(embargo_date, "%m/%d/%Y")
     end
   end
@@ -190,8 +190,8 @@ class Hydrus::Item < Hydrus::GenericObject
     Date.parse(date).strftime("%m/%d/%Y") unless date.blank?
   end
 
-  def embargo_date= *args
-    date = args.first.blank? ? "" : Date.strptime(args.first, "%m/%d/%Y").to_s
+  def embargo_date= val
+    date = val.blank? ? "" : Date.strptime(val, "%m/%d/%Y").to_s
     (rightsMetadata.read_access.machine.embargo_release_date= date) unless date.blank?
   end
 

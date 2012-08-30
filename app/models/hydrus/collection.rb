@@ -10,6 +10,8 @@ class Hydrus::Collection < Hydrus::GenericObject
 
   has_relationship 'hydrus_items', :is_member_of_collection, :inbound => true
 
+  # Creates a new Collection, sets up various defaults, saves and 
+  # returns the object.
   def self.create(user)
     # Create the object, with the correct model.
     apo     = Hydrus::AdminPolicyObject.create(user)
@@ -92,138 +94,95 @@ class Hydrus::Collection < Hydrus::GenericObject
   end
 
   def remove_values_for_associated_attribute_with_value_none
-    self.embargo = nil if self.embargo_option == "none"
-    self.license = nil if self.license_option == "none"
-  end
-
-  # These getters and setters are needed because the ActiveFedora delegate()
-  # does not work when we need to delegate through to the APO.
-
-  def deposit_status *args
-    apo.deposit_status *args
-  end
-
-  # for APO administrativeMetadata
-
-  # These getter and setter methods allow us to set a single value for the
-  # embargo period and license from two separate HTML select controls, based on
-  # the value of a radio button.
-
-  def embargo_varies
-    embargo_option == "varies" ? embargo : ""
-  end
-
-  def embargo_fixed
-    embargo_option == "fixed" ? embargo : ""
-  end
-
-  def embargo_varies= *args
-    # only set the embargo period if the corresponding radio button is selected
-    apo.embargo= *args if embargo_option == "varies"
-  end
-
-  def embargo_fixed= *args
-    # only set the embargo period if the corresponding radio button is selected
-    apo.embargo= *args if embargo_option == "fixed"
-  end
-
-  def license_varies
-    license_option == "varies" ? license : ""
-  end
-
-  def license_fixed
-    license_option == "fixed" ? license : ""
-  end
-
-  def license_varies= *args
-    # only set the license if the corresponding radio button is selected
-    apo.license= *args if license_option == "varies"
-  end
-
-  def license_fixed= *args
-    # only set the license if the corresponding radio button is selected
-    apo.license= *args if license_option == "fixed"
-  end
-
-  #############
-
-  def embargo *args
-    apo.embargo *args
-  end
-
-  def embargo= *args
-    apo.embargo= *args
-  end
-
-  def embargo_option *args
-    apo.embargo_option *args
-  end
-
-  def embargo_option= *args
-    apo.embargo_option= *args
-  end
-
-  def visibility *args
-    apo.visibility *args
-  end
-
-  def visibility= *args
-    apo.visibility= *args
-  end
-
-  def visibility_option *args
-    apo.visibility_option *args
-  end
-
-  def visibility_option= *args
-    apo.visibility_option= *args
-  end
-
-  def vov_lookup
-    return {
-      'everyone'       => 'fixed_world',
-      'varies'         => 'varies_world',
-      'stanford'       => 'fixed_stanford',
-      'fixed_world'    => 'everyone',
-      'varies_world'   => 'varies',
-      'fixed_stanford' => 'stanford',
-    }
-  end
-
-  def visibility_option_value *args
-    opt = apo.visibility_option # fixed or varies
-    vis = apo.visibility        # world or stanford
-    return vov_lookup["#{opt}_#{vis}"]
-  end
-
-  def visibility_option_value= *args
-    opt, vis              = vov_lookup[args.first].split('_')
-    apo.visibility_option = opt # fixed or varies
-    apo.visibility        = vis # world or stanford
-  end
-
-  def license *args
-    apo.license *args
-  end
-
-  def license= *args
-    apo.license= *args
-  end
-
-  def license_option *args
-    apo.license_option *args
-  end
-
-  def license_option= *args
-    apo.license_option= *args
+    self.embargo = nil if embargo_option == "none"
+    self.license = nil if license_option == "none"
   end
 
   def add_empty_person_to_role *args
     apo.roleMetadata.add_empty_person_to_role *args
   end
 
+  ####
+  # Simple getters and settings forwarded to the APO.
+  #
+  # These are needed because ActiveFedora's delegate()
+  # does not work when we need to delegate through to the APO.
+  #
+  # The conditional embargo and license methods allow us to set a 
+  # single value for the embargo period and license from two separate 
+  # HTML select controls, based on the value of a radio button.
+  ####
+
   def collection_owner *args
     apo.collection_owner *args
+  end
+
+  def deposit_status *args
+    apo.deposit_status *args
+  end
+
+  def embargo *args
+    apo.embargo *args
+  end
+
+  def embargo= val
+    apo.embargo= val
+  end
+
+  def embargo_option *args
+    apo.embargo_option *args
+  end
+
+  def embargo_option= val
+    apo.embargo_option= val
+  end
+
+  def embargo_fixed
+    embargo_option == "fixed" ? embargo : ""
+  end
+
+  def embargo_varies
+    embargo_option == "varies" ? embargo : ""
+  end
+
+  def embargo_fixed= val
+    apo.embargo= val if embargo_option == "fixed"
+  end
+
+  def embargo_varies= val
+    apo.embargo= val if embargo_option == "varies"
+  end
+
+  def license_fixed
+    license_option == "fixed" ? license : ""
+  end
+
+  def license_varies
+    license_option == "varies" ? license : ""
+  end
+
+  def license_fixed= val
+    apo.license= val if license_option == "fixed"
+  end
+
+  def license_varies= val
+    apo.license= val if license_option == "varies"
+  end
+
+  def license *args
+    apo.license *args
+  end
+
+  def license= val
+    apo.license= val
+  end
+
+  def license_option *args
+    apo.license_option *args
+  end
+
+  def license_option= val
+    apo.license_option= val
   end
 
   def person_id *args
@@ -234,12 +193,55 @@ class Hydrus::Collection < Hydrus::GenericObject
     return apo.person_roles
   end
 
-  def apo_person_roles= *args
-    apo.person_roles= args.first
+  def apo_person_roles= val
+    apo.person_roles= val
   end
 
   def apo_persons_with_role(role)
     return apo.persons_with_role(role)
+  end
+
+  def visibility *args
+    apo.visibility *args
+  end
+
+  def visibility= val
+    apo.visibility= val
+  end
+
+  def visibility_option *args
+    apo.visibility_option *args
+  end
+
+  def visibility_option= val
+    apo.visibility_option= val
+  end
+
+  def visibility_option_value *args
+    opt = apo.visibility_option # fixed or varies
+    vis = apo.visibility        # world or stanford
+    return vov_lookup["#{opt}_#{vis}"]
+  end
+
+  def visibility_option_value= val
+    opt, vis              = vov_lookup[val].split('_')
+    apo.visibility_option = opt # fixed or varies
+    apo.visibility        = vis # world or stanford
+  end
+
+  ####
+  # Data structures.
+  ####
+
+  def vov_lookup
+    return {
+      'everyone'       => 'fixed_world',
+      'varies'         => 'varies_world',
+      'stanford'       => 'fixed_stanford',
+      'fixed_world'    => 'everyone',
+      'varies_world'   => 'varies',
+      'fixed_stanford' => 'stanford',
+    }
   end
 
   def tracked_fields

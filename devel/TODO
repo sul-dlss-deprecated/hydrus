@@ -16,8 +16,9 @@ Item.embargo datastream: create the DS, using default embargo info from APO.
 Deployment to hydrus-test.stanford.edu is a hassle. In particular, it's not easy
 to get the latest fixture/file content up-to-date.
 
-Unit tests. We have some tests that are slow and should be converted to
-integration tests.
+Unit tests. Can we improve our coverage in the controllers?
+
+rightsMD: (a) tests; (b) refactor to take advantage of OM and generic_ds.rb.
 
 descMD template. Don't start with an empty person. Related issues:
   - Item valiation. The :actors validation does not impose much of a test,
@@ -26,9 +27,8 @@ descMD template. Don't start with an empty person. Related issues:
   - Item Edit: Don't a a person to the descMD if the name is left blank when
     the user saves the form
 
-rightsMD: (a) tests; (b) refactor to take advantage of OM and generic_ds.rb.
-
-Unit tests: collection.rb.
+Unit tests. We have some tests that are slow and should be converted to
+integration tests.
 
 
 -------

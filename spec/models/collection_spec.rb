@@ -221,6 +221,13 @@ describe Hydrus::Collection do
       EOF
     end
     
+    it "apo_person_roles should forward to apo.person_roles" do
+      apo = Hydrus::AdminPolicyObject.new
+      @hc.stub(:apo).and_return(apo)
+      apo.should_receive(:person_roles)
+      @hc.apo_person_roles
+    end
+
     it "apo_persons_with_role() should delegate to apo.persons_with_role()" do
       role = 'foo_role'
       apo = double('apo')
@@ -233,6 +240,106 @@ describe Hydrus::Collection do
 
   it "can exercise tracked_fields()" do
     @hc.tracked_fields.should be_an_instance_of(Hash)
+  end
+
+  describe "methods forwarded to the APO" do
+    
+    before(:each) do
+      @apo = Hydrus::AdminPolicyObject.new
+      @hc.stub(:apo).and_return(@apo)
+      @arg = 'foobar'
+    end
+
+    it "simple getters/setters should forward to APO" do
+      methods = %w(
+        collection_owner
+        deposit_status
+        embargo
+        embargo=
+        embargo_option
+        embargo_option=
+        license
+        license=
+        license_option
+        license_option=
+        person_id
+        visibility
+        visibility=
+        visibility_option
+        visibility_option=
+      )
+      methods.each do |m|
+        @apo.should_receive(m).with(@arg)
+        @hc.send(m, @arg)
+      end
+    end
+
+    describe "embargo/license conditional getters and setters" do
+
+      before(:each) do
+        @combos = [
+          %w(embargo fixed),
+          %w(embargo varies),
+          %w(license fixed),
+          %w(license varies),
+        ]
+      end
+
+      it "FOO_VAL() should return FOO() if FOO_option() returns VAL" do
+        @combos.each do |typ, val|
+          # Example:
+          #   FOO_VAL()     embargo_fixed()
+          #   FOO_option()  embargo_option()
+          #   FOO()         embargo()
+          #   VAL           'fixed'
+          # Initially, FOO_VAL() returns empty string.
+          m = "#{typ}_#{val}".to_sym
+          @hc.send(m).should == ''
+          # And if FOO_option() returns VAL, then FOO_VAL() will return FOO().
+          exp = 'blah blah!!'
+          @hc.stub("#{typ}_option").and_return(val)
+          @hc.stub(typ).and_return(exp)
+          @hc.send(m).should == exp
+        end
+      end
+      
+      it "setters should not call apo.FOO= because FOO_option() does not return VAL" do
+        @combos.each do |typ, val|
+          m = "#{typ}="
+          @apo.should_not_receive("#{typ}=")
+          @hc.stub("#{typ}_option").and_return('')
+          @hc.send("#{typ}_#{val}=", 'new_val')
+        end
+      end
+      
+      it "setters should call apo.FOO= because FOO_option() does return VAL" do
+        @combos.each do |typ, val|
+          m   = "#{typ}="
+          exp = 'new value!'
+          @apo.should_receive("#{typ}=").with(exp).once
+          @hc.stub("#{typ}_option").and_return(val)
+          @hc.send("#{typ}_#{val}=", exp)
+        end
+      end
+      
+    end
+
+    describe "visibility_option_value getter and setter" do
+      
+      it "can exercise the getter" do
+        @apo.stub(:visibility_option).and_return('fixed')
+        @apo.stub(:visibility).and_return('world')
+        @hc.visibility_option_value.should == 'everyone'
+      end
+
+      it "the setter should call the expected setters on the APO" do
+        @apo.should_receive('visibility_option=').with('fixed')
+        @apo.should_receive('visibility=').with('world')
+        @hc.visibility_option_value = 'everyone'
+      end
+
+    end
+
   end
 
 end
