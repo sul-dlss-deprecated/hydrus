@@ -2,9 +2,9 @@ Item edit. You can't add more people.
 
 Item view page. The "Test Version" image in the top left corner interferes with
 the user's ability to click the Collection hyperlink when the Collection has a
-short title.
+very short title.
 
-Events: collection and item view beautification/tabification.
+UI redesign: side bar and tabs.
 
 Item.embargo datastream: create the DS, using default embargo info from APO.
 
@@ -18,12 +18,9 @@ which occurs if you add a blank row (i.e. no no name), and then add another row
 with a name and then save. Strange things happen (the role field and/or name
 value is lost).
 
-Submit relevant (or all) form data on addition of multi-valued fields (issues
-w/ non-linear indexed role MD)
+rightsMD: (a) tests; (b) refactor to take advantage of OM and generic_ds.rb.
 
 Check test coverage in models: admin_policy_object.rb, collection.rb.
-
-rightsMD: (a) tests; (b) refactor to take advantage of OM and generic_ds.rb.
 
 
 -------
