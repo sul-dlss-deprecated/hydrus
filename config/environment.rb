@@ -1,6 +1,7 @@
 # Load the rails application
 require File.expand_path('../application', __FILE__)
 
+# Override make_solr_connection() so that we don't need certs in dev and test.
 if %w{development test prod_w_local_dor}.include?(Rails.env) 
   require File.expand_path(File.join(File.dirname(__FILE__), 'override_solr_connection'))
 end

@@ -1,15 +1,19 @@
 development:
   user: fedoraAdmin
   password: fedoraAdmin
-  # url: http://dor-dev.stanford.edu/fedora
   url: http://127.0.0.1:8983/fedora
-test: &TEST  
+
+dortest: 
+  user: fedoraAdmin
+  password: fedoraAdmin
+  url: https://fedoratestURL
+
+test: 
   user: fedoraAdmin
   password: fedoraAdmin
   url: http://127.0.0.1:8983/fedora-test
+
 production:
   user: fedoraAdmin
   password: fedoraAdmin
   url: http://your.production.server:8080/fedora
-cucumber:
-  <<: *TEST
