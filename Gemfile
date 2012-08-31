@@ -28,6 +28,7 @@ gem 'rails', '3.2.3'
 gem 'jquery-rails'
 gem 'dynamic_form'
 gem 'bootstrap-datepicker-rails'
+gem 'cancan'
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'

@@ -8,7 +8,7 @@ class SigninController < ApplicationController
   end
   
   def login
-    redirect_to params[:referrer]
+    redirect_to params[:referrer] || root_url
   end
   
   def logout

@@ -4,7 +4,7 @@ September 2012
 
 * Roles
 - Implement gated discovery: Solr fields, etc.
-- Implement Hydrus app behaviours based on user ID, roles, and permissions.
+- Implement Hydrus app behaviours based on user ID, roles, and permissions [using cancan?]
 - Plan/spec the multi-author role issue [Hannah and Lynn].
 
 * UI Redesign
@@ -15,10 +15,10 @@ September 2012
 
 * Integration with DOR
 - Set up needed file mounts [waiting on sys admins].
-- Provde that we can publish some Hydrus items and run them through assembly/accessioning.
+- Prove that we can publish some Hydrus items and run them through assembly/accessioning.  Debug issues with Chimera team.
 
 * PURL app
-- Review existing behaviors spec any needed new behaviors for Hydrus objects (datasets).
+- Review existing behaviors and spec any needed new behaviors for Hydrus objects (datasets).
 
 * Technical debt
 - Fix Javascript and multi-valued field glitches on Item edit page.
