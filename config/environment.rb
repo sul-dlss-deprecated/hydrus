@@ -1,10 +1,11 @@
 # Load the rails application
 require File.expand_path('../application', __FILE__)
 
+current_path=File.dirname(__FILE__)
+no_solr_cert=(%w{development test prod_w_local_dor}.include?(Rails.env))
+
 # Override make_solr_connection() so that we don't need certs in dev and test.
-if %w{development test prod_w_local_dor}.include?(Rails.env) 
-  require File.expand_path(File.join(File.dirname(__FILE__), 'override_solr_connection'))
-end
+require File.expand_path(File.join(current_path, 'rsolr_no_certificate')) if no_solr_cert
 
 Hydrus::Application.configure do
  
@@ -20,10 +21,10 @@ end
 
 Dor::Config.configure do
 
-  cert_dir File.join(File.dirname(__FILE__), "certs")
+  cert_dir File.join(current_path, "certs")
 
   load_yaml_config = lambda { |yaml_file|
-    full_path = File.expand_path(File.join(File.dirname(__FILE__), yaml_file))
+    full_path = File.expand_path(File.join(current_path, yaml_file))
     yaml      = YAML.load(File.read full_path)
     return yaml[Rails.env]
   }
@@ -99,5 +100,8 @@ end
 
 # Initialize the rails application
 Hydrus::Application.initialize!
+
+
+require File.expand_path(File.join(current_path, 'rsolr_certificate')) unless no_solr_cert
 
 require 'hydrus'

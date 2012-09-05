@@ -296,7 +296,7 @@ GEM
       mime-types (>= 1.16)
     rsolr (1.0.8)
       builder (>= 2.1.2)
-    rsolr-client-cert (0.5.1)
+    rsolr-client-cert (0.5.2)
       rest-client
       rsolr
     rsolr-ext (1.0.3)
@@ -424,6 +424,7 @@ DEPENDENCIES
   mysql
   quiet_assets
   rails (= 3.2.3)
+  rsolr-client-cert (>= 0.5.2)
   rspec-rails (>= 2.9.0)
   rubydora (~> 0.5.11)
   sass-rails (~> 3.2.3)
