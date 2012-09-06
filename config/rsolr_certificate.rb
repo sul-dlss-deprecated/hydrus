@@ -1,4 +1,5 @@
 require 'rsolr/client_cert'
+require 'solrizer-fedora'
 
 # Force Blacklight to use RSolr::ClientCert::Connection
 Rails.logger.warn "Monkey-patching Blacklight.solr to use RSolr::ClientCert::Connection"
@@ -8,8 +9,8 @@ end
 
 # Monkey patch Solrizer::Fedora::Indexer to use RSolr::ClientCert::Connection
 # Rails.logger.warn "Monkey-patching Solrizer::Fedora::Indexer to use RSolr::ClientCert::Connection"
-# class Solrizer::Fedora::Indexer
-#   def connect
-#     @solr = Dor::Config.make_solr_connection
-#   end
-# end
+class Solrizer::Fedora::Indexer
+  def connect
+    @solr = Dor::Config.make_solr_connection
+  end
+end

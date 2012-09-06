@@ -24,10 +24,6 @@ config/workflow.yml
 config/ssl_certs.yml
 config/certs/*
 
-
-## Cucumber
-rerun.txt
-
 ## coverage
 coverage.data
 coverage/*

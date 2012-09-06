@@ -1,5 +1,5 @@
 AboutPage.configure do |config|
-  config.app = { :name => 'Application Name', :version => '0.0.0' }
+  config.app = { :name => 'Hydrus', :version => '0.0.0' }
 
   config.dependencies = AboutPage::Dependencies.new
 
