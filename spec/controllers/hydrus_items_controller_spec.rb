@@ -54,11 +54,14 @@ describe HydrusItemsController do
   end
 
   describe "Update Action" do
-    describe "file upload" do
+
+    describe("File upload", :integration => true) do
+
       before(:all) do
         @pid = "druid:oo000oo0001"
         @file = fixture_file_upload("/../../spec/fixtures/files/fixture.html", "text/html")
       end
+
       it "should update the file successfully" do
         controller.stub(:current_user).and_return(mock_authed_user)
         put :update, :id => @pid, "files" => [@file]
@@ -67,7 +70,9 @@ describe HydrusItemsController do
         flash[:notice].should =~ /'fixture.html' uploaded/
         Hydrus::Item.find(@pid).files.map{|file| file.filename }.include?("fixture.html").should be_true
       end
+
     end
+
   end
 
 end

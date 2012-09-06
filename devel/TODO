@@ -53,10 +53,6 @@ Unit tests. Can we improve our coverage in the controllers?
 
 rightsMD: (a) tests; (b) refactor to take advantage of OM and generic_ds.rb.
 
-Convert to integration tests.
-    1.92 seconds    ./spec/controllers/hydrus_items_controller_spec.rb:62
-    0.92347 seconds ./spec/models/item_spec.rb:66
-
 
 ****************
 WAITING
