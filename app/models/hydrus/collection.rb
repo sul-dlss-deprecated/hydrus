@@ -113,8 +113,8 @@ class Hydrus::Collection < Hydrus::GenericObject
   # HTML select controls, based on the value of a radio button.
   ####
 
-  def collection_owner *args
-    apo.collection_owner *args
+  def collection_manager *args
+    apo.collection_manager *args
   end
 
   def deposit_status *args

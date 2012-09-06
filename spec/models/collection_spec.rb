@@ -252,7 +252,7 @@ describe Hydrus::Collection do
 
     it "simple getters/setters should forward to APO" do
       methods = %w(
-        collection_owner
+        collection_manager
         deposit_status
         embargo
         embargo=
