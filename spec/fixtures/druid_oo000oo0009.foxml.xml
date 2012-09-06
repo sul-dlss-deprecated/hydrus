@@ -145,14 +145,10 @@
                 <identifier type="sunetid">pgallagher</identifier>
                 <name>Gallagher, Patrick</name>
              </person>
-          </role>
-          <role type="hydrus-item-depositor">
              <person>
                 <identifier type="sunetid">mshapiro</identifier>
                 <name>Shapiro, Maxwell C.</name>
              </person>
-          </role>
-          <role type="hydrus-item-depositor">
              <person>
                 <identifier type="sunetid">jbrown</identifier>
                 <name>Brown, Jefferson</name>

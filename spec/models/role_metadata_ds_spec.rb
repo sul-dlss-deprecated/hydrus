@@ -30,22 +30,12 @@ describe Hydrus::RoleMetadataDS do
                 <identifier type="sunetid">ggreen</identifier>
                 <name>Green, Greg</name>
              </person>
-             <group>
-                <identifier type="workgroup">pasig:2011attendees</identifier>
-                <name>Conference attendees</name>
-              </group>
           </role>
           <role type="hydrus-collection-reviewer">
-             <group>
-                <identifier type="workgroup">pasig:staff</identifier>
-                <name>Conference attendees</name>
-             </group>
-          </role>
-          <role type="hydrus-collection-viewer">
-             <group>
-                <identifier type="community">stanford</identifier>
-                <name>Stanford University Community</name>
-             </group>
+             <person>
+                <identifier type="sunetid">bblue</identifier>
+                <name>Blue, Bill</name>
+             </person>
           </role>
         #{@rmd_end}
       EOF
@@ -54,46 +44,24 @@ describe Hydrus::RoleMetadataDS do
 
     it "should get expected values from OM terminology" do
       tests = [
-        [[:role, :person, :identifier], %w(brown dblack ggreen)],
-        [:person_id, %w(brown dblack ggreen)],
-        [[:role, :group,  :identifier], %w(pasig:2011attendees pasig:staff stanford)],
-        [[:role, :person, :name], ["Brown, Malcolm", "Black, Delores", "Green, Greg"]],
+        [[:role, :person, :identifier], %w(brown dblack ggreen bblue)],
+        [:person_id, %w(brown dblack ggreen bblue)],
+        [[:role, :person, :name], ["Brown, Malcolm", "Black, Delores", "Green, Greg", "Blue, Bill"]],
         [[:collection_manager, :person, :identifier], %w(brown dblack)],
-        [[:collection_manager, :group, :identifier], %w()],
-        [:collection_owner, %w(brown dblack)],
         [[:collection_depositor, :person, :identifier], %w(ggreen)],
-        [[:collection_depositor, :group, :identifier], %w(pasig:2011attendees)],
-        [[:collection_reviewer, :person, :identifier], %w()],
-        [[:collection_reviewer, :group, :identifier], %w(pasig:staff)],
+        [[:collection_reviewer, :person, :identifier], %w(bblue)],
         [[:collection_viewer, :person, :identifier], %w()],
-        [[:collection_viewer, :group, :identifier], %w(stanford)],
-        [[:role, :type], %w(hydrus-collection-manager hydrus-collection-depositor hydrus-collection-reviewer hydrus-collection-viewer)],
-        [[:person, :identifier, :type], %w(sunetid sunetid sunetid)],
-        [[:group, :identifier, :type], %w(workgroup workgroup community)],
-        [[:actor], %w()],
+        [[:role, :type], %w(hydrus-collection-manager hydrus-collection-depositor hydrus-collection-reviewer)],
       ]
       tests.each do |terms, exp|
         @rmdoc.term_values(*terms).should == exp
       end
     end
-    
-    it "should be able to exercise to_solr()" do
-      sdoc = @rmdoc.to_solr
-      sdoc.should be_kind_of Hash
-      exp_hash = {
-        "apo_register_permissions_t"                => ["sunetid:brown", "sunetid:dblack", "sunetid:ggreen", "workgroup:pasig:2011attendees"],
-        "apo_role_hydrus_collection_depositor_facet"       => ["sunetid:ggreen", "workgroup:pasig:2011attendees"],
-        "apo_role_hydrus_collection_depositor_t"           => ["sunetid:ggreen", "workgroup:pasig:2011attendees"],
-        "apo_role_group_hydrus_collection_depositor_facet" => ["workgroup:pasig:2011attendees"],
-        "apo_role_group_hydrus_collection_depositor_t"     => ["workgroup:pasig:2011attendees"],
-        "apo_role_person_hydrus_collection_manager_facet"  => ["sunetid:brown", "sunetid:dblack"],
-        "apo_role_person_hydrus_collection_manager_t"      => ["sunetid:brown", "sunetid:dblack"],
-      }
-      sdoc.should include(exp_hash)
-    end
-  end  # context APO object
-  
+
+  end
+
   context "ITEM object role metadata" do
+
     before(:each) do
       xml = <<-EOF
         #{@rmd_start}
@@ -114,8 +82,6 @@ describe Hydrus::RoleMetadataDS do
         [[:role, :person, :name], ["Violet, Viola"]],
         [[:item_depositor, :person, :identifier], ['vviolet']],
         [[:role, :type], ['hydrus-item-depositor']],
-        [[:person, :identifier, :type], ['sunetid']],
-        [[:actor], %w()],
       ]
       tests.each do |terms, exp|
         @rmdoc.term_values(*terms).should == exp
@@ -136,18 +102,7 @@ describe Hydrus::RoleMetadataDS do
       rmdoc.ng_xml.should be_equivalent_to exp_xml
     end
 
-    it "should be able to exercise to_solr()" do
-      sdoc = @rmdoc.to_solr
-      sdoc.should be_kind_of Hash
-      exp_hash = {
-        "apo_role_hydrus_item_depositor_facet"         => ["sunetid:vviolet"],
-        "apo_role_hydrus_item_depositor_t"             => ["sunetid:vviolet"],
-        "apo_role_person_hydrus_item_depositor_facet"  => ["sunetid:vviolet"],
-        "apo_role_person_hydrus_item_depositor_t"      => ["sunetid:vviolet"],
-      }
-      sdoc.should include(exp_hash)
-    end
-  end # context item object
+  end
 
   it "toggle_hyphen_underscore() should work correctly" do
     rmdoc = Hydrus::RoleMetadataDS.from_xml('')
@@ -167,36 +122,31 @@ describe Hydrus::RoleMetadataDS do
     }
     tests.each do |input, exp|
       rmdoc.toggle_hyphen_underscore(input).should == exp
-    end    
+    end
   end
 
   context "inserting nodes" do
+
     before(:all) do
-      # empty actor node xml strings
       @ep = '<person><identifier type="sunetid"/><name/></person>'
-      @egs = '<group><identifier type="stanford"/><name/></group>'
-      @egw = '<group><identifier type="workgroup"/><name/></group>'
     end
-    
-    it "Should be able to insert new role, person, and group nodes" do
+
+    it "Should be able to insert new role and person nodes" do
       exp_parts = [
         @rmd_start,
-        '<role type="hydrus-collection-manager">',  @egw, @ep,     '</role>',
-        '<role type="hydrus-collection-reviewer">', @egs, @ep, @egs, '</role>',
+        '<role type="hydrus-collection-manager">',  @ep, '</role>',
+        '<role type="hydrus-collection-reviewer">', @ep, '</role>',
         @rmd_end,
       ]
       exp_xml = noko_doc(exp_parts.join '')
       rmdoc   = Hydrus::RoleMetadataDS.from_xml("#{@rmd_start}#{@rmd_end}")
       role_node1 = rmdoc.insert_role('hydrus-collection-manager')
       role_node2 = rmdoc.insert_role('hydrus-collection-reviewer')
-      rmdoc.insert_group(role_node2, 'stanford')
       rmdoc.insert_person(role_node2, "")
-      rmdoc.insert_group(role_node1, 'workgroup')
       rmdoc.insert_person(role_node1, "")
-      rmdoc.insert_group(role_node2, 'stanford')
       rmdoc.ng_xml.should be_equivalent_to exp_xml
     end
-    
+
     context "add_person_with_role" do
       before(:each) do
         xml = <<-EOF
@@ -211,7 +161,7 @@ describe Hydrus::RoleMetadataDS do
         EOF
         @rmdoc = Hydrus::RoleMetadataDS.from_xml(xml)
       end
-      
+
       it "should add the person node to an existing role node" do
         exp_parts = [
           @rmd_start,
@@ -232,7 +182,7 @@ describe Hydrus::RoleMetadataDS do
         @rmdoc.add_person_with_role("sunetid4", 'hydrus-collection-depositor')
         @rmdoc.ng_xml.should be_equivalent_to exp_xml
       end
-      
+
       it "should create the role node when none exists" do
         exp_parts = [
           @rmd_start,
@@ -245,7 +195,7 @@ describe Hydrus::RoleMetadataDS do
         @rmdoc.add_person_with_role("sunetid2", 'foo-role')
         @rmdoc.ng_xml.should be_equivalent_to exp_xml
       end
-      
+
       it "add_empty_person_to_role should insert an empty person node as a child of the role node" do
         exp_parts = [
           @rmd_start,
@@ -256,9 +206,11 @@ describe Hydrus::RoleMetadataDS do
         exp_xml = noko_doc(exp_parts.join '')
         @rmdoc.add_empty_person_to_role('hydrus-collection-manager')
         @rmdoc.ng_xml.should be_equivalent_to exp_xml
-      end  
-    end # context add_person_of_role
-  end # context inserting nodes
+      end
+
+    end
+
+  end
 
   it "the blank template should match our expectations" do
     exp_xml = %Q(
