@@ -1,2 +1,4 @@
-$(".people-select .person:last").after("<%= escape_javascript(render :partial => 'person', :locals=>{:index=>index}) %>");
+$(".people-select #add_person").before(
+  "<%=escape_javascript(render :partial => 'person', :locals=>{:index=>index})%>"
+);
 validate_hydrus_item();

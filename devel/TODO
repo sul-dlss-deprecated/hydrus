@@ -1,9 +1,11 @@
-**********************
-SEPTEMBER 2012 GOALS
-**********************
---------------
+****************
+SEPTEMBER 2012
+****************
+
+--------
 UI Redesign
---------------
+--------
+
 Item view page. The "Test Version" image in the top left corner interferes with
 the user's ability to click the Collection hyperlink, especially when the
 Collection has a very short title.
@@ -33,15 +35,16 @@ Query 2 = look up collection and item objects and find intersection of objects w
 
 4. Write module (possibly a gem using cancan as a basis?) that 
 
-a. understands permissions and roles and is able to return true false, pass it druid, sunet and action
-e.g. I am 'petucket', I am looking at 'druid:oo000oo0001' and I want to 'review' and it returns true/false
+a. understands permissions and roles and is able to return true false, pass it
+druid, sunet and action e.g. I am 'petucket', I am looking at
+'druid:oo000oo0001' and I want to 'review' and it returns true/false
 
-b. runs queries to return items
-e.g. I am 'petucket', what objects can i see?
+b. runs queries to return items e.g. I am 'petucket', what objects can i see?
 
-----------------
+--------
 Technical Debt
-----------------
+--------
+
 Deployment to hydrus-test.stanford.edu is a hassle. In particular, it's not easy
 to get the latest fixture/file content up-to-date.
 
@@ -52,30 +55,14 @@ rightsMD: (a) tests; (b) refactor to take advantage of OM and generic_ds.rb.
 Unit tests. We have some tests that are slow and should be converted to
 integration tests.
 
-**************************
-OTHER
-**************************
-------------
-Adding Items
-------------
 Item.embargo datastream: create the DS, using default embargo info from APO.
-	  [does the embargo info for an item go into the administrativeData get set at the item level too to override the collection embargo?]
-	
-descMD template. Don't start with an empty person. Related issues:
-  - Item validation. The :actors validation does not impose much of a test,
-    because the xml template for descMD always includes an actor (with a blank
-    role and name).
-		[do we need a blank item in the xml template? can we prevent blank nodes from
-		being entered from the form?]
-  - Item Edit: Don't add a person to the descMD if the name is left blank when
-    the user saves the form... 
-		[in hydrus_item_controller, check params hash for hydrus_item[person] blank values 
-		remove them before setting the attributes?  or can this be done in the desc_metadata_ds.rb model?]
+[does the embargo info for an item go into the administrativeData get set at
+the item level too to override the collection embargo?]
 
 
-******************************
+****************
 WAITING
-******************************
+****************
 
 Need a place to store Item types. Currently hardcoded to :dataset. Also see
 object_type() in GenericObject. [Lynn and Hannah will discuss]

@@ -112,12 +112,6 @@ describe Hydrus::DescMetadataDS do
           <titleInfo>
             <title/>
           </titleInfo>
-          <name>
-            <namePart/>
-            <role>
-              <roleTerm/>
-            </role>
-          </name>
           <relatedItem>
             <titleInfo>
               <title/>

@@ -419,7 +419,16 @@ describe Hydrus::Item do
   describe "validations" do
 
     before(:each) do
-      @exp = [:pid, :collection, :files, :title, :abstract, :contact, :terms_of_deposit]
+      @exp = [
+        :pid,
+        :collection,
+        :files,
+        :title,
+        :abstract,
+        :contact,
+        :terms_of_deposit,
+        :actors,
+      ]
       @hi.instance_variable_set('@should_validate', true)
     end
 

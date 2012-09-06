@@ -99,12 +99,6 @@ class Hydrus::DescMetadataDS < ActiveFedora::NokogiriDatastream
         xml.titleInfo {
           xml.title
         }
-        xml.name {
-          xml.namePart
-          xml.role {
-            xml.roleTerm
-          }
-        }
         xml.relatedItem {
           xml.titleInfo {
             xml.title
