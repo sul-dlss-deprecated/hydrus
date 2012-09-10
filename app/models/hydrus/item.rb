@@ -2,6 +2,7 @@ class Hydrus::Item < Hydrus::GenericObject
 
   include Hydrus::EmbargoMetadataDsExtension
   include Hydrus::Responsible
+  extend  Hydrus::Delegatable
 
   after_validation :strip_whitespace
 
@@ -13,15 +14,22 @@ class Hydrus::Item < Hydrus::GenericObject
   validate  :must_accept_terms_of_deposit, :if => :should_validate
   # validate  :embargo_date_is_correct_format # TODO
 
-  delegate :accepted_terms_of_deposit, :to => "hydrusProperties", :unique => true
-  delegate :preferred_citation, :to => "descMetadata", :unique => true
-  delegate :related_citation, :to => "descMetadata"
-  delegate :person, :to => "descMetadata", :at => [:name, :namePart]
-  delegate :person_role, :to => "descMetadata", :at => [:name, :role, :roleTerm]
-  delegate(:item_depositor_id, :to => "roleMetadata",
-           :at => [:item_depositor, :person, :identifier], :unique => true)
-  delegate(:item_depositor_name, :to => "roleMetadata",
-           :at => [:item_depositor, :person, :name], :unique => true)
+  setup_delegations(
+    # [:METHOD_NAME,               :uniq, :at... ]
+    "descMetadata" => [            
+      [:preferred_citation,        true   ],
+      [:related_citation,          false  ],
+      [:person,                    false, :name, :namePart],
+      [:person_role,               false, :name, :role, :roleTerm],
+    ],
+    "roleMetadata" => [
+      [:item_depositor_id,         true,  :item_depositor, :person, :identifier],
+      [:item_depositor_name,       true,  :item_depositor, :person, :name],
+    ],
+    "hydrusProperties" => [
+      [:accepted_terms_of_deposit, true   ],
+    ]
+  )
 
   def self.create(collection_pid, user)
     # Create the object, with the correct model.

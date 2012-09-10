@@ -1,12 +1,18 @@
 class Hydrus::Collection < Hydrus::GenericObject
 
   include Hydrus::Responsible
+  extend  Hydrus::Delegatable
 
   before_save :save_apo
   before_validation :remove_values_for_associated_attribute_with_value_none
   after_validation :strip_whitespace
 
-  delegate :requires_human_approval, :to => "hydrusProperties", :unique => true
+  setup_delegations(
+    # [:METHOD_NAME,            :uniq,  :at... ]
+    "hydrusProperties" => [
+      [:requires_human_approval, true   ],
+    ],
+  )
 
   has_relationship 'hydrus_items', :is_member_of_collection, :inbound => true
 

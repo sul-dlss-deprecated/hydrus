@@ -42,6 +42,13 @@ druid, sunet and action e.g. I am 'petucket', I am looking at
 
 b. runs queries to return items e.g. I am 'petucket', what objects can i see?
 
+hydrus-collection-manager
+hydrus-collection-depositor
+hydrus-collection-reviewer
+hydrus-collection-viewer
+hydrus-item-depositor
+
+
 --------
 Technical Debt
 --------
@@ -53,6 +60,8 @@ Unit tests. Can we improve our coverage in the controllers?
 
 rightsMD: (a) tests; (b) refactor to take advantage of OM and generic_ds.rb.
 
+Change roles: hydrus-viewer >> hydrus-collection-viewer (globally);
+hydrus-item-depositor >> hydrus-collection-depositor (only at APO-Coll level).
 
 ****************
 WAITING

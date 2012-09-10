@@ -4,6 +4,7 @@ class Hydrus::RoleMetadataDS < ActiveFedora::NokogiriDatastream
   include Hydrus::GenericDS
   
   set_terminology do |t|
+
     t.root :path => 'roleMetadata'
 
     t.role do

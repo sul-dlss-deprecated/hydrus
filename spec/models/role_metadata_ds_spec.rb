@@ -12,6 +12,7 @@ describe Hydrus::RoleMetadataDS do
   end
 
   context "APO role metadata" do
+
     before(:each) do
       xml = <<-EOF
         #{@rmd_start}
