@@ -1,9 +1,15 @@
 def create_test_collection
   # Create a new Collection and set all required values.
-  hc          = Hydrus::Collection.create('archivist1')
-  hc.title    = hc.pid
-  hc.abstract = 'abstract'
-  hc.contact  = 'contact'
+  hc                         = Hydrus::Collection.create('archivist1')
+  hc.title                   = hc.pid
+  hc.abstract                = 'abstract'
+  hc.contact                 = 'contact'
+  hc.embargo_option          = 'varies'
+  hc.embargo                 = '2 years'
+  hc.license_option          = 'varies'
+  hc.license                 = 'cc-by-nc'
+  hc.visibility_option       = 'varies'
+  hc.visibility              = 'world'
   hc.requires_human_approval = 'yes'
   # Save and return.
   hc.save
