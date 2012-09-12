@@ -1,5 +1,12 @@
-include Blacklight::SolrHelper
-
+module Dor
+  class WorkflowDs < ActiveFedora::NokogiriDatastream 
+    def to_solr(solr_doc = {}, *args)
+      puts "to_solr()"
+      super(solr_doc, *args)
+    end
+  end
+end
+  
 def noko_doc(x)
   Nokogiri.XML(x) { |conf| conf.default_xml.noblanks }
 end
@@ -37,15 +44,53 @@ def role_md
 end
 
 def run_solr_query(user)
+
   # :q  :rows :fq
   h = {
-    :q    => '*:*',
-    :rows => 100,
-    :fq => [
-      'has_model_s:info\:fedora/afmodel\:Hydrus_Collection',
-      'wf_wps_facet:hydrusAssemblyWF\:start-deposit\:completed',
+    :q => [
+      'has_model_s:info\:fedora/afmodel\:Hydrus_Item',
+      # 'wf_wps_facet:hydrusAssemblyWF\:start-deposit\:completed',
     ].join(' AND '),
+    :'facet.pivot' => 'is_governed_by_s',
+    # :q    => '*:*',
+    # :q => [
+    #   'has_model_s:info\:fedora/afmodel\:Hydrus_Item',
+    #   'is_governed_by_s:(info\:fedora/druid\:oo000oo0009 OR info\:fedora/druid\:oo000oo0002)',
+    #   # 'wf_wps_facet:hydrusAssemblyWF\:start-deposit\:completed',
+    # ].join(' AND '),
+    # :q    => 'has_model_s:info\:fedora/afmodel\:Hydrus_Item AND ' +
+    #            'abstract_t:research',
+    # :rows => 100,
+    # :fq => [
+    #   # 'has_model_s:info\:fedora/afmodel\:Hydrus_Collection',
+    #   'wf_wps_facet:(hydrusAssemblyWF\:start-deposit\:completed) NOT ' +
+    #                 'hydrusAssemblyWF\:submit\:foo',
+    # ],
+    # :fq => [
+    #   'has_model_s:info\:fedora/afmodel\:Hydrus_Item',
+    #   'is_governed_by_s:info\:fedora/druid\:oo000oo0009',
+    #   # 'wf_wps_facet:hydrusAssemblyWF\:start-deposit\:completed',
+    # ].join(' AND '),
+    :fl => [
+      # 'has_model_s',
+      # 'is_governed_by_s',
+      # 'wf_wps_facet',
+      'identityMetadata_objectId_t',
+      # 'abstract_t',
+      # 'wf_wps_facet:hydrusAssemblyWF\:start-deposit\:completed',
+      # 'wf_wps_facet:hydrusAssemblyWF\:submit\:completed',
+    ].join(','),
+    :facet => true,
+    :'facet.field' => ['wf_wps_facet' , 'is_governed_by_s'],
+    # :'facet.field' => 'wf_wps_facet',
+    # :group => true,
+    # :'group.field' => 'is_governed_by_s',
   }
+
+    # :fq => [
+    #   'has_model_s:info\:fedora/afmodel\:Hydrus_Collection',
+    #   'wf_wps_facet:hydrusAssemblyWF\:start-deposit\:completed',
+    # ].join(' AND '),
 
     # :fq => [
     #   'has_model_s:info\:fedora/afmodel\:Hydrus_AdminPolicyObject',
@@ -70,8 +115,9 @@ end
 
 def solr_query(*args)
   resp, sdocs = run_solr_query(args.first)
-  # ap resp['response']
-  ap resp.docs.map { |d| d['identityMetadata_objectId_t'].first }
+  ap resp
+  # ap resp['response']['numFound']
+  # ap resp.docs.map { |d| d['identityMetadata_objectId_t'].first }
 end
 
 def show_keys(*args)
@@ -114,18 +160,17 @@ method(ARGV[0]).call(*ARGV[1..99])
 
 __END__
 
-wf_wps_facet" => [
-[0] "hydrusAssemblyWF",
-[1] "hydrusAssemblyWF:start-deposit",
-[2] "hydrusAssemblyWF:start-deposit:completed
+fq=pid:coll_a&fq=workflow_status:completed  ->  
+  numfound is the number of documents with these criteria. 
+  rows=0&facet=false
 
-hydrusAssemblyWF:start-deposit	16
-hydrusAssemblyWF:start-deposit:completed	16
-hydrusAssemblyWF	16
-hydrusAssemblyWF:approve:waiting	3
-hydrusAssemblyWF:start-assembly:waiting	3
-hydrusAssemblyWF:submit	3
-hydrusAssemblyWF:start-assembly	3
-hydrusAssemblyWF:submit:waiting	3
-hydrusAssemblyWF:approve	3
+http://sw-solr-a:8983/solr/select?fq=format:Book&fq=access_facet:%22At%20the%20Library%22&rows=0&facet=false
+
+fq=fld1:(val1 OR val2) & fq=fld3:(val2 OR val3)&rows=0&facet=true&facet.field=fld4&facet.field=fld5
+
+http://wiki.apache.org/solr/SimpleFacetParameters
+
+
+
+http://lucene.apache.org/core/3_6_0/queryparsersyntax.html
 

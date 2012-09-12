@@ -42,13 +42,6 @@ druid, sunet and action e.g. I am 'petucket', I am looking at
 
 b. runs queries to return items e.g. I am 'petucket', what objects can i see?
 
-hydrus-collection-manager
-hydrus-collection-depositor
-hydrus-collection-reviewer
-hydrus-collection-viewer
-hydrus-item-depositor
-
-
 --------
 Technical Debt
 --------
@@ -88,3 +81,45 @@ find any definitive examples in Consul. [waiting on response from Lynn]
 
 Item view page: the actions box div is called "div.collection-actions".
 [Postpone this until we have GG's new design for sidebar, etc.]
+
+
+****************
+Role implementation notes
+****************
+
+Get APOs with which USER is involved. 
+  :q 
+    has_model_s                             info:fedora/afmodel:Hydrus_AdminPolicyObject
+    roleMetadata_role_person_identifier_t   USER
+  :fl
+    identityMetadata_objectId_t             # APO druids.
+
+For each APO:
+
+  Get Collection governed by the APO.
+    :q 
+      has_model_s         info:fedora/afmodel:Hydrus_Item
+      is_governed_by_s    info:fedora/druid:DRUID
+    :fl
+      identityMetadata_objectId_t     # Collection druid.
+      title...                        # Collection title
+  
+  Print Collection title.
+
+  Print the roles of USER.
+    collection-manager
+    collection-reviewer
+    collection-viewer
+    collection-depositor              # NOT item-depositor.
+ 
+  For STATUS in [draft, waiting_approval, published]
+      
+    Determine N of items with STATUS
+      :q 
+        has_model_s          info:fedora/afmodel:Hydrus_Item
+        is_governed_by_s     info:fedora/druid:DRUID
+      :fq
+        wf_wps_facet     (   hydrusAssemblyWF:STEP_A:completed
+                         NOT hydrusAssemblyWF:STEP_B:completed)
+
+    Generate link to those items.
