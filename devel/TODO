@@ -19,28 +19,12 @@ Applies to home page and Collection view page.
 
 UI redesign: side bar and tabs.
 
--------------------
-Roles/Gated Discovery
--------------------
+Implement gated discovery: see implementation notes below.
 
-Gated discovery strategy - dual solr queries.  Query 1 = look up APOs to find
-all roles the logged in user is in. Query 2 = look up collection and item
-objects and find intersection of objects with roles using permission matrix.
-
-1. Figure out what APO role metadata to index in solr and how to index it.
-
-2. Formulate solr pre-query.
-
-3. Figure out how to index collection and item objects so that pre-query can
-return results based on roles
-
-4. Write module (possibly a gem using cancan as a basis?) that 
-
-a. understands permissions and roles and is able to return true false, pass it
-druid, sunet and action e.g. I am 'petucket', I am looking at
-'druid:oo000oo0001' and I want to 'review' and it returns true/false
-
-b. runs queries to return items e.g. I am 'petucket', what objects can i see?
+Workflow changes and SOLR: when the workflow DS for an object changes, the local
+SOLR index on a developer's box is not updated. Option 1: set up a listener that
+will update local SOLR when objects changes on the dor-dev environment. Option 2:
+run the workflow service locally. Option 3: other?
 
 --------
 Technical Debt
@@ -59,6 +43,8 @@ hydrus-item-depositor >> hydrus-collection-depositor (only at APO-Coll level).
 ****************
 WAITING
 ****************
+
+Consider upgrading to Jetty v3 or Jetty v4.
 
 Need a place to store Item types. Currently hardcoded to :dataset. Also see
 object_type() in GenericObject. [Lynn and Hannah will discuss]
@@ -84,7 +70,7 @@ Item view page: the actions box div is called "div.collection-actions".
 
 
 ****************
-Role implementation notes
+Implementation notes on roles and gated discovery
 ****************
 
 Get APOs with which USER is involved. 
