@@ -49,9 +49,9 @@ class CatalogController < ApplicationController
     #
     # :show may be set to false if you don't want the facet to be drawn in the 
     # facet bar
-    config.add_facet_field 'object_profile_display', :label => 'Object Profile' 
-    config.add_facet_field 'is_governed_by', :label => 'APOs' 
-    config.add_facet_field 'conforms_to', :label => 'Model Type (?)' 
+    # config.add_facet_field 'object_profile_display', :label => 'Object Profile' 
+    # config.add_facet_field 'is_governed_by_s', :label => 'APOs' 
+    # config.add_facet_field 'conforms_to_s', :label => 'Model Type (?)' 
 
     # Have BL send all facet field names to Solr, which has been the default
     # previously. Simply remove these lines if you'd rather use Solr request
@@ -101,10 +101,10 @@ class CatalogController < ApplicationController
     # label in pulldown is followed by the name of the SOLR field to sort by and
     # whether the sort is ascending or descending (it must be asc or desc
     # except in the relevancy case).
-    config.add_sort_field 'score desc, pub_date_sort desc, title_sort asc', :label => 'relevance'
-    config.add_sort_field 'pub_date_sort desc, title_sort asc', :label => 'year'
-    config.add_sort_field 'author_sort asc, title_sort asc', :label => 'author'
-    config.add_sort_field 'title_sort asc, pub_date_sort desc', :label => 'title'
+    config.add_sort_field 'score desc', :label => 'relevance'
+    # config.add_sort_field 'title_sort asc', :label => 'year'
+    # config.add_sort_field 'author_sort asc, title_sort asc', :label => 'author'
+    # config.add_sort_field 'title_sort asc', :label => 'title'
 
     # If there are more than this many search results, no spelling ("did you 
     # mean") suggestion is offered.

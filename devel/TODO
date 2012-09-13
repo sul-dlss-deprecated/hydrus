@@ -26,6 +26,8 @@ SOLR index on a developer's box is not updated. Option 1: set up a listener that
 will update local SOLR when objects changes on the dor-dev environment. Option 2:
 run the workflow service locally. Option 3: other?
 
+Consider upgrading to SOLR v3 or v4. Will require active-fedora 4.5.2.
+
 --------
 Technical Debt
 --------
@@ -43,8 +45,6 @@ hydrus-item-depositor >> hydrus-collection-depositor (only at APO-Coll level).
 ****************
 WAITING
 ****************
-
-Consider upgrading to Jetty v3 or Jetty v4.
 
 Need a place to store Item types. Currently hardcoded to :dataset. Also see
 object_type() in GenericObject. [Lynn and Hannah will discuss]

@@ -56,6 +56,7 @@ describe HydrusCollectionsController do
       @pid = "druid:oo000oo0003"
     end
 
+    # TODO: convert this to an integration test.
     it "should not allow a user to update an object if you do not have edit permissions" do
       controller.stub(:current_user).and_return(mock_user)
       put :update, :id => @pid
