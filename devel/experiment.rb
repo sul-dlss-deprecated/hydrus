@@ -1,11 +1,11 @@
-module Dor
-  class WorkflowDs < ActiveFedora::NokogiriDatastream 
-    def to_solr(solr_doc = {}, *args)
-      puts "to_solr()"
-      super(solr_doc, *args)
-    end
-  end
-end
+# module Dor
+#   class WorkflowDs < ActiveFedora::NokogiriDatastream 
+#     def to_solr(solr_doc = {}, *args)
+#       puts "to_solr()"
+#       super(solr_doc, *args)
+#     end
+#   end
+# end
   
 def noko_doc(x)
   Nokogiri.XML(x) { |conf| conf.default_xml.noblanks }
@@ -48,10 +48,9 @@ def run_solr_query(user)
   # :q  :rows :fq
   h = {
     :q => [
-      'has_model_s:info\:fedora/afmodel\:Hydrus_Item',
+      'has_model_s:info\:fedora/afmodel\:Hydrus_Collection',
       # 'wf_wps_facet:hydrusAssemblyWF\:start-deposit\:completed',
     ].join(' AND '),
-    :'facet.pivot' => 'is_governed_by_s',
     # :q    => '*:*',
     # :q => [
     #   'has_model_s:info\:fedora/afmodel\:Hydrus_Item',
@@ -81,7 +80,8 @@ def run_solr_query(user)
       # 'wf_wps_facet:hydrusAssemblyWF\:submit\:completed',
     ].join(','),
     :facet => true,
-    :'facet.field' => ['wf_wps_facet' , 'is_governed_by_s'],
+    :'facet.field' => 'wf_wps_facet',
+    # :'facet.pivot' => 'is_governed_by_s',
     # :'facet.field' => 'wf_wps_facet',
     # :group => true,
     # :'group.field' => 'is_governed_by_s',
@@ -155,22 +155,4 @@ def resolrize(*args)
   end
 end
 
-method(ARGV[0]).call(*ARGV[1..99])
-
-
-__END__
-
-fq=pid:coll_a&fq=workflow_status:completed  ->  
-  numfound is the number of documents with these criteria. 
-  rows=0&facet=false
-
-http://sw-solr-a:8983/solr/select?fq=format:Book&fq=access_facet:%22At%20the%20Library%22&rows=0&facet=false
-
-fq=fld1:(val1 OR val2) & fq=fld3:(val2 OR val3)&rows=0&facet=true&facet.field=fld4&facet.field=fld5
-
-http://wiki.apache.org/solr/SimpleFacetParameters
-
-
-
-http://lucene.apache.org/core/3_6_0/queryparsersyntax.html
-
+method(ARGV.shift).call(*ARGV)

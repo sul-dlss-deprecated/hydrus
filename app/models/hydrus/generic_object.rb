@@ -1,5 +1,11 @@
 class Hydrus::GenericObject < Dor::Item
 
+  # def resolrize
+  #   Hydrus.ap_dump('resolrize()', pid)
+  #   s = Solrizer::Fedora::Solrizer.new(:index_full_text => true)
+  #   s.solrize(pid)
+  # end
+
   include Hydrus::ModelHelper
   include Hydrus::Publishable
   include ActiveModel::Validations

@@ -4,6 +4,7 @@ class Hydrus::Collection < Hydrus::GenericObject
   extend  Hydrus::Delegatable
 
   before_save :save_apo
+
   before_validation :remove_values_for_associated_attribute_with_value_none
   after_validation :strip_whitespace
 
