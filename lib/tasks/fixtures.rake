@@ -121,4 +121,23 @@ namespace :hydrus do
     }
   end
 
+  desc "restore jetty to initial state"
+  task :jetty_nuke do
+    puts "Nuking jetty"
+    # Restore jetty submodule to initial state.
+    Rake::Task['jetty:stop'].invoke
+    Dir.chdir('jetty') {
+      system('git reset --hard HEAD') or exit
+      system('git clean -dfx')        or exit
+    }
+    Rake::Task['hydra:jetty:config'].invoke
+    Rake::Task['jetty:start'].invoke
+    # Refresh fixtures.
+    sleep(15)
+    Rake::Task['hydrus:refreshfix'].invoke
+    ENV['RAILS_ENV'] = 'test'
+    Rails.env = 'test'
+    Rake::Task['hydrus:refreshfix'].invoke
+  end
+
 end
