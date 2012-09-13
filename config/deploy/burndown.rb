@@ -2,7 +2,7 @@ set :rails_env, "development"
 set :deployment_host, "dlss-dev-#{ENV['USER']}.stanford.edu"
 set :repository, File.expand_path(File.join(File.dirname(Pathname.new(__FILE__).realpath), "../.."))
 set :deploy_via, :copy
-set :branch, "develop"
+DEFAULT_TAG='develop'
 set :bundle_without, [:deployment]
 set :user, ENV['USER']
 set :runner, ENV['USER']

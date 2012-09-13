@@ -2,7 +2,7 @@ set :rails_env, "production"
 set :deployment_host, "hydrus-prod.stanford.edu"
 set :repository, "https://github.com/sul-dlss/hydrus.git"
 set :deploy_via, :remote_cache
-set :branch, "master"
+DEFAULT_TAG='master'
 set :bundle_without, [:deployment,:development,:test]
 
 role :web, deployment_host

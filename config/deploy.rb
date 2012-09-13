@@ -46,6 +46,13 @@ set :keep_releases, 2
 
 set :deploy_to, "#{destination}/#{application}"
 
+set :branch do
+# DEFAULT_TAG = `git tag`.split("\n").last
+  tag = Capistrano::CLI.ui.ask "Tag or branch to deploy (make sure to push the tag or branch first): [#{DEFAULT_TAG}] "
+  tag = DEFAULT_TAG if tag.empty?
+  tag
+end
+
 namespace :rvm do
   task :trust_rvmrc do
     run "/usr/local/rvm/bin/rvm rvmrc trust #{latest_release}"

@@ -2,7 +2,7 @@ set :rails_env, "development"
 set :deployment_host, "hydrus-dev.stanford.edu"
 set :repository, File.expand_path(File.join(File.dirname(Pathname.new(__FILE__).realpath), "../.."))
 set :deploy_via, :copy
-set :branch, "develop"
+DEFAULT_TAG='develop'
 set :bundle_without, [:deployment]
 
 role :web, deployment_host
