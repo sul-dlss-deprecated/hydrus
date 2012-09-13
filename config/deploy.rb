@@ -5,8 +5,8 @@ require 'bundler/capistrano'
 require 'dlss/capistrano'
 require 'pathname'
 
-set :stages, %W(burndown dev testing prod)
-set :default_stage, "testing"
+set :stages, %W(burndown dev dortest prod)
+set :default_stage, "dortest"
 set :bundle_flags, "--quiet"
 set :rvm_ruby_string, "1.9.3@hydrus"
 set :rvm_type, :system
@@ -19,7 +19,6 @@ after "deploy:assets:symlink", "rvm:trust_rvmrc"
 set :shared_children, %w(
   log 
   config/certs
-  config/environments
   config/database.yml
   config/solr.yml
   config/fedora.yml

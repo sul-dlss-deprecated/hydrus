@@ -3,25 +3,27 @@ September 2012
 --------------
 
 * UI Redesign
-- Complete the design of new tab and sidebars. Design dashboard/home page.
-- Implement new tab and sidebars.
-- Implement dashboard/home page.
+- Design dashboard/home page. [done]
+- Complete the design of new tab and sidebars. 
+- Implement UI designs for new tab and sidebars.
+- Implement UI designs for dashboard/home page.  Actual data will not be accurate if queries not complete/working.
 
 * Roles
+- Implement Hydrus app behaviors given an object, based on user ID, roles, and permissions [using cancan, hitting DOR directly, no solr]
 - Implement gated discovery for dashboard and individual items/collections: Solr fields, etc. 
-- Implement Hydrus app behaviours based on user ID, roles, and permissions [using cancan]
 - Plan/spec the multi-author role issue [Hannah and Lynn].
 
 * Integration with DOR/PURL
 - Set up needed file mounts [waiting on sys admins].
-- Prove that we can publish some Hydrus items and run them through assembly/accessioning.  Debug issues with Chimera team.
+- Prove that we can publish some Hydrus items and run them through assembly/accessioning.  
+  -- Connect hydrus-test to dor-test and solr-test 
+	-- Debug issues with Chimera team.
 - Review / articulate PURL app behavior for Hydrus items (Hannah/Lynn)
 
 * Technical debt
-- Fix Javascript and multi-valued field glitches on Item edit page.
 - Support ability to add Item to Collection when Javascript is disabled.
+- Fix Javascript and multi-valued field glitches on Item edit page.
 - Smooth out difficulties in deployment to hydrus-test.
-
 
 -----------
 August 2012
