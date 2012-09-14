@@ -45,6 +45,19 @@ class Hydrus::Collection < Hydrus::GenericObject
     return v1 && v2
   end
 
+  #################################
+  # methods used to build sidebar
+
+  def license_details_provided?
+    validate! ? true : (errors.keys & [:license,:license_option]).size == 0
+  end
+
+  def embargo_details_provided?
+    validate! ? true : (errors.keys & [:embargo,:embargo_option]).size == 0
+  end
+
+  ###########################
+  
   # Returns true only if the Collection is unpublished and has no Items.
   def is_destroyable
     return not(is_published or has_items)

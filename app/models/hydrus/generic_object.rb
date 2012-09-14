@@ -6,7 +6,9 @@ class Hydrus::GenericObject < Dor::Item
 
   attr_accessor :files_were_changed
 
-  validates :title, :abstract, :contact, :not_empty => true, :if => :should_validate
+  REQUIRED_FIELDS=[:title,:abstract,:contact]
+  REQUIRED_FIELDS.each {|field| validates field, :not_empty => true, :if => :should_validate}
+  
   validates :pid, :is_druid => true
 
   delegate :title,    :to => "descMetadata", :unique => true
@@ -16,6 +18,28 @@ class Hydrus::GenericObject < Dor::Item
   delegate :contact, :to => "descMetadata", :unique => true
   delegate :disapproval_reason, :to => "hydrusProperties", :unique => true
 
+  def is_collection?
+    self.class == Hydrus::Collection
+  end
+    
+  # this method will FORCE run validations and populate the errors object for you so you can run further tests
+  # as is needed --- note that a simple .valid? call will always return true by default if the object is not publishable
+  def validate!
+    @should_validate=true
+    apo.instance_variable_set('@should_validate', true) if is_collection?
+    is_valid=valid?
+    @should_validate=false
+    apo.instance_variable_set('@should_validate', false) if is_collection?
+    return is_valid
+  end
+
+  #################################
+  # methods used to build sidebar #
+  def required_fields_completed?  # returns true if all required fields are filled in, otherwise returns false
+    validate! ? true : (errors.keys & REQUIRED_FIELDS).size == 0  # if validations are true, returns true, if not runs an intersection of invalid fields with required fields and indicates if this is blank
+  end
+  #################################  
+  
   # We override save() so we can control whether editing events are logged.
   def save(opts = {})
     log_editing_events() unless opts[:no_edit_logging]

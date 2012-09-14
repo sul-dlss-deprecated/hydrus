@@ -4,7 +4,7 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
   include Hydrus::Responsible
   include Hydrus::Publishable
   include Dor::Processable  # TODO: needed until dor-services gem includes in its APOs.
-
+    
   validates :pid, :is_druid => true
   validate  :check_embargo_options, :if => :should_validate
   validate  :check_license_options, :if => :should_validate
