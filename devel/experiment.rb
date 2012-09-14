@@ -1,12 +1,3 @@
-# module Dor
-#   class WorkflowDs < ActiveFedora::NokogiriDatastream 
-#     def to_solr(solr_doc = {}, *args)
-#       puts "to_solr()"
-#       super(solr_doc, *args)
-#     end
-#   end
-# end
-  
 def noko_doc(x)
   Nokogiri.XML(x) { |conf| conf.default_xml.noblanks }
 end
@@ -48,7 +39,7 @@ def run_solr_query(user)
   # :q  :rows :fq
   h = {
     :q => [
-      'has_model_s:info\:fedora/afmodel\:Hydrus_Collection',
+      'has_model_s:"info:fedora/afmodel:Hydrus_Item"',
       # 'wf_wps_facet:hydrusAssemblyWF\:start-deposit\:completed',
     ].join(' AND '),
     # :q    => '*:*',
@@ -75,13 +66,15 @@ def run_solr_query(user)
       # 'is_governed_by_s',
       # 'wf_wps_facet',
       'identityMetadata_objectId_t',
+      'hydrus_wf_status_t',
       # 'abstract_t',
       # 'wf_wps_facet:hydrusAssemblyWF\:start-deposit\:completed',
       # 'wf_wps_facet:hydrusAssemblyWF\:submit\:completed',
     ].join(','),
     :facet => true,
-    :'facet.field' => 'wf_wps_facet',
-    # :'facet.pivot' => 'is_governed_by_s',
+    # :'facet.field' => 'wf_wps_facet,is_governed_by_s',
+    # :'facet.pivot' => 'is_governed_by_s,wf_wps_facet',
+    :'facet.pivot' => 'is_member_of_s,hydrus_wf_status_facet',
     # :'facet.field' => 'wf_wps_facet',
     # :group => true,
     # :'group.field' => 'is_governed_by_s',

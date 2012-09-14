@@ -106,10 +106,10 @@ namespace :hydrus do
     repo    = 'dor'
     wf_name = 'hydrusAssemblyWF'
     steps   = [
-      ['start-deposit', ' status="completed" lifecycle="registered"'],
-      ['submit', ''],
-      ['approve', ''],
-      ['start-assembly', ''],
+      ['start-deposit',  ' status="completed" lifecycle="registered"'],
+      ['submit',         ' status="completed"'],
+      ['approve',        ' status="completed"'],
+      ['start-assembly', ' status="completed"'],
     ]
     FIXTURE_PIDS.each { |druid|
       resp = [druid, wf_name]
