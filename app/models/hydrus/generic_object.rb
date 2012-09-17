@@ -10,7 +10,7 @@ class Hydrus::GenericObject < Dor::Item
   validates :title, :abstract, :contact, :not_empty => true, :if => :should_validate
   validates :pid, :is_druid => true
 
-  delegate :title,    :to => "descMetadata", :unique => true
+  delegate :title,    :to => "descMetadata", :at => [:main_title], :unique => true
   delegate :abstract, :to => "descMetadata", :unique => true
   delegate :related_item_title, :to => "descMetadata", :at => [:relatedItem, :titleInfo, :title]
   delegate :related_item_url, :to => "descMetadata", :at => [:relatedItem, :location, :url]

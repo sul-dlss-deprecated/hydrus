@@ -29,7 +29,7 @@ class Hydrus::DescMetadataDS < ActiveFedora::NokogiriDatastream
     t.titleInfo IANS do
       t.title IA
     end
-    t.title(
+    t.main_title(
       :proxy => [:mods, :titleInfo, :title],
       :index_as => [:searchable, :displayable]
     )

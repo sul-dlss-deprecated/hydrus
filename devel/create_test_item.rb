@@ -4,7 +4,7 @@
 def create_test_collection(*args)
   # Create a new Collection and set all required values.
   hc                         = Hydrus::Collection.create('archivist1')
-  hc.title                   = hc.pid
+  hc.title                   = "Title for: #{hc.pid}"
   hc.abstract                = 'abstract'
   hc.contact                 = 'contact'
   hc.embargo_option          = 'varies'
@@ -26,7 +26,7 @@ def create_test_item(*args)
   hc_pid         = args.shift
   hc_pid         = "druid:#{hc_pid}" unless hc_pid =~ /^druid:/
   hi             = Hydrus::Item.create(hc_pid, 'archivist1')
-  hi.title       = hi.pid
+  hi.title       = "Title for: #{hi.pid}"
   hi.abstract    = 'abstract'
   hi.contact     = 'contact'
   hi.person      = { "0" => "Nugent, Ted" }

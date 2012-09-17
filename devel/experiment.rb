@@ -67,6 +67,7 @@ def run_solr_query(user)
       # 'wf_wps_facet',
       'identityMetadata_objectId_t',
       'hydrus_wf_status_t',
+      'main_title_t',
       # 'abstract_t',
       # 'wf_wps_facet:hydrusAssemblyWF\:start-deposit\:completed',
       # 'wf_wps_facet:hydrusAssemblyWF\:submit\:completed',
@@ -75,6 +76,7 @@ def run_solr_query(user)
     # :'facet.field' => 'wf_wps_facet,is_governed_by_s',
     # :'facet.pivot' => 'is_governed_by_s,wf_wps_facet',
     :'facet.pivot' => 'is_member_of_s,hydrus_wf_status_facet',
+    :rows => 100,
     # :'facet.field' => 'wf_wps_facet',
     # :group => true,
     # :'group.field' => 'is_governed_by_s',
@@ -149,3 +151,72 @@ def resolrize(*args)
 end
 
 method(ARGV.shift).call(*ARGV)
+
+__END__
+
+
+  # :q  :rows :fq
+  h = {
+    :q => [
+      'has_model_s:"info:fedora/afmodel:Hydrus_Item"',
+      # 'wf_wps_facet:hydrusAssemblyWF\:start-deposit\:completed',
+    ].join(' AND '),
+    # :q    => '*:*',
+    # :q => [
+    #   'has_model_s:info\:fedora/afmodel\:Hydrus_Item',
+    #   'is_governed_by_s:(info\:fedora/druid\:oo000oo0009 OR info\:fedora/druid\:oo000oo0002)',
+    #   # 'wf_wps_facet:hydrusAssemblyWF\:start-deposit\:completed',
+    # ].join(' AND '),
+    # :q    => 'has_model_s:info\:fedora/afmodel\:Hydrus_Item AND ' +
+    #            'abstract_t:research',
+    # :rows => 100,
+    # :fq => [
+    #   # 'has_model_s:info\:fedora/afmodel\:Hydrus_Collection',
+    #   'wf_wps_facet:(hydrusAssemblyWF\:start-deposit\:completed) NOT ' +
+    #                 'hydrusAssemblyWF\:submit\:foo',
+    # ],
+    # :fq => [
+    #   'has_model_s:info\:fedora/afmodel\:Hydrus_Item',
+    #   'is_governed_by_s:info\:fedora/druid\:oo000oo0009',
+    #   # 'wf_wps_facet:hydrusAssemblyWF\:start-deposit\:completed',
+    # ].join(' AND '),
+    :fl => [
+      # 'has_model_s',
+      # 'is_governed_by_s',
+      # 'wf_wps_facet',
+      'identityMetadata_objectId_t',
+      'hydrus_wf_status_t',
+      'main_title_t',
+      # 'abstract_t',
+      # 'wf_wps_facet:hydrusAssemblyWF\:start-deposit\:completed',
+      # 'wf_wps_facet:hydrusAssemblyWF\:submit\:completed',
+    ].join(','),
+    :facet => true,
+    # :'facet.field' => 'wf_wps_facet,is_governed_by_s',
+    # :'facet.pivot' => 'is_governed_by_s,wf_wps_facet',
+    :'facet.pivot' => 'is_member_of_s,hydrus_wf_status_facet',
+    :rows => 100,
+    # :'facet.field' => 'wf_wps_facet',
+    # :group => true,
+    # :'group.field' => 'is_governed_by_s',
+  }
+
+    # :fq => [
+    #   'has_model_s:info\:fedora/afmodel\:Hydrus_Collection',
+    #   'wf_wps_facet:hydrusAssemblyWF\:start-deposit\:completed',
+    # ].join(' AND '),
+
+    # :fq => [
+    #   'has_model_s:info\:fedora/afmodel\:Hydrus_AdminPolicyObject',
+    #   "roleMetadata_role_person_identifier_t:#{user}",
+    # ].join(' AND '),
+    # :fl => [
+    #   'roleMetadata_role_type_t',
+    #   'roleMetadata_role_person_identifier_t',
+    #   'identityMetadata_objectId_t',
+
+    # roleMetadata_role_person_identifier_t
+    # :fq => 'has_model_s:info\:fedora/afmodel\:Hydrus_AdminPolicyObject',
+    # :fq => 'has_model_s:info\:fedora/afmodel\:Hydrus_Collection',
+    # :fq => 'has_model_s:info\:fedora/afmodel\:Hydrus_Item',
+    # :fq => 'has_model_s:info\:fedora/afmodel\:Dor_AdminPolicyObject',

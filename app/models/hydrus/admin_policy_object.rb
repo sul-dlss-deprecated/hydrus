@@ -35,7 +35,7 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
   setup_delegations(
     # [:METHOD_NAME,         :uniq, :at... ]
     "descMetadata" => [
-      [:title,               true   ],
+      [:title,               true,  :main_title ],
     ],
     "roleMetadata" => [
       [:collection_manager,  false  ],

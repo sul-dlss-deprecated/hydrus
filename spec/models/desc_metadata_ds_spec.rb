@@ -53,7 +53,7 @@ describe Hydrus::DescMetadataDS do
       tests = [
         [[:originInfo, :dateOther],          ['Nov 7']],
         [[:abstract],                        ['abstract content']],
-        [[:title],                           ['Learn VB in 21 Days']],
+        [[:main_title],                      ['Learn VB in 21 Days']],
         [[:name, :namePart],                 ['Angus']],
         [[:name, :role, :roleTerm],          ['guitar']],
         [[:relatedItem, :titleInfo, :title], ['Learn VB in 1 Day']],

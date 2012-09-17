@@ -71,7 +71,7 @@ class Hydrus::Collection < Hydrus::GenericObject
       # At the moment of publication, we refresh various titles.
       apo_title = "APO for #{title}"
       apo.identityMetadata.objectLabel = apo_title
-      apo.descMetadata.title           = apo_title
+      apo.title                        = apo_title
       identityMetadata.objectLabel     = title
       self.label                       = title     # The label in Fedora's foxml:objectProperties.
       apo.label                        = apo_title # Ditto.
