@@ -109,12 +109,18 @@ namespace :hydrus do
       ['start-deposit',  ' status="completed" lifecycle="registered"'],
       ['submit',         ' status="completed"'],
       ['approve',        ' status="completed"'],
-      ['start-assembly', ' status="completed"'],
+      ['start-assembly', ' status="waiting"'],
     ]
     FIXTURE_PIDS.each { |druid|
       resp = [druid, wf_name]
       resp << Dor::WorkflowService.delete_workflow(repo, druid, wf_name)
-      xml  = steps.map { |step, extra| %Q(<process name="#{step}"#{extra}/>) }.join ''
+      xml  = steps.map { |step, extra|
+        extra = extra.gsub(/completed/, 'waiting') if (
+          druid == 'druid:oo000oo0005' &&
+          step != 'start-deposit'
+        )
+        %Q(<process name="#{step}"#{extra}/>)
+      }.join ''
       xml  = "<workflow>#{xml}</workflow>"
       resp << Dor::WorkflowService.create_workflow(repo, druid, wf_name, xml)
       puts resp.inspect

@@ -41,6 +41,16 @@ rightsMD: (a) tests; (b) refactor to take advantage of OM and generic_ds.rb.
 Change roles: hydrus-viewer >> hydrus-collection-viewer (globally);
 hydrus-item-depositor >> hydrus-collection-depositor (only at APO-Coll level).
 
+Collection/Item create. Rather than starting a new Item/Collection with blank
+text boxes, use the approach we have adopted elsewhere for non-required items:
+have the user click "Add" button first. Collection: links to related items.
+Item: related citations; and links to related items.
+
+Workflow fixtures. Create proper worflow XML fixture files, and modify rake
+refresh_workflows task to load the files. We need more fine-grained controlled
+over the states of our fixture objects.
+
+
 ****************
 WAITING
 ****************
