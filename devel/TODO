@@ -21,12 +21,11 @@ UI redesign: side bar and tabs.
 
 Implement gated discovery: see implementation notes below.
 
-Workflow changes and SOLR: when the workflow DS for an object changes, the local
-SOLR index on a developer's box is not updated. Option 1: set up a listener that
-will update local SOLR when objects changes on the dor-dev environment. Option 2:
-run the workflow service locally. Option 3: other?
-
-Consider upgrading to SOLR v3 or v4. Will require active-fedora 4.5.2.
+Workflow changes and SOLR: when the workflow DS for an object changes, the
+local SOLR index on a developer's box is not updated. Option 1: set up a
+listener that will update local SOLR when objects changes on the dor-dev
+environment. See dor-services-gem bin/ directory. Option 2: run the workflow
+service locally.
 
 --------
 Technical Debt

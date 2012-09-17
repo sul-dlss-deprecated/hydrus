@@ -132,12 +132,6 @@ namespace :hydrus do
     }
     Rake::Task['hydra:jetty:config'].invoke
     Rake::Task['jetty:start'].invoke
-    # Refresh fixtures.
-    sleep(15)
-    Rake::Task['hydrus:refreshfix'].invoke
-    ENV['RAILS_ENV'] = 'test'
-    Rails.env = 'test'
-    Rake::Task['hydrus:refreshfix'].invoke
   end
 
 end
