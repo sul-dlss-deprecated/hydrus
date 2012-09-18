@@ -3,7 +3,7 @@ class Hydrus::Item < Hydrus::GenericObject
   include Hydrus::EmbargoMetadataDsExtension
   include Hydrus::Responsible
 
-  after_validation :strip_whitespace
+  after_validation :strip_whitespace, :set_terms_of_deposit_acceptance_date
 
   attr_accessor :embargo
   
@@ -57,6 +57,19 @@ class Hydrus::Item < Hydrus::GenericObject
     end
   end
 
+  def date_accepted_terms_of_deposit
+    accept_date=hydrusProperties.date_accepted_terms_of_deposit
+    accept_date.size == 1 ? accept_date.first.to_datetime : nil
+  end
+
+  def date_accepted_terms_of_deposit=(date)
+    hydrusProperties.date_accepted_terms_of_deposit = date
+  end
+  
+  def set_terms_of_deposit_acceptance_date
+    date_accepted_terms_of_deposit=Time.now if to_bool(accepted_terms_of_deposit) && date_accepted_terms_of_deposit.nil?
+  end
+  
   # Returns true if the Item's Collection requires items to be
   # reviewed/approved before ultimate release.
   def requires_human_approval

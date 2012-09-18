@@ -6,6 +6,7 @@ class Hydrus::HydrusPropertiesDS < ActiveFedora::NokogiriDatastream
     t.root :path => 'hydrusProperties'
     
     t.accepted_terms_of_deposit :path => 'acceptedTermsOfDeposit'
+    t.date_accepted_terms_of_deposit :path=> 'dateAcceptedTermsOfDeposit'
     t.requires_human_approval :path => 'requiresHumanApproval'
     t.disapproval_reason :path => 'disapprovalReason'
   end

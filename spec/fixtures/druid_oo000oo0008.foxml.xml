@@ -151,6 +151,7 @@
       <foxml:xmlContent>
         <hydrusProperties>
           <acceptedTermsOfDeposit>true</acceptedTermsOfDeposit>
+          <dateAcceptedTermsOfDeposit>2012-08-15T10:12:31-07:00</dateAcceptedTermsOfDeposit>
         </hydrusProperties>
       </foxml:xmlContent>
     </foxml:datastreamVersion>

@@ -84,14 +84,14 @@ describe("Collection create", :type => :request, :integration => true) do
     page.should have_content(@notice)
     # The view page should display some validation error messages, and should not
     # offer the Open Collection button.
-    div_cs = find("div.collection-actions")
-    div_cs.should_not have_button(open_button)
-    err_msgs = div_cs.all('li').map { |e| e.text }.join("\n")
-    exp = [
-      /^Abstract/,
-      /^Contact/,
-    ]
-    exp.each { |e| err_msgs.should =~ e }
+    # div_cs = find("div.collection-actions")
+    # div_cs.should_not have_button(open_button)
+    # err_msgs = div_cs.all('li').map { |e| e.text }.join("\n")
+    # exp = [
+    #   /^Abstract/,
+    #   /^Contact/,
+    # ]
+    # exp.each { |e| err_msgs.should =~ e }
     # Get the Collection and APO objects from fedora.
     coll = Hydrus::Collection.find(druid)
     apo = coll.apo
