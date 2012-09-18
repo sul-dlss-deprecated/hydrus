@@ -16,7 +16,7 @@ describe Hydrus::GenericDS do
           #{@p1}
           #{@p2}
         </role>
-        <role type="hydrus-item-depositor">
+        <role type="hydrus-collection-item-depositor">
           #{@p3}
         </role>
       #{@rmd_end}
@@ -34,7 +34,7 @@ describe Hydrus::GenericDS do
       exp_xml = <<-EOF
         #{@rmd_start}
           <role type="hydrus-collection-manager" />
-          <role type="hydrus-item-depositor" />
+          <role type="hydrus-collection-item-depositor" />
         #{@rmd_end}
       EOF
       @rmdoc.remove_nodes(:person)
@@ -42,7 +42,7 @@ describe Hydrus::GenericDS do
       # Remove the <role> node for collection manager.
       exp_xml = <<-EOF
         #{@rmd_start}
-          <role type="hydrus-item-depositor" />
+          <role type="hydrus-collection-item-depositor" />
         #{@rmd_end}
       EOF
       @rmdoc.remove_nodes(:collection_manager)
@@ -56,7 +56,7 @@ describe Hydrus::GenericDS do
       exp_xml = <<-EOF
         #{@rmd_start}
           <role type="hydrus-collection-manager" />
-          <role type="hydrus-item-depositor" />
+          <role type="hydrus-collection-item-depositor" />
         #{@rmd_end}
       EOF
       @rmdoc.remove_nodes(:role, :person)
@@ -77,7 +77,7 @@ describe Hydrus::GenericDS do
       exp_xml = <<-EOF
         #{@rmd_start}
           <role type="hydrus-collection-manager" />
-          <role type="hydrus-item-depositor" />
+          <role type="hydrus-collection-item-depositor" />
         #{@rmd_end}
       EOF
       @rmdoc.remove_nodes_by_xpath('//role/person')
@@ -85,7 +85,7 @@ describe Hydrus::GenericDS do
       # Remove the <role> node for collection manager.
       exp_xml = <<-EOF
         #{@rmd_start}
-          <role type="hydrus-item-depositor" />
+          <role type="hydrus-collection-item-depositor" />
         #{@rmd_end}
       EOF
       @rmdoc.remove_nodes_by_xpath('//role[@type="hydrus-collection-manager"]')
@@ -112,7 +112,7 @@ describe Hydrus::GenericDS do
           <role type="hydrus-collection-manager">
             #{@p1}
           </role>
-          <role type="hydrus-item-depositor">
+          <role type="hydrus-collection-item-depositor">
             #{@p3}
           </role>
         #{@rmd_end}

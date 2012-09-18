@@ -1,7 +1,5 @@
 class Hydrus::Collection < Hydrus::GenericObject
 
-  include Hydrus::Responsible
-
   before_save :save_apo
   before_validation :remove_values_for_associated_attribute_with_value_none
   after_validation :strip_whitespace
@@ -21,8 +19,6 @@ class Hydrus::Collection < Hydrus::GenericObject
     coll.assert_content_model
     # Add some Hydrus-specific info to identityMetadata.
     coll.augment_identity_metadata(:collection)
-    # Add roleMetadata with current user as hydrus-collection-depositor.
-    coll.roleMetadata.add_person_with_role(user, 'hydrus-collection-depositor')
     # Add event.
     coll.events.add_event('hydrus', user, 'Collection created')
     # Set defaults for visability, embargo, etc.

@@ -22,7 +22,14 @@ class Hydrus::Item < Hydrus::GenericObject
            :at => [:item_depositor, :person, :identifier], :unique => true)
   delegate(:item_depositor_name, :to => "roleMetadata",
            :at => [:item_depositor, :person, :name], :unique => true)
-  
+
+
+   has_metadata(
+     :name => "roleMetadata",
+     :type => Hydrus::RoleMetadataDS,
+     :label => 'Role Metadata',
+     :control_group => 'M')
+               
   def self.create(collection_pid, user)
     # Create the object, with the correct model.
     coll     = Hydrus::Collection.find(collection_pid)
