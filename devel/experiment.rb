@@ -1,107 +1,108 @@
-def noko_doc(x)
-  Nokogiri.XML(x) { |conf| conf.default_xml.noblanks }
-end
+def dashboard(*args)
 
-def role_md
-  rmd_start = '<roleMetadata>'
-  rmd_end   = '</roleMetadata>'
-  xml = <<-EOF
-    #{rmd_start}
-      <role type="hydrus-collection-manager">
-         <person>
-            <identifier type="sunetid">brown</identifier>
-            <name>Brown, Malcolm</name>
-         </person>
-         <person>
-            <identifier type="sunetid">dblack</identifier>
-            <name>Black, Delores</name>
-         </person>
-      </role>
-      <role type="hydrus-collection-depositor">
-         <person>
-            <identifier type="sunetid">ggreen</identifier>
-            <name>Green, Greg</name>
-         </person>
-      </role>
-      <role type="hydrus-collection-reviewer">
-         <person>
-            <identifier type="sunetid">bblue</identifier>
-            <name>Blue, Bill</name>
-         </person>
-      </role>
-    #{rmd_end}
-  EOF
-  return Hydrus::RoleMetadataDS.from_xml(noko_doc(xml))
-end
+  # Current logged in user.
+  user = args.first
 
-def run_solr_query(user)
+  # Get PIDs of the APOs where USER plays a role.
+  resp, sdocs = run_solr_query('apos', user)
+  apo_druids = resp.docs.map { |d| d['identityMetadata_objectId_t'].first }
 
-  # :q  :rows :fq
-  h = {
-    :q => [
-      'has_model_s:"info:fedora/afmodel:Hydrus_Item"',
-      # 'wf_wps_facet:hydrusAssemblyWF\:start-deposit\:completed',
-    ].join(' AND '),
-    # :q    => '*:*',
-    # :q => [
-    #   'has_model_s:info\:fedora/afmodel\:Hydrus_Item',
-    #   'is_governed_by_s:(info\:fedora/druid\:oo000oo0009 OR info\:fedora/druid\:oo000oo0002)',
-    #   # 'wf_wps_facet:hydrusAssemblyWF\:start-deposit\:completed',
-    # ].join(' AND '),
-    # :q    => 'has_model_s:info\:fedora/afmodel\:Hydrus_Item AND ' +
-    #            'abstract_t:research',
-    # :rows => 100,
-    # :fq => [
-    #   # 'has_model_s:info\:fedora/afmodel\:Hydrus_Collection',
-    #   'wf_wps_facet:(hydrusAssemblyWF\:start-deposit\:completed) NOT ' +
-    #                 'hydrusAssemblyWF\:submit\:foo',
-    # ],
-    # :fq => [
-    #   'has_model_s:info\:fedora/afmodel\:Hydrus_Item',
-    #   'is_governed_by_s:info\:fedora/druid\:oo000oo0009',
-    #   # 'wf_wps_facet:hydrusAssemblyWF\:start-deposit\:completed',
-    # ].join(' AND '),
-    :fl => [
-      # 'has_model_s',
-      # 'is_governed_by_s',
-      # 'wf_wps_facet',
-      'identityMetadata_objectId_t',
-      'hydrus_wf_status_t',
-      'main_title_t',
-      # 'abstract_t',
-      # 'wf_wps_facet:hydrusAssemblyWF\:start-deposit\:completed',
-      # 'wf_wps_facet:hydrusAssemblyWF\:submit\:completed',
-    ].join(','),
-    :facet => true,
-    # :'facet.field' => 'wf_wps_facet,is_governed_by_s',
-    # :'facet.pivot' => 'is_governed_by_s,wf_wps_facet',
-    :'facet.pivot' => 'is_member_of_s,hydrus_wf_status_facet',
-    :rows => 100,
-    # :'facet.field' => 'wf_wps_facet',
-    # :group => true,
-    # :'group.field' => 'is_governed_by_s',
+  # Get PIDs of the Collections governed by those APOs.
+  resp, sdocs = run_solr_query('colls', *apo_druids)
+  coll_druids = resp.docs.map { |d| d['identityMetadata_objectId_t'].first }
+
+  # Get counts of Items-by-workflow-status for those Collections.
+  resp, sdocs = run_solr_query('stats', *coll_druids)
+  stats = {}
+  resp.facet_counts['facet_pivot'].values.first.each { |h|
+    druid = h['value'].sub(/.+\/druid/, 'druid')
+    h['pivot'].each { |p|
+      status = p['value']
+      n      = p['count']
+      stats[druid] ||= {}
+      stats[druid][status] = n
+    }
   }
 
-    # :fq => [
-    #   'has_model_s:info\:fedora/afmodel\:Hydrus_Collection',
-    #   'wf_wps_facet:hydrusAssemblyWF\:start-deposit\:completed',
-    # ].join(' AND '),
+  # Pull all of the information together.
+  colls = {}
+  coll_druids.each do |coll_dru|
+    hc  = Hydrus::Collection.find(coll_dru)
+    apo = hc.apo
+    ap({
+      :pid         => hc.pid,
+      :apo_pid     => apo.pid,
+      :title       => hc.title,
+      :roles       => apo.roles_of_person(user),
+      :item_counts => stats[hc.pid] || {},
+    })
+  end
 
-    # :fq => [
-    #   'has_model_s:info\:fedora/afmodel\:Hydrus_AdminPolicyObject',
-    #   "roleMetadata_role_person_identifier_t:#{user}",
-    # ].join(' AND '),
-    # :fl => [
-    #   'roleMetadata_role_type_t',
-    #   'roleMetadata_role_person_identifier_t',
-    #   'identityMetadata_objectId_t',
+end
 
-    # roleMetadata_role_person_identifier_t
-    # :fq => 'has_model_s:info\:fedora/afmodel\:Hydrus_AdminPolicyObject',
-    # :fq => 'has_model_s:info\:fedora/afmodel\:Hydrus_Collection',
-    # :fq => 'has_model_s:info\:fedora/afmodel\:Hydrus_Item',
-    # :fq => 'has_model_s:info\:fedora/afmodel\:Dor_AdminPolicyObject',
+def run_solr_query(*args)
 
+  # Get the APO (druids) for which USER has a role.
+  if args.first == 'apos'
+    user = args[1]
+    h = {
+      :q => [
+        'has_model_s:"info:fedora/afmodel:Hydrus_AdminPolicyObject"',
+        'roleMetadata_role_person_identifier_t:' + user,
+      ].join(' AND '),
+      :fl => [
+        'identityMetadata_objectId_t',
+      ].join(','),
+      :rows => 9999,
+    }
+
+  # Get Collections (druids and titles) that are governed by those APOs.
+  elsif args.first == 'colls'
+    args.shift
+    druids = args.map { |d| "info:fedora/#{d}".gsub(/([:\/])/, '\\\\\1') }
+    igb = druids.join(' OR ')
+    h = {
+      :q => [
+        'has_model_s:"info:fedora/afmodel:Hydrus_Collection"',
+        "is_governed_by_s:(#{igb})"
+      ].join(' AND '),
+      :fl => [
+        'identityMetadata_objectId_t',
+      ].join(','),
+      :rows => 9999,
+    }
+
+  # Get Item counts-by-status for those Collections.
+  elsif args.first == 'stats'
+    args.shift
+    imo = args.map { |d| %Q<"info:fedora/#{d}"> }.join(' OR ')
+    h = {
+      :q => [
+        'has_model_s:"info:fedora/afmodel:Hydrus_Item"',
+        "is_member_of_s:(#{imo})"
+      ].join(' AND '),
+      :fl => [
+        'is_member_of_s',
+        'hydrus_wf_status_t',
+        'identityMetadata_objectId_t',
+      ].join(','),
+      :facet => true,
+      :'facet.pivot' => 'is_member_of_s,hydrus_wf_status_facet',
+      :rows => 0,
+    }
+
+  elsif args.first == 'resp'
+    h = {
+      :q    => '*.*',
+      :fl   => 'identityMetadata_objectId_t',
+    }
+
+  else
+    h = {
+      :q    => '*.*',
+      :fl   => 'identityMetadata_objectId_t',
+    }
+  end
 
   solr_response = Blacklight.solr.find(h)
   document_list = solr_response.docs.map {|doc| SolrDocument.new(doc, solr_response)}  
@@ -109,34 +110,9 @@ def run_solr_query(user)
 end
 
 def solr_query(*args)
-  resp, sdocs = run_solr_query(args.first)
+  resp, sdocs = run_solr_query(*args)
+  ap resp['response']['numFound']
   ap resp
-  # ap resp['response']['numFound']
-  # ap resp.docs.map { |d| d['identityMetadata_objectId_t'].first }
-end
-
-def show_keys(*args)
-  rmd = role_md()
-  sdoc = rmd.to_solr
-  sdoc.keys.each { |k|
-    next if k =~ /_\d+_/
-    puts k
-    sdoc[k].each { |v| puts "  #{v}" }
-  }
-end
-
-def zzz(*args)
-  druid = "druid:#{args.first}"
-  hi = Hydrus::Collection.find druid
-  wf = hi.workflows
-  sdoc = wf.to_solr
-  puts hi.workflows.ng_xml
-  ap sdoc
-  sdoc.keys.each { |k|
-    next if k =~ /_\d+_/
-    puts k
-    sdoc[k].each { |v| puts "  #{v}" }
-  }
 end
 
 def resolrize(*args)
@@ -151,72 +127,3 @@ def resolrize(*args)
 end
 
 method(ARGV.shift).call(*ARGV)
-
-__END__
-
-
-  # :q  :rows :fq
-  h = {
-    :q => [
-      'has_model_s:"info:fedora/afmodel:Hydrus_Item"',
-      # 'wf_wps_facet:hydrusAssemblyWF\:start-deposit\:completed',
-    ].join(' AND '),
-    # :q    => '*:*',
-    # :q => [
-    #   'has_model_s:info\:fedora/afmodel\:Hydrus_Item',
-    #   'is_governed_by_s:(info\:fedora/druid\:oo000oo0009 OR info\:fedora/druid\:oo000oo0002)',
-    #   # 'wf_wps_facet:hydrusAssemblyWF\:start-deposit\:completed',
-    # ].join(' AND '),
-    # :q    => 'has_model_s:info\:fedora/afmodel\:Hydrus_Item AND ' +
-    #            'abstract_t:research',
-    # :rows => 100,
-    # :fq => [
-    #   # 'has_model_s:info\:fedora/afmodel\:Hydrus_Collection',
-    #   'wf_wps_facet:(hydrusAssemblyWF\:start-deposit\:completed) NOT ' +
-    #                 'hydrusAssemblyWF\:submit\:foo',
-    # ],
-    # :fq => [
-    #   'has_model_s:info\:fedora/afmodel\:Hydrus_Item',
-    #   'is_governed_by_s:info\:fedora/druid\:oo000oo0009',
-    #   # 'wf_wps_facet:hydrusAssemblyWF\:start-deposit\:completed',
-    # ].join(' AND '),
-    :fl => [
-      # 'has_model_s',
-      # 'is_governed_by_s',
-      # 'wf_wps_facet',
-      'identityMetadata_objectId_t',
-      'hydrus_wf_status_t',
-      'main_title_t',
-      # 'abstract_t',
-      # 'wf_wps_facet:hydrusAssemblyWF\:start-deposit\:completed',
-      # 'wf_wps_facet:hydrusAssemblyWF\:submit\:completed',
-    ].join(','),
-    :facet => true,
-    # :'facet.field' => 'wf_wps_facet,is_governed_by_s',
-    # :'facet.pivot' => 'is_governed_by_s,wf_wps_facet',
-    :'facet.pivot' => 'is_member_of_s,hydrus_wf_status_facet',
-    :rows => 100,
-    # :'facet.field' => 'wf_wps_facet',
-    # :group => true,
-    # :'group.field' => 'is_governed_by_s',
-  }
-
-    # :fq => [
-    #   'has_model_s:info\:fedora/afmodel\:Hydrus_Collection',
-    #   'wf_wps_facet:hydrusAssemblyWF\:start-deposit\:completed',
-    # ].join(' AND '),
-
-    # :fq => [
-    #   'has_model_s:info\:fedora/afmodel\:Hydrus_AdminPolicyObject',
-    #   "roleMetadata_role_person_identifier_t:#{user}",
-    # ].join(' AND '),
-    # :fl => [
-    #   'roleMetadata_role_type_t',
-    #   'roleMetadata_role_person_identifier_t',
-    #   'identityMetadata_objectId_t',
-
-    # roleMetadata_role_person_identifier_t
-    # :fq => 'has_model_s:info\:fedora/afmodel\:Hydrus_AdminPolicyObject',
-    # :fq => 'has_model_s:info\:fedora/afmodel\:Hydrus_Collection',
-    # :fq => 'has_model_s:info\:fedora/afmodel\:Hydrus_Item',
-    # :fq => 'has_model_s:info\:fedora/afmodel\:Dor_AdminPolicyObject',

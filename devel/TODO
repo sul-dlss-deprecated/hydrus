@@ -38,8 +38,10 @@ Unit tests. Can we improve our coverage in the controllers?
 
 rightsMD: (a) tests; (b) refactor to take advantage of OM and generic_ds.rb.
 
-Change roles: hydrus-viewer >> hydrus-collection-viewer (globally);
-hydrus-item-depositor >> hydrus-collection-depositor (only at APO-Coll level).
+roleMD changes. (a) Do not store roleMD in Collections; all roleMD info for a
+Collection will reside in the APO of the Collection. (b) Role changes:
+hydrus-viewer >> hydrus-collection-viewer; hydrus-item-depositor >>
+hydrus-collection-item-depositor.
 
 Collection/Item create. Rather than starting a new Item/Collection with blank
 text boxes, use the approach we have adopted elsewhere for non-required items:

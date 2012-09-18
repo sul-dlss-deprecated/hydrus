@@ -6,7 +6,7 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
   include Hydrus::Publishable
   extend  Hydrus::Delegatable
 
-  has_relationship('governed_objects', :is_governed_by, :inbound => true)
+  # has_relationship('governed_objects', :is_governed_by, :inbound => true)
 
   has_metadata(
     :name => "descMetadata",
@@ -96,14 +96,6 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
 
   def is_open
     return deposit_status == "open"
-  end
-
-  def governed_items
-    return governed_objects.select { |ho| ho.class == Hydrus::Item }
-  end
-
-  def governed_collections
-    return governed_objects.select { |ho| ho.class == Hydrus::Collection }
   end
 
   def self.roles
