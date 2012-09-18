@@ -70,20 +70,6 @@
       </foxml:xmlContent>
     </foxml:datastreamVersion>
   </foxml:datastream>
-  <foxml:datastream ID="roleMetadata" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
-    <foxml:datastreamVersion ID="roleMetadata.0" LABEL="Role Metadata" CREATED="2011-07-05T20:47:26.359Z" MIMETYPE="text/xml" SIZE="405">
-      <foxml:xmlContent>
-        <roleMetadata objectId="druid:oo000oo0004">
-          <role type="hydrus-collection-depositor">
-             <person>
-                <identifier type="sunetid">ggreen</identifier>
-                <name>Green, Greg</name>
-             </person>
-          </role>
-        </roleMetadata>
-      </foxml:xmlContent>
-    </foxml:datastreamVersion>
-  </foxml:datastream>
   <foxml:datastream ID="rightsMetadata" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
     <foxml:datastreamVersion ID="rightsMetadata.0" LABEL="Rights Metadata" CREATED="2010-02-25T20:46:24.337Z" MIMETYPE="text/xml" SIZE="155">
       <foxml:xmlContent>

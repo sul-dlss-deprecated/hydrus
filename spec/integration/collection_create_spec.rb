@@ -45,9 +45,8 @@ describe("Collection create", :type => :request, :integration => true) do
     # Check identityMetadata of Collection.
     coll.identityMetadata.tag.should include("Hydrus : collection", "Project : Hydrus")
     coll.identityMetadata.objectType.should include('collection', 'set')
-    # Check person roles of the roleMetadata in APO and Collection.
-    coll.apo_person_roles.should == { "hydrus-collection-manager"   => [ "archivist1" ] }
-    coll.person_roles.should     == { "hydrus-collection-depositor" => [ "archivist1" ] }
+    # Check person roles of the roleMetadata in APO
+    coll.apo_person_roles.should == { "hydrus-collection-manager"   => [ "archivist1" ], "hydrus-collection-depositor" => [ "archivist1" ] }
     # Check APO.descMetadata.
     apo.title.should == Dor::Config.hydrus.initial_apo_title
     # Check events.
