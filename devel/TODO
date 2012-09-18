@@ -84,39 +84,10 @@ Item view page: the actions box div is called "div.collection-actions".
 Implementation notes on roles and gated discovery
 ****************
 
-Get APOs with which USER is involved. 
-  :q 
-    has_model_s                             info:fedora/afmodel:Hydrus_AdminPolicyObject
-    roleMetadata_role_person_identifier_t   USER
-  :fl
-    identityMetadata_objectId_t             # APO druids.
+See devel/experiment.rb
 
-For each APO:
+Unit test: roles_of_user().
 
-  Get Collection governed by the APO.
-    :q 
-      has_model_s         info:fedora/afmodel:Hydrus_Item
-      is_governed_by_s    info:fedora/druid:DRUID
-    :fl
-      identityMetadata_objectId_t     # Collection druid.
-      title...                        # Collection title
-  
-  Print Collection title.
-
-  Print the roles of USER.
-    collection-manager
-    collection-reviewer
-    collection-viewer
-    collection-depositor              # NOT item-depositor.
- 
-  For STATUS in [draft, waiting_approval, published]
-      
-    Determine N of items with STATUS
-      :q 
-        has_model_s          info:fedora/afmodel:Hydrus_Item
-        is_governed_by_s     info:fedora/druid:DRUID
-      :fq
-        wf_wps_facet     (   hydrusAssemblyWF:STEP_A:completed
-                         NOT hydrusAssemblyWF:STEP_B:completed)
-
-    Generate link to those items.
+Consider moving Hydrus::Responsible into RoleMDDS. Not sure that we need the module.
+Also, there is currently some duplication between Hydrus::Responsible and the
+to_solr() method in RoleMDDS.

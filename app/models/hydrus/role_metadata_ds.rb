@@ -93,4 +93,28 @@ class Hydrus::RoleMetadataDS < ActiveFedora::NokogiriDatastream
     }
   end
 
+  def to_solr(solr_doc = {}, *args)
+    super(solr_doc, *args)
+    # Get the roles and their persons. This duplicates code in Hydrus::Responsible.
+    h = {}
+    find_by_terms(:role, :person, :identifier).each do |n|
+      id   = n.text
+      role = n.parent.parent[:type]
+      h[role] ||= []
+      h[role] << id
+    end
+    h.values.each { |ids| ids.uniq! }
+    # Add keys to the solr index to aggregate the roles of each user.
+    h.each do |role, ids|
+      ids.each do |id|
+        add_solr_value(
+          solr_doc, "roles_of_sunetid_#{id}", role,
+          :string, [:searchable]
+        )
+      end
+    end
+    # Return the solr doc.
+    return solr_doc
+  end
+
 end
