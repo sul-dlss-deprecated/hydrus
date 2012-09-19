@@ -1,11 +1,21 @@
 class Hydrus::Collection < Hydrus::GenericObject
 
+  include Hydrus::Responsible
+  extend  Hydrus::Delegatable
+
   before_save :save_apo
+
   before_validation :remove_values_for_associated_attribute_with_value_none
   after_validation :strip_whitespace
 
-  delegate :requires_human_approval, :to => "hydrusProperties", :unique => true
-  delegate :collection_depositor, :to => "hydrusProperties", :unique => true
+  setup_delegations(
+    # [:METHOD_NAME,            :uniq,  :at... ]
+    "hydrusProperties" => [
+      [:requires_human_approval, true   ],
+      [:collection_depositor, true   ],
+      
+    ],
+  )
 
   has_relationship 'hydrus_items', :is_member_of_collection, :inbound => true
 
@@ -16,7 +26,7 @@ class Hydrus::Collection < Hydrus::GenericObject
     apo     = Hydrus::AdminPolicyObject.create(user)
     dor_obj = Hydrus::GenericObject.register_dor_object(user, 'collection', apo.pid)
     coll    = dor_obj.adapt_to(Hydrus::Collection)
-    coll.collection_depositor=user
+    coll.collection_depositor=user.to_s
     coll.remove_relationship :has_model, 'info:fedora/afmodel:Dor_Collection'
     coll.assert_content_model
     # Add some Hydrus-specific info to identityMetadata.
@@ -75,7 +85,7 @@ class Hydrus::Collection < Hydrus::GenericObject
       # At the moment of publication, we refresh various titles.
       apo_title = "APO for #{title}"
       apo.identityMetadata.objectLabel = apo_title
-      apo.descMetadata.title           = apo_title
+      apo.title                        = apo_title
       identityMetadata.objectLabel     = title
       self.label                       = title     # The label in Fedora's foxml:objectProperties.
       apo.label                        = apo_title # Ditto.

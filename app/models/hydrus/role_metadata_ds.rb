@@ -4,66 +4,40 @@ class Hydrus::RoleMetadataDS < ActiveFedora::NokogiriDatastream
   include Hydrus::GenericDS
   
   set_terminology do |t|
-    t.root :path => 'roleMetadata'
 
-    t.actor do
-      t.identifier do
-        t.type_ :path => {:attribute => 'type'}
-      end
-      t.name
-    end
-    t.person :ref => [:actor], :path => 'person'
-    t.group  :ref => [:actor], :path => 'group'
-    
-    t.person_id :proxy => [:person, :identifier]
+    t.root :path => 'roleMetadata'
 
     t.role do
       t.type_ :path => {:attribute => 'type'}
-      t.person :ref => [:person]
-      t.group  :ref => [:group]
+      t.person do
+        t.identifier do
+          t.type_ :path => {:attribute => 'type'}
+        end
+        t.name
+      end
     end
     
-    # APO roles
+    t.person_id :proxy => [:role, :person, :identifier]
+
+    t.collection_creator   :ref => [:role], :attributes => {:type => 'hydrus-collection-creator'}
     t.collection_manager   :ref => [:role], :attributes => {:type => 'hydrus-collection-manager'}
     t.collection_owner :ref => [:role], :attributes => {:type => 'hydrus-collection-depositor'}
     t.collection_item_depositor :ref => [:role], :attributes => {:type => 'hydrus-collection-item-depositor'}
     t.collection_reviewer  :ref => [:role], :attributes => {:type => 'hydrus-collection-reviewer'}
     t.collection_viewer    :ref => [:role], :attributes => {:type => 'hydrus-collection-viewer'}
     # item object roles
+    t.item_manager         :ref => [:role], :attributes => {:type => 'hydrus-item-manager'}
     t.item_depositor       :ref => [:role], :attributes => {:type => 'hydrus-item-depositor'}
+
   end
 
-  def to_solr(solr_doc=Hash.new, *args)
-    find_by_xpath('/roleMetadata/role/*').each do |actor|
-      role_type = toggle_hyphen_underscore(actor.parent['type']) # eg hydrus_item_depositor
-      val = [
-        actor.at_xpath('identifier/@type'),  # eg sunetid
-        actor.at_xpath('identifier/text()')  # eg ggreen
-      ].join ':'
-      f1 = "apo_role_#{actor.name}_#{role_type}" # eg apo_role_person_hydrus_collection_manager
-      f2 = "apo_role_#{role_type}"               # eg apo_role_hydrus_collection_manager
-      add_solr_value(solr_doc, f1, val, :string, [:searchable, :facetable])
-      add_solr_value(solr_doc, f2, val, :string, [:searchable, :facetable])
-      if ['hydrus_collection_manager','hydrus_collection_depositor'].include? role_type
-        add_solr_value(solr_doc, "apo_register_permissions", val, :string, [:searchable, :facetable])
-      end
-    end
-    solr_doc
-  end
+  ####
+  # Adding nodes.
+  ####
 
-  # Takes a string       (eg, hydrus-item-foo or hydrus_collection_bar)
-  # Returns a new string (eg, hydrus_item_foo or hydrus-collection-bar).
-  TOGGLE_HYPHEN_REGEX = / \A (hydrus) ([_\-]) (collection|item) \2 ([a-z]) /ix
-  def toggle_hyphen_underscore(role_type)
-    role_type.sub(TOGGLE_HYPHEN_REGEX) {
-      [$1, $3, $4].join($2 == '_' ? '-' : '_')
-    }
-  end
-
-  # Adding/removing nodes.
-
-  # if the role node exists, add the person node to it; 
-  #  otherwise, create the role node and then add the person node.  
+  # Takes a SUNET ID and a role.
+  # Adds the person under the given role. Will spawn a new role node,
+  # if the role isn't already present.
   def add_person_with_role(id, role_type)
     role_node = find_by_xpath("/roleMetadata/role[@type='#{role_type}']")
     if role_node.size == 0
@@ -74,8 +48,6 @@ class Hydrus::RoleMetadataDS < ActiveFedora::NokogiriDatastream
     end
   end  
 
-  # if the role node exists, add an empty person node to it; 
-  #  otherwise, create the role node and then add an empty person node
   def add_empty_person_to_role(role_type)
     add_person_with_role("", role_type)
   end  
@@ -88,11 +60,9 @@ class Hydrus::RoleMetadataDS < ActiveFedora::NokogiriDatastream
     add_hydrus_child_node(role_node, :person, sunetid)
   end
 
-  def insert_group(role_node, group_type)
-    add_hydrus_child_node(role_node, :group, group_type)
-  end
-
+  ####
   # OM templates.
+  ####
 
   define_template :role do |xml, role_type|
     xml.role(:type => role_type)
@@ -105,19 +75,48 @@ class Hydrus::RoleMetadataDS < ActiveFedora::NokogiriDatastream
     }
   end
 
-  define_template :group do |xml, group_type|
-    xml.group {
-      xml.identifier(:type => group_type)
-      xml.name
-    }
-  end
-
-  # Empty XML document.
-
   def self.xml_template
     Nokogiri::XML::Builder.new do |xml|
       xml.roleMetadata
     end.doc
+  end
+
+  ####
+  # Other.
+  ####
+
+  # Takes a string       (eg, hydrus-item-foo or hydrus_collection_bar)
+  # Returns a new string (eg, hydrus_item_foo or hydrus-collection-bar).
+  # Was used in our old implementation. Might not be needed in future.
+  TOGGLE_HYPHEN_REGEX = / \A (hydrus) ([_\-]) (collection|item) \2 ([a-z]) /ix
+  def toggle_hyphen_underscore(role_type)
+    role_type.sub(TOGGLE_HYPHEN_REGEX) {
+      [$1, $3, $4].join($2 == '_' ? '-' : '_')
+    }
+  end
+
+  def to_solr(solr_doc = {}, *args)
+    super(solr_doc, *args)
+    # Get the roles and their persons. This duplicates code in Hydrus::Responsible.
+    h = {}
+    find_by_terms(:role, :person, :identifier).each do |n|
+      id   = n.text
+      role = n.parent.parent[:type]
+      h[role] ||= []
+      h[role] << id
+    end
+    h.values.each { |ids| ids.uniq! }
+    # Add keys to the solr index to aggregate the roles of each user.
+    h.each do |role, ids|
+      ids.each do |id|
+        add_solr_value(
+          solr_doc, "roles_of_sunetid_#{id}", role,
+          :string, [:searchable]
+        )
+      end
+    end
+    # Return the solr doc.
+    return solr_doc
   end
 
 end

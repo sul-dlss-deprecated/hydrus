@@ -106,19 +106,38 @@ namespace :hydrus do
     repo    = 'dor'
     wf_name = 'hydrusAssemblyWF'
     steps   = [
-      ['start-deposit', ' status="completed" lifecycle="registered"'],
-      ['submit', ''],
-      ['approve', ''],
-      ['start-assembly', ''],
+      ['start-deposit',  ' status="completed" lifecycle="registered"'],
+      ['submit',         ' status="completed"'],
+      ['approve',        ' status="completed"'],
+      ['start-assembly', ' status="waiting"'],
     ]
     FIXTURE_PIDS.each { |druid|
       resp = [druid, wf_name]
       resp << Dor::WorkflowService.delete_workflow(repo, druid, wf_name)
-      xml  = steps.map { |step, extra| %Q(<process name="#{step}"#{extra}/>) }.join ''
+      xml  = steps.map { |step, extra|
+        extra = extra.gsub(/completed/, 'waiting') if (
+          druid == 'druid:oo000oo0005' &&
+          step != 'start-deposit'
+        )
+        %Q(<process name="#{step}"#{extra}/>)
+      }.join ''
       xml  = "<workflow>#{xml}</workflow>"
       resp << Dor::WorkflowService.create_workflow(repo, druid, wf_name, xml)
       puts resp.inspect
     }
+  end
+
+  desc "restore jetty to initial state"
+  task :jetty_nuke do
+    puts "Nuking jetty"
+    # Restore jetty submodule to initial state.
+    Rake::Task['jetty:stop'].invoke
+    Dir.chdir('jetty') {
+      system('git reset --hard HEAD') or exit
+      system('git clean -dfx')        or exit
+    }
+    Rake::Task['hydra:jetty:config'].invoke
+    Rake::Task['jetty:start'].invoke
   end
 
 end

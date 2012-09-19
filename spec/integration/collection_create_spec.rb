@@ -69,8 +69,8 @@ describe("Collection create", :type => :request, :integration => true) do
       :abstract => 'abstract_foo',
       :contact  => 'ozzy@hell.com',
     )
-    open_button    = "Open for deposit"
-    close_button   = "Closed for deposit"
+    open_button    = "Open Collection"
+    close_button   = "Close Collection"
     # Login, go to new Collection page, and store the druid of the new Collection.
     login_as_archivist1
     visit new_hydrus_collection_path()
@@ -110,7 +110,7 @@ describe("Collection create", :type => :request, :integration => true) do
     click_button "Save"
     page.should have_content(@notice)
     # The view page should now offer the Open Collection button.
-    div_cs = find("div.collection-status")
+    div_cs = find("div.collection-actions")
     div_cs.should have_button(open_button)
     # Get the Collection and APO objects from fedora.
     coll = Hydrus::Collection.find(druid)
@@ -127,7 +127,7 @@ describe("Collection create", :type => :request, :integration => true) do
     click_button(open_button)
     page.should have_content(@notice)
     # The view page should now offer the Close Collection button.
-    div_cs = find("div.collection-status")
+    div_cs = find("div.collection-actions")
     div_cs.should have_button(close_button)
     # Get the Collection and APO objects from fedora.
     coll = Hydrus::Collection.find(druid)
@@ -144,7 +144,7 @@ describe("Collection create", :type => :request, :integration => true) do
     click_button(close_button)
     page.should have_content(@notice)
     # The view page should now offer the Open Collection button.
-    div_cs = find("div.collection-status")
+    div_cs = find("div.collection-actions")
     div_cs.should have_button(open_button)
     # Get the Collection and APO objects from fedora.
     coll = Hydrus::Collection.find(druid)
@@ -171,7 +171,7 @@ describe("Collection create", :type => :request, :integration => true) do
     click_button(open_button)
     page.should have_content(@notice)
     # The view page should now offer the Close Collection button.
-    div_cs = find("div.collection-status")
+    div_cs = find("div.collection-actions")
     div_cs.should have_button(close_button)
     # Get the Collection and APO objects from fedora.
     coll = Hydrus::Collection.find(druid)

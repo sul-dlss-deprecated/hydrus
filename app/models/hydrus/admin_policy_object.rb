@@ -1,33 +1,55 @@
 class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
 
+  include Dor::Processable  # TODO: needed until dor-services gem includes in its APOs.
   include Hydrus::ModelHelper
   include Hydrus::Responsible
   include Hydrus::Publishable
-  include Dor::Processable  # TODO: needed until dor-services gem includes in its APOs.
-    
+  extend  Hydrus::Delegatable
+
+  # has_relationship('governed_objects', :is_governed_by, :inbound => true)
+
+  has_metadata(
+    :name => "descMetadata",
+    :type => Hydrus::DescMetadataDS,
+    :label => 'Descriptive Metadata',
+    :control_group => 'M')
+
+  has_metadata(
+    :name => "administrativeMetadata",
+    :type => Hydrus::AdministrativeMetadataDS,
+    :label => 'Administrative Metadata',
+    :control_group => 'M')
+
+  has_metadata(
+    :name => "roleMetadata",
+    :type => Hydrus::RoleMetadataDS,
+    :label => 'Role Metadata',
+    :control_group => 'M')
+
   validates :pid, :is_druid => true
-  validate  :check_embargo_options, :if => :should_validate
-  validate  :check_license_options, :if => :should_validate
   validates :embargo_option, :presence => true, :if => :should_validate
   validates :license_option, :presence => true, :if => :should_validate
+  validate  :check_embargo_options, :if => :should_validate
+  validate  :check_license_options, :if => :should_validate
 
-  delegate(:title, :to => "descMetadata", :unique => true)
-  delegate(:deposit_status, :to => "administrativeMetadata",
-           :at => [:hydrus, :depositStatus], :unique => true)
-  delegate(:embargo, :to => "administrativeMetadata",
-           :at => [:hydrus, :embargo], :unique => true)
-  delegate(:embargo_option, :to => "administrativeMetadata",
-           :at => [:hydrus, :embargo, :option], :unique => true)
-  delegate(:license, :to => "administrativeMetadata",
-           :at => [:hydrus, :license], :unique => true)
-  delegate(:license_option, :to => "administrativeMetadata",
-           :at => [:hydrus, :license, :option], :unique => true)
-  delegate(:visibility, :to => "administrativeMetadata",
-           :at => [:hydrus, :visibility], :unique => true)
-  delegate(:visibility_option, :to => "administrativeMetadata",
-           :at => [:hydrus, :visibility, :option], :unique => true)
-  delegate(:person_id, :to => "roleMetadata",
-           :at => [:role, :person, :identifier])
+  setup_delegations(
+    # [:METHOD_NAME,         :uniq, :at... ]
+    "descMetadata" => [
+      [:title,               true,  :main_title ],
+    ],
+    "roleMetadata" => [
+      [:person_id,           false, :role, :person, :identifier],
+    ],
+    "administrativeMetadata" => [
+      [:deposit_status,      true,  :hydrus, :depositStatus],
+      [:embargo,             true,  :hydrus, :embargo],
+      [:embargo_option,      true,  :hydrus, :embargo, :option],
+      [:license,             true,  :hydrus, :license],
+      [:license_option,      true,  :hydrus, :license, :option],
+      [:visibility,          true,  :hydrus, :visibility],
+      [:visibility_option,   true,  :hydrus, :visibility, :option],
+    ]
+  )
 
   def initialize(*args)
     super
@@ -75,24 +97,6 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
   def is_open
     return deposit_status == "open"
   end
-
-  has_metadata(
-    :name => "descMetadata",
-    :type => Hydrus::DescMetadataDS,
-    :label => 'Descriptive Metadata',
-    :control_group => 'M')
-
-  has_metadata(
-    :name => "administrativeMetadata",
-    :type => Hydrus::AdministrativeMetadataDS,
-    :label => 'Administrative Metadata',
-    :control_group => 'M')
-
-  has_metadata(
-    :name => "roleMetadata",
-    :type => Hydrus::RoleMetadataDS,
-    :label => 'Role Metadata',
-    :control_group => 'M')
 
   def self.roles
      return {

@@ -9,6 +9,7 @@ describe Hydrus::GenericDS do
     @p1 = '<person><identifier type="sunetid">sunetid1</identifier><name/></person>'
     @p2 = '<person><identifier type="sunetid">sunetid2</identifier><name/></person>'
     @p3 = '<person><identifier type="sunetid">sunetid3</identifier><name/></person>'
+    @p4 = '<person><identifier type="sunetid">sunetid4</identifier><name/></person>'
     @rmd_xml = <<-EOF
       #{@rmd_start}
         <role type="hydrus-collection-manager">
@@ -19,12 +20,15 @@ describe Hydrus::GenericDS do
         <role type="hydrus-collection-item-depositor">
           #{@p3}
         </role>
+        <role type="hydrus-item-manager">
+          #{@p4}
+        </role>
       #{@rmd_end}
     EOF
   end
 
   before(:each) do
-    @rmdoc = Hydrus::RoleMetadataDS.from_xml(@rmd_xml)
+    @rmdoc = Hydrus::RoleMetadataDS.from_xml(noko_doc(@rmd_xml))
   end
 
   describe "remove_nodes()" do
@@ -34,10 +38,11 @@ describe Hydrus::GenericDS do
       exp_xml = <<-EOF
         #{@rmd_start}
           <role type="hydrus-collection-manager" />
+          <role type="hydrus-item-manager" />
           <role type="hydrus-collection-item-depositor" />
         #{@rmd_end}
       EOF
-      @rmdoc.remove_nodes(:person)
+      @rmdoc.remove_nodes(:role, :person)
       @rmdoc.ng_xml.should be_equivalent_to exp_xml
       # Remove the <role> node for collection manager.
       exp_xml = <<-EOF
@@ -46,6 +51,7 @@ describe Hydrus::GenericDS do
         #{@rmd_end}
       EOF
       @rmdoc.remove_nodes(:collection_manager)
+      @rmdoc.remove_nodes(:item_manager)
       @rmdoc.ng_xml.should be_equivalent_to exp_xml
       # Remove the <role> nodes.
       @rmdoc.remove_nodes(:role)
@@ -57,6 +63,7 @@ describe Hydrus::GenericDS do
         #{@rmd_start}
           <role type="hydrus-collection-manager" />
           <role type="hydrus-collection-item-depositor" />
+          <role type="hydrus-item-manager" />
         #{@rmd_end}
       EOF
       @rmdoc.remove_nodes(:role, :person)
@@ -78,6 +85,7 @@ describe Hydrus::GenericDS do
         #{@rmd_start}
           <role type="hydrus-collection-manager" />
           <role type="hydrus-collection-item-depositor" />
+          <role type="hydrus-item-manager" />
         #{@rmd_end}
       EOF
       @rmdoc.remove_nodes_by_xpath('//role/person')
@@ -86,6 +94,7 @@ describe Hydrus::GenericDS do
       exp_xml = <<-EOF
         #{@rmd_start}
           <role type="hydrus-collection-item-depositor" />
+          <role type="hydrus-item-manager" />
         #{@rmd_end}
       EOF
       @rmdoc.remove_nodes_by_xpath('//role[@type="hydrus-collection-manager"]')
@@ -105,15 +114,16 @@ describe Hydrus::GenericDS do
   describe "remove_node()" do
 
     it "should remove correct node" do
-      @rmdoc.remove_node(:person, 2)
-      @rmdoc.remove_node(:person, 0)
+      @rmdoc.remove_node(:role, 1)
       exp = <<-EOF
         #{@rmd_start}
           <role type="hydrus-collection-manager">
+            #{@p0}
             #{@p1}
+            #{@p2}
           </role>
-          <role type="hydrus-collection-item-depositor">
-            #{@p3}
+          <role type="hydrus-item-manager">
+            #{@p4}
           </role>
         #{@rmd_end}
       EOF

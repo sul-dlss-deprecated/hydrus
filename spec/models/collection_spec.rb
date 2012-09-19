@@ -57,7 +57,7 @@ describe Hydrus::Collection do
       @hc.apo.deposit_status.should == 'open'
       @hc.get_hydrus_events.size.should > 0
       @hc.apo.identityMetadata.objectLabel.should == [apo_title]
-      @hc.apo.descMetadata.title.should           == [apo_title]
+      @hc.apo.title.should                        == apo_title
       @hc.identityMetadata.objectLabel.should     == [hc_title]
       @hc.label.should                            == hc_title
       @hc.apo.label.should                        == apo_title

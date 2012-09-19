@@ -2,6 +2,8 @@ class Hydrus::GenericObject < Dor::Item
 
   include Hydrus::ModelHelper
   include Hydrus::Publishable
+  include Hydrus::WorkflowDsExtension
+  extend  Hydrus::Delegatable
   include ActiveModel::Validations
 
   attr_accessor :files_were_changed
@@ -11,12 +13,19 @@ class Hydrus::GenericObject < Dor::Item
   
   validates :pid, :is_druid => true
 
-  delegate :title,    :to => "descMetadata", :unique => true
-  delegate :abstract, :to => "descMetadata", :unique => true
-  delegate :related_item_title, :to => "descMetadata", :at => [:relatedItem, :titleInfo, :title]
-  delegate :related_item_url, :to => "descMetadata", :at => [:relatedItem, :location, :url]
-  delegate :contact, :to => "descMetadata", :unique => true
-  delegate :disapproval_reason, :to => "hydrusProperties", :unique => true
+  setup_delegations(
+    # [:METHOD_NAME,         :uniq, :at... ]
+    "descMetadata" => [
+      [:title,               true,  :main_title ],
+      [:abstract,            true   ],
+      [:related_item_title,  false, :relatedItem, :titleInfo, :title],
+      [:related_item_url,    false, :relatedItem, :location, :url],
+      [:contact,             true   ],
+    ],
+    "hydrusProperties" => [
+      [:disapproval_reason,  true   ],
+    ],
+  )
 
   def is_collection?
     self.class == Hydrus::Collection
@@ -238,32 +247,32 @@ class Hydrus::GenericObject < Dor::Item
     Dor::WorkflowService.update_workflow_status('dor', pid, awf, step, 'completed')
   end
 
-  # Returns the hydrusAssemblyWF node from the object's workflows.
-  def get_workflow_node
-    wf = Dor::Config.hydrus.app_workflow
-    q = "//workflow[@id='#{wf}']"
-    return workflows.find_by_xpath(q).first
-  end
+  # # Returns the hydrusAssemblyWF node from the object's workflows.
+  # def get_workflow_node
+  #   wf = Dor::Config.hydrus.app_workflow
+  #   q = "//workflow[@id='#{wf}']"
+  #   return workflows.find_by_xpath(q).first
+  # end
 
-  # Takes the name of a hydrusAssemblyWF step.
-  # Returns the corresponding process node.
-  def get_workflow_step(step)
-    node = get_workflow_node()
-    return node ? node.at_xpath("//process[@name='#{step}']") : nil
-  end
+  # # Takes the name of a hydrusAssemblyWF step.
+  # # Returns the corresponding process node.
+  # def get_workflow_step(step)
+  #   node = get_workflow_node()
+  #   return node ? node.at_xpath("//process[@name='#{step}']") : nil
+  # end
 
-  # Takes the name of a hydrusAssemblyWF step.
-  # Returns the staus of the corresponding process node.
-  def get_workflow_status(step)
-    node = get_workflow_step(step)
-    return node ? node['status'] : nil
-  end
+  # # Takes the name of a hydrusAssemblyWF step.
+  # # Returns the staus of the corresponding process node.
+  # def get_workflow_status(step)
+  #   node = get_workflow_step(step)
+  #   return node ? node['status'] : nil
+  # end
 
-  # Takes the name of a hydrusAssemblyWF step.
-  # Returns the staus of the corresponding process node.
-  def workflow_step_is_done(step)
-    return get_workflow_status(step) == 'completed'
-  end
+  # # Takes the name of a hydrusAssemblyWF step.
+  # # Returns the staus of the corresponding process node.
+  # def workflow_step_is_done(step)
+  #   return get_workflow_status(step) == 'completed'
+  # end
 
   def submit_time
     s = 'submit'
@@ -319,6 +328,27 @@ class Hydrus::GenericObject < Dor::Item
   def editing_event_message(fields)
     fs = fields.map { |e| e.to_s }.join(', ')
     return "#{hydrus_class_to_s()} modified: #{fs}"
+  end
+
+  ####
+  # Delegate some functionality to workflow DS.
+  # Could not get this to work using delegate().
+  ####
+
+  def get_workflow_node
+    return workflows.get_workflow_node
+  end
+
+  def get_workflow_step(step)
+    return workflows.get_workflow_step(step)
+  end
+
+  def get_workflow_status(step)
+    return workflows.get_workflow_status(step)
+  end
+
+  def workflow_step_is_done(step)
+    return workflows.workflow_step_is_done(step)
   end
 
 end

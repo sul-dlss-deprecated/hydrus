@@ -2,6 +2,14 @@ require 'spec_helper'
 
 describe(Hydrus::GenericObject, :integration => true) do
  
+  before(:each) do
+    @prev_mint_ids = config_mint_ids()
+  end
+
+  after(:each) do
+    config_mint_ids(@prev_mint_ids)
+  end
+
   describe "approve()" do
     
     it "should modify workflows as expected" do

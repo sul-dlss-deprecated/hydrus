@@ -19,28 +19,13 @@ Applies to home page and Collection view page.
 
 UI redesign: side bar and tabs.
 
--------------------
-Roles/Gated Discovery
--------------------
+Implement gated discovery: see implementation notes below.
 
-Gated discovery strategy - dual solr queries.  Query 1 = look up APOs to find
-all roles the logged in user is in. Query 2 = look up collection and item
-objects and find intersection of objects with roles using permission matrix.
-
-1. Figure out what APO role metadata to index in solr and how to index it.
-
-2. Formulate solr pre-query.
-
-3. Figure out how to index collection and item objects so that pre-query can
-return results based on roles
-
-4. Write module (possibly a gem using cancan as a basis?) that 
-
-a. understands permissions and roles and is able to return true false, pass it
-druid, sunet and action e.g. I am 'petucket', I am looking at
-'druid:oo000oo0001' and I want to 'review' and it returns true/false
-
-b. runs queries to return items e.g. I am 'petucket', what objects can i see?
+Workflow changes and SOLR: when the workflow DS for an object changes, the
+local SOLR index on a developer's box is not updated. Option 1: set up a
+listener that will update local SOLR when objects changes on the dor-dev
+environment. See dor-services-gem bin/ directory. Option 2: run the workflow
+service locally.
 
 --------
 Technical Debt
@@ -52,6 +37,20 @@ to get the latest fixture/file content up-to-date.
 Unit tests. Can we improve our coverage in the controllers?
 
 rightsMD: (a) tests; (b) refactor to take advantage of OM and generic_ds.rb.
+
+roleMD changes. (a) Do not store roleMD in Collections; all roleMD info for a
+Collection will reside in the APO of the Collection. (b) Role changes:
+hydrus-viewer >> hydrus-collection-viewer; hydrus-item-depositor >>
+hydrus-collection-item-depositor.
+
+Collection/Item create. Rather than starting a new Item/Collection with blank
+text boxes, use the approach we have adopted elsewhere for non-required items:
+have the user click "Add" button first. Collection: links to related items.
+Item: related citations; and links to related items.
+
+Workflow fixtures. Create proper worflow XML fixture files, and modify rake
+refresh_workflows task to load the files. We need more fine-grained controlled
+over the states of our fixture objects.
 
 Can we remove :add_person button and related checks from the update/create actions in 
 Collections controller? 
@@ -81,3 +80,16 @@ find any definitive examples in Consul. [waiting on response from Lynn]
 
 Item view page: the actions box div is called "div.collection-actions".
 [Postpone this until we have GG's new design for sidebar, etc.]
+
+
+****************
+Implementation notes on roles and gated discovery
+****************
+
+See devel/experiment.rb
+
+Unit test: roles_of_user().
+
+Consider moving Hydrus::Responsible into RoleMDDS. Not sure that we need the module.
+Also, there is currently some duplication between Hydrus::Responsible and the
+to_solr() method in RoleMDDS.

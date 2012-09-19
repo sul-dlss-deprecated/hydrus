@@ -7,6 +7,9 @@
   -->
   <abortOnConfigurationError>${solr.abortOnConfigurationError:true}</abortOnConfigurationError>
 
+  <luceneMatchVersion>LUCENE_40</luceneMatchVersion>
+
+  <!--
   <indexDefaults>
     <useCompoundFile>false</useCompoundFile>
     <mergeFactor>10</mergeFactor>
@@ -26,6 +29,7 @@
     <maxFieldLength>10000</maxFieldLength>
     <unlockOnStartup>false</unlockOnStartup>
   </mainIndex>
+  -->
   
   <jmx />
 
@@ -79,6 +83,7 @@
   <requestHandler name="standard" class="solr.SearchHandler" default="true">
      <lst name="defaults">
        <str name="echoParams">explicit</str>
+        <str name="defType">lucene</str>
      </lst>
   </requestHandler>
 
@@ -168,11 +173,13 @@
         <float name="tie">0.01</float>
 
         <!-- NOT using marc_display because it is large and will slow things down for search results -->
+        <!--
         <str name="fl">
           *,score
         </str>
+        -->
 
-        <str name="facet">true</str>
+        <str name="facet">on</str>
         <str name="facet.mincount">1</str>
         <str name="facet.limit">10</str>
         <str name="facet.field">format</str>
@@ -185,7 +192,7 @@
         <str name="facet.field">subject_geo_facet</str>
         <str name="facet.field">subject_topic_facet</str>
 
-        <str name="spellcheck">true</str>
+        <str name="spellcheck">off</str>
         <str name="spellcheck.dictionary">default</str>
         <str name="spellcheck.onlyMorePopular">true</str>
         <str name="spellcheck.extendedResults">true</str>
@@ -217,9 +224,11 @@
       <str name="facet">on</str>
       <str name="facet.mincount">1</str>
 	    <str name="echoParams">explicit</str>
+      <!--
       <str name="fl">
        *,score
       </str>
+      -->
     </lst>
   </requestHandler>
   
@@ -356,9 +365,12 @@
   </requestHandler>
 
   <requestHandler name="/update" class="solr.XmlUpdateRequestHandler" />
+  <!--
   <requestHandler name="/analysis" class="solr.AnalysisRequestHandler" />
   <requestHandler name="/update/csv" class="solr.CSVRequestHandler" startup="lazy" />
+  -->
   <requestHandler name="/admin/" class="org.apache.solr.handler.admin.AdminHandlers" />
+  <!--
   <requestHandler name="/admin/ping" class="PingRequestHandler">
     <lst name="defaults">
       <str name="qt">standard</str>
@@ -368,24 +380,27 @@
   </requestHandler>
   <requestHandler name="/debug/dump" class="solr.DumpRequestHandler" >
     <lst name="defaults">
-     <str name="echoParams">explicit</str> <!-- for all params (including the default etc) use: 'all' -->
+     <str name="echoParams">explicit</str>
      <str name="echoHandler">true</str>
     </lst>
   </requestHandler>
+  -->
   
   <!-- 
   <queryResponseWriter name="xml" class="org.apache.solr.request.XMLResponseWriter" default="true"/>
   <queryResponseWriter name="json" class="org.apache.solr.request.JSONResponseWriter"/>
   <queryResponseWriter name="ruby" class="org.apache.solr.request.RubyResponseWriter"/>
   -->
+  <queryResponseWriter name="ruby" class="solr.RubyResponseWriter"/>
+  
 
   <!-- XSLT response writer transforms the XML output by any xslt file found
        in Solr's conf/xslt directory.  Changes to xslt files are checked for
        every xsltCacheLifetimeSeconds.  
-   -->
   <queryResponseWriter name="xslt" class="org.apache.solr.request.XSLTResponseWriter">
     <int name="xsltCacheLifetimeSeconds">5</int>
   </queryResponseWriter> 
+   -->
 
   <admin>
     <defaultQuery>hydra</defaultQuery>
