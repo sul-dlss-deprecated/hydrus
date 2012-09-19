@@ -2,11 +2,14 @@ class Hydrus::Collection < Hydrus::GenericObject
 
   include Hydrus::Responsible
   extend  Hydrus::Delegatable
+  extend Hydrus::SolrQueryable
 
   before_save :save_apo
 
   before_validation :remove_values_for_associated_attribute_with_value_none
   after_validation :strip_whitespace
+
+  attr_accessor :item_counts
 
   setup_delegations(
     # [:METHOD_NAME,            :uniq,  :at... ]
@@ -275,6 +278,44 @@ class Hydrus::Collection < Hydrus::GenericObject
       :license     => [:license_option, :license],
       :roles       => [:apo_person_roles],
     }
+  end
+
+  ####
+  # A class method to run some SOLR queries to get Collections involving a
+  # user, along with counts of Items in those Collections, broken down by their
+  # workflow status.
+  ####
+
+  def self.dashboard_stats(user)
+    id_key = 'identityMetadata_objectId_t'
+
+    # Get PIDs of the APOs where USER plays a role.
+    h           = squery_apos_involving_user(user)
+    resp, sdocs = issue_solr_query(h)
+    apo_pids    = resp.docs.map { |doc| doc[id_key].first }
+
+    # Get PIDs of the Collections governed by those APOs.
+    # Use those PIDs as the keys to initalize a hash of stats.
+    #   stats{COLL_PID} = {}
+    h           = squery_collections_of_apos(apo_pids)
+    resp, sdocs = issue_solr_query(h)
+    stats       = Hash[ resp.docs.map { |doc| [doc[id_key].first, {}] } ]
+
+    # Get counts of Items in those Collection, broken down by workflow status.
+    # Add those counts to the stats hash.
+    h           = squery_item_counts_of_collections(stats.keys)
+    resp, sdocs = issue_solr_query(h)
+    resp.facet_counts['facet_pivot'].values.first.each { |h|
+      druid = h['value'].sub(/.+\/druid/, 'druid')
+      h['pivot'].each { |p|
+        status = p['value']
+        n      = p['count']
+        stats[druid] ||= {}
+        stats[druid][status] = n
+      }
+    }
+
+    return stats
   end
 
 end

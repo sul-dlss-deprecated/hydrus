@@ -112,7 +112,18 @@ class CatalogController < ApplicationController
   end
 
   def index
-    @collections = Hydrus::Collection.find(:all)
+    # Issue some SOLR queries to get Collections involving the user,
+    # along with counts of Items in those Collections, broken down by 
+    # their workflow status.
+    stats = Hydrus::Collection.dashboard_stats(current_user)
+
+    # Get the collections, and add the counts as attributes.
+    @collections = stats.keys.map { |coll_dru|
+      hc  = Hydrus::Collection.find(coll_dru)
+      hc.item_counts = ( stats[hc.pid] || {} )
+      hc
+    }
+
     super
   end
 
