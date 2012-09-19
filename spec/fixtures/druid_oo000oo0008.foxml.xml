@@ -136,6 +136,10 @@
         <roleMetadata objectId="druid:oo000oo0008">
           <role type="hydrus-collection-manager">
              <person>
+                <identifier type="sunetid">archivist1</identifier>
+                <name>Archivist, One</name>
+             </person>
+             <person>
                 <identifier type="sunetid">bblue</identifier>
                 <name>Blue, Bill</name>
              </person>

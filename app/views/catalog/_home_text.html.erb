@@ -10,30 +10,18 @@
       <thead>
         <tr>
           <th class="title">Collection</th>
-          <th class="journal">Your role</th>
-          <th class="deposited">Your work</th>
-          <th class="files">What you can do</th>
+          <th class="journal">Your roles</th>
+          <th class="deposited">Collection items</th>
+          <th class="deposited">Item status</th>
         </tr>
       </thead>
       <tbody>
       <% @collections.each do |c| %>
         <tr>
           <td><%= link_to(c.title, polymorphic_path(c)) %></td>
-          <td><font color=red>#TODO</font></td>
-          <td><font color=red>#TODO</font></td>
-          <td>
-					  <% if c.is_open %>
-	            <form class="form-horizontal">
-	              <div class="btn-group">
-	                <a class="btn" href="#">Add new &hellip;</a>
-	                <a class="btn dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
-	                <%= render :partial => "shared/add_content_options", :locals => {:parent => c} %>
-	              </div>
-	            </form>
-						 <% else %>
-							Collection is closed - <%= link_to('edit to open', edit_polymorphic_path(c)) %>
-		         <% end %>
-          </td>
+          <td><%= c.apo.roles_of_person(current_user.to_s).join(', ') %></td>
+          <td><%= c.item_counts.values.sum %></td>
+          <td><%= c.item_counts %></td>
         </tr> 
         <% end %>
       </tbody>

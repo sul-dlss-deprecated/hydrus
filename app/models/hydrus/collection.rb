@@ -286,6 +286,14 @@ class Hydrus::Collection < Hydrus::GenericObject
   # workflow status.
   ####
 
+  def self.initial_stats
+    return {
+      "published"        => 0,
+      "waiting_approval" => 0,
+      "draft"            => 0,
+    }
+  end
+
   def self.dashboard_stats(user)
     id_key = 'identityMetadata_objectId_t'
 
@@ -299,7 +307,9 @@ class Hydrus::Collection < Hydrus::GenericObject
     #   stats{COLL_PID} = {}
     h           = squery_collections_of_apos(apo_pids)
     resp, sdocs = issue_solr_query(h)
-    stats       = Hash[ resp.docs.map { |doc| [doc[id_key].first, {}] } ]
+    stats       = Hash[ resp.docs.map { |doc|
+      [doc[id_key].first, initial_stats()]
+    } ]
 
     # Get counts of Items in those Collection, broken down by workflow status.
     # Add those counts to the stats hash.

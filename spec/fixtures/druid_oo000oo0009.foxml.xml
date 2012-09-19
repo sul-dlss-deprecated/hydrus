@@ -136,11 +136,19 @@
         <roleMetadata objectId="druid:oo000oo0009">
           <role type="hydrus-collection-manager">
              <person>
+                <identifier type="sunetid">archivist1</identifier>
+                <name>Archivist, One</name>
+             </person>
+             <person>
                 <identifier type="sunetid">skota</identifier>
                 <name>Ota, Stella</name>
              </person>
           </role>
           <role type="hydrus-collection-item-depositor">
+             <person>
+                <identifier type="sunetid">archivist2</identifier>
+                <name>Archivist, Two</name>
+             </person>
              <person>
                 <identifier type="sunetid">pgallagher</identifier>
                 <name>Gallagher, Patrick</name>
@@ -154,6 +162,12 @@
                 <name>Brown, Jefferson</name>
              </person>
           </role>          
+          <role type="hydrus-collection-reviewer">
+             <person>
+                <identifier type="sunetid">archivist2</identifier>
+                <name>Archivist, Two</name>
+             </person>
+          </role>
         </roleMetadata>
       </foxml:xmlContent>
     </foxml:datastreamVersion>
