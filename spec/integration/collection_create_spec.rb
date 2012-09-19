@@ -112,7 +112,6 @@ describe("Collection create", :type => :request, :integration => true) do
     page.should have_content(@notice)
     # The view page should now offer the Open Collection button.
     page.should have_button(open_button)
-    puts page
     # Get the Collection and APO objects from fedora.
     coll = Hydrus::Collection.find(druid)
     apo = coll.apo
