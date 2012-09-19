@@ -7,7 +7,7 @@ class Hydrus::Item < Hydrus::GenericObject
   after_validation :strip_whitespace
 
   attr_accessor :embargo
-
+  
   validate :collection_is_open, :on => :create
   validates :actors, :at_least_one=>true, :if => :should_validate
   validates :files, :at_least_one=>true, :if => :should_validate
@@ -31,6 +31,13 @@ class Hydrus::Item < Hydrus::GenericObject
     ]
   )
 
+
+   has_metadata(
+     :name => "roleMetadata",
+     :type => Hydrus::RoleMetadataDS,
+     :label => 'Role Metadata',
+     :control_group => 'M')
+               
   def self.create(collection_pid, user)
     # Create the object, with the correct model.
     coll     = Hydrus::Collection.find(collection_pid)
@@ -77,6 +84,19 @@ class Hydrus::Item < Hydrus::GenericObject
     return cs.first  # In Hydrus, we assume there is just one (for now).
   end
 
+  #################################
+  # methods used to build sidebar
+
+  def files_uploaded?
+    validate! ? true : !errors.keys.include?(:files)
+  end
+
+  def terms_of_deposit_accepted?
+    validate! ? true : !errors.keys.include?(:terms_of_deposit)
+  end
+
+  ###########################
+  
   def base_file_directory
     f = File.join(Rails.root, "public", Hydrus::Application.config.file_upload_path)
     DruidTools::Druid.new(pid, f).path

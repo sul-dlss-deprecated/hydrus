@@ -17,7 +17,7 @@ describe Hydrus::GenericDS do
           #{@p1}
           #{@p2}
         </role>
-        <role type="hydrus-item-depositor">
+        <role type="hydrus-collection-item-depositor">
           #{@p3}
         </role>
         <role type="hydrus-item-manager">
@@ -38,8 +38,8 @@ describe Hydrus::GenericDS do
       exp_xml = <<-EOF
         #{@rmd_start}
           <role type="hydrus-collection-manager" />
-          <role type="hydrus-item-depositor" />
           <role type="hydrus-item-manager" />
+          <role type="hydrus-collection-item-depositor" />
         #{@rmd_end}
       EOF
       @rmdoc.remove_nodes(:role, :person)
@@ -47,7 +47,7 @@ describe Hydrus::GenericDS do
       # Remove the <role> node for collection manager.
       exp_xml = <<-EOF
         #{@rmd_start}
-          <role type="hydrus-item-depositor" />
+          <role type="hydrus-collection-item-depositor" />
         #{@rmd_end}
       EOF
       @rmdoc.remove_nodes(:collection_manager)
@@ -62,7 +62,7 @@ describe Hydrus::GenericDS do
       exp_xml = <<-EOF
         #{@rmd_start}
           <role type="hydrus-collection-manager" />
-          <role type="hydrus-item-depositor" />
+          <role type="hydrus-collection-item-depositor" />
           <role type="hydrus-item-manager" />
         #{@rmd_end}
       EOF
@@ -84,7 +84,7 @@ describe Hydrus::GenericDS do
       exp_xml = <<-EOF
         #{@rmd_start}
           <role type="hydrus-collection-manager" />
-          <role type="hydrus-item-depositor" />
+          <role type="hydrus-collection-item-depositor" />
           <role type="hydrus-item-manager" />
         #{@rmd_end}
       EOF
@@ -93,7 +93,7 @@ describe Hydrus::GenericDS do
       # Remove the <role> node for collection manager.
       exp_xml = <<-EOF
         #{@rmd_start}
-          <role type="hydrus-item-depositor" />
+          <role type="hydrus-collection-item-depositor" />
           <role type="hydrus-item-manager" />
         #{@rmd_end}
       EOF

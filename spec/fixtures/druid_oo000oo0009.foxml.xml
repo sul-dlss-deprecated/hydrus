@@ -140,7 +140,7 @@
                 <name>Ota, Stella</name>
              </person>
           </role>
-          <role type="hydrus-item-depositor">
+          <role type="hydrus-collection-item-depositor">
              <person>
                 <identifier type="sunetid">pgallagher</identifier>
                 <name>Gallagher, Patrick</name>

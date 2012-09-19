@@ -144,7 +144,13 @@
                 <name>Black, Delores</name>
              </person>
           </role>
-          <role type="hydrus-item-depositor">
+          <role type="hydrus-collection-item-depositor">
+             <person>
+                <identifier type="sunetid">ggreen</identifier>
+                <name>Green, Greg</name>
+             </person>
+          </role>
+          <role type="hydrus-collection-depositor">
              <person>
                 <identifier type="sunetid">ggreen</identifier>
                 <name>Green, Greg</name>

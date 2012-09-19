@@ -73,6 +73,7 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
     apo.title = dconf.hydrus.initial_apo_title
     # Add roleMetadata with current user as hydrus-collection-manager.
     apo.roleMetadata.add_person_with_role(user, 'hydrus-collection-manager')
+    apo.roleMetadata.add_person_with_role(user, 'hydrus-collection-depositor')
     # Save and return.
     apo.save
     return apo
@@ -102,13 +103,13 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
      return {
        'hydrus-collection-manager'  => "Manage collection",
        'hydrus-collection-reviewer' => "Review items",
-       'hydrus-item-depositor'      => "Deposit items",
-       'hydrus-viewer'              => "View items",
+       'hydrus-collection-item-depositor'      => "Deposit items",
+       'hydrus-collection-viewer'   => "View items",
      }
   end
 
   def self.default_role
-    return "hydrus-item-depositor"
+    return "hydrus-collection-item-depositor"
   end
 
   # Returns a hash of info needed for licenses in the APO.

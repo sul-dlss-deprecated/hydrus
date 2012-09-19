@@ -145,7 +145,14 @@
     <p>Provide a SUNet ID for each person who can view, add, or review items in this
        collection, or who can manage the collection. Separate multiple IDs with a comma
        or enter on a separate line.</p>
-
+			  <div class="row">
+				 <%= hydrus_form_label do %>
+				  	<%= f.label :'apo_person_roles[hydrus-collection-depositor]', 'Owner (locked)' %>
+				  <% end %>
+				<%= hydrus_form_value do %>
+						<%= f.text_field :'apo_person_roles[hydrus-collection-depositor]', :value=>@document_fedora.apo_persons_with_role('hydrus-collection-depositor').first, :readonly=>true%>
+  				<% end %>
+ 			</div>
     <% Hydrus::AdminPolicyObject.roles.each do |role, role_label| %>
       <% k = :"apo_person_roles[#{role}]" %>
         <div class="row">
@@ -158,7 +165,8 @@
           <%- end %>
         </div>
     <% end %>
-  </div>
+   </div>
+
 
   <noscript>
     <%= render :partial => "actions_box", :locals => {:id=>"nojs"}%>

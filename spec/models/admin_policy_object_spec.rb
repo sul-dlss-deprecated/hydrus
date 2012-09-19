@@ -26,16 +26,17 @@ describe Hydrus::AdminPolicyObject do
     @apo.administrativeMetadata.find_by_xpath('//workflow').size.should == exp_size
     @apo.title.should == Dor::Config.hydrus.initial_apo_title
     role_nodes = @apo.roleMetadata.find_by_xpath('//role')
-    role_nodes.size.should == 1
-    role_nodes.first['type'].should == 'hydrus-collection-manager'
+    role_nodes.size.should == 2
+    role_nodes[0]['type'].should == 'hydrus-collection-manager'
+    role_nodes[1]['type'].should == 'hydrus-collection-depositor'
   end
 
   describe "class methods" do
 
     describe "roles" do
 
-      it "should have a default role of hydrus-item-depositor" do
-        Hydrus::AdminPolicyObject.default_role.should == "hydrus-item-depositor"
+      it "should have a default role of hydrus-collection-item-depositor" do
+        Hydrus::AdminPolicyObject.default_role.should == "hydrus-collection-item-depositor"
       end
 
       it "should have a hash of possible roles" do

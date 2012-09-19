@@ -34,6 +34,7 @@ describe Hydrus::Publishable do
       obj = MockPublishable.new(false)
       obj.should_not_receive(:apo)
       obj.stub(:'valid?').and_return(true)
+      obj.stub(:'is_collection?').and_return(false)      
       obj.is_publishable.should == true
       obj.stub(:'valid?').and_return(false)
       obj.is_publishable.should == false
@@ -43,6 +44,7 @@ describe Hydrus::Publishable do
       obj = Hydrus::Collection.new
       apo = MockPublishable.new(false)
       obj.should_receive(:apo).exactly(4).times
+      obj.stub(:'is_collection?').and_return(true)      
       obj.stub(:'valid?').and_return(true)
       obj.is_publishable.should == true
       obj.stub(:'valid?').and_return(false)

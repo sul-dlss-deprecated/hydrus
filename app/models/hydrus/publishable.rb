@@ -9,16 +9,15 @@ module Hydrus::Publishable
   def should_validate
     return (@should_validate or is_published)
   end
-
+  
   # Returns true only if the object is valid.
   # We want all validations to run, so we must set @should_validate accordingly.
   def is_publishable
-    is_collection = self.class == Hydrus::Collection
     @should_validate = true
-    apo.instance_variable_set('@should_validate', true) if is_collection
+    apo.instance_variable_set('@should_validate', true) if is_collection?
     v = valid?
     @should_validate = false
-    apo.instance_variable_set('@should_validate', false) if is_collection
+    apo.instance_variable_set('@should_validate', false) if is_collection?
     return v
   end
 

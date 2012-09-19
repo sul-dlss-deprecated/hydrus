@@ -28,8 +28,6 @@ class Hydrus::Collection < Hydrus::GenericObject
     coll.assert_content_model
     # Add some Hydrus-specific info to identityMetadata.
     coll.augment_identity_metadata(:collection)
-    # Add roleMetadata with current user as hydrus-collection-depositor.
-    coll.roleMetadata.add_person_with_role(user, 'hydrus-collection-depositor')
     # Add event.
     coll.events.add_event('hydrus', user, 'Collection created')
     # Set defaults for visability, embargo, etc.
@@ -52,6 +50,19 @@ class Hydrus::Collection < Hydrus::GenericObject
     return v1 && v2
   end
 
+  #################################
+  # methods used to build sidebar
+
+  def license_details_provided?
+    validate! ? true : (errors.keys & [:license,:license_option]).size == 0
+  end
+
+  def embargo_details_provided?
+    validate! ? true : (errors.keys & [:embargo,:embargo_option]).size == 0
+  end
+
+  ###########################
+  
   # Returns true only if the Collection is unpublished and has no Items.
   def is_destroyable
     return not(is_published or has_items)

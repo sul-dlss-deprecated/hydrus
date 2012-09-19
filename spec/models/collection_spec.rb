@@ -159,7 +159,7 @@ describe Hydrus::Collection do
             <person><identifier type="sunetid">sunetid1</identifier><name/></person>
             <person><identifier type="sunetid">sunetid2</identifier><name/></person>
           </role>
-          <role type="hydrus-item-depositor">
+          <role type="hydrus-collection-item-depositor">
             <person><identifier type="sunetid">sunetid3</identifier><name/></person>
           </role>
         </roleMetadata>
@@ -180,7 +180,7 @@ describe Hydrus::Collection do
             <person><identifier type="sunetid">sunetid2</identifier><name/></person>
             <person><identifier type="sunetid" /><name/></person>
           </role>
-          <role type="hydrus-item-depositor">
+          <role type="hydrus-collection-item-depositor">
             <person><identifier type="sunetid">sunetid3</identifier><name/></person>
           </role>
         </roleMetadata>
@@ -193,7 +193,7 @@ describe Hydrus::Collection do
             <person><identifier type="sunetid">sunetid2</identifier><name/></person>
             <person><identifier type="sunetid" /><name/></person>
           </role>
-          <role type="hydrus-item-depositor">
+          <role type="hydrus-collection-item-depositor">
             <person><identifier type="sunetid">sunetid3</identifier><name/></person>
           </role>
           <role type="foo">
@@ -206,7 +206,7 @@ describe Hydrus::Collection do
     it "apo_person_roles= should correctly update APO roleMetadtaDS" do
       @hc.apo_person_roles = {
         'hydrus-collection-manager' => 'brown, dblack',
-        'hydrus-item-depositor'     => 'bblue',
+        'hydrus-collection-item-depositor'     => 'bblue',
       } 
       @rmdoc.ng_xml.should be_equivalent_to <<-EOF
         <roleMetadata>
@@ -214,7 +214,7 @@ describe Hydrus::Collection do
             <person><identifier type="sunetid">brown</identifier><name/></person>
             <person><identifier type="sunetid">dblack</identifier><name/></person>
           </role>
-          <role type="hydrus-item-depositor">
+          <role type="hydrus-collection-item-depositor">
             <person><identifier type="sunetid">bblue</identifier><name/></person>
           </role>
         </roleMetadata>
