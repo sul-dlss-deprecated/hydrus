@@ -68,7 +68,7 @@ class Hydrus::Item < Hydrus::GenericObject
     unless workflow_step_is_done(s)
       complete_workflow_step(s)
       events.add_event('hydrus', @current_user, 'Item published')
-      approve() unless requires_human_approval
+      approve() unless to_bool(requires_human_approval)
     end
   end
 
@@ -85,10 +85,8 @@ class Hydrus::Item < Hydrus::GenericObject
     date_accepted_terms_of_deposit=Time.now if to_bool(accepted_terms_of_deposit) && date_accepted_terms_of_deposit.nil?
   end
   
-  # Returns true if the Item's Collection requires items to be
-  # reviewed/approved before ultimate release.
   def requires_human_approval
-    to_bool(collection.requires_human_approval)
+    collection.requires_human_approval
   end
 
   # Returns the Item's Collection.

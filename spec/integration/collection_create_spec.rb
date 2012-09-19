@@ -47,6 +47,7 @@ describe("Collection create", :type => :request, :integration => true) do
     coll.identityMetadata.objectType.should include('collection', 'set')
     # Check person roles of the roleMetadata in APO
     coll.apo_person_roles.should == { "hydrus-collection-manager"   => [ "archivist1" ], "hydrus-collection-depositor" => [ "archivist1" ] }
+    coll.collection_depositor.should == 'archivist1'
     # Check APO.descMetadata.
     apo.title.should == Dor::Config.hydrus.initial_apo_title
     # Check events.
@@ -83,8 +84,8 @@ describe("Collection create", :type => :request, :integration => true) do
     page.should have_content(@notice)
     # The view page should display some validation error messages, and should not
     # offer the Open Collection button.
-    # div_cs = find("div.collection-actions")
-    # div_cs.should_not have_button(open_button)
+    div_cs = find("div.collection-actions")
+    div_cs.should_not have_button(open_button)
     # err_msgs = div_cs.all('li').map { |e| e.text }.join("\n")
     # exp = [
     #   /^Abstract/,
@@ -110,8 +111,8 @@ describe("Collection create", :type => :request, :integration => true) do
     click_button "Save"
     page.should have_content(@notice)
     # The view page should now offer the Open Collection button.
-    div_cs = find("div.collection-actions")
-    div_cs.should have_button(open_button)
+    page.should have_button(open_button)
+    puts page
     # Get the Collection and APO objects from fedora.
     coll = Hydrus::Collection.find(druid)
     apo = coll.apo
@@ -127,8 +128,7 @@ describe("Collection create", :type => :request, :integration => true) do
     click_button(open_button)
     page.should have_content(@notice)
     # The view page should now offer the Close Collection button.
-    div_cs = find("div.collection-actions")
-    div_cs.should have_button(close_button)
+    page.should have_button(close_button)
     # Get the Collection and APO objects from fedora.
     coll = Hydrus::Collection.find(druid)
     apo = coll.apo
@@ -144,8 +144,7 @@ describe("Collection create", :type => :request, :integration => true) do
     click_button(close_button)
     page.should have_content(@notice)
     # The view page should now offer the Open Collection button.
-    div_cs = find("div.collection-actions")
-    div_cs.should have_button(open_button)
+    page.should have_button(open_button)
     # Get the Collection and APO objects from fedora.
     coll = Hydrus::Collection.find(druid)
     apo = coll.apo
@@ -171,8 +170,7 @@ describe("Collection create", :type => :request, :integration => true) do
     click_button(open_button)
     page.should have_content(@notice)
     # The view page should now offer the Close Collection button.
-    div_cs = find("div.collection-actions")
-    div_cs.should have_button(close_button)
+    page.should have_button(close_button)
     # Get the Collection and APO objects from fedora.
     coll = Hydrus::Collection.find(druid)
     apo = coll.apo

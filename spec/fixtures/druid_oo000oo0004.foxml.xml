@@ -99,7 +99,7 @@
       CREATED="2011-07-05T20:49:25.801Z" MIMETYPE="text/xml" SIZE="345">
       <foxml:xmlContent>
         <hydrusProperties>
-          <requiresHumanApproval>false</requiresHumanApproval>
+          <requiresHumanApproval>no</requiresHumanApproval>
           <collectionDepositor>ggreen</collectionDepositor>
         </hydrusProperties>
       </foxml:xmlContent>

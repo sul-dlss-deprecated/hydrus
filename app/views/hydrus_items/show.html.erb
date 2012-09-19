@@ -60,7 +60,7 @@
             <button type="submit" class="btn btn-small save-edits"
                     name="hydrus_item[publish]" value="true"
                     id="hydrus_item_publish">
-              <%= @document_fedora.requires_human_approval ?
+              <%= to_bool(@document_fedora.requires_human_approval) ?
                     'Submit for Approval' : 'Publish Item'  %>
             </button>
           </p>

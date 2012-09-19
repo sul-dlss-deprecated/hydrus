@@ -8,7 +8,7 @@ describe Hydrus::HydrusPropertiesDS do
     xml = <<-EOF
       #{@ds_start}
         <acceptedTermsOfDeposit>true</acceptedTermsOfDeposit>
-        <requiresHumanApproval>false</requiresHumanApproval>
+        <requiresHumanApproval>no</requiresHumanApproval>
         <disapprovalReason>Idiota</disapprovalReason>
       #{@ds_end}
     EOF
@@ -18,7 +18,7 @@ describe Hydrus::HydrusPropertiesDS do
   it "should get expected values from OM terminology" do
     tests = [
       [:accepted_terms_of_deposit, ["true"]],
-      [:requires_human_approval, ["false"]],
+      [:requires_human_approval, ["no"]],
       [:disapproval_reason, ["Idiota"]],
     ]
     tests.each do |terms, exp|

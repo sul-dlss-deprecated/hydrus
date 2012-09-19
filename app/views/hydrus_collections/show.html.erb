@@ -15,13 +15,11 @@
       <div class="collection-actions box-header">Actions</div>
 				<%= form_for(@document_fedora, :method => 'PUT', :html => {:class => "step", :novalidate=>""}) do |f| -%>
 					<% if @document_fedora.is_open %>
-            <p>
               <button type="submit" class="btn btn-small save-edits"
                       name="hydrus_collection[publish]" value="false"
                       id="hydrus_collection_publish">Close Collection</button>
-            </p>
 					<% elsif @document_fedora.is_publishable %>
-				  	<p><button type="submit" class="btn btn-small save-edits" name="hydrus_collection[publish]" value="true" id="hydrus_collection_publish">Open Collection</button></p>
+				  	<button type="submit" class="btn btn-small save-edits" name="hydrus_collection[publish]" value="true" id="hydrus_collection_publish">Open Collection</button>
 					<% else %>
 							<p>To open the collection, you must fix the following:
 								<%
@@ -138,8 +136,19 @@
 			After its release date,
 		<% end %>
 		items in this collection are covered by the following license terms:</p>
-		<p><%=@document_fedora.license%></p>
 		
+		<p>
+		<% if @document_fedora.license_option == 'none' %>
+		  No license
+		<% else %>
+			<% if @document_fedora.license_option == 'varies' %>
+				A default license -- the license below applies to items in this collection by default, but can be changed for each item.
+			<% else %>
+				A required license -- the license below applies to all items in the collection.
+			<% end %>
+		</p>
+			<p><%=license_image(@document_fedora.license)%> <%=license_link(@document_fedora.license)%></p>
+		<% end %>
 </div>
 
 <div class="collection-items">

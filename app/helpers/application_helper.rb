@@ -5,6 +5,24 @@ module ApplicationHelper
     'Stanford Digital Repository'
   end
   
+  def license_image(license_code)
+    if Hydrus::GenericObject.license_type(license_code) == 'creativeCommons'
+      image_tag "licenses/" + license_code.downcase.gsub('-','_') + ".png"
+    end
+  end
+  
+  def license_link(license_code)
+    license_name=Hydrus::GenericObject.license_human(license_code)
+    license_type=Hydrus::GenericObject.license_type(license_code)
+    if license_type == 'creativeCommons'
+      link_to license_name,'http://creativecommons.org/licenses/'
+    elsif license_type == 'openDataCommons'
+      link_to license_name,'http://opendatacommons.org/licenses/'
+    else 
+      license_name
+    end
+  end
+  
   def hydrus_format_date(input_string)
     input_string.blank? ? '' : input_string.to_date.strftime("%b %d, %Y")
   end

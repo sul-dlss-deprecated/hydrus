@@ -472,7 +472,7 @@ describe Hydrus::Item do
     
     it "if not published, should set titles and call approve" do
       @hi.stub(:workflow_step_is_done).and_return(false)
-      @hi.stub(:requires_human_approval).and_return(false)
+      @hi.stub(:requires_human_approval).and_return("no")
       exp_title = 'blah blah blah'
       @hi.title = exp_title
       @hi.should_receive(:complete_workflow_step).with('submit')
@@ -497,7 +497,7 @@ describe Hydrus::Item do
   end
 
   it "requires_human_approval() should delegate to the collection" do
-    [true, false, true].each { |exp|
+    ["yes", "no", "yes"].each { |exp|
       @hi.stub_chain(:collection, :requires_human_approval).and_return(exp)
       @hi.requires_human_approval.should == exp
     }

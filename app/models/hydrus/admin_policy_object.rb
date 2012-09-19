@@ -99,11 +99,20 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
   end
 
   def self.roles
-     return {
+     {
        'hydrus-collection-manager'  => "Collection manager",
        'hydrus-collection-reviewer' => "Item reviewer",
        'hydrus-collection-item-depositor'      => "Item Depositor",
        'hydrus-collection-viewer'   => "View only",
+     }
+  end
+
+  def self.roles_help_text
+     {
+       'hydrus-collection-manager'  => "These users can edit collection details, and add and review items in the collection",
+       'hydrus-collection-reviewer' => "These users can review items in the collection, but not add new items",
+       'hydrus-collection-item-depositor'      => "These users can add items to the collection, but cannot act as reviewers",
+       'hydrus-collection-viewer'   => "These users can view items in the collection only",
      }
   end
 
