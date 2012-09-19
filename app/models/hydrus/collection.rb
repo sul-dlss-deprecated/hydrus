@@ -5,6 +5,7 @@ class Hydrus::Collection < Hydrus::GenericObject
   after_validation :strip_whitespace
 
   delegate :requires_human_approval, :to => "hydrusProperties", :unique => true
+  delegate :collection_depositor, :to => "hydrusProperties", :unique => true
 
   has_relationship 'hydrus_items', :is_member_of_collection, :inbound => true
 
@@ -15,6 +16,7 @@ class Hydrus::Collection < Hydrus::GenericObject
     apo     = Hydrus::AdminPolicyObject.create(user)
     dor_obj = Hydrus::GenericObject.register_dor_object(user, 'collection', apo.pid)
     coll    = dor_obj.adapt_to(Hydrus::Collection)
+    coll.collection_depositor=user
     coll.remove_relationship :has_model, 'info:fedora/afmodel:Dor_Collection'
     coll.assert_content_model
     # Add some Hydrus-specific info to identityMetadata.
@@ -121,11 +123,12 @@ class Hydrus::Collection < Hydrus::GenericObject
   # single value for the embargo period and license from two separate 
   # HTML select controls, based on the value of a radio button.
   ####
-
-  def collection_owner *args
-    apo.collection_owner *args
+  
+  def collection_owner
+    depositors=apo.persons_with_role('hydrus-collection-depositor')
+    depositors.size == 1 ? depositors.first : ''
   end
-
+  
   def deposit_status *args
     apo.deposit_status *args
   end

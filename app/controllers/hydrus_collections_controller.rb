@@ -55,8 +55,6 @@ class HydrusCollectionsController < ApplicationController
     if has_mvf
       if params.has_key?(:add_link)
         @document_fedora.descMetadata.insert_related_item
-      elsif params.has_key?(:add_person) # TODO Not needed anymore?
-        @document_fedora.add_empty_person_to_role(Hydrus::AdminPolicyObject.default_role)
       end
     end
 

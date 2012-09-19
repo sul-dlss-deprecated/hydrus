@@ -45,7 +45,7 @@ describe("Collection view", :type => :request, :integration => true) do
     login_as_archivist1
     visit polymorphic_path(@hc)
     current_path.should == polymorphic_path(@hc)
-    coll_items = find('div.collection-items')
+    coll_items = find('div#items')
     exp_content.each do |exp|
       coll_items.should have_content(exp)
     end

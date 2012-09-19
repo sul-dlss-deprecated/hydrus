@@ -105,6 +105,7 @@
       <foxml:xmlContent>
         <hydrusProperties>
           <requiresHumanApproval>false</requiresHumanApproval>
+          <collectionDepositor>ggreen</collectionDepositor>
         </hydrusProperties>
       </foxml:xmlContent>
     </foxml:datastreamVersion>

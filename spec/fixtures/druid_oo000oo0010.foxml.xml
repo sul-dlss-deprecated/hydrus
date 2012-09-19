@@ -98,6 +98,7 @@
       <foxml:xmlContent>
         <hydrusProperties>
           <requiresHumanApproval>false</requiresHumanApproval>
+          <collectionDepositor>pgallagher</collectionDepositor>
         </hydrusProperties>
       </foxml:xmlContent>
     </foxml:datastreamVersion>

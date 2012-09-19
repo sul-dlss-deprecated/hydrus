@@ -9,6 +9,7 @@ class Hydrus::HydrusPropertiesDS < ActiveFedora::NokogiriDatastream
     t.date_accepted_terms_of_deposit :path=> 'dateAcceptedTermsOfDeposit'
     t.requires_human_approval :path => 'requiresHumanApproval'
     t.disapproval_reason :path => 'disapprovalReason'
+    t.collection_depositor :path => 'collectionDepositor'
   end
 
   # Empty XML document.

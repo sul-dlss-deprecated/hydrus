@@ -26,8 +26,6 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
            :at => [:hydrus, :visibility], :unique => true)
   delegate(:visibility_option, :to => "administrativeMetadata",
            :at => [:hydrus, :visibility, :option], :unique => true)
-  delegate(:collection_owner, :to => "roleMetadata",
-           :at => :collection_owner)
   delegate(:person_id, :to => "roleMetadata",
            :at => [:role, :person, :identifier])
 
@@ -98,15 +96,11 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
 
   def self.roles
      return {
-       'hydrus-collection-manager'  => "Manage collection",
-       'hydrus-collection-reviewer' => "Review items",
-       'hydrus-collection-item-depositor'      => "Deposit items",
-       'hydrus-collection-viewer'   => "View items",
+       'hydrus-collection-manager'  => "Collection manager",
+       'hydrus-collection-reviewer' => "Item reviewer",
+       'hydrus-collection-item-depositor'      => "Item Depositor",
+       'hydrus-collection-viewer'   => "View only",
      }
-  end
-
-  def self.default_role
-    return "hydrus-collection-item-depositor"
   end
 
   # Returns a hash of info needed for licenses in the APO.

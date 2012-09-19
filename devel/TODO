@@ -54,9 +54,7 @@ Unit tests. Can we improve our coverage in the controllers?
 rightsMD: (a) tests; (b) refactor to take advantage of OM and generic_ds.rb.
 
 Can we remove :add_person button and related checks from the update/create actions in 
-Collections controller?  We can also remove the "default_role" method in the APO object model.
-
-Remove collection_owner delegation in APO object
+Collections controller? 
 
 ****************
 WAITING

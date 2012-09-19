@@ -69,7 +69,7 @@
 		<h4 class="muted">Collection Settings</h4>
 
     <dt>Owner</dt>
-    <dd><font color=red>#TODO</font></dd>
+    <dd><%= @document_fedora.collection_owner%></dd>
 
     <dt>Contact</dt>
     <dd><%= hydrus_object_setting_value(@document_fedora.contact) %></dd>
@@ -110,18 +110,24 @@
 	<% end %>
 	</p>
 	
-	<font color=red>#TODO</font>
 	<p>
 	<%if @document_fedora.embargo_option == 'none' %>
 		Upon release
 	<% else %>
 		After its release date,
 	<% end %>
-	content in this collection can be discovered and downloaded by the <strong>Stanford community -- all items will be visible only to Stanford-authenticated users.</strong></p>
+	content in this collection can be discovered and downloaded by 
+		<% if @document_fedora.visibility == 'stanford' %>
+			<strong>the Stanford community -- all items will be visible only to Stanford-authenticated users.</strong>
+		<% elsif @document_fedora.visibility == 'everyone' %>
+		  <strong>anyone -- all items will be visible to everybody, including non-Stanford users.</strong>
+		<% else %>
+			<strong>anyone -- but individual items may restrict visibility to members of the Stanford community.</strong>
+		<% end %>
+	</p>
 	<% if to_bool(@document_fedora.requires_human_approval) %>
 		<p>Before being released, content in this collection <strong>must be</strong> approved by the collection manager or a reviewer.</p>
 	<% end %>
-</p>
 </div>
 
 <div class="collection-items">
@@ -139,10 +145,18 @@
 
 <div class="collection-items">
      <h4>Other contributors to this collection</h4>
+			<dl class="dl-horizontal object-view">
+				<% Hydrus::AdminPolicyObject.roles.each do |key,value| %>
+	       <tr class="document <%= cycle("even","odd") %>">
+					<dt><%=value%></dt>
+					<% people = @document_fedora.apo.persons_with_role(key) %>
+			    <dd><%= people.size == 0 ? "none" : people.join(',') %></dd>
+				<% end %>
+			</dl>
 </div>
 
   <% unless @document_fedora.hydrus_items.size == 0 %>
-    <div class="collection-items">
+    <div id="items" class="collection-items">
       <h4>In this collection</h4>
       <table class="hydrus-striped-table table-striped table-condensed">
         <thead>

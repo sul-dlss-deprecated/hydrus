@@ -148,10 +148,10 @@
 			  <div class="row">
 				 <%= hydrus_form_label do %>
 				  	<%= f.label :'apo_person_roles[hydrus-collection-depositor]', 'Owner (locked)' %>
-				  <% end %>
+				  <%- end %>
 				<%= hydrus_form_value do %>
 						<%= f.text_field :'apo_person_roles[hydrus-collection-depositor]', :value=>@document_fedora.apo_persons_with_role('hydrus-collection-depositor').first, :readonly=>true%>
-  				<% end %>
+  				<%- end %>
  			</div>
     <% Hydrus::AdminPolicyObject.roles.each do |role, role_label| %>
       <% k = :"apo_person_roles[#{role}]" %>
