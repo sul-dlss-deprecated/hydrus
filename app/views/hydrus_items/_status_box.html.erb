@@ -1,0 +1,26 @@
+<dl>
+   <dt><h6>Collection</h6></dt>
+   <dd class="collection">
+     <%=
+       c = @document_fedora.collection
+       link_to(c.title, polymorphic_path(c))
+     %>
+   </dd>
+ </dl>
+
+ <div class="well actions-box item-status">
+   <div class="box-header">Status</div>
+   <dl class="dl-horizontal">
+     <dt>Submitted by:</dt>
+     <dd><%= hydrus_object_setting_value(@document_fedora.item_depositor_name) %></dd>
+     <dt>Submitted on:</dt>
+     <dd><%= hydrus_object_setting_value(hydrus_format_date(@document_fedora.submit_time)) %></dd>
+     <dt>Release date:</dt>
+     <dd><%=
+       d = formatted_datetime(@document_fedora.publish_lifecycle_time, :date)
+       hydrus_object_setting_value(d)
+     %></dd>
+     <dt>Visibility:</dt>
+     <dd><%= hydrus_object_setting_value(@document_fedora.discover_access) %></dd>
+   </dl>
+ </div>

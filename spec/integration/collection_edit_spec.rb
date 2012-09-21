@@ -188,7 +188,6 @@ describe("Collection edit", :type => :request, :integration => true) do
       dk    = 'hydrus_collection_apo_person_roles'
       h     = {}
       collection_roles=Hydrus::AdminPolicyObject.roles
-      role_info.delete 'hydrus-collection-depositor' # ignore the hydrus-collection-depositor, since it's not in the UI for now
       collection_roles.each do |role, v|
         ids = rmdiv.find("input[id^='#{dk}[#{role}]']")[:value]
         ids = @hc.parse_delimited(ids)
@@ -210,6 +209,7 @@ describe("Collection edit", :type => :request, :integration => true) do
         'hydrus-collection-reviewer' => %w(cc dd ee),
         'hydrus-collection-item-depositor'      => %w(ff),
         'hydrus-collection-viewer'              => %w(gg hh ii),
+        'hydrus-collection-depositor' => %w(ggreen)
       }
       rmdiv = find('div#role-management')
       dk    = 'hydrus_collection_apo_person_roles'
@@ -222,7 +222,7 @@ describe("Collection edit", :type => :request, :integration => true) do
       check_role_management_div(role_info)
       # Confirm new content in fedora.
       @hc = Hydrus::Collection.find @druid
-      @hc.apo_person_roles.should == role_info.merge({'hydrus-collection-depositor'=>['ggreen']}) # add back in the collection depositor, not in the UI
+      @hc.apo_person_roles.should == role_info
     end
     
   end

@@ -52,8 +52,7 @@ Workflow fixtures. Create proper worflow XML fixture files, and modify rake
 refresh_workflows task to load the files. We need more fine-grained controlled
 over the states of our fixture objects.
 
-Can we remove :add_person button and related checks from the update/create actions in 
-Collections controller? 
+Search is broken.
 
 ****************
 WAITING

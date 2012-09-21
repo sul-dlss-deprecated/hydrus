@@ -1,6 +1,5 @@
 class Hydrus::Collection < Hydrus::GenericObject
 
-  include Hydrus::Responsible
   extend  Hydrus::Delegatable
   extend Hydrus::SolrQueryable
 
@@ -122,6 +121,14 @@ class Hydrus::Collection < Hydrus::GenericObject
     self.license = nil if license_option == "none"
   end
 
+  def roles_of_person(user)
+    apo.roles_of_person(user)
+  end
+
+  def roles_of_person_for_ui(user)
+    roles_of_person(user).collect {|role| Hydrus::AdminPolicyObject.roles[role]}
+  end
+  
   def add_empty_person_to_role *args
     apo.roleMetadata.add_empty_person_to_role *args
   end
@@ -315,16 +322,19 @@ class Hydrus::Collection < Hydrus::GenericObject
     # Add those counts to the stats hash.
     h           = squery_item_counts_of_collections(stats.keys)
     resp, sdocs = issue_solr_query(h)
-    resp.facet_counts['facet_pivot'].values.first.each { |h|
-      druid = h['value'].sub(/.+\/druid/, 'druid')
-      h['pivot'].each { |p|
-        status = p['value']
-        n      = p['count']
-        stats[druid] ||= {}
-        stats[druid][status] = n
+    
+    facet_pivot=resp.facet_counts['facet_pivot']
+    if facet_pivot
+      facet_pivot.values.first.each { |h|
+        druid = h['value'].sub(/.+\/druid/, 'druid')
+        h['pivot'].each { |p|
+          status = p['value']
+          n      = p['count']
+          stats[druid] ||= {}
+          stats[druid][status] = n
+        }
       }
-    }
-
+    end
     return stats
   end
 

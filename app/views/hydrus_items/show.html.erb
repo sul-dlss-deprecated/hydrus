@@ -2,88 +2,9 @@
 
 <% sidebar_items << capture do %>
 
-  <dl>
-    <dt><h6>Collection</h6></dt>
-    <dd class="collection">
-      <%=
-        c = @document_fedora.collection
-        link_to(c.title, polymorphic_path(c))
-      %>
-    </dd>
-  </dl>
+	<%= render :partial => "status_box"%>
 
-
-  <div class="well actions-box item-status">
-    <div class="box-header">Status</div>
-    <dl class="dl-horizontal">
-      <dt>Submitted by:</dt>
-      <dd><%= hydrus_object_setting_value(@document_fedora.item_depositor_name) %></dd>
-      <dt>Submitted on:</dt>
-      <dd><%= hydrus_object_setting_value(hydrus_format_date(@document_fedora.submit_time)) %></dd>
-      <dt>Release date:</dt>
-      <dd><%=
-        d = formatted_datetime(@document_fedora.publish_lifecycle_time, :date)
-        hydrus_object_setting_value(d)
-      %></dd>
-      <dt>Visibility:</dt>
-      <dd><%= hydrus_object_setting_value(@document_fedora.discover_access) %></dd>
-    </dl>
-  </div>
-
-
-	<%= form_for(@document_fedora, :method => 'PUT', :html => {:class => "step", :novalidate=>""}) do |f| -%>
-	<div class="well actions-box collection-actions">
-	  <div class="box-header">What you can do</div>
-	  <p><%= link_to("Edit item",edit_polymorphic_path(@document_fedora, :viewing_context => 'edit'),
-	          :class => 'edit toggle') %></p>
-      <%
-         if @document_fedora.is_published
-           unless @document_fedora.is_approved
-      %>
-             <p>
-               <button type="submit" class="btn btn-small save-edits"
-                       name="hydrus_item[approve][value]" value="yes"
-                       id="hydrus_item_approve">Approve Item</button>
-             </p>
-             <p>
-               <button type="submit" class="btn btn-small save-edits"
-                       name="hydrus_item[approve][value]" value="no"
-                       id="hydrus_item_disapprove">Disapprove Item</button>
-             </p>
-             <p>
-                 <%= label_tag("hydrus_item_disapproval_reason", "Disapproval reason") %>
-                 <%= text_field_tag("hydrus_item[approve][reason]", @document_fedora.disapproval_reason) -%>
-             </p>
-          <% end %>
-			<% elsif @document_fedora.is_publishable %>
-          <p>
-            <button type="submit" class="btn btn-small save-edits"
-                    name="hydrus_item[publish]" value="true"
-                    id="hydrus_item_publish">
-              <%= to_bool(@document_fedora.requires_human_approval) ?
-                    'Submit for Approval' : 'Publish Item'  %>
-            </button>
-          </p>
-			<% else %>
-					<p>To publish the item, you must fix the following:
-						<%
-            errors = @document_fedora.errors.messages.map { |field, error|
-			        "<li class='errors'>#{field.to_s.humanize.capitalize} #{error.join}</li>"
-            }
-						%>
-						<%="<ul>#{errors.join}</ul>".html_safe%>
-				  </p>
-			<%
-			end
-      unless @document_fedora.is_published
-			%>
-        <p class="discard-item">
-          <i class="icon-trash"></i>
-          <a href="#">Discard <%=@document_fedora.object_type%></a>
-        </p>
-			<% end %>
-	</div>
-	<% end %>
+	<%= render :partial => "actions_box_show"%>
 <%- end -%>
 
 

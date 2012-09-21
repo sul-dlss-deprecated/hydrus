@@ -351,9 +351,13 @@ describe Hydrus::Item do
   end
     
   describe "class methods" do
-    it "should provide an array of roles" do
-      Hydrus::Item.roles.should be_a Array
+    it "should provide an array of person roles" do
+      Hydrus::Item.person_roles.should be_a Array
     end
+    it "should provide a hash of item roles" do
+      Hydrus::Item.roles.should be_a Hash
+    end
+
   end
 
   describe "strip_whitespace_from_fields()" do

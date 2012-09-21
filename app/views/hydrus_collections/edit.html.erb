@@ -3,7 +3,15 @@
 <%= form_for(@document_fedora, :method => 'PUT', :html => {:class => "step", :novalidate=>""}) do |f| -%>
 
 <%- sidebar_items << capture do -%>
-	<%= render :partial => "actions_box", :locals => {:f=>f, :id=>"js"}%>
+
+	<div class="well actions-box" id="collection-actions">
+	
+			<%=render :partial=>'status_box' %>
+	
+		 <%= render :partial => "actions_box_edit", :locals => {:f=>f, :id=>"js"}%>
+
+	</div>
+
 <%- end -%>
 
 <div class="row">
@@ -11,6 +19,9 @@
 		<%=render :partial=>'shared/navigation' %>
   </div>
 </div>
+<h3><%= hydrus_object_setting_value(@document_fedora.title) %></h3>
+<h4 class="muted">Collection Settings</h4>
+
   <%= hydrus_form_header(:required=>true, :first=>true) {"Name, description, contact"} %>
   <div class="row">
     <%= hydrus_form_label do %>
@@ -47,7 +58,7 @@
     </div>
   </div>
 
-  <%= hydrus_form_header {"Release and visibility of content"} %>
+  <%= hydrus_form_header(:required=>true) {"Release and visibility of content"} %>
   <div id="content-visibility">
     <p>Content in SDR is intended to be shared. You can impose a delay (embargo) before
     content in this collection is released for public or Stanford-only discovery
@@ -156,24 +167,29 @@
 <%- end %>
  			</div>
     <% Hydrus::AdminPolicyObject.roles.each do |role, role_label| %>
-      <% k = :"apo_person_roles[#{role}]" %>
-        <div class="row">
-          <%= hydrus_form_label do %>
-            <%= f.label k, role_label %>
-          <%- end %>
-          <%- pwr = @document_fedora.apo_persons_with_role(role) %>
-          <%= hydrus_form_value do %>
-            <%= f.text_field k, :value => pwr.join(', ') %>
-						<p class="help"><%=Hydrus::AdminPolicyObject.roles_help_text[role]%></p>
-          <%- end %>
-        </div>
+      <% 
+				if role != 'hydrus-collection-depositor'
+					k = :"apo_person_roles[#{role}]" %>
+	        <div class="row">
+	          <%= hydrus_form_label do %>
+	            <%= f.label k, role_label %>
+	          <%- end %>
+	          <%- pwr = @document_fedora.apo_persons_with_role(role) %>
+	          <%= hydrus_form_value do %>
+	            <%= f.text_field k, :value => pwr.join(', ') %>
+							<p class="help"><%=Hydrus::AdminPolicyObject.roles_help_text[role]%></p>
+	          <%- end %>
+	        </div>
+		  <% end %>
     <% end %>
    </div>
 
 
   <noscript>
-    <%= render :partial => "actions_box", :locals => {:id=>"nojs"}%>
-  </noscript>
+			<div class="well actions-box" id="collection-actions">
+    		<%= render :partial => "actions_box_edit", :locals => {:id=>"nojs"}%>
+  		</div>
+</noscript>
 
   <% render(
        :partial => "hydra/permissions/index",

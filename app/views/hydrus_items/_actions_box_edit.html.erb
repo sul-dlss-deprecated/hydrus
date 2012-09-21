@@ -1,5 +1,7 @@
 <div class="well actions-box" id="item-actions">
   <div class="box-header">Actions</div>
+	<p>You are a <%=@document_fedora.collection.roles_of_person_for_ui(current_user.to_s).join(',').downcase%> for this collection.</p>
+
   <fieldset>
     <button type="submit" class="btn btn-small save-edits" name="save" id="save_<%= id %>">Save</button>
     <label class="checkbox">

@@ -1,7 +1,7 @@
 <%- @page_title = "Editing '#{@document_fedora.title}' - #{application_name}" -%>
 <%- object_type = @document_fedora.object_type -%>
 <% sidebar_items << capture do %>
-  <%= render :partial => "actions_box", :locals => {:id=>"js"}%>
+  <%= render :partial => "actions_box_edit", :locals => {:id=>"js"}%>
 <%- end -%>
 
 
@@ -193,7 +193,7 @@
   </div>
 
   <noscript>
-    <%= render :partial => "actions_box", :locals => {:id=>"nojs"}%>
+    <%= render :partial => "actions_box_edit", :locals => {:id=>"nojs"}%>
   </noscript>
 <%- end -%>
 

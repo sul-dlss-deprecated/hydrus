@@ -1,61 +1,17 @@
 <%- @page_title = "#{@document_fedora.title} - #{application_name}" -%>
 
-<% sidebar_items << capture do %>
+<%- sidebar_items << capture do -%>
 
-    <div class="well actions-box collection-settings">
-      <div class="collection-status box-header">
-					<span >Status</span> 
-					<% if @document_fedora.is_open %>
-						<button class="pull-right btn btn-success btn-small" type="button">Open for deposit</button>
-		      <% else %>
-						<button class="pull-right btn btn-danger btn-small" type="button">Closed for deposit</button>
-				  <% end %>
-				  <br /><br />
-				</div>
-      <div class="collection-actions box-header">Actions</div>
-				<%= form_for(@document_fedora, :method => 'PUT', :html => {:class => "step", :novalidate=>""}) do |f| -%>
-					<% if @document_fedora.is_open %>
-              <button type="submit" class="btn btn-small save-edits"
-                      name="hydrus_collection[publish]" value="false"
-                      id="hydrus_collection_publish">Close Collection</button>
-					<% elsif @document_fedora.is_publishable %>
-				  	<button type="submit" class="btn btn-small save-edits" name="hydrus_collection[publish]" value="true" id="hydrus_collection_publish">Open Collection</button>
-					<% else %>
-							<p>To open the collection, you must fix the following:
-								<%
-								errors = []
-					      @document_fedora.errors.messages.each do |field, error|
-					        errors << "<li class='errors'>#{field.to_s.humanize.capitalize} #{error.join}</li>"
-					      end
-								%>
-								<%="<ul>#{errors.join}</ul>".html_safe%>
-						  </p>
-					<%
-					end
-				end %>
+<div class="well actions-box collection-settings">
+	
+			<%=render :partial=>'status_box' %>
 
-			<% if @document_fedora.is_open %>
-	      <form class="form-horizontal">
-	        <div class="btn-group">
-	          <button class="btn btn-small">Add new &hellip;</button>
-	          <button class="btn btn-small dropdown-toggle" data-toggle="dropdown">
-	            <span class="caret"></span>
-	          </button>
-	          <%= render :partial => "shared/add_content_options", :locals => {:parent => @document_fedora} %>
-	        </div>
-	      </form>
-			 <% end %>
-		    <% if @document_fedora.is_destroyable %>
-					<p class="discard-item"><i class="icon-trash"></i> <a href="#">Discard this collection</a></p>
-		    <% else %>
-					<p class="muted"><i class="icon-trash"></i> Cannot discard a published collection</p>		
-				<% end %>
-    </div>
-		
+ 			<%=render :partial=>'actions_box_show' %>
+
+</div>
+
 <%- end -%>
-
 <div>
-
   <span class="edit-browse">
         <%=render :partial=>'shared/navigation' %>
   </span>

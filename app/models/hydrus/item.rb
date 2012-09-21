@@ -322,7 +322,25 @@ class Hydrus::Item < Hydrus::GenericObject
     end
   end
 
+  def roles_of_person_for_ui(user)
+    roles_of_person(user).collect {|role| Hydrus::Item.roles[role]}
+  end
+  
   def self.roles
+     {
+       'hydrus-item-depositor' => "Item Depositor",       
+       'hydrus-item-manager' => "Item Manager",
+     }
+  end
+
+  def self.roles_help_text
+     {
+       'hydrus-item-depositor' => "This is the original depositor of the item and can peform any action with the item",       
+       'hydrus-item-manager' => "These users can edit the item",
+      }
+  end
+  
+  def self.person_roles
     return [
       "Author",
       "Creator",

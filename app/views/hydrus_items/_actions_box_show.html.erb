@@ -1,0 +1,55 @@
+	<%= form_for(@document_fedora, :method => 'PUT', :html => {:class => "step", :novalidate=>""}) do |f| -%>
+	<div class="well actions-box collection-actions">
+	  <div class="box-header">Actions</div>
+		<p>You are a <%=@document_fedora.collection.roles_of_person_for_ui(current_user.to_s).join(',').downcase%> for this collection.</p>
+	
+	  <p><%= link_to("Edit item",edit_polymorphic_path(@document_fedora, :viewing_context => 'edit'),
+	          :class => 'edit toggle') %></p>
+     <%
+        if @document_fedora.is_published
+          unless @document_fedora.is_approved
+     %>
+            <p>
+              <button type="submit" class="btn btn-small save-edits"
+                      name="hydrus_item[approve][value]" value="yes"
+                      id="hydrus_item_approve">Approve Item</button>
+            </p>
+            <p>
+              <button type="submit" class="btn btn-small save-edits"
+                      name="hydrus_item[approve][value]" value="no"
+                      id="hydrus_item_disapprove">Disapprove Item</button>
+            </p>
+            <p>
+                <%= label_tag("hydrus_item_disapproval_reason", "Disapproval reason") %>
+                <%= text_field_tag("hydrus_item[approve][reason]", @document_fedora.disapproval_reason) -%>
+            </p>
+         <% end %>
+			<% elsif @document_fedora.is_publishable %>
+         <p>
+           <button type="submit" class="btn btn-small save-edits"
+                   name="hydrus_item[publish]" value="true"
+                   id="hydrus_item_publish">
+             <%= to_bool(@document_fedora.requires_human_approval) ?
+                   'Submit for Approval' : 'Publish Item'  %>
+           </button>
+         </p>
+			<% else %>
+					<p>To publish the item, you must fix the following:
+						<%
+           errors = @document_fedora.errors.messages.map { |field, error|
+			        "<li class='errors'>#{field.to_s.humanize.capitalize} #{error.join}</li>"
+           }
+						%>
+						<%="<ul>#{errors.join}</ul>".html_safe%>
+				  </p>
+			<%
+			end
+     unless @document_fedora.is_published
+			%>
+       <p class="discard-item">
+         <i class="icon-trash"></i>
+         <a href="#">Discard <%=@document_fedora.object_type%></a>
+       </p>
+			<% end %>
+	</div>
+	<% end %>
