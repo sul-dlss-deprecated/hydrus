@@ -91,9 +91,15 @@ form.step .peer_reviewed label {
 	display: inline;
 }
 
-form .dropdown-menu a {border-bottom: none;}
-form .dropdown-menu .disabled a {color: #cccccc;}
-form .dropdown-menu li.disabled:hover, form .dropdown-menu .disabled a:hover {cursor: default; background: none;}
+.dropdown-menu a {border-bottom: none;}
+.dropdown-menu .disabled a {color: #cccccc;}
+.dropdown-menu li.disabled:hover, .dropdown-menu .disabled a:hover {cursor: default; background: none; color:#cccccc}
+
+/* Select list shown for non-js browsers */
+.add-content-options {
+	select {width: 162px}
+	input[type='submit'] {margin-top:-10px}
+}
 
 form .highlight-value {font-weight: bold;}
 form .sub-section {margin-bottom: 12px;}

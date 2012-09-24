@@ -15,7 +15,16 @@ describe("Item create", :type => :request, :integration => true) do
     # Restore mint_ids setting.
     Dor::Config.configure.suri.mint_ids = @prev_mint_ids
   end
-
+  
+  it "should have a non-js select list for depositing items into collections" do
+    login_as_archivist1
+    visit hydrus_collection_path(:id=>@hc_druid)
+    select "item", :from => "collection"
+    click_button "Add"
+    current_path.should_not == hydrus_collection_path(:id=>@hc_druid)
+    current_path.should =~ @edit_path_regex
+  end
+  
   it "should be able to create a new Item, with expected datastreams" do
     # Login, go to new Item page, and store the druid of the new Item.
     login_as_archivist1

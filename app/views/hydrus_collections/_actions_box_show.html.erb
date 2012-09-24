@@ -13,15 +13,19 @@
 end %>
 
 <% if @document_fedora.is_open %>
-   <form class="form-horizontal">
-     <div class="btn-group">
-       <button class="btn btn-small">Add new &hellip;</button>
-       <button class="btn btn-small dropdown-toggle" data-toggle="dropdown">
-         <span class="caret"></span>
-       </button>
-       <%= render :partial => "shared/add_content_options", :locals => {:parent => @document_fedora} %>
-     </div>
-   </form>
+   <div class="btn-group add-content-dropdown" style="display:none;">
+     <button class="btn btn-small">Add new &hellip;</button>
+     <button class="btn btn-small dropdown-toggle" data-toggle="dropdown">
+       <span class="caret"></span>
+     </button>
+     <%= render :partial => "shared/add_content_options", :locals => {:parent => @document_fedora} %>
+   </div>
+   <noscript>
+     <%= form_tag(new_hydrus_item_path, :method=>"GET", :class=>"add-content-options") do %>
+       <%= select_tag("collection", options_for_select([["item", @document_fedora.pid]]), :class=>"add-content-options") %>
+       <%= submit_tag("Add", :class=>"btn btn-small") %>
+     <%- end -%>
+    </noscript>
 <% end %>
   <% if @document_fedora.is_destroyable %>
 	<p class="discard-item"><i class="icon-trash"></i> <a href="#">Discard this collection</a></p>
