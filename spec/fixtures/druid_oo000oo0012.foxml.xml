@@ -150,7 +150,7 @@ The calculated Fermi surface of RbCu4S3 reveals one three-dimensional pocket and
       CREATED="2011-07-10T11:22:33.666Z" MIMETYPE="text/xml" SIZE="377">
       <foxml:xmlContent>
         <roleMetadata>
-          <role type="item-depositor">
+          <role type="hydrus-item-depositor">
              <person>
                 <identifier type="sunetid">student2</identifier>
                 <name>Shapiro, Maxwell</name>

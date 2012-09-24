@@ -28,10 +28,12 @@
     </table>
 
     <form class="form-horizontal">
-      <%= link_to(
-            "Create a new collection", 
-            new_polymorphic_path(Hydrus::Collection),
-            :class => 'btn') %>
+			<% if can? :create, Hydrus::Collection %>
+	      <%= link_to(
+	            "Create a new collection", 
+	            new_polymorphic_path(Hydrus::Collection),
+	            :class => 'btn')  %>
+				<% end %>
     </form>
   </div>
 

@@ -96,14 +96,6 @@ describe("Item create", :type => :request, :integration => true) do
     # offer the Publish button.
     div_cs = find("div.collection-actions")
     div_cs.should_not have_button(publish_button)
-    err_msgs = div_cs.all('li').map { |e| e.text }.join("\n")
-    exp = [
-      /^Abstract/,
-      /^Contact/,
-      /^Files/,
-      /^Terms/,
-    ]
-    exp.each { |e| err_msgs.should =~ e }
     # Check various Item attributes and methods.
     item = Hydrus::Item.find(druid)
     item.is_publishable.should == false

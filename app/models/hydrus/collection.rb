@@ -144,7 +144,7 @@ class Hydrus::Collection < Hydrus::GenericObject
   # HTML select controls, based on the value of a radio button.
   ####
   
-  def collection_owner
+  def owner
     depositors=apo.persons_with_role('hydrus-collection-depositor')
     depositors.size == 1 ? depositors.first : ''
   end

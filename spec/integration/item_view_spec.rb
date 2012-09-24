@@ -32,9 +32,7 @@ describe("Item view", :type => :request, :integration => true) do
       'Sponsor', # label for actor 
       'US National Science Foundation, award SES-0751613', # actor
       'wooden boys', # keyword
-      'Related links', # relatedItem label
       'Keywords', # keywords label
-      'story by Jennifer Ludden August 16, 2010', # relatedItem title
       'pinocchio.htm', # file
     ]
     login_as_archivist1
@@ -55,19 +53,6 @@ describe("Item view", :type => :request, :integration => true) do
     page.should_not have_content('Related links')
     page.should_not have_content('Keywords')
     page.should_not have_content('story by Jennifer Ludden August 16, 2010') # relatedItem
-  end
-
-  it "some of the expected info is displayed in the Item status box" do
-    exp_content = [
-      @hi.item_depositor_name,
-    ]
-    login_as_archivist1
-    visit polymorphic_path(@hi)
-    current_path.should == polymorphic_path(@hi)
-    item_status_box = find('div.item-status')
-    exp_content.each do |exp|
-      item_status_box.should have_content(exp)
-    end
   end
 
 end

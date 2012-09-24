@@ -8,16 +8,6 @@
                   id="hydrus_collection_publish">Close Collection</button>
 	<% elsif @document_fedora.is_publishable %>
   	<button type="submit" class="btn btn-small save-edits" name="hydrus_collection[publish]" value="true" id="hydrus_collection_publish">Open Collection</button>
-	<% else %>
-			<p>To open the collection, you must fix the following:
-				<%
-				errors = []
-	      @document_fedora.errors.messages.each do |field, error|
-	        errors << "<li class='errors'>#{field.to_s.humanize.capitalize} #{error.join}</li>"
-	      end
-				%>
-				<%="<ul>#{errors.join}</ul>".html_safe%>
-		  </p>
 	<%
 	end
 end %>

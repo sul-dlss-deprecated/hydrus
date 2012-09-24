@@ -126,10 +126,10 @@ describe("Item edit", :type => :request, :integration => true) do
     click_button "Save"
     page.should have_content(@notice)
 
-    current_path.should == polymorphic_path(@hi)
-    visit polymorphic_path(@hi)
-    page.should have_xpath("//dd/a[@href='#{new_link}']")
-    page.should have_content(new_title)
+    # Confirm new content in fedora.
+    @hi = Hydrus::Item.find(@druid)
+    @hi.descMetadata.relatedItem.titleInfo.title.first.should == new_title
+    @hi.descMetadata.relatedItem.location.url.first == new_link
   end
 
   it "Related Content adding and deleting" do
@@ -199,8 +199,7 @@ describe("Item edit", :type => :request, :integration => true) do
     # Confirm new location and flash message.
     current_path.should == polymorphic_path(@hi)
     page.should have_content(@notice)
-    # Confirm new content on page and in fedora.
-    find("dd a[href='#{ni.ri_url}']").should have_content ni.ri_title
+    # Confirm new content in fedora.
     @hi = Hydrus::Item.find(@druid)
     @hi.related_item_title.first.should == ni.ri_title
   end
@@ -218,9 +217,9 @@ describe("Item edit", :type => :request, :integration => true) do
     click_button "Save"
     page.should have_content(@notice)
 
-    current_path.should == polymorphic_path(@hi)
-    visit polymorphic_path(@hi)
-    page.should have_content(new_pref_cit)
+    # Confirm new content in fedora.
+    @hi = Hydrus::Item.find(@druid)
+    @hi.preferred_citation == new_pref_cit
   end
 
   it "Related citation adding and deleting" do
