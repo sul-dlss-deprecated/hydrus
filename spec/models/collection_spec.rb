@@ -340,12 +340,109 @@ describe Hydrus::Collection do
     end
 
   end
-  describe "class methods" do
-    describe "dashboard stats" do
-      it "should return a blank object when the user does not have any active collections" do
-        Hydrus::Collection.dashboard_stats("not-a-real-user").should be_blank
-      end
+
+  describe "dashboard stats and related methods" do
+
+    before(:all) do
+      @HC       = Hydrus::Collection
+      @user_foo = 'user_foo'
     end
+
+    describe "dashboard_stats()" do
+
+      it "should return empty hash if there are no APOs involving the user" do
+        @HC.should_receive(:apos_involving_user).and_return([])
+        @HC.should_not_receive(:collections_of_apos)
+        @HC.dashboard_stats(@user_foo).should == {}
+      end
+
+      it "should return empty hash if there are no Collections involving the user" do
+        @HC.should_receive(:apos_involving_user).and_return([1,2,3])
+        @HC.should_receive(:collections_of_apos).and_return([])
+        @HC.should_not_receive(:item_counts_of_collections)
+        @HC.dashboard_stats(@user_foo).should == {}
+      end
+
+      it "should return item_counts_of_collections() if there are relevant Collections" do
+        exp = {:foo => 1, :bar => 2}
+        @HC.should_receive(:apos_involving_user).and_return([1,2,3])
+        @HC.should_receive(:collections_of_apos).and_return([4,5,6])
+        @HC.should_receive(:item_counts_of_collections).and_return(exp)
+        @HC.dashboard_stats(@user_foo).should == exp
+      end
+
+    end
+
+    it "can exercise initial_item_counts()" do
+      @HC.initial_item_counts().should be_instance_of(Hash)
+    end
+
+    it "can exercise methods returning APO and Collection druids" do
+      resp = double('mock_response')
+      exp  = 12345
+      @HC.stub(:issue_solr_query).and_return([resp, nil])
+      @HC.should_receive(:get_druids_from_response).with(resp).twice.and_return(exp)
+      @HC.apos_involving_user(@user_foo).should == exp
+      @HC.collections_of_apos([1,2,3,4]).should == exp
+    end
+    
+    it "can exercise get_druids_from_response()" do
+      k    = 'identityMetadata_objectId_t'
+      exp  = [12, 34, 56]
+      docs = exp.map { |n| {k => [n]} }
+      resp = double('resp', :docs => docs)
+      @HC.get_druids_from_response(resp).should == exp
+    end
+
+    it "can exercise get_facet_counts_from_response()" do
+      exp  = 1234
+      fcs  = {'facet_pivot' => {:a => exp}}
+      resp = double('resp', :facet_counts => fcs)
+      @HC.get_facet_counts_from_response(resp).should == exp
+    end
+
+    it "item_counts_of_collections()" do
+      exp = {
+        "druid:xx000xx0001" => {
+          "draft"            => 1,
+          "waiting_approval" => 2,
+          "published"        => 3,
+        },
+        "druid:xx000xx0002" => {
+          "draft"            => 14,
+          "waiting_approval" => 15,
+          "published"        => 16,
+        },
+        "druid:xx000xx0003" => {
+          "draft"            => 0,
+          "waiting_approval" => 0,
+          "published"        => 0,
+        },
+      }
+      coll_pids = exp.keys
+      fcs = [
+        {
+          "value" => "info:fedora/#{coll_pids[0]}",
+          "pivot" => [
+            { "value" => "draft",            "count" => 1 },
+            { "value" => "waiting_approval", "count" => 2 },
+            { "value" => "published",        "count" => 3 },
+          ],
+        },
+        {
+          "value" => "info:fedora/#{coll_pids[1]}",
+          "pivot" => [
+            { "value" => "draft",            "count" => 14 },
+            { "value" => "waiting_approval", "count" => 15 },
+            { "value" => "published",        "count" => 16 },
+          ],
+        },
+      ]
+      @HC.stub(:issue_solr_query).and_return([nil, nil])
+      @HC.stub(:get_facet_counts_from_response).and_return(fcs)
+      @HC.item_counts_of_collections(coll_pids).should == exp
+    end
+
   end
 
 end
