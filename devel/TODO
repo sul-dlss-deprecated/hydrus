@@ -1,6 +1,17 @@
 ****************
-SEPTEMBER 2012
+OCTOBER 2012
 ****************
+--------
+Roles and Discovery
+--------
+
+Implement gated discovery: see implementation notes below.
+
+Workflow changes and SOLR: when the workflow DS for an object changes, the
+local SOLR index on a developer's box is not updated. Option 1: set up a
+listener that will update local SOLR when objects changes on the dor-dev
+environment. See dor-services-gem bin/ directory. Option 2: run the workflow
+service locally.
 
 --------
 UI Redesign
@@ -14,18 +25,7 @@ Item and Collect edit. When you click one of the "Add..." or "Delete..."
 buttons, we should give the user some visual feedback so they don't think
 nothing happened.
 
-Add Item to Collection. Drop down does not work when javascript is disabled.
-Applies to home page and Collection view page.
-
 UI redesign: side bar and tabs.
-
-Implement gated discovery: see implementation notes below.
-
-Workflow changes and SOLR: when the workflow DS for an object changes, the
-local SOLR index on a developer's box is not updated. Option 1: set up a
-listener that will update local SOLR when objects changes on the dor-dev
-environment. See dor-services-gem bin/ directory. Option 2: run the workflow
-service locally.
 
 --------
 Technical Debt
@@ -38,11 +38,6 @@ Unit tests. Can we improve our coverage in the controllers?
 
 rightsMD: (a) tests; (b) refactor to take advantage of OM and generic_ds.rb.
 
-roleMD changes. (a) Do not store roleMD in Collections; all roleMD info for a
-Collection will reside in the APO of the Collection. (b) Role changes:
-hydrus-viewer >> hydrus-collection-viewer; hydrus-item-depositor >>
-hydrus-collection-item-depositor.
-
 Collection/Item create. Rather than starting a new Item/Collection with blank
 text boxes, use the approach we have adopted elsewhere for non-required items:
 have the user click "Add" button first. Collection: links to related items.
@@ -52,7 +47,6 @@ Workflow fixtures. Create proper worflow XML fixture files, and modify rake
 refresh_workflows task to load the files. We need more fine-grained controlled
 over the states of our fixture objects.
 
-Search is broken.
 
 ****************
 WAITING

@@ -1,39 +1,29 @@
 --------------
-September 2012
+October 2012
 --------------
 
 * UI Redesign
-- Design dashboard/home page. [done]
-- Complete the design of new tab and sidebars. 
-- Implement UI designs for new tab and sidebars.
-- Implement UI designs for dashboard/home page.  Actual data will not be accurate if queries not complete/working.
+- Finish implementing UI designs for new tab and sidebars.
+- Finishing implementing UI designs for dashboard/home page.
+- Style implemented UI designs.
 
 * Roles
 - Implement Hydrus app behaviors given an object, based on user ID, roles, and permissions [using cancan, hitting DOR directly, no solr]
-- Implement gated discovery for dashboard and individual items/collections: Solr fields, etc. 
+- Finish implementing gated discovery for dashboard and individual items/collections: Solr fields, etc. 
 - Plan/spec the multi-author role issue [Hannah and Lynn].
+- Email notifications when users are invited to add to a collection.
 
 * Integration with DOR/PURL
-- Set up needed file mounts [waiting on sys admins].
-- Prove that we can publish some Hydrus items and run them through assembly/accessioning.  
-  -- Connect hydrus-test to dor-test and solr-test 
-	-- Debug issues with Chimera team.
+- Connect hydrus-test to dor-test and solr-test 
+- Set up ActiveMQ listener.
+- Check file system mounts for uploaded files.
+- Run full integration tests with robots and see if objects make it to PURL.  Debug.
 - Review / articulate PURL app behavior for Hydrus items (Hannah/Lynn)
+- Ensure uber Hydrus APO exists on real DOR servers as needed.
 
 * Technical debt
-- Support ability to add Item to Collection when Javascript is disabled.
 - Fix Javascript and multi-valued field glitches on Item edit page.
-- Smooth out difficulties in deployment to hydrus-test.
+- Deploy to Hydrus-test with own Fedora.
+- Improve tests on Embargo Dates
+- Add a local listener so that developers can advance workflow state and have it reflected in local solr
 
------------
-August 2012
------------
-
-- Spec, design, build Events (LM & HF, GG, MH)
-- Wrap up Create Collection to-dos (MH)
-- Design Terms of Deposit (HF & GG)
-- Re-design/rationalize left sidebar (HF & GG)
-- Spec file management across Hydrus, DOR, Digital Stacks (LM, MH, PM)
-- Finish spec for Roles and Permissions (LM)
-- Re-factor Javascript multi-value fields (JK)
-- Rework role assignment UI (GG)

@@ -134,6 +134,12 @@
     <foxml:datastreamVersion ID="roleMetadata.0" LABEL="Role Metadata" CREATED="2011-07-05T20:47:26.359Z" MIMETYPE="text/xml" SIZE="405">
       <foxml:xmlContent>
         <roleMetadata objectId="druid:oo000oo0009">
+          <role type="hydrus-collection-depositor">
+             <person>
+                <identifier type="sunetid">archivist1</identifier>
+                <name>Archivist, One</name>
+             </person>
+          </role>
           <role type="hydrus-collection-manager">
              <person>
                 <identifier type="sunetid">archivist1</identifier>
