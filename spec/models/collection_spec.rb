@@ -340,5 +340,12 @@ describe Hydrus::Collection do
     end
 
   end
+  describe "class methods" do
+    describe "dashboard stats" do
+      it "should return a blank object when the user does not have any active collections" do
+        Hydrus::Collection.dashboard_stats("not-a-real-user").should be_blank
+      end
+    end
+  end
 
 end

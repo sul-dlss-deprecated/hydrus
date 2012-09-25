@@ -308,7 +308,7 @@ class Hydrus::Collection < Hydrus::GenericObject
     h           = squery_apos_involving_user(user)
     resp, sdocs = issue_solr_query(h)
     apo_pids    = resp.docs.map { |doc| doc[id_key].first }
-
+    return {} if apo_pids.blank?
     # Get PIDs of the Collections governed by those APOs.
     # Use those PIDs as the keys to initalize a hash of stats.
     #   stats{COLL_PID} = {}
