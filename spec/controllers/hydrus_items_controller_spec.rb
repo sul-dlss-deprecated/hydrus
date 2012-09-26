@@ -39,7 +39,7 @@ describe HydrusItemsController do
   end
 
   describe "New Action" do
-    it "should do something" do
+    it "should restrict access to non authed user" do
       controller.stub(:current_user).and_return(mock_user)
       get :new, :collection => "druid:oo000oo0003"
       response.should redirect_to edit_hydrus_collection_path("druid:oo000oo0003")
@@ -73,6 +73,25 @@ describe HydrusItemsController do
 
     end
 
+  end
+
+  describe "index action" do
+    it "should redirect with a flash message" do
+      get :index
+      flash[:warning].should =~ /You need to log in/
+      response.should redirect_to(new_user_session_path)
+    end
+    describe "as a nested resource of a collection" do
+      it "should return the collection requested via the hydrus_collection_id parameter and assign it to the document_fedora instance variable" do
+        controller.stub(:current_user).and_return(mock_authed_user)
+        mock_coll = mock("HydrusCollection")
+        mock_coll.should_receive(:"current_user=").and_return("")
+        Hydrus::Collection.should_receive(:find).with("1234").and_return(mock_coll)
+        get :index, :hydrus_collection_id=>"1234"
+        response.should be_success
+        assigns(:document_fedora).should == mock_coll
+      end
+    end
   end
 
 end
