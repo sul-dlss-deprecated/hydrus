@@ -1,0 +1,6 @@
+<ul class="nav nav-tabs">
+  <li<%= " class='active'" if params[:action] == "show" %>><%= link_to("View Collection", polymorphic_path(@document_fedora)) %></li>
+  <li<%= " class='active'" if params[:action] == "edit" %>><%= link_to("Edit Collection", edit_polymorphic_path(@document_fedora)) %></li>
+  <li<%= " class='active'" if params[:controller] == "items" %>><%= link_to("Items", polymorphic_path(@document_fedora)) %></li>
+  <li<%= " class='active'" if params[:controller] == "events" %>><%= link_to("History", polymorphic_path([@document_fedora, :events])) %></li>
+</ul>

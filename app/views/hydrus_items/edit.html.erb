@@ -9,10 +9,10 @@
 
 <div class="row">
   <div class="span9">
-		<%=render :partial=>'shared/navigation' %>
+		<%=render :partial=>'navigation' %>
   </div>
 </div>
-<%= form_for(@document_fedora, :method => 'PUT', :html => {:class=>"step", :multipart=>true, :novalidate=>""}) do |f| -%>
+<%= form_for(@document_fedora, :method => 'PUT', :html => {:class=>"step", :multipart=>true, :"data-track-state-change"=>"true", :novalidate=>""}) do |f| -%>
   <%= hidden_field_tag("object_id", params[:id]) -%>
   <%= hydrus_form_header(:required=>true, :first=>true) {"Title"} %>
   <div class="row">

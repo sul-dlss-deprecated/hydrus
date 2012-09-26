@@ -13,7 +13,7 @@
 <%- end -%>
 <div>
   <span class="edit-browse">
-        <%=render :partial=>'shared/navigation' %>
+        <%=render :partial=>'navigation' %>
   </span>
 
   <dl class="dl-horizontal object-view">
@@ -148,8 +148,6 @@
       </table>
     </div>
   <% end %>
-
-  <%= render(:partial => 'shared/events') %>
 
   <div id="druid-footer"><%= @document_fedora.pid %></div>
 
