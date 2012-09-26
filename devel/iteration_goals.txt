@@ -8,8 +8,10 @@ October 2012
 - Style implemented UI designs.
 
 * Roles
-- Implement Hydrus app behaviors given an object, based on user ID, roles, and permissions [using cancan, hitting DOR directly, no solr]
-- Finish implementing gated discovery for dashboard and individual items/collections: Solr fields, etc. 
+- Implement Hydrus app behaviors given an object, based on user ID, roles, and
+  permissions [using cancan, hitting DOR directly, no solr]
+- Finish implementing gated discovery for dashboard and individual
+  items/collections: Solr fields, etc. 
 - Plan/spec the multi-author role issue [Hannah and Lynn].
 - Email notifications when users are invited to add to a collection.
 
@@ -17,7 +19,8 @@ October 2012
 - Connect hydrus-test to dor-test and solr-test 
 - Set up ActiveMQ listener.
 - Check file system mounts for uploaded files.
-- Run full integration tests with robots and see if objects make it to PURL.  Debug.
+- Run full integration tests with robots and see if objects make it to PURL.
+  Debug.
 - Review / articulate PURL app behavior for Hydrus items (Hannah/Lynn)
 - Ensure uber Hydrus APO exists on real DOR servers as needed.
 
@@ -25,5 +28,6 @@ October 2012
 - Fix Javascript and multi-valued field glitches on Item edit page.
 - Deploy to Hydrus-test with own Fedora.
 - Improve tests on Embargo Dates
-- Add a local listener so that developers can advance workflow state and have it reflected in local solr
+- Add a local listener so that developers can advance workflow state and have
+  it reflected in local solr
 

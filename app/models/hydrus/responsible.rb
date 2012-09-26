@@ -7,7 +7,7 @@ module Hydrus::Responsible
     return roleMetadata.find_by_xpath(q).map { |node| node.text }
   end
 
-  # Returns an array of SUNet IDs having the given role.
+  # Returns an array of roles for the given role.
   def roles_of_person(person_id)
     roles = []
     person_roles.each do |role, ids|
@@ -18,8 +18,8 @@ module Hydrus::Responsible
 
   # Returns of hash of role info.
   #   {
-  #     'hydrus-collection-manager' => ['willy',   'naomi'],
-  #     'hydrus-collection-item-depositor'     => ['hindman', 'cbeer'],
+  #     'hydrus-collection-manager'        => ['willy',   'naomi'],
+  #     'hydrus-collection-item-depositor' => ['hindman', 'cbeer'],
   #     etc.
   #   }
   def person_roles
@@ -36,8 +36,8 @@ module Hydrus::Responsible
 
   # Takes a hash of roles and SUNETIDs.
   #   {
-  #     'hydrus-collection-manager' => 'willy,naomi',
-  #     'hydrus-collection-item-depositor'     => 'hindman,cbeer',
+  #     'hydrus-collection-manager'        => 'willy,naomi',
+  #     'hydrus-collection-item-depositor' => 'hindman,cbeer',
   #     etc.
   #   }
   # Rewrites roleMetadata <person> nodes to reflect the contents of the hash.
