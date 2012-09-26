@@ -43,6 +43,8 @@ Technical Debt
 Deployment to hydrus-test.stanford.edu is a hassle. In particular, it's not easy
 to get the latest fixture/file content up-to-date.
 
+Need to load user fixtures on deployment to hydrus-dev.stanford.edu.
+
 Unit test coverage: let's improve the coverage (esp in controllers) or lower
 the thresholds in jenkins for determining when the project is "unstable".
 
