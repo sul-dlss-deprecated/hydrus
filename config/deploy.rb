@@ -59,6 +59,24 @@ namespace :rvm do
   end
 end
 
+namespace :jetty do
+  task :start do 
+    run "cd #{deploy_to}/current && rake hydra:jetty:config && rake jetty:start"
+  end
+  task :stop do
+    run "if [ -d #{deploy_to}/current ]; then cd #{deploy_to}/current && rake jetty:stop; fi"
+  end
+  task :ingest_fixtures do
+    run "cd #{deploy_to}/current && rake hydrus:refreshfix"
+  end
+end
+
+namespace :db do
+  task :loadfixtures do
+    run "cd #{deploy_to}/current && rake db:fixtures:load"
+  end
+end
+
 namespace :deploy do
   task :start do ; end
   task :stop do ; end

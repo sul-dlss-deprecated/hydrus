@@ -35,5 +35,5 @@ bblue:
 
 skota:
   id: 8
-  email: skota@example.com
+  email: skota@example.coma
   encrypted_password: "$2a$10$mhcz9WtWgJpF7RAooWcK8OhyBxnp1qRSW/BCAnJqk7QZVDyKxullm" # beatcal

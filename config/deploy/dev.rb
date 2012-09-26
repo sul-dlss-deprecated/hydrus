@@ -10,17 +10,6 @@ role :app, deployment_host
 role :db,  deployment_host, :primary => true
 
 set :git_enable_submodules, 1
-namespace :jetty do
-  task :start do 
-    run "cd #{deploy_to}/current && rake hydra:jetty:config && rake jetty:start"
-  end
-  task :stop do
-    run "if [ -d #{deploy_to}/current ]; then cd #{deploy_to}/current && rake jetty:stop; fi"
-  end
-  task :ingest_fixtures do
-    run "cd #{deploy_to}/current && rake hydrus:refreshfix"
-  end
-end
 
 namespace :deploy do
   namespace :assets do
@@ -31,4 +20,5 @@ end
 
 before "deploy", "jetty:stop"
 after "deploy", "jetty:start"
+after "deploy", "db:loadfixtures"
 after "jetty:start", "jetty:ingest_fixtures"
