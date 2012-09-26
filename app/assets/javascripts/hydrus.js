@@ -22,7 +22,7 @@ function collection_edit_init(){
 	});
 	// On page load, execute the code block above to disable appropriate select dropdowns
 	$('div.radio-select-group input:radio:checked').trigger('click');	
-	
+	setup_form_state_change_tracking();
 }
 
 function item_edit_init(){
@@ -45,6 +45,7 @@ function item_edit_init(){
 		});
 	});
 	manage_radio_groups();
+	setup_form_state_change_tracking();
 }
 
 // this is loaded on each page
@@ -155,3 +156,26 @@ function validate_hydrus_collection() {
 		}
 	});
 }
+
+function setup_form_state_change_tracking() {
+	$("form[data-track-state-change='true']").each(function(){
+		$(this).data("serialized",$(this).serialize());
+	});
+}
+function check_tracked_form_state_change() {
+	var state_changed = false;
+	$("form[data-track-state-change='true']").each(function(){
+		if($("input[type='hidden'][name='save']", $(this)).length < 1){
+		  if(!state_changed && ($(this).serialize() != $(this).data("serialized")) ){
+				state_changed = true;
+			}	
+		}
+	});
+	return state_changed;
+}
+$(window).on('beforeunload', function() {
+	state_changed = check_tracked_form_state_change();
+	if(state_changed){
+	  return "You have unsaved changes.";	
+	}
+});

@@ -1,6 +1,6 @@
 <%- @page_title = "Editing '#{@document_fedora.title}' - #{application_name}" -%>
 <%- object_type = @document_fedora.object_type -%>
-<%= form_for(@document_fedora, :method => 'PUT', :html => {:class => "step", :novalidate=>""}) do |f| -%>
+<%= form_for(@document_fedora, :method => 'PUT', :html => {:class => "step", :"data-track-state-change"=>"true", :novalidate=>""}) do |f| -%>
 
 <%- sidebar_items << capture do -%>
 
