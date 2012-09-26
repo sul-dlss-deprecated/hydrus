@@ -12,6 +12,7 @@ Hydrus::Application.routes.draw do
 
   resources :collections, :controller => 'hydrus_collections', :as => 'hydrus_collections' do
     resources :events, :only=>:index
+    resources :items, :only=>:index, :controller=>"hydrus_items"
   end
   resources :items,       :controller => 'hydrus_items', :as => 'hydrus_items' do
     resources :events, :only=>:index

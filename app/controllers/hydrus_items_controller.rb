@@ -7,13 +7,18 @@ class HydrusItemsController < ApplicationController
 
   #prepend_before_filter :sanitize_update_params, :only => :update
   before_filter :enforce_access_controls
-  before_filter :setup_attributes, :except => :new
+  before_filter :setup_attributes, :except => [:new, :index]
   before_filter :check_for_collection, :only => :new
   before_filter :redirect_if_not_correct_object_type, :only => [:edit,:show,:update]
 
   def index
-    flash[:warning]="You need to log in."
-    redirect_to new_user_session_path
+    if params.has_key?(:hydrus_collection_id)
+      @document_fedora = Hydrus::Collection.find(params[:hydrus_collection_id])
+      @document_fedora.current_user = current_user
+    else
+      flash[:warning]="You need to log in."
+      redirect_to new_user_session_path
+    end
   end
 
   def setup_attributes
