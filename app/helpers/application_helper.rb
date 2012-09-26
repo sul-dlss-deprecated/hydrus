@@ -73,4 +73,8 @@ module ApplicationHelper
             k == :time ? '%I:%M %P' : '%d-%b-%Y %I:%M %P')
   end
 
+  def render_contextual_navigation(model)
+    render :partial=>"#{model.class.to_s.pluralize.parameterize("_")}/navigation"
+  end
+
 end

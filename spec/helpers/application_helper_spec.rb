@@ -34,5 +34,22 @@ describe ApplicationHelper do
       formatted_datetime(input, fmt).should == exp
     end
   end
+  
+  describe "render helpers" do
+    describe "render_contextual_navigation" do
+      it "should return the correct data" do
+        @document_fedora = Hydrus::Collection.new(:pid=>"1234")
+        helper.should_receive(:polymorphic_path).with(@document_fedora).and_return("")
+        helper.should_receive(:edit_polymorphic_path).with(@document_fedora).and_return("")
+        helper.should_receive(:polymorphic_path).with([@document_fedora,:items]).and_return("")
+        helper.should_receive(:polymorphic_path).with([@document_fedora,:events]).and_return("")
+        nav = Capybara.string(render_contextual_navigation(@document_fedora))
+        nav.should have_css("ul.nav.nav-tabs li a")
+        ["View Collection", "Edit Collection", "Items", "History"].each do |text|
+          nav.should have_content(text)
+        end
+      end
+    end
+  end
 
 end
