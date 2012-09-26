@@ -10,11 +10,12 @@ Hydrus::Application.routes.draw do
 
   # See how all your routes lay out with "rake routes"
 
-  resources :collections, :controller => 'hydrus_collections', :as => 'hydrus_collections'
-  resources :items,       :controller => 'hydrus_items', :as => 'hydrus_items'
-
-  resources :collections, :controller => 'hydrus_collections', :as => 'dor_collections'
-  resources :items,       :controller => 'hydrus_items', :as => 'dor_items'
+  resources :collections, :controller => 'hydrus_collections', :as => 'hydrus_collections' do
+    resources :events, :only=>:index
+  end
+  resources :items,       :controller => 'hydrus_items', :as => 'hydrus_items' do
+    resources :events, :only=>:index
+  end
   
   match "items/:id/destroy_value" => "hydrus_items#destroy_value", :as => 'destroy_hydrus_item_value', :via => "get"
   match "collections/:id/destroy_value" => "hydrus_collections#destroy_value", :as => 'destroy_hydrus_collection_value', :via => "get"
