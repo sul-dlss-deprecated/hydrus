@@ -76,7 +76,7 @@ describe HydrusItemsController do
   end
 
   describe "index action" do
-    it "should redirect with a flash message" do
+    it "should redirect with a flash message when we're not dealing w/ a nested resrouce" do
       get :index
       flash[:warning].should =~ /You need to log in/
       response.should redirect_to(new_user_session_path)
@@ -90,6 +90,12 @@ describe HydrusItemsController do
         get :index, :hydrus_collection_id=>"1234"
         response.should be_success
         assigns(:document_fedora).should == mock_coll
+      end
+      it "should restrict access to non authenticated users" do
+        controller.stub(:current_user).and_return(mock_user)
+        get :index, :hydrus_collection_id => "12345"
+        flash[:error].should =~ /You do not have permissions to view this collection/
+        response.should redirect_to(root_path)
       end
     end
   end

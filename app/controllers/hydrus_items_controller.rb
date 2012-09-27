@@ -154,6 +154,15 @@ class HydrusItemsController < ApplicationController
 
   protected
 
+  def enforce_index_permissions
+    if params.has_key?(:hydrus_collection_id)
+      unless can? :read, params[:hydrus_collection_id]
+        flash[:error] = "You do not have permissions to view this collection."
+        redirect_to root_path
+      end
+    end
+  end
+
   def check_for_collection
     unless params.has_key?(:collection)
       flash[:error] = "You cannot create an item without specifying a collection."
