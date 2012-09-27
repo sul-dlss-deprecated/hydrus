@@ -388,6 +388,13 @@ noscript #item-actions, noscript #collection-actions {
 .signin-label {
 	text-align: right;
 }
+.signin-options {
+	margin: 8px 0 8px 50px;
+}
+.webauth {
+	margin-bottom: 20px;
+	margin-top: 10px;
+}
 /* SUL Chrome overrides */
 #hydra-attribution {
 	display: inline;
