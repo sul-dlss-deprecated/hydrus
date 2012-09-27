@@ -100,11 +100,11 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
 
   def self.roles
      {
-       'hydrus-collection-depositor'      => "Collection owner",
-       'hydrus-collection-manager'  => "Collection manager",
-       'hydrus-collection-reviewer' => "Item reviewer",
-       'hydrus-collection-item-depositor'      => "Item Depositor",
-       'hydrus-collection-viewer'   => "View only",
+       'hydrus-collection-depositor'      => "Owner",
+       'hydrus-collection-manager'  => "Manager",
+       'hydrus-collection-reviewer' => "Reviewer",
+       'hydrus-collection-item-depositor'      => "Depositor",
+       'hydrus-collection-viewer'   => "Viewer",
      }
   end
 

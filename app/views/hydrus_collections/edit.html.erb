@@ -172,7 +172,7 @@
 					k = :"apo_person_roles[#{role}]" %>
 	        <div class="row">
 	          <%= hydrus_form_label do %>
-	            <%= f.label k, role_label %>
+	            <%= f.label k, role_label.pluralize %>
 	          <%- end %>
 	          <%- pwr = @document_fedora.apo_persons_with_role(role) %>
 	          <%= hydrus_form_value do %>
