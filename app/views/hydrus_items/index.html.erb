@@ -1,11 +1,21 @@
+<%- @page_title = "#{@document_fedora.title} - #{application_name}" -%>
+
+<%- sidebar_items << capture do -%>
+  <div class="well actions-box collection-settings">
+  	<%=render :partial=>'hydrus_collections/status_box' %>
+		<%=render :partial=>'hydrus_collections/actions_box_show' %>
+  </div>
+<%- end -%>
+
 <div class="row">
   <div class="span9">
 		<%= render_contextual_navigation(@document_fedora) %>
   </div>
 </div>
-<% unless @document_fedora.hydrus_items.size == 0 %>
+<h3><%= hydrus_object_setting_value(@document_fedora.title) %></h3>
+<h4 class="muted">Items in this Collection</h4>
+<%- unless @document_fedora.hydrus_items.blank? -%>
   <div id="items" class="collection-items">
-    <h4>In this collection</h4>
     <table class="hydrus-striped-table table-striped table-condensed">
       <thead>
         <tr>
@@ -31,4 +41,6 @@
       </tbody>
     </table>
   </div>
-<% end %>
+<%- else -%>
+  No items have been added to this collection.
+<%- end -%>

@@ -1,10 +1,3 @@
-function collection_show_init() {
-	// Show all dropdown menus
-	$(".add-content-dropdown").each(function(){
-		$(this).toggle();
-	});
-}
-
 function collection_edit_init(){
 	
 	// this method is called when the collection edit page is fully loaded
@@ -51,7 +44,6 @@ function item_edit_init(){
 // this is loaded on each page
 $(document).ready(function(){
 	
-  if ($('#hydrus_collections-show').length == 1) {collection_show_init();}
 	if ($('#hydrus_collections-edit').length == 1 || $('#hydrus_collections-update').length == 1) {collection_edit_init();}
 	if ($('#hydrus_items-edit').length == 1 || $('#hydrus_items-update').length == 1) {item_edit_init();}
 
@@ -65,6 +57,11 @@ $(document).ready(function(){
 			$.ajax($(this).attr("data-url") + "&format=js");
 			return false;
 	  });
+	});
+	
+	// Show all dropdown menus.  This only happens on HydrusCollections#show and HydrusItems#indexc currently.
+	$(".add-content-dropdown").each(function(){
+		$(this).toggle();
 	});
 	
 });
