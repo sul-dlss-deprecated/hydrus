@@ -31,13 +31,18 @@ class Hydrus::Item < Hydrus::GenericObject
     ]
   )
 
+  has_metadata(
+    :name => "roleMetadata",
+    :type => Hydrus::RoleMetadataDS,
+    :label => 'Role Metadata',
+    :control_group => 'M')
 
-   has_metadata(
-     :name => "roleMetadata",
-     :type => Hydrus::RoleMetadataDS,
-     :label => 'Role Metadata',
-     :control_group => 'M')
-               
+  has_metadata(
+    :name => "rightsMetadata",
+    :type => Hydrus::RightsMetadataDS,
+    :label => 'Rights Metadata',
+    :control_group => "M")
+
   def self.create(collection_pid, user)
     # Create the object, with the correct model.
     coll     = Hydrus::Collection.find(collection_pid)
@@ -260,18 +265,6 @@ class Hydrus::Item < Hydrus::GenericObject
   def files
     Hydrus::ObjectFile.find_all_by_pid(pid,:order=>'weight')  # coming from the database
   end
-
-  has_metadata(
-    :name => "roleMetadata",
-    :type => Hydrus::RoleMetadataDS,
-    :label => 'Role Metadata',
-    :control_group => 'M')
-
-  has_metadata(
-    :name => "rightsMetadata",
-    :type => Hydrus::RightsMetadataDS,
-    :label => 'Rights Metadata',
-    :control_group => "M")
 
   def strip_whitespace
     strip_whitespace_from_fields [:preferred_citation,:title,:abstract,:contact]

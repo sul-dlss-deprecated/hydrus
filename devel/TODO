@@ -1,31 +1,46 @@
 ****************
-SEPTEMBER 2012
+OCTOBER 2012
 ****************
 
 --------
-UI Redesign
+Roles and Discovery
 --------
-
-Item view page. The "Test Version" image in the top left corner interferes with
-the user's ability to click the Collection hyperlink, especially when the
-Collection has a very short title.
-
-Item and Collect edit. When you click one of the "Add..." or "Delete..."
-buttons, we should give the user some visual feedback so they don't think
-nothing happened.
-
-Add Item to Collection. Drop down does not work when javascript is disabled.
-Applies to home page and Collection view page.
-
-UI redesign: side bar and tabs.
-
-Implement gated discovery: see implementation notes below.
 
 Workflow changes and SOLR: when the workflow DS for an object changes, the
 local SOLR index on a developer's box is not updated. Option 1: set up a
 listener that will update local SOLR when objects changes on the dor-dev
 environment. See dor-services-gem bin/ directory. Option 2: run the workflow
 service locally.
+
+Workflow fixtures. Create proper worflow XML fixture files, and modify rake
+refresh_workflows task to load the files. We need more fine-grained controlled
+over the states of our fixture objects.
+
+Integration tests for dashboard with different users logged in.
+
+Apply gated discovery to search queries.
+
+Role-protect dashboard actions: "Create a new collection" button.
+  integration tests
+
+Tests:
+  Hydrus::Authorization
+  ability.rb
+
+Role-protect Collection actions: various buttons.
+
+Role-protect Item actions: various buttons.
+
+
+--------
+UI Redesign
+--------
+
+Item and Collect edit. When you click one of the "Add..." or "Delete..."
+buttons, we should give the user some visual feedback so they don't think
+nothing happened.
+
+UI redesign: side bar and tabs.
 
 --------
 Technical Debt
@@ -34,29 +49,34 @@ Technical Debt
 Deployment to hydrus-test.stanford.edu is a hassle. In particular, it's not easy
 to get the latest fixture/file content up-to-date.
 
-Unit tests. Can we improve our coverage in the controllers?
+Need to load user fixtures on deployment to hydrus-dev.stanford.edu.
+
+Unit test coverage: let's improve the coverage (esp in controllers) or lower
+the thresholds in jenkins for determining when the project is "unstable".
 
 rightsMD: (a) tests; (b) refactor to take advantage of OM and generic_ds.rb.
 
-roleMD changes. (a) Do not store roleMD in Collections; all roleMD info for a
-Collection will reside in the APO of the Collection. (b) Role changes:
-hydrus-viewer >> hydrus-collection-viewer; hydrus-item-depositor >>
-hydrus-collection-item-depositor.
+****************
+WAITING
+****************
+
+Should the hydrus app be logging more systematically?
+
+Dashboard: implement hyperlinks to items-by-status. For example, "3 published"
+should be a hyperlink to the 3 published items for the applicable collection.
+
+Item view page. The "Test Version" image in the top left corner interferes with
+the user's ability to click the Collection hyperlink, especially when the
+Collection has a very short title.
 
 Collection/Item create. Rather than starting a new Item/Collection with blank
 text boxes, use the approach we have adopted elsewhere for non-required items:
 have the user click "Add" button first. Collection: links to related items.
 Item: related citations; and links to related items.
 
-Workflow fixtures. Create proper worflow XML fixture files, and modify rake
-refresh_workflows task to load the files. We need more fine-grained controlled
-over the states of our fixture objects.
-
-Search is broken.
-
-****************
-WAITING
-****************
+Consider moving Hydrus::Responsible into RoleMDDS. Not sure that we need the module.
+Also, there is currently some duplication between Hydrus::Responsible and the
+to_solr() method in RoleMDDS.
 
 Need a place to store Item types. Currently hardcoded to :dataset. Also see
 object_type() in GenericObject. [Lynn and Hannah will discuss]
@@ -80,17 +100,44 @@ find any definitive examples in Consul. [waiting on response from Lynn]
 Item view page: the actions box div is called "div.collection-actions".
 [Postpone this until we have GG's new design for sidebar, etc.]
 
-
 ****************
-Implementation notes on roles and gated discovery
+Role overview
 ****************
 
-See devel/experiment.rb
+View objects in a catalog listing
+  Anyone with a role.
+  List only those objects in which the user has a role.
 
-Unit test: roles_of_user().
+View collection
+  Anyone with a role in APO.
 
-dashboard_stats(). Break apart into methods. Write unit tests.
+View item
+  Anyone with a role in APO or Item.
 
-Consider moving Hydrus::Responsible into RoleMDDS. Not sure that we need the module.
-Also, there is currently some duplication between Hydrus::Responsible and the
-to_solr() method in RoleMDDS.
+Create collection
+  hydrus-administrator	            Super users
+  hydrus-collection-creator	        Those who can create new Coll.
+
+Edit collection
+  hydrus-administrator	            Super users
+  hydrus-collection-manager	        Others who can edit the Coll
+  hydrus-collection-depositor	      Did the deposit of the Coll
+
+Create item
+  hydrus-administrator	            Super users
+  hydrus-collection-manager	        Others who can edit the Coll
+  hydrus-collection-depositor	      Did the deposit of the Coll
+  hydrus-collection-item-depositor	Can deposit Items into Coll
+
+Edit item
+  hydrus-administrator	            Super users
+  hydrus-collection-manager	        Others who can edit the Coll
+  hydrus-collection-depositor	      Did the deposit of the Coll
+  hydrus-item-depositor	            Did the deposit of the Item
+  hydrus-item-manager 	            Others who can edit Item
+
+Approve/disapprove item
+  hydrus-administrator	            Super users
+  hydrus-collection-manager	        Others who can edit the Coll
+  hydrus-collection-depositor	      Did the deposit of the Coll
+  hydrus-collection-reviewer	      Reviews Items in Coll

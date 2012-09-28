@@ -114,7 +114,7 @@
 	       <tr class="document <%= cycle("even","odd") %>">
 					<% people = @document_fedora.apo.persons_with_role(key) %>
           <dt><%=value.pluralize(people.size)%></dt>
-			    <dd><%= people.size == 0 ? "none" : people.join(', ') %></dd>
+			    <dd><%= people.size == 0 ? "none" : people.to_a.join(', ') %></dd>
 				<% end %>
 			</dl>
 </div>

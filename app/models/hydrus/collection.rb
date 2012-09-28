@@ -288,12 +288,44 @@ class Hydrus::Collection < Hydrus::GenericObject
   end
 
   ####
-  # A class method to run some SOLR queries to get Collections involving a
+  # Some class method to run some SOLR queries to get Collections involving a
   # user, along with counts of Items in those Collections, broken down by their
   # workflow status.
   ####
 
-  def self.initial_stats
+  # Takes a user name.
+  # Returns a hash of item counts (broken down by workflow status) for 
+  # collections in which the USER plays a role.
+  def self.dashboard_stats(user)
+    # Get PIDs of the APOs in which USER plays a role.
+    apo_pids = apos_involving_user(user)
+    return {} if apo_pids.size == 0
+
+    # Get PIDs of the Collections governed by those APOs.
+    coll_pids = collections_of_apos(apo_pids)
+    return {} if coll_pids.size == 0
+
+    # Returns the item counts for those collections.
+    return item_counts_of_collections(coll_pids)
+  end
+
+  # Takes a user name.
+  # Returns an array druids for the APOs in which USER plays a role.
+  def self.apos_involving_user(user)
+    h           = squery_apos_involving_user(user)
+    resp, sdocs = issue_solr_query(h)
+    return get_druids_from_response(resp)
+  end
+
+  # Takes an array of APO druids.
+  # Returns an arra of druids for the Collections governed by those APOs.
+  def self.collections_of_apos(apo_pids)
+    h           = squery_collections_of_apos(apo_pids)
+    resp, sdocs = issue_solr_query(h)
+    return get_druids_from_response(resp)
+  end
+
+  def self.initial_item_counts
     return {
       "published"        => 0,
       "waiting_approval" => 0,
@@ -301,41 +333,52 @@ class Hydrus::Collection < Hydrus::GenericObject
     }
   end
 
-  def self.dashboard_stats(user)
-    id_key = 'identityMetadata_objectId_t'
+  # Takes an array of Collection druids.
+  # Returns a hash of item counts, broken down by workflow status.
+  def self.item_counts_of_collections(coll_pids)
+    # Initalize the hash of item counts.
+    counts = Hash[ coll_pids.map { |cp| [cp, initial_item_counts()] } ]
 
-    # Get PIDs of the APOs where USER plays a role.
-    h           = squery_apos_involving_user(user)
+    # Run SOLR query to get items counts.
+    h           = squery_item_counts_of_collections(counts.keys)
     resp, sdocs = issue_solr_query(h)
-    apo_pids    = resp.docs.map { |doc| doc[id_key].first }
-    return {} if apo_pids.blank?
-    # Get PIDs of the Collections governed by those APOs.
-    # Use those PIDs as the keys to initalize a hash of stats.
-    #   stats{COLL_PID} = {}
-    h           = squery_collections_of_apos(apo_pids)
-    resp, sdocs = issue_solr_query(h)
-    stats       = Hash[ resp.docs.map { |doc|
-      [doc[id_key].first, initial_stats()]
-    } ]
 
-    # Get counts of Items in those Collection, broken down by workflow status.
-    # Add those counts to the stats hash.
-    h           = squery_item_counts_of_collections(stats.keys)
-    resp, sdocs = issue_solr_query(h)
-    
-    facet_pivot=resp.facet_counts['facet_pivot']
-    if facet_pivot
-      facet_pivot.values.first.each { |h|
-        druid = h['value'].sub(/.+\/druid/, 'druid')
-        h['pivot'].each { |p|
-          status = p['value']
-          n      = p['count']
-          stats[druid] ||= {}
-          stats[druid][status] = n
-        }
+    # Extract needed counts from SOLR response and put them into to the hash.
+    # In the loop below, each fc hash looks like this example:
+    #   {
+    #     "value" => "info:fedora/druid:oo000oo0003",
+    #     "pivot" => [
+    #       { "value" => "draft",            "count" => 1 },
+    #       { "value" => "waiting_approval", "count" => 3 },
+    #       { "value" => "published",        "count" => 0 },
+    #     ]
+    #   }
+    get_facet_counts_from_response(resp).each { |fc|
+      druid = fc['value'].split('/').last
+      fc['pivot'].each { |p|
+        status = p['value']
+        n      = p['count']
+        counts[druid] ||= initial_item_counts()
+        counts[druid][status] = n
       }
-    end
-    return stats
+    }
+
+    return counts
+  end
+
+  # Takes a SOLR response.
+  # Returns an array of druids corresponding to the documents.
+  # Written as a separate method for testing purposes.
+  def self.get_druids_from_response(resp)
+    k = 'identityMetadata_objectId_t'
+    return resp.docs.map { |doc| doc[k].first }
+  end
+
+  # Takes a SOLR response.
+  # Returns an array of hashes containing the needed facet counts.
+  # Written as a separate method for testing purposes.
+  def self.get_facet_counts_from_response(resp)
+    return resp.facet_counts['facet_pivot'].values.first
   end
 
 end

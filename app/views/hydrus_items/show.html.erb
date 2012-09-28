@@ -85,7 +85,30 @@
 					    </dd>
 						<% end %>						
 		</div>
+
+		 <div class="collection-items">
+		     <h4>Related Links and Citations</h4>
+	     <% unless hydrus_is_empty?(@document_fedora.preferred_citation) %>
+	       <dt>Cite this item as</dt>
+	       <dd><%= @document_fedora.preferred_citation %></dd>
+	     <% end %>
+	 
+	     <% unless hydrus_is_empty?(@document_fedora.related_citation) %>
+	       <% @document_fedora.related_citation.each_with_index do |related_citation, index| %>
+	         <dt class="<%= 'hidden-label' if index > 0 %>">Related published work</dt>
+	         <dd><%= related_citation %></dd>
+	       <% end %>
+	     <% end %>
+	 
+	     <% unless hydrus_is_empty?(@document_fedora.related_items) %>
+	       <% @document_fedora.related_items.each_with_index do |related_item, index| %>
+	         <dt class="<%= 'hidden-label' if index > 0 %>">Related links</dt>
+	         <dd><%= related_item.url.blank? ? hydrus_object_setting_value(related_item.url) : link_to(related_item.title, related_item.url) %></dd>
+	       <% end %>
+	     <% end %>
+	 </div>
   
+
   <% end %>
 
   <%= render(:partial => 'shared/events') %>

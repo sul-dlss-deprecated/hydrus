@@ -40,6 +40,10 @@ class MockResponsible
               <identifier type="sunetid">bblue</identifier>
               <name>Blue, Bill</name>
            </person>
+           <person>
+              <identifier type="sunetid">ggreen</identifier>
+              <name>Green, Greg</name>
+           </person>
         </role>
       </roleMetadata>
     EOF
@@ -52,9 +56,9 @@ describe Hydrus::Responsible do
   before(:each) do
     @obj = MockResponsible.new
     @orig_roles = {
-      "hydrus-collection-manager"  => ["brown", "dblack"],
-      "hydrus-collection-reviewer" => ["ggreen"],
-      "hydrus-collection-item-depositor"      => ["bblue"],
+      "hydrus-collection-manager"        => Set.new(["brown", "dblack"]),
+      "hydrus-collection-reviewer"       => Set.new(["ggreen"]),
+      "hydrus-collection-item-depositor" => Set.new(["bblue", "ggreen"]),
     }
   end
 
@@ -66,6 +70,14 @@ describe Hydrus::Responsible do
     @orig_roles.each do |role, ids|
       @obj.persons_with_role(role).should == ids
     end
+  end
+
+  it "roles_of_person() should return expected roles" do
+    @obj.roles_of_person('ggreen').should == Set.new(%w(
+      hydrus-collection-reviewer
+      hydrus-collection-item-depositor
+    ))
+    @obj.roles_of_person('xxxxx').should == Set.new
   end
 
   it "person_roles= should rewrite the <person> nodes, but not <group> nodes" do

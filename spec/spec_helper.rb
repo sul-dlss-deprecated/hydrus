@@ -79,6 +79,7 @@ end
 def mock_user
   mock_user =  mock("user")
   mock_user.stub!(:email)
+  mock_user.stub!(:sunetid)
   mock_user.stub!(:persisted?).and_return(false)
   mock_user.stub!(:new_record?).and_return(true)
   mock_user.stub!(:is_being_superuser?).and_return(false)
@@ -88,6 +89,7 @@ end
 def mock_authed_user
   mock_user =  mock("user")
   mock_user.stub!(:email).and_return("archivist1@example.com")
+  mock_user.stub!(:sunetid).and_return("archivist1")
   mock_user.stub!(:persisted?).and_return(true)
   mock_user.stub!(:new_record?).and_return(false)
   mock_user.stub!(:is_being_superuser?).and_return(false)
