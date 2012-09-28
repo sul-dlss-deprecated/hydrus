@@ -74,7 +74,11 @@ module ApplicationHelper
   end
 
   def render_contextual_navigation(model)
-    render :partial=>"#{model.class.to_s.pluralize.parameterize("_")}/navigation"
+    render :partial=>"#{view_path_from_model(model)}/navigation"
+  end
+  
+  def view_path_from_model(model)
+    model.class.to_s.pluralize.parameterize("_")
   end
 
 end

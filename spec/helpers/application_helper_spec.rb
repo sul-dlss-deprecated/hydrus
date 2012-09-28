@@ -36,6 +36,10 @@ describe ApplicationHelper do
   end
   
   describe "render helpers" do
+    it "should return a string that corresponds to the view path for that model" do
+      view_path_from_model(Hydrus::Collection.new(:pid=>"1234")).should == "hydrus_collections"
+      view_path_from_model(Hydrus::Item.new(:pid=>"1234")).should       == "hydrus_items"
+    end
     describe "render_contextual_navigation" do
       it "should return the correct data" do
         @document_fedora = Hydrus::Collection.new(:pid=>"1234")
