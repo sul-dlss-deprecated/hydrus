@@ -159,7 +159,7 @@ describe("Collection create", :type => :request, :integration => true) do
     coll.is_open.should == false
     apo.is_open.should == false
     # Return to edit page, and try to save Collection with an empty title.
-    click_link "Switch to edit view"
+    click_link "Edit Collection"
     fill_in "hydrus_collection_title", :with => ''
     click_button "Save"
     page.should_not have_content(@notice)

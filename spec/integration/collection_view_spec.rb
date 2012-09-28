@@ -43,8 +43,8 @@ describe("Collection view", :type => :request, :integration => true) do
       'Mascot, Harvard',
     ]
     login_as_archivist1
-    visit polymorphic_path(@hc)
-    current_path.should == polymorphic_path(@hc)
+    visit polymorphic_path([@hc, :items])
+    current_path.should == polymorphic_path([@hc, :items])
     coll_items = find('div#items')
     exp_content.each do |exp|
       coll_items.should have_content(exp)
