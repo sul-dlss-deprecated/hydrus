@@ -21,29 +21,7 @@
     <h3><%= hydrus_object_setting_value(@document_fedora.title) %></h3>
 		<h4 class="muted">Item Settings</h4>
 		
-		<dt>Collection</dt>
-		<dd><%=
-      c = @document_fedora.collection
-      link_to(c.title, polymorphic_path(c))
-    %></dd>
-
-   <dt>Submitted by</dt>
-    <dd><%= @document_fedora.item_depositor_id %></dd>
-
-   <dt>Submitted on</dt>
-    <dd><%= hydrus_format_date(@document_fedora.create_date) %></dd>
-		
-    <dt>PURL</dt>
-    <dd>
-      <% if @document_fedora.is_published %>
-				<%=link_to(@document_fedora.url, @document_fedora.url)%>
-    	<% else %>
-				Not published yet
-			<% end %>
-		</dd>
-
-    <dt>Contact email</dt>
-    <dd><%= @document_fedora.contact.blank? ? hydrus_object_setting_value(@document_fedora.contact) : mail_to(@document_fedora.contact) %></dd>
+		<%= render "hydrus_items/basic_item_metadata" %>
 
 		 <div class="collection-items">
 		     <h4>People and organizations responsible for this item</h4>

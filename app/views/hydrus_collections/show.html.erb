@@ -20,17 +20,8 @@
 
     <h3><%= hydrus_object_setting_value(@document_fedora.title) %></h3>
 		<h4 class="muted">Collection Settings</h4>
-
-    <dt>Owner</dt>
-    <dd><%= @document_fedora.owner%></dd>
-
-    <dt>Contact</dt>
-    <dd><%= hydrus_object_setting_value(@document_fedora.contact) %></dd>
-
-    <dt>Description</dt>
-    <dd><%= hydrus_object_setting_value(@document_fedora.abstract) %></dd>
-
-
+		
+    <%= render "hydrus_collections/basic_collection_metadata" %>
 
 <!--     <dt>APO PID </dt>
     <dd><%= @document_fedora.apo.pid %></dd> -->

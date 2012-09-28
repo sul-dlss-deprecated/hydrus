@@ -1,0 +1,15 @@
+<%- c = @document_fedora.collection -%>
+<dt>Collection</dt>
+<dd><%= link_to(c.title, polymorphic_path(c)) %></dd>
+
+<dt>Submitted by</dt>
+<dd><%= @document_fedora.item_depositor_id %></dd>
+
+<dt>Submitted on</dt>
+<dd><%= hydrus_format_date(@document_fedora.create_date) %></dd>
+
+<dt>PURL</dt>
+<dd><%= @document_fedora.is_published ? link_to(@document_fedora.url, @document_fedora.url) : "Not published yet" %></dd>
+
+<dt>Contact email</dt>
+<dd><%= @document_fedora.contact.blank? ? hydrus_object_setting_value(@document_fedora.contact) : mail_to(@document_fedora.contact) %></dd>

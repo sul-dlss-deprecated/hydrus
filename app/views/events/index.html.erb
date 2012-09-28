@@ -1,10 +1,23 @@
+<%- @page_title = "#{@document_fedora.title} - #{application_name}" -%>
+
+<%- sidebar_items << capture do -%>
+  <div class="well actions-box collection-settings">
+  	<%=render :partial=>"#{view_path_from_model(@document_fedora)}/status_box" %>
+		<%=render :partial=>"#{view_path_from_model(@document_fedora)}/actions_box_show" %>
+  </div>
+<%- end -%>
+
 <div class="row">
   <div class="span9">
     <%= render_contextual_navigation(@document_fedora) %>
   </div>
 </div>
+<h3><%= hydrus_object_setting_value(@document_fedora.title) %></h3>
+
+<%= render "#{view_path_from_model(@document_fedora)}/events_metadata" %>
+
 <div class="event-history">
-  <h4>History</h4>
+  <h4>Event history for this <%= @document_fedora.class.to_s.gsub("Hydrus::", "") %></h4>
   <table class="hydrus-striped-table table-striped table-condensed">
     <thead>
       <tr>
