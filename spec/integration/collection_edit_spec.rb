@@ -191,7 +191,7 @@ describe("Collection edit", :type => :request, :integration => true) do
       collection_roles.each do |role, v|
         ids = rmdiv.find("input[id^='#{dk}[#{role}]']")[:value]
         ids = @hc.parse_delimited(ids)
-        h[role] = ids if ids.length > 0 
+        h[role] = Set.new(ids) if ids.length > 0 
       end
       h.should == role_info
     end
@@ -205,16 +205,16 @@ describe("Collection edit", :type => :request, :integration => true) do
       check_role_management_div(role_info)
       # Modify the roles in the UI.
       role_info = {
-        'hydrus-collection-manager'  => %w(aa bb),
-        'hydrus-collection-reviewer' => %w(cc dd ee),
-        'hydrus-collection-item-depositor'      => %w(ff),
-        'hydrus-collection-viewer'              => %w(gg hh ii),
-        'hydrus-collection-depositor' => %w(ggreen)
+        'hydrus-collection-manager'        => Set.new(%w(aa bb archivist1)),
+        'hydrus-collection-reviewer'       => Set.new(%w(cc dd ee)),
+        'hydrus-collection-item-depositor' => Set.new(%w(ff)),
+        'hydrus-collection-viewer'         => Set.new(%w(gg hh ii)),
+        'hydrus-collection-depositor'      => Set.new(%w(ggreen)),
       }
       rmdiv = find('div#role-management')
       dk    = 'hydrus_collection_apo_person_roles'
       role_info.each do |role,ids|
-        rmdiv.fill_in("#{dk}[#{role}]", :with => ids.join(', '))
+        rmdiv.fill_in("#{dk}[#{role}]", :with => ids.to_a.join(', '))
       end
       # Check role-management section after additions.
       click_button "Save"

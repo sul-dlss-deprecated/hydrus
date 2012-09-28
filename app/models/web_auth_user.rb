@@ -12,6 +12,10 @@ class WebAuthUser
     @id
   end
   
+  def sunetid
+    return @id
+  end
+  
   def is_webauth?
     true
   end

@@ -1,40 +1,36 @@
 class Ability
+
   include CanCan::Ability
   include Hydra::Ability
+
+  AUTH = Hydrus::Authorization
   
-  # TODO Add actual access control enforcement
-  def hydra_default_permissions user, session    
-    can :manage, :all if user.email.present?
+  def hydra_default_permissions(user, session, *args)
+
+    can(:read, :all) if user.email.present?
+
+    can(:create, Hydrus::Collection) if AUTH.can_create_collections(user)
+
+    can(:create_items_in, [String, Hydrus::Collection]) do |obj|
+      # Hydrus.ap_dump('create_items_in', get_fedora_object(obj).pid)
+      AUTH.can_create_items_in(user, get_fedora_object(obj))
+    end
+
+    can([:edit, :update], [String, ActiveFedora::Base]) do |obj|
+      # Hydrus.ap_dump('edit/update', get_fedora_object(obj).pid)
+      AUTH.can_edit_object(user, get_fedora_object(obj))
+    end
+
+    # cannot([:edit, :update], SolrDocument)
+    cannot(:destroy, String)
+    cannot(:destroy, ActiveFedora::Base)
+    cannot(:destroy, SolrDocument)
   end
-end
 
-__END__
-
-class Ability
-  include CanCan::Ability
-
-
-  can? :edit, @fedora_object
-  can? :edit, 'changeme:5'
-
-
-  # XXX Disable access control enforcement for this iteration
-  def hydra_default_permissions user, session
-  #  can :manage, :all if user.email.present?
-    can :read, String do |pid|
-      obj = ActiveFedora::Base.find(pid, :cast => true)
-      Dor::Authorization.check_if_user_can_read_obj(user, obj)
-    end
-
-    can :read, ActiveFedora::Base do |obj|
-      Dor::Authorization.check_if_user_can_read_obj(user, obj)
-    end
-
-    can :edit do |pid|
-
-    end
+  # Takes a String (a pid) or an ActiveFedora object.
+  # Returns the ActiveFedora object.
+  def get_fedora_object(obj)
+    return obj.kind_of?(String) ? ActiveFedora::Base.find(obj, :cast => true) : obj
   end
-end
 
-https://github.com/projecthydra/hydra-head/tree/master/hydra-access-controls
-https://github.com/projecthydra/hydra-head/blob/master/hydra-access-controls/lib/hydra/policy_aware_access_controls_enforcement.rb
+end

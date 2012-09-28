@@ -51,7 +51,7 @@ describe("Item create", :type => :request, :integration => true) do
     # Check identityMetadata of Item.
     item.identityMetadata.tag.should include("Hydrus : dataset", "Project : Hydrus")
     # Check person roles of the Item.
-    item.person_roles.should == { "hydrus-item-depositor" => ["archivist1"] }
+    item.person_roles.should == { "hydrus-item-depositor" => Set.new(["archivist1"]) }
     # Check events.
     exp = [
       /\AItem created/,

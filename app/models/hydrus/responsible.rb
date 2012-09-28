@@ -1,25 +1,27 @@
 # A mixin for roleMetadata stuff.
+
 module Hydrus::Responsible
 
-  # Returns an array of SUNet IDs having the given role.
+  # Returns a set of SUNet IDs having the given role.
   def persons_with_role(role)
-    q = "//role[@type='#{role}']/person/identifier"
-    return roleMetadata.find_by_xpath(q).map { |node| node.text }
+    q     = "//role[@type='#{role}']/person/identifier"
+    roles = roleMetadata.find_by_xpath(q).map { |node| node.text }
+    return Set.new(roles)
   end
 
-  # Returns an array of roles for the given role.
+  # Returns a set of roles for the given SUNet ID.
   def roles_of_person(person_id)
-    roles = []
+    roles = Set.new
     person_roles.each do |role, ids|
       roles << role if ids.include?(person_id)
     end
     return roles
   end
 
-  # Returns of hash of role info.
+  # Returns of hash-of-sets containing role info.
   #   {
-  #     'hydrus-collection-manager'        => ['willy',   'naomi'],
-  #     'hydrus-collection-item-depositor' => ['hindman', 'cbeer'],
+  #     'hydrus-collection-manager'        => <'willy',   'naomi'>,
+  #     'hydrus-collection-item-depositor' => <'hindman', 'cbeer'>,
   #     etc.
   #   }
   def person_roles
@@ -27,10 +29,9 @@ module Hydrus::Responsible
     roleMetadata.find_by_terms(:role, :person, :identifier).each do |n|
       id   = n.text
       role = n.parent.parent[:type]
-      h[role] ||= []
+      h[role] ||= Set.new
       h[role] << id
     end
-    h.values.each { |ids| ids.uniq! }
     return h
   end
 

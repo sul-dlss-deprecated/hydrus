@@ -176,7 +176,7 @@
 	          <%- end %>
 	          <%- pwr = @document_fedora.apo_persons_with_role(role) %>
 	          <%= hydrus_form_value do %>
-	            <%= f.text_field k, :value => pwr.join(', ') %>
+	            <%= f.text_field k, :value => pwr.to_a.join(', ') %>
 							<p class="help"><%=Hydrus::AdminPolicyObject.roles_help_text[role]%></p>
 	          <%- end %>
 	        </div>
