@@ -16,16 +16,14 @@
             <th class="title">Collection</th>
             <th class="journal">Your roles</th>
             <th class="deposited">Collection items</th>
-            <th class="deposited">Item status</th>
           </tr>
         </thead>
         <tbody>
         <% @collections.each do |c| %>
           <tr>
             <td><%= link_to(c.title, polymorphic_path(c)) %></td>
-            <td><%= c.roles_of_person_for_ui(current_user.to_s).join(',')%></td>
-            <td><%= c.hydrus_items.size %></td>
-            <td><%= c.item_counts.collect {|state,num| "#{num} #{state}"}.join(', ') %></td>
+            <td><%= c.roles_of_person_for_ui(current_user.to_s).join(', ')%></td>
+            <td><%= pluralize(c.hydrus_items.size, 'item')%>: <%= c.item_counts.collect {|state,num| "#{num} #{state}"}.join(', ') %></td>
           </tr> 
           <% end %>
         </tbody>
