@@ -40,12 +40,26 @@ describe("Collection view", :type => :request, :integration => true) do
     exp_content = [
       "How Couples Meet and Stay Together",
       "Ethnic Collective Action",
-      'Mascot, Harvard',
+      'Mascot, Harvard'
     ]
     login_as_archivist1
     visit polymorphic_path([@hc, :items])
     current_path.should == polymorphic_path([@hc, :items])
     coll_items = find('div#items')
+    exp_content.each do |exp|
+      coll_items.should have_content(exp)
+    end
+  end
+  
+  it "should show the events in a history tab" do
+    exp_content = [
+      "Collection created",
+      "archivist1"
+    ]
+    login_as_archivist1
+    visit polymorphic_path([@hc, :events])
+    current_path.should == polymorphic_path([@hc, :events])
+    coll_items = find('div.event-history')
     exp_content.each do |exp|
       coll_items.should have_content(exp)
     end

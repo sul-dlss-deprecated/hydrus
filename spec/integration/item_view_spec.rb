@@ -55,4 +55,18 @@ describe("Item view", :type => :request, :integration => true) do
     page.should_not have_content('story by Jennifer Ludden August 16, 2010') # relatedItem
   end
 
+
+  it "should show the events in a history tab" do
+    exp_content = [
+      "SSDS Social Science Data Collection",
+      "How Couples Meet and Stay Together",
+      'cardinal',
+    ]
+    login_as_archivist1
+    visit polymorphic_path([@hi, :events])
+    current_path.should == polymorphic_path([@hi, :events])
+    exp_content.each do |exp|
+      page.should have_content(exp)
+    end
+  end
 end
