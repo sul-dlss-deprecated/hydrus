@@ -364,15 +364,18 @@ noscript #item-actions, noscript #collection-actions {
 }
 
 /* beta version warning elements */
-#beta-dialog.modal, #signin.modal {
+#beta-dialog.modal {
 	text-align: center;
 	p {
 		font-size: 110%;
 		font-weight: bold;
 	}
+}
+#beta-dialog.modal, #signin.modal {
 	.modal-header {
 		background-color: #93190c;
 		color: #fff;
+		text-align: center;
 	}
 	.modal-footer {
 		border: none;
@@ -381,20 +384,36 @@ noscript #item-actions, noscript #collection-actions {
 		text-align: center;
 	}
 }
-#signin.modal {
-	label {text-align: right;}
-	.checkbox {text-align: left;}
+#signin, #new_user {
+	fieldset {text-align: left;}
+	p.help {
+		line-height: 1.5;
+		margin-top: 10px;
+	}
+	.signin-form {
+		margin: 0 auto;
+	  .signin-fields {
+			border-right: 1px solid #DDD;
+			float: left;
+			width: 245px;
+			input {
+				float: left;
+				&.signin-submit {margin-right: 40px;}
+			}
+			#user_remember_me {margin-right: 6px;}
+			.remember-me {margin-top: 10px;}
+			span {
+				float: right;
+				margin-right: 35px;
+			}
+		}
+		.webauth {
+			margin-bottom: 20px;
+			margin-top: 23px;
+		}
+	}
 }
-.signin-label {
-	text-align: right;
-}
-.signin-options {
-	margin: 8px 0 8px 50px;
-}
-.webauth {
-	margin-bottom: 20px;
-	margin-top: 10px;
-}
+
 /* SUL Chrome overrides */
 #hydra-attribution {
 	display: inline;
