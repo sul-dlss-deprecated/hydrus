@@ -414,6 +414,27 @@ noscript #item-actions, noscript #collection-actions {
 	}
 }
 
+h1 {
+	border-bottom: 1px solid #DDD;
+	color: #333;
+	font-size: 24px;
+	margin: 30px 0 5px 5px;
+	padding-bottom: 5px;
+}
+
+ul.breadcrumb {
+	background: none;
+	border: none;
+	margin-bottom: 25px;
+	padding: 6px;
+}
+
+.well {
+	box-shadow: none;
+	border: none;
+	background: none;
+}
+
 /* SUL Chrome overrides */
 #hydra-attribution {
 	display: inline;
