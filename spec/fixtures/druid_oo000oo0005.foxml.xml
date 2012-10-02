@@ -194,8 +194,7 @@
       CREATED="2011-07-05T20:49:25.801Z" MIMETYPE="text/xml" SIZE="345">
       <foxml:xmlContent>
         <hydrusProperties>
-          <acceptedTermsOfDeposit>true</acceptedTermsOfDeposit>
-          <dateAcceptedTermsOfDeposit>2012-08-15T10:12:31-07:00</dateAcceptedTermsOfDeposit>
+ 		  <reviewedReleaseSettings>true</reviewedReleaseSettings>		  
         </hydrusProperties>
       </foxml:xmlContent>
     </foxml:datastreamVersion>

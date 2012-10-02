@@ -4,7 +4,7 @@ class Hydrus::Item < Hydrus::GenericObject
   include Hydrus::Responsible
   extend  Hydrus::Delegatable
 
-  after_validation :strip_whitespace, :set_terms_of_deposit_acceptance_date
+  after_validation :strip_whitespace
 
   attr_accessor :embargo
   
@@ -12,6 +12,7 @@ class Hydrus::Item < Hydrus::GenericObject
   validates :actors, :at_least_one=>true, :if => :should_validate
   validates :files, :at_least_one=>true, :if => :should_validate
   validate  :must_accept_terms_of_deposit, :if => :should_validate
+  validate  :must_review_release_settings, :if => :should_validate
   # validate  :embargo_date_is_correct_format # TODO
 
   setup_delegations(
@@ -27,7 +28,7 @@ class Hydrus::Item < Hydrus::GenericObject
       [:item_depositor_name,       true,  :item_depositor, :person, :name],
     ],
     "hydrusProperties" => [
-      [:accepted_terms_of_deposit, true   ],
+      [:reviewed_release_settings, true   ],
     ]
   )
 
@@ -77,19 +78,11 @@ class Hydrus::Item < Hydrus::GenericObject
     end
   end
 
-  def date_accepted_terms_of_deposit
-    accept_date=hydrusProperties.date_accepted_terms_of_deposit
-    accept_date.size == 1 ? accept_date.first.to_datetime : nil
+  def accept_terms_of_deposit
+    #hydrusProperties.accepted_terms_of_deposit="true"
+    #hydrusProperties.date_accepted_terms_of_deposit=Time.now
   end
-
-  def date_accepted_terms_of_deposit=(date)
-    hydrusProperties.date_accepted_terms_of_deposit = date
-  end
-  
-  def set_terms_of_deposit_acceptance_date
-    date_accepted_terms_of_deposit=Time.now if to_bool(accepted_terms_of_deposit) && date_accepted_terms_of_deposit.nil?
-  end
-  
+    
   def requires_human_approval
     collection.requires_human_approval
   end
@@ -109,6 +102,10 @@ class Hydrus::Item < Hydrus::GenericObject
 
   def terms_of_deposit_accepted?
     validate! ? true : !errors.keys.include?(:terms_of_deposit)
+  end
+  
+  def reviewed_release_settings?
+    validate! ? true : !errors.keys.include?(:release_settings)    
   end
 
   ###########################
@@ -163,13 +160,28 @@ class Hydrus::Item < Hydrus::GenericObject
     return false
   end
 
-  # the user must have accepted the terms of deposit to publish
+  def terms_acceptance_date_passed
+    # if date_accepted_terms_of_deposit != nil
+    #   return (Time.now - 1.year) > date_accepted_terms_of_deposit.to_datetime
+    # else
+    #   return false
+    # end
+  end
+  
+  # the user must accept the terms of deposit to publish
   def must_accept_terms_of_deposit
-    if to_bool(accepted_terms_of_deposit) != true
-      errors.add(:terms_of_deposit, "must be accepted")
-    end
+    # if to_bool(accepted_terms_of_deposit) != true || terms_acceptance_date_passed
+    #   errors.add(:terms_of_deposit, "must be accepted once each year per collection")
+    # end
   end
 
+  # the user must have reviewed the release and visibility settings
+  def must_review_release_settings
+    if to_bool(reviewed_release_settings) != true
+      errors.add(:release_settings, "must be reviewed")
+    end
+  end
+  
   # Returns the Item's license, if present.
   # Otherwise, return's the Collection's license.
   def license *args

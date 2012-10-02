@@ -7,7 +7,12 @@ describe Hydrus::HydrusPropertiesDS do
     @ds_end="</hydrusProperties>"
     xml = <<-EOF
       #{@ds_start}
-        <acceptedTermsOfDeposit>true</acceptedTermsOfDeposit>
+        <acceptedTermsOfDeposit>
+  	    	<user dateAccepted="2011-09-02 01:02:32 -0700">cardinal</user>
+        	<user dateAccepted="2012-05-02 12:02:44 -0700">crimson</user>
+        	<user dateAccepted="2011-10-02 02:05:31 -0700">cornellian</user>
+        	<user dateAccepted="2011-10-02 02:05:31 -0700">mhamster</user>
+        </acceptedTermsOfDeposit>
         <requiresHumanApproval>no</requiresHumanApproval>
         <disapprovalReason>Idiota</disapprovalReason>
       #{@ds_end}
@@ -17,7 +22,8 @@ describe Hydrus::HydrusPropertiesDS do
   
   it "should get expected values from OM terminology" do
     tests = [
-      [:accepted_terms_of_deposit, ["true"]],
+      [[:accepted_terms_of_deposit,:user],%w{cardinal crimson cornellian mhamster}],
+      [[:accepted_terms_of_deposit,:user,:date_accepted],["2011-09-02 01:02:32 -0700","2012-05-02 12:02:44 -0700","2011-10-02 02:05:31 -0700","2011-10-02 02:05:31 -0700"]],
       [:requires_human_approval, ["no"]],
       [:disapproval_reason, ["Idiota"]],
     ]

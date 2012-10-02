@@ -15,7 +15,6 @@ class Hydrus::Collection < Hydrus::GenericObject
     "hydrusProperties" => [
       [:requires_human_approval, true   ],
       [:collection_depositor, true   ],
-      
     ],
   )
 
@@ -104,6 +103,15 @@ class Hydrus::Collection < Hydrus::GenericObject
     end
   end
 
+  # returns a hash of depositors for this collection that have accepted the terms of deposit for an item in that collection
+  def users_accepted_terms_of_deposit
+    result={}
+    hydrusProperties.find_by_terms(:accepted_terms_of_deposit,:user).each do |node|
+      result.merge!(node.content => node['dateAccepted'])
+    end
+    return result
+  end
+  
   def is_open
     return apo.is_open
   end

@@ -1,0 +1,9 @@
+<h3>Stanford Digital Repository  - Self-Service Terms of Deposit - DRAFT</h3>
+
+<%= render :partial=>'terms_of_deposit_text' %>
+
+<% unless @document_fedora.terms_of_deposit_accepted?%>
+	<a href="<%=terms_of_deposit_agree_path(@pid)%>"><button class="btn btn-primary">I agree to these terms</button></a>
+<% end %>
+
+<a href="/terms_of_deposit_text.txt"><button class="btn">Save</button></a>

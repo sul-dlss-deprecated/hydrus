@@ -7,7 +7,7 @@ class HydrusItemsController < ApplicationController
 
   #prepend_before_filter :sanitize_update_params, :only => :update
   before_filter :enforce_access_controls
-  before_filter :setup_attributes, :except => [:new, :index]
+  before_filter :setup_attributes, :except => [:new, :index, :terms_of_deposit, :agree_to_terms_of_deposit]
   before_filter :check_for_collection, :only => :new
   before_filter :redirect_if_not_correct_object_type, :only => [:edit,:show,:update]
 
@@ -143,6 +143,26 @@ class HydrusItemsController < ApplicationController
 
   end
 
+  def terms_of_deposit
+    @pid=params[:pid]
+    @document_fedora=Hydrus::Item.find(@pid)
+    respond_to do |format|
+      format.html
+      format.js
+    end
+  end
+
+  def agree_to_terms_of_deposit
+    @pid=params[:pid]
+    @document_fedora=Hydrus::Item.find(@pid)
+    @document_fedora.accept_terms_of_deposit
+    @document_fedora.save
+    respond_to do |format|
+      format.html
+      format.js
+    end
+  end
+  
   def destroy_value
     @document_fedora.descMetadata.remove_node(params[:term], params[:term_index])
     @document_fedora.save

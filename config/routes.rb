@@ -16,6 +16,8 @@ Hydrus::Application.routes.draw do
   end
   resources :items,       :controller => 'hydrus_items', :as => 'hydrus_items' do
     resources :events, :only=>:index
+    get 'terms_of_deposit', :as =>'terms_of_deposit', :on=>:collection
+    get 'agree_to_terms_of_deposit', :as =>'agree_to_terms_of_deposit', :on=>:collection
   end
   
   match "items/:id/destroy_value" => "hydrus_items#destroy_value", :as => 'destroy_hydrus_item_value', :via => "get"
@@ -23,7 +25,7 @@ Hydrus::Application.routes.draw do
   match "collections/:id/destroy_actor" => "hydrus_collections#destroy_actor", :as => 'destroy_hydrus_collection_actor', :via => "get"
   match "users/auth/webauth" => "signin#login", :as => "webauth_login"
   match "users/auth/webauth/logout" => "signin#logout", :as => "webauth_logout"
-  
+    
   resources :object_files
   resources :signin
   

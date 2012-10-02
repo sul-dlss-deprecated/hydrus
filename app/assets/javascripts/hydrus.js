@@ -50,7 +50,7 @@ $(document).ready(function(){
 	$(".abstract").truncate({max_length: 350});
 
 	$("[rel=tooltip]").tooltip();
-	
+		
 	// Modal sign in
 	$(".signin_link").each(function(){
 		$(this).click(function(){
@@ -59,6 +59,14 @@ $(document).ready(function(){
 	  });
 	});
 	
+	// Terms of deposit modal window
+	$(".tod_link").each(function(){
+		$(this).click(function(){
+			$.ajax($(this).attr("data-url") + "&format=js");
+			return false;
+	  });
+	});
+		
 	// Show all dropdown menus.  This only happens on HydrusCollections#show and HydrusItems#indexc currently.
 	$(".add-content-dropdown").each(function(){
 		$(this).toggle();

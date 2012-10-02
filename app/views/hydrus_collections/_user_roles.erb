@@ -1,0 +1,8 @@
+<p>
+  Your roles in this collection:
+  <% 
+    rs = @document_fedora.roles_of_person_for_ui(current_user.to_s).join(', ').downcase
+    rs = 'None' if rs.size == 0
+  %>
+  <%=rs%>
+</p>

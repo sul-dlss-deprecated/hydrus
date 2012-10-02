@@ -1,11 +1,5 @@
 <div class="collection-actions box-header">Actions</div>
-<p>
-  Your roles in this collection:
-  <%= 
-    rs = @document_fedora.roles_of_person_for_ui(current_user.to_s).join(',').downcase
-    rs = 'None' if rs.size == 0
-  %>
-</p>
+		<%=render :partial=>'hydrus_collections/user_roles'%>
 
 <%= form_for(@document_fedora, :method => 'PUT', :html => {:class => "step", :novalidate=>""}) do |f| -%>
 	<% if @document_fedora.is_open %>

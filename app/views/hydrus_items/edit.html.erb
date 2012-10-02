@@ -144,7 +144,7 @@
         after deposit.
       </span>
     <% end %>
-    </div>
+</div>
   </div>
   <!-- Visiblity -->
   <div class="row">
@@ -168,6 +168,13 @@
     <% end %>
     </div>
   </div>
+  <div class="row">
+    <div class="span9 sub-section">
+  <span>
+	  <br />
+    <input type="checkbox" <%="checked disabled" if to_bool(@document_fedora.reviewed_release_settings)%> name="hydrus_item[reviewed_release_settings]" value="true" id="release_settings" /> I have reviewed the release and visibility settings above.
+  </span>
+  </div></div>
 
  <%= hydrus_form_header{"License"} %>
   <div class="row">

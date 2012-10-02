@@ -1,8 +1,9 @@
+
+
 	<%= form_for(@document_fedora, :method => 'PUT', :html => {:class => "step", :novalidate=>""}) do |f| -%>
 	<div class="well actions-box collection-actions">
 	  <div class="box-header">Actions</div>
-		<p>You are a <%=@document_fedora.collection.roles_of_person_for_ui(current_user.to_s).join(',').downcase%> for this collection.</p>
-	
+		<%=render :partial=>'user_roles'%>
      <%
         if @document_fedora.is_published
           unless @document_fedora.is_approved

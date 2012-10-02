@@ -44,6 +44,14 @@ module ApplicationHelper
     link_to("Sign in", new_signin_path(:referrer => request.fullpath), :class=>'signin_link', :"data-url" => new_signin_path(:referrer => request.fullpath))
   end
   
+  def terms_of_deposit_path(pid)
+    url_for(:controller=>'hydrus_items',:action=>'terms_of_deposit',:pid=>pid)
+  end
+
+  def terms_of_deposit_agree_path(pid)
+    url_for(:controller=>'hydrus_items',:action=>'agree_to_terms_of_deposit',:pid=>pid)
+  end
+    
   def hydrus_strip(value)
     value.nil? ? "" : value.strip
   end
