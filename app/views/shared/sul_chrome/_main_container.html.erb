@@ -24,4 +24,10 @@
     </div>
   <%- end -%>
 </div>
-<%= render "shared/main_contents" %>
+
+<%= image_tag "test-version-ribbon.png", :title => "This website is in development and any data you add will be deleted.", :style => "position: absolute; top: 0; left: 0; border: 0;" %>
+
+<h1>Stanford Digital Repository &ndash; Self-Deposit</h1>
+
+<%-# display home page with different layout -%>
+<%= render_contextual_layout %>

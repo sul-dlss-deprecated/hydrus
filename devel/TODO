@@ -49,6 +49,17 @@ nothing happened.
 
 UI redesign: side bar and tabs.
 
+Make sidebar fixed when in Edit mode (broke when moving sidebar to right side
+because it's harder to use position:fixed on right side of viewport).
+
+Write more tests for breadcrumbs when breadcrumb functionality is in place.
+Currently, we just test that no breadcrumbs are displayed on home page and that
+the placeholder breadcrumb is displayed on Collection View page.
+
+After finishing more thorough UI rework, look at:
+  responsive issues
+  accessibility issues
+
 --------
 Technical Debt
 --------

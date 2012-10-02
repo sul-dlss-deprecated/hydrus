@@ -139,10 +139,10 @@ table form {
 }
 
 #main {
-	float: right;
+	float: left;
 }
 #sidebar {
-	float: left;
+	float: right;
 }
 
 /* form: radio button groups with embedded select */
@@ -267,7 +267,7 @@ noscript #item-actions, noscript #collection-actions {
 }
 
 #hydrus_items-edit #sidebar, #hydrus_collections-edit #sidebar {
-	position:fixed;
+	// position:fixed;
 	@media (max-width: 768px) {
 		position: relative;
 	}

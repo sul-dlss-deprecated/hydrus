@@ -16,6 +16,12 @@ describe("Collection view", :type => :request, :integration => true) do
     current_path.should == new_user_session_path
   end
 
+  it "Breadcrumbs should be displayed" do
+    login_as_archivist1
+    visit polymorphic_path(@hc)
+    page.should have_selector("ul.breadcrumb li a", :text => "Home")
+  end
+
   it "should redirect to the collection page if the requested druid is a collection but is visited at the item page URL" do
     @bad_url = "/items/#{@druid}" # this is actually a collection druid
     login_as_archivist1
