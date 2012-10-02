@@ -33,9 +33,7 @@ class HydrusItemsController < ApplicationController
   end
 
   def new
-    # Hydrus.ap_dump('Items.controller.new()', params)
     coll_pid = params[:collection]
-    # authorize! :create_items_in, coll_pid
     item = Hydrus::Item.create(coll_pid, current_user)
     item.current_user = current_user
     redirect_to edit_polymorphic_path(item)

@@ -3,39 +3,32 @@
 <%- else -%>
   <%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
     <div class="modal-body">    
-      <div class="row">
-        <div class="span2 offset2 webauth"><%= link_to("Sign in via WebAuth", webauth_login_path(:referrer => params[:referrer])) %></div>
-      </div>
-      <div class="row">
-        <div class="span2"><%= f.label :email %></div>
-        <div class="span2"><%= f.email_field :email, :autofocus => true %></div>
-      </div>
-
-      <div class="row">
-        <div class="span2"><%= f.label :password %></div>
-        <div class="span2"><%= f.password_field :password %></div>
-      </div>
-      <% if devise_mapping.rememberable? -%>
-        <div class="row">
-          <div class="span2"><%= f.label :remember_me %></div>
-          <div class="span2 checkbox"><%= f.check_box :remember_me %></div>
+      <div class="row signin-form">
+        <div class="span2 signin-fields">
+          <fieldset>
+            <%= f.label :email %>
+            <%= f.email_field :email, :autofocus => true, :tabindex => '1' %>
+          </fieldset>
+          <fieldset>
+            <%= f.label :password do %> Password 
+              <%- if devise_mapping.recoverable? %>
+              <span>
+                <%= link_to "Forgot?", new_password_path(resource_name) %>
+              </span>
+              <% end -%>
+            <% end -%>
+            <%= f.password_field :password, :tabindex => '2' %>
+          </fieldset>
+          <%= f.submit "Sign in", :class=>"btn signin-submit", :tabindex => '3' %>
+          <fieldset class="remember-me">
+            <%= f.check_box :remember_me, :tabindex => '4' %>
+            <%= f.label :remember_me %>
+          </fieldset>
         </div>
-      <% end -%>
-      <div class="row signin-options">
-        <div class="span2 signin-label">
-          <%- if devise_mapping.registerable? %>
-            <%= link_to "Sign up", new_registration_path(resource_name) %>
-          <% end -%>
-        </div>
-        <div class="span3">
-          <%- if devise_mapping.recoverable? %>
-            <%= link_to "Forgot your password?", new_password_path(resource_name) %>
-          <% end -%>
+        <div class="span2 webauth">
+          <%= link_to("Sign in via WebAuth", webauth_login_path(:referrer => params[:referrer]), :class => 'btn', :tabindex => '5') %>
+          <p class="help">One-click sign in if you are currently authenticated through a Stanford site.</p>
         </div>
       </div>
-    </div>
-    <div class="modal-footer">
-      <%= f.submit "Sign in", :class=>"btn" %>
-    </div>
   <% end %>
 <%- end -%>
