@@ -128,6 +128,8 @@ table form {
 
 /* search form */
 #search {
+	float: right;
+	margin-top: 12px;
 	label, h2 {
 		display: inline;
 	}
@@ -412,6 +414,10 @@ noscript #item-actions, noscript #collection-actions {
 			margin-top: 23px;
 		}
 	}
+}
+
+p.homepage-intro {
+	margin: 12px 6px;
 }
 
 h1 {
