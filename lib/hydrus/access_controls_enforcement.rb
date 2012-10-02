@@ -3,19 +3,29 @@ module Hydrus::AccessControlsEnforcement
   def apply_gated_discovery solr_parameters, user_parameters
   end
 
+  def enforce_edit_permissions *args
+    # Just return if the user can edit the object.
+    pid = params[:id]
+    return if can?(:edit, pid)
+    # Otherwise, redirect to the object's view page.
+    obj  = ActiveFedora::Base.find(pid, :cast => true)
+    c    = obj.hydrus_class_to_s.downcase
+    msg  = "You do not have sufficient privileges to edit this #{c}."
+    flash[:error] = msg
+    redirect_to(polymorphic_path(obj))
+  end
+
   def enforce_create_permissions *args
     coll_pid = params[:collection]
     if coll_pid
       # User wants to create an Item in a Collection.
-      return if can?(:edit, coll_pid)
-      msg = "You do not have sufficient privileges to edit this document. " +
-            "You have been redirected to the read-only view."
-      path = edit_polymorphic_path(Hydrus::Collection.find(coll_pid))
+      return if can?(:create_items_in, coll_pid)
+      msg = "You do not have sufficient privileges to create items in this collection."
+      path = polymorphic_path(Hydrus::Collection.find(coll_pid))
     else
       # User wants to create a Collection.
       return if can?(:create, Hydrus::Collection)
-      msg = "You do not have sufficient privileges to create new collections. " +
-            "You have been redirected to the home page."
+      msg = "You do not have sufficient privileges to create new collections."
       path = root_path
     end
     flash[:error] = msg

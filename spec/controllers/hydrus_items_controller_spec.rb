@@ -39,18 +39,21 @@ describe HydrusItemsController do
   end
 
   describe "New Action" do
+
     it "should restrict access to non authed user" do
       controller.stub(:current_user).and_return(mock_user)
-      get :new, :collection => "druid:oo000oo0003"
-      response.should redirect_to edit_hydrus_collection_path("druid:oo000oo0003")
-      flash[:error].should == "You do not have sufficient privileges to edit this document. You have been redirected to the read-only view."
+      get(:new, :collection => "druid:oo000oo0003")
+      response.should redirect_to hydrus_collection_path("druid:oo000oo0003")
+      flash[:error].should =~ /do not have sufficient privileges to create items in/
     end
+
     it "should redirect w/ a flash error when no collection has been provided" do
       controller.stub(:current_user).and_return(mock_authed_user)
       get :new
       response.should redirect_to(root_path)
       flash[:error].should =~ /You cannot create an item without specifying a collection./
     end
+
   end
 
   describe "Update Action" do

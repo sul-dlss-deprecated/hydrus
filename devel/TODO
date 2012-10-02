@@ -24,12 +24,19 @@ Role-protect dashboard actions: "Create a new collection" button.
   integration tests
 
 Tests:
-  Hydrus::Authorization
+  authorization.rb
   ability.rb
 
 Role-protect Collection actions: various buttons.
+  open collection
+  discard collection
+  close collection
+  add new Item
 
 Role-protect Item actions: various buttons.
+  submit for approval
+  discard item
+  approve/disapprove/reason
 
 
 --------

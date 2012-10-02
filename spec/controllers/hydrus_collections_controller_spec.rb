@@ -61,8 +61,7 @@ describe HydrusCollectionsController do
       controller.stub(:current_user).and_return(mock_user)
       put :update, :id => @pid
       response.should redirect_to hydrus_collection_path(@pid)
-      flash[:alert].should =~ /You do not have sufficient privileges to edit this document/
-      flash[:alert].should =~ /You have been redirected to the read-only view/
+      flash[:error].should =~ /You do not have sufficient privileges to edit/
     end
 
   end
