@@ -395,6 +395,7 @@ describe Hydrus::Item do
         :abstract,
         :contact,
         :terms_of_deposit,
+        :release_settings,
         :actors,
       ]
       @hi.instance_variable_set('@should_validate', true)
@@ -415,6 +416,7 @@ describe Hydrus::Item do
       dru = 'druid:ll000ll0001'
       @hi.stub(:collection_is_open).and_return(true)
       @hi.stub(:accepted_terms_of_deposit).and_return(true)
+      @hi.stub(:reviewed_release_settings).and_return(true)
       @exp.each { |e| @hi.stub(e).and_return(dru) }
       @hi.valid?.should == true
     end

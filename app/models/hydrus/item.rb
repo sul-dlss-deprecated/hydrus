@@ -78,9 +78,20 @@ class Hydrus::Item < Hydrus::GenericObject
     end
   end
 
+  # indicates if this user has accepted a terms of deposit for any other item in this collection and less than 1 year has passed since then
+  def accepted_terms_of_deposit
+    return false unless collection
+    users=collection.users_accepted_terms_of_deposit
+    if users && users.keys.include?(item_depositor_id)
+      return (Time.now - 1.year) < collection.users_accepted_terms_of_deposit[item_depositor_id].to_datetime
+    else
+      return false
+    end
+  end
+  
   def accept_terms_of_deposit
-    #hydrusProperties.accepted_terms_of_deposit="true"
-    #hydrusProperties.date_accepted_terms_of_deposit=Time.now
+    self.collection.hydrusProperties.insert_user_accepting_terms_of_deposit(self.item_depositor_id,Time.now)
+    self.collection.save
   end
     
   def requires_human_approval
@@ -159,20 +170,12 @@ class Hydrus::Item < Hydrus::GenericObject
     errors.add(:collection, "must be open to have new items added")
     return false
   end
-
-  def terms_acceptance_date_passed
-    # if date_accepted_terms_of_deposit != nil
-    #   return (Time.now - 1.year) > date_accepted_terms_of_deposit.to_datetime
-    # else
-    #   return false
-    # end
-  end
   
   # the user must accept the terms of deposit to publish
   def must_accept_terms_of_deposit
-    # if to_bool(accepted_terms_of_deposit) != true || terms_acceptance_date_passed
-    #   errors.add(:terms_of_deposit, "must be accepted once each year per collection")
-    # end
+     if !accepted_terms_of_deposit
+       errors.add(:terms_of_deposit, "must be accepted once each year per collection")
+     end
   end
 
   # the user must have reviewed the release and visibility settings

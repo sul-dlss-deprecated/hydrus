@@ -117,13 +117,16 @@ describe("Item create", :type => :request, :integration => true) do
     should_visit_edit_page(item)
     fill_in "hydrus_item_abstract", :with => ni.abstract
     fill_in "hydrus_item_contact",  :with => ni.contact
-    check "hydrus_item[accepted_terms_of_deposit]"
     f = Hydrus::ObjectFile.new
     f.pid = druid
     f.file = Tempfile.new('mock_HydrusObjectFile_')
     f.save
     click_button "Save"
     page.should have_content(@notice)
+    # accept terms of deposit
+    item = Hydrus::Item.find(druid)
+    item.accept_terms_of_deposit
+    item.save
     # The view page should now offer the Publish button.
     div_cs = find("div.collection-actions")
     div_cs.should have_button(publish_button)

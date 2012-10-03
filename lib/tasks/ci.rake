@@ -7,7 +7,7 @@ task :ci do
   jetty_params = Jettywrapper.load_config.merge({
     :jetty_home => File.expand_path(File.dirname(__FILE__) + '/../../jetty'),
     :jetty_port => 8983,
-    :startup_wait => 25
+    :startup_wait => 200
   })
   
   error = nil

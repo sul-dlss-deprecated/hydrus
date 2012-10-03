@@ -49,6 +49,12 @@ nothing happened.
 
 UI redesign: side bar and tabs.
 
+Terms of deposit acceptance:
+  store an event in the history when a user accepts terms of deposit
+  fix item level terms of deposit validation checks
+  create item level method of accepting terms of deposit which writes the correct XML to the corresponding collection
+	remove existing user nodes from collection hydrusproperties for a user when they accept (in case it was already there)
+	
 --------
 Technical Debt
 --------

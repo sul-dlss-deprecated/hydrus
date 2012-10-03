@@ -42,4 +42,18 @@ describe Hydrus::HydrusPropertiesDS do
     dsdoc.ng_xml.should be_equivalent_to exp_xml
   end
 
+  it "should be able to add a user who accepted the terms of deposit" do
+      user_node = '<acceptedTermsOfDeposit><user dateAccepted="10-02-2012 00:00:00">foo</user></acceptedTermsOfDeposit>'
+      @exp_xml = noko_doc([
+        @ds_start,
+        user_node,
+        @ds_end,
+      ].join '')
+      @dsdoc   = Hydrus::HydrusPropertiesDS.from_xml("#{@ds_start}#{@ds_end}")
+      # @dsdoc.add_child_node(@dsdoc.ng_xml.root,:accepted_terms_of_deposit)
+      # puts @dsdoc.ng_xml
+     @dsdoc.insert_user_accepting_terms_of_deposit('foo','10-02-2012 00:00:00')
+     @dsdoc.ng_xml.should be_equivalent_to @exp_xml
+  end
+  
 end
