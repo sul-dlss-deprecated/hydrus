@@ -1,27 +1,22 @@
 <div class="collection-actions box-header">Actions</div>
-<p>
-  Your roles in this collection:
-  <%= 
-    rs = @document_fedora.roles_of_person_for_ui(current_user.to_s).join(',').downcase
-    rs = 'None' if rs.size == 0
-  %>
-</p>
 
-<%= form_for(@document_fedora, :method => 'PUT', :html => {:class => "step", :novalidate=>""}) do |f| -%>
-	<% if @document_fedora.is_open %>
-          <button type="submit" class="btn btn-small save-edits"
-                  name="hydrus_collection[publish]" value="false"
-                  id="hydrus_collection_publish">Close Collection</button>
-	<% elsif @document_fedora.is_publishable %>
-    <button type="submit" class="btn btn-small save-edits"
-            name="hydrus_collection[publish]" value="true"
-            id="hydrus_collection_publish">Open Collection</button>
-	<%
-	end
-end %>
+<% if can? :edit, @document_fedora %>
+  <%= form_for(@document_fedora, :method => 'PUT', 
+               :html => {:class => "step", :novalidate=>""}) do |f| -%>
+    <% if @document_fedora.is_open %>
+            <button type="submit" class="btn btn-small save-edits"
+                    name="hydrus_collection[publish]" value="false"
+                    id="hydrus_collection_publish">Close Collection</button>
+    <% elsif @document_fedora.is_publishable %>
+      <button type="submit" class="btn btn-small save-edits"
+              name="hydrus_collection[publish]" value="true"
+              id="hydrus_collection_publish">Open Collection</button>
+    <% end %>
+  <% end %>
+<% end %>
 
-<% if @document_fedora.is_open %>
-  <% if can? :create_items_in, @document_fedora %>
+<% if can? :create_items_in, @document_fedora %>
+  <% if @document_fedora.is_open %>
     <div class="btn-group add-content-dropdown" style="display:none;">
       <button class="btn btn-small">Add new &hellip;</button>
       <button class="btn btn-small dropdown-toggle" data-toggle="dropdown">
@@ -44,14 +39,16 @@ end %>
   <% end %>
 <% end %>
 
-<% if @document_fedora.is_destroyable %>
-  <p class="discard-item">
-    <i class="icon-trash"></i>
-    <a href="#">Discard this collection</a>
-  </p>
-<% else %>
-  <p class="muted">
-    <i class="icon-trash"></i>
-    Cannot discard a published collection
-  </p>
+<% if can? :edit, @document_fedora %>
+  <% if @document_fedora.is_destroyable %>
+    <p class="discard-item">
+      <i class="icon-trash"></i>
+      <a href="#">Discard this collection</a>
+    </p>
+  <% else %>
+    <p class="muted">
+      <i class="icon-trash"></i>
+      Cannot discard a published collection
+    </p>
+  <% end %>
 <% end %>

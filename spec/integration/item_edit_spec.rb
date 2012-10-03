@@ -9,10 +9,10 @@ describe("Item edit", :type => :request, :integration => true) do
     @notice = "Your changes have been saved."
   end
 
-  it "If not logged in, should be redirected to sign-in page" do
+  it "If not logged in, should be redirected to home page" do
     logout
     visit edit_polymorphic_path(@hi)
-    current_path.should == new_user_session_path
+    current_path.should == root_path
   end
 
   it "should be able to edit simple items: abstract, contact, keywords" do

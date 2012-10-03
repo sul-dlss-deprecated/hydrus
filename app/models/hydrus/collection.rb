@@ -1,6 +1,6 @@
 class Hydrus::Collection < Hydrus::GenericObject
 
-  extend  Hydrus::Delegatable
+  extend Hydrus::Delegatable
   extend Hydrus::SolrQueryable
 
   before_save :save_apo
@@ -125,10 +125,6 @@ class Hydrus::Collection < Hydrus::GenericObject
     apo.roles_of_person(user)
   end
 
-  def roles_of_person_for_ui(user)
-    roles_of_person(user).collect {|role| Hydrus::AdminPolicyObject.roles[role]}
-  end
-  
   def add_empty_person_to_role *args
     apo.roleMetadata.add_empty_person_to_role *args
   end

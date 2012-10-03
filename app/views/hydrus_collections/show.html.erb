@@ -101,10 +101,10 @@
 <div class="collection-items">
      <h4>Other contributors to this collection</h4>
 			<dl class="dl-horizontal object-view">
-				<% Hydrus::AdminPolicyObject.roles.each do |key,value| %>
+				<% Hydrus::Responsible.role_labels(:only_labels).each do |role, role_label| %>
 	       <tr class="document <%= cycle("even","odd") %>">
-					<% people = @document_fedora.apo.persons_with_role(key) %>
-          <dt><%=value.pluralize(people.size)%></dt>
+					<% people = @document_fedora.apo.persons_with_role(role) %>
+          <dt><%= role_label.pluralize(people.size) %></dt>
 			    <dd><%= people.size == 0 ? "none" : people.to_a.join(', ') %></dd>
 				<% end %>
 			</dl>

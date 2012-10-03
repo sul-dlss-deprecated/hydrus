@@ -1,6 +1,5 @@
 <div class="well actions-box" id="item-actions">
   <div class="box-header">Actions</div>
-	<p>You are a <%=@document_fedora.collection.roles_of_person_for_ui(current_user.to_s).join(',').downcase%> for this collection.</p>
 
   <fieldset>
     <button type="submit" class="btn btn-small save-edits" name="save" id="save_<%= id %>">Save</button>
@@ -9,4 +8,5 @@
 			<input type="checkbox" <%="checked disabled" if to_bool(@document_fedora.accepted_terms_of_deposit)%>  name="hydrus_item[accepted_terms_of_deposit]" value="true" class="terms_of_deposit" id="terms_<%= id %>" /> I agree to the <a href="#">terms of deposit</a> for the Stanford Digital Repository
     </label>
   </fieldset>
+
 </div>

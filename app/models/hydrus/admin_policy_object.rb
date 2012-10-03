@@ -98,26 +98,6 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
     return deposit_status == "open"
   end
 
-  def self.roles
-     {
-       'hydrus-collection-depositor'      => "Owner",
-       'hydrus-collection-manager'        => "Manager",
-       'hydrus-collection-reviewer'       => "Reviewer",
-       'hydrus-collection-item-depositor' => "Depositor",
-       'hydrus-collection-viewer'         => "Viewer",
-     }
-  end
-
-  def self.roles_help_text
-     {
-       'hydrus-collection-depositor'      => "This user is the collection owner and can perform any action with the collection",
-       'hydrus-collection-manager'        => "These users can edit collection details, and add and review items in the collection",
-       'hydrus-collection-reviewer'       => "These users can review items in the collection, but not add new items",
-       'hydrus-collection-item-depositor' => "These users can add items to the collection, but cannot act as reviewers",
-       'hydrus-collection-viewer'         => "These users can view items in the collection only",
-     }
-  end
-
   # Returns a hash of info needed for licenses in the APO.
   # Keys correspond to the license_option in the OM terminology.
   # Values are displayed in the web form.

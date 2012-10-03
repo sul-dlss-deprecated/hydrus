@@ -1,7 +1,3 @@
-****************
-OCTOBER 2012
-****************
-
 --------
 Roles and Discovery
 --------
@@ -16,28 +12,32 @@ Workflow fixtures. Create proper worflow XML fixture files, and modify rake
 refresh_workflows task to load the files. We need more fine-grained controlled
 over the states of our fixture objects.
 
-Integration tests for dashboard with different users logged in.
-
 Apply gated discovery to search queries.
-
-Role-protect dashboard actions: "Create a new collection" button.
-  integration tests
 
 Tests:
   authorization.rb
   ability.rb
 
-Role-protect Collection actions: various buttons.
-  open collection
-  discard collection
-  close collection
-  add new Item
+  Role-protect Collection actions.
+        open collection
+        discard collection
+        close collection
+        add new Item
 
-Role-protect Item actions: various buttons.
-  submit for approval
-  discard item
-  approve/disapprove/reason
+  Role-protect Item actions.
+        submit for approval
+        discard item
+        approve/disapprove/reason
 
+  Role-protect dashboard actions.
+        create collection.
+
+Investigate bug: create a new collection; go to home page; click search.
+
+person_roles=(). Prune unneeded roles. For example, if user FOO is a collection
+manager, it's pointless to make him a lesser role like reviewer.
+
+Change fixtures so that they don't use anything that could be a real SUNETID.
 
 --------
 UI Redesign
@@ -119,45 +119,3 @@ find any definitive examples in Consul. [waiting on response from Lynn]
 
 Item view page: the actions box div is called "div.collection-actions".
 [Postpone this until we have GG's new design for sidebar, etc.]
-
-****************
-Role overview
-****************
-
-View objects in a catalog listing
-  Anyone with a role.
-  List only those objects in which the user has a role.
-
-View collection
-  Anyone with a role in APO.
-
-View item
-  Anyone with a role in APO or Item.
-
-Create collection
-  hydrus-administrator	            Super users
-  hydrus-collection-creator	        Those who can create new Coll.
-
-Edit collection
-  hydrus-administrator	            Super users
-  hydrus-collection-manager	        Others who can edit the Coll
-  hydrus-collection-depositor	      Did the deposit of the Coll
-
-Create item
-  hydrus-administrator	            Super users
-  hydrus-collection-manager	        Others who can edit the Coll
-  hydrus-collection-depositor	      Did the deposit of the Coll
-  hydrus-collection-item-depositor	Can deposit Items into Coll
-
-Edit item
-  hydrus-administrator	            Super users
-  hydrus-collection-manager	        Others who can edit the Coll
-  hydrus-collection-depositor	      Did the deposit of the Coll
-  hydrus-item-depositor	            Did the deposit of the Item
-  hydrus-item-manager 	            Others who can edit Item
-
-Approve/disapprove item
-  hydrus-administrator	            Super users
-  hydrus-collection-manager	        Others who can edit the Coll
-  hydrus-collection-depositor	      Did the deposit of the Coll
-  hydrus-collection-reviewer	      Reviews Items in Coll

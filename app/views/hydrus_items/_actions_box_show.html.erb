@@ -1,44 +1,57 @@
-	<%= form_for(@document_fedora, :method => 'PUT', :html => {:class => "step", :novalidate=>""}) do |f| -%>
-	<div class="well actions-box collection-actions">
-	  <div class="box-header">Actions</div>
-		<p>You are a <%=@document_fedora.collection.roles_of_person_for_ui(current_user.to_s).join(',').downcase%> for this collection.</p>
-	
-     <%
-        if @document_fedora.is_published
-          unless @document_fedora.is_approved
-     %>
+<%= form_for(@document_fedora, :method => 'PUT',
+             :html => {:class => "step", :novalidate=>""}) do |f| -%>
+
+  <div class="well actions-box collection-actions">
+    <div class="box-header">Actions</div>
+
+        <!-- Approve/disapprove buttons. -->
+        <% if @document_fedora.is_published %>
+          <% if can?(:review, @document_fedora) %>
+            <% unless @document_fedora.is_approved %>
+
+              <p>
+                <button type="submit" class="btn btn-small save-edits"
+                        name="hydrus_item[approve][value]" value="yes"
+                        id="hydrus_item_approve">Approve Item</button>
+              </p>
+              <p>
+                <button type="submit" class="btn btn-small save-edits"
+                        name="hydrus_item[approve][value]" value="no"
+                        id="hydrus_item_disapprove">Disapprove Item</button>
+              </p>
+              <p>
+                  <%= label_tag("hydrus_item_disapproval_reason", "Disapproval reason") %>
+                  <%= text_field_tag("hydrus_item[approve][reason]",
+                                     @document_fedora.disapproval_reason) -%>
+              </p>
+
+            <% end %>
+          <% end %>
+
+        <!-- Submit/Publish button. -->
+        <% elsif @document_fedora.is_publishable %>
+          <% if can?(:edit, @document_fedora) %>
             <p>
               <button type="submit" class="btn btn-small save-edits"
-                      name="hydrus_item[approve][value]" value="yes"
-                      id="hydrus_item_approve">Approve Item</button>
+                      name="hydrus_item[publish]" value="true"
+                      id="hydrus_item_publish">
+                <%= to_bool(@document_fedora.requires_human_approval) ?
+                      'Submit for Approval' : 'Publish Item'  %>
+              </button>
             </p>
-            <p>
-              <button type="submit" class="btn btn-small save-edits"
-                      name="hydrus_item[approve][value]" value="no"
-                      id="hydrus_item_disapprove">Disapprove Item</button>
+          <% end %>
+        <% end %>
+
+        <!-- Delete link (currently a no-op). -->
+        <% if @document_fedora.is_destroyable %>
+          <% if can?(:edit, @document_fedora) %>
+            <p class="discard-item">
+              <i class="icon-trash"></i>
+              <a href="#">Discard <%=@document_fedora.object_type%></a>
             </p>
-            <p>
-                <%= label_tag("hydrus_item_disapproval_reason", "Disapproval reason") %>
-                <%= text_field_tag("hydrus_item[approve][reason]", @document_fedora.disapproval_reason) -%>
-            </p>
-         <% end %>
-			<% elsif @document_fedora.is_publishable %>
-         <p>
-           <button type="submit" class="btn btn-small save-edits"
-                   name="hydrus_item[publish]" value="true"
-                   id="hydrus_item_publish">
-             <%= to_bool(@document_fedora.requires_human_approval) ?
-                   'Submit for Approval' : 'Publish Item'  %>
-           </button>
-         </p>
-			<% 
-			end
-     unless @document_fedora.is_published
-			%>
-       <p class="discard-item">
-         <i class="icon-trash"></i>
-         <a href="#">Discard <%=@document_fedora.object_type%></a>
-       </p>
-			<% end %>
-	</div>
-	<% end %>
+          <% end %>
+        <% end %>
+
+  </div>
+
+<% end %>

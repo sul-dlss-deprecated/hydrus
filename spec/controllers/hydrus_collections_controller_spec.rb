@@ -35,28 +35,27 @@ describe HydrusCollectionsController do
     
   end # Routes and Mapping
 
-  describe "Show Action" do
+  describe "Show Action", :integration => true do
 
     before(:each) do
       @pid = 'druid:oo000oo0003'
     end
 
-    it "should not get fedora document and assign various attributes when not logged in", :integration => true do
+    it "should not get fedora document and assign various attributes when not logged in" do
       controller.stub(:current_user).and_return(mock_user)
       get :show, :id => @pid
       assigns[:document_fedora].should be_nil
-      response.should redirect_to new_user_session_path
+      response.should redirect_to root_path
     end
 
   end
 
-  describe "Update Action" do
+  describe "Update Action", :integration => true do
 
     before(:all) do
       @pid = "druid:oo000oo0003"
     end
 
-    # TODO: convert this to an integration test.
     it "should not allow a user to update an object if you do not have edit permissions" do
       controller.stub(:current_user).and_return(mock_user)
       put :update, :id => @pid

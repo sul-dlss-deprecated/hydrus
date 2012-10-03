@@ -33,14 +33,6 @@ describe Hydrus::AdminPolicyObject do
 
   describe "class methods" do
 
-    describe "roles" do
-
-      it "should have a hash of possible roles" do
-        Hydrus::AdminPolicyObject.roles.should be_a Hash
-      end
-
-    end
-
     it "should define a license_types hash" do
       Hydrus::AdminPolicyObject.license_types.should be_a Hash
     end

@@ -46,6 +46,12 @@ module Hydrus::Authorization
     )
   end
 
+  def self.item_reviewer_roles
+    return Set.new %w(
+      hydrus-collection-reviewer	
+    )
+  end
+
   ####
   # Abilities and related methods.
   ####
@@ -66,6 +72,32 @@ module Hydrus::Authorization
     return collection_creators.include?(user.sunetid)
   end
 
+  # Takes a verb (read or edit), user, and object.
+  # Dispatches to the appropriate can_* method.
+  def self.can_do_it(verb, user, obj)
+    c = obj.hydrus_class_to_s.downcase # 'collection' or 'item'
+    return send("can_#{verb}_#{c}", user, obj)
+  end
+
+  def self.can_read_object(user, obj)
+    return can_do_it('read', user, obj)
+  end
+
+  # Returns true if the given user can view the given Collection.
+  def self.can_read_collection(user, coll)
+    return true if can_create_collections(user)
+    user_roles = coll.roles_of_person(user.sunetid)
+    return user_roles.size > 0
+  end
+
+  # Returns true if the given user can view the given Item.
+  def self.can_read_item(user, item)
+    return true if can_create_collections(user)
+    sid = user.sunetid
+    user_roles = item.roles_of_person(sid) + item.apo.roles_of_person(sid)
+    return user_roles.size > 0
+  end
+
   # Returns true if the given user can create new Items
   # in the given Collection.
   def self.can_create_items_in(user, coll)
@@ -77,8 +109,7 @@ module Hydrus::Authorization
   # Takes a user and a Collection or Item.
   # Returns true if the user can edit the object.
   def self.can_edit_object(user, obj)
-    c = obj.hydrus_class_to_s.downcase      # 'collection' or 'item'
-    return send("can_edit_#{c}", user, obj)
+    return can_do_it('edit', user, obj)
   end
 
   # Returns true if the given user can edit the given Collection.
@@ -94,6 +125,13 @@ module Hydrus::Authorization
     return true if is_administrator(user)
     user_roles = item.roles_of_person(sid) + item.apo.roles_of_person(sid)
     return does_intersect(user_roles, item_editor_roles)
+  end
+
+  # Returns true if the given user can review the given Item.
+  def self.can_review_item(user, item)
+    return true if can_edit_collection(user, item.collection)
+    user_roles = item.apo.roles_of_person(user.sunetid)
+    return does_intersect(user_roles, item_reviewer_roles)
   end
 
 end
