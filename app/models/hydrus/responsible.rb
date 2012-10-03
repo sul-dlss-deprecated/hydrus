@@ -103,4 +103,9 @@ module Hydrus::Responsible
     return h
   end
 
+  def self.roles_for_ui(roles)
+    labels = role_labels(:only_labels)
+    return roles.map { |r| labels[r] }
+  end
+
 end

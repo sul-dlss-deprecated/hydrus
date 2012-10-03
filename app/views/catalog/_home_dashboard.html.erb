@@ -17,8 +17,16 @@
         <% @collections.each do |c| %>
           <tr>
             <td><%= link_to(c.title, polymorphic_path(c)) %></td>
-            <td><%= c.roles_of_person_for_ui(current_user.to_s).join(', ')%></td>
-            <td><%= pluralize(c.hydrus_items.size, 'item')%>: <%= c.item_counts.collect {|state,num| "#{num} #{state}"}.join(', ') %></td>
+            <td>
+              <%=
+                rs = c.roles_of_person(current_user.to_s)
+                Hydrus::Responsible.roles_for_ui(rs).join(', ')
+              %>
+            </td>
+            <td>
+              <%= pluralize(c.hydrus_items.size, 'item')%>:
+              <%= c.item_counts.collect {|state,num| "#{num} #{state}"}.join(', ') %>
+            </td>
           </tr> 
           <% end %>
         </tbody>
