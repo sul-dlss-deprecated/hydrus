@@ -128,6 +128,8 @@ table form {
 
 /* search form */
 #search {
+	float: right;
+	margin-top: 12px;
 	label, h2 {
 		display: inline;
 	}
@@ -139,10 +141,10 @@ table form {
 }
 
 #main {
-	float: right;
+	float: left;
 }
 #sidebar {
-	float: left;
+	float: right;
 }
 
 /* form: radio button groups with embedded select */
@@ -267,7 +269,7 @@ noscript #item-actions, noscript #collection-actions {
 }
 
 #hydrus_items-edit #sidebar, #hydrus_collections-edit #sidebar {
-	position:fixed;
+	// position:fixed;
 	@media (max-width: 768px) {
 		position: relative;
 	}
@@ -412,6 +414,10 @@ noscript #item-actions, noscript #collection-actions {
 			margin-top: 23px;
 		}
 	}
+}
+
+p.homepage-intro {
+	margin: 12px 6px;
 }
 
 h1 {

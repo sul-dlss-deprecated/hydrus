@@ -3,6 +3,16 @@ module Hydrus::AccessControlsEnforcement
   def apply_gated_discovery solr_parameters, user_parameters
   end
 
+  def enforce_show_permissions *args
+    # Just return if the user can read the object.
+    pid = params[:id]
+    return if can?(:read, pid)
+    # Otherwise, redirect to the home page.
+    msg  = "You do not have sufficient privileges to view the requested item."
+    flash[:error] = msg
+    redirect_to(root_path)
+  end
+
   def enforce_edit_permissions *args
     # Just return if the user can edit the object.
     pid = params[:id]

@@ -166,21 +166,24 @@
   				
 <%- end %>
  			</div>
-    <% Hydrus::AdminPolicyObject.roles.each do |role, role_label| %>
+
+    <% Hydrus::Responsible.role_labels(:collection_level).each do |role, h| %>
       <% 
-				if role != 'hydrus-collection-depositor'
-					k = :"apo_person_roles[#{role}]" %>
-	        <div class="row">
-	          <%= hydrus_form_label do %>
-	            <%= f.label k, role_label.pluralize %>
-	          <%- end %>
-	          <%- pwr = @document_fedora.apo_persons_with_role(role) %>
-	          <%= hydrus_form_value do %>
-	            <%= f.text_field k, :value => pwr.to_a.join(', ') %>
-							<p class="help"><%=Hydrus::AdminPolicyObject.roles_help_text[role]%></p>
-	          <%- end %>
-	        </div>
-		  <% end %>
+        role_label = h[:label]
+        help_text  = h[:help]
+        next if role == 'hydrus-collection-depositor'
+        k = :"apo_person_roles[#{role}]"
+      %>
+	      <div class="row">
+	        <%= hydrus_form_label do %>
+	          <%= f.label k, role_label.pluralize %>
+	        <%- end %>
+	        <%- pwr = @document_fedora.apo_persons_with_role(role) %>
+	        <%= hydrus_form_value do %>
+	          <%= f.text_field k, :value => pwr.to_a.join(', ') %>
+						<p class="help"><%=help_text%></p>
+	        <%- end %>
+	      </div>
     <% end %>
    </div>
 

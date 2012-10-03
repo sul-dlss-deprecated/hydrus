@@ -1,9 +1,9 @@
  <div class="well actions-box item-status">
    <div class="box-header">Status</div>
 		<% if @document_fedora.is_published %>
-			<button class="pull-right btn btn-success btn-small" type="button">Published</button>
+			<button class="pull-right btn btn-success btn-mini" type="button">Published</button>
    <% else %>
-			<button class="pull-right btn btn-warning btn-small" type="button">Draft</button>
+			<button class="pull-right btn btn-warning btn-mini" type="button">Draft</button>
 	  <% end %>
 	  <br /><br />
 	 <% unless @document_fedora.is_published %>

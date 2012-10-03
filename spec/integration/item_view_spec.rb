@@ -8,10 +8,10 @@ describe("Item view", :type => :request, :integration => true) do
     @hi    = Hydrus::Item.find @druid
   end
 
-  it "If not logged in, should be redirected to sign-in page" do
+  it "If not logged in, should be redirected to home page" do
     logout
     visit polymorphic_url(@hi)
-    current_path.should == new_user_session_path
+    current_path.should == root_path
   end
 
   it "should redirect to the item page if the requested druid is an item but is visited at the collection page URL" do

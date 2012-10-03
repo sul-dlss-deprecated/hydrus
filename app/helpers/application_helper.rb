@@ -40,6 +40,10 @@ module ApplicationHelper
     render_extra_head_content + content_for(:head)
   end
 
+  def render_contextual_layout
+    controller.controller_name == 'catalog' ? (render "shared/home_contents") : (render "shared/main_contents")
+  end
+
   def hydrus_signin_link
     link_to("Sign in", new_signin_path(:referrer => request.fullpath), :class=>'signin_link', :"data-url" => new_signin_path(:referrer => request.fullpath))
   end

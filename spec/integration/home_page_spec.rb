@@ -9,4 +9,9 @@ describe("Home page", :type => :request, :integration => true) do
     page.should_not have_content("override")
   end
 
+  it "Breadcrumbs should not be displayed" do
+    visit root_path
+    page.should_not have_css("ul.breadcrumb li a")
+  end
+
 end

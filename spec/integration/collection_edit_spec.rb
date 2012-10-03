@@ -9,10 +9,10 @@ describe("Collection edit", :type => :request, :integration => true) do
     @hc             = Hydrus::Collection.find @druid
   end
 
-  it "if not logged in, should be redirected to sign-in page" do
+  it "if not logged in, should be redirected to home page" do
     logout
     visit edit_polymorphic_path(@hc)
-    current_path.should == new_user_session_path
+    current_path.should == root_path
   end
 
   it "can edit Collection descMetadata content" do
@@ -186,14 +186,13 @@ describe("Collection edit", :type => :request, :integration => true) do
       # contains same information.
       rmdiv = find('div#role-management')
       dk    = 'hydrus_collection_apo_person_roles'
-      h     = {}
-      collection_roles=Hydrus::AdminPolicyObject.roles
-      collection_roles.each do |role, v|
+      got   = {}
+      Hydrus::Responsible.role_labels(:collection_level).each do |role, h|
         ids = rmdiv.find("input[id^='#{dk}[#{role}]']")[:value]
         ids = @hc.parse_delimited(ids)
-        h[role] = Set.new(ids) if ids.length > 0 
+        got[role] = Set.new(ids) if ids.length > 0 
       end
-      h.should == role_info
+      got.should == role_info
     end
 
     it "should be able to add/remove persons with various roles" do

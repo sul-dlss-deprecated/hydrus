@@ -119,4 +119,25 @@ describe Hydrus::Responsible do
     @obj.roleMetadata.ng_xml.should be_equivalent_to(exp)
   end
 
+  it "role_labels() should return the expect hash of roles and labels" do
+    k1 = 'hydrus-item-depositor'
+    k2 = 'hydrus-collection-reviewer'
+    # Entire hash of hashes.
+    h = Hydrus::Responsible.role_labels
+    h[k1][:label].should == 'Item Depositor'
+    h[k1][:help].should  =~ /original depositor/
+    h[k2][:label].should == 'Reviewer'
+    h[k2][:help].should  =~ /can review/
+    # Just collection-level roles.
+    Hydrus::Responsible.role_labels(:collection_level).keys.size.should == h.keys.size - 2
+    # Just labels.
+    h = Hydrus::Responsible.role_labels(:only_labels)
+    h[k1].should == 'Item Depositor'
+    h[k2].should == 'Reviewer'
+    # Just help text.
+    h = Hydrus::Responsible.role_labels(:only_help)
+    h[k1].should  =~ /original depositor/
+    h[k2].should  =~ /can review/
+  end
+  
 end

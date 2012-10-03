@@ -10,10 +10,16 @@ describe("Collection view", :type => :request, :integration => true) do
     @hc    = Hydrus::Collection.find @druid
   end
 
-  it "If not logged in, should be redirected to sign-in page" do
+  it "If not logged in, should be redirected to home page" do
     logout
     visit polymorphic_url(@hc)
-    current_path.should == new_user_session_path
+    current_path.should == root_path
+  end
+
+  it "Breadcrumbs should be displayed" do
+    login_as_archivist1
+    visit polymorphic_path(@hc)
+    page.should have_selector("ul.breadcrumb li a", :text => "Home")
   end
 
   it "should redirect to the collection page if the requested druid is a collection but is visited at the item page URL" do
