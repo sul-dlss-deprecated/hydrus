@@ -12,30 +12,32 @@
     <%= render_contextual_navigation(@document_fedora) %>
   </div>
 </div>
-<h3><%= hydrus_object_setting_value(@document_fedora.title) %></h3>
+<div id="object-content-wrapper">
+  <h3><%= hydrus_object_setting_value(@document_fedora.title) %></h3>
 
-<%= render "#{view_path_from_model(@document_fedora)}/events_metadata" %>
+  <%= render "#{view_path_from_model(@document_fedora)}/events_metadata" %>
 
-<div class="event-history">
-  <h4>Event history for this <%= @document_fedora.class.to_s.gsub("Hydrus::", "") %></h4>
-  <table class="hydrus-striped-table table-striped table-condensed">
-    <thead>
-      <tr>
-        <th class="title">Event</th>
-        <th class="depositor">Initiated By</th>
-        <th class="type">Type</th>
-        <th class="date">Date</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @document_fedora.get_hydrus_events.each do |event| %>
-        <tr class="document <%= cycle("even","odd") %>">
-          <td><%= event.text %></td>
-          <td><%= event.who %></td>
-          <td><%= event.type %></td>
-          <td><%= formatted_datetime(event.when, :datetime) %></td>
+  <div class="event-history">
+    <h4>Event history for this <%= @document_fedora.class.to_s.gsub("Hydrus::", "") %></h4>
+    <table class="hydrus-striped-table table-striped table-condensed">
+      <thead>
+        <tr>
+          <th class="title">Event</th>
+          <th class="depositor">Initiated By</th>
+          <th class="type">Type</th>
+          <th class="date">Date</th>
         </tr>
-      <% end %>
-    </tbody>
-  </table>
-</div>
+      </thead>
+      <tbody>
+        <% @document_fedora.get_hydrus_events.each do |event| %>
+          <tr class="document <%= cycle("even","odd") %>">
+            <td><%= event.text %></td>
+            <td><%= event.who %></td>
+            <td><%= event.type %></td>
+            <td><%= formatted_datetime(event.when, :datetime) %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div> <!-- object-content-wrapper --> 

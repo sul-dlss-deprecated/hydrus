@@ -19,186 +19,188 @@
 		<%=render :partial=>'navigation' %>
   </div>
 </div>
-<h3><%= hydrus_object_setting_value(@document_fedora.title) %></h3>
-<h4 class="muted">Collection Settings</h4>
+<div id="object-content-wrapper">
+  <h3><%= hydrus_object_setting_value(@document_fedora.title) %></h3>
+  <h4 class="muted">Collection Settings</h4>
 
-  <%= hydrus_form_header(:required=>true, :first=>true) {"Name, description, contact"} %>
-  <div class="row">
-    <%= hydrus_form_label do %>
-      <%= f.label :title, "Collection name" %>
-    <%- end -%>
-    <%= hydrus_form_value do %>
-      <%= f.text_field :title, :value => (@document_fedora.title || ""), :required => true %>
-    <%- end -%>
-  </div>
-  <div class="row">
-    <%= hydrus_form_label do %>
-      <%= f.label :abstract, "Description" %>
-    <%- end -%>
-    <%= hydrus_form_value(:class=>"short-textarea") do %>
-      <%= f.text_area :abstract, :value => (@document_fedora.abstract || ""),:required => true %>
-    <%- end -%>
-  </div>
-  <div class="row">
-    <%= hydrus_form_label do %>
-      Contact email
-    <%- end -%>
-    <%= hydrus_form_value do %>
-      <%= f.text_field :contact, :value => (@document_fedora.contact || ""),:required => true%>
-    <%- end -%>
-  </div>
-
-  <%= hydrus_form_header {"Links to related information"} %>
-  <div id="related-items" class="destroy-group">
-    <%= render "related_items" %>
-  </div>
-  <div class="row">
-    <div class="span8 offset1">
-      <%= button_tag("Add another link", :name=>"add_link", :"data-attribute" => "add_link", :id=>"add_link", :class=>"btn", :value=>@document_fedora.related_items.length) %>
-    </div>
-  </div>
-
-  <%= hydrus_form_header(:required=>true) {"Release and visibility of content"} %>
-  <div id="content-visibility">
-    <p>Content in SDR is intended to be shared. You can impose a delay (embargo) before
-    content in this collection is released for public or Stanford-only discovery
-    and download.</p>
-
-    <div class="row radio-select-group">
-      <%= hydrus_form_value do %>
-        <% Hydrus::AdminPolicyObject.embargo_types.each do |emb_opt, emb_text| %>
-          <div class="row radio-select-option">
-            <div class="span1 radio-input">
-              <%= f.radio_button 'embargo_option', emb_opt %>
-            </div>
-            <div class="span7 radio-label">
-              <%= f.label        'embargo_option', emb_text, :value => emb_opt %>
-              <%# Don't include embargo period select if embargo type is 'none' %>
-              <% unless emb_opt == 'none' %>
-                <%= f.select "embargo_#{emb_opt}".to_sym, options_for_select(Hydrus::AdminPolicyObject.embargo_terms, @document_fedora.send("embargo_#{emb_opt}")), {:prompt => 'Select embargo'}, {:class => 'inline-select right', :id => "embargo_option_#{emb_opt}" } %>
-              <% end %>
-            </div>
-          </div>
-        <% end %>
-      <% end %>
-    </div>
-
-    <p class="form-section-para">After its release date, content in this collection can be discovered and downloaded by:</p>
+    <%= hydrus_form_header(:required=>true, :first=>true) {"Name, description, contact"} %>
     <div class="row">
+      <%= hydrus_form_label do %>
+        <%= f.label :title, "Collection name" %>
+      <%- end -%>
       <%= hydrus_form_value do %>
-        <% Hydrus::AdminPolicyObject.visibility_types.each do |vis_opt, vis_text| %>
-          <div class="row">
-            <div class="span1 radio-input">
-              <%= f.radio_button 'visibility_option_value', vis_opt %>
-            </div>
-            <div class="span7 radio-label">
-              <%= f.label        'visibility_option_value', vis_text, :value => vis_opt %>
-            </div>
-          </div>
-        <% end %>
-      <% end %>
+        <%= f.text_field :title, :value => (@document_fedora.title || ""), :required => true %>
+      <%- end -%>
     </div>
-
-    <p class="form-section-para">Before being released, content in this collection must be
-                                 approved by the collection manager or a reviewer:</p>
     <div class="row">
+      <%= hydrus_form_label do %>
+        <%= f.label :abstract, "Description" %>
+      <%- end -%>
+      <%= hydrus_form_value(:class=>"short-textarea") do %>
+        <%= f.text_area :abstract, :value => (@document_fedora.abstract || ""),:required => true %>
+      <%- end -%>
+    </div>
+    <div class="row">
+      <%= hydrus_form_label do %>
+        Contact email
+      <%- end -%>
       <%= hydrus_form_value do %>
-        <% %w(no yes).each do |opt| %>
-          <div class="row">
-            <div class="span1 radio-input">
-              <%= f.radio_button 'requires_human_approval', opt %>
-            </div>
-            <div class="span7 radio-label">
-              <%= f.label 'requires_human_approval', opt.capitalize, :value => opt %>
-            </div>
-          </div>
-        <% end %>
-      <% end %>
+        <%= f.text_field :contact, :value => (@document_fedora.contact || ""),:required => true%>
+      <%- end -%>
     </div>
 
-  </div>
-
-  <%= hydrus_form_header {"License"} %>
-  <div id="license">
-    <p>After its release date, items in this collection should be covered by:</p>
-    <div class="row radio-select-group">
-      <%= hydrus_form_value do %>
-        <% Hydrus::AdminPolicyObject.license_types.each do |lic_opt, lic_text| %>
-          <div class="row radio-select-option">
-            <div class="span1 radio-input">
-              <%= f.radio_button 'license_option', lic_opt %>
-            </div>
-            <div class="span7 radio-label">
-              <%= f.label('license_option', lic_text, :value => lic_opt) %>
-              <%# Don't include license select dropdown if license type is 'no license' %>
-              <% unless lic_opt == 'none' %>
-                <%= f.select(
-                      "license_#{lic_opt}".to_sym,
-                      grouped_options_for_select(
-                        Hydrus::Collection.licenses,
-                        @document_fedora.send("license_#{lic_opt}")
-                      ),
-                      {:prompt => 'Select license'},
-                      {:class => 'inline-select right', :id => "license_option_#{lic_opt}" }
-                    )
-                %>
-              <% end %>
-            </div>
-          </div>
-        <% end %>
-      <% end %>
+    <%= hydrus_form_header {"Links to related information"} %>
+    <div id="related-items" class="destroy-group">
+      <%= render "related_items" %>
     </div>
-  </div>
+    <div class="row">
+      <div class="span8 offset1">
+        <%= button_tag("Add another link", :name=>"add_link", :"data-attribute" => "add_link", :id=>"add_link", :class=>"btn", :value=>@document_fedora.related_items.length) %>
+      </div>
+    </div>
 
-  <%= hydrus_form_header {"Allow others to contribute to this collection"} %>
+    <%= hydrus_form_header(:required=>true) {"Release and visibility of content"} %>
+    <div id="content-visibility">
+      <p>Content in SDR is intended to be shared. You can impose a delay (embargo) before
+      content in this collection is released for public or Stanford-only discovery
+      and download.</p>
 
-  <div id="role-management">
-    <p>Provide a SUNet ID for each person who can view, add, or review items in this
-       collection, or who can manage the collection. Separate multiple IDs with a comma
-       or enter on a separate line.</p>
-			  <div class="row">
-				 <%= hydrus_form_label do %>
-				  	<%= f.label :'apo_person_roles[hydrus-collection-depositor]', 'Owner' %>
-				  <%- end %>
-				<%= hydrus_form_value do %>
-						<%= f.text_field :'apo_person_roles[hydrus-collection-depositor]', :value=>@document_fedora.apo_persons_with_role('hydrus-collection-depositor').first, :readonly=>true%>
-						<p class="help">This is the owner of the collection, and cannot be changed</p>
-  				
-<%- end %>
- 			</div>
+      <div class="row radio-select-group">
+        <%= hydrus_form_value do %>
+          <% Hydrus::AdminPolicyObject.embargo_types.each do |emb_opt, emb_text| %>
+            <div class="row radio-select-option">
+              <div class="span1 radio-input">
+                <%= f.radio_button 'embargo_option', emb_opt %>
+              </div>
+              <div class="span7 radio-label">
+                <%= f.label        'embargo_option', emb_text, :value => emb_opt %>
+                <%# Don't include embargo period select if embargo type is 'none' %>
+                <% unless emb_opt == 'none' %>
+                  <%= f.select "embargo_#{emb_opt}".to_sym, options_for_select(Hydrus::AdminPolicyObject.embargo_terms, @document_fedora.send("embargo_#{emb_opt}")), {:prompt => 'Select embargo'}, {:class => 'inline-select right', :id => "embargo_option_#{emb_opt}" } %>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
 
-    <% Hydrus::Responsible.role_labels(:collection_level).each do |role, h| %>
-      <% 
-        role_label = h[:label]
-        help_text  = h[:help]
-        next if role == 'hydrus-collection-depositor'
-        k = :"apo_person_roles[#{role}]"
-      %>
-	      <div class="row">
-	        <%= hydrus_form_label do %>
-	          <%= f.label k, role_label.pluralize %>
-	        <%- end %>
-	        <%- pwr = @document_fedora.apo_persons_with_role(role) %>
-	        <%= hydrus_form_value do %>
-	          <%= f.text_field k, :value => pwr.to_a.join(', ') %>
-						<p class="help"><%=help_text%></p>
-	        <%- end %>
-	      </div>
-    <% end %>
-   </div>
+      <p class="form-section-para">After its release date, content in this collection can be discovered and downloaded by:</p>
+      <div class="row">
+        <%= hydrus_form_value do %>
+          <% Hydrus::AdminPolicyObject.visibility_types.each do |vis_opt, vis_text| %>
+            <div class="row">
+              <div class="span1 radio-input">
+                <%= f.radio_button 'visibility_option_value', vis_opt %>
+              </div>
+              <div class="span7 radio-label">
+                <%= f.label        'visibility_option_value', vis_text, :value => vis_opt %>
+              </div>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+
+      <p class="form-section-para">Before being released, content in this collection must be
+                                   approved by the collection manager or a reviewer:</p>
+      <div class="row">
+        <%= hydrus_form_value do %>
+          <% %w(no yes).each do |opt| %>
+            <div class="row">
+              <div class="span1 radio-input">
+                <%= f.radio_button 'requires_human_approval', opt %>
+              </div>
+              <div class="span7 radio-label">
+                <%= f.label 'requires_human_approval', opt.capitalize, :value => opt %>
+              </div>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+
+    </div>
+
+    <%= hydrus_form_header {"License"} %>
+    <div id="license">
+      <p>After its release date, items in this collection should be covered by:</p>
+      <div class="row radio-select-group">
+        <%= hydrus_form_value do %>
+          <% Hydrus::AdminPolicyObject.license_types.each do |lic_opt, lic_text| %>
+            <div class="row radio-select-option">
+              <div class="span1 radio-input">
+                <%= f.radio_button 'license_option', lic_opt %>
+              </div>
+              <div class="span7 radio-label">
+                <%= f.label('license_option', lic_text, :value => lic_opt) %>
+                <%# Don't include license select dropdown if license type is 'no license' %>
+                <% unless lic_opt == 'none' %>
+                  <%= f.select(
+                        "license_#{lic_opt}".to_sym,
+                        grouped_options_for_select(
+                          Hydrus::Collection.licenses,
+                          @document_fedora.send("license_#{lic_opt}")
+                        ),
+                        {:prompt => 'Select license'},
+                        {:class => 'inline-select right', :id => "license_option_#{lic_opt}" }
+                      )
+                  %>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+
+    <%= hydrus_form_header {"Allow others to contribute to this collection"} %>
+
+    <div id="role-management">
+      <p>Provide a SUNet ID for each person who can view, add, or review items in this
+         collection, or who can manage the collection. Separate multiple IDs with a comma
+         or enter on a separate line.</p>
+  			  <div class="row">
+  				 <%= hydrus_form_label do %>
+  				  	<%= f.label :'apo_person_roles[hydrus-collection-depositor]', 'Owner' %>
+  				  <%- end %>
+  				<%= hydrus_form_value do %>
+  						<%= f.text_field :'apo_person_roles[hydrus-collection-depositor]', :value=>@document_fedora.apo_persons_with_role('hydrus-collection-depositor').first, :readonly=>true%>
+  						<p class="help">This is the owner of the collection, and cannot be changed</p>
+    				
+  <%- end %>
+   			</div>
+
+      <% Hydrus::Responsible.role_labels(:collection_level).each do |role, h| %>
+        <% 
+          role_label = h[:label]
+          help_text  = h[:help]
+          next if role == 'hydrus-collection-depositor'
+          k = :"apo_person_roles[#{role}]"
+        %>
+  	      <div class="row">
+  	        <%= hydrus_form_label do %>
+  	          <%= f.label k, role_label.pluralize %>
+  	        <%- end %>
+  	        <%- pwr = @document_fedora.apo_persons_with_role(role) %>
+  	        <%= hydrus_form_value do %>
+  	          <%= f.text_field k, :value => pwr.to_a.join(', ') %>
+  						<p class="help"><%=help_text%></p>
+  	        <%- end %>
+  	      </div>
+      <% end %>
+     </div>
 
 
-  <noscript>
-			<div class="well actions-box" id="collection-actions">
-    		<%= render :partial => "actions_box_edit", :locals => {:id=>"nojs"}%>
-  		</div>
-</noscript>
+    <noscript>
+  			<div class="well actions-box" id="collection-actions">
+      		<%= render :partial => "actions_box_edit", :locals => {:id=>"nojs"}%>
+    		</div>
+  </noscript>
 
-  <% render(
-       :partial => "hydra/permissions/index",
-       :locals  => { :document => @document_fedora, :asset_id => params[:id] }
-     )
-  %>
+    <% render(
+         :partial => "hydra/permissions/index",
+         :locals  => { :document => @document_fedora, :asset_id => params[:id] }
+       )
+    %>
 
-<% end %>
+  <% end %>
+</div> <!-- object-content-wrapper --> 
 <div id="druid-footer"><%= @document_fedora.pid %></div>

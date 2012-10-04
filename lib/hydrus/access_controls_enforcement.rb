@@ -46,7 +46,7 @@ module Hydrus::AccessControlsEnforcement
       path = polymorphic_path(Hydrus::Collection.find(coll_pid))
     else
       # User wants to create a Collection.
-      return if can?(:create, Hydrus::Collection)
+      return if can?(:create_collections, Hydrus::Collection)
       msg = "You do not have sufficient privileges to create new collections."
       path = root_path
     end

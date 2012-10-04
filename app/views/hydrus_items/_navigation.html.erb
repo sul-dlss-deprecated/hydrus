@@ -1,4 +1,4 @@
-<ul class="nav nav-tabs">
+<ul class="nav nav-pills">
   <li<%= " class='active'" if params[:action] == "show" %>><%= link_to("View Draft", polymorphic_path(@document_fedora)) %></li>
   <li<%= " class='active'" if ["edit", "update"].include?(params[:action]) %>><%= link_to("Edit Draft", edit_polymorphic_path(@document_fedora)) %></li>
   <li<%= " class='active'" if params[:controller] == "events" %>><%= link_to("History", polymorphic_path([@document_fedora, :events])) %></li>

@@ -34,10 +34,8 @@ Workflow fixtures. Create proper worflow XML fixture files, and modify rake
 refresh_workflows task to load the files. We need more fine-grained controlled
 over the states of our fixture objects.
 
-person_roles=(). Prune unneeded roles. For example, if user FOO is a collection
+person_roles=(). Prune unneeded roles. For example, if user X is a collection
 manager, it's pointless to make him a lesser role like reviewer.
-
-Change fixtures so that they don't use anything that could be a real SUNETID.
 
 --------
 UI Redesign
@@ -66,8 +64,10 @@ After finishing more thorough UI rework, look at:
 Update search results page; UI redesign degraded formatting of it.
 
 --------
-Technical Debt
+Misc implementation tasks
 --------
+
+Change fixtures so that they don't use anything that could be a real SUNETID.
 
 Deployment to hydrus-test.stanford.edu is a hassle. In particular, it's not easy
 to get the latest fixture/file content up-to-date.
