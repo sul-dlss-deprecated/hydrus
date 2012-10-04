@@ -7,12 +7,12 @@ describe Hydrus::HydrusPropertiesDS do
     @ds_end="</hydrusProperties>"
     xml = <<-EOF
       #{@ds_start}
-        <acceptedTermsOfDeposit>
+        <usersAcceptedTermsOfDeposit>
   	    	<user dateAccepted="2011-09-02 01:02:32 -0700">cardinal</user>
         	<user dateAccepted="2012-05-02 12:02:44 -0700">crimson</user>
         	<user dateAccepted="2011-10-02 02:05:31 -0700">cornellian</user>
         	<user dateAccepted="2011-10-02 02:05:31 -0700">mhamster</user>
-        </acceptedTermsOfDeposit>
+        </usersAcceptedTermsOfDeposit>
         <requiresHumanApproval>no</requiresHumanApproval>
         <disapprovalReason>Idiota</disapprovalReason>
       #{@ds_end}
@@ -22,8 +22,8 @@ describe Hydrus::HydrusPropertiesDS do
   
   it "should get expected values from OM terminology" do
     tests = [
-      [[:accepted_terms_of_deposit,:user],%w{cardinal crimson cornellian mhamster}],
-      [[:accepted_terms_of_deposit,:user,:date_accepted],["2011-09-02 01:02:32 -0700","2012-05-02 12:02:44 -0700","2011-10-02 02:05:31 -0700","2011-10-02 02:05:31 -0700"]],
+      [[:users_accepted_terms_of_deposit,:user],%w{cardinal crimson cornellian mhamster}],
+      [[:users_accepted_terms_of_deposit,:user,:date_accepted],["2011-09-02 01:02:32 -0700","2012-05-02 12:02:44 -0700","2011-10-02 02:05:31 -0700","2011-10-02 02:05:31 -0700"]],
       [:requires_human_approval, ["no"]],
       [:disapproval_reason, ["Idiota"]],
     ]
@@ -43,15 +43,13 @@ describe Hydrus::HydrusPropertiesDS do
   end
 
   it "should be able to add a user who accepted the terms of deposit" do
-      user_node = '<acceptedTermsOfDeposit><user dateAccepted="10-02-2012 00:00:00">foo</user></acceptedTermsOfDeposit>'
+      user_node = '<usersAcceptedTermsOfDeposit><user dateAccepted="10-02-2012 00:00:00">foo</user></usersAcceptedTermsOfDeposit>'
       @exp_xml = noko_doc([
         @ds_start,
         user_node,
         @ds_end,
       ].join '')
       @dsdoc   = Hydrus::HydrusPropertiesDS.from_xml("#{@ds_start}#{@ds_end}")
-      # @dsdoc.add_child_node(@dsdoc.ng_xml.root,:accepted_terms_of_deposit)
-      # puts @dsdoc.ng_xml
      @dsdoc.insert_user_accepting_terms_of_deposit('foo','10-02-2012 00:00:00')
      @dsdoc.ng_xml.should be_equivalent_to @exp_xml
   end

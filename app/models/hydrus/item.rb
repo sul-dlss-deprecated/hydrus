@@ -29,6 +29,7 @@ class Hydrus::Item < Hydrus::GenericObject
     ],
     "hydrusProperties" => [
       [:reviewed_release_settings, true   ],
+      [:accepted_terms_of_deposit, true   ],      
     ]
   )
 
@@ -59,6 +60,8 @@ class Hydrus::Item < Hydrus::GenericObject
     item.roleMetadata.add_person_with_role(user, 'hydrus-item-depositor')
     # Add event.
     item.events.add_event('hydrus', user, 'Item created')
+    # Check to see if this user needs to agree again for this new item, if not, indicate agreement has already occured automatically
+    item.accepted_terms_of_deposit=(!item.requires_terms_acceptance(user.to_s,coll)).to_s  
     # Save and return.
     item.save(:no_edit_logging => true)
     return item
@@ -78,20 +81,20 @@ class Hydrus::Item < Hydrus::GenericObject
     end
   end
 
-  # indicates if this user has accepted a terms of deposit for any other item in this collection and less than 1 year has passed since then
-  def accepted_terms_of_deposit
-    return false unless collection # there should always be an associated collection, but unit tests will break unless this check is here
-    users=collection.users_accepted_terms_of_deposit # get the users who have accepted the terms of deposit
-    if users && users.keys.include?(item_depositor_id) # if there are users, find out if the current depositor is one of them, and if so, if they have agreed within the last year
-      return (Time.now - 1.year) < collection.users_accepted_terms_of_deposit[item_depositor_id].to_datetime
+  # indicates if this item has an accepted terms of deposit, or if the supplied user (logged in user) has accepted a terms of deposit for another item in this collection within the last year
+  # you can pass in a specific collection to check, if not specified, defaults to this item's collection (useful when creating new items)
+  def requires_terms_acceptance(user,coll=self.collection)
+    if to_bool(accepted_terms_of_deposit) # if this item has previously been accepted, no further checks are needed
+      return false 
     else
-      return false
+      # if this item has not been accepted, let's look at the collection
+      users=coll.users_accepted_terms_of_deposit # get the users who have accepted the terms of deposit for any other items in this collection
+      if users && users.keys.include?(user) # if there are users, find out if the supplied user is one of them
+        return (Time.now - 1.year) > coll.users_accepted_terms_of_deposit[user].to_datetime # if so, have agreed within the last year?
+      else
+        return true
+      end
     end
-  end
-  
-  def accept_terms_of_deposit(user=item_depositor_id)
-    self.collection.accept_terms_of_deposit(user,Time.now)
-    events.add_event('hydrus', user, 'Terms of deposit accepted')
   end
     
   def requires_human_approval
@@ -173,8 +176,8 @@ class Hydrus::Item < Hydrus::GenericObject
   
   # the user must accept the terms of deposit to publish
   def must_accept_terms_of_deposit
-     if !accepted_terms_of_deposit
-       errors.add(:terms_of_deposit, "must be accepted once each year per collection")
+     if to_bool(accepted_terms_of_deposit) != true
+       errors.add(:terms_of_deposit, "must be accepted")
      end
   end
 
@@ -183,6 +186,13 @@ class Hydrus::Item < Hydrus::GenericObject
     if to_bool(reviewed_release_settings) != true
       errors.add(:release_settings, "must be reviewed")
     end
+  end
+  
+  # accepts terms of deposit for the given user
+  def accept_terms_of_deposit(user)
+    self.accepted_terms_of_deposit="true"
+    self.collection.accept_terms_of_deposit(user,Time.now) # update the collection level user acceptance list
+    events.add_event('hydrus', user, 'Terms of deposit accepted')
   end
   
   # Returns the Item's license, if present.

@@ -6,7 +6,9 @@ class Hydrus::HydrusPropertiesDS < ActiveFedora::NokogiriDatastream
   set_terminology do |t|
     t.root :path => 'hydrusProperties'
     
-    t.accepted_terms_of_deposit(:path => 'acceptedTermsOfDeposit') do
+    t.accepted_terms_of_deposit :path=> 'acceptedTermsOfDeposit'
+    
+    t.users_accepted_terms_of_deposit(:path => 'usersAcceptedTermsOfDeposit') do
       t.user do
         t.date_accepted :path=> {:attribute => 'dateAccepted'}
       end 
@@ -24,8 +26,8 @@ class Hydrus::HydrusPropertiesDS < ActiveFedora::NokogiriDatastream
       xml.user(username,:dateAccepted => date_accepted)
   end
 
-  define_template :accepted_terms_of_deposit do |xml|
-      xml.acceptedTermsOfDeposit
+  define_template :users_accepted_terms_of_deposit do |xml|
+      xml.useersAcceptedTermsOfDeposit
   end
 
   # Empty XML document.
@@ -36,9 +38,9 @@ class Hydrus::HydrusPropertiesDS < ActiveFedora::NokogiriDatastream
   end
   
   def insert_user_accepting_terms_of_deposit(user,date_accepted)
-    root_node=find_by_terms(:accepted_terms_of_deposit).first
+    root_node=find_by_terms(:users_accepted_terms_of_deposit).first
     if root_node.nil?
-      root_node=add_hydrus_child_node(ng_xml.root,:accepted_terms_of_deposit)
+      root_node=add_hydrus_child_node(ng_xml.root,:users_accepted_terms_of_deposit)
     end
     add_hydrus_child_node(root_node, :user, user, date_accepted)
   end

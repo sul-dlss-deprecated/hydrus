@@ -101,8 +101,8 @@
         <hydrusProperties>
           <requiresHumanApproval>no</requiresHumanApproval>
           <collectionDepositor>ggreen</collectionDepositor>
-		      <acceptedTermsOfDeposit>
-		      </acceptedTermsOfDeposit>
+		      <usersAcceptedTermsOfDeposit>
+		      </usersAcceptedTermsOfDeposit>
         </hydrusProperties>
       </foxml:xmlContent>
     </foxml:datastreamVersion>

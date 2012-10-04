@@ -106,12 +106,12 @@
         <hydrusProperties>
           <requiresHumanApproval>no</requiresHumanApproval>
           <collectionDepositor>ggreen</collectionDepositor>
-		      <acceptedTermsOfDeposit>
+		      <usersAcceptedTermsOfDeposit>
 			    	<user dateAccepted="2011-09-02 01:02:32 -0700">cardinal</user>
 		      	<user dateAccepted="2012-05-02 12:02:44 -0700">crimson</user>
 		      	<user dateAccepted="2011-10-02 02:05:31 -0700">cornellian</user>
 		      	<user dateAccepted="2011-10-02 02:05:31 -0700">mhamster</user>
-		      </acceptedTermsOfDeposit>
+		      </usersAcceptedTermsOfDeposit>
         </hydrusProperties>
       </foxml:xmlContent>
     </foxml:datastreamVersion>

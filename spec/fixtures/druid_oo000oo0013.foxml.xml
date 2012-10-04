@@ -58,6 +58,7 @@
       <foxml:xmlContent>
         <hydrusProperties>
 		  <reviewedReleaseSettings>true</reviewedReleaseSettings>		  
+		      <acceptedTermsOfDeposit>true</acceptedTermsOfDeposit>
         </hydrusProperties>
       </foxml:xmlContent>
     </foxml:datastreamVersion>

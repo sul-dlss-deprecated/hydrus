@@ -106,7 +106,7 @@ class Hydrus::Collection < Hydrus::GenericObject
   # returns a hash of depositors for this collection that have accepted the terms of deposit for an item in that collection
   def users_accepted_terms_of_deposit
     result={}
-    hydrusProperties.find_by_terms(:accepted_terms_of_deposit,:user).each do |node|
+    hydrusProperties.find_by_terms(:users_accepted_terms_of_deposit,:user).each do |node|
       result.merge!(node.content => node['dateAccepted'])
     end
     return result

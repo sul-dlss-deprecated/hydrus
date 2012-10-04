@@ -194,7 +194,8 @@
       CREATED="2011-07-05T20:49:25.801Z" MIMETYPE="text/xml" SIZE="345">
       <foxml:xmlContent>
         <hydrusProperties>
- 		  <reviewedReleaseSettings>true</reviewedReleaseSettings>		  
+ 		  <reviewedReleaseSettings>true</reviewedReleaseSettings>		
+		      <acceptedTermsOfDeposit>true</acceptedTermsOfDeposit>  
         </hydrusProperties>
       </foxml:xmlContent>
     </foxml:datastreamVersion>
