@@ -27,7 +27,7 @@ class Hydrus::HydrusPropertiesDS < ActiveFedora::NokogiriDatastream
   end
 
   define_template :users_accepted_terms_of_deposit do |xml|
-      xml.useersAcceptedTermsOfDeposit
+      xml.usersAcceptedTermsOfDeposit
   end
 
   # Empty XML document.
