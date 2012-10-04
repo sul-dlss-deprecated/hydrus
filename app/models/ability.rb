@@ -17,9 +17,7 @@ class Ability
 
     # Create.
 
-    can(:create, Hydrus::Collection) do |obj|
-      AUTH.can_create_collections(user)
-    end
+    can(:create_collections, :all) if AUTH.can_create_collections(user)
 
     can(:create_items_in, [String, Hydrus::Collection]) do |obj|
       AUTH.can_create_items_in(user, get_fedora_object(obj))
@@ -33,17 +31,17 @@ class Ability
 
     cannot([:edit, :update], SolrDocument)
 
-    # Destroy.
-
-    cannot(:destroy, String)
-    cannot(:destroy, ActiveFedora::Base)
-    cannot(:destroy, SolrDocument)
-
     # Review (approve/disapprove).
 
     can(:review, [String, ActiveFedora::Base]) do |obj|
       AUTH.can_review_item(user, get_fedora_object(obj))
     end
+
+    # Destroy.
+
+    cannot(:destroy, String)
+    cannot(:destroy, ActiveFedora::Base)
+    cannot(:destroy, SolrDocument)
 
   end
 
