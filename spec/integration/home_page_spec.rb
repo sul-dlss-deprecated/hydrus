@@ -6,7 +6,7 @@ describe("Home page", :type => :request, :integration => true) do
     visit root_path
     page.should have_content("Stanford Digital Repository")
     page.should have_content("SDR")
-    page.should_not have_content("override")
+    page.should_not have_content("active collections")
   end
 
   it "Breadcrumbs should not be displayed" do

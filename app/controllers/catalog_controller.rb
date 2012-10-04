@@ -127,4 +127,16 @@ class CatalogController < ApplicationController
     super
   end
 
+  def enforce_index_permissions
+    if (current_user.nil? and has_search_parameters?)
+      msg  = "You must sign in before searching."
+      flash[:error] = msg
+      redirect_to(new_user_session_path)
+    end
+  end
+
+  def has_search_parameters?
+    return not(params[:q].blank? and params[:f].blank? and params[:search_field].blank?)
+  end
+
 end 
