@@ -112,6 +112,17 @@ class Hydrus::Collection < Hydrus::GenericObject
     return result
   end
   
+  # a user accepts the terms of deposit, either update the time (if user has done this before) or add a new node
+  def accept_terms_of_deposit(user,date_accepted)
+    existing_user=hydrusProperties.ng_xml.xpath("//user[text()='#{user}']")
+    if existing_user.size == 0 # user not in there yet, so add new node
+      hydrusProperties.insert_user_accepting_terms_of_deposit(user,date_accepted)
+    else # update date of existing node for this user
+      existing_user[0]['dateAccepted']=date_accepted.to_s 
+    end
+    save
+  end
+  
   def is_open
     return apo.is_open
   end
@@ -133,6 +144,10 @@ class Hydrus::Collection < Hydrus::GenericObject
     apo.roles_of_person(user)
   end
 
+  def roles_of_person_for_ui(user)
+    roles_of_person(user).collect {|role| Hydrus::AdminPolicyObject.roles[role]}
+  end
+  
   def add_empty_person_to_role *args
     apo.roleMetadata.add_empty_person_to_role *args
   end

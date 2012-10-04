@@ -82,10 +82,6 @@
     <foxml:datastreamVersion ID="administrativeMetadata.0" LABEL="Administrative Metadata" CREATED="2011-07-05T20:59:01.385Z" MIMETYPE="text/xml" SIZE="1186">
       <foxml:xmlContent>
         <administrativeMetadata objectId="druid:oo000oo0008">
-          <relationships xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:fedora="info:fedora/fedora-system:def/relations-external#">
-            <fedora:isMemberOf rdf:resource="info:fedora/druid:oo000oo0003" />
-            <fedora:isMemberOfCollection rdf:resource="info:fedora/druid:oo000oo0003" />
-          </relationships>
           <hydrus>
             <depositStatus>open</depositStatus>
             <reviewRequired>yes</reviewRequired>
