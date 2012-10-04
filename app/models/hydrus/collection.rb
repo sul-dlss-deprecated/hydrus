@@ -100,13 +100,15 @@ class Hydrus::Collection < Hydrus::GenericObject
         approve() # Collections never require human approval, even when their Items do.
       end
       unless recipients.blank?
-        HydrusMailer.open_notification(:to => recipients.join(", "), :object => self).deliver
+        email = HydrusMailer.open_notification(:to => recipients.join(", "), :object => self)
+        email.deliver unless email.to.blank? # this will catch when we're trying to send an email from a fixture.
       end
     else
       apo.deposit_status = 'closed'
       events.add_event('hydrus', @current_user, 'Collection closed')
       unless recipients.blank?
-        HydrusMailer.close_notification(:to => recipients.join(", "), :object => self).deliver
+        email = HydrusMailer.close_notification(:to => recipients.join(", "), :object => self)
+        email.deliver unless email.to.blank? # this will catch when we're trying to send an email from a fixture.
       end
     end
   end
@@ -266,7 +268,8 @@ class Hydrus::Collection < Hydrus::GenericObject
 
   def send_invitation(recipients = "")
     return nil if recipients.blank?
-    HydrusMailer.invitation(:to => recipients, :object => self).deliver
+    email = HydrusMailer.invitation(:to => recipients, :object => self)
+    email.deliver unless email.to.blank? # this will catch when we're trying to send an email from a fixture.
   end
 
   ####
