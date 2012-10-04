@@ -1,6 +1,18 @@
 module Hydrus::AccessControlsEnforcement
 
-  def apply_gated_discovery solr_parameters, user_parameters
+  # Adds various :fq paramenters to a set of SOLR search parameters.
+  #   - We want only Collections or Items
+  #   - And we want:
+  #       - objects governed by APOs that mention the user in APO roleMD
+  #       - or objects that mention the user directly in their roleMD.
+  def apply_gated_discovery(solr_parameters, user_parameters)
+    user = current_user || '____NOT_LOGGED_IN_USER____'
+    apo_pids = Hydrus::Collection.apos_involving_user(user)
+    hsq = Hydrus::SolrQueryable
+    hsq.add_model_filter(solr_parameters, 'Hydrus_Collection', 'Hydrus_Item')
+    hsq.add_governed_by_filter(solr_parameters, apo_pids)
+    hsq.add_involved_user_filter(solr_parameters, current_user, :or => true)
+    logger.debug("Solr parameters: #{ solr_parameters.inspect }")
   end
 
   def enforce_show_permissions *args

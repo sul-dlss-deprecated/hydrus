@@ -2,21 +2,11 @@
 Roles and Discovery
 --------
 
-Workflow changes and SOLR: when the workflow DS for an object changes, the
-local SOLR index on a developer's box is not updated. Option 1: set up a
-listener that will update local SOLR when objects changes on the dor-dev
-environment. See dor-services-gem bin/ directory. Option 2: run the workflow
-service locally.
-
-Workflow fixtures. Create proper worflow XML fixture files, and modify rake
-refresh_workflows task to load the files. We need more fine-grained controlled
-over the states of our fixture objects.
-
-Apply gated discovery to search queries.
-
 Tests:
   authorization.rb
   ability.rb
+  solr_queryable.rb
+  access_controls_enforcement.rb
 
   Role-protect Collection actions.
         open collection
@@ -32,7 +22,17 @@ Tests:
   Role-protect dashboard actions.
         create collection.
 
-Investigate bug: create a new collection; go to home page; click search.
+  Apply gated discovery in search queries.
+
+Workflow changes and SOLR: when the workflow DS for an object changes, the
+local SOLR index on a developer's box is not updated. Option 1: set up a
+listener that will update local SOLR when objects changes on the dor-dev
+environment. See dor-services-gem bin/ directory. Option 2: run the workflow
+service locally.
+
+Workflow fixtures. Create proper worflow XML fixture files, and modify rake
+refresh_workflows task to load the files. We need more fine-grained controlled
+over the states of our fixture objects.
 
 person_roles=(). Prune unneeded roles. For example, if user FOO is a collection
 manager, it's pointless to make him a lesser role like reviewer.
