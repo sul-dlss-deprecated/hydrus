@@ -17,11 +17,9 @@
   </span>
 
   <div id="object-content-wrapper">
+    <h3><%= hydrus_object_setting_value(@document_fedora.title) %></h3>
+    <h4 class="muted">Collection Settings</h4>
     <dl class="dl-horizontal object-view">
-
-      <h3><%= hydrus_object_setting_value(@document_fedora.title) %></h3>
-  		<h4 class="muted">Collection Settings</h4>
-  		
       <%= render "hydrus_collections/basic_collection_metadata" %>
 
   <!--     <dt>APO PID </dt>
