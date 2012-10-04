@@ -150,6 +150,17 @@ describe Hydrus::Collection do
     @hc.is_open.should == true
   end
   
+  describe "invite email" do
+    it "should provide an method to send deposit invites" do
+      mail = @hc.send_invitation("jdoe")
+      mail.to.should == ["jdoe@stanford.edu"]
+      mail.subject.should =~ /Invitation to deposit in the Stanford Digital Repository/
+    end
+    it "should return nil when no recipients are sent in" do
+      @hc.send_invitation.should be_nil
+    end
+  end
+  
   context "APO roleMetadataDS delegation-y methods" do
     before(:each) do
       apo = Hydrus::AdminPolicyObject.new

@@ -82,6 +82,7 @@ class Hydrus::Collection < Hydrus::GenericObject
   # Opening also has the effect of publishing it.
   # Unlike open-close, which the user can toggle, publishing is irreversible.
   def publish(value)
+    recipients = apo.persons_with_role("hydrus-collection-item-depositor").to_a
     if to_bool(value)
       apo.deposit_status = 'open'
       # At the moment of publication, we refresh various titles.
@@ -98,9 +99,15 @@ class Hydrus::Collection < Hydrus::GenericObject
         complete_workflow_step(s)
         approve() # Collections never require human approval, even when their Items do.
       end
+      unless recipients.blank?
+        HydrusMailer.open_notification(:to => recipients.join(", "), :object => self).deliver
+      end
     else
       apo.deposit_status = 'closed'
       events.add_event('hydrus', @current_user, 'Collection closed')
+      unless recipients.blank?
+        HydrusMailer.close_notification(:to => recipients.join(", "), :object => self).deliver
+      end
     end
   end
 
@@ -255,6 +262,11 @@ class Hydrus::Collection < Hydrus::GenericObject
     opt, vis              = vov_lookup[val].split('_')
     apo.visibility_option = opt # fixed or varies
     apo.visibility        = vis # world or stanford
+  end
+
+  def send_invitation(recipients = "")
+    return nil if recipients.blank?
+    HydrusMailer.invitation(:to => recipients, :object => self).deliver
   end
 
   ####
