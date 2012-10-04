@@ -12,6 +12,7 @@
 		<%=render :partial=>'navigation' %>
   </div>
 </div>
+<div id="object-content-wrapper">
 <%= form_for(@document_fedora, :method => 'PUT', :html => {:class=>"step", :multipart=>true, :"data-track-state-change"=>"true", :novalidate=>""}) do |f| -%>
   <%= hidden_field_tag("object_id", params[:id]) -%>
   <%= hydrus_form_header(:required=>true, :first=>true) {"Title"} %>
@@ -198,5 +199,5 @@
     <%= render :partial => "actions_box_edit", :locals => {:id=>"nojs"}%>
   </noscript>
 <%- end -%>
-
+</div> <!-- object-content-wrapper --> 
 <div id="druid-footer"><%= @document_fedora.pid %></div>

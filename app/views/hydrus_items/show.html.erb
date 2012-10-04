@@ -16,81 +16,81 @@
     </div>
   </div>
 
-  <dl class="dl-horizontal object-view clearfix">
+  <div id="object-content-wrapper">
+	  <dl class="dl-horizontal object-view clearfix">
 
-    <h3><%= hydrus_object_setting_value(@document_fedora.title) %></h3>
-		<h4 class="muted">Item Settings</h4>
+	    <h3><%= hydrus_object_setting_value(@document_fedora.title) %></h3>
+			<h4 class="muted">Item Settings</h4>
+			
+			<%= render "hydrus_items/basic_item_metadata" %>
+
+			 <div class="collection-items">
+			     <h4>People and organizations responsible for this item</h4>
+			    <% @document_fedora.actors.each do |actor| %>
+			      <dt><%= actor.role %></dt>
+			      <dd><%= actor.name %></dd>
+			    <% end %>
+			</div>
+
+
+		  <% unless @document_fedora.files.size == 0 %>
+		    <div class="item-files">
+			     <h4>Files associated With This Item</h4>
+
+		      <table class="hydrus-striped-table table-striped table-condensed">
+		        <thead>
+		          <th>File (Download)</th>
+		          <th>Description</th>
+		        </thead>
+		        <tbody>
+		          <%
+		            @document_fedora.files.each do |file|
+		          %>
+		              <tr class="document <%= cycle("even","odd") %>">
+		                <td><%= link_to(file.filename, file.url) %></td>
+		                <td><%= file.label %></td>
+		              </tr>
+		          <% end %>
+		        </tbody>
+		      </table>
+		    </div>
 		
-		<%= render "hydrus_items/basic_item_metadata" %>
+			 <div class="collection-items">
+			     <h4>Abstract and keywords</h4>
+	 				   <dt>Abstract</dt>
+					    <dd class="abstract"><%= hydrus_object_setting_value(@document_fedora.abstract) %></dd>
+							<% unless hydrus_is_empty?(@document_fedora.keywords) %>
+						    <dt>Keywords</dt>
+						    <dd>
+						      <%= @document_fedora.keywords.map {|topic| link_to(topic, "#")}.join(", ").html_safe %>
+						    </dd>
+							<% end %>						
+			</div>
 
-		 <div class="collection-items">
-		     <h4>People and organizations responsible for this item</h4>
-		    <% @document_fedora.actors.each do |actor| %>
-		      <dt><%= actor.role %></dt>
-		      <dd><%= actor.name %></dd>
-		    <% end %>
-		</div>
+			 <div class="collection-items">
+			     <h4>Related Links and Citations</h4>
+		     <% unless hydrus_is_empty?(@document_fedora.preferred_citation) %>
+		       <dt>Cite this item as</dt>
+		       <dd><%= @document_fedora.preferred_citation %></dd>
+		     <% end %>
+		 
+		     <% unless hydrus_is_empty?(@document_fedora.related_citation) %>
+		       <% @document_fedora.related_citation.each_with_index do |related_citation, index| %>
+		         <dt class="<%= 'hidden-label' if index > 0 %>">Related published work</dt>
+		         <dd><%= related_citation %></dd>
+		       <% end %>
+		     <% end %>
+		 
+		     <% unless hydrus_is_empty?(@document_fedora.related_items) %>
+		       <% @document_fedora.related_items.each_with_index do |related_item, index| %>
+		         <dt class="<%= 'hidden-label' if index > 0 %>">Related links</dt>
+		         <dd><%= related_item.url.blank? ? hydrus_object_setting_value(related_item.url) : link_to(related_item.title, related_item.url) %></dd>
+		       <% end %>
+		     <% end %>
+		 </div>
+	  
 
-
-	  <% unless @document_fedora.files.size == 0 %>
-	    <div class="item-files">
-		     <h4>Files associated With This Item</h4>
-
-	      <table class="hydrus-striped-table table-striped table-condensed">
-	        <thead>
-	          <th>File (Download)</th>
-	          <th>Description</th>
-	        </thead>
-	        <tbody>
-	          <%
-	            @document_fedora.files.each do |file|
-	          %>
-	              <tr class="document <%= cycle("even","odd") %>">
-	                <td><%= link_to(file.filename, file.url) %></td>
-	                <td><%= file.label %></td>
-	              </tr>
-	          <% end %>
-	        </tbody>
-	      </table>
-	    </div>
-	
-		 <div class="collection-items">
-		     <h4>Abstract and keywords</h4>
- 				   <dt>Abstract</dt>
-				    <dd class="abstract"><%= hydrus_object_setting_value(@document_fedora.abstract) %></dd>
-						<% unless hydrus_is_empty?(@document_fedora.keywords) %>
-					    <dt>Keywords</dt>
-					    <dd>
-					      <%= @document_fedora.keywords.map {|topic| link_to(topic, "#")}.join(", ").html_safe %>
-					    </dd>
-						<% end %>						
-		</div>
-
-		 <div class="collection-items">
-		     <h4>Related Links and Citations</h4>
-	     <% unless hydrus_is_empty?(@document_fedora.preferred_citation) %>
-	       <dt>Cite this item as</dt>
-	       <dd><%= @document_fedora.preferred_citation %></dd>
-	     <% end %>
-	 
-	     <% unless hydrus_is_empty?(@document_fedora.related_citation) %>
-	       <% @document_fedora.related_citation.each_with_index do |related_citation, index| %>
-	         <dt class="<%= 'hidden-label' if index > 0 %>">Related published work</dt>
-	         <dd><%= related_citation %></dd>
-	       <% end %>
-	     <% end %>
-	 
-	     <% unless hydrus_is_empty?(@document_fedora.related_items) %>
-	       <% @document_fedora.related_items.each_with_index do |related_item, index| %>
-	         <dt class="<%= 'hidden-label' if index > 0 %>">Related links</dt>
-	         <dd><%= related_item.url.blank? ? hydrus_object_setting_value(related_item.url) : link_to(related_item.title, related_item.url) %></dd>
-	       <% end %>
-	     <% end %>
-	 </div>
-  
-
-  <% end %>
-
-  <div id="druid-footer"><%= @document_fedora.pid %></div>
-
+	  <% end %>
+  </div> <!-- object-content-wrapper --> 
+  	<div id="druid-footer"><%= @document_fedora.pid %></div>
 </div>
