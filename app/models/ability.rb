@@ -3,7 +3,7 @@ class Ability
   include CanCan::Ability
   include Hydra::Ability
 
-  AUTH = Hydrus::Authorization
+  AUTH = Hydrus::Authorizable
   
   def hydra_default_permissions(user, session, *args)
 

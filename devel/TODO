@@ -3,7 +3,7 @@ Roles and Discovery
 --------
 
 Unit tests:
-  authorization.rb
+  authorization.rb  [in progress]
   ability.rb
 
 Integration tests:

@@ -1,4 +1,4 @@
-module Hydrus::Authorization
+module Hydrus::Authorizable
 
   ####
   # SUNET IDs of administrators and collection creators.
