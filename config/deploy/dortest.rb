@@ -8,3 +8,6 @@ set :bundle_without, [:deployment, :development]
 role :web, deployment_host
 role :app, deployment_host
 role :db,  deployment_host, :primary => true
+
+after "deploy", "db:loadfixtures"
+after "deploy", "hydrus:refresh_upload_files"

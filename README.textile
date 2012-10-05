@@ -110,7 +110,8 @@ replace "working" above with your local branch name.
 h2. Deploying
 
   cd deploy
-  cap dev deploy
+  cap dev deploy # for http://hydrus-dev.stanford.edu
+  cap dortest deploy # for http://hydrus-test.stanford.edu
 
 h2. Useful commands
 
@@ -132,6 +133,7 @@ they don't exist, assuming you are using sqllite):
 
 h3. Fixtures:
 
+	rake hydrus:jetty_nuke   # kill jetty and reload it, will delete all objects (requires refreshfix when you are done)
 	rake hydrus:refreshfix   # deletes and then reloads fixtures (most common)
 	rake hydrus:loadfix      # loads fixtures (will fail if they exist)
 	rake hydrus:deletefix    # deletes fixtures 
