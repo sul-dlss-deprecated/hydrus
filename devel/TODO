@@ -2,12 +2,11 @@
 Roles and Discovery
 --------
 
-Tests:
-  X access_controls_enforcement.rb
-    solr_queryable.rb
-    authorization.rb
-    ability.rb
+Unit tests:
+  authorization.rb
+  ability.rb
 
+Integration tests:
   Role-protect Collection actions.
     open collection
     discard collection

@@ -5,14 +5,9 @@ module Hydrus::SolrQueryable
   # Convenience variable to execute module methods.
   HSQ = self
 
-  # Takes a hash of parameters for a SOLR query.
-  # Runs the query an returns a two-element array containing the SOLR
-  # response and an array of SolrDocuments.
-  def issue_solr_query(h)
-    solr_response = Blacklight.solr.find(h)
-    document_list = solr_response.docs.map {|doc| SolrDocument.new(doc, solr_response)}  
-    return [solr_response, document_list]
-  end
+  ####
+  # Module methods that modify the SOLR query parameters hash.
+  ####
 
   # Takes a hash of SOLR query parameters, along with a SUNET ID.
   # Adds a condition to the filter query parameter requiring that
@@ -52,6 +47,19 @@ module Hydrus::SolrQueryable
     h[:fq] ||= []
     hms = models.map { |m| %Q<"info:fedora/afmodel:#{m}"> }.join(' OR ')
     h[:fq] << %Q<has_model_s:(#{hms})>
+  end
+
+  ####
+  # Instance methods to issue SOLR queries or generate SOLR query hashes.
+  ####
+
+  # Takes a hash of parameters for a SOLR query.
+  # Runs the query an returns a two-element array containing the SOLR
+  # response and an array of SolrDocuments.
+  def issue_solr_query(h)
+    solr_response = Blacklight.solr.find(h)
+    document_list = solr_response.docs.map {|doc| SolrDocument.new(doc, solr_response)}  
+    return [solr_response, document_list]
   end
 
   # Takes a string -- a user's SUNET ID.
