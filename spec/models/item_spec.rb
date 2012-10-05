@@ -456,71 +456,7 @@ describe Hydrus::Item do
       'content'
     )
   end
-
-  describe "terms of acceptance for an existing item" do
-
-    subject { Hydrus::Item.find('druid:oo000oo0001') }
     
-    it "should indicate if the item has had terms accepted already" do
-      subject.accepted_terms_of_deposit.should=="true"
-      subject.must_accept_terms_of_deposit == false
-    end
-
-    it "should indicate the users who have accepted the terms of deposit for this collection in a hash and should returns dates accepted" do
-      users=subject.collection.users_accepted_terms_of_deposit
-      users.class.should == Hash
-      users.keys.include?('cardinal').should == true
-      users['cardinal'].should == '2011-09-02 01:02:32 -0700'
-      users.keys.include?('cardinal').should == true
-      users['crimson'].should == '2012-05-02 12:02:44 -0700'      
-    end
-  
-  end
-
-  describe "terms of acceptance for a new item" do
-    
-    subject { Hydrus::Collection.find('druid:oo000oo0003') }
-    
-    it "should indicate that a new item in a collection requires terms acceptance, if the user has already accepted another item in this collection but it was more than 1 year ago" do
-      user='cardinal'
-      subject.users_accepted_terms_of_deposit.keys.include?(user).should == true
-      subject.users_accepted_terms_of_deposit[user] = (Time.now - 2.years).to_s # make the acceptance 2 years ago
-      ni=Hydrus::Item.create(subject.pid,user)
-      ni.requires_terms_acceptance(user,subject).should == true      
-      ni.must_accept_terms_of_deposit == true
-    end
-
-    it "should indicate that a new item in a collection does not require terms acceptance, if the user has already accepted another item in this collection less than 1 year ago" do
-      user='crimson'
-      subject.users_accepted_terms_of_deposit.keys.include?(user).should == true
-      subject.users_accepted_terms_of_deposit[user] = (Time.now - 1.month).to_s # make the acceptance 1 month ago
-      ni=Hydrus::Item.create(subject.pid,user)
-      ni.requires_terms_acceptance(user,subject).should == false      
-    end
-
-    it "should indicate that a new item in a collection requires terms acceptance, when the user has not already accepted another item in this collection" do
-      user='archivist1'
-      ni=Hydrus::Item.create(subject.pid,user)
-      ni.requires_terms_acceptance(user,subject).should == true 
-      ni.must_accept_terms_of_deposit == true     
-    end
-  
-    it "should accept the terms for an item, updating the appropriate hydrusProperties metadata in item and collection" do
-      user='archivist1'
-      ni=Hydrus::Item.create(subject.pid,user)
-      ni.requires_terms_acceptance(user,subject).should == true      
-      ni.accepted_terms_of_deposit.should == "false"
-      subject.users_accepted_terms_of_deposit.keys.include?(user).should == false      
-      ni.accept_terms_of_deposit(user)
-      ni.accepted_terms_of_deposit.should == "true"
-      coll=Hydrus::Collection.find('druid:oo000oo0003') 
-      coll.users_accepted_terms_of_deposit.keys.include?(user).should == true      
-      coll.users_accepted_terms_of_deposit[user].nil?.should == false   
-    end
-         
-  end
-
-  
   describe "publish()" do
 
     # More substantive testing is done at integration level.
