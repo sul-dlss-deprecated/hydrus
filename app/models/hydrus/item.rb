@@ -270,7 +270,8 @@ class Hydrus::Item < Hydrus::GenericObject
   end
 
   def beginning_of_embargo_range
-    submit_time ? Date.parse(submit_time).strftime("%m/%d/%Y") : Date.today.strftime("%m/%d/%Y")
+    submit_time ? Date.parse(submit_time).strftime("%m/%d/%Y") :
+                  Date.today.strftime("%m/%d/%Y")
   end
 
   def end_of_embargo_range

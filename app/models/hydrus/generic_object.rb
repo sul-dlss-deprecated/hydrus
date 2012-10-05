@@ -257,33 +257,6 @@ class Hydrus::GenericObject < Dor::Item
     Dor::WorkflowService.update_workflow_status('dor', pid, awf, step, 'completed')
   end
 
-  # # Returns the hydrusAssemblyWF node from the object's workflows.
-  # def get_workflow_node
-  #   wf = Dor::Config.hydrus.app_workflow
-  #   q = "//workflow[@id='#{wf}']"
-  #   return workflows.find_by_xpath(q).first
-  # end
-
-  # # Takes the name of a hydrusAssemblyWF step.
-  # # Returns the corresponding process node.
-  # def get_workflow_step(step)
-  #   node = get_workflow_node()
-  #   return node ? node.at_xpath("//process[@name='#{step}']") : nil
-  # end
-
-  # # Takes the name of a hydrusAssemblyWF step.
-  # # Returns the staus of the corresponding process node.
-  # def get_workflow_status(step)
-  #   node = get_workflow_step(step)
-  #   return node ? node['status'] : nil
-  # end
-
-  # # Takes the name of a hydrusAssemblyWF step.
-  # # Returns the staus of the corresponding process node.
-  # def workflow_step_is_done(step)
-  #   return get_workflow_status(step) == 'completed'
-  # end
-
   def submit_time
     s = 'submit'
     return nil unless workflow_step_is_done(s)
