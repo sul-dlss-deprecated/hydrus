@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+  </head>
+  <body>
+    <p><%= @document_fedora.owner %> has closed the <%= @document_fedora.title %> collection in the Stanford Digital Repository.</p>
+    <p>Items are no longer able to be deposited into this collection.</p>
+    <p>If you have any questions about the SDR, send a message to <%= mail_to("sdr-contact@lists.stanford.edu", "sdr-contact@lists.stanford.edu") %>.</p>
+  </body>
+</html>
