@@ -77,6 +77,15 @@ namespace :db do
   end
 end
 
+namespace :files do
+  task :refresh_fixtures do
+    run "cd #{deploy_to}/current && rake hydrus:refresh_upload_files"
+  end  
+  task :create_upload_symlink do
+   run "ln -s /data/hydrus-files #{deploy_to}/current/public/uploads" 
+  end
+end
+
 namespace :deploy do
   task :start do ; end
   task :stop do ; end

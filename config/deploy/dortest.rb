@@ -9,5 +9,5 @@ role :web, deployment_host
 role :app, deployment_host
 role :db,  deployment_host, :primary => true
 
-after "deploy", "db:loadfixtures"
-after "deploy", "hydrus:refresh_upload_files"
+after "deploy", "files:create_upload_symlink"
+after "deploy", "files:refresh_fixtures"
