@@ -61,7 +61,10 @@ class Hydrus::Item < Hydrus::GenericObject
     # Add event.
     item.events.add_event('hydrus', user, 'Item created')
     # Check to see if this user needs to agree again for this new item, if not, indicate agreement has already occured automatically
-    item.accepted_terms_of_deposit=(!item.requires_terms_acceptance(user.to_s,coll)).to_s  
+    if item.requires_terms_acceptance(user.to_s,coll) == false
+      item.accepted_terms_of_deposit="true"
+      events.add_event('hydrus', user, 'Terms of deposit accepted due to previous item acceptance in collection')
+    end
     # Save and return.
     item.save(:no_edit_logging => true)
     return item

@@ -50,9 +50,9 @@ describe("Item view", :type => :request, :integration => true) do
     fill_in "hydrus_item_keywords", :with => " "
     click_button "Save"
     should_visit_view_page(@hi)
-    page.should have_content('Related links')
-    page.should have_content('Keywords')
-    page.should have_content('story by Jennifer Ludden August 16, 2010') # relatedItem
+    page.should_not have_content('Related links')
+    page.should_not have_content('Keywords')
+    page.should_not have_content('story by Jennifer Ludden August 16, 2010') # relatedItem
   end
 
 

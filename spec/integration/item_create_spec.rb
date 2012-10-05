@@ -125,7 +125,7 @@ describe("Item create", :type => :request, :integration => true) do
     page.should have_content(@notice)
     # accept terms of deposit
     item = Hydrus::Item.find(druid)
-    item.accept_terms_of_deposit
+    item.accept_terms_of_deposit('archivist1')
     item.save
     # The view page should now offer the Publish button.
     div_cs = find("div.collection-actions")

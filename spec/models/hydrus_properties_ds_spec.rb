@@ -14,6 +14,7 @@ describe Hydrus::HydrusPropertiesDS do
         	<user dateAccepted="2011-10-02 02:05:31 -0700">mhamster</user>
         </usersAcceptedTermsOfDeposit>
         <requiresHumanApproval>no</requiresHumanApproval>
+        <acceptedTermsOfDeposit>false</acceptedTermsOfDeposit>
         <disapprovalReason>Idiota</disapprovalReason>
       #{@ds_end}
     EOF
@@ -25,6 +26,7 @@ describe Hydrus::HydrusPropertiesDS do
       [[:users_accepted_terms_of_deposit,:user],%w{cardinal crimson cornellian mhamster}],
       [[:users_accepted_terms_of_deposit,:user,:date_accepted],["2011-09-02 01:02:32 -0700","2012-05-02 12:02:44 -0700","2011-10-02 02:05:31 -0700","2011-10-02 02:05:31 -0700"]],
       [:requires_human_approval, ["no"]],
+      [:accepted_terms_of_deposit, ["false"]],
       [:disapproval_reason, ["Idiota"]],
     ]
     tests.each do |terms, exp|
@@ -42,7 +44,7 @@ describe Hydrus::HydrusPropertiesDS do
     dsdoc.ng_xml.should be_equivalent_to exp_xml
   end
 
-  it "should be able to add a user who accepted the terms of deposit" do
+  it "should be able to add a user who accepted the terms of deposit to the collection" do
       user_node = '<usersAcceptedTermsOfDeposit><user dateAccepted="10-02-2012 00:00:00">foo</user></usersAcceptedTermsOfDeposit>'
       @exp_xml = noko_doc([
         @ds_start,
