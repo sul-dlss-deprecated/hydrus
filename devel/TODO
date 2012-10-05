@@ -3,26 +3,29 @@ Roles and Discovery
 --------
 
 Tests:
-  authorization.rb
-  ability.rb
-  solr_queryable.rb
-  access_controls_enforcement.rb
+  X access_controls_enforcement.rb
+    solr_queryable.rb
+    authorization.rb
+    ability.rb
 
   Role-protect Collection actions.
-        open collection
-        discard collection
-        close collection
-        add new Item
+    open collection
+    discard collection
+    close collection
+    add new Item
 
   Role-protect Item actions.
-        submit for approval
-        discard item
-        approve/disapprove/reason
+    submit for approval
+    discard item
+    approve/disapprove/reason
 
   Role-protect dashboard actions.
-        create collection.
+    create collection
 
   Apply gated discovery in search queries.
+    archivist2
+    archivist99
+    not logged in
 
 Workflow changes and SOLR: when the workflow DS for an object changes, the
 local SOLR index on a developer's box is not updated. Option 1: set up a

@@ -346,6 +346,7 @@ class Hydrus::Collection < Hydrus::GenericObject
   # Takes a user name.
   # Returns an array druids for the APOs in which USER plays a role.
   def self.apos_involving_user(user)
+    return [] unless user
     h           = squery_apos_involving_user(user)
     resp, sdocs = issue_solr_query(h)
     return get_druids_from_response(resp)

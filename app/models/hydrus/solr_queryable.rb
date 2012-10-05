@@ -16,16 +16,18 @@ module Hydrus::SolrQueryable
 
   # Takes a hash of SOLR query parameters, along with a SUNET ID.
   # Adds a condition to the filter query parameter requiring that
-  # the user's ID be present in the role metadata.
+  # the user's ID be present in the object's role metadata.
+  # If opt[:or] is true, this condition will be OR'd with the
+  # preceding condition in the :fq array.
   def self.add_involved_user_filter(h, user, opt = {})
     return unless user
     s = %Q<roleMetadata_role_person_identifier_t:"#{user}">
     h[:fq] ||= []
     if opt[:or]
-      if h[:fq][-1]
-        h[:fq][-1] += " OR #{s}"
+      if h[:fq].size == 0
+        h[:fq][0] = s
       else
-        h[:fq][-1] = s
+        h[:fq][-1] += " OR #{s}"
       end
     else
       h[:fq] << s

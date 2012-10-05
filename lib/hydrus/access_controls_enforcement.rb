@@ -1,20 +1,7 @@
 module Hydrus::AccessControlsEnforcement
 
-  # Adds various :fq paramenters to a set of SOLR search parameters.
-  #   - We want only Collections or Items
-  #   - And we want:
-  #       - objects governed by APOs that mention the user in APO roleMD
-  #       - or objects that mention the user directly in their roleMD.
-  def apply_gated_discovery(solr_parameters, user_parameters)
-    user = current_user || '____NOT_LOGGED_IN_USER____'
-    apo_pids = Hydrus::Collection.apos_involving_user(user)
-    hsq = Hydrus::SolrQueryable
-    hsq.add_model_filter(solr_parameters, 'Hydrus_Collection', 'Hydrus_Item')
-    hsq.add_governed_by_filter(solr_parameters, apo_pids)
-    hsq.add_involved_user_filter(solr_parameters, current_user, :or => true)
-    logger.debug("Solr parameters: #{ solr_parameters.inspect }")
-  end
-
+  # Redirects to home page with a flash error if user lacks 
+  # authorization to read the Item/Collection.
   def enforce_show_permissions *args
     # Just return if the user can read the object.
     pid = params[:id]
@@ -25,6 +12,8 @@ module Hydrus::AccessControlsEnforcement
     redirect_to(root_path)
   end
 
+  # Redirects to the Item/Collection view page with a flash error
+  # if user lacks authorization to edit the Item/Collection.
   def enforce_edit_permissions *args
     # Just return if the user can edit the object.
     pid = params[:id]
@@ -37,6 +26,13 @@ module Hydrus::AccessControlsEnforcement
     redirect_to(polymorphic_path(obj))
   end
 
+  # Handles two cases:
+  # (1) Create new Item in a given Collection.
+  #     Redirects to the Collection view page with a flash error
+  #     if user lacks authorization to create Items in the Collection.
+  # (2) Create new Collections.
+  #     Redirects to the home page with a flash error if the user
+  #     lacks authorization to create new Collections.
   def enforce_create_permissions *args
     coll_pid = params[:collection]
     if coll_pid
@@ -54,12 +50,29 @@ module Hydrus::AccessControlsEnforcement
     redirect_to(path)
   end
 
-  # This filters out objects that you want to exclude from search results.
-  def exclude_unwanted_models(solr_parameters, user_parameters)
-    solr_parameters[:fq] ||= [
-      '-has_model_s:"info:fedora/afmodel:Dor_AdminPolicyObject"',
-      '-has_model_s:"info:fedora/afmodel:Hydrus_AdminPolicyObject"',
-    ]
+  # Adds some :fq paramenters to a set of SOLR search parameters
+  # so that search results contains only those Items/Collections
+  # the user is authorized to see.
+  def apply_gated_discovery(solr_parameters, user_parameters)
+    # Get the PIDs of APOs that include the user in their roleMD.
+    apo_pids = Hydrus::Collection.apos_involving_user(current_user)
+    # The search search should find:
+    #      objects governed by APOs that mention current user in the APO roleMD
+    #   OR objects that mention the user directly in their roleMD
+    hsq = Hydrus::SolrQueryable
+    hsq.add_governed_by_filter(solr_parameters, apo_pids)
+    hsq.add_involved_user_filter(solr_parameters, current_user, :or => true)
+    # In addition, the objects must be Hydrus Collections or Items (not APOs).
+    hsq.add_model_filter(solr_parameters, 'Hydrus_Collection', 'Hydrus_Item')
+    # If there is no user, add a condition to guarantee zero search results.
+    # The enforce_index_permissions() method in the catalog controller also
+    # guards against this scenario, but this provides extra insurance.
+    unless current_user
+      bogus_model = '____USER_IS_NOT_LOGGED_IN____'
+      hsq.add_model_filter(solr_parameters, bogus_model)
+    end
+    # Logging.
+    logger.debug("Solr parameters: #{ solr_parameters.inspect }")
   end
 
 end
