@@ -160,6 +160,7 @@ Local services provided by jetty, assuming it's running (most will have both a d
 Starting Jetty on the hydrus-dev or -test servers:
 
   # Note that the name of the log file will depend on the current date.
+  # Run this from the jetty directory.
   nohup java -Djetty.port=8983 -Dsolr.solr.home=/home/lyberadmin/hydrus/shared/jetty/solr \
              -XX:MaxPermSize=128m -Xmx256m -jar start.jar                                 \
              > logs/2012_10_05.request.log 2>&1 <&- &
