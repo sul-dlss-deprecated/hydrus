@@ -96,13 +96,24 @@ def mock_authed_user
   return mock_user
 end
 
+def login_pw
+  'beatcal'
+end
+
 def login_as_archivist1
-  login_as "archivist1@example.com", 'beatcal'
+  login_as "archivist1@example.com", login_pw
+end
+
+def login_as_archivist2
+  login_as "archivist2@example.com", login_pw
+end
+
+def login_as_archivist99
+  login_as "archivist99@example.com", login_pw
 end
 
 def login_as(email, password)
   logout
-
   visit new_user_session_path
   fill_in "Email", :with => email 
   fill_in "Password", :with => password

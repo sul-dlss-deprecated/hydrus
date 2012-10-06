@@ -3,13 +3,21 @@ require 'spec_helper'
 describe("Collection create", :type => :request, :integration => true) do
 
   before(:each) do
-    @notice = "Your changes have been saved"
+    @alert           = 'div.alert'
+    @notice          = "Your changes have been saved"
     @edit_path_regex = Regexp.new('/collections/(druid:\w{11})/edit')
-    @prev_mint_ids = config_mint_ids()
+    @prev_mint_ids   = config_mint_ids()
   end
 
   after(:each) do
     config_mint_ids(@prev_mint_ids)
+  end
+
+  it "should not be able to visit new collection URL if user lacks authority to create collections" do
+    login_as_archivist99
+    visit new_hydrus_collection_path
+    current_path.should == root_path
+    find(@alert).should have_content("You do not have sufficient privileges")
   end
 
   it "should be able to create a new Collection, with APO, and with expected datastreams" do
@@ -28,7 +36,7 @@ describe("Collection create", :type => :request, :integration => true) do
     fill_in "hydrus_collection_abstract", :with => ni.abstract
     fill_in "hydrus_collection_contact",  :with => ni.contact
     click_button "Save"
-    page.should have_content(@notice)
+    find(@alert).should have_content(@notice)
     # Get Collection from fedora and confirm that our edits were persisted.
     coll = Hydrus::Collection.find(druid)
     coll.title.should    == ni.title
@@ -84,7 +92,7 @@ describe("Collection create", :type => :request, :integration => true) do
     fill_in "hydrus_collection_title", :with => ni.title
     choose "hydrus_collection_requires_human_approval_yes"
     click_button "Save"
-    page.should have_content(@notice)
+    find(@alert).should have_content(@notice)
     # The view page should display some validation error messages, and should not
     # offer the Open Collection button.
     div_cs = find("div.collection-actions")
@@ -112,7 +120,7 @@ describe("Collection create", :type => :request, :integration => true) do
     fill_in "hydrus_collection_abstract", :with => ni.abstract
     fill_in "hydrus_collection_contact",  :with => ni.contact
     click_button "Save"
-    page.should have_content(@notice)
+    find(@alert).should have_content(@notice)
     # The view page should now offer the Open Collection button.
     page.should have_button(open_button)
     # Get the Collection and APO objects from fedora.
@@ -128,7 +136,7 @@ describe("Collection create", :type => :request, :integration => true) do
     apo.is_open.should == false
     # Open the Collection.
     click_button(open_button)
-    page.should have_content(@notice)
+    find(@alert).should have_content(@notice)
     # The view page should now offer the Close Collection button.
     page.should have_button(close_button)
     # Get the Collection and APO objects from fedora.
@@ -144,7 +152,7 @@ describe("Collection create", :type => :request, :integration => true) do
     apo.is_open.should == true
     # Close the Collection.
     click_button(close_button)
-    page.should have_content(@notice)
+    find(@alert).should have_content(@notice)
     # The view page should now offer the Open Collection button.
     page.should have_button(open_button)
     # Get the Collection and APO objects from fedora.
@@ -167,10 +175,10 @@ describe("Collection create", :type => :request, :integration => true) do
     # Fill in the title and save.
     fill_in "hydrus_collection_title", :with => ni.title
     click_button "Save"
-    page.should have_content(@notice)
+    find(@alert).should have_content(@notice)
     # Open the Collection.
     click_button(open_button)
-    page.should have_content(@notice)
+    find(@alert).should have_content(@notice)
     # The view page should now offer the Close Collection button.
     page.should have_button(close_button)
     # Get the Collection and APO objects from fedora.

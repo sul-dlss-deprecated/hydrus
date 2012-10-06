@@ -30,12 +30,14 @@ Roles and Discovery
 
 Integration tests for role-protection and gated discovery:
   Dashboard:
-    create collection
-  Search queries:
-    archivist2
-    archivist99
-    not logged in
+    show search box only if logged in      [done]  
+    show create collection button          [done]
+    Collections shown should vary by user
+  Search:
+    N search results should vary by user
+    non logged in user via a direct URL    [done]
   Collection:
+    non-logged in user ability to visit collections/new       [done]
     open collection
     discard collection
     close collection
