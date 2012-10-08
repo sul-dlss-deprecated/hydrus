@@ -8,9 +8,28 @@
 </div>
 <div class="box-body">
 	 <% unless @document_fedora.is_open %>
-		<p><%=check_box_tag 'required_fields_checkbox', true, @document_fedora.required_fields_completed?, :disabled=>true%> Name, abstract, contact provided</p>
-		<p><%=check_box_tag 'embargo_details_checkbox', true, @document_fedora.embargo_details_provided?, :disabled=>true%> Release and visibility details provided</p>
-		<p><%=check_box_tag 'license_details_checkbox', true, @document_fedora.license_details_provided?, :disabled=>true%> License details provided</p>
-		<p><%=check_box_tag 'collection_opened_checkbox', true, @document_fedora.is_publishable, :disabled=>true%> Collection can be opened for deposit</p>
+		<%=check_box_tag 'required_fields_checkbox', true, @document_fedora.required_fields_completed?, :disabled=>true%> 
+		<label for="required_fields_checkbox">
+			<%= select_status_checkbox_icon(@document_fedora.required_fields_completed?) %>
+			Name, abstract, contact provided
+		</label>
+
+		<%=check_box_tag 'embargo_details_checkbox', true, @document_fedora.embargo_details_provided?, :disabled=>true%>
+		<label for="embargo_details_checkbox">
+			<%= select_status_checkbox_icon(@document_fedora.embargo_details_provided?) %>
+			Release and visibility details provided
+		</label>
+
+		<%=check_box_tag 'license_details_checkbox', true, @document_fedora.license_details_provided?, :disabled=>true%>
+		<label for="license_details_checkbox">
+			<%= select_status_checkbox_icon(@document_fedora.license_details_provided?) %>
+			License details provided
+		</label>
+
+		<%=check_box_tag 'collection_opened_checkbox', true, @document_fedora.is_publishable, :disabled=>true%>
+		<label for="collection_opened_checkbox">
+			<%= select_status_checkbox_icon(@document_fedora.is_publishable) %>
+			Collection can be opened for deposit
+		</label>
 	<% end %>
 </div>

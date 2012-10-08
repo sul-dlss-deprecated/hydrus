@@ -93,4 +93,7 @@ module ApplicationHelper
     model.class.to_s.pluralize.parameterize("_")
   end
 
+  def select_status_checkbox_icon(field)
+    content_tag(:i, nil, :class =>  field ? "icon-check" : "icon-minus")
+  end
 end
