@@ -143,6 +143,17 @@ table form {
 }
 #sidebar {
 	float: right;
+	border-bottom: 1px solid #DDD;
+	border-left: 1px solid #DDD;
+	border-right: 1px solid #DDD;
+	margin-left: -1px;
+	margin-top: 38px;
+}
+/* This seems to help fix an issue w/ floats once we stack all columns on-top of each other */
+#main, #sidebar {
+	@media (max-width: 767px) {
+	  float: none;	
+	}
 }
 
 /* form: radio button groups with embedded select */
@@ -192,14 +203,6 @@ form.step .embargo .datepicker {
 	a {border-bottom: 1px solid #DDD;}
 }
 
-
-/* This seems to help fix an issue w/ floats once we stack all columns on-top of each other */
-#main, #sidebar {
-	@media (max-width: 767px) {
-	  float: none;	
-	}
-}
-
 /* search results */
 table.hydrus-striped-table {
 	@include striped-table;
@@ -215,51 +218,64 @@ noscript #item-actions, noscript #collection-actions {
   display:block;	
 }
 #collection-actions .btn-group {margin-left: 18px;}
-.actions-box {
-	margin-right: 20px;
-	margin-top: 25px;
-	&.well {
-		padding: 0 10px 0 15px;
-	}
+.well {
+	box-shadow: none;
+	border: none;
+	background: none;
+	margin-bottom: 0;
+	padding: 0px 2px 0 0;
 	.box-header {
-		border-bottom: 1px dotted #CCC;
-		font-size: 120%;
-		line-height: 1.6em;
-		margin-top: 9px;
+		border-bottom: 1px solid #DDD;
+		border-top: 1px solid #DDD;
+		color: #555;
+		font-size: 12px;
+		font-weight: bold;
+		margin-bottom: 6px;
+		padding: 10px 6px 6px 10px;
+		text-transform: uppercase;
+		// font-size: 120%;
+		// line-height: 1.6em;
+		// margin-top: 9px;
 	}
-	legend {margin-bottom: 0;}
-	dt, dd { 
-		line-height: 2em;
-		text-align: left;
-		width: 50%;
-	}
-	dd { margin-left: 55%;}
-	dl {
-		font-size: 85%;
-		margin-bottom: none;
-	}
-	button {
-		display: block;
-		margin: 12px 0 10px 0;
-	}
-	label{
-		font-size: 75%;
-		line-height: 1.5em;
-		margin-bottom: 0;
-		margin-top: 18px;
-	}
-	p {
-		margin-top: 12px;
-		&.discard-item {
-			margin-bottom: 18px;
-			margin-left: 12px;
-			i {
-				margin-right: 5px;
-				margin-left: -15px;
+	.box-body {
+		// margin-top: 10px;
+		padding: 10px;
+		legend {margin-bottom: 0;}
+		dt, dd { 
+			line-height: 2em;
+			text-align: left;
+			width: 50%;
+		}
+		dd { margin-left: 55%;}
+		dl {
+			font-size: 85%;
+			margin-bottom: none;
+		}
+		button {
+			display: block;
+			// margin: 12px 0 10px 0;
+		}
+		input[type='checkbox'] {
+			background-image: url(check.png);
+		}
+		label{
+			font-size: 75%;
+			line-height: 1.5em;
+			margin-bottom: 0;
+			margin-top: 18px;
+		}
+		p {
+			font-size: 12px;
+      &.discard-item {
+        margin: 18px 12px 0 20px;
+				i {
+					margin-right: 5px;
+					margin-left: -15px;
+				}
 			}
 		}
+		.btn-group .btn {margin-bottom: 0px;}
 	}
-	.btn-group .btn {margin-bottom: 0px;}
 }
 
 #hydrus_items-edit #sidebar, #hydrus_collections-edit #sidebar {
@@ -303,10 +319,6 @@ noscript #item-actions, noscript #collection-actions {
 		}
 	}
 }
-#sidebar dd.collection {
-	font-size: 90%;
-	margin-left:0;
-}
 
 #catalog-index .user-collections {
 	h3 {margin-top: 24px;}
@@ -318,7 +330,7 @@ noscript #item-actions, noscript #collection-actions {
 .unspecified {font-style: italic;}
 
 #hydrus_items-show {
-	#sidebar {margin-top: 25px;}
+	// #sidebar {margin-top: 25px;}
 	table.hydrus-striped-table {
 		@include striped-table;
 		width: 100%;
@@ -432,12 +444,6 @@ ul.breadcrumb {
 	border: none;
 	margin-bottom: 25px;
 	padding: 6px;
-}
-
-.well {
-	box-shadow: none;
-	border: none;
-	background: none;
 }
 
 /* navigation */

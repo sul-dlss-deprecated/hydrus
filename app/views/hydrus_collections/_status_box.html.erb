@@ -1,14 +1,16 @@
 <div class="collection-status box-header">
-		<span>Status</span> 
-		<% if @document_fedora.is_open %>
-			<button class="pull-right btn btn-success btn-mini" type="button">Open for deposit</button>
-   <% else %>
-			<button class="pull-right btn btn-danger btn-mini" type="button">Closed for deposit</button>
-	  <% end %>
-	</div>
- <% unless @document_fedora.is_open %>
-	<p><%=check_box_tag 'required_fields_checkbox', true, @document_fedora.required_fields_completed?, :disabled=>true%> Name, abstract, contact provided</p>
-	<p><%=check_box_tag 'embargo_details_checkbox', true, @document_fedora.embargo_details_provided?, :disabled=>true%> Release and visibility details provided</p>
-	<p><%=check_box_tag 'license_details_checkbox', true, @document_fedora.license_details_provided?, :disabled=>true%> License details provided</p>
-	<p><%=check_box_tag 'collection_opened_checkbox', true, @document_fedora.is_publishable, :disabled=>true%> Collection can be opened for deposit</p>
-<% end %>
+	<span>Status</span> 
+	<% if @document_fedora.is_open %>
+		<button class="pull-right btn btn-success btn-mini" type="button">Open for deposit</button>
+ <% else %>
+		<button class="pull-right btn btn-danger btn-mini" type="button">Closed for deposit</button>
+  <% end %>
+</div>
+<div class="box-body">
+	 <% unless @document_fedora.is_open %>
+		<p><%=check_box_tag 'required_fields_checkbox', true, @document_fedora.required_fields_completed?, :disabled=>true%> Name, abstract, contact provided</p>
+		<p><%=check_box_tag 'embargo_details_checkbox', true, @document_fedora.embargo_details_provided?, :disabled=>true%> Release and visibility details provided</p>
+		<p><%=check_box_tag 'license_details_checkbox', true, @document_fedora.license_details_provided?, :disabled=>true%> License details provided</p>
+		<p><%=check_box_tag 'collection_opened_checkbox', true, @document_fedora.is_publishable, :disabled=>true%> Collection can be opened for deposit</p>
+	<% end %>
+</div>

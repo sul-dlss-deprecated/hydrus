@@ -1,55 +1,56 @@
 <div class="collection-actions box-header">Actions</div>
 
-
-<% if can? :edit, @document_fedora %>
-  <%= form_for(@document_fedora, :method => 'PUT', 
-               :html => {:class => "step", :novalidate=>""}) do |f| -%>
-    <% if @document_fedora.is_open %>
-            <button type="submit" class="btn btn-small save-edits"
-                    name="hydrus_collection[publish]" value="false"
-                    id="hydrus_collection_publish">Close Collection</button>
-    <% elsif @document_fedora.is_publishable %>
-      <button type="submit" class="btn btn-small save-edits"
-              name="hydrus_collection[publish]" value="true"
-              id="hydrus_collection_publish">Open Collection</button>
+<div class="box-body">
+  <% if can? :edit, @document_fedora %>
+    <%= form_for(@document_fedora, :method => 'PUT', 
+                 :html => {:class => "step", :novalidate=>""}) do |f| -%>
+      <% if @document_fedora.is_open %>
+              <button type="submit" class="btn btn-small save-edits"
+                      name="hydrus_collection[publish]" value="false"
+                      id="hydrus_collection_publish">Close Collection</button>
+      <% elsif @document_fedora.is_publishable %>
+        <button type="submit" class="btn btn-small save-edits"
+                name="hydrus_collection[publish]" value="true"
+                id="hydrus_collection_publish">Open Collection</button>
+      <% end %>
     <% end %>
   <% end %>
-<% end %>
 
-<% if can? :create_items_in, @document_fedora %>
-  <% if @document_fedora.is_open %>
-    <div class="btn-group add-content-dropdown" style="display:none;">
-      <button class="btn btn-small">Add new &hellip;</button>
-      <button class="btn btn-small dropdown-toggle" data-toggle="dropdown">
-        <span class="caret"></span>
-      </button>
-      <%= render :partial => "shared/add_content_options",
-                 :locals => {:parent => @document_fedora} %>
-    </div>
-    <noscript>
-      <%= form_tag(new_hydrus_item_path, :method=>"GET", :class=>"add-content-options") do %>
-        <%= select_tag(
-              "collection", 
-              options_for_select([["item", @document_fedora.pid]]),
-              :class=>"add-content-options"
-            )
-        %>
-        <%= submit_tag("Add", :class=>"btn btn-small") %>
-      <%- end -%>
-    </noscript>
+  <% if can? :create_items_in, @document_fedora %>
+    <% if @document_fedora.is_open %>
+      <div class="btn-group add-content-dropdown" style="display:none;">
+        <button class="btn btn-small">Add new &hellip;</button>
+        <button class="btn btn-small dropdown-toggle" data-toggle="dropdown">
+          <span class="caret"></span>
+        </button>
+        <%= render :partial => "shared/add_content_options",
+                   :locals => {:parent => @document_fedora} %>
+      </div>
+      <noscript>
+        <%= form_tag(new_hydrus_item_path, :method=>"GET", :class=>"add-content-options") do %>
+          <%= select_tag(
+                "collection", 
+                options_for_select([["item", @document_fedora.pid]]),
+                :class=>"add-content-options"
+              )
+          %>
+          <%= submit_tag("Add", :class=>"btn btn-small") %>
+        <%- end -%>
+      </noscript>
+    <% end %>
   <% end %>
-<% end %>
 
-<% if can? :edit, @document_fedora %>
-  <% if @document_fedora.is_destroyable %>
-    <p class="discard-item">
-      <i class="icon-trash"></i>
-      <a href="#">Discard this collection</a>
-    </p>
-  <% else %>
-    <p class="muted">
-      <i class="icon-trash"></i>
-      Cannot discard a published collection
-    </p>
+  <% if can? :edit, @document_fedora %>
+    <% if @document_fedora.is_destroyable %>
+      <p class="discard-item">
+        <i class="icon-trash"></i>
+        <a href="#">Discard this collection</a>
+      </p>
+    <% else %>
+      <p class="discard-item muted">
+        <i class="icon-trash"></i>
+        Cannot discard a published collection
+      </p>
+    <% end %>
   <% end %>
-<% end %>
+</div>
