@@ -148,6 +148,7 @@ table form {
 	border-right: 1px solid #DDD;
 	margin-left: -1px;
 	margin-top: 38px;
+	form {margin-bottom: 0;}
 }
 /* This seems to help fix an issue w/ floats once we stack all columns on-top of each other */
 #main, #sidebar {
@@ -250,6 +251,7 @@ noscript #item-actions, noscript #collection-actions {
 		}
 		button {
 			display: block;
+			margin-bottom: 18px;
 		}
 		input[type=checkbox] {display:none;}
 		label {
@@ -266,14 +268,14 @@ noscript #item-actions, noscript #collection-actions {
 		p {
 			font-size: 12px;
       &.discard-item {
-        margin: 18px 12px 0 20px;
+        margin: 6px 12px 6px 20px;
 				i {
 					margin-right: 5px;
 					margin-left: -15px;
 				}
 			}
 		}
-		.btn-group .btn {margin-bottom: 0px;}
+		// .btn-group .btn {margin-bottom: 0px;}
 	}
 }
 

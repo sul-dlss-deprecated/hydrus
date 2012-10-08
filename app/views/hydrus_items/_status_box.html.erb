@@ -1,18 +1,47 @@
- <div class="well actions-box item-status">
-   <div class="box-header">Status</div>
-		<% if @document_fedora.is_published %>
-			<button class="pull-right btn btn-success btn-mini" type="button">Published</button>
-   <% else %>
-			<button class="pull-right btn btn-warning btn-mini" type="button">Draft</button>
-	  <% end %>
-	  <br /><br />
-	 <% unless @document_fedora.is_published %>
-		<p><%=check_box_tag 'required_fields_checkbox', true, @document_fedora.required_fields_completed?, :disabled=>true%> Required fields completed</p>
-		<p><%=check_box_tag 'files_uploaded_checkbox', true, @document_fedora.files_uploaded?, :disabled=>true%> File(s) uploaded</p>
-		<p><%=check_box_tag 'release_reviewed_checkbox', true, @document_fedora.reviewed_release_settings?, :disabled=>true%> Release and visibility of content settings reviewed</p>
-		<p><%=check_box_tag 'depositor_agreement_checkbox', true, @document_fedora.terms_of_deposit_accepted?, :disabled=>true%> Depositor agreement with 
-			<%=link_to("Terms of Deposit", terms_of_deposit_path(@document_fedora.id), :target=>'_blank', :class=>'tod_link', :"data-url" => terms_of_deposit_path(@document_fedora.id))%>
-	    </p>
-		<p><%=check_box_tag 'item_opened_checkbox', true, @document_fedora.is_publishable, :disabled=>true%> Item can be published</p>
-	<% end %>
- </div>
+ <div class="well item-status">
+   <div class="box-header">
+			<span>Status</span>
+			<% if @document_fedora.is_published %>
+				<button class="pull-right btn btn-success btn-mini" type="button">Published</button>
+			<% else %>
+				<button class="pull-right btn btn-warning btn-mini" type="button">Draft</button>
+			<% end %>
+   </div>
+	 <div class="box-body">
+	 	<% unless @document_fedora.is_published %>
+
+			<%=check_box_tag 'required_fields_checkbox', true, @document_fedora.required_fields_completed?, :disabled=>true%> 
+			<label for="required_fields_checkbox">
+				<%= select_status_checkbox_icon(@document_fedora.required_fields_completed?) %>
+				Required fields completed
+			</label>
+
+			<%=check_box_tag 'files_uploaded_checkbox', true, @document_fedora.files_uploaded?, :disabled=>true%>
+			<label for="files_uploaded_checkbox">
+				<%= select_status_checkbox_icon(@document_fedora.files_uploaded?) %>
+				File(s) uploaded
+			</label>
+
+			<%=check_box_tag 'release_reviewed_checkbox', true, @document_fedora.reviewed_release_settings?, :disabled=>true%>
+			<label for="release_reviewed_checkbox">
+				<%= select_status_checkbox_icon(@document_fedora.reviewed_release_settings?) %>
+				Release and visibility of content settings reviewed
+			</label>
+
+			<%=check_box_tag 'depositor_agreement_checkbox', true, @document_fedora.terms_of_deposit_accepted?, :disabled=>true%> 
+			<label for="depositor_agreement_checkbox">
+				<%= select_status_checkbox_icon(@document_fedora.terms_of_deposit_accepted?) %>
+				Depositor agreement with
+				<%=link_to("Terms of Deposit", terms_of_deposit_path(@document_fedora.id), :target=>'_blank', :class=>'tod_link', :"data-url" => terms_of_deposit_path(@document_fedora.id))%>
+			</label>
+
+			<%=check_box_tag 'item_opened_checkbox', true, @document_fedora.is_publishable, :disabled=>true%> 
+			<label for="item_opened_checkbox">
+				<%= select_status_checkbox_icon(@document_fedora.is_publishable) %>
+				Item can be published
+			</label>
+
+		<% end %>
+	</div>
+
+</div>
