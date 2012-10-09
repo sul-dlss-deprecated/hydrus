@@ -223,6 +223,42 @@ describe("Collection edit", :type => :request, :integration => true) do
       @hc = Hydrus::Collection.find @druid
       @hc.apo_person_roles.should == role_info
     end
+
+    it "should be able to strip email addresses to leave just sunetIDs from persons with various roles" do
+      # Visit edit page.
+      login_as_archivist1
+      should_visit_edit_page(@hc)
+      # Check the initial role-management section.
+      role_info = @hc.apo_person_roles
+      check_role_management_div(role_info)
+      # Modify the roles in the UI.
+      role_info = {
+        'hydrus-collection-manager'        => Set.new(%w(aa@crapola.com bb archivist1)),
+        'hydrus-collection-reviewer'       => Set.new(%w(cc dd ee@dude.com)),
+        'hydrus-collection-item-depositor' => Set.new(%w(ff@yoyo.com)),
+        'hydrus-collection-viewer'         => Set.new(%w(gg hh ii@wazzzup.org)),
+        'hydrus-collection-depositor'      => Set.new(%w(ggreen@i.am.a.stupid.domainname.com)),
+      }
+      role_info_stripped = {
+        'hydrus-collection-manager'        => Set.new(%w(aa bb archivist1)),
+        'hydrus-collection-reviewer'       => Set.new(%w(cc dd ee)),
+        'hydrus-collection-item-depositor' => Set.new(%w(ff)),
+        'hydrus-collection-viewer'         => Set.new(%w(gg hh ii)),
+        'hydrus-collection-depositor'      => Set.new(%w(ggreen)),
+      }      
+      rmdiv = find('div#role-management')
+      dk    = 'hydrus_collection_apo_person_roles'
+      role_info.each do |role,ids|
+        rmdiv.fill_in("#{dk}[#{role}]", :with => ids.to_a.join(', '))
+      end
+      # Check role-management section after additions.
+      click_button "Save"
+      should_visit_edit_page(@hc)
+      check_role_management_div(role_info_stripped)
+      # Confirm new content in fedora.
+      @hc = Hydrus::Collection.find @druid
+      @hc.apo_person_roles.should == role_info_stripped
+    end
     
   end
 

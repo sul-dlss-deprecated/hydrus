@@ -140,12 +140,11 @@ class Hydrus::Collection < Hydrus::GenericObject
      strip_whitespace_from_fields [:title,:abstract,:contact]
   end
 
+  # convert email addresses to sunet format (i.e. chop off anything after the @ sign)
   def cleanup_usernames
-    apo_person_roles.each do |role,users|
-      users.collect do |user|
-        user[/[^@]+/]
-      end
-    end
+    result={}
+    apo_person_roles.each {|role,users| result[role]=users.to_a.collect {|user| user[/[^@]+/]}.join(',')}
+    self.apo_person_roles=result
   end
   
   def save_apo
