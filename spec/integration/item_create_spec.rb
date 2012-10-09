@@ -84,8 +84,8 @@ describe("Item create", :type => :request, :integration => true) do
       :person   => 'person_foo',
     )
     publish_button    = "Submit for Approval"
-    approve_button    = "Approve"
-    disapprove_button = "Disapprove"
+    approve_button    = "Approve Item"
+    disapprove_button = "Return Item"
     # Force Items to receive human approval.
     coll = Hydrus::Collection.find(@hc_druid)
     coll.requires_human_approval = 'yes'

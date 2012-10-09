@@ -18,12 +18,14 @@
               <p>
                 <button type="submit" class="btn btn-small save-edits"
                         name="hydrus_item[approve][value]" value="no"
-                        id="hydrus_item_disapprove">Disapprove Item</button>
+                        id="hydrus_item_disapprove">Return Item</button>
               </p>
               <p>
-                  <%= label_tag("hydrus_item_disapproval_reason", "Disapproval reason") %>
+                  <%= label_tag("hydrus_item_disapproval_reason", "Reason for return", 
+                      :class => "return-item") %>
                   <%= text_field_tag("hydrus_item[approve][reason]",
-                                     @document_fedora.disapproval_reason) -%>
+                                     @document_fedora.disapproval_reason, :class => "return-item", :autofocus => true) -%>
+                  <span class="help">Item depositor will be notified by email</span>
               </p>
 
             <% end %>

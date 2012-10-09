@@ -268,7 +268,13 @@ noscript #item-actions, noscript #collection-actions {
 				margin-right: 7px;
 				font-size: 15px;
 			}
+			&.return-item {
+				font-weight: bold;
+				margin-left: 3px;
+				padding-bottom: 0;}
 		}
+		input.return-item {margin-bottom: 2px;}
+		.help {margin-left: 3px;}
 		p {
 			font-size: 12px;
       &.discard-item {
