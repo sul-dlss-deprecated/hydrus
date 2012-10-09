@@ -14,6 +14,14 @@ describe("Item view", :type => :request, :integration => true) do
     current_path.should == root_path
   end
 
+  it "Breadcrumbs should be displayed with home link, linked trucated collection name, and unlinked item name with state" do
+    login_as_archivist1
+    visit polymorphic_path(@hi)
+    page.should have_selector("ul.breadcrumb li a", :text => "Home")
+    page.should have_selector("ul.breadcrumb li a", :text => "SSDS Social Science Data Co...")
+    page.should have_selector("ul.breadcrumb li", :text => "How Couples Meet and Stay T... (published)")
+  end
+
   it "should redirect to the item page if the requested druid is an item but is visited at the collection page URL" do
     @bad_url = "/collections/#{@druid}" # this is actually an item druid
     login_as_archivist1

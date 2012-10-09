@@ -166,6 +166,16 @@ class Hydrus::Item < Hydrus::GenericObject
       :include_root_xml => false)
   end
 
+  def status
+    if is_published 
+      return "published"
+    elsif to_bool(requires_human_approval)
+      return "waiting approval"
+    else
+      return "draft"
+    end
+  end
+  
   # Returns true only if the Item is unpublished.
   def is_destroyable
     return not(is_published)

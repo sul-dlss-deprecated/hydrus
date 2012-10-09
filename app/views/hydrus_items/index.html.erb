@@ -40,7 +40,7 @@
               <td><%= item_title_link(item) %></td>
               <td><%= item.item_depositor_name %></td>
               <td><font color=red><%= item.object_type %></font></td>
-              <td><font color=red>#TODO</font></td>
+              <td><%= item.status %></td>
               <td><%= hydrus_format_date(item.submit_time) %></td>
             </tr>
           <% end %>

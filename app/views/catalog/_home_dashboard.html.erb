@@ -3,13 +3,14 @@
     <h3>No active collections</h3>
     <br/>
   <%- else -%>
-    <h3>Your active collections</h3>
+    <h3>Your Active Collections</h3>
     <table class="hydrus-striped-table table-striped table-condensed">
       <thead>
         <tr>
           <th class="title">Collection</th>
           <th class="journal">Your roles</th>
-          <th class="deposited">Collection items</th>
+          <th class="deposited">Collection Items</th>
+          <th class="deposited">Item Status</th>
         </tr>
       </thead>
       <tbody>
@@ -19,12 +20,18 @@
           <td>
             <%=
               rs = c.roles_of_person(current_user.to_s)
-              Hydrus::Responsible.roles_for_ui(rs).join(', ')
+              Hydrus::Responsible.roles_for_ui(rs).join(', ').downcase
             %>
           </td>
+					<td>
+						<% if c.hydrus_items.size == 0 %>
+						 	no items yet
+						<% else %>
+							<%= link_to pluralize(c.hydrus_items.size, 'item'), polymorphic_path([c, :items])%>
+          	<% end %>
+					</td>
           <td>
-            <%= pluralize(c.hydrus_items.size, 'item')%>:
-            <%= c.item_counts.collect {|state,num| "#{num} #{state}"}.join(', ') %>
+            <%= c.item_counts.collect {|state,num| "#{num} #{state.gsub('_',' ')}"}.join(', ') %>
           </td>
         </tr> 
         <% end %>
