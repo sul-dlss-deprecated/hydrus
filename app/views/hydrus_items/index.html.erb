@@ -22,7 +22,7 @@
           <tr>
             <th class="title">Title</th>
             <th class="depositor">Depositor</th>
-            <!--<th class="type">Type</th>-->
+            <!-- <th class="type">Type</th> -->
             <th class="status">Status</th>
             <th class="date">Date added</th>
           </tr>
@@ -34,7 +34,7 @@
             <tr class="document <%= cycle("even","odd") %>">
               <td><%= item_title_link(item) %></td>
               <td><%= item.item_depositor_name %></td>
-              <!--<td><font color=red>#TODO</font></td>-->
+              <!-- <td><%#= item.object_type %></td> -->
               <td><%= item.status %></td>
               <td><%= hydrus_format_date(item.submit_time) %></td>
             </tr>

@@ -7,9 +7,7 @@
 	<%= render :partial => "actions_box_show"%>
 <%- end -%>
 
-
 <div>
-
   <div class="row">
     <div class="span9">
   		<%=render :partial=>'navigation' %>
@@ -17,11 +15,10 @@
   </div>
 
   <div id="object-content-wrapper">
-	  <dl class="dl-horizontal object-view clearfix">
+  	<h3><%= hydrus_object_setting_value(@document_fedora.title) %></h3>
+		<h4 class="muted">Item Settings</h4>
+	  <dl class="dl-horizontal item-view clearfix">
 
-	    <h3><%= hydrus_object_setting_value(@document_fedora.title) %></h3>
-			<h4 class="muted">Item Settings</h4>
-			
 			<%= render "hydrus_items/basic_item_metadata" %>
 
 			 <div class="collection-items">
@@ -32,10 +29,9 @@
 			    <% end %>
 			</div>
 
-
 		  <% unless @document_fedora.files.size == 0 %>
-		    <div class="item-files">
-			     <h4>Files associated With This Item</h4>
+		    <div class="item-files collection-items">
+			     <h4>Files associated with this item</h4>
 
 		      <table class="hydrus-striped-table table-striped table-condensed">
 		        <thead>
@@ -89,7 +85,6 @@
 		     <% end %>
 		 </div>
 	  
-
 	  <% end %>
   </div> <!-- object-content-wrapper --> 
   	<div id="druid-footer"><%= @document_fedora.pid %></div>

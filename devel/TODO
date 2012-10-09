@@ -6,8 +6,6 @@ Item and Collect edit. When you click one of the "Add..." or "Delete..."
 buttons, we should give the user some visual feedback so they don't think
 nothing happened.
 
-UI redesign: side bar and tabs.
-	
 Make sidebar fixed when in Edit mode (broke when moving sidebar to right side
 because it's harder to use position:fixed on right side of viewport).
 
@@ -19,7 +17,15 @@ Update search results page; UI redesign degraded formatting of it.
 
 Make date format consistent (YYYY-MM-DD)
 
-Comment-out item type column in event history table [done]
+Collection Edit and Item Edit pages: fix formatting of fields and headings.
+Formatting that was useful when sidebar was on left-side is now creating 
+problems with sidebar on right-side.
+
+Item View page: Fix conditional display of metadata sections when only some 
+required fields have been saved.
+
+Collection Items page: Type column is temporarily commented out. Add back when
+we distinguish between different item types.
 
 --------
 Roles and Discovery

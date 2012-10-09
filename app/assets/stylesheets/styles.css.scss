@@ -21,16 +21,14 @@
 
 /* forms */
 .section-header {
-	background-color: #F5F5F5;
-	border: 1px solid rgba(0,0,0,0.05);
-	margin-bottom: 20px;
-	margin-left: -1px;
+	// background-color: #F5F5F5;
+	// border: 1px solid rgba(0,0,0,0.05);
+	// margin-bottom: 20px;
+	margin-left: 0px;
 	margin-top: 30px;
 	padding: 2px 0;
-	> .span1, > .span9 {margin-left: 5px;}
-	// > .span9 {margin-left: 5px;}
+	> .span1, > .span9 {margin-left: 3px;}
 	&.first-header {margin-top: 6px;}
-	h3 {float: left; padding-left: 2px;}
 }
 .section-header .required {
 	// color: #990000;
@@ -43,7 +41,6 @@
 .form-section-para {margin-top: 20px;}
 
 .form-label {
-	text-align: right;
 	@media (max-width: 767px) {
 		text-align: left;
 	}
@@ -207,6 +204,7 @@ form.step .embargo .datepicker {
 /* search results */
 table.hydrus-striped-table {
 	@include striped-table;
+	margin-bottom: 20px;
 	margin-top: 6px;
 	width: 100%;
 }
@@ -333,11 +331,11 @@ noscript #item-actions, noscript #collection-actions {
 
 #catalog-index .user-collections {
 	h3 {margin-top: 24px;}
-	table {margin-bottom: 12px;}
+	table {border-bottom: 1px solid #ddd;}
 	// .btn-primary {@include primary-button;}
 }
 
-/* object view */
+/* object views */
 .unspecified {font-style: italic;}
 
 #hydrus_items-show {
@@ -347,24 +345,28 @@ noscript #item-actions, noscript #collection-actions {
 	}
 	#druid-footer {@include druid-footer;}
 }
-dl.object-view {
+dl.collection-view, dl.item-view {
 	margin-bottom: 0;
-	margin-top: 20px;
-}
-.object-view {
+	margin-top: 0;
 	h3 {margin-bottom: 15px;}
 	dt {
 		color: #999;
-		width: 158px;
 		&.hidden-label {@include hidden-label;}
 	}
 	dd {
-		margin-left: 173px;
 		padding-bottom: 6px;
 		@media (max-width: 768px) {
 			margin-left: 0;
 		}
 	}
+}
+dl.item-view {
+	dt {width: 158px;}
+	dd {margin-left: 173px;}
+}
+.collection-items h4, .section-header h4 {
+	border-top: 1px solid #CCC;
+	padding: 8px 0 12px;
 }
 
 #hydrus_collections-show {
@@ -439,7 +441,7 @@ p.homepage-intro {
 }
 
 h1 {
-	border-bottom: 1px solid #DDD;
+	border-bottom: 2px solid #CCC;
 	color: #333;
 	font-size: 24px;
 	margin: 30px 0 5px 5px;
@@ -477,11 +479,12 @@ ul.breadcrumb {
 }
 
 #object-content-wrapper {
-	border-bottom: 1px solid #DDD;
-	border-top: 1px solid #DDD;
+	border-bottom: 2px solid #DDD;
+	border-top: 2px solid #DDD;
+	// border: 2px solid #DDD;
 	// border-radius: 0 0 14px 14px;
 	padding: 10px 20px 10px 10px;
-	h3 + h4 {margin-bottom: 10px;}
+	h3 + h4 {margin-bottom: 30px;}
 }
 
 
