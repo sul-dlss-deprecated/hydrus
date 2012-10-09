@@ -235,6 +235,10 @@ noscript #item-actions, noscript #collection-actions {
 		margin-bottom: 6px;
 		padding: 10px 6px 6px 10px;
 		text-transform: uppercase;
+		.status-label {
+			float: right;
+			text-transform: none;
+		}
 	}
 	.box-body {
 		padding: 10px;

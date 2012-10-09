@@ -1,9 +1,9 @@
 <div class="collection-status box-header">
 	<span>Status</span> 
 	<% if @document_fedora.is_open %>
-		<button class="pull-right btn btn-success btn-mini" type="button">Open for deposit</button>
+		<span class="label label-success status-label">Open for deposit</span>
  <% else %>
-		<button class="pull-right btn btn-danger btn-mini" type="button">Closed for deposit</button>
+ 		<span class="label label-important status-label">Closed for deposit</span>
   <% end %>
 </div>
 <div class="box-body">

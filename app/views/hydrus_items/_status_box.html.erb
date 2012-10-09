@@ -2,9 +2,9 @@
    <div class="box-header">
 			<span>Status</span>
 			<% if @document_fedora.is_published %>
-				<button class="pull-right btn btn-success btn-mini" type="button">Published</button>
+				<span class="label label-success status-label">Published</span>
 			<% else %>
-				<button class="pull-right btn btn-warning btn-mini" type="button">Draft</button>
+				<span class="label label-warning status-label">Draft</span>
 			<% end %>
    </div>
 	 <div class="box-body">
