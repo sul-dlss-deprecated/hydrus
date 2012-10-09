@@ -5,7 +5,7 @@ describe("Home page", :type => :request, :integration => true) do
   before(:each) do
     @search_box  = 'select.search_field + input.submit'
     @sdr         = "Stanford Digital Repository"
-    @your_cs     = "Your active collections"
+    @your_cs     = "Your Active Collections"
     @breadcrumbs = "ul.breadcrumb li a"
     @cc_button   = 'a.btn [href="/collections/new"]'
     @alert       = 'div.alert'

@@ -14,6 +14,9 @@ module Hydrus::Authorizable
     ids = Set.new %w(
       archivist1
       archivist2
+      amyhodge
+      ronbo
+      mmarosti
     )
     return administrators.union(ids)
   end

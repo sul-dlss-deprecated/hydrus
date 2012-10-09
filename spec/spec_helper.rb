@@ -1,5 +1,4 @@
 # for test coverage 
-
 ruby_engine = defined?(RUBY_ENGINE) ? RUBY_ENGINE : "ruby"
 
 if ENV['COVERAGE'] == "true" and ruby_engine != "jruby"

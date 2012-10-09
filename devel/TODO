@@ -17,9 +17,20 @@ After finishing more thorough UI rework, look at:
 
 Update search results page; UI redesign degraded formatting of it.
 
+Make date format consistent (YYYY-MM-DD)
+
+Comment-out item type column in event history table
+
 --------
 Roles and Discovery
 --------
+
+Hardcode SUNets of our testers in the collection-creator role
+
+Change link in email notification from "hydrus.stanford.edu" to "hydrus-test.stanford.edu"
+
+Don't allow users to edit a published item when in dortest or production environment (allow in others for testing purposes).
+This will get fixed eventually in all environments when we have versioning.
 
 Integration tests for role-protection and gated discovery:
   Dashboard:
@@ -53,9 +64,20 @@ over the states of our fixture objects.
 person_roles=(). Prune unneeded roles. For example, if user X is a collection
 manager, it's pointless to make him a lesser role like reviewer.
 
+Strip any text after @ sign for users entered into roles (so users don't inadvertently enter email addresses instead of sunet)
+
+Item page: don't show edit tab for reviewers (or for people who don't have permissions).
+
 --------
 Misc implementation tasks
 --------
+
+Update to latest dor-services-gem:
+  - create a new DOR object fixture for the hydrusWF workflow according to the new model
+  - remove hydrusWF workflow definition from APO
+
+Fix checkbox for terms of deposit acceptance javascript when returning via ajax.  Also enable publish button 
+when on view page?  Or refresh?
 
 Change fixtures so that they don't use anything that could be a real SUNETID.
 
