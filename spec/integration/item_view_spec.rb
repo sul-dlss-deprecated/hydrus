@@ -66,9 +66,9 @@ describe("Item view", :type => :request, :integration => true) do
 
   it "should show the events in a history tab" do
     exp_content = [
-      "SSDS Social Science Data Collection",
       "How Couples Meet and Stay Together",
-      'cardinal',
+      'Event History for This Item',
+      'Item created'
     ]
     login_as_archivist1
     visit polymorphic_path([@hi, :events])
