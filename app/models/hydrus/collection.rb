@@ -6,7 +6,7 @@ class Hydrus::Collection < Hydrus::GenericObject
   before_save :save_apo
 
   before_validation :remove_values_for_associated_attribute_with_value_none
-  after_validation :strip_whitespace
+  after_validation :strip_whitespace, :cleanup_usernames
 
   attr_accessor :item_counts
 
@@ -140,6 +140,14 @@ class Hydrus::Collection < Hydrus::GenericObject
      strip_whitespace_from_fields [:title,:abstract,:contact]
   end
 
+  def cleanup_usernames
+    apo_person_roles.each do |role,users|
+      users.collect do |user|
+        user[/[^@]+/]
+      end
+    end
+  end
+  
   def save_apo
     apo.save
   end

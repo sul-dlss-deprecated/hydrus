@@ -40,20 +40,6 @@ describe ApplicationHelper do
       view_path_from_model(Hydrus::Collection.new(:pid=>"1234")).should == "hydrus_collections"
       view_path_from_model(Hydrus::Item.new(:pid=>"1234")).should       == "hydrus_items"
     end
-    describe "render_contextual_navigation" do
-      it "should return the correct data" do
-        @document_fedora = Hydrus::Collection.new(:pid=>"1234")
-        helper.should_receive(:polymorphic_path).with(@document_fedora).and_return("")
-        helper.should_receive(:edit_polymorphic_path).with(@document_fedora).and_return("")
-        helper.should_receive(:polymorphic_path).with([@document_fedora,:items]).and_return("")
-        helper.should_receive(:polymorphic_path).with([@document_fedora,:events]).and_return("")
-        nav = Capybara.string(render_contextual_navigation(@document_fedora))
-        nav.should have_css("ul.nav.nav-pills li a")
-        ["View Collection", "Edit Collection", "Items", "History"].each do |text|
-          nav.should have_content(text)
-        end
-      end
-    end
   end
 
 end

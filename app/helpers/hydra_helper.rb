@@ -2,20 +2,19 @@ module HydraHelper
 
   include Hydra::HydraHelperBehavior
 
-  def home_link
-    link_to("Home",root_url)
+  # indicates if we should show the item edit tab for a given item
+  # only if its not published yet, unless we are in development mode (to make development easier)
+  def show_item_edit(item)
+    can?(:edit,@document_fedora) && (!@document_fedora.is_published || ["development","test"].include?(Rails.env))
   end
   
-  def edit_and_browse_links
-    if params[:action] == "edit" || params[:action] == "update"
-      link_to("Switch to browse view", 
-              polymorphic_path(@document_fedora, :viewing_context => 'browse'),
-              :class => 'browse toggle')
-    else
-      link_to("Switch to edit view", 
-              edit_polymorphic_path(@document_fedora, :viewing_context => 'edit'),
-              :class => 'edit toggle')
-    end
+  def edit_item_text(item)
+    ["development","test"].include?(Rails.env) ? "Edit Draft (only for dev)" : "Edit Draft"
+  end
+  
+  # text to show on item view tab
+  def view_item_text(item)
+    item.is_published ? "Published Version" : "View Draft"
   end
 
 end
