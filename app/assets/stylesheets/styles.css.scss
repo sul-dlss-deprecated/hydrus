@@ -451,6 +451,13 @@ ul.breadcrumb {
 	border: none;
 	margin-bottom: 25px;
 	padding: 6px;
+	a {
+		border-bottom: none;
+		color: #6D1308;
+		font-weight: bold;
+	}
+	a:hover {border-bottom: 1px dotted #84785A}
+	.divider {color: #CCC;}
 }
 
 /* navigation */

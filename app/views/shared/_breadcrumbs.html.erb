@@ -1,11 +1,11 @@
 <ul class="breadcrumb">
-  <li><%= link_to 'Home', root_path%> <span class="divider">/</span></li>
+  <li><%= link_to 'Home', root_path%></li>
   <% if @document_fedora %>
 		<% if @document_fedora.is_collection? %>
-	  	<li><%= truncate(@document_fedora.title) %> <span class="divider">/</span></li>
+	  	<li><span class="divider">/</span> <%= truncate(@document_fedora.title) %></li>
 	  <% else %>
-			<li><%= link_to truncate(@document_fedora.collection.title), hydrus_collection_path(@document_fedora.collection)%> <span class="divider">/</span></li>
-			<li><%= "#{truncate(@document_fedora.title)} (#{@document_fedora.status})"%></li>
+			<li><span class="divider">/</span> <%= link_to truncate(@document_fedora.collection.title), hydrus_collection_path(@document_fedora.collection)%> </li>
+			<li><span class="divider">/</span> <%= "#{truncate(@document_fedora.title)} (#{@document_fedora.status})"%></li>
 		<% end %>
 	<% end %>
 </ul>
