@@ -357,18 +357,11 @@ dl.object-view {
 	}
 }
 
-.collection-items {
-	border-top: 1px solid #eee;
-	margin: 20px 0 0;
-	padding: 8px 0;
-	h4 { margin-bottom: 12px;}
-}
-
 #hydrus_collections-show {
 	#druid-footer {@include druid-footer;}
 }
 
-.event-history {
+.event-history, .collection-items {
 	margin-top: 25px;
 }
 

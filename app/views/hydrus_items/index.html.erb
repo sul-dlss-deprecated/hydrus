@@ -14,11 +14,6 @@
 </div>
 <div id="object-content-wrapper">
   <h3><%= hydrus_object_setting_value(@document_fedora.title) %></h3>
-
-  <dl class="dl-horizontal object-view clearfix">
-    <%= render "hydrus_collections/basic_collection_metadata" %>
-  </dl>
-
   <h4 class="muted">Items in this Collection</h4>
   <%- unless @document_fedora.hydrus_items.blank? -%>
     <div id="items" class="collection-items">
