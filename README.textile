@@ -52,6 +52,7 @@ fixtures.  Login with the following default user:
 username: archivist1@example.com
 password: beatcal
 	
+Collection manager SUNETids hardcoded into app/models/hydrus/authorizable.rb
 
 h2. Developing
 
@@ -144,6 +145,11 @@ h3. Tests:
 	rake local_ci	   # run all tests (will shut down jetty, runs 'rake ci' task and then restart jetty)
 	rake rspec       # just run rspec tests
 	open coverage/rcov/index.html  # check your test coverage (won't exist until tests run at least once)
+
+Test failure on embargo dates?  Open a rails console in development mode and:
+
+Dor::WorkflowService.delete_workflow('dor','__DO_NOT_USE__','hydrusAssemblyWF')
+
 
 h3. App URLs:
 

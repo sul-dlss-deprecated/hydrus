@@ -1,5 +1,5 @@
 source :rubygems
-source "http://sulair-rails-dev.stanford.edu"
+source 'http://sul-gems.stanford.edu'
 
 # def dor_services_gem_params
 #   p = '/afs/ir/dev/dlss/git/lyberteam/dor-services-gem.git'
@@ -12,7 +12,7 @@ source "http://sulair-rails-dev.stanford.edu"
 #   end
 # end
 
-gem 'dor-services', ">= 3.5.1"  # , dor_services_gem_params
+gem 'dor-services', "<= 3.9.1"  # , dor_services_gem_params
 gem 'druid-tools', '>= 0.2.0'
 gem 'sul_chrome'
 gem 'about_page'
