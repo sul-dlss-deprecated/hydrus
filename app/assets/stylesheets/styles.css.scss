@@ -34,8 +34,8 @@
 	// color: #990000;
 	color: #FFF;
 	float: right;
-	margin-right: 12px;
-	margin-top: 3px;
+	margin-right: 25px;
+	margin-top: 8px;
 }
 
 .form-section-para {margin-top: 20px;}
@@ -70,6 +70,7 @@ form.step #file-upload {
 	input[type=text] {
 		width: 88%;
 	}
+	#files_ {margin-top: 20px;}
 }
 
 .delete-node, .delete-file {
@@ -367,11 +368,20 @@ dl.item-view {
 .collection-items h4, .section-header h4 {
 	border-top: 1px solid #CCC;
 	padding: 8px 0 12px;
+	margin-right: 25px;
 }
 
+#hydrus_items-edit .field-group, #hydrus_collections-edit .field-group {
+	margin-left: -25px;
+	margin-right: -20px;
+	&> .span8 {margin-right: -20px;}
+	@media (min-width: 768px) and (max-width: 1199px) {margin-left: -16px;}
+	@media (max-width: 767px) {margin-left: 5px;}
+}
 #hydrus_collections-show {
 	#druid-footer {@include druid-footer;}
 }
+#hydrus_collections-edit #main p {margin-left: 4px;}
 
 .event-history, .collection-items {
 	margin-top: 25px;

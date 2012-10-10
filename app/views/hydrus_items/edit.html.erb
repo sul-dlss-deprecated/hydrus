@@ -18,7 +18,7 @@
 <%= form_for(@document_fedora, :method => 'PUT', :html => {:class=>"step", :multipart=>true, :"data-track-state-change"=>"true", :novalidate=>""}) do |f| -%>
   <%= hidden_field_tag("object_id", params[:id]) -%>
   <%= hydrus_form_header(:required=>true, :first=>true) {"Title and contact"} %>
-  <div class="row">
+  <div class="row field-group">
     <%= hydrus_form_label do %>
       <%= f.label :title, "Title of #{object_type}" %>
     <%- end -%>
@@ -26,7 +26,7 @@
       <%= f.text_area :title, :value=>(@document_fedora.title || ""), :required => true %>
     <%- end -%>
   </div>
-  <div class="row">
+  <div class="row field-group">
     <%= hydrus_form_label do %>
       Contact email
     <%- end -%>
@@ -36,7 +36,7 @@
   </div>
 
   <%= hydrus_form_header(:required=>true) {"People and organizations responsible for this #{object_type}"} -%>
-  <div class="row">
+  <div class="row field-group">
     <!-- <%= hydrus_form_label do %> -->
       <!-- <%= f.label :person_0, "People" -%> -->
     <!-- <%- end -%> -->
@@ -48,7 +48,7 @@
   </div>
 
   <%= hydrus_form_header(:required=>true) {"Upload file(s)"} -%>
-  <div class="row">
+  <div class="row field-group">
     <div class="span9" id="file-upload">
       <div id="uploaded-files">
         <%- unless @document_fedora.files.blank? -%>
@@ -66,7 +66,7 @@
   </div>
 
   <%= hydrus_form_header(:required=>true) {"Abstract and keywords"} -%>
-  <div class="row">
+  <div class="row field-group">
     <%= hydrus_form_label do %>
       <%= f.label :abstract %>
     <%- end -%>
@@ -74,7 +74,7 @@
       <%= f.text_area :abstract, :value=>(@document_fedora.abstract || ""), :required=>true %>
     <%- end -%>
   </div>
-  <div class="row">
+  <div class="row field-group">
     <%= hydrus_form_label do %>
       <%= label_tag("hydrus_item_keywords", "Keywords") %>
     <%- end -%>
@@ -85,7 +85,7 @@
   </div>
 
   <%= hydrus_form_header {"Citations"} -%>
-  <div class="row">
+  <div class="row field-group">
     <%= hydrus_form_label do %>
       <%= f.label :preferred_citation, "Preferred citation for this #{object_type}", :class => "hidden-tablet" %>
       <%= f.label :preferred_citation, "Cite this #{object_type}", :class => "visible-tablet" %>
@@ -94,7 +94,7 @@
       <%= f.text_area :preferred_citation, :value=>hydrus_strip(@document_fedora.preferred_citation) %>
     <%- end -%>
   </div>
-  <div class="row">
+  <div class="row field-group">
     <%= hydrus_form_label do %>
       <%= f.label :"related_citation_0", "Related published work" %>
     <%- end -%>
@@ -104,7 +104,7 @@
       </div>
     <%- end -%>
   </div>
-  <div class="row">
+  <div class="row field-group">
     <div class="span8 offset1">
       <%= button_tag("Add another related work", :name=>"add_related_citation", :"data-attribute" => "add_related_citation", :id=>"add_related_citation", :class=>"btn", :value=>@document_fedora.related_citation.length) %>
     </div>
@@ -115,7 +115,7 @@
   <div id="related-items" class="destroy-group">
     <%= render "related_items" %>
   </div>
-  <div class="row">
+  <div class="row field-group">
     <div class="span8 offset1">
       <%= button_tag("Add another link", :name=>"add_link", :"data-attribute" => "add_link", :id=>"add_link", :class=>"btn", :value=>@document_fedora.related_items.length) %>
     </div>
@@ -123,7 +123,7 @@
 
 <%= hydrus_form_header{"Release and visibility of content"} %>
   <!-- Embargo -->
-  <div class="row embargo">
+  <div class="row embargo field-group">
     <div class="span9 sub-section">
     <% case @document_fedora.collection.embargo_option %>
     <% when 'none' %>
@@ -150,7 +150,7 @@
 </div>
   </div>
   <!-- Visiblity -->
-  <div class="row">
+  <div class="row field-group">
     <div class="span9">
     <% case @document_fedora.collection.visibility_option_value %>
     <% when 'everyone' %>
@@ -171,7 +171,7 @@
     <% end %>
     </div>
   </div>
-  <div class="row">
+  <div class="row field-group">
     <div class="span9 sub-section">
   <span>
 	  <br />
@@ -180,7 +180,7 @@
   </div></div>
 
  <%= hydrus_form_header{"License"} %>
-  <div class="row">
+  <div class="row field-group">
     <div class="span9">
     <% case @document_fedora.collection.license_option %>
     <% when 'none' %>
@@ -198,7 +198,7 @@
   </div>
 
   <%= hydrus_form_header{"Terms of Use"} %>
-  <div class="row">
+  <div class="row field-group">
     <div class="span9">
       People who can discover and download this item will agree to these <a href="#">Terms of Use</a>.
     </div>

@@ -24,7 +24,7 @@
   <h4 class="muted">Collection Settings</h4>
 
     <%= hydrus_form_header(:required=>true, :first=>true) {"Name, description, contact"} %>
-    <div class="row">
+    <div class="row field-group">
       <%= hydrus_form_label do %>
         <%= f.label :title, "Collection name" %>
       <%- end -%>
@@ -32,7 +32,7 @@
         <%= f.text_field :title, :value => (@document_fedora.title || ""), :required => true %>
       <%- end -%>
     </div>
-    <div class="row">
+    <div class="row field-group">
       <%= hydrus_form_label do %>
         <%= f.label :abstract, "Description" %>
       <%- end -%>
@@ -40,7 +40,7 @@
         <%= f.text_area :abstract, :value => (@document_fedora.abstract || ""),:required => true %>
       <%- end -%>
     </div>
-    <div class="row">
+    <div class="row field-group">
       <%= hydrus_form_label do %>
         Contact email
       <%- end -%>
@@ -53,7 +53,7 @@
     <div id="related-items" class="destroy-group">
       <%= render "related_items" %>
     </div>
-    <div class="row">
+    <div class="row field-group">
       <div class="span8 offset1">
         <%= button_tag("Add another link", :name=>"add_link", :"data-attribute" => "add_link", :id=>"add_link", :class=>"btn", :value=>@document_fedora.related_items.length) %>
       </div>
@@ -156,7 +156,7 @@
     <div id="role-management">
       <p>Provide a SUNet ID (NOT email address) for each person who can view, add, or review items in this
          collection, or who can manage the collection. Separate multiple IDs with a comma.</p>
-  			  <div class="row">
+  			  <div class="row field-group">
   				 <%= hydrus_form_label do %>
   				  	<%= f.label :'apo_person_roles[hydrus-collection-depositor]', 'Owner' %>
   				  <%- end %>
@@ -174,7 +174,7 @@
           next if role == 'hydrus-collection-depositor'
           k = :"apo_person_roles[#{role}]"
         %>
-  	      <div class="row">
+  	      <div class="row field-group">
   	        <%= hydrus_form_label do %>
   	          <%= f.label k, role_label.pluralize %>
   	        <%- end %>
