@@ -289,15 +289,19 @@ noscript #item-actions, noscript #collection-actions {
 }
 
 #hydrus_items-edit #sidebar, #hydrus_collections-edit #sidebar {
-	// position:fixed;
-	@media (max-width: 768px) {
+	position:fixed;
+	margin-left: 930px;
+	@media (min-width: 980px) and (max-width: 1199px) {margin-left: 740px;}
+	@media (min-width: 768px) and (max-width: 979px) {margin-left: 590px;}
+	@media (max-width: 767px) {
 		position: relative;
+		margin-left: 0;
 	}
 }
   /* reformat sidebar based on screen size */
 .actions-box.item-status,
 .actions-box.collection-settings { 
-	@media (min-width: 768px) and (max-width: 978px) {
+	@media (min-width: 768px) and (max-width: 979px) {
 	  .dl-horizontal dt {
 		  clear: both;
 		  width: 100%;

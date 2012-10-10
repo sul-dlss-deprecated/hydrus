@@ -6,9 +6,6 @@ Item and Collect edit. When you click one of the "Add..." or "Delete..."
 buttons, we should give the user some visual feedback so they don't think
 nothing happened.
 
-Make sidebar fixed when in Edit mode (broke when moving sidebar to right side
-because it's harder to use position:fixed on right side of viewport).
-
 After finishing more thorough UI rework, look at:
   responsive issues
   accessibility issues
