@@ -9,7 +9,7 @@ module HydraHelper
   end
   
   def edit_item_text(item)
-    ["development","test"].include?(Rails.env) ? "Edit Draft (only for dev)" : "Edit Draft"
+    "Edit Draft"
   end
   
   # text to show on item view tab

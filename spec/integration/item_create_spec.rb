@@ -154,7 +154,7 @@ describe("Item create", :type => :request, :integration => true) do
     item.is_destroyable.should == false
     item.valid?.should == true
     # Return to edit page, and try to save Item with an empty title.
-    click_link "Edit Draft (only for dev)"
+    click_link "Edit Draft"
     fill_in "hydrus_item_title", :with => ''
     click_button "Save"
     page.should_not have_content(@notice)
