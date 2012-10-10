@@ -17,9 +17,10 @@ Update search results page; UI redesign degraded formatting of it.
 
 Make date format consistent (YYYY-MM-DD)
 
-Collection Edit and Item Edit pages: fix formatting of fields and headings.
-Formatting that was useful when sidebar was on left-side is now creating 
-problems with sidebar on right-side.
+Update SUL-chrome gem to latest Bootstrap (needed to be able to use the 
+unchecked checkbox icon, which is not available in our current SUL-chrome gem).
+When this is done, change "icon-minus" to "icon-check-empty" in the 
+select_status_checkbox_icon helper method (application_helper.rb).
 
 Item View page: Fix conditional display of metadata sections when only some 
 required fields have been saved.
