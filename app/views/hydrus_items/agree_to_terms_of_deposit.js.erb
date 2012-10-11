@@ -1,1 +1,6 @@
-$('#depositor_agreement_checkbox').attr('checked',true);
+$('#status-box').html("<%= escape_javascript(render( :partial => "hydrus_items/status_box")).html_safe %>");
+$('#actions-box').html("<%= escape_javascript(render( :partial => "hydrus_items/actions_box_#{@from}", :locals => {:id=>"js"})).html_safe %>");
+
+<% if @from == 'edit' %>
+ activate_edit_controls();
+<% end %>

@@ -1,9 +1,9 @@
 <%- @page_title = "Editing '#{@document_fedora.title}' - #{application_name}" -%>
 <%- object_type = @document_fedora.object_type -%>
 <% sidebar_items << capture do %>
-	<%= render :partial => "status_box"%>
+	<div id="status-box"><%= render :partial => "status_box"%></div>
 
-  <%= render :partial => "actions_box_edit", :locals => {:id=>"js"}%>
+  <div id="actions-box"><%= render :partial => "actions_box_edit", :locals => {:id=>"js"}%></div>
 <%- end -%>
 
 

@@ -80,7 +80,7 @@ Update to latest dor-services-gem:
   - remove hydrusWF workflow definition from APO
 
 Fix checkbox for terms of deposit acceptance javascript when returning via ajax.  Also enable publish button 
-when on view page?  Or refresh?
+when on view page.  [done]
 
 Change fixtures so that they don't use anything that could be a real SUNETID.
 

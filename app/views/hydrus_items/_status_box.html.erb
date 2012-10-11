@@ -32,7 +32,7 @@
 			<label for="depositor_agreement_checkbox">
 				<%= select_status_checkbox_icon(@document_fedora.terms_of_deposit_accepted?) %>
 				Depositor agreement with
-				<%=link_to("Terms of Deposit", terms_of_deposit_path(@document_fedora.id), :target=>'_blank', :class=>'tod_link', :"data-url" => terms_of_deposit_path(@document_fedora.id))%>
+				<%=link_to("Terms of Deposit", terms_of_deposit_path(@document_fedora.id), :target=>'_blank', :class=>'tod_link', :"data-url" => "#{terms_of_deposit_path(@document_fedora.id)}&from=#{controller.action_name}" )%>
 			</label>
 
 			<%=check_box_tag 'item_opened_checkbox', true, @document_fedora.is_publishable, :disabled=>true%> 

@@ -207,7 +207,7 @@ describe("Item create", :type => :request, :integration => true) do
     es[0...exp.size].zip(exp).each { |e, exp| e.text.should =~ exp  }
   end
   
-  describe "terms of acceptance for an existing item" do
+  describe("terms of acceptance for an existing item", :integration => true)  do
 
     subject { Hydrus::Item.find('druid:oo000oo0001') }
     
@@ -227,7 +227,7 @@ describe("Item create", :type => :request, :integration => true) do
   
   end
 
-  describe "terms of acceptance for a new item" do
+  describe("terms of acceptance for a new item",:integration => true)  do
     
     subject { Hydrus::Collection.find('druid:oo000oo0003') }
     

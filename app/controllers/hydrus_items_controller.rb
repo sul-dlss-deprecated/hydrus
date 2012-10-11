@@ -143,6 +143,7 @@ class HydrusItemsController < ApplicationController
 
   def terms_of_deposit
     @pid=params[:pid]
+    @from=params[:from]
     @document_fedora=Hydrus::Item.find(@pid)
     respond_to do |format|
       format.html
@@ -152,6 +153,7 @@ class HydrusItemsController < ApplicationController
 
   def agree_to_terms_of_deposit
     @pid=params[:pid]
+    @from=params[:from]
     @document_fedora=Hydrus::Item.find(@pid)
     @document_fedora.accept_terms_of_deposit(current_user.to_s)
     @document_fedora.save

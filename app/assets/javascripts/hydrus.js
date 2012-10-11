@@ -23,11 +23,6 @@ function item_edit_init(){
 	// this method is called when the item edit page is fully loaded
   validate_hydrus_item();
 	activate_edit_controls();
-	$(".terms_of_deposit").each(function(){
-		$(this).click(function(){
-			validate_hydrus_item();
-		});
-	});
 	$("form input, form textarea").live("blur", function(){
 	    validate_hydrus_item();
 	});
@@ -59,7 +54,7 @@ $(document).ready(function(){
 	  });
 	});
 	
-	// Terms of deposit modal window
+	// Open terms of deposit modal window for ajax users
 	$(".tod_link").each(function(){
 		$(this).click(function(){
 			$.ajax($(this).attr("data-url") + "&format=js");
@@ -111,7 +106,6 @@ function activate_edit_controls() {
 	// javascript form submission
 	$("#item-actions, #collection-actions").toggle();
 	$("#item-actions button[type=submit], #collection-actions button[type=submit]").click(function(){
-		$("form.step").append("<input type='hidden' value='" + $("input#terms_js").is(":checked") + "' name='" + $('input#terms_js').attr('name') + "' />");	
 		$("form.step").append("<input type='hidden' value='" + $(this).attr('value') + "' name='" + $(this).attr('name') + "' />");	
   	$("form.step").submit();
 	});
@@ -142,7 +136,7 @@ function validate_hydrus_item() {
 	if($("#uploaded-files .object_file").length == 0) {
 		all_required_filled = false;
 	}
-	if(all_required_filled && $("input#terms_js").is(":checked")) {
+	if(all_required_filled) {
 		$("#hydrus_item_publish").each(function(){
 			$(this).removeAttr("disabled");
 		});
