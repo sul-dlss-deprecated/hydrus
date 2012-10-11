@@ -68,6 +68,8 @@ RSpec.configure do |config|
   end
 end
 
+Dor::WorkflowService.delete_workflow('dor','__DO_NOT_USE__','hydrusAssemblyWF')
+
 Dor::Config.configure.suri.mint_ids = false
 
 # Create a Nokogiri document from an XML source, with some whitespace configuration.

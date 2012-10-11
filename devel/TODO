@@ -4,7 +4,7 @@ UI Redesign
 
 Item and Collect edit. When you click one of the "Add..." or "Delete..."
 buttons, we should give the user some visual feedback so they don't think
-nothing happened.
+nothing happened. [done]
 
 After finishing more thorough UI rework, look at:
   responsive issues

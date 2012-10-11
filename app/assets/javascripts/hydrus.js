@@ -92,12 +92,13 @@ function activate_edit_controls() {
 
 	$(".delete-node").live("click", function(){
 		var button = $(this);
+		ajax_loading_indicator(button);
 		$.ajax({url: button.attr("href") + "&format=js",
 		        success: function(data){
-						  //hydrus_alert("notice", "Field deleted.");
+							ajax_loading_done(button);
 						},
 						error: function(data){
-							//hydrus_alert("error", "Unable to destroy field.");
+							ajax_loading_done(button);
 						}
 		});
 		return false;
@@ -110,17 +111,24 @@ function activate_edit_controls() {
   	$("form.step").submit();
 	});
 
-	$("#add_person, #add_link, #add_related_citation").click(function(){
+	$("#add_person, #add_link, #add_related_citation").live('click',function(){
 		var button = $(this);
 		var type = $(this).attr("class");
 		var form = $(this).closest("form");
 		var method = $(this).closest("form").attr("method");
+		ajax_loading_indicator(button);
 		if($("input[name=_method]",form).length > 0){
 			method = $("input[name=_method]").attr("value");
 		}
 		$.ajax({
 			type: method,
-			url: form.attr("action") + "?format=js&" + button.attr("data-attribute") + "=" + button.attr("value")
+			url: form.attr("action") + "?format=js&" + button.attr("data-attribute") + "=" + button.attr("value"),
+			success: function(data){
+				ajax_loading_done(button);
+			},
+			error: function(data){
+				ajax_loading_done(button);
+			}
 		});
 		return false;
 	});	
@@ -161,6 +169,23 @@ function setup_form_state_change_tracking() {
 		$(this).data("serialized",$(this).serialize());
 	});
 }
+
+function ajax_loading_indicator(element) {
+	$("body").css("cursor", "progress");	
+	if (!!element) {
+		element.animate({opacity:0.25});
+		element.attr("disabled","disabled");
+		}
+}
+
+function ajax_loading_done(element) {
+	$("body").css("cursor", "auto");	
+	if (!!element) {
+		element.animate({opacity:1.0});
+		element.removeAttr("disabled");
+		}
+}
+
 function check_tracked_form_state_change() {
 	var state_changed = false;
 	$("form[data-track-state-change='true']").each(function(){
