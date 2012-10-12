@@ -349,7 +349,7 @@ describe Hydrus::Item do
 
     end  
   end
-    
+        
   describe "class methods" do
     it "should provide an array of person roles" do
       Hydrus::Item.person_roles.should be_a Array
@@ -407,7 +407,7 @@ describe Hydrus::Item do
       @hi.valid?.should == false
       @hi.errors.messages.keys.should include(*@exp)
     end
-
+    
     it "fully populated Item should be valid" do
       dru = 'druid:ll000ll0001'
       @hi.stub(:collection_is_open).and_return(true)
@@ -439,6 +439,16 @@ describe Hydrus::Item do
     @hi.tracked_fields.should be_an_instance_of(Hash)
   end
 
+  it "status()" do
+    @hi.stub(:requires_human_approval).and_return("no")
+    @hi.stub(:is_published).and_return(true)
+    @hi.status.should == 'published'
+    @hi.stub(:is_published).and_return(false)
+    @hi.status.should == 'draft'
+    @hi.stub(:requires_human_approval).and_return("yes")
+    @hi.status.should == 'waiting approval'
+  end
+  
   it "is_destroyable() should return the negative of is_published" do
     @hi.stub(:is_published).and_return(false)
     @hi.is_destroyable.should == true
@@ -456,6 +466,18 @@ describe Hydrus::Item do
       'content'
     )
   end
+
+  it "metadata_directory()" do
+    dru = 'oo000oo9999'
+    @hi.stub(:pid).and_return("druid:#{dru}")
+    @hi.metadata_directory.should == File.join(
+      File.expand_path('public/uploads'),
+      'oo/000/oo/9999',
+      dru,
+      'metadata'
+    )
+  end
+
     
   describe "publish()" do
 

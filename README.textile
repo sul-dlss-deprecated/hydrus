@@ -146,10 +146,6 @@ h3. Tests:
 	rake rspec       # just run rspec tests
 	open coverage/rcov/index.html  # check your test coverage (won't exist until tests run at least once)
 
-Test failure on embargo dates?  Open a rails console in development mode and:
-
-Dor::WorkflowService.delete_workflow('dor','__DO_NOT_USE__','hydrusAssemblyWF')
-
 
 h3. App URLs:
 

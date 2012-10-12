@@ -13,6 +13,35 @@ describe ApplicationHelper do
     hydrus_format_date('1999-03-31').should == 'Mar 31, 1999'
   end
 
+  it "should return a correct license image" do
+    license_image('cc_by').should == "<img alt=\"Cc_by\" src=\"/images/licenses/cc_by.png\" />"
+    license_image('pddl').should be nil
+  end
+  
+  it "should return a correct license link" do
+    license_link('cc_by').should == "<a href=\"http://creativecommons.org/licenses/\">{&quot;Creative Commons Licenses&quot;=&gt;[[&quot;CC BY Attribution&quot;, &quot;cc-by&quot;], [&quot;CC BY-SA Attribution Share Alike&quot;, &quot;cc-by-sa&quot;], [&quot;CC BY-ND Attribution-NoDerivs&quot;, &quot;cc-by-nd&quot;], [&quot;CC BY-NC Attribution-NonCommercial&quot;, &quot;cc-by-nc&quot;], [&quot;CC BY-NC-SA Attribution-NonCommercial-ShareAlike&quot;, &quot;cc-by-nc-sa&quot;], [&quot;CC BY-NC-ND Attribution-NonCommercial-NoDerivs&quot;, &quot;cc-by-nc-nd&quot;]], &quot;Open Data Commons Licenses&quot;=&gt;[[&quot;PDDL Public Domain Dedication and License&quot;, &quot;pddl&quot;], [&quot;ODC-By Attribution License&quot;, &quot;odc-by&quot;], [&quot;ODC-ODbl Open Database License&quot;, &quot;odc-odbl&quot;]]}</a>"
+    license_link('pddl').should == "<a href=\"http://opendatacommons.org/licenses/\">PDDL Public Domain Dedication and License</a>"
+    license_link('junkola').should == "junkola"
+  end
+  
+  it "should strip text values including nil" do
+    hydrus_strip(' text  ').should == 'text'
+    hydrus_strip('text').should == 'text'
+    hydrus_strip(nil).should == ''    
+  end
+  
+  it "should return item title links, showing special text when blank" do
+    hi=Hydrus::Item.new
+    hc=Hydrus::Item.find('druid:oo000oo0001')
+    item_title_link(hi).should == '<a href="/items">new item</a>'
+    item_title_link(hc).should == '<a href="/items/druid:oo000oo0001">How Couples Meet and Stay Together</a>'
+  end
+  
+  it "should show select status checkbox icon" do
+    select_status_checkbox_icon(true).should == '<i class="icon-check"></i>'
+    select_status_checkbox_icon(false).should == '<i class="icon-minus"></i>'
+  end
+  
   it "seen_beta_dialog? should be shown only once" do
     # Initially, we haven't seen the dialog.
     session[:seen_beta_dialog] = false
@@ -35,6 +64,19 @@ describe ApplicationHelper do
     end
   end
   
+  it "should set the terms of deposit path" do
+    terms_of_deposit_path('druid:oo000oo0001').should == '/items/terms_of_deposit?pid=druid%3Aoo000oo0001'
+  end
+
+  it "should set the terms of deposit agree path" do
+    terms_of_deposit_agree_path('druid:oo000oo0001').should == '/items/agree_to_terms_of_deposit?pid=druid%3Aoo000oo0001'
+  end
+  
+  it "should show edit item text" do
+    hi=Hydrus::Item.new
+    edit_item_text(hi).should == 'Edit Draft'
+  end
+    
   describe "render helpers" do
     it "should return a string that corresponds to the view path for that model" do
       view_path_from_model(Hydrus::Collection.new(:pid=>"1234")).should == "hydrus_collections"
@@ -43,3 +85,4 @@ describe ApplicationHelper do
   end
 
 end
+

@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe HydrusCollectionsController do
-
+  
   describe "Routes and Mapping" do
     
     it "should map collections show correctly" do
@@ -34,14 +34,11 @@ describe HydrusCollectionsController do
     end
     
   end # Routes and Mapping
-
+  
   describe "Show Action", :integration => true do
-
-    before(:each) do
-      @pid = 'druid:oo000oo0003'
-    end
-
+    
     it "should not get fedora document and assign various attributes when not logged in" do
+      @pid = 'druid:oo000oo0003'
       controller.stub(:current_user).and_return(mock_user)
       get :show, :id => @pid
       assigns[:document_fedora].should be_nil

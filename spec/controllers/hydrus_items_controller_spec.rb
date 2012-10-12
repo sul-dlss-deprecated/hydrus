@@ -28,16 +28,16 @@ describe HydrusItemsController do
   # SHOW ACTION.
   describe "Show Action", :integration => true do
 
-    pid = 'druid:oo000oo0001'
-
-    it "should get fedora document and assign various attributes" do
+    it "should not get fedora document and assign various attributes when not logged in" do
+      @pid = 'druid:oo000oo0001'
       controller.stub(:current_user).and_return(mock_user)
-      get :show, :id => pid
+      get(:show, :id => @pid)
       assigns[:document_fedora].should be_nil
       response.should redirect_to root_path
     end
-  end
 
+  end
+  
   describe "New Action" do
 
     it "should restrict access to non authed user" do
@@ -78,7 +78,7 @@ describe HydrusItemsController do
 
   end
 
-  describe "index action" do
+  describe "Index action" do
 
     it "should redirect with a flash message when we're not dealing w/ a nested resrouce" do
       get :index
