@@ -189,16 +189,10 @@
 
 
     <noscript>
-  			<div class="well actions-box" id="collection-actions">
-      		<%= render :partial => "actions_box_edit", :locals => {:id=>"nojs"}%>
-    		</div>
-  </noscript>
-
-    <% render(
-         :partial => "hydra/permissions/index",
-         :locals  => { :document => @document_fedora, :asset_id => params[:id] }
-       )
-    %>
+  		<div class="well actions-box" id="collection-actions">
+    		<%= render :partial => "actions_box_edit", :locals => {:id=>"nojs"}%>
+  		</div>
+    </noscript>
 
   <% end %>
 </div> <!-- object-content-wrapper --> 
