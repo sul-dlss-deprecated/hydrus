@@ -37,6 +37,37 @@ describe Hydrus::Item do
     Hydrus::Item.create(hc.pid, 'USERFOO').pid.should == druid
   end
 
+  it "can exercise a stubbed version of create when terms have already been accepted on another item" do
+    # More substantive testing is done at integration level.
+    druid = 'druid:BLAH'
+    stubs = [
+      :remove_relationship,
+      :assert_content_model,
+      :add_to_collection,
+      :augment_identity_metadata,
+    ]
+    stubs.each { |s| @hi.should_receive(s) }
+    @hi.should_receive(:save).with(:no_edit_logging => true)
+    @hi.stub(:pid).and_return(druid)
+    @hi.stub(:adapt_to).and_return(@hi)
+    @hi.stub(:requires_terms_acceptance).and_return(false)
+    hc = Hydrus::Collection.new
+    Hydrus::Collection.stub(:find).and_return(hc)
+    Hydrus::GenericObject.stub(:register_dor_object).and_return(@hi)
+    new_item=Hydrus::Item.create(hc.pid, 'USERFOO')
+    new_item.pid.should == druid
+    new_item.terms_of_deposit_accepted?.should be true
+  end
+
+  it "should indicate blank item visibility if no metadata available" do
+    @hi.visibility.should == []
+  end
+
+  it "should indicate item visibility with an embargo date in the future" do
+    @hi.embargo_date='1/1/2100'
+    @hi.visibility.should == []
+  end
+  
   it "should be able to add and remove an item from a collection" do
     collection_pid = 'druid:xx99xx9999'
     exp_uri        = "info:fedora/#{collection_pid}"
@@ -508,6 +539,60 @@ describe Hydrus::Item do
     
   end
 
+  it "should indicate no files have been uploaded yet" do
+    @hi.files_uploaded?.should == false
+  end
+
+  it "should indicate that release settings have not been reviewed yet" do
+    @hi.reviewed_release_settings?.should == false
+    @hi.reviewed_release_settings="true"
+    @hi.reviewed_release_settings?.should == true    
+  end
+
+  it "should indicate that terms of deposit have not been accepted yet" do
+    @hi.terms_of_deposit_accepted?.should == false
+  end
+  
+  it "should indicate if we do not require terms acceptance if user already accepted terms" do
+    @hi.stub(:accepted_terms_of_deposit).and_return(true)
+    @hi.requires_terms_acceptance('archivist1').should be false
+  end
+
+  it "should indicate if we do require terms acceptance if user has never accepted terms on another item in the same collection" do
+    @coll=Hydrus::Collection.new
+    @coll.stub(:users_accepted_terms_of_deposit).and_return({'archivist3'=>'10-12-2008 00:00:00','archivist4'=>'10-12-2009 00:00:05'})    
+    @hi.stub(:accepted_terms_of_deposit).and_return(false)
+    @hi.stub(:collection).and_return(@coll)
+    @hi.requires_terms_acceptance('archivist1').should be true
+  end
+  
+  it "should indicate if we do require terms acceptance if user already accepted terms on another item in the same collection, but it was more than 1 year ago" do
+    @coll=Hydrus::Collection.new
+    @coll.stub(:users_accepted_terms_of_deposit).and_return({'archivist1'=>'10-12-2008 00:00:00','archivist2'=>'10-12-2009 00:00:05'})    
+    @hi.stub(:accepted_terms_of_deposit).and_return(false)
+    @hi.stub(:collection).and_return(@coll)
+    @hi.requires_terms_acceptance('archivist1').should be true
+  end
+
+  it "should indicate if we do not require terms acceptance if user already accepted terms on another item in the same collection, and it was less than 1 year ago" do
+    @coll=Hydrus::Collection.new
+    @coll.stub(:users_accepted_terms_of_deposit).and_return({'archivist1'=>Time.now - 364.days,'archivist2'=>'10-12-2009 00:00:05'})    
+    @hi.stub(:accepted_terms_of_deposit).and_return(false)
+    @hi.stub(:collection).and_return(@coll)
+    @hi.requires_terms_acceptance('archivist1').should be false
+  end
+  
+  it "should accept the terms of deposit for a user" do
+    @coll=Hydrus::Collection.new
+    @coll.stub(:accept_terms_of_deposit)
+    @hi.stub(:collection).and_return(@coll)   
+    @hi.terms_of_deposit_accepted?.should == false 
+    @hi.accepted_terms_of_deposit.should_not == 'true'
+    @hi.accept_terms_of_deposit('archivist1')
+    @hi.accepted_terms_of_deposit.should == 'true'
+    @hi.terms_of_deposit_accepted?.should == true
+  end
+    
   it "embargo_date_is_correct_format() should add an error if embargo_date is bogus" do
     k = :embargo_date
     # Valid date.

@@ -24,6 +24,13 @@ task :ci do
   Rake::Task["doc:reapp"].invoke
 end
 
+desc "Run unit tests with coverage report, assumes jetty is running already and no fixture refreshes" 
+task :coverage do
+  ENV['RAILS_ENV'] = 'test'
+  Rails.env = 'test'
+  ENV['COVERAGE'] = 'true'
+  Rake::Task['rspec'].invoke
+end
 
 desc "Stop jetty, run `rake ci`, db:migrate, start jetty." 
 task :local_ci do

@@ -63,7 +63,7 @@ module ApplicationHelper
   # indicates if we should show the item edit tab for a given item
   # only if its not published yet, unless we are in development mode (to make development easier)
   def show_item_edit(item)
-    can?(:edit,@document_fedora) && (!@document_fedora.is_published || ["development","test"].include?(Rails.env))
+    can?(:edit,item) && (!item.is_published || ["development","test"].include?(Rails.env))
   end
   
   def edit_item_text(item)
@@ -95,6 +95,31 @@ module ApplicationHelper
     end
   end
 
+  # this checks to see if the object passed in is "empty", which could be nil, a blank string, an array of strings with all elements that are blank, 
+  # an arbitrary object whose attributes are all blank, or an array of arbitrary objects whose attributes are all blank
+  def hydrus_is_empty?(obj)
+    if obj.nil? # nil case
+      is_blank=true
+    elsif obj.class == Array # arrays      
+      is_blank=obj.all? {|element| hydrus_is_empty?(element)}
+    elsif obj.class == String # strings
+      is_blank=obj.blank?
+    else # case of abitrary object
+      is_blank=hydrus_is_object_empty?(obj) 
+    end
+    return is_blank
+   end
+  
+  # this checks to see if the object passed in has attributes that are all blank
+  def hydrus_is_object_empty?(obj)
+    !get_attributes(obj).collect{|attribute| obj.send(attribute).blank?}.include?(false)
+  end
+
+  # this returns an array of the attributes that have setter methods on any arbitrary object (stripping out attribures you don't want), "=" stripped out as well
+  def get_attributes(obj)
+    obj.methods.grep(/\w=$/).collect{|method| method.to_s.gsub('=','')}-['validation_context','_validate_callbacks','_validators']
+  end
+  
   def datetime_format(k)
     return (k == :date ? '%d-%b-%Y' :
             k == :time ? '%I:%M %P' : '%d-%b-%Y %I:%M %P')

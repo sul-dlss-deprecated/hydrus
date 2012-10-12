@@ -2,6 +2,15 @@ require 'spec_helper'
 
 describe HydrusCollectionsController do
   
+  describe "Index action" do
+
+    it "should redirect with a flash message when we're not dealing w/ a nested resrouce" do
+      get :index
+      flash[:warning].should =~ /You need to log in/
+      response.should redirect_to(new_user_session_path)
+    end
+  end
+      
   describe "Routes and Mapping" do
     
     it "should map collections show correctly" do

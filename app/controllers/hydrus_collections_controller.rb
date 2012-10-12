@@ -6,7 +6,7 @@ class HydrusCollectionsController < ApplicationController
   include Hydrus::AccessControlsEnforcement
 
   before_filter :enforce_access_controls
-  before_filter :setup_attributes, :except => :new
+  before_filter :setup_attributes, :except => [:index,:new]
   before_filter :redirect_if_not_correct_object_type, :only => [:edit,:show,:update]
 
   def index
