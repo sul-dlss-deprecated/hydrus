@@ -150,8 +150,10 @@ h3. Fixtures:
 
 h3. Tests:
 	
-	rake local_ci	   # run all tests (will shut down jetty, runs 'rake ci' task and then restart jetty)
-	rake rspec       # just run rspec tests
+	rake local_ci	   # run all tests and generates full coverage report (will shut down jetty, runs 'rake ci' task and then restart jetty)
+	rake unit_tests  # just run rspec unit tests with coverage report for only those tests
+	rake integration_test # just run rspec integration test with coverage report for only those tests (this will take a while)
+
 	open coverage/rcov/index.html  # check your test coverage (won't exist until tests run at least once)
 
 

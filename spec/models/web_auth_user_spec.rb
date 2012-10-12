@@ -8,6 +8,9 @@ describe WebAuthUser do
     it "should respond to to_s w/ the user ID" do
       @user.to_s.should == "jdoe"
     end
+    it "should respond to sunetid w/ the user ID" do
+      @user.sunetid.should == "jdoe"
+    end    
     it "should respond to email w/ the user ID + @stanford.edu" do
       @user.email.should == "jdoe@stanford.edu"
     end

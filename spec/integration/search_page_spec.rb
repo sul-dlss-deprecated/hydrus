@@ -9,9 +9,8 @@ describe("Search page", :type => :request, :integration => true) do
     click_button("search")
 
     page.should have_content("Object ID")
-    page.should have_content("druid:oo000oo0005")
     page.should have_content("Item")
-    page.should have_content("druid:oo000oo0003")
+    page.should have_content("druid:oo000oo000")
     page.should have_content("Collection")
   end
 

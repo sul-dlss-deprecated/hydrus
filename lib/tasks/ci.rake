@@ -16,20 +16,27 @@ task :ci do
     original_coverage = ENV['COVERAGE']
     Rake::Task['hydrus:refreshfix'].invoke
     ENV['COVERAGE'] ||= 'true'
-    Rake::Task['rspec'].invoke
+    Rake::Task['rspec_all'].invoke
     ENV['COVERAGE'] = original_coverage || 'false'
-    Rake::Task['rspec_with_integration'].invoke
   end
   raise "TEST FAILURES: #{error}" if error
   Rake::Task["doc:reapp"].invoke
 end
 
-desc "Run unit tests with coverage report, assumes jetty is running already and no fixture refreshes" 
-task :coverage do
+desc "Run only unit tests with coverage report, assumes jetty is running already and no fixture refreshes" 
+task :unit_tests do
   ENV['RAILS_ENV'] = 'test'
   Rails.env = 'test'
   ENV['COVERAGE'] = 'true'
   Rake::Task['rspec'].invoke
+end
+
+desc "Run only integrations tests with coverage report, assumes jetty is running already and no fixture refreshes" 
+task :integration_tests do
+  ENV['RAILS_ENV'] = 'test'
+  Rails.env = 'test'
+  ENV['COVERAGE'] = 'true'
+  Rake::Task['rspec_with_integration'].invoke
 end
 
 desc "Stop jetty, run `rake ci`, db:migrate, start jetty." 
