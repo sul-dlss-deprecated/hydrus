@@ -114,6 +114,14 @@ h2. Deploying
   cap dev deploy # for http://hydrus-dev.stanford.edu
   cap dortest deploy # for http://hydrus-test.stanford.edu
 
+Note that if you want to blanket change all passwords for default fixture users 
+(useful for public facing websites), you can use a rake command for that environment.
+
+e.g. RAILS_ENV=dortest rake hydrus:update_passwords['NEW_PASSWORD_HERE']
+
+By default the dortest environment does not refresh users after each deploy, so this command
+is only needed if you refresh fixtures.
+
 h2. Useful commands
 
 h3. Using Rails console:

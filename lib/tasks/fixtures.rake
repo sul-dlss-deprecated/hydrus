@@ -37,7 +37,25 @@ namespace :hydrus do
       ENV["pid"] = pid
       Rake::Task['repo:load'].reenable
       Rake::Task['repo:load'].invoke
-  }
+    }
+    if !["test","development"].include?(Rails.env) 
+      puts "****NOTE: For security reasons, you might want to change passwords for default users after this task using \"RAILS_ENV=#{ENV['RAILS_ENV']}rake hydrus:update_passwords['newpassword']\"*****"
+    end
+  end
+
+  # call with hydrus:update_passwords['newpassword']
+  desc "update all fixture user passwords"
+  task :update_passwords, :new_password do |t,args|
+    require File.expand_path('config/environment')
+    new_password=args[:new_password]
+    users = YAML.load(File.read 'test/fixtures/users.yml')
+    users.each do |user,values|
+      puts "Updating password for #{values['email']}" 
+      u=User.find_by_email(values['email'])
+      u.password=new_password
+      u.password_confirmation=new_password
+      u.save
+    end
   end
 
   # call with rake hydrus:export_object['druid:xx00oo0001','/tmp']
