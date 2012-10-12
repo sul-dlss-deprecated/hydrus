@@ -5,7 +5,7 @@
   </head>
   <body>
     <p><%= @document_fedora.owner %> has opened the <%= @document_fedora.title %> collection for deposit in the Stanford Digital Repository.</p>
-    <p>To make a deposit, follow this link: <%= link_to("http://hydrus.stanford.edu", "http://hydrus.stanford.edu") %>.</p>
+    <p>To make a deposit, follow this link: <%= link_to(root_url(:only_path => false, :host => @host), root_url(:only_path => false, :host => @host)) %>.</p>
     <p>If you have any questions about the SDR, send a message to <%= mail_to("sdr-contact@lists.stanford.edu", "sdr-contact@lists.stanford.edu") %>.</p>
   </body>
 </html>
