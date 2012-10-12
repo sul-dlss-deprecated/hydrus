@@ -3,7 +3,15 @@ require 'spec_helper'
 describe ApplicationHelper do
 
   include ApplicationHelper
-
+  
+  it "should show correct view_item_text" do    
+    hi=Hydrus::Item.new
+    hi.stub(:is_published).and_return(true)    
+    view_item_text(hi).should == 'Published Version'
+    hi.stub(:is_published).and_return(false)    
+    view_item_text(hi).should == 'View Draft'
+  end
+  
   it "should get the local application name" do
     application_name.should == "Stanford Digital Repository"
   end
