@@ -46,10 +46,9 @@ class HydrusCollectionsController < ApplicationController
     end
     
     if @document_fedora.is_open
-      if @document_fedora.apo.persons_with_role("hydrus-collection-item-depositor").to_a.length > depositors_before_update.length
-        new_depositors = @document_fedora.apo.persons_with_role("hydrus-collection-item-depositor").to_a - depositors_before_update
-        @document_fedora.send_invitation(new_depositors.join(", ")) unless new_depositors.blank?
-      end
+      depositors_after_update = @document_fedora.apo.persons_with_role("hydrus-collection-item-depositor").to_a
+      new_depositors = depositors_after_update.select{|depositor| !depositors_before_update.include?(depositor)  }.compact
+      @document_fedora.send_invitation(new_depositors.join(", ")) unless new_depositors.blank?
     end
 
     ####

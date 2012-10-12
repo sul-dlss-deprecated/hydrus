@@ -272,6 +272,9 @@ describe("Collection edit", :type => :request, :integration => true) do
           login_as_archivist1
           @coll.apo_person_roles = {:"hydrus-collection-item-depositor" => "jdoe"}
           expect {@coll.publish(true)}.to change { ActionMailer::Base.deliveries.count }.by(1)
+          last_email_sent = ActionMailer::Base.deliveries.last
+          last_email_sent.to.should == ["jdoe@stanford.edu"]
+          last_email_sent.subject.should == "Collection opened for deposit in the Stanford Digital Repository"
         end
         it "should not send an email when there are no item depositors" do
           login_as_archivist1
@@ -283,6 +286,9 @@ describe("Collection edit", :type => :request, :integration => true) do
           login_as_archivist1
           @coll.apo_person_roles = {:"hydrus-collection-item-depositor" => "jdoe"}
           expect {@coll.publish(false)}.to change { ActionMailer::Base.deliveries.count }.by(1)
+          last_email_sent = ActionMailer::Base.deliveries.last
+          last_email_sent.to.should == ["jdoe@stanford.edu"]
+          last_email_sent.subject.should == "Collection closed for deposit in the Stanford Digital Repository"
         end
         it "should not send an email when there are no item depositors" do
           login_as_archivist1
@@ -298,7 +304,7 @@ describe("Collection edit", :type => :request, :integration => true) do
       after(:each) do
         config_mint_ids(@prev_mint_ids)
       end
-      it "should send an email to new depositors of we're updating a new collection" do
+      it "should send an email to new depositors when we're updating a collection" do
         login_as_archivist1
         visit new_hydrus_collection_path()
         fill_in "hydrus_collection_title", :with => "TestingTitle"
@@ -307,7 +313,30 @@ describe("Collection edit", :type => :request, :integration => true) do
         fill_in "hydrus_collection_apo_person_roles[hydrus-collection-item-depositor]", :with => "jdoe"
         click_button("Save")
         page.should have_content("Your changes have been saved.")
+        
         expect {click_button("Open Collection")}.to change { ActionMailer::Base.deliveries.count }.by(1)
+        
+        last_email_sent = ActionMailer::Base.deliveries.last
+        last_email_sent.to.should == ["jdoe@stanford.edu"]
+        last_email_sent.subject.should == "Collection opened for deposit in the Stanford Digital Repository"
+      end
+      it "should handle complex changes to depositors" do
+        login_as_archivist1
+        visit new_hydrus_collection_path()
+        fill_in "hydrus_collection_title", :with => "TestingTitle"
+        fill_in "hydrus_collection_abstract", :with => "Summary of my content"
+        fill_in "hydrus_collection_contact", :with => "jdoe@example.com"
+        fill_in "hydrus_collection_apo_person_roles[hydrus-collection-item-depositor]", :with => "jdoe, leland, janedoe"
+        click_button("Save")
+        page.should have_content("Your changes have been saved.")
+        click_button("Open Collection")
+        click_link("Edit Collection")
+        
+        fill_in "hydrus_collection_apo_person_roles[hydrus-collection-item-depositor]", :with => "jandoe, leland, jondoe"
+        expect {click_button("Save")}.to change { ActionMailer::Base.deliveries.count }.by(1)
+        last_email_sent = ActionMailer::Base.deliveries.last
+        last_email_sent.to.should == ["jandoe@stanford.edu", "jondoe@stanford.edu"]
+        last_email_sent.subject.should == "Invitation to deposit in the Stanford Digital Repository"
       end
       it "should not send an email if the collection is closed" do
         login_as_archivist1
