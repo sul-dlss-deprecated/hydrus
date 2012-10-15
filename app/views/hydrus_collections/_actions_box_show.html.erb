@@ -1,3 +1,4 @@
+<% is_open = @document_fedora.is_open %>
 <div class="collection-actions box-header">Actions</div>
 
 <div class="box-body">
@@ -16,11 +17,11 @@
     <% end %>
   <% end %>
 
-  <% if can? :create_items_in, @document_fedora %>
-    <% if @document_fedora.is_open %>
-      <div class="btn-group add-content-dropdown" style="display:none;">
-        <button class="btn btn-small">Add new &hellip;</button>
-        <button class="btn btn-small dropdown-toggle" data-toggle="dropdown">
+ <% if can? :create_items_in, @document_fedora %>
+			<% message = @document_fedora.is_publishable ? "To add items, you must open the collection." : "To add items, you must fill in all required fields and open the collection." %> 
+      <div class="btn-group add-content-dropdown" <%=raw "data-placement=\"bottom\" rel=\"tooltip\" data-original-title=\"#{message}\"" unless is_open%> style="display:none;" >
+        <button class="<%="disabled" unless is_open%> btn btn-small">Add new &hellip;</button>
+        <button class="<%="disabled" unless is_open%> btn btn-small dropdown-toggle" data-toggle="dropdown">
           <span class="caret"></span>
         </button>
         <%= render :partial => "shared/add_content_options",
@@ -37,7 +38,7 @@
           <%= submit_tag("Add", :class=>"btn btn-small") %>
         <%- end -%>
       </noscript>
-    <% end %>
+
   <% end %>
 
   <% if can? :edit, @document_fedora %>

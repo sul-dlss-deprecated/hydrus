@@ -11,7 +11,7 @@
 		<%=check_box_tag 'required_fields_checkbox', true, @document_fedora.required_fields_completed?, :disabled=>true%> 
 		<label for="required_fields_checkbox">
 			<%= select_status_checkbox_icon(@document_fedora.required_fields_completed?) %>
-			Name, abstract, contact provided
+			Name, description, contact provided
 		</label>
 
 		<%=check_box_tag 'embargo_details_checkbox', true, @document_fedora.embargo_details_provided?, :disabled=>true%>
