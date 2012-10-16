@@ -112,10 +112,10 @@
             <format>MODS</format>
             <source>symphony</source>
           </descMetadata>
-          <contact id="sunetid:mbklein" type="user">
-            <name>Michael B. Klein</name>
+          <contact id="sunetid:lmcrae" type="user">
+            <name>McRae, Lynn</name>
             <organization>DLSS</organization>
-            <email>mbklein@stanford.edu</email>
+            <email>lmcrae@stanford.edu</email>
           </contact>
           <rights>
             <copyright useDefault="true"/>
@@ -175,10 +175,6 @@
       <foxml:xmlContent>
         <roleMetadata>
           <role type="hydrus-collection-manager">
-            <person>
-              <identifier type="sunetid">mbklein</identifier>
-              <name>Klein, Michael</name>
-            </person>
             <person>
               <identifier type="sunetid">lmcrae</identifier>
               <name>McRae, Lynn</name>

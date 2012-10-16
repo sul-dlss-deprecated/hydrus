@@ -143,8 +143,8 @@
         <roleMetadata>
           <role type="hydrus-item-depositor">
              <person>
-                <identifier type="sunetid">crimson</identifier>
-                <name>Mascot, Harvard</name>
+                <identifier type="sunetid">archivist3</identifier>
+                <name>Archivist, Three</name>
              </person>
           </role>
 	      </roleMetadata>

@@ -76,16 +76,14 @@ Misc implementation tasks
 --------
 
 Update to latest dor-services-gem:
-  - create a new DOR object fixture for the hydrusWF workflow according to the new model
+  - update gemfile
+  - create a new DOR object fixture for the hydrusWF workflow according to the new model [done]
   - remove hydrusWF workflow definition from APO
 
 Fix checkbox for terms of deposit acceptance javascript when returning via ajax.  Also enable publish button 
 when on view page.  [done]
 
-Change fixtures so that they don't use anything that could be a real SUNETID.
-
-Unit test coverage: let's improve the coverage (esp in controllers) or lower
-the thresholds in jenkins for determining when the project is "unstable".
+Change fixtures so that they don't use anything that could be a real SUNETID. [done]
 
 rightsMD: (a) tests; (b) refactor to take advantage of OM and generic_ds.rb.
 

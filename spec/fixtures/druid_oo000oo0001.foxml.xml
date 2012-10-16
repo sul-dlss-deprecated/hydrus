@@ -176,8 +176,8 @@
         <roleMetadata>
           <role type="hydrus-item-depositor">
              <person>
-                <identifier type="sunetid">cardinal</identifier>
-                <name>Mascot, Stanford</name>
+                <identifier type="sunetid">archivist1</identifier>
+                <name>Archivist, One</name>
              </person>
           </role>
 	      </roleMetadata>

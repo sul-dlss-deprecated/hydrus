@@ -208,7 +208,7 @@ describe("Collection edit", :type => :request, :integration => true) do
         'hydrus-collection-reviewer'       => Set.new(%w(cc dd ee)),
         'hydrus-collection-item-depositor' => Set.new(%w(ff)),
         'hydrus-collection-viewer'         => Set.new(%w(gg hh ii)),
-        'hydrus-collection-depositor'      => Set.new(%w(ggreen)),
+        'hydrus-collection-depositor'      => Set.new(%w(archivist3)),
       }
       rmdiv = find('div#role-management')
       dk    = 'hydrus_collection_apo_person_roles'
@@ -237,14 +237,14 @@ describe("Collection edit", :type => :request, :integration => true) do
         'hydrus-collection-reviewer'       => Set.new(%w(cc dd ee@dude.com)),
         'hydrus-collection-item-depositor' => Set.new(%w(ff@yoyo.com)),
         'hydrus-collection-viewer'         => Set.new(%w(gg hh ii@wazzzup.org)),
-        'hydrus-collection-depositor'      => Set.new(%w(ggreen@i.am.a.stupid.domainname.com)),
+        'hydrus-collection-depositor'      => Set.new(%w(archivist3@i.am.a.stupid.domainname.com)),
       }
       role_info_stripped = {
         'hydrus-collection-manager'        => Set.new(%w(aa bb archivist1)),
         'hydrus-collection-reviewer'       => Set.new(%w(cc dd ee)),
         'hydrus-collection-item-depositor' => Set.new(%w(ff)),
         'hydrus-collection-viewer'         => Set.new(%w(gg hh ii)),
-        'hydrus-collection-depositor'      => Set.new(%w(ggreen)),
+        'hydrus-collection-depositor'      => Set.new(%w(archivist3)),
       }      
       rmdiv = find('div#role-management')
       dk    = 'hydrus_collection_apo_person_roles'

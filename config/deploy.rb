@@ -72,6 +72,9 @@ namespace :jetty do
 end
 
 namespace :db do
+  task :migrate do
+    run "cd #{deploy_to}/current && rake db:migrate"    
+  end
   task :loadfixtures do
     run "cd #{deploy_to}/current && rake db:fixtures:load"
   end

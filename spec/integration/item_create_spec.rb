@@ -219,10 +219,11 @@ describe("Item create", :type => :request, :integration => true) do
     it "should indicate the users who have accepted the terms of deposit for this collection in a hash and should returns dates accepted" do
       users=subject.collection.users_accepted_terms_of_deposit
       users.class.should == Hash
-      users.keys.include?('cardinal').should == true
-      users['cardinal'].should == '2011-09-02 01:02:32 -0700'
-      users.keys.include?('cardinal').should == true
-      users['crimson'].should == '2012-05-02 12:02:44 -0700'      
+      users.size.should == 2
+      users.keys.include?('archivist1').should == true
+      users['archivist1'].should == '2011-09-02 01:02:32 -0700'
+      users.keys.include?('archivist3').should == true
+      users['archivist3'].should == '2012-05-02 12:02:44 -0700'      
     end
   
   end
@@ -232,9 +233,8 @@ describe("Item create", :type => :request, :integration => true) do
     subject { Hydrus::Collection.find('druid:oo000oo0003') }
     
     it "should indicate that a new item in a collection requires terms acceptance, if the user has already accepted another item in this collection but it was more than 1 year ago" do
-      user='cardinal'
+      user='archivist1' # this user accepted more than 1 year ago
       subject.users_accepted_terms_of_deposit.keys.include?(user).should == true
-      subject.users_accepted_terms_of_deposit[user] = (Time.now - 2.years).to_s # make the acceptance 2 years ago
       ni=Hydrus::Item.create(subject.pid,user)
       ni.requires_terms_acceptance(user,subject).should == true      
       ni.accepted_terms_of_deposit.should == "false"
@@ -242,9 +242,10 @@ describe("Item create", :type => :request, :integration => true) do
     end
 
     it "should indicate that a new item in a collection does not require terms acceptance, if the user has already accepted another item in this collection less than 1 year ago" do
-      user='crimson'
+      user='archivist3'
       subject.users_accepted_terms_of_deposit.keys.include?(user).should == true
       subject.users_accepted_terms_of_deposit[user] = (Time.now - 1.month).to_s # make the acceptance 1 month ago
+      subject.save
       ni=Hydrus::Item.create(subject.pid,user)
       ni.requires_terms_acceptance(user,subject).should == false     
       ni.accepted_terms_of_deposit.should == "true" 
@@ -252,7 +253,7 @@ describe("Item create", :type => :request, :integration => true) do
     end
 
     it "should indicate that a new item in a collection requires terms acceptance, when the user has not already accepted another item in this collection" do
-      user='archivist1'
+      user='archivist5'
       ni=Hydrus::Item.create(subject.pid,user)
       ni.requires_terms_acceptance(user,subject).should == true 
       ni.accepted_terms_of_deposit.should == "false"
@@ -260,7 +261,7 @@ describe("Item create", :type => :request, :integration => true) do
     end
   
     it "should accept the terms for an item, updating the appropriate hydrusProperties metadata in item and collection" do
-      user='archivist1'
+      user='archivist5'
       ni=Hydrus::Item.create(subject.pid,user)
       ni.requires_terms_acceptance(user,subject).should == true      
       ni.accepted_terms_of_deposit.should == "false"

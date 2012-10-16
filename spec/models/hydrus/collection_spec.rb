@@ -216,17 +216,17 @@ describe Hydrus::Collection do
 
     it "apo_person_roles= should correctly update APO roleMetadtaDS" do
       @hc.apo_person_roles = {
-        'hydrus-collection-manager' => 'brown, dblack',
-        'hydrus-collection-item-depositor'     => 'bblue',
+        'hydrus-collection-manager' => 'archivist4, archivist5',
+        'hydrus-collection-item-depositor'     => 'archivist6',
       } 
       @rmdoc.ng_xml.should be_equivalent_to <<-EOF
         <roleMetadata>
           <role type="hydrus-collection-manager">
-            <person><identifier type="sunetid">brown</identifier><name/></person>
-            <person><identifier type="sunetid">dblack</identifier><name/></person>
+            <person><identifier type="sunetid">archivist4</identifier><name/></person>
+            <person><identifier type="sunetid">archivist5</identifier><name/></person>
           </role>
           <role type="hydrus-collection-item-depositor">
-            <person><identifier type="sunetid">bblue</identifier><name/></person>
+            <person><identifier type="sunetid">archivist6</identifier><name/></person>
           </role>
         </roleMetadata>
       EOF

@@ -159,8 +159,8 @@ describe Hydrus::Item do
     subject { Hydrus::Item.find('druid:oo000oo0001') }
     it "should have a roleMetadata datastream" do
       subject.roleMetadata.should be_an_instance_of(Hydrus::RoleMetadataDS)
-      subject.item_depositor_id.should == 'cardinal'
-      subject.item_depositor_name.should == 'Mascot, Stanford'
+      subject.item_depositor_id.should == 'archivist1'
+      subject.item_depositor_name.should == 'Archivist, One'
     end
   end
 

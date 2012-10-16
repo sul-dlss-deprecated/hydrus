@@ -8,32 +8,32 @@ archivist2:
   email: archivist2@example.com
   encrypted_password: "$2a$10$mhcz9WtWgJpF7RAooWcK8OhyBxnp1qRSW/BCAnJqk7QZVDyKxullm" # beatcal
 
-archivist99:
+archivist3:
   id: 3
-  email: archivist99@example.com
+  email: archivist3@example.com
   encrypted_password: "$2a$10$mhcz9WtWgJpF7RAooWcK8OhyBxnp1qRSW/BCAnJqk7QZVDyKxullm" # beatcal
 
-ggreen:
+archivist4:
   id: 4
-  email: ggreen@example.com
+  email: archivist4@example.com
   encrypted_password: "$2a$10$mhcz9WtWgJpF7RAooWcK8OhyBxnp1qRSW/BCAnJqk7QZVDyKxullm" # beatcal
 
-brown:
+archivist5:
   id: 5
-  email: brown@example.com
+  email: archivist5@example.com
   encrypted_password: "$2a$10$mhcz9WtWgJpF7RAooWcK8OhyBxnp1qRSW/BCAnJqk7QZVDyKxullm" # beatcal
 
-dblack:
+archivist6:
   id: 6
-  email: dblack@example.com
+  email: archivist6@example.com
   encrypted_password: "$2a$10$mhcz9WtWgJpF7RAooWcK8OhyBxnp1qRSW/BCAnJqk7QZVDyKxullm" # beatcal
 
-bblue:
+archivist7:
   id: 7
-  email: bblue@example.com
+  email: archivist7@example.coma
   encrypted_password: "$2a$10$mhcz9WtWgJpF7RAooWcK8OhyBxnp1qRSW/BCAnJqk7QZVDyKxullm" # beatcal
 
-skota:
-  id: 8
-  email: skota@example.coma
+archivist99:
+  id: 99
+  email: archivist99@example.com
   encrypted_password: "$2a$10$mhcz9WtWgJpF7RAooWcK8OhyBxnp1qRSW/BCAnJqk7QZVDyKxullm" # beatcal

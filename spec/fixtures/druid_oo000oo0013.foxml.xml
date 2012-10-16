@@ -154,7 +154,7 @@
           <role type="hydrus-item-depositor">
              <person>
                 <identifier type="sunetid">student3</identifier>
-                <name>Brown, Jefferson</name>
+                <name>Student, Three</name>
              </person>
           </role>
         </roleMetadata>

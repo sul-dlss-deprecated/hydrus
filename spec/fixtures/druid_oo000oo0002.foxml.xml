@@ -136,24 +136,24 @@
                 <name>Archivist, One</name>
              </person>
              <person>
-                <identifier type="sunetid">brown</identifier>
-                <name>Brown, Malcolm</name>
+                <identifier type="sunetid">archivist4</identifier>
+                <name>Archivist, Four</name>
              </person>
              <person>
-                <identifier type="sunetid">dblack</identifier>
-                <name>Black, Delores</name>
+                <identifier type="sunetid">archivist5</identifier>
+                <name>Archivist, Five</name>
              </person>
           </role>
           <role type="hydrus-collection-item-depositor">
              <person>
-                <identifier type="sunetid">ggreen</identifier>
-                <name>Green, Greg</name>
+                <identifier type="sunetid">archivist3</identifier>
+                <name>Archivist, Three</name>
              </person>
           </role>
           <role type="hydrus-collection-depositor">
              <person>
-                <identifier type="sunetid">ggreen</identifier>
-                <name>Green, Greg</name>
+                <identifier type="sunetid">archivist3</identifier>
+                <name>Archivist, Three</name>
              </person>
           </role>
         </roleMetadata>

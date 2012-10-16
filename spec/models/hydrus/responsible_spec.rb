@@ -17,18 +17,18 @@ class MockResponsible
       <roleMetadata>
         <role type="hydrus-collection-manager">
            <person>
-              <identifier type="sunetid">brown</identifier>
-              <name>Brown, Malcolm</name>
+              <identifier type="sunetid">archivist4</identifier>
+              <name>Archivist, Four</name>
            </person>
            <person>
-              <identifier type="sunetid">dblack</identifier>
-              <name>Black, Delores</name>
+              <identifier type="sunetid">archivist5</identifier>
+              <name>Archivist, Five</name>
            </person>
         </role>
         <role type="hydrus-collection-reviewer">
            <person>
-              <identifier type="sunetid">ggreen</identifier>
-              <name>Green, Greg</name>
+              <identifier type="sunetid">archivist3</identifier>
+              <name>Archivist, Three</name>
            </person>
            <group>
               <identifier type="workgroup">pasig:2011attendees</identifier>
@@ -37,12 +37,12 @@ class MockResponsible
         </role>
         <role type="hydrus-collection-item-depositor">
            <person>
-              <identifier type="sunetid">bblue</identifier>
-              <name>Blue, Bill</name>
+              <identifier type="sunetid">archivist6</identifier>
+              <name>Archivist, Six</name>
            </person>
            <person>
-              <identifier type="sunetid">ggreen</identifier>
-              <name>Green, Greg</name>
+              <identifier type="sunetid">archivist3</identifier>
+              <name>Archivist, Three</name>
            </person>
         </role>
       </roleMetadata>
@@ -56,9 +56,9 @@ describe Hydrus::Responsible do
   before(:each) do
     @obj = MockResponsible.new
     @orig_roles = {
-      "hydrus-collection-manager"        => Set.new(["brown", "dblack"]),
-      "hydrus-collection-reviewer"       => Set.new(["ggreen"]),
-      "hydrus-collection-item-depositor" => Set.new(["bblue", "ggreen"]),
+      "hydrus-collection-manager"        => Set.new(["archivist4", "archivist5"]),
+      "hydrus-collection-reviewer"       => Set.new(["archivist3"]),
+      "hydrus-collection-item-depositor" => Set.new(["archivist6", "archivist3"]),
     }
   end
 
@@ -73,7 +73,7 @@ describe Hydrus::Responsible do
   end
 
   it "roles_of_person() should return expected roles" do
-    @obj.roles_of_person('ggreen').should == Set.new(%w(
+    @obj.roles_of_person('archivist3').should == Set.new(%w(
       hydrus-collection-reviewer
       hydrus-collection-item-depositor
     ))
@@ -95,7 +95,7 @@ describe Hydrus::Responsible do
             <name>Conference attendees</name>
           </group>
           <person>
-            <identifier type="sunetid">ggreen</identifier>
+            <identifier type="sunetid">archivist3</identifier>
             <name/>
           </person>
         </role>
@@ -113,7 +113,7 @@ describe Hydrus::Responsible do
     EOF
     @obj.person_roles= {
       "hydrus-collection-manager"  => "archivist1", 
-      "hydrus-collection-reviewer" => "ggreen", 
+      "hydrus-collection-reviewer" => "archivist3", 
       "hydrus-collection-item-depositor"      => "foo,bar",
     }
     @obj.roleMetadata.ng_xml.should be_equivalent_to(exp)

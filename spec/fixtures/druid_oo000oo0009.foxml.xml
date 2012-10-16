@@ -142,8 +142,8 @@
                 <name>Archivist, One</name>
              </person>
              <person>
-                <identifier type="sunetid">skota</identifier>
-                <name>Ota, Stella</name>
+                <identifier type="sunetid">archivist7</identifier>
+                <name>Archivist, Seven</name>
              </person>
           </role>
           <role type="hydrus-collection-item-depositor">
@@ -152,16 +152,8 @@
                 <name>Archivist, Two</name>
              </person>
              <person>
-                <identifier type="sunetid">pgallagher</identifier>
-                <name>Gallagher, Patrick</name>
-             </person>
-             <person>
-                <identifier type="sunetid">mshapiro</identifier>
-                <name>Shapiro, Maxwell C.</name>
-             </person>
-             <person>
-                <identifier type="sunetid">jbrown</identifier>
-                <name>Brown, Jefferson</name>
+                <identifier type="sunetid">archivist4</identifier>
+                <name>Archivist, Four</name>
              </person>
           </role>          
           <role type="hydrus-collection-reviewer">

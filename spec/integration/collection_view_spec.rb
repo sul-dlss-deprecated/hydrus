@@ -47,7 +47,7 @@ describe("Collection view", :type => :request, :integration => true) do
     exp_content = [
       "How Couples Meet and Stay Together",
       "Ethnic Collective Action",
-      'Mascot, Harvard'
+      'Archivist, Three'
     ]
     login_as_archivist1
     visit polymorphic_path([@hc, :items])

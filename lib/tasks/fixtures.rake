@@ -15,12 +15,14 @@ namespace :hydrus do
     'druid:oo000oo0011',
     'druid:oo000oo0012',
     'druid:oo000oo0013',
+    'druid:oo000oo0099',    
   ]
 
   desc "hydrus fixture info"
   task :helpfix do
     puts <<-EOF.gsub(/^ {6}/, '')
-      Ur-APO:       00
+      Ur-APO:           00
+      hydrusAssemblyWF: 99
       APOs:             02  08  09
       Collections:      03  04  10
       Items:            01      11
@@ -129,7 +131,9 @@ namespace :hydrus do
       ['approve',        ' status="completed"'],
       ['start-assembly', ' status="waiting"'],
     ]
-    FIXTURE_PIDS.each { |druid|
+    fixtures_to_refresh=FIXTURE_PIDS.dup
+    fixtures_to_refresh.delete('druid:oo000oo0099') # can't refresh the workflow fixture itself
+    fixtures_to_refresh.each { |druid|
       resp = [druid, wf_name]
       resp << Dor::WorkflowService.delete_workflow(repo, druid, wf_name)
       xml  = steps.map { |step, extra|

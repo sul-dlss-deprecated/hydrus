@@ -43,7 +43,7 @@ describe("Home page", :type => :request, :integration => true) do
 
   it "should show Create Collection button only if user has authority to create collections" do
     # No
-    login_as('ggreen', login_pw)
+    login_as('archivist3', login_pw)
     visit root_path
     page.should_not have_selector(@cc_button)
     # Yes

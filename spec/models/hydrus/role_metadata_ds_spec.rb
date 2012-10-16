@@ -18,24 +18,24 @@ describe Hydrus::RoleMetadataDS do
         #{@rmd_start}
           <role type="hydrus-collection-manager">
              <person>
-                <identifier type="sunetid">brown</identifier>
-                <name>Brown, Malcolm</name>
+                <identifier type="sunetid">archivist4</identifier>
+                <name>Archivist, Four</name>
              </person>
              <person>
-                <identifier type="sunetid">dblack</identifier>
-                <name>Black, Delores</name>
+                <identifier type="sunetid">archivist5</identifier>
+                <name>Archivist, Five</name>
              </person>
           </role>
           <role type="hydrus-collection-depositor">
              <person>
-                <identifier type="sunetid">ggreen</identifier>
-                <name>Green, Greg</name>
+                <identifier type="sunetid">archivist3</identifier>
+                <name>Archivist, Three</name>
              </person>
           </role>
           <role type="hydrus-collection-reviewer">
              <person>
-                <identifier type="sunetid">bblue</identifier>
-                <name>Blue, Bill</name>
+                <identifier type="sunetid">archivist6</identifier>
+                <name>Archivist, Six</name>
              </person>
           </role>
         #{@rmd_end}
@@ -45,12 +45,12 @@ describe Hydrus::RoleMetadataDS do
 
     it "should get expected values from OM terminology" do
       tests = [
-        [[:role, :person, :identifier], %w(brown dblack ggreen bblue)],
-        [:person_id, %w(brown dblack ggreen bblue)],
-        [[:role, :person, :name], ["Brown, Malcolm", "Black, Delores", "Green, Greg", "Blue, Bill"]],
-        [[:collection_manager, :person, :identifier], %w(brown dblack)],
-        [[:collection_owner, :person, :identifier], %w(ggreen)],
-        [[:collection_reviewer, :person, :identifier], %w(bblue)],
+        [[:role, :person, :identifier], %w(archivist4 archivist5 archivist3 archivist6)],
+        [:person_id, %w(archivist4 archivist5 archivist3 archivist6)],
+        [[:role, :person, :name], ["Archivist, Four", "Archivist, Five", "Archivist, Three", "Archivist, Six"]],
+        [[:collection_manager, :person, :identifier], %w(archivist4 archivist5)],
+        [[:collection_owner, :person, :identifier], %w(archivist3)],
+        [[:collection_reviewer, :person, :identifier], %w(archivist6)],
         [[:collection_viewer, :person, :identifier], %w()],
         [[:role, :type], %w(hydrus-collection-manager hydrus-collection-depositor hydrus-collection-reviewer)],
       ]

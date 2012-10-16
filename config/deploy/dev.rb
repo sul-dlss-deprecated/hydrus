@@ -20,5 +20,6 @@ end
 
 before "deploy", "jetty:stop"
 after "deploy", "jetty:start"
+after "deploy", "db:migrate"
 after "deploy", "db:loadfixtures"
 after "jetty:start", "jetty:ingest_fixtures"
