@@ -277,7 +277,7 @@ noscript #item-actions, noscript #collection-actions {
 		.help {margin-left: 3px;}
 		p {
 			font-size: 12px;
-      &.discard-item {
+      &.discard-item,&.popup-link {
         margin: 6px 12px 6px 20px;
 				i {
 					margin-right: 5px;

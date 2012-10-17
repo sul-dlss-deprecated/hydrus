@@ -39,11 +39,13 @@
                       name="hydrus_item[publish]" value="true"
                       id="hydrus_item_publish">
                 <%= to_bool(@document_fedora.requires_human_approval) ?
-                      'Submit for Approval' : 'Publish Item'  %>
+                      "Submit for Approval" : "Publish #{@document_fedora.object_type.capitalize}"  %>
               </button>
             </p>
           <% end %>
         <% end %>
+
+				<p class="popup-link"><i class="icon-share"></i><%=link_to(@document_fedora.terms_of_deposit_accepted? ? "View Terms of Deposit" : "View and agree with Terms of Deposit", terms_of_deposit_path(@document_fedora.id), :target=>'_blank', :class=>'tod_link', :"data-url" => "#{terms_of_deposit_path(@document_fedora.id)}&from=#{controller.action_name}" )%></p>
 
         <!-- Delete link (currently a no-op). -->
         <% if @document_fedora.is_destroyable %>

@@ -75,6 +75,8 @@ Item page: don't show edit tab for reviewers (or for people who don't have permi
 Misc implementation tasks
 --------
 
+Update assembly robots to allow for multiple source directories
+
 Update to latest dor-services-gem:
   - update gemfile
   - create a new DOR object fixture for the hydrusWF workflow according to the new model [done]
