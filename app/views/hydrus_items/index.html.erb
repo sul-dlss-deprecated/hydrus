@@ -17,7 +17,7 @@
   <h4 class="muted">Items in This Collection</h4>
   <%- unless @document_fedora.hydrus_items.blank? -%>
     <div id="items" class="collection-items">
-      <table class="hydrus-striped-table table-striped table-condensed">
+      <table id="itemsTable" class="tablesorter hydrus-striped-table table-striped table-condensed">
         <thead>
           <tr>
             <th class="title">Title</th>
