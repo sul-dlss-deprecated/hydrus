@@ -17,6 +17,12 @@
 	overflow: hidden;
 }
 
+@mixin modal-header {
+	background-color: #93190c;
+	color: #fff;
+	text-align: center;
+}
+
 #druid-footer {@include druid-footer;}
 
 /* forms */
@@ -349,6 +355,7 @@ noscript #item-actions, noscript #collection-actions {
 		@include striped-table;
 		width: 100%;
 	}
+	.modal-header {@include modal-header;}
 	#druid-footer {@include druid-footer;}
 }
 dl.collection-view, dl.item-view {
@@ -376,6 +383,7 @@ dl.item-view {
 	margin-right: 25px;
 }
 
+#hydrus_items-edit .modal-header {@include modal-header;}
 #hydrus_items-edit .field-group, #hydrus_collections-edit .field-group {
 	margin-left: -25px;
 	margin-right: -20px;
@@ -408,11 +416,7 @@ dl.item-view {
 	}
 }
 #beta-dialog.modal, #signin.modal {
-	.modal-header {
-		background-color: #93190c;
-		color: #fff;
-		text-align: center;
-	}
+	.modal-header {@include modal-header;}
 	.modal-footer {
 		border: none;
 		background-color: inherit;

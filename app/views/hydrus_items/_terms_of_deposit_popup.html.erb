@@ -3,20 +3,19 @@
     <button type="button" class="close" data-dismiss="modal">×</button>
  		<h3 id="myModalLabel">Stanford Digital Repository  - Self-Service Terms of Deposit - DRAFT</h3>
   </div>
-<div class="modal-body">
-  <%= render :partial=>"terms_of_deposit_text" %>
-</div>
- <div class="modal-footer">
-	
-<% if @document_fedora.terms_of_deposit_accepted?%>
-	<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>	
-<% else %>
-	<button class="btn" data-dismiss="modal" aria-hidden="true">Return without agreeing</button>
-	<button class="tod-agree btn btn-primary" data-url="<%="#{terms_of_deposit_agree_path(@pid)}&from=#{@from}"%>" data-dismiss="modal">I agree to these terms</button>
-<% end %>
-<a href="/terms_of_deposit_text.txt"><button class="btn">Save</button></a>
-<button class="btn printbtn">Print</button>
-</div>
+	<div class="modal-body">
+	  <%= render :partial=>"terms_of_deposit_text" %>
+	</div>
+	<div class="modal-footer">
+		<a href="/terms_of_deposit_text.txt"><button class="btn">Save</button></a>
+		<button class="btn printbtn">Print</button>
+		<% if @document_fedora.terms_of_deposit_accepted?%>
+			<button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Close</button>
+		<% else %>
+			<button class="btn" data-dismiss="modal" aria-hidden="true">Return without agreeing</button>
+			<button class="tod-agree btn btn-primary" data-url="<%="#{terms_of_deposit_agree_path(@pid)}&from=#{@from}"%>" data-dismiss="modal">I agree to these terms</button>
+		<% end %>
+	</div>
 </div>
 
 <script language="JavaScript">
