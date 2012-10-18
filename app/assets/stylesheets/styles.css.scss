@@ -427,10 +427,12 @@ dl.item-view {
 		margin-top: 10px;
 	}
 	.signin-form {
-		margin: 0 auto;
+		margin-left: 20px;
+		margin-top: -10px;
 	  .signin-fields {
 			border-right: 1px solid #DDD;
 			float: left;
+			margin-right: 25px;
 			width: 245px;
 			input {
 				float: left;
@@ -446,6 +448,7 @@ dl.item-view {
 		.webauth {
 			margin-bottom: 20px;
 			margin-top: 23px;
+			.btn {margin-top: 50px;}
 		}
 	}
 }

@@ -3,8 +3,8 @@
 <%- else -%>
   <%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
     <div class="modal-body">    
-      <div class="row signin-form">
-        <div class="span2 signin-fields">
+      <div class="signin-form">
+        <div class="signin-fields">
           <fieldset>
             <%= f.label :email %>
             <%= f.email_field :email, :autofocus => true, :tabindex => '1' %>
@@ -25,7 +25,7 @@
             <%= f.label :remember_me %>
           </fieldset>
         </div>
-        <div class="span2 webauth">
+        <div class="webauth">
           <%= link_to("Sign in via WebAuth", webauth_login_path(:referrer => params[:referrer]), :class => 'btn', :tabindex => '5') %>
           <p class="help">One-click sign in if you are currently authenticated through a Stanford site.</p>
         </div>

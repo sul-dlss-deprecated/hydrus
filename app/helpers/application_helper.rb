@@ -41,7 +41,7 @@ module ApplicationHelper
   end
 
   def render_contextual_layout
-    controller.controller_name == 'catalog' ? (render "shared/home_contents") : (render "shared/main_contents")
+    controller.controller_name == 'catalog' || controller.controller_name == 'sessions' ? (render "shared/home_contents") : (render "shared/main_contents")
   end
 
   def hydrus_signin_link
