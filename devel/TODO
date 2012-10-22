@@ -29,10 +29,6 @@ Change link in email notification from "hydrus.stanford.edu" to
 "hydrus-test.stanford.edu"
 
 Integration tests for role-protection and gated discovery:
-  Dashboard:
-    Collections shown should vary by user
-  Search:
-    N search results should vary by user
   Collection:
     open collection
     discard collection
@@ -59,6 +55,8 @@ manager, it's pointless to make him a lesser role like reviewer.
 --------
 Misc implementation tasks
 --------
+
+Search results should look better.
 
 Update assembly robots to allow for multiple source directories
 

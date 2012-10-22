@@ -30,6 +30,33 @@ describe("Home page", :type => :request, :integration => true) do
     page.should have_selector(@search_box)
   end
 
+  it "dashboard: collections shown should vary by user and their roles" do
+    exp = {
+      'archivist1@example.com' => %w(oo000oo0003 oo000oo0004 oo000oo0010),
+      'archivist2@example.com' => %w(oo000oo0010),
+    }
+    exp.each do |user, drus|
+      login_as(user, login_pw)
+      visit root_path
+      drus.each do |dru|
+        xp = "//a[@href='/collections/druid:#{dru}']"
+        find('div.user-collections').should have_xpath(xp)
+      end
+    end
+  end
+
+  it "search results should vary by user and their roles" do
+    exp = {
+      'archivist1@example.com' => 10,
+      'archivist2@example.com' => 4,
+    }
+    exp.each do |user, exp_n|
+      login_as(user, login_pw)
+      visit @search_url
+      find('div.pageEntriesInfo').should have_content("Displaying all #{exp_n} items")
+    end
+  end
+
   it "breadcrumbs should not be displayed" do
     # Logged out
     logout
@@ -43,7 +70,7 @@ describe("Home page", :type => :request, :integration => true) do
 
   it "should show Create Collection button only if user has authority to create collections" do
     # No
-    login_as('archivist3', login_pw)
+    login_as('archivist3@example.com', login_pw)
     visit root_path
     page.should_not have_selector(@cc_button)
     # Yes
