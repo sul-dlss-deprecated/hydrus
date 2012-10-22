@@ -58,6 +58,7 @@ group :development, :test do
   gem 'looksee'
   gem 'debugger'
   gem 'sqlite3'
+  gem 'launchy'
 end
 
 group :production do
