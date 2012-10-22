@@ -2,10 +2,6 @@
 UI Redesign
 --------
 
-Item and Collect edit. When you click one of the "Add..." or "Delete..."
-buttons, we should give the user some visual feedback so they don't think
-nothing happened. [done]
-
 After finishing more thorough UI rework, look at:
   responsive issues
   accessibility issues
@@ -14,12 +10,12 @@ Update search results page; UI redesign degraded formatting of it.
 
 Make date format consistent (YYYY-MM-DD)
 
-Update SUL-chrome gem to latest Bootstrap (needed to be able to use the 
+Update SUL-chrome gem to latest Bootstrap (needed to be able to use the
 unchecked checkbox icon, which is not available in our current SUL-chrome gem).
-When this is done, change "icon-minus" to "icon-check-empty" in the 
+When this is done, change "icon-minus" to "icon-check-empty" in the
 select_status_checkbox_icon helper method (application_helper.rb).
 
-Item View page: Fix conditional display of metadata sections when only some 
+Item View page: Fix conditional display of metadata sections when only some
 required fields have been saved.
 
 Collection Items page: Type column is temporarily commented out. Add back when
@@ -29,22 +25,15 @@ we distinguish between different item types.
 Roles and Discovery
 --------
 
-Hardcode SUNets of our testers in the collection-creator role [done]
-
-Change link in email notification from "hydrus.stanford.edu" to "hydrus-test.stanford.edu"
-
-Don't allow users to edit a published item when not in development mode.  [done]
+Change link in email notification from "hydrus.stanford.edu" to
+"hydrus-test.stanford.edu"
 
 Integration tests for role-protection and gated discovery:
   Dashboard:
-    show search box only if logged in      [done]  
-    show create collection button          [done]
     Collections shown should vary by user
   Search:
     N search results should vary by user
-    non logged in user via a direct URL    [done]
   Collection:
-    non-logged in user ability to visit collections/new       [done]
     open collection
     discard collection
     close collection
@@ -67,10 +56,6 @@ over the states of our fixture objects.
 person_roles=(). Prune unneeded roles. For example, if user X is a collection
 manager, it's pointless to make him a lesser role like reviewer.
 
-Strip any text after @ sign for users entered into roles (so users don't inadvertently enter email addresses instead of sunet) [done]
-
-Item page: don't show edit tab for reviewers (or for people who don't have permissions). [done]
-
 --------
 Misc implementation tasks
 --------
@@ -79,13 +64,7 @@ Update assembly robots to allow for multiple source directories
 
 Update to latest dor-services-gem:
   - update gemfile
-  - create a new DOR object fixture for the hydrusWF workflow according to the new model [done]
   - remove hydrusWF workflow definition from APO
-
-Fix checkbox for terms of deposit acceptance javascript when returning via ajax.  Also enable publish button 
-when on view page.  [done]
-
-Change fixtures so that they don't use anything that could be a real SUNETID. [done]
 
 rightsMD: (a) tests; (b) refactor to take advantage of OM and generic_ds.rb.
 
@@ -107,9 +86,9 @@ text boxes, use the approach we have adopted elsewhere for non-required items:
 have the user click "Add" button first. Collection: links to related items.
 Item: related citations; and links to related items.
 
-Consider moving Hydrus::Responsible into RoleMDDS. Not sure that we need the module.
-Also, there is currently some duplication between Hydrus::Responsible and the
-to_solr() method in RoleMDDS.
+Consider moving Hydrus::Responsible into RoleMDDS. Not sure that we need the
+module.  Also, there is currently some duplication between Hydrus::Responsible
+and the to_solr() method in RoleMDDS.
 
 Need a place to store Item types. Currently hardcoded to :dataset. Also see
 object_type() in GenericObject. [Lynn and Hannah will discuss]
@@ -119,8 +98,8 @@ APO RELS-EXT datastream needs to add a child node to <rdf:Description>:
 the PID of the global Hydrus Agreement object. [The Hydrus agreement object
 needs to be created -- need more details].
 
-Use reified WFs rather than putting them in the APO. (a) Set up WF objects
-on -dev. (b) Work with Willy to deploy the feature to -dev.
+Use reified WFs rather than putting them in the APO. (a) Set up WF objects on
+-dev. (b) Work with Willy to deploy the feature to -dev.
 
 Collection create: APO.roleMetadata: set the value of <name> for the
 collection-manager [waiting on LDAP].
