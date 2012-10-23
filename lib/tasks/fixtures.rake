@@ -21,8 +21,9 @@ namespace :hydrus do
   desc "hydrus fixture info"
   task :helpfix do
     puts <<-EOF.gsub(/^ {6}/, '')
-      Ur-APO:           00
       hydrusAssemblyWF: 99
+      Ur-APO:           00
+
       APOs:             02  08  09
       Collections:      03  04  10
       Items:            01      11
@@ -125,28 +126,17 @@ namespace :hydrus do
     require File.expand_path('config/environment')
     repo    = 'dor'
     wf_name = 'hydrusAssemblyWF'
-    steps   = [
-      ['start-deposit',  ' status="completed" lifecycle="registered"'],
-      ['submit',         ' status="completed"'],
-      ['approve',        ' status="completed"'],
-      ['start-assembly', ' status="waiting"'],
-    ]
-    fixtures_to_refresh=FIXTURE_PIDS.dup
-    fixtures_to_refresh.delete('druid:oo000oo0099') # can't refresh the workflow fixture itself
-    fixtures_to_refresh.each { |druid|
+    # Read files in workflow fixtures directory.
+    Dir.glob("spec/fixtures/workflow_xml/druid_*.xml").each do |f|
+      # Read XML from file and get druid from file name.
+      xml   = File.read(f)
+      druid = File.basename(f, '.xml').gsub(/_/, ':')
+      # Push content up to the WF service.
       resp = [druid, wf_name]
       resp << Dor::WorkflowService.delete_workflow(repo, druid, wf_name)
-      xml  = steps.map { |step, extra|
-        extra = extra.gsub(/completed/, 'waiting') if (
-          druid == 'druid:oo000oo0005' &&
-          step != 'start-deposit'
-        )
-        %Q(<process name="#{step}"#{extra}/>)
-      }.join ''
-      xml  = "<workflow>#{xml}</workflow>"
       resp << Dor::WorkflowService.create_workflow(repo, druid, wf_name, xml)
       puts resp.inspect
-    }
+    end
   end
 
   desc "restore jetty to initial state"
