@@ -32,6 +32,7 @@ def create_test_item(*args)
   hi.person      = { "0" => "Nugent, Ted" }
   hi.person_role = { "0" => "Author" }
   hi.accepted_terms_of_deposit = 'yes'
+  hi.reviewed_release_settings = 'yes'
   # Create a file for the Item.
   f       = Hydrus::ObjectFile.new
   f.pid   = hi.pid

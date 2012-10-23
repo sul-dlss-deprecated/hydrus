@@ -2,9 +2,8 @@
 UI Redesign
 --------
 
-After finishing more thorough UI rework, look at:
-  responsive issues
-  accessibility issues
+After finishing more thorough UI rework, look at: responsive issues;
+accessibility issues.
 
 Update search results page; UI redesign degraded formatting of it.
 
@@ -39,18 +38,16 @@ Integration tests for role-protection and gated discovery:
     discard item
     approve/disapprove/reason
 
-Workflow changes and SOLR: when the workflow DS for an object changes, the
-local SOLR index on a developer's box is not updated. Option 1: set up a
-listener that will update local SOLR when objects changes on the dor-dev
-environment. See dor-services-gem bin/ directory. Option 2: run the workflow
-service locally.
-
 person_roles=(). Prune unneeded roles. For example, if user X is a collection
 manager, it's pointless to make him a lesser role like reviewer.
 
 --------
 Misc implementation tasks
 --------
+
+Set up the listener scripts to update the Hydrus SOLR when Hydrus objects are
+updates outside of the Hydrus app. See the argo/bin directory for the latest
+copies of the scripts.
 
 Search results should look better.
 
@@ -65,6 +62,10 @@ rightsMD: (a) tests; (b) refactor to take advantage of OM and generic_ds.rb.
 ****************
 WAITING
 ****************
+
+Work with Willy to switch local dev environment to use a local workflow service
+rather than the workflow service on sul-lyberservices-dev. [He will help us
+when he returns from vacation]
 
 Should the hydrus app be logging more systematically?
 

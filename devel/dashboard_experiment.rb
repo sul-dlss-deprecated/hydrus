@@ -1,5 +1,3 @@
-require File.expand_path('config/environment')
-
 def dashboard(*args)
   # Controller: get the stats.
   user  = args.first
