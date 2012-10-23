@@ -149,6 +149,10 @@
                 <identifier type="sunetid">archivist3</identifier>
                 <name>Archivist, Three</name>
              </person>
+             <person>
+                <identifier type="sunetid">archivist6</identifier>
+                <name>Archivist, Six</name>
+             </person>
           </role>
           <role type="hydrus-collection-depositor">
              <person>

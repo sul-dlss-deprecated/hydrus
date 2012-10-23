@@ -30,18 +30,12 @@ class Hydrus::GenericObject < Dor::Item
   def is_collection?
     self.class == Hydrus::Collection
   end
-    
-  # this method will FORCE run validations and populate the errors object for you so you can run further tests
-  # as is needed --- note that a simple .valid? call will always return true by default if the object is not publishable
-  def validate!
-    @should_validate=true
-    apo.instance_variable_set('@should_validate', true) if is_collection?
-    is_valid=valid?
-    @should_validate=false
-    apo.instance_variable_set('@should_validate', false) if is_collection?
-    return is_valid
-  end
 
+  # if we are a collection, return the value from the datastream, if not, return this item's collections value
+  def requires_human_approval
+    is_collection? ? super : collection.requires_human_approval
+  end
+    
   #################################
   # methods used to build sidebar #
   def required_fields_completed?  # returns true if all required fields are filled in, otherwise returns false
@@ -79,20 +73,41 @@ class Hydrus::GenericObject < Dor::Item
     :label => 'Hydrus Properties',
     :control_group => 'M')
 
+  
+  def is_approvable
+    is_published ? false : (to_bool(requires_human_approval) ? validate! && !is_submitted_for_approval : false)
+  end
+  
+  # Returns true only if the Item is unpublished.
+  def is_destroyable
+    return not(is_published)
+  end
+
   def is_published
-    @is_published = workflow_step_is_done('submit') unless defined?(@is_published)
+    unless defined?(@is_published)
+      @is_published = to_bool(requires_human_approval) ?  is_approved : is_submitted
+    end
     return @is_published
   end
 
+  def is_submitted
+    workflow_step_is_done('submit')
+  end
+  
+  def is_submitted_for_approval
+    return (is_submitted and !workflow_step_is_done('approve'))
+  end
+  
   def is_approved
-    return (is_published and workflow_step_is_done('approve'))
+    return (is_submitted and workflow_step_is_done('approve'))
   end
 
   # The controller will call these methods, which we simply forward to
   # the Collection or Item class.
   def publish=(val) publish(val) end
   def approve=(val) approve(val) end
-
+  def resubmit=(val) resubmit(val) end
+    
   def object_type
     # TODO: this is not what we want.
     return identityMetadata.objectType.first
@@ -213,7 +228,7 @@ class Hydrus::GenericObject < Dor::Item
   def do_approve
     is_item = is_hydrus_item()
     complete_workflow_step('approve')
-    events.add_event('hydrus', @current_user, "#{hydrus_class_to_s()} approved")
+    events.add_event('hydrus', @current_user, "#{hydrus_class_to_s()} approved") if to_bool(requires_human_approval) && !is_collection?
     hydrusProperties.remove_nodes(:disapproval_reason)
     if should_start_common_assembly
       update_content_metadata if is_item
@@ -224,13 +239,18 @@ class Hydrus::GenericObject < Dor::Item
 
   # Disapproves an object by setting the reason is the hydrusProperties datastream.
   def do_disapprove(reason)
-    events.add_event('hydrus', @current_user, "Item disapproved")
+    events.add_event('hydrus', @current_user, "Item disapproved: #{reason}")
     self.disapproval_reason = reason
+    recipients = persons_with_role("hydrus-collection-item-depositor").to_a
+    unless recipients.blank?
+      email = HydrusMailer.item_returned(:to => recipients.join(", "), :object => self)
+      email.deliver unless email.to.blank? # this will catch when we're trying to send an email from a fixture.
+    end    
   end
-
+  
   # Returns true if there is a non-blank disapproval_reason.
   def is_disapproved
-    return not(disapproval_reason.blank?)
+    is_published ? false : (to_bool(requires_human_approval) ? !disapproval_reason.blank? : false)
   end
 
   # Returns value of Dor::Config.hydrus.start_common_assembly.

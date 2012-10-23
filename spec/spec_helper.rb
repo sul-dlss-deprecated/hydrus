@@ -109,6 +109,10 @@ def login_as_archivist2
   login_as "archivist2@example.com", login_pw
 end
 
+def login_as_archivist6
+  login_as "archivist6@example.com", login_pw
+end
+
 def login_as_archivist99
   login_as "archivist99@example.com", login_pw
 end

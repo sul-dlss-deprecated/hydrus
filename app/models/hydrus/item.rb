@@ -72,6 +72,12 @@ class Hydrus::Item < Hydrus::GenericObject
     return item
   end
 
+  # Resubmits an object by resetting the reason in the hydrusProperties datastream
+  def resubmit(value = nil)
+    events.add_event('hydrus', @current_user, "Item resubmitted for approval")
+    hydrusProperties.remove_nodes(:disapproval_reason)
+  end
+  
   # Publish the Item.
   def publish(value = nil)
     # At the moment of publication, we refresh various titles.
@@ -81,8 +87,12 @@ class Hydrus::Item < Hydrus::GenericObject
     s = 'submit'
     unless workflow_step_is_done(s)
       complete_workflow_step(s)
-      events.add_event('hydrus', @current_user, 'Item published')
-      approve() unless to_bool(requires_human_approval)
+      if to_bool(requires_human_approval)
+        events.add_event('hydrus', @current_user, 'Item submitted for approval')
+      else
+        events.add_event('hydrus', @current_user, "#{hydrus_class_to_s()} published")
+        approve()
+      end
     end
   end
 
@@ -100,10 +110,6 @@ class Hydrus::Item < Hydrus::GenericObject
         return true
       end
     end
-  end
-    
-  def requires_human_approval
-    collection.requires_human_approval
   end
 
   # Returns the Item's Collection.
@@ -169,18 +175,15 @@ class Hydrus::Item < Hydrus::GenericObject
   def status
     if is_published 
       return "published"
-    elsif to_bool(requires_human_approval)
-      return "waiting approval"
+    elsif is_disapproved
+      return "item returned"      
+    elsif is_submitted_for_approval
+      return "waiting for approval"
     else
       return "draft"
     end
   end
   
-  # Returns true only if the Item is unpublished.
-  def is_destroyable
-    return not(is_published)
-  end
-
   # Returns true only if the Item has an open Collection.
   def collection_is_open
     c = collection

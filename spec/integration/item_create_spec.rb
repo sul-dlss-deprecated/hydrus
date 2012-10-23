@@ -75,7 +75,7 @@ describe("Item create", :type => :request, :integration => true) do
     current_path.should =~ @edit_path_regex
   end
 
-  it "should be able to create a new Item, publish, etc" do
+  it "For an item requiring approval, should be able to create a new Item, reject, accept, publish, etc" do
     ni = hash2struct(
       :title    => 'title_foo',
       :abstract => 'abstract_foo',
@@ -83,16 +83,18 @@ describe("Item create", :type => :request, :integration => true) do
       :reason   => 'Idiota',
       :person   => 'person_foo',
     )
-    publish_button    = "Submit for Approval"
+    submit_button    = "Submit for Approval"
     approve_button    = "Approve Item"
     disapprove_button = "Return Item"
+    resubmit_button = "Resubmit for Approval"
     # Force Items to receive human approval.
     coll = Hydrus::Collection.find(@hc_druid)
     coll.requires_human_approval = 'yes'
     coll.save
-    # Login, go to new Item page, and store the druid of the new Item.
-    login_as_archivist1
+    # Login as a item depositor for this collection, go to new Item page, and store the druid of the new Item.
+    login_as_archivist6
     visit new_hydrus_item_path(:collection => @hc_druid)
+    page.should have_content('Welcome archivist6!')
     current_path.should =~ @edit_path_regex
     druid = @edit_path_regex.match(current_path)[1]
     # Fill in form and save.
@@ -101,10 +103,9 @@ describe("Item create", :type => :request, :integration => true) do
     fill_in "Title of item", :with => ni.title
     click_button "Save"
     page.should have_content(@notice)
-    # The view page should display some validation error messages, and should not
-    # offer the Publish button.
-    div_cs = find("div.collection-actions")
-    div_cs.should_not have_button(publish_button)
+    # The view page should display some validation error messages, and should not offer the Submit for approval button.
+    find("div.collection-actions").should_not have_button(submit_button)
+    find('span#status-label').should have_content('Draft')    
     # Check various Item attributes and methods.
     item = Hydrus::Item.find(druid)
     item.is_publishable.should == false
@@ -114,9 +115,6 @@ describe("Item create", :type => :request, :integration => true) do
     item.is_destroyable.should == true
     item.accepted_terms_of_deposit.should == "false"
     item.valid?.should == true  # Because unpublished, so validation is limited.
-    # accept terms of deposit (hard to do via the UI since a pop-up window is involved, so let's exercise the method directly)
-    item.accept_terms_of_deposit('archivist1')
-    item.save
     # Go back to edit page and fill in required elements.
     should_visit_edit_page(item)
     check "release_settings"
@@ -128,30 +126,42 @@ describe("Item create", :type => :request, :integration => true) do
     f.save
     click_button "Save"
     page.should have_content(@notice)
-    # The view page should now offer the Publish button.
-    div_cs = find("div.collection-actions")
-    div_cs.should have_button(publish_button)
+    # The view page should still not offer the Submit for approval button since we haven't accepted the terms.
+    find("div.collection-actions").should_not have_button(submit_button)    
+
+    # accept terms of deposit (hard to do via the UI since a pop-up window is involved, so let's exercise the method directly)
+    item = Hydrus::Item.find(druid)
+    item.accept_terms_of_deposit('archivist6')
+    item.save    
+
+    # The view page should now offer the Submit for approval button since we haven't accepted the terms.
+    visit hydrus_item_path(:id=>item.pid)    
+    find("div.collection-actions").should have_button(submit_button)
+
     # Check various Item attributes and methods.
     item = Hydrus::Item.find(druid)
-    item.is_publishable.should == true
+    item.is_publishable.should == false
+    item.is_approvable.should == true    
     item.is_published.should == false
     item.is_approved.should == false
     item.is_disapproved.should == false
     item.is_destroyable.should == true
     item.valid?.should == true
-    # Publish the Item.
-    click_button(publish_button)
+
+    # Submit the Item for approval.
+    click_button(submit_button)
     page.should have_content(@notice)
-    # The view page should not offer the Publish button.
-    div_cs = find("div.collection-actions")
-    div_cs.should_not have_button(publish_button)
+    # The view page should not offer the Submit for approval button anymore
+    find("div.collection-actions").should_not have_button(submit_button)
+    find('span#status-label').should have_content('Waiting for approval')    
     # Check various Item attributes and methods.
     item = Hydrus::Item.find(druid)
-    item.is_publishable.should == true
-    item.is_published.should == true
+    item.is_publishable.should == false
+    item.requires_human_approval.should == "yes"
+    item.is_published.should == false
     item.is_approved.should == false
     item.is_disapproved.should == false
-    item.is_destroyable.should == false
+    item.is_destroyable.should == true
     item.valid?.should == true
     # Return to edit page, and try to save Item with an empty title.
     click_link "Edit Draft"
@@ -163,26 +173,55 @@ describe("Item create", :type => :request, :integration => true) do
     fill_in "hydrus_item_title", :with => ni.title
     click_button "Save"
     page.should have_content(@notice)
-    # Disapprove the Item.
+
+    # now login as archivist 1 (collection manager) and Disapprove the Item.
+    login_as_archivist1
+    visit hydrus_item_path(:id=>item.pid)
+    page.should have_content('Welcome archivist1!')
     fill_in "hydrus_item_approve_reason", :with => ni.reason
     click_button(disapprove_button)
     # Check various Item attributes and methods.
     item = Hydrus::Item.find(druid)
-    item.is_publishable.should == true
-    item.is_published.should == true
+    item.is_publishable.should == false
+    item.is_published.should == false
     item.is_approved.should == false
     item.is_disapproved.should == true
-    item.is_destroyable.should == false
+    item.is_destroyable.should == true
     item.valid?.should == true
     item.disapproval_reason.should == ni.reason
+    visit hydrus_item_path(:id=>item.pid)
+    find('span#status-label').should have_content('Item returned')    
+
+    # now login as archivist 6 (depositor) and resubmit the Item.
+    login_as_archivist6
+    visit hydrus_item_path(:id=>item.pid)
+    page.should have_content('Welcome archivist6!')    
+    page.should have_content(ni.reason)
+    find('span#status-label').should have_content('Item returned')        
+    click_button(resubmit_button)
+    # Check various Item attributes and methods.
+    item = Hydrus::Item.find(druid)
+    item.is_publishable.should == false
+    item.is_published.should == false
+    item.is_approved.should == false
+    item.is_disapproved.should == false
+    item.is_destroyable.should == true
+    item.valid?.should == true
+    item.disapproval_reason.should == nil
+    find('span#status-label').should have_content('Waiting for approval')
+    
+    # now login as archivist 1 and approve the item
+    login_as_archivist1
+    visit hydrus_item_path(:id=>item.pid)
     # Approve the Item.
     click_button(approve_button)
     page.should have_content(@notice)
     # The view page should not offer the Publish, Approve, or Disapprove buttons.
     div_cs = find("div.collection-actions")
-    div_cs.should_not have_button(publish_button)
+    div_cs.should_not have_button(submit_button)
     div_cs.should_not have_button(approve_button)
     div_cs.should_not have_button(disapprove_button)
+    find('span#status-label').should have_content('Published')        
     # Check various Item attributes and methods.
     item = Hydrus::Item.find(druid)
     item.is_publishable.should == true
@@ -197,16 +236,125 @@ describe("Item create", :type => :request, :integration => true) do
       /\AItem created/,
       /\AItem modified/, # Visibility. Do not expect this. Refactor of rightsMD might fix.
       /\AItem modified/,
-      /\ATerms of deposit accepted/,
       /\AItem modified/,
+      /\ATerms of deposit accepted/,
+      /\AItem submitted for approval/,
+      /\AItem disapproved:/,
+      /\AItem resubmitted for approval/,
+      /\AItem approved/,      
       /\AItem published/,
-      /\AItem disapproved/,
-      /\AItem approved/,
     ]
     es = item.get_hydrus_events
     es[0...exp.size].zip(exp).each { |e, exp| e.text.should =~ exp  }
   end
+
+  it "For an item not requiring approval, should be able to create a new Item and publish it" do
+    ni = hash2struct(
+      :title    => 'title_foo',
+      :abstract => 'abstract_foo',
+      :contact  => 'ozzy@hell.com',
+      :reason   => 'Idiota',
+      :person   => 'person_foo',
+    )
+    submit_button    = "Publish"
+    # Force Items to not receive human approval.
+    coll = Hydrus::Collection.find(@hc_druid)
+    coll.requires_human_approval = 'no'
+    coll.save
+    # Login as a item depositor for this collection, go to new Item page, and store the druid of the new Item.
+    login_as_archivist1
+    visit new_hydrus_item_path(:collection => @hc_druid)
+    current_path.should =~ @edit_path_regex
+    druid = @edit_path_regex.match(current_path)[1]
+    # Fill in form and save.
+    click_button "Add Person"
+    fill_in "hydrus_item_person_0", :with => ni.person
+    fill_in "Title of item", :with => ni.title
+    click_button "Save"
+    page.should have_content(@notice)
+    # The view page should display some validation error messages, and should not
+    # offer the Publish button.
+    find("div.collection-actions").should_not have_button(submit_button)
+    find('span#status-label').should have_content('Draft')    
+    # Check various Item attributes and methods.
+    item = Hydrus::Item.find(druid)
+    item.is_publishable.should == false
+    item.is_published.should == false
+    item.is_approved.should == false
+    item.is_disapproved.should == false
+    item.is_destroyable.should == true
+    item.accepted_terms_of_deposit.should == "false"
+    item.valid?.should == true  # Because unpublished, so validation is limited.
+    # Go back to edit page and fill in required elements.
+    should_visit_edit_page(item)
+    check "release_settings"
+    fill_in "hydrus_item_abstract", :with => ni.abstract
+    fill_in "hydrus_item_contact",  :with => ni.contact
+    f = Hydrus::ObjectFile.new
+    f.pid = druid
+    f.file = Tempfile.new('mock_HydrusObjectFile_')
+    f.save
+    click_button "Save"
+    page.should have_content(@notice)
+    # The view page should not offer the Publish button since we haven't accepted the terms yet
+    find("div.collection-actions").should_not have_button(submit_button)
+
+    # accept terms of deposit (hard to do via the UI since a pop-up window is involved, so let's exercise the method directly)
+    item = Hydrus::Item.find(druid)
+    item.accept_terms_of_deposit('archivist1')
+    item.save
   
+    visit hydrus_item_path(:id=>item.pid)    
+    # now we should have the publish button    
+    find("div.collection-actions").should have_button(submit_button)
+    # Check various Item attributes and methods.
+    item = Hydrus::Item.find(druid)
+    item.is_publishable.should == true
+    item.requires_human_approval.should == "no"
+    item.is_approvable.should == false    
+    item.is_published.should == false
+    item.is_approved.should == false
+    item.is_disapproved.should == false
+    item.is_destroyable.should == true
+    item.valid?.should == true
+    # Publish thte item
+    click_button(submit_button)
+    page.should have_content(@notice)
+    # The view page should not offer the Publish button.
+    find("div.collection-actions").should_not have_button(submit_button)
+    find('span#status-label').should have_content('Published')    
+    # Check various Item attributes and methods.
+    item = Hydrus::Item.find(druid)
+    item.is_publishable.should == true
+    item.is_published.should == true
+    item.is_approved.should == true
+    item.is_disapproved.should == false
+    item.is_destroyable.should == false
+    item.valid?.should == true
+    # Return to edit page, and try to save Item with an empty title.
+    click_link "Edit Draft"
+    fill_in "hydrus_item_title", :with => ''
+    click_button "Save"
+    page.should_not have_content(@notice)
+    find('div.alert').should have_content('Title cannot be blank')
+    # Fill in the title and save.
+    fill_in "hydrus_item_title", :with => ni.title
+    click_button "Save"
+    page.should have_content(@notice)
+  
+    # Check events.
+    exp = [
+      /\AItem created/,
+      /\AItem modified/, # Visibility. Do not expect this. Refactor of rightsMD might fix.
+      /\AItem modified/,
+      /\AItem modified/,
+      /\ATerms of deposit accepted/,
+      /\AItem published/,
+    ]
+    es = item.get_hydrus_events
+    es[0...exp.size].zip(exp).each { |e, exp| e.text.should =~ exp  }
+  end
+    
   describe("terms of acceptance for an existing item", :integration => true)  do
 
     subject { Hydrus::Item.find('druid:oo000oo0001') }

@@ -7,6 +7,12 @@ class HydrusMailer < ActionMailer::Base
     mail(:to=>HydrusMailer.process_user_list(opts[:to]), :subject=>"Invitation to deposit in the Stanford Digital Repository") unless protected_druids.include?(@document_fedora.pid)
   end
   
+  def item_returned(opts={})
+    @host = setup_host
+    @document_fedora = opts[:object]
+    mail(:to=>HydrusMailer.process_user_list(opts[:to]), :subject=>"#{@document_fedora.object_type.capitalize} returned for edits in the Stanford Digital Repository") unless protected_druids.include?(@document_fedora.pid)    
+  end
+  
   def open_notification(opts={})
     @host = setup_host
     @document_fedora = opts[:object]
@@ -22,7 +28,14 @@ class HydrusMailer < ActionMailer::Base
   protected
   
   def setup_host
-    Rails.env.dortest? ? "hydrus-test.stanford.edu" : "hydrus-dev.stanford.edu"
+    case Rails.env
+      when 'dortest'
+        "hydrus-test.stanford.edu"
+      when 'development','test'
+        "hydrus-dev.stanford.edu"
+      else
+        "hydrus.stanford.edu"
+    end
   end
   
   def protected_druids

@@ -200,7 +200,7 @@
   <%= hydrus_form_header{"Terms of Use"} %>
   <div class="row field-group">
     <div class="span9">
-      People who can discover and download this item will agree to these <a href="#">Terms of Use</a>.
+      People who can discover and download this item will agree to these <%=link_to("terms of deposit", terms_of_deposit_path(@document_fedora.id), :target=>'_blank', :class=>'tod_link', :"data-url" => "#{terms_of_deposit_path(@document_fedora.id)}&from=#{controller.action_name}")%>.
     </div>
   </div>
 

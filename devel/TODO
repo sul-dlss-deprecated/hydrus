@@ -81,6 +81,7 @@ Update to latest dor-services-gem:
   - update gemfile
   - create a new DOR object fixture for the hydrusWF workflow according to the new model [done]
   - remove hydrusWF workflow definition from APO
+	- Set up WF object (currently oo000oo0099) on test/prod/dev as needed
 
 Fix checkbox for terms of deposit acceptance javascript when returning via ajax.  Also enable publish button 
 when on view page.  [done]
@@ -119,8 +120,6 @@ APO RELS-EXT datastream needs to add a child node to <rdf:Description>:
 the PID of the global Hydrus Agreement object. [The Hydrus agreement object
 needs to be created -- need more details].
 
-Use reified WFs rather than putting them in the APO. (a) Set up WF objects
-on -dev. (b) Work with Willy to deploy the feature to -dev.
 
 Collection create: APO.roleMetadata: set the value of <name> for the
 collection-manager [waiting on LDAP].

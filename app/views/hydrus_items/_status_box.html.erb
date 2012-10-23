@@ -1,15 +1,11 @@
  <div class="well item-status">
    <div class="box-header">
 			<span>Status</span>
-			<% if @document_fedora.is_published %>
-				<span class="label label-success status-label">Published</span>
-			<% else %>
-				<span class="label label-warning status-label">Draft</span>
-			<% end %>
+				<span id="status-label" class="label label-<%=button_color(@document_fedora.status)%> status-label"><%=@document_fedora.status.capitalize%></span>
    </div>
 	 <div class="box-body">
 	 	<% unless @document_fedora.is_published %>
-
+			
 			<%=check_box_tag 'required_fields_checkbox', true, @document_fedora.required_fields_completed?, :disabled=>true%> 
 			<label for="required_fields_checkbox">
 				<%= select_status_checkbox_icon(@document_fedora.required_fields_completed?) %>
@@ -31,10 +27,23 @@
 			<%=check_box_tag 'depositor_agreement_checkbox', true, @document_fedora.terms_of_deposit_accepted?, :disabled=>true%> 
 			<label for="depositor_agreement_checkbox">
 				<%= select_status_checkbox_icon(@document_fedora.terms_of_deposit_accepted?) %>
-				Depositor agreement with
-				<%=link_to("Terms of Deposit", terms_of_deposit_path(@document_fedora.id), :target=>'_blank', :class=>'tod_link', :"data-url" => "#{terms_of_deposit_path(@document_fedora.id)}&from=#{controller.action_name}" )%>
+				Depositor agreement with Terms of Deposit
 			</label>
 
+			<% if to_bool(@document_fedora.requires_human_approval) %>
+				<%=check_box_tag 'item_submitted_approval_checkbox', true, @document_fedora.is_submitted_for_approval, :disabled=>true%> 
+				<label for="item_submitted_approval_checkbox">
+					<%= select_status_checkbox_icon(@document_fedora.is_submitted_for_approval) %>
+					Item submitted for approval
+				</label>
+			
+				<%=check_box_tag 'item_approved_checkbox', true, @document_fedora.is_approved, :disabled=>true%> 
+				<label for="item_approved_checkbox">
+					<%= select_status_checkbox_icon(@document_fedora.is_approved) %>
+					Item approved
+				</label>
+			<% end %>
+			
 			<%=check_box_tag 'item_opened_checkbox', true, @document_fedora.is_publishable, :disabled=>true%> 
 			<label for="item_opened_checkbox">
 				<%= select_status_checkbox_icon(@document_fedora.is_publishable) %>

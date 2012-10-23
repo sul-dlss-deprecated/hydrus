@@ -198,7 +198,6 @@ describe("Collection create", :type => :request, :integration => true) do
       /\ACollection modified/,
       /\ACollection modified/,
       /\ACollection opened/,
-      /\ACollection approved/,
       /\ACollection closed/,
       /\ACollection opened/,
     ]

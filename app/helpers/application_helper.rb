@@ -23,6 +23,15 @@ module ApplicationHelper
     end
   end
   
+  def button_color(status)
+    case status.downcase
+      when "published"
+        "success"
+      else
+        "warning"
+      end
+  end
+
   def hydrus_format_date(input_string)
     input_string.blank? ? '' : input_string.to_date.strftime("%b %d, %Y")
   end

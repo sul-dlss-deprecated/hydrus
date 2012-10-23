@@ -7,12 +7,16 @@ module Hydrus::Publishable
   # unpublished objects. The @should_validate instance variable
   # provides a mechanism to short-circuit the typical logic.
   def should_validate
-    return (@should_validate or is_published)
+    return (@should_validate || is_published || is_submitted || is_disapproved)
+  end
+  
+  def is_publishable
+    is_published ? true : (to_bool(requires_human_approval) && !is_collection? ? validate! && is_approved : validate!)
   end
   
   # Returns true only if the object is valid.
   # We want all validations to run, so we must set @should_validate accordingly.
-  def is_publishable
+  def validate!
     @should_validate = true
     apo.instance_variable_set('@should_validate', true) if is_collection?
     v = valid?

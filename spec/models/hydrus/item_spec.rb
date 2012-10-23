@@ -475,16 +475,20 @@ describe Hydrus::Item do
     @hi.stub(:is_published).and_return(true)
     @hi.status.should == 'published'
     @hi.stub(:is_published).and_return(false)
+    @hi.stub(:is_submitted_for_approval).and_return(false)    
     @hi.status.should == 'draft'
-    @hi.stub(:requires_human_approval).and_return("yes")
-    @hi.status.should == 'waiting approval'
+    @hi.stub(:is_submitted_for_approval).and_return(true)    
+    @hi.status.should == 'waiting for approval'    
+    @hi.stub(:requires_human_approval).and_return("yes")    
+    @hi.stub(:disapproval_reason).and_return('it is crappola')    
+    @hi.status.should == 'item returned'    
   end
   
   it "is_destroyable() should return the negative of is_published" do
     @hi.stub(:is_published).and_return(false)
     @hi.is_destroyable.should == true
-    @hi.stub(:is_published).and_return(false)
-    @hi.is_destroyable.should == true
+    @hi.stub(:is_published).and_return(true)
+    @hi.is_destroyable.should == false
   end
 
   it "content_directory()" do

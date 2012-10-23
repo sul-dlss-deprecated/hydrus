@@ -94,6 +94,14 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
     return is_open
   end
 
+  def is_submitted
+    return is_open
+  end
+  
+  def is_disapproved
+    false
+  end
+  
   def is_open
     return deposit_status == "open"
   end

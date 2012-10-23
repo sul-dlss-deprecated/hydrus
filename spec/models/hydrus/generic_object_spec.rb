@@ -146,6 +146,7 @@ describe Hydrus::GenericObject do
 
     it "should make expected calls (start_common_assembly = false)" do
       @go.stub(:should_start_common_assembly).and_return(false)
+      @go.stub(:requires_human_approval).and_return(false)
       @go.should_receive(:complete_workflow_step).with('approve').once
       @go.should_not_receive(:initiate_apo_workflow)
       @go.do_approve()
@@ -153,6 +154,7 @@ describe Hydrus::GenericObject do
 
     it "should make expected calls (start_common_assembly = true)" do
       @go.stub(:should_start_common_assembly).and_return(true)
+      @go.stub(:requires_human_approval).and_return(false)
       @go.should_receive(:complete_workflow_step).with('approve').once
       @go.should_receive(:complete_workflow_step).with('start-assembly').once
       @go.should_receive(:initiate_apo_workflow).once
@@ -225,16 +227,19 @@ describe Hydrus::GenericObject do
     describe "is_published()" do
 
       it "should return false when submit step is waiting" do
+        @go.stub(:requires_human_approval).and_return('no')
         @go.is_published.should == false
       end
 
       it "should return true when submit step is completed" do
         @workflow.find_by_xpath('//process[@name="submit"]').first['status'] = 'completed'
+        @go.stub(:requires_human_approval).and_return('no')        
         @go.is_published.should == true
       end
 
       it "should not call workflow_step_is_done() a second time" do
         @go.should_receive(:workflow_step_is_done).once.and_return(false)
+        @go.stub(:requires_human_approval).and_return('no')        
         @go.is_published.should == false
         @go.is_published.should == false
       end
@@ -243,26 +248,23 @@ describe Hydrus::GenericObject do
 
     describe "is_approved()" do
 
-      it "should not call workflow_step_is_done() unless the object is published" do
-        @go.should_not_receive(:workflow_step_is_done)
-        @go.instance_variable_set('@is_published', false)
-        @go.is_approved.should == false
-      end
-
-      it "should return false if approved step is not completed" do
+      it "should return false if item not published yet" do
         @go.stub(:is_published).and_return(true)
         @go.is_approved.should == false
       end
 
       it "should return true if approved step is completed" do
         @go.stub(:is_published).and_return(true)
+        @go.stub(:requies_human_approval).and_return('yes')        
         @workflow.find_by_xpath('//process[@name="approve"]').first['status'] = 'completed'
+        @workflow.find_by_xpath('//process[@name="submit"]').first['status'] = 'completed'        
         @go.is_approved.should == true
       end
 
     end
 
     it "is_publishable() should return the value of valid?" do
+      @go.stub(:requires_human_approval).and_return('no')      
       @go.stub(:pid).and_return('blah')
       @go.valid?.should == false    # Bad PID.
       @go.stub(:pid).and_return('druid:oo000oo0001')
@@ -287,6 +289,7 @@ describe Hydrus::GenericObject do
         ''     => false,
         nil    => false,
       }
+      @go.stub(:requires_human_approval).and_return('yes')
       tests.each do |reason, exp|
         @go.stub(:disapproval_reason).and_return(reason)
         @go.is_disapproved.should == exp
@@ -337,7 +340,11 @@ describe Hydrus::GenericObject do
 
     it "should return the value of is_published() when @should_validate is false" do
       [false, true].each do |exp|
+        @go.stub(:requires_human_approval).and_return('no')
+        @go.instance_variable_set('@should_validate', nil)              
         @go.stub(:is_published).and_return(exp)
+        @go.stub(:is_submitted).and_return(false)
+        @go.stub(:is_approved).and_return(false)
         @go.should_validate.should == exp
       end
     end
@@ -500,6 +507,7 @@ describe Hydrus::GenericObject do
   end
 
   it "save() should not invoke log_editing_events() if no_edit_logging is true" do
+    @go.stub(:requires_human_approval).and_return('no')
     @go.should_receive(:log_editing_events).once
     @go.save
     @go.save(:no_edit_logging => true)
