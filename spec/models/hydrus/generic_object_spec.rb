@@ -221,7 +221,13 @@ describe Hydrus::GenericObject do
       step = 'submit'
       args = ['dor', @go.pid, kind_of(Symbol), step, 'completed']
       Dor::WorkflowService.should_receive(:update_workflow_status).with(*args)
+      @go.should_receive(:workflows_content_is_stale)
       @go.complete_workflow_step(step)
+    end
+
+    it "can exercise workflows_content_is_stale, stubbed" do
+      @go.workflows.should_receive(:instance_variable_set).twice
+      @go.workflows_content_is_stale
     end
 
     describe "is_published()" do

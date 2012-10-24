@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<workflow>
+  <process name="start-deposit" status="completed" lifecycle="registered"/>
+  <process name="submit" status="waiting"/>
+  <process name="approve" status="waiting"/>
+  <process name="start-assembly" status="waiting"/>
+</workflow>

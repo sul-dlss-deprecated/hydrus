@@ -275,6 +275,17 @@ class Hydrus::GenericObject < Dor::Item
   def complete_workflow_step(step)
     awf = Dor::Config.hydrus.app_workflow
     Dor::WorkflowService.update_workflow_status('dor', pid, awf, step, 'completed')
+    workflows_content_is_stale
+  end
+
+  # This method resets two instance variables of the workflow datastream.  By
+  # resorting to this encapsulation-violating hack, we ensure that our current
+  # Hydrus object will not rely on its cached copy of the workflow XML.
+  # Instead it will call to the workflow service to get the latest XML,
+  # particularly during the save() process, which is when our object will be
+  # resolarized.
+  def workflows_content_is_stale
+    %w(@content @ng_xml).each { |v| workflows.instance_variable_set(v, nil) }
   end
 
   def submit_time

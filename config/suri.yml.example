@@ -3,8 +3,13 @@ production:
   user: u
   password: p
   
-test:
+dortest:
   url: http://sul-lyberservices-test.stanford.edu
+  user: u
+  password: p
+  
+test:
+  url: http://sul-lyberservices-dev.stanford.edu
   user: u
   password: p
   
