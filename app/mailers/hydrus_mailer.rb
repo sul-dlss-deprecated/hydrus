@@ -11,6 +11,7 @@ class HydrusMailer < ActionMailer::Base
     @host = setup_host
     @document_fedora = opts[:object]
     @returned_by = opts[:returned_by]
+    @item_url = polymorphic_path(@document_fedora,:only_path => false, :host => @host)
     mail(:to=>HydrusMailer.process_user_list(opts[:to]), :subject=>"#{@document_fedora.object_type.capitalize} returned for edits in the Stanford Digital Repository") unless protected_druids.include?(@document_fedora.pid)    
   end
   

@@ -4,8 +4,8 @@
     <meta charset="utf-8" />
   </head>
   <body>
-    <p><%= @returned_by %> has returned the <%=@document_fedora.object_type%> <%= @document_fedora.title %> in the Stanford Digital Repository.</p>
-    <p>To edit and resubmit this <%=@document_fedora.object_type%>, follow this link: <%= link_to(polymorphic_path(@document_fedora),:only_path => false, :host => @host) %>.</p>
+    <p><%= @returned_by %> has returned the <%=@document_fedora.object_type%> <%= @document_fedora.title %> in the Stanford Digital Repository.  The reason given was <%=@document_fedora.disapproval_reason%>.</p>
+    <p>To edit and resubmit this <%=@document_fedora.object_type%>, follow this link <%= link_to(@item_url,@item_url) %>.</p>
     <p>If you have any questions about the SDR, send a message to <%= mail_to("sdr-contact@lists.stanford.edu", "sdr-contact@lists.stanford.edu") %>.</p>
   </body>
 </html>
