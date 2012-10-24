@@ -7,9 +7,10 @@ class HydrusMailer < ActionMailer::Base
     mail(:to=>HydrusMailer.process_user_list(opts[:to]), :subject=>"Invitation to deposit in the Stanford Digital Repository") unless protected_druids.include?(@document_fedora.pid)
   end
   
-  def item_returned(opts={})
+  def object_returned(opts={})
     @host = setup_host
     @document_fedora = opts[:object]
+    @returned_by = opts[:returned_by]
     mail(:to=>HydrusMailer.process_user_list(opts[:to]), :subject=>"#{@document_fedora.object_type.capitalize} returned for edits in the Stanford Digital Repository") unless protected_druids.include?(@document_fedora.pid)    
   end
   

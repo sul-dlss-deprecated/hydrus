@@ -241,9 +241,10 @@ class Hydrus::GenericObject < Dor::Item
   def do_disapprove(reason)
     events.add_event('hydrus', @current_user, "Item disapproved: #{reason}")
     self.disapproval_reason = reason
-    recipients = persons_with_role("hydrus-collection-item-depositor").to_a
+    recipients = (is_collection? ? '' : item_depositor_id)
     unless recipients.blank?
-      email = HydrusMailer.item_returned(:to => recipients.join(", "), :object => self)
+      recipients=[recipients] unless recipients.class == Array
+      email = HydrusMailer.object_returned(:to => recipients.join(", "), :returned_by => @current_user, :object => self)
       email.deliver unless email.to.blank? # this will catch when we're trying to send an email from a fixture.
     end    
   end

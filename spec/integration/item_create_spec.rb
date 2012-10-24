@@ -179,7 +179,8 @@ describe("Item create", :type => :request, :integration => true) do
     visit hydrus_item_path(:id=>item.pid)
     page.should have_content('Welcome archivist1!')
     fill_in "hydrus_item_approve_reason", :with => ni.reason
-    click_button(disapprove_button)
+    expect {click_button(disapprove_button)}.to change { ActionMailer::Base.deliveries.count }.by(1)
+    
     # Check various Item attributes and methods.
     item = Hydrus::Item.find(druid)
     item.is_publishable.should == false

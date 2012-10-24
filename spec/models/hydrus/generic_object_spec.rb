@@ -164,6 +164,8 @@ describe Hydrus::GenericObject do
   end
 
   it "do_disapprove()" do
+    @go.stub(:is_collection?).and_return(false)
+    @go.stub(:item_depositor_id).and_return('')
     @go.do_disapprove('foo')
     @go.disapproval_reason.should == 'foo'
   end
