@@ -19,7 +19,7 @@ module Hydrus
     # Takes a delimited string (eg, of keywords as entered on Item edit page).
     # Returns an array of elements obtained by parsing the string.
     # Allowed delimiters: comma, semi-colon, newlines.
-    def parse_delimited(cds)
+    def self.parse_delimited(cds)
       return cds.split(/[,;\n\r]/).each { |s| s.strip! }.select { |s| s.length > 0 }
     end
 

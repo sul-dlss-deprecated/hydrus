@@ -29,7 +29,7 @@ describe Hydrus::AccessControlsEnforcement do
       '  '                      => [],
       "  a,,; b \n\r  , c\nd  " => %w(a b c d),
     }
-    tests.each { |inp, exp| parse_delimited(inp).should == exp }
+    tests.each { |inp, exp| Hydrus::ModelHelper.parse_delimited(inp).should == exp }
   end
 
   it "equal_when_stripped?" do
