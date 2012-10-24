@@ -189,7 +189,7 @@ describe("Collection edit", :type => :request, :integration => true) do
       got   = {}
       Hydrus::Responsible.role_labels(:collection_level).each do |role, h|
         ids = rmdiv.find("input[id^='#{dk}[#{role}]']")[:value]
-        ids = @hc.parse_delimited(ids)
+        ids = Hydrus::ModelHelper.parse_delimited(ids)
         got[role] = Set.new(ids) if ids.length > 0 
       end
       got.should == role_info

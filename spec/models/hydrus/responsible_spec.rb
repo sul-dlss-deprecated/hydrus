@@ -88,6 +88,10 @@ describe Hydrus::Responsible do
             <identifier type="sunetid">archivist1</identifier>
             <name/>
           </person>
+          <person>
+            <identifier type="sunetid">ZZZ</identifier>
+            <name/>
+          </person>
         </role>
         <role type="hydrus-collection-reviewer">
           <group>
@@ -112,11 +116,34 @@ describe Hydrus::Responsible do
       </roleMetadata>
     EOF
     @obj.person_roles= {
-      "hydrus-collection-manager"  => "archivist1", 
-      "hydrus-collection-reviewer" => "archivist3", 
-      "hydrus-collection-item-depositor"      => "foo,bar",
+      "hydrus-collection-manager"        => "archivist1,ZZZ", 
+      "hydrus-collection-reviewer"       => "archivist3,ZZZ", 
+      "hydrus-collection-item-depositor" => "foo,bar,ZZZ",
     }
     @obj.roleMetadata.ng_xml.should be_equivalent_to(exp)
+  end
+
+  it "pruned_role_info() should prune out lesser roles" do
+    h = {
+      'hydrus-collection-depositor'      => 'aaa',
+      'hydrus-collection-manager'        => 'aaa,bbb,ccc,ddd,eee',
+      'hydrus-collection-reviewer'       => 'bbb,ccc,xxx,yyy',
+      'hydrus-collection-item-depositor' => 'ccc,ddd,xxx,zzz',
+      'hydrus-collection-viewer'         => 'aaa,bbb,ccc,QQQ,RRR',
+    }
+    exp = {
+      'aaa' => Set.new(%w(hydrus-collection-depositor hydrus-collection-manager)),
+      'bbb' => Set.new(%w(hydrus-collection-manager)),
+      'ccc' => Set.new(%w(hydrus-collection-manager)),
+      'ddd' => Set.new(%w(hydrus-collection-manager)),
+      'eee' => Set.new(%w(hydrus-collection-manager)),
+      'xxx' => Set.new(%w(hydrus-collection-reviewer hydrus-collection-item-depositor)),
+      'yyy' => Set.new(%w(hydrus-collection-reviewer)),
+      'zzz' => Set.new(%w(hydrus-collection-item-depositor)),
+      'QQQ' => Set.new(%w(hydrus-collection-viewer)),
+      'RRR' => Set.new(%w(hydrus-collection-viewer)),
+    }
+    Hydrus::Responsible.pruned_role_info(h).should == exp
   end
 
   it "role_labels() should return the expect hash of roles and labels" do
@@ -128,6 +155,7 @@ describe Hydrus::Responsible do
     h[k1][:help].should  =~ /original depositor/
     h[k2][:label].should == 'Reviewer'
     h[k2][:help].should  =~ /can review/
+    h[k2][:lesser].should == %w(hydrus-collection-viewer)
     # Just collection-level roles.
     Hydrus::Responsible.role_labels(:collection_level).keys.size.should == h.keys.size - 2
     # Just labels.

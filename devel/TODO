@@ -21,11 +21,8 @@ Collection Items page: Type column is temporarily commented out. Add back when
 we distinguish between different item types.
 
 --------
-Roles and Discovery
+Misc implementation tasks
 --------
-
-Change link in email notification from "hydrus.stanford.edu" to
-"hydrus-test.stanford.edu"
 
 Integration tests for role-protection and gated discovery:
   Collection:
@@ -38,15 +35,11 @@ Integration tests for role-protection and gated discovery:
     discard item
     approve/disapprove/reason
 
-person_roles=(). Prune unneeded roles. For example, if user X is a collection
-manager, it's pointless to make him a lesser role like reviewer.
-
---------
-Misc implementation tasks
---------
+Change link in email notification from "hydrus.stanford.edu" to
+"hydrus-test.stanford.edu"
 
 Set up the listener scripts to update the Hydrus SOLR when Hydrus objects are
-updates outside of the Hydrus app. See the argo/bin directory for the latest
+updated outside of the Hydrus app. See the argo/bin directory for the latest
 copies of the scripts.
 
 Search results should look better.
