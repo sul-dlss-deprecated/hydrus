@@ -30,14 +30,12 @@ ERROR [2012-10-25 16:07:56] (20609)  :: #<LyberCore::Exceptions::ItemError: drui
 
 Figure out why the 'accessionWF' workflow initial step 'start-accession' is marked as 'waiting' instead of 'completed' when the assembly robots are completed.  This prevents the accessioning robots from running.
 
-
 --------
 Misc implementation tasks
 --------
 
-The home page is producing explosive volumes of SOLR logging. This occurs
-during the super() call in index() of catalog_controller.rb. Investigate
-with cbeer.
+Redirect unauthenticated users back to the page they were trying to view after
+logging in.
 
 Integration tests for role-protection and gated discovery:
   Collection:
@@ -145,3 +143,8 @@ find any definitive examples in Consul. [waiting on response from Lynn]
 
 Item view page: the actions box div is called "div.collection-actions".
 [Postpone this until we have GG's new design for sidebar, etc.]
+
+The home page is producing explosive volumes of SOLR logging.  This occurs
+during the super() call in index() of catalog_controller.rb, which invokes a
+Blacklight method that logs the entire SOLR response. A bug has been filed; in
+the meantime, you can monkey-patch solr_helper.rb in Blacklight.
