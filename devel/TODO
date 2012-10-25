@@ -48,10 +48,38 @@ Integration tests for role-protection and gated discovery:
 
 Unify our handling of object status.
 
-  collection
-  def is_destroyable
-  def publish(value)    # open/close
-  def is_open
+  Relevant methods
+
+      Hydrus::Publishable
+
+      collection
+        def is_destroyable
+        def publish           # open/close
+        def is_open
+
+      generic_object
+        def is_approvable
+        def is_destroyable
+        def is_published
+        def is_submitted
+        def is_submitted_for_approval
+        def is_approved
+        def publish=
+        def approve=
+        def resubmit=
+        def approve
+        def do_approve
+        def do_disapprove
+        def is_disapproved
+        def complete_workflow_step
+        def submit_time
+        def deposit_time
+        def publish_lifecycle_time
+
+      item
+        def resubmit
+        def publish
+        def collection_is_open
 
   1. For all app logic, refer to hydrusProperties, not workflow,
      to determine object state. Unlike workflow, these steps

@@ -31,10 +31,12 @@ class Hydrus::GenericObject < Dor::Item
     self.class == Hydrus::Collection
   end
 
-  #################################
-  # methods used to build sidebar #
-  def required_fields_completed?  # returns true if all required fields are filled in, otherwise returns false
-    validate! ? true : (errors.keys & REQUIRED_FIELDS).size == 0  # if validations are true, returns true, if not runs an intersection of invalid fields with required fields and indicates if this is blank
+  # Returns true if all required fields are filled in.
+  def required_fields_completed?
+    # If validations are true, returns true.
+    # Otherwise, run an intersection of invalid fields with required fields
+    # and indicates if this is blank.
+    validate! ? true : (errors.keys & REQUIRED_FIELDS).size == 0
   end
   #################################  
   
