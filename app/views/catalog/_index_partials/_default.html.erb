@@ -1,15 +1,8 @@
 <tr class="document <%= cycle("even","odd") %>">
-  <td>
-    <%= link_to_document(document, :label => blacklight_config.show.heading.to_sym, :counter => (counter + 1 + @response.params[:start].to_i)) %>
-  </td>
-  <td>
-    <%= hydrus_format_date(DateTime.parse(document.fetch(:system_create_dt,nil)).to_date) if document[:system_create_dt] %>
-  </td>
-  <td>
-    <%= document.document_type(blacklight_config.show.display_type).gsub('Hydrus_','') %>
-  </td>
-  <td>
-    <font color="red">#TODO</font>
-  </td>
+
+  <td><%= link_to document.main_title, document.path %></td>
+  <td><%= document.object_type %></td>
+  <td><%= document.depositor %></td>
+  <td><font color="red">#TODO</font></td>
 
 </tr>

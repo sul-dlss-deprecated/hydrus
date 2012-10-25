@@ -39,4 +39,24 @@ class SolrDocument
     ActiveFedora::Base.load_instance_from_solr(id, self)
   end
 
+  def main_title
+    return get('main_title_t')
+  end
+
+  def pid
+    return get('identityMetadata_objectId_t')
+  end
+
+  def object_type
+    return get('has_model_s').gsub(/.+:Hydrus_/, '').downcase
+  end
+
+  def depositor
+    return get("roleMetadata_#{object_type}_depositor_person_identifier_t")
+  end
+
+  def path
+    return "/#{object_type}s/#{pid}"
+  end
+
 end
