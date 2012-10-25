@@ -524,6 +524,7 @@ describe Hydrus::Item do
       @hi.title = exp_title
       @hi.should_not_receive(:approve)
       @hi.should_not_receive(:complete_workflow_step)
+      @hi.stub(:save).and_return(true)
       @hi.publish
       @hi.identityMetadata.objectLabel.should == [exp_title]
       @hi.label.should == exp_title
@@ -536,6 +537,7 @@ describe Hydrus::Item do
       @hi.title = exp_title
       @hi.should_receive(:complete_workflow_step).with('submit')
       @hi.should_receive(:approve)
+      @hi.stub(:save).and_return(true)      
       @hi.publish
       @hi.identityMetadata.objectLabel.should == [exp_title]
       @hi.label.should == exp_title

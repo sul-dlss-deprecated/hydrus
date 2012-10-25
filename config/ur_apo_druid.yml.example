@@ -1,11 +1,11 @@
 development:
   druid: "druid:oo000oo0000"
-  
+
 dortest:
   druid: "druid:oo000oo0000"
-  
-test: 
+
+test:
   druid: "druid:oo000oo0000"
-  
+
 production:
   druid: "druid:oo000oo0000"

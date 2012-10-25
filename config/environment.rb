@@ -101,7 +101,6 @@ end
 # Initialize the rails application
 Hydrus::Application.initialize!
 
-
 require File.expand_path(File.join(current_path, 'rsolr_certificate')) unless no_solr_cert
 
 require 'hydrus'

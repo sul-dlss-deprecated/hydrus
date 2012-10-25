@@ -3,12 +3,12 @@ development:
   password: fedoraAdmin
   url: http://127.0.0.1:8983/fedora
 
-dortest: 
+dortest:
   user: fedoraAdmin
   password: fedoraAdmin
   url: https://fedoratestURL
 
-test: 
+test:
   user: fedoraAdmin
   password: fedoraAdmin
   url: http://127.0.0.1:8983/fedora-test

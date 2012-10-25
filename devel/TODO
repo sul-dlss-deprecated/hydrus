@@ -17,12 +17,23 @@ select_status_checkbox_icon helper method (application_helper.rb).
 Item View page: Fix conditional display of metadata sections when only some
 required fields have been saved.
 
+--------
+Integration with DOR
+--------
+Set up the listener scripts to update the Hydrus SOLR when Hydrus objects are
+updated outside of the Hydrus app. See the argo/bin directory for the latest
+copies of the scripts.
+
+Figure out why the latest version of dor-services gem does not seem to find the admin_policy_object returned.  This is a problem since the rights-metadata robot uses the newer gem.
+ERROR [2012-10-25 16:07:56] (20609)  :: #<LyberCore::Exceptions::ItemError: druid:pd270vx4885 - Item error; caused by #<NoMethodError: undefined method `datastreams' for nil:NilClass>>
+/home/lyberadmin/common-accessioning/shared/bundle/ruby/1.8/gems/dor-services-3.14.5/lib/dor/models/publishable.rb:16:in `build_rightsMetadata_datastream'
+
+Figure out why the 'accessionWF' workflow initial step 'start-accession' is marked as 'waiting' instead of 'completed' when the assembly robots are completed.  This prevents the accessioning robots from running.
+
 
 --------
 Misc implementation tasks
 --------
-
-Redirect unauthenticated users back to the page they were trying to view after logging in.
 
 The home page is producing explosive volumes of SOLR logging. This occurs
 during the super() call in index() of catalog_controller.rb. Investigate
@@ -36,15 +47,6 @@ Integration tests for role-protection and gated discovery:
     add new Item
   Item:
     submit for approval
-    discard item
-    approve/disapprove/reason
-
-Change link in email notification from "hydrus.stanford.edu" to
-"hydrus-test.stanford.edu"
-
-Set up the listener scripts to update the Hydrus SOLR when Hydrus objects are
-updated outside of the Hydrus app. See the argo/bin directory for the latest
-copies of the scripts.
 
 Unify our handling of object status.
 

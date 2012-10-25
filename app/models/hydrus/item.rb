@@ -83,6 +83,7 @@ class Hydrus::Item < Hydrus::GenericObject
     # At the moment of publication, we refresh various titles.
     identityMetadata.objectLabel = title
     self.label                   = title # The label in Fedora's foxml:objectProperties.
+    self.save
     # Advance workflow to record that the object has been published.
     s = 'submit'
     unless workflow_step_is_done(s)

@@ -2,17 +2,17 @@ production:
   url: http://sul-lyberservices-prod.stanford.edu
   user: u
   password: p
-  
+
 dortest:
   url: http://sul-lyberservices-test.stanford.edu
   user: u
   password: p
-  
+
 test:
   url: http://sul-lyberservices-dev.stanford.edu
   user: u
   password: p
-  
+
 development:
   url: http://sul-lyberservices-dev.stanford.edu
   user: u

@@ -3,9 +3,9 @@ development:
 
 dortest:
   url: https://dortest/solrizer
-	
-test: 
+
+test:
   url: http://localhost:8983/solr/test
 
 production:
-  url: http://your.production.server:8080/bl_solr/core0 
+  url: http://your.production.server:8080/bl_solr/core0
