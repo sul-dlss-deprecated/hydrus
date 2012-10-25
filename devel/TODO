@@ -17,12 +17,12 @@ select_status_checkbox_icon helper method (application_helper.rb).
 Item View page: Fix conditional display of metadata sections when only some
 required fields have been saved.
 
-Collection Items page: Type column is temporarily commented out. Add back when
-we distinguish between different item types.
 
 --------
 Misc implementation tasks
 --------
+
+Redirect unauthenticated users back to the page they were trying to view after logging in.
 
 The home page is producing explosive volumes of SOLR logging. This occurs
 during the super() call in index() of catalog_controller.rb. Investigate
@@ -87,6 +87,12 @@ Update to latest dor-services-gem:
 
 rightsMD: (a) tests; (b) refactor to take advantage of OM and generic_ds.rb.
 
+Perform server side validation to make sure users are not able to publish or 
+submit for approval objects that should not be allowed to have this step performed.
+
+Collection Items page: Type column is temporarily commented out. Add back when
+we distinguish between different item types.
+
 ****************
 WAITING
 ****************
@@ -94,9 +100,9 @@ WAITING
 Convert any unit tests that require jetty to be running to use stubbed/mocked
 objects so we don't have a dependency on real objects for unit tests.
 
+
 Work with Willy to switch local dev environment to use a local workflow service
-rather than the workflow service on sul-lyberservices-dev. [He will help us
-when he returns from vacation]
+rather than the workflow service on sul-lyberservices-dev.
 
 Should the hydrus app be logging more systematically?
 

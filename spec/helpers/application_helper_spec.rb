@@ -71,7 +71,7 @@ describe ApplicationHelper do
 
   it "should be able to exercise both branches of hydrus_format_date()" do
     hydrus_format_date('').should == ''
-    hydrus_format_date('1999-03-31').should == 'Mar 31, 1999'
+    hydrus_format_date('1999-03-31').should == '1999-03-31'
   end
 
   it "should return a correct license image" do

@@ -14,7 +14,7 @@
 </div>
 <div id="object-content-wrapper">
   <h3><%= hydrus_object_setting_value(@document_fedora.title) %></h3>
-  <h4 class="muted">Items in This Collection</h4>
+  <h4 class="muted"><%=@document_fedora.hydrus_items.size%> Items in This Collection</h4>
   <%- unless @document_fedora.hydrus_items.blank? -%>
     <div id="items" class="collection-items">
       <table id="itemsTable" class="tablesorter hydrus-striped-table table-striped table-condensed">
@@ -24,18 +24,20 @@
             <th class="depositor">Depositor</th>
             <!-- <th class="type">Type</th> -->
             <th class="status">Status</th>
+            <th class="status"># of Files</th>
             <th class="date">Date added</th>
           </tr>
         </thead>
         <tbody>
           <!-- iterate through collection items  -->
           <!-- Can use Hydrus::Item.milestones.last to get status. Speak with Lynn. -->
-          <% @document_fedora.hydrus_items.each do |item| %>
+          <% @document_fedora.hydrus_items.sort_by{|i|[i.deposit_time]}.reverse.each do |item| %>
             <tr class="document <%= cycle("even","odd") %>">
               <td><%= item_title_link(item) %></td>
               <td><%= item.item_depositor_id %></td>
               <!-- <td><%#= item.object_type %></td> -->
               <td><%= item.status %></td>
+              <td><%= item.files.size %></td>
               <td><%= hydrus_format_date(item.deposit_time) %></td>
             </tr>
           <% end %>

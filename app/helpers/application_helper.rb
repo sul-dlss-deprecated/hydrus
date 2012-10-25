@@ -33,7 +33,7 @@ module ApplicationHelper
   end
 
   def hydrus_format_date(input_string)
-    input_string.blank? ? '' : input_string.to_date.strftime("%b %d, %Y")
+    input_string.blank? ? '' : input_string.to_date.strftime("%Y-%m-%d")
   end
 
   def seen_beta_dialog?
