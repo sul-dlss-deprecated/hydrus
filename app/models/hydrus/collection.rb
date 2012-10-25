@@ -79,7 +79,11 @@ class Hydrus::Collection < Hydrus::GenericObject
 
   # the users who will receive email notifications when a collection is opened or closed
   def recipients_for_collection_update_emails
-    (apo.persons_with_role("hydrus-collection-item-depositor") + apo.persons_with_role("hydrus-collection-manager") + apo.persons_with_role("hydrus-collection-depositor")).to_a.join(', ')
+    (
+      apo.persons_with_role("hydrus-collection-item-depositor") + 
+      apo.persons_with_role("hydrus-collection-manager") + 
+      apo.persons_with_role("hydrus-collection-depositor")
+    ).to_a.join(', ')
   end
   
   # Open or close the Collection.
@@ -88,13 +92,14 @@ class Hydrus::Collection < Hydrus::GenericObject
   def publish(value)
     if to_bool(value)
       apo.deposit_status = 'open'
-      # At the moment of publication, we refresh various titles.
+      # At the moment of publication, we refresh various titles and labels.
+      # Note that the two label attributes reside in Fedora's foxml:objectProperties.
       apo_title = "APO for #{title}"
       apo.identityMetadata.objectLabel = apo_title
       apo.title                        = apo_title
       identityMetadata.objectLabel     = title
-      self.label                       = title     # The label in Fedora's foxml:objectProperties.
-      apo.label                        = apo_title # Ditto.
+      self.label                       = title
+      apo.label                        = apo_title
       # Advance the workflow to record that the object has been published.
       s = 'submit'
       events.add_event('hydrus', @current_user, 'Collection opened')

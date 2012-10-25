@@ -31,11 +31,6 @@ class Hydrus::GenericObject < Dor::Item
     self.class == Hydrus::Collection
   end
 
-  # if we are a collection, return the value from the datastream, if not, return this item's collections value
-  def requires_human_approval
-    is_collection? ? super : collection.requires_human_approval
-  end
-    
   #################################
   # methods used to build sidebar #
   def required_fields_completed?  # returns true if all required fields are filled in, otherwise returns false
@@ -104,8 +99,8 @@ class Hydrus::GenericObject < Dor::Item
 
   # The controller will call these methods, which we simply forward to
   # the Collection or Item class.
-  def publish=(val) publish(val) end
-  def approve=(val) approve(val) end
+  def publish=(val)  publish(val) end
+  def approve=(val)  approve(val) end
   def resubmit=(val) resubmit(val) end
     
   def object_type

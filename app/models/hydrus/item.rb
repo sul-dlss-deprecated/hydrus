@@ -120,6 +120,11 @@ class Hydrus::Item < Hydrus::GenericObject
     return cs.first  # In Hydrus, we assume there is just one (for now).
   end
 
+  def requires_human_approval
+    # Delegate this question to the collection.
+    collection.requires_human_approval
+  end
+    
   #################################
   # methods used to build sidebar
 

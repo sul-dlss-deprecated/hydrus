@@ -48,6 +48,11 @@ Integration tests for role-protection and gated discovery:
 
 Unify our handling of object status.
 
+  collection
+  def is_destroyable
+  def publish(value)    # open/close
+  def is_open
+
   1. For all app logic, refer to hydrusProperties, not workflow,
      to determine object state. Unlike workflow, these steps
      are not one-way: the object can toggle back and forth
@@ -92,6 +97,8 @@ submit for approval objects that should not be allowed to have this step perform
 
 Collection Items page: Type column is temporarily commented out. Add back when
 we distinguish between different item types.
+
+Move datastreams to a subdirectory, which is conventional in hydra projects.
 
 ****************
 WAITING
