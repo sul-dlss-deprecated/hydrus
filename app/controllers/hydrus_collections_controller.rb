@@ -35,7 +35,7 @@ class HydrusCollectionsController < ApplicationController
 
     notice = []
     
-    depositors_before_update = @document_fedora.apo.persons_with_role("hydrus-collection-item-depositor").to_a
+    depositors_before_update = @document_fedora.apo.persons_with_role("hydrus-collection-item-depositor")
     
     ####
     # Update attributes without saving.
@@ -46,9 +46,9 @@ class HydrusCollectionsController < ApplicationController
     end
     
     if @document_fedora.is_open
-      depositors_after_update = @document_fedora.apo.persons_with_role("hydrus-collection-item-depositor").to_a
-      new_depositors = depositors_after_update.select{|depositor| !depositors_before_update.include?(depositor)  }.compact
-      @document_fedora.send_invitation(new_depositors.join(", ")) unless new_depositors.blank?
+      depositors_after_update = @document_fedora.apo.persons_with_role("hydrus-collection-item-depositor")
+      new_depositors = (depositors_after_update - depositors_before_update).to_a.join(", ")
+      @document_fedora.send_invitation_email_notification(new_depositors)
     end
 
     ####

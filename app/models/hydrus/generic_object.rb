@@ -210,6 +210,16 @@ class Hydrus::GenericObject < Dor::Item
     }
   end
 
+  def recipients_for_object_returned_email
+    is_collection? ? owner : item_depositor_id
+  end
+  
+  def send_object_returned_email_notification(opts={})
+    return if recipients_for_object_returned_email.blank?      
+    email=HydrusMailer.object_returned(:returned_by => @current_user, :object => self, :item_url=>opts[:item_url])
+    email.deliver unless email.blank? 
+  end
+  
   # Optionally takes a hash like this: 
   #   { 'value'  => 'yes|no', 'reason' => 'blah blah' }
   # Implements approve/disapprove accordingly.
@@ -239,14 +249,9 @@ class Hydrus::GenericObject < Dor::Item
 
   # Disapproves an object by setting the reason is the hydrusProperties datastream.
   def do_disapprove(reason)
-    events.add_event('hydrus', @current_user, "Item disapproved: #{reason}")
+    events.add_event('hydrus', @current_user, "Item returned: #{reason}")
     self.disapproval_reason = reason
-    recipients = (is_collection? ? '' : item_depositor_id)
-    unless recipients.blank?
-      recipients=[recipients] unless recipients.class == Array
-      email = HydrusMailer.object_returned(:to => recipients.join(", "), :returned_by => @current_user, :object => self)
-      email.deliver unless email.to.blank? # this will catch when we're trying to send an email from a fixture.
-    end    
+    send_object_returned_email_notification
   end
   
   # Returns true if there is a non-blank disapproval_reason.
@@ -291,6 +296,12 @@ class Hydrus::GenericObject < Dor::Item
 
   def submit_time
     s = 'submit'
+    return nil unless workflow_step_is_done(s)
+    return get_workflow_step(s)['datetime']
+  end
+
+  def deposit_time
+    s = 'start-deposit'
     return nil unless workflow_step_is_done(s)
     return get_workflow_step(s)['datetime']
   end

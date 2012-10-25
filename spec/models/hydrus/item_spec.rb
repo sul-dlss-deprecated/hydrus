@@ -323,7 +323,7 @@ describe Hydrus::Item do
         subject.rightsMetadata.read_access.machine.embargo_release_date.should == []
       end
       describe "date ranges" do
-        it "should return today's date if there is no completed submit time in the workflowDataStream" do
+        it "should return today's date if there is no completed submit time in the workflowDataStream",:integration => true do
           subject.beginning_of_embargo_range.should == Date.today.strftime("%m/%d/%Y")
         end
         it "should return the submit time if one is available" do

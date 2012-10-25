@@ -17,6 +17,8 @@ module Hydrus::Authorizable
       amyhodge
       ronbo
       mmarosti
+      petucket
+      hindman
     )
     return administrators.union(ids)
   end

@@ -100,7 +100,7 @@
     <div class="collection-items">
          <h4>Other contributors to this collection</h4>
     			<dl class="dl-horizontal collection-view">
-    				<% Hydrus::Responsible.role_labels(:only_labels).each do |role, role_label| %>
+    				<% Hydrus::Responsible.role_labels(:only_labels,:collection_level).each do |role, role_label| %>
     	       <tr class="document <%= cycle("even","odd") %>">
     					<% people = @document_fedora.apo.persons_with_role(role) %>
               <dt><%= role_label.pluralize(people.size) %></dt>

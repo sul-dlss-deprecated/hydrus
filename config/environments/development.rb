@@ -41,6 +41,7 @@ end
 Dor::Config.configure do
   
   hydrus do
+    host 'localhost:3000'
     start_common_assembly(false)
   end
 

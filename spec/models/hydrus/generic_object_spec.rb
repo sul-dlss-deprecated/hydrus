@@ -495,6 +495,20 @@ describe Hydrus::GenericObject do
     expect{ @go.tracked_fields }.to raise_error(NoMethodError)
   end
 
+  describe "object returned email" do
+    it "should provide a method to send object returned emails" do
+      @go.stub(:recipients_for_object_returned_email).and_return('jdoe')
+      @go.stub(:object_type=>'item')
+      mail = @go.send_object_returned_email_notification(:item_url=>'/fake/it')
+      mail.to.should == ["jdoe@stanford.edu"]
+      mail.subject.should =~ /Item returned in the Stanford Digital Repository/
+    end
+    it "should return nil when no recipients are sent in" do
+      @go.stub(:recipients_for_object_returned_email).and_return('')      
+      @go.send_object_returned_email_notification.should be_nil
+    end
+  end
+
   describe "log_editing_events()" do
 
     it "should do nothing if there are no changed fields" do
@@ -514,7 +528,7 @@ describe Hydrus::GenericObject do
 
   end
 
-  it "save() should not invoke log_editing_events() if no_edit_logging is true" do
+  it "save() should not invoke log_editing_events() if no_edit_logging is true",:integration => true do
     @go.stub(:requires_human_approval).and_return('no')
     @go.should_receive(:log_editing_events).once
     @go.save

@@ -317,7 +317,7 @@ describe("Collection edit", :type => :request, :integration => true) do
         expect {click_button("Open Collection")}.to change { ActionMailer::Base.deliveries.count }.by(1)
         
         last_email_sent = ActionMailer::Base.deliveries.last
-        last_email_sent.to.should == ["jdoe@stanford.edu"]
+        last_email_sent.to.should == ["jdoe@stanford.edu","archivist1@stanford.edu"]
         last_email_sent.subject.should == "Collection opened for deposit in the Stanford Digital Repository"
       end
       it "should handle complex changes to depositors" do

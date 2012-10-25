@@ -151,14 +151,34 @@ describe Hydrus::Collection do
   end
   
   describe "invite email" do
-    it "should provide an method to send deposit invites" do
-      mail = @hc.send_invitation("jdoe")
+    it "should provide a method to send deposit invites" do
+      mail = @hc.send_invitation_email_notification("jdoe")
       mail.to.should == ["jdoe@stanford.edu"]
       mail.subject.should =~ /Invitation to deposit in the Stanford Digital Repository/
     end
     it "should return nil when no recipients are sent in" do
-      @hc.send_invitation.should be_nil
+      @hc.send_invitation_email_notification("").should be_nil
     end
+  end
+
+  describe "open/close notification email" do
+    it "should provide a method to send open notification emails" do
+      @hc.stub(:recipients_for_collection_update_emails).and_return('jdoe')
+      mail = @hc.send_publish_email_notification(true)
+      mail.to.should == ["jdoe@stanford.edu"]
+      mail.subject.should =~ /Collection opened for deposit in the Stanford Digital Repository/
+    end
+    it "should provide a method to send close notification emails" do
+      @hc.stub(:recipients_for_collection_update_emails).and_return('jdoe')
+      mail = @hc.send_publish_email_notification(false)
+      mail.to.should == ["jdoe@stanford.edu"]
+      mail.subject.should =~ /Collection closed for deposit in the Stanford Digital Repository/      
+    end
+    it "should return nil when no recipients are set" do
+      @hc.stub(:recipients_for_collection_update_emails).and_return('')      
+      @hc.send_publish_email_notification(true).should be_nil
+      @hc.send_publish_email_notification(false).should be_nil
+    end    
   end
   
   context "APO roleMetadataDS delegation-y methods" do

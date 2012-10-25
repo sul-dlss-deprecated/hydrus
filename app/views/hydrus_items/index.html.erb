@@ -33,10 +33,10 @@
           <% @document_fedora.hydrus_items.each do |item| %>
             <tr class="document <%= cycle("even","odd") %>">
               <td><%= item_title_link(item) %></td>
-              <td><%= item.item_depositor_name %></td>
+              <td><%= item.item_depositor_id %></td>
               <!-- <td><%#= item.object_type %></td> -->
               <td><%= item.status %></td>
-              <td><%= hydrus_format_date(item.submit_time) %></td>
+              <td><%= hydrus_format_date(item.deposit_time) %></td>
             </tr>
           <% end %>
         </tbody>

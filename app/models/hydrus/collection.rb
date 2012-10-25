@@ -77,11 +77,15 @@ class Hydrus::Collection < Hydrus::GenericObject
     return hydrus_items.size > 0
   end
 
+  # the users who will receive email notifications when a collection is opened or closed
+  def recipients_for_collection_update_emails
+    (apo.persons_with_role("hydrus-collection-item-depositor") + apo.persons_with_role("hydrus-collection-manager") + apo.persons_with_role("hydrus-collection-depositor")).to_a.join(', ')
+  end
+  
   # Open or close the Collection.
   # Opening also has the effect of publishing it.
   # Unlike open-close, which the user can toggle, publishing is irreversible.
   def publish(value)
-    recipients = apo.persons_with_role("hydrus-collection-item-depositor").to_a
     if to_bool(value)
       apo.deposit_status = 'open'
       # At the moment of publication, we refresh various titles.
@@ -98,20 +102,30 @@ class Hydrus::Collection < Hydrus::GenericObject
         complete_workflow_step(s)
         approve() # Collections never require human approval, even when their Items do.
       end
-      unless recipients.blank?
-        email = HydrusMailer.open_notification(:to => recipients.join(", "), :object => self)
-        email.deliver unless email.to.blank? # this will catch when we're trying to send an email from a fixture.
-      end
     else
       apo.deposit_status = 'closed'
       events.add_event('hydrus', @current_user, 'Collection closed')
-      unless recipients.blank?
-        email = HydrusMailer.close_notification(:to => recipients.join(", "), :object => self)
-        email.deliver unless email.to.blank? # this will catch when we're trying to send an email from a fixture.
-      end
     end
+    send_publish_email_notification(to_bool(value))
   end
 
+  def send_invitation_email_notification(new_depositors)
+    return if new_depositors.blank?
+    email=HydrusMailer.invitation(:to =>  new_depositors, :object =>  self)
+    email.deliver unless email.to.blank?
+  end
+  
+  def send_publish_email_notification(value)
+    return if recipients_for_collection_update_emails.blank?
+    case value
+      when true 
+        email=HydrusMailer.open_notification(:object => self) 
+      when false 
+        email=HydrusMailer.close_notification(:object => self)
+    end
+    email.deliver unless email.to.blank?
+  end
+  
   # returns a hash of depositors for this collection that have accepted the terms of deposit for an item in that collection
   def users_accepted_terms_of_deposit
     result={}
@@ -294,12 +308,6 @@ class Hydrus::Collection < Hydrus::GenericObject
     opt, vis              = vov_lookup[val].split('_')
     apo.visibility_option = opt # fixed or varies
     apo.visibility        = vis # world or stanford
-  end
-
-  def send_invitation(recipients = "")
-    return nil if recipients.blank?
-    email = HydrusMailer.invitation(:to => recipients, :object => self)
-    email.deliver unless email.to.blank? # this will catch when we're trying to send an email from a fixture.
   end
 
   ####

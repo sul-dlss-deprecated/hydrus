@@ -240,7 +240,7 @@ describe("Item create", :type => :request, :integration => true) do
       /\AItem modified/,
       /\ATerms of deposit accepted/,
       /\AItem submitted for approval/,
-      /\AItem disapproved:/,
+      /\AItem returned:/,
       /\AItem resubmitted for approval/,
       /\AItem approved/,      
       /\AItem published/,

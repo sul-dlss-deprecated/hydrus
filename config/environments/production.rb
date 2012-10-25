@@ -72,6 +72,7 @@ end
 Dor::Config.configure do
   
   hydrus do
+    host 'hydrus.stanford.edu'    
     start_common_assembly(true)
   end
 
