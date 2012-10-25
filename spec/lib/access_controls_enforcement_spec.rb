@@ -8,7 +8,7 @@ class MockController
   def initialize(ps = {})
     @flash     = {}
     @params    = ps
-    @root_path = 'root/path'
+    @root_path = '/users/signin'
   end
 
 end
@@ -24,8 +24,15 @@ describe Hydrus::AccessControlsEnforcement do
 
   describe "enforce_show_permissions" do
 
-    it "should do nothing if the user can read the object" do
+    before(:each) do
       @mc = MockController.new(:id => @dru)
+      @mc.stub('current_user').and_return(nil)
+      @mc.stub('session').and_return({})
+      @mc.stub('request').and_return(OpenStruct.new(:full_path=>'some/fake/path'))
+      @mc.stub('new_signin_path').and_return('/users/signin')
+    end
+    
+    it "should do nothing if the user can read the object" do
       @mc.stub('can?').and_return(true)
       @mc.should_not_receive(:redirect_to)
       @mc.enforce_show_permissions
@@ -33,7 +40,6 @@ describe Hydrus::AccessControlsEnforcement do
     end
 
     it "should redirect to root path if user cannot read the object" do
-      @mc = MockController.new(:id => @dru)
       @mc.stub('can?').and_return(false)
       @mc.should_receive(:redirect_to).with(@exp_rp)
       @mc.enforce_show_permissions
@@ -46,17 +52,24 @@ describe Hydrus::AccessControlsEnforcement do
 
   describe "enforce_edit_permissions" do
 
-    it "should do nothing if the user can edit the object" do
+    before(:each) do
       @mc = MockController.new(:id => @dru)
+      @mc.stub('session').and_return({})
+      @mc.stub('request').and_return(OpenStruct.new(:full_path=>'some/fake/path'))
+      @mc.stub('new_signin_path').and_return('/users/signin')
+    end
+
+    it "should do nothing if the user can edit the object" do
       @mc.stub('can?').and_return(true)
+      @mc.stub('current_user').and_return(nil)      
       @mc.should_not_receive(:redirect_to)
       @mc.enforce_edit_permissions
       @mc.flash.should == {}
     end
 
     it "should redirect to view page if user cannot edit the object" do
-      @mc = MockController.new(:id => @dru)
       @mc.stub('can?').and_return(false)
+      @mc.stub('current_user').and_return(OpenStruct.new)
       @mc.stub(:polymorphic_path).and_return(@exp_pp)
       @mc.should_receive(:redirect_to).with(@exp_pp)
       mock_coll = double('mock_coll', :hydrus_class_to_s => 'Collection')
@@ -70,9 +83,16 @@ describe Hydrus::AccessControlsEnforcement do
   end
 
   describe "enforce_create_permissions: create items in collections" do
-
+    
+    before(:each) do
+      @mc = MockController.new(:id => @dru)
+      @mc.stub('current_user').and_return(OpenStruct.new)      
+      @mc.stub('session').and_return({})
+      @mc.stub('request').and_return(OpenStruct.new(:full_path=>'some/fake/path'))
+      @mc.stub('new_signin_path').and_return('/users/signin')
+    end
+    
     it "should do nothing if the user can do it" do
-      @mc = MockController.new(:collection => @dru)
       @mc.stub('can?').and_return(true)
       @mc.should_not_receive(:redirect_to)
       @mc.enforce_create_permissions
@@ -80,8 +100,8 @@ describe Hydrus::AccessControlsEnforcement do
     end
 
     it "should redirect to collection view if user cannot do it" do
-      @mc = MockController.new(:collection => @dru)
       @mc.stub('can?').and_return(false)
+      @mc.stub('params').and_return({:collection=>'druid:oo000oo0003'})      
       @mc.stub(:polymorphic_path).and_return(@exp_pp)
       @mc.should_receive(:redirect_to).with(@exp_pp)
       Hydrus::Collection.stub(:find)
@@ -95,8 +115,15 @@ describe Hydrus::AccessControlsEnforcement do
 
   describe "enforce_create_permissions: create collections" do
 
-    it "should do nothing if the user can do it" do
+    before(:each) do
       @mc = MockController.new()
+      @mc.stub('current_user').and_return(nil)
+      @mc.stub('session').and_return({})
+      @mc.stub('request').and_return(OpenStruct.new(:full_path=>'some/fake/path'))
+      @mc.stub('new_signin_path').and_return('/users/signin')
+    end
+
+    it "should do nothing if the user can do it" do
       @mc.stub('can?').and_return(true)
       @mc.should_not_receive(:redirect_to)
       @mc.enforce_create_permissions
@@ -104,7 +131,6 @@ describe Hydrus::AccessControlsEnforcement do
     end
 
     it "should redirect to home page if user cannot do it" do
-      @mc = MockController.new()
       @mc.stub('can?').and_return(false)
       @mc.should_receive(:redirect_to).with(@exp_rp)
       @mc.enforce_create_permissions

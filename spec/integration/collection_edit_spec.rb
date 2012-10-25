@@ -9,10 +9,14 @@ describe("Collection edit", :type => :request, :integration => true) do
     @hc             = Hydrus::Collection.find @druid
   end
 
-  it "if not logged in, should be redirected to home page" do
+  it "if not logged in, should be redirected to the login page, then back to our intended page after logging in" do
     logout
     visit edit_polymorphic_path(@hc)
-    current_path.should == root_path
+    current_path.should == new_signin_path
+    fill_in "Email", :with => 'archivist1@example.com' 
+    fill_in "Password", :with => login_pw
+    click_button "Sign in"
+    current_path.should == edit_polymorphic_path(@hc)
   end
 
   it "can edit Collection descMetadata content" do

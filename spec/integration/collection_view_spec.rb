@@ -10,10 +10,14 @@ describe("Collection view", :type => :request, :integration => true) do
     @hc    = Hydrus::Collection.find @druid
   end
 
-  it "If not logged in, should be redirected to home page" do
+  it "If not logged in, should be redirected to login page, then back to our intended page after logging in" do
     logout
     visit polymorphic_url(@hc)
-    current_path.should == root_path
+    current_path.should == new_signin_path
+    fill_in "Email", :with => 'archivist1@example.com' 
+    fill_in "Password", :with => login_pw
+    click_button "Sign in"
+    current_path.should == polymorphic_path(@hc)    
   end
 
   it "Breadcrumbs should be displayed with home link and unlinked trucated collection name" do
