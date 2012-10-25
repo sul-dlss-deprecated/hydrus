@@ -49,7 +49,7 @@ describe Hydrus::RoleMetadataDS do
         [:person_id, %w(archivist4 archivist5 archivist3 archivist6)],
         [[:role, :person, :name], ["Archivist, Four", "Archivist, Five", "Archivist, Three", "Archivist, Six"]],
         [[:collection_manager, :person, :identifier], %w(archivist4 archivist5)],
-        [[:collection_owner, :person, :identifier], %w(archivist3)],
+        [[:collection_depositor, :person, :identifier], %w(archivist3)],
         [[:collection_reviewer, :person, :identifier], %w(archivist6)],
         [[:collection_viewer, :person, :identifier], %w()],
         [[:role, :type], %w(hydrus-collection-manager hydrus-collection-depositor hydrus-collection-reviewer)],

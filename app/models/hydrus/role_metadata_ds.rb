@@ -19,15 +19,15 @@ class Hydrus::RoleMetadataDS < ActiveFedora::NokogiriDatastream
     
     t.person_id :proxy => [:role, :person, :identifier]
 
-    t.collection_creator   :ref => [:role], :attributes => {:type => 'hydrus-collection-creator'}
-    t.collection_manager   :ref => [:role], :attributes => {:type => 'hydrus-collection-manager'}
-    t.collection_owner :ref => [:role], :attributes => {:type => 'hydrus-collection-depositor'}
+    t.collection_creator        :ref => [:role], :attributes => {:type => 'hydrus-collection-creator'}
+    t.collection_manager        :ref => [:role], :attributes => {:type => 'hydrus-collection-manager'}
+    t.collection_depositor      :ref => [:role], :attributes => {:type => 'hydrus-collection-depositor'}
     t.collection_item_depositor :ref => [:role], :attributes => {:type => 'hydrus-collection-item-depositor'}
-    t.collection_reviewer  :ref => [:role], :attributes => {:type => 'hydrus-collection-reviewer'}
-    t.collection_viewer    :ref => [:role], :attributes => {:type => 'hydrus-collection-viewer'}
-    # item object roles
-    t.item_manager         :ref => [:role], :attributes => {:type => 'hydrus-item-manager'}
-    t.item_depositor       :ref => [:role], :attributes => {:type => 'hydrus-item-depositor'}
+    t.collection_reviewer       :ref => [:role], :attributes => {:type => 'hydrus-collection-reviewer'}
+    t.collection_viewer         :ref => [:role], :attributes => {:type => 'hydrus-collection-viewer'}
+    # item object roles         
+    t.item_manager              :ref => [:role], :attributes => {:type => 'hydrus-item-manager'}
+    t.item_depositor            :ref => [:role], :attributes => {:type => 'hydrus-item-depositor'}
 
   end
 
