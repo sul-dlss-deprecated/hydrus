@@ -24,6 +24,10 @@ we distinguish between different item types.
 Misc implementation tasks
 --------
 
+The home page is producing explosive volumes of SOLR logging. This occurs
+during the super() call in index() of catalog_controller.rb. Investigate
+with cbeer.
+
 Integration tests for role-protection and gated discovery:
   Collection:
     open collection
@@ -42,7 +46,39 @@ Set up the listener scripts to update the Hydrus SOLR when Hydrus objects are
 updated outside of the Hydrus app. See the argo/bin directory for the latest
 copies of the scripts.
 
-Search results should look better.
+Unify our handling of object status.
+
+  1. For all app logic, refer to hydrusProperties, not workflow,
+     to determine object state. Unlike workflow, these steps
+     are not one-way: the object can toggle back and forth
+     between awaiting_approval and returned.
+
+        draft
+        awaiting_approval
+        returned
+        published
+
+  2. As the object advances through the process, we will advance
+     the workflow (as we are currently doing), but the app will
+     never consult the workflow XML for any information about state.
+     The workflow states will remain as they are now. In effect,
+     workflow XML is write (or advance), but never read.
+
+        start-deposit
+        submit
+        approve
+        start-assembly
+
+  3. Get rid of the to_solr codee in WorkflowDsExtension. Instead
+     we need to make sure that hydrusProperties is solrized as needed.
+     
+Search results: display these fields: title; depositor; object type; object
+status; date added. [waiting on work to unify handling of object status]
+
+Consider moving the actual collection-depositor roleMD info from the APO to
+the Collection, for two reasons: (1) it parallels the roleMD stored in the
+Item; (2) without it, we don't have access to the collection depositor
+during search results (at least not without mucking with the to_solr method).
 
 Update to latest dor-services-gem:
   - update gemfile
