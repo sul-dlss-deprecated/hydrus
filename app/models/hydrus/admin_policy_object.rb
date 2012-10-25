@@ -90,6 +90,10 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
     end
   end
 
+  def hydrus_class_to_s
+    "apo"
+  end
+  
   def is_published
     return is_open
   end

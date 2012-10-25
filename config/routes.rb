@@ -25,6 +25,7 @@ Hydrus::Application.routes.draw do
   match "collections/:id/destroy_actor" => "hydrus_collections#destroy_actor", :as => 'destroy_hydrus_collection_actor', :via => "get"
   match "users/auth/webauth" => "signin#login", :as => "webauth_login"
   match "users/auth/webauth/logout" => "signin#logout", :as => "webauth_logout"
+  match "error" => "signin#error", :as => "error"
     
   resources :object_files
   resources :signin

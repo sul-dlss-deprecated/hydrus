@@ -9,9 +9,14 @@ module Hydrus::AccessControlsEnforcement
     # Otherwise, redirect to the home page.
     msg  = "You do not have sufficient privileges to view the requested item."
     flash[:error] = msg
-    redirect_to(root_path)
+    redirect_to_correct_page(root_path)
   end
 
+  def redirect_to_correct_page(url) 
+    session['user_return_to']=request.fullpath
+    current_user.nil? ? redirect_to(new_signin_path(:referrer => request.fullpath)) : redirect_to(url)
+  end
+  
   # Redirects to the Item/Collection view page with a flash error
   # if user lacks authorization to edit the Item/Collection.
   def enforce_edit_permissions *args
@@ -23,7 +28,7 @@ module Hydrus::AccessControlsEnforcement
     c    = obj.hydrus_class_to_s.downcase
     msg  = "You do not have sufficient privileges to edit this #{c}."
     flash[:error] = msg
-    redirect_to(polymorphic_path(obj))
+    redirect_to_correct_page(polymorphic_path(obj))
   end
 
   # Handles two cases:
@@ -47,7 +52,7 @@ module Hydrus::AccessControlsEnforcement
       path = root_path
     end
     flash[:error] = msg
-    redirect_to(path)
+    redirect_to_correct_page(path)
   end
 
   # Adds some :fq paramenters to a set of SOLR search parameters

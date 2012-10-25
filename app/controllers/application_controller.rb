@@ -7,8 +7,15 @@ class ApplicationController < ActionController::Base
   helper_method :to_bool # defined in Hydra::ModelHelper so it can be used in models as well
   helper_method :is_production?, :current_user
   
+  rescue_from Exception, :with=>:exception_on_website
+   
   def layout_name
    'sul_chrome/application'
+  end
+  
+  def exception_on_website(exception)
+    # TODO also log this exception in some special way and notify someone?
+    is_production? ? redirect_to(error_url) : raise(exception)
   end
   
   # used to determine if we should show beta message in UI
@@ -28,6 +35,8 @@ class ApplicationController < ActionController::Base
       redirect_url=Rails.application.routes.url_helpers.send("hydrus_#{@document_fedora.object_type}_path",@document_fedora.pid) 
       redirect_to redirect_url    
     elsif @document_fedora.object_type=='adminPolicy'
+      msg  = "You do not have sufficient privileges to view the requested item."
+      flash[:error] = msg
       redirect_to root_url
     end
   end
