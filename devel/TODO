@@ -61,14 +61,13 @@ Integration tests for role-protection and gated discovery:
 
 Unify our handling of object status.
 
-  Set up hydrusProperties and write unit tests
+  Implementation plan:
 
-      <objectStatus>
-        draft
-        awaiting_approval
-        returned
-        published
+    -- Tap into complete_workflow_step, and modify hydrusProperties as well.
 
+    -- Create object_status() method to check hydrusProperties.
+
+    -- Convert workflow_step_is_done() calls to use object_status() instead.
 
   Relevant methods
 

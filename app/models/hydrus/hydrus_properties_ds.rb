@@ -14,18 +14,19 @@ class Hydrus::HydrusPropertiesDS < ActiveFedora::NokogiriDatastream
       end 
     end
   
-    t.requires_human_approval :path => 'requiresHumanApproval'
-    t.reviewed_release_settings :path=>'reviewedReleaseSettings'
-    t.disapproval_reason :path => 'disapprovalReason'
+    t.requires_human_approval   :path => 'requiresHumanApproval'
+    t.reviewed_release_settings :path => 'reviewedReleaseSettings'
+    t.object_status             :path => 'objectStatus'
+    t.disapproval_reason        :path => 'disapprovalReason'
     
   end
 
   define_template :user do |xml,username,date_accepted|
-      xml.user(username,:dateAccepted => date_accepted)
+    xml.user(username,:dateAccepted => date_accepted)
   end
 
   define_template :users_accepted_terms_of_deposit do |xml|
-      xml.usersAcceptedTermsOfDeposit
+    xml.usersAcceptedTermsOfDeposit
   end
 
   # Empty XML document.
