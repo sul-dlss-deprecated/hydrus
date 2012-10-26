@@ -37,6 +37,8 @@ class Hydrus::Collection < Hydrus::GenericObject
     coll.embargo_option          = 'none'
     coll.requires_human_approval = 'no'
     coll.license_option          = 'none'
+    # Set object status.
+    coll.object_status = 'draft'
     # Save and return.
     coll.save(:no_edit_logging => true)
     return coll
@@ -84,13 +86,19 @@ class Hydrus::Collection < Hydrus::GenericObject
     ).to_a.join(', ')
   end
   
-  # Open or close the Collection.
-  # Opening also has the effect of publishing it.
-  # Unlike open-close, which the user can toggle, publishing is irreversible.
+  # Takes a boolean-like value.
+  # If true, opens the collection and publishes it (the latter if needed).
+  # Otherwise, closes the collection.
+  #
+  # Note: unlike open-close, which the user can toggle, publishing is irreversible.
   def publish(value)
     if to_bool(value)
+      # Open the collection.
       apo.deposit_status = 'open'
-      # At the moment of publication, we refresh various titles and labels.
+      self.object_status = 'published_open'
+      events.add_event('hydrus', @current_user, 'Collection opened')
+
+      # Also, at the moment of publication, we refresh various titles and labels.
       # Note that the two label attributes reside in Fedora's foxml:objectProperties.
       apo_title = "APO for #{title}"
       apo.identityMetadata.objectLabel = apo_title
@@ -98,17 +106,22 @@ class Hydrus::Collection < Hydrus::GenericObject
       identityMetadata.objectLabel     = title
       self.label                       = title
       apo.label                        = apo_title
-      # Advance the workflow to record that the object has been published.
+
+      # If needed, advance the workflow to record that the object has been published.
+      # At this time we can also approve the collection, because collections never
+      # require human approval, even when their items do.
       s = 'submit'
-      events.add_event('hydrus', @current_user, 'Collection opened')
       unless workflow_step_is_done(s)
         complete_workflow_step(s)
-        approve() # Collections never require human approval, even when their Items do.
+        approve()
       end
     else
+      # Close the collection.
       apo.deposit_status = 'closed'
+      self.object_status = 'published_closed'
       events.add_event('hydrus', @current_user, 'Collection closed')
     end
+    # Email.
     send_publish_email_notification(to_bool(value))
   end
 

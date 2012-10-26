@@ -61,14 +61,22 @@ Integration tests for role-protection and gated discovery:
 
 Unify our handling of object status.
 
+  Test backlog
+
+    Coll.create: check object_status
+    Item.create: check object_status
+    Coll.publish: check object_status
+
+  refactor
+
+    Collection: change publish() to open() and close(), and modify UI controls
+    accordingly.
+
+    Collection: publish(): set titles/labels only during publish, not during open.
+
   Implementation plan:
 
-    -- Add objectStatus to fixtures.
-
     -- Tap into complete_workflow_step(), and modify hydrusProperties as well.
-
-        app/models/hydrus/collection.rb
-          submit
 
         app/models/hydrus/item.rb
           submit
@@ -124,6 +132,17 @@ Unify our handling of object status.
      to determine object state. Unlike workflow, these steps
      are not one-way: the object can toggle back and forth
      between awaiting_approval and returned.
+
+        # Item
+        draft
+        awaiting_approval
+        returned
+        published
+
+        # Collection.
+        draft
+        published_open
+        published_closed
 
   2. As the object advances through the process, we will advance
      the workflow (as we are currently doing), but the app will

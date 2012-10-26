@@ -24,6 +24,7 @@ class Hydrus::GenericObject < Dor::Item
     ],
     "hydrusProperties" => [
       [:disapproval_reason,  true   ],
+      [:object_status,       true   ],
     ],
   )
 
