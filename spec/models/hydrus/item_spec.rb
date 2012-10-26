@@ -423,7 +423,7 @@ describe Hydrus::Item do
         :contact,
         :terms_of_deposit,
         :release_settings,
-        :actors,
+        :actors
       ]
       @hi.instance_variable_set('@should_validate', true)
     end
@@ -439,15 +439,31 @@ describe Hydrus::Item do
       @hi.errors.messages.keys.should include(*@exp)
     end
     
+    it "should provide an error when the embargo date is out of the collection's embargo range" do
+      coll = mock("collection")
+      item = Hydrus::Item.new
+      item.instance_variable_set('@should_validate', true)
+      coll.stub(:is_open).and_return(true)
+      coll.stub(:embargo_option).and_return("varies")
+      coll.stub_chain([:apo, :embargo]).and_return("1 year")
+      item.stub(:collection).and_return(coll)
+      item.embargo = "future"
+      item.embargo_date = (Date.today + 2.years).strftime("%m/%d/%Y")
+      item.valid?.should == false
+      item.errors.messages.should have_key(:embargo_date)
+      item.errors.messages[:embargo_date].first.should =~ /must be in the date range \d{2}\/\d{2}\/\d{4} - \d{2}\/\d{2}\/\d{4}/
+    end
+    
     it "fully populated Item should be valid" do
       dru = 'druid:ll000ll0001'
       @hi.stub(:collection_is_open).and_return(true)
       @hi.stub(:accepted_terms_of_deposit).and_return(true)
       @hi.stub(:reviewed_release_settings).and_return(true)
       @exp.each { |e| @hi.stub(e).and_return(dru) }
+      @hi.stub_chain([:collection, :embargo_option]).and_return("varies")
       @hi.valid?.should == true
     end
-
+    
   end
 
   it "collection_is_open() should return true only if the Item is in an open Collection" do

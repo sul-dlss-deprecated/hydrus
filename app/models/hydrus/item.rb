@@ -14,6 +14,7 @@ class Hydrus::Item < Hydrus::GenericObject
   validate  :must_accept_terms_of_deposit, :if => :should_validate
   validate  :must_review_release_settings, :if => :should_validate
   # validate  :embargo_date_is_correct_format # TODO
+  validate :embargo_date_in_range, :if => :should_validate
 
   setup_delegations(
     # [:METHOD_NAME,               :uniq, :at... ]
@@ -304,6 +305,18 @@ class Hydrus::Item < Hydrus::GenericObject
       Date.strptime(embargo_date, "%m/%d/%Y")
     rescue ArgumentError
       errors.add(:embargo_date, 'must be a valid date')
+    end
+  end
+
+  def under_embargo?
+    !collection.blank? and collection.embargo_option == "varies"
+  end
+
+  def embargo_date_in_range
+    if under_embargo? and embargo == "future"
+      unless (Date.strptime(beginning_of_embargo_range, "%m/%d/%Y")...Date.strptime(end_of_embargo_range, "%m/%d/%Y")).include?(Date.strptime(embargo_date, "%m/%d/%Y"))
+        errors.add(:embargo_date, "must be in the date range #{beginning_of_embargo_range} - #{end_of_embargo_range}")
+      end
     end
   end
 
