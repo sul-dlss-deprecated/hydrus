@@ -79,6 +79,7 @@ class Hydrus::Item < Hydrus::GenericObject
   def resubmit(value = nil)
     events.add_event('hydrus', @current_user, "Item resubmitted for approval")
     hydrusProperties.remove_nodes(:disapproval_reason)
+    self.object_status = 'awaiting_approval'
   end
   
   # Publish the Item.
@@ -88,13 +89,15 @@ class Hydrus::Item < Hydrus::GenericObject
     self.label                   = title # The label in Fedora's foxml:objectProperties.
     self.save
     # Advance workflow to record that the object has been published.
-    s = 'submit'
+    rha                = to_bool(requires_human_approval)
+    s                  = 'submit'
+    self.object_status = rha ? 'awaiting_approval' : 'published'
     unless workflow_step_is_done(s)
       complete_workflow_step(s)
-      if to_bool(requires_human_approval)
+      if rha
         events.add_event('hydrus', @current_user, 'Item submitted for approval')
       else
-        events.add_event('hydrus', @current_user, "#{hydrus_class_to_s()} published")
+        events.add_event('hydrus', @current_user, "Item published")
         approve()
       end
     end

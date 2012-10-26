@@ -413,18 +413,6 @@ describe Hydrus::GenericObject do
 
   end
 
-  it "is_hydrus_item() should work as expected" do
-    tests = {
-      Hydrus::Item       => true,
-      Hydrus::Collection => false,
-      String             => false,
-    }
-    tests.each do |cls, exp|
-      @go.stub(:class).and_return(cls)
-      @go.is_hydrus_item.should == exp
-    end
-  end
-
   it "hydrus_class_to_s() should work as expected" do
     tests = {
       Hydrus::Item       => 'Item',

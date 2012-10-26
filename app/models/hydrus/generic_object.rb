@@ -234,12 +234,13 @@ class Hydrus::GenericObject < Dor::Item
   # additional calls will be made to the workflow service to begin that
   # process as well. In that case, we also generate content metadata.
   def do_approve
-    is_item = is_hydrus_item()
+    # Approve.
     complete_workflow_step('approve')
-    events.add_event('hydrus', @current_user, "#{hydrus_class_to_s()} approved") if to_bool(requires_human_approval) && !is_collection?
+    events.add_event('hydrus', @current_user, "#{hydrus_class_to_s()} approved") if to_bool(requires_human_approval)
     hydrusProperties.remove_nodes(:disapproval_reason)
+    # Start common assembly.
     if should_start_common_assembly
-      update_content_metadata if is_item
+      update_content_metadata unless is_collection?
       complete_workflow_step('start-assembly')
       initiate_apo_workflow('assemblyWF')
     end
@@ -261,11 +262,6 @@ class Hydrus::GenericObject < Dor::Item
   # Wrapped in method to simplify testing stubs.
   def should_start_common_assembly
     return Dor::Config.hydrus.start_common_assembly
-  end
-
-  # Returns true if object is a Hydrus::Item.
-  def is_hydrus_item
-    return self.class == Hydrus::Item
   end
 
   # Returns string representation of the class, minus the Hydrus:: prefix.

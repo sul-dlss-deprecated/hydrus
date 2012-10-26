@@ -69,10 +69,12 @@ Unify our handling of object status.
 
   refactor
 
-    Collection: change publish() to open() and close(), and modify UI controls
-    accordingly.
+    Collection: refactor publish()
+      - Use separately named methods to communicate actual steps: open() and close().
+      - Modify UI controls accordingly.
+      - Set titles/labels only during actualy publishing.
 
-    Collection: publish(): set titles/labels only during publish, not during open.
+    Item: similar refactor of publish().
 
   Implementation plan:
 
