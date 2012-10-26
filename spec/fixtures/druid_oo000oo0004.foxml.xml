@@ -102,6 +102,7 @@
           <requiresHumanApproval>no</requiresHumanApproval>
 		      <usersAcceptedTermsOfDeposit>
 		      </usersAcceptedTermsOfDeposit>
+          <objectStatus>published_open</objectStatus>
         </hydrusProperties>
       </foxml:xmlContent>
     </foxml:datastreamVersion>

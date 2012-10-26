@@ -103,6 +103,7 @@
 		      	<user dateAccepted="2012-05-02 12:02:44 -0700">archivist2</user>
 		      	<user dateAccepted="2011-10-02 02:05:31 -0700">archivist3</user>
 		      </usersAcceptedTermsOfDeposit>
+          <objectStatus>published_open</objectStatus>
         </hydrusProperties>
       </foxml:xmlContent>
     </foxml:datastreamVersion>
