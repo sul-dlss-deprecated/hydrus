@@ -18,8 +18,6 @@ class Hydrus::HydrusPropertiesDS < ActiveFedora::NokogiriDatastream
     t.reviewed_release_settings :path=>'reviewedReleaseSettings'
     t.disapproval_reason :path => 'disapprovalReason'
     
-    t.collection_depositor :path => 'collectionDepositor'
-    
   end
 
   define_template :user do |xml,username,date_accepted|

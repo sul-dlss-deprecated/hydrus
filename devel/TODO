@@ -61,6 +61,15 @@ Integration tests for role-protection and gated discovery:
 
 Unify our handling of object status.
 
+  Set up hydrusProperties and write unit tests
+
+      <objectStatus>
+        draft
+        awaiting_approval
+        returned
+        published
+
+
   Relevant methods
 
       Hydrus::Publishable
@@ -98,11 +107,6 @@ Unify our handling of object status.
      to determine object state. Unlike workflow, these steps
      are not one-way: the object can toggle back and forth
      between awaiting_approval and returned.
-
-        draft
-        awaiting_approval
-        returned
-        published
 
   2. As the object advances through the process, we will advance
      the workflow (as we are currently doing), but the app will

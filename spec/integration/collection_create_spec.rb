@@ -105,7 +105,6 @@ describe("Collection create", :type => :request, :integration => true) do
     # exp.each { |e| err_msgs.should =~ e }
     # Get the Collection and APO objects from fedora.
     coll = Hydrus::Collection.find(druid)
-    coll.collection_depositor='archivist1'
     apo = coll.apo
     # Check various Collection attributes and methods.
     coll.is_publishable.should == false

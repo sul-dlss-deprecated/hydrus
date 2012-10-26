@@ -100,7 +100,6 @@
       <foxml:xmlContent>
         <hydrusProperties>
           <requiresHumanApproval>no</requiresHumanApproval>
-          <collectionDepositor>archivist3</collectionDepositor>
 		      <usersAcceptedTermsOfDeposit>
 		      </usersAcceptedTermsOfDeposit>
         </hydrusProperties>

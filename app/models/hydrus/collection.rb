@@ -14,7 +14,6 @@ class Hydrus::Collection < Hydrus::GenericObject
     # [:METHOD_NAME,            :uniq,  :at... ]
     "hydrusProperties" => [
       [:requires_human_approval, true   ],
-      [:collection_depositor, true   ],
     ],
   )
 
@@ -27,7 +26,6 @@ class Hydrus::Collection < Hydrus::GenericObject
     apo     = Hydrus::AdminPolicyObject.create(user)
     dor_obj = Hydrus::GenericObject.register_dor_object(user, 'collection', apo.pid)
     coll    = dor_obj.adapt_to(Hydrus::Collection)
-    coll.collection_depositor=user.to_s
     coll.remove_relationship :has_model, 'info:fedora/afmodel:Dor_Collection'
     coll.assert_content_model
     # Add some Hydrus-specific info to identityMetadata.
@@ -202,7 +200,15 @@ class Hydrus::Collection < Hydrus::GenericObject
     depositors=apo.persons_with_role('hydrus-collection-depositor')
     depositors.size == 1 ? depositors.first : ''
   end
-  
+
+  def collection_depositor *args
+    apo.collection_depositor *args
+  end
+
+  def collection_depositor= val
+    apo.collection_depositor= val
+  end
+
   def deposit_status *args
     apo.deposit_status *args
   end

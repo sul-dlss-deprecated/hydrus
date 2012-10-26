@@ -33,22 +33,23 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
   validate  :check_license_options, :if => :should_validate
 
   setup_delegations(
-    # [:METHOD_NAME,         :uniq, :at... ]
+    # [:METHOD_NAME,          :uniq, :at... ]
     "descMetadata" => [
-      [:title,               true,  :main_title ],
+      [:title,                true,  :main_title ],
     ],
     "roleMetadata" => [
-      [:person_id,           false, :role, :person, :identifier],
+      [:person_id,            false, :role, :person, :identifier],
+      [:collection_depositor, true, :collection_depositor, :person, :identifier],
     ],
     "administrativeMetadata" => [
-      [:deposit_status,      true,  :hydrus, :depositStatus],
-      [:embargo,             true,  :hydrus, :embargo],
-      [:embargo_option,      true,  :hydrus, :embargo, :option],
-      [:license,             true,  :hydrus, :license],
-      [:license_option,      true,  :hydrus, :license, :option],
-      [:visibility,          true,  :hydrus, :visibility],
-      [:visibility_option,   true,  :hydrus, :visibility, :option],
-    ]
+      [:deposit_status,       true,  :hydrus, :depositStatus],
+      [:embargo,              true,  :hydrus, :embargo],
+      [:embargo_option,       true,  :hydrus, :embargo, :option],
+      [:license,              true,  :hydrus, :license],
+      [:license_option,       true,  :hydrus, :license, :option],
+      [:visibility,           true,  :hydrus, :visibility],
+      [:visibility_option,    true,  :hydrus, :visibility, :option],
+    ],
   )
 
   def initialize(*args)
