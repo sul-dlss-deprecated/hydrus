@@ -324,6 +324,7 @@ describe Hydrus::Item do
       end
       describe "date ranges" do
         it "should return today's date if there is no completed submit time in the workflowDataStream",:integration => true do
+          subject.stub(:submit_time).and_return(nil)
           subject.beginning_of_embargo_range.should == Date.today.strftime("%m/%d/%Y")
         end
         it "should return the submit time if one is available" do
