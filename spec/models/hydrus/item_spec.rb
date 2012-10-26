@@ -450,6 +450,7 @@ describe Hydrus::Item do
       item.stub(:collection).and_return(coll)
       item.embargo = "future"
       item.embargo_date = (Date.today + 2.years).strftime("%m/%d/%Y")
+      item.stub(:submit_time).and_return Date.today.to_s
       item.valid?.should == false
       item.errors.messages.should have_key(:embargo_date)
       item.errors.messages[:embargo_date].first.should =~ /must be in the date range \d{2}\/\d{2}\/\d{4} - \d{2}\/\d{2}\/\d{4}/
@@ -542,6 +543,7 @@ describe Hydrus::Item do
       @hi.should_not_receive(:approve)
       @hi.should_not_receive(:complete_workflow_step)
       @hi.stub(:save).and_return(true)
+      @hi.stub(:requires_human_approval).and_return('yes')
       @hi.publish
       @hi.identityMetadata.objectLabel.should == [exp_title]
       @hi.label.should == exp_title

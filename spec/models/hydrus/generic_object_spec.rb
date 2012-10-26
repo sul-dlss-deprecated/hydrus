@@ -241,13 +241,13 @@ describe Hydrus::GenericObject do
 
       it "should return true when submit step is completed" do
         @workflow.find_by_xpath('//process[@name="submit"]').first['status'] = 'completed'
-        @go.stub(:requires_human_approval).and_return('no')        
+        @go.stub(:requires_human_approval).and_return('no')
         @go.is_published.should == true
       end
 
       it "should not call workflow_step_is_done() a second time" do
         @go.should_receive(:workflow_step_is_done).once.and_return(false)
-        @go.stub(:requires_human_approval).and_return('no')        
+        @go.stub(:requires_human_approval).and_return('no')
         @go.is_published.should == false
         @go.is_published.should == false
       end
@@ -263,16 +263,16 @@ describe Hydrus::GenericObject do
 
       it "should return true if approved step is completed" do
         @go.stub(:is_published).and_return(true)
-        @go.stub(:requies_human_approval).and_return('yes')        
+        @go.stub(:requies_human_approval).and_return('yes')
         @workflow.find_by_xpath('//process[@name="approve"]').first['status'] = 'completed'
-        @workflow.find_by_xpath('//process[@name="submit"]').first['status'] = 'completed'        
+        @workflow.find_by_xpath('//process[@name="submit"]').first['status'] = 'completed'
         @go.is_approved.should == true
       end
 
     end
 
     it "is_publishable() should return the value of valid?" do
-      @go.stub(:requires_human_approval).and_return('no')      
+      @go.stub(:requires_human_approval).and_return('no')
       @go.stub(:pid).and_return('blah')
       @go.valid?.should == false    # Bad PID.
       @go.stub(:pid).and_return('druid:oo000oo0001')
@@ -349,7 +349,7 @@ describe Hydrus::GenericObject do
     it "should return the value of is_published() when @should_validate is false" do
       [false, true].each do |exp|
         @go.stub(:requires_human_approval).and_return('no')
-        @go.instance_variable_set('@should_validate', nil)              
+        @go.instance_variable_set('@should_validate', nil)
         @go.stub(:is_published).and_return(exp)
         @go.stub(:is_submitted).and_return(false)
         @go.stub(:is_approved).and_return(false)
@@ -492,7 +492,7 @@ describe Hydrus::GenericObject do
       mail.subject.should =~ /Item returned in the Stanford Digital Repository/
     end
     it "should return nil when no recipients are sent in" do
-      @go.stub(:recipients_for_object_returned_email).and_return('')      
+      @go.stub(:recipients_for_object_returned_email).and_return('')
       @go.send_object_returned_email_notification.should be_nil
     end
   end
@@ -516,11 +516,30 @@ describe Hydrus::GenericObject do
 
   end
 
-  it "save() should not invoke log_editing_events() if no_edit_logging is true",:integration => true do
-    @go.stub(:requires_human_approval).and_return('no')
-    @go.should_receive(:log_editing_events).once
-    @go.save
-    @go.save(:no_edit_logging => true)
+  describe "save()" do
+
+    it "should invoke log_editing_events() usually" do
+      @go.should_receive(:log_editing_events).once
+      @go.save(:no_super => true)
+    end
+
+    it "should not invoke log_editing_events() if no_edit_logging is true" do
+      @go.should_not_receive(:log_editing_events)
+      @go.save(:no_edit_logging => true, :no_super => true)
+    end
+
+  end
+
+  it "is_item? and is_collection? should work" do
+    hi = Hydrus::Item.new
+    hc = Hydrus::Collection.new
+    go = @go
+    hi.is_item?.should == true
+    hc.is_item?.should == false
+    go.is_item?.should == false
+    hi.is_collection?.should == false
+    hc.is_collection?.should == true
+    go.is_collection?.should == false
   end
 
 end

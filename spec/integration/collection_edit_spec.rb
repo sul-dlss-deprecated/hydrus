@@ -275,6 +275,7 @@ describe("Collection edit", :type => :request, :integration => true) do
         it "should send an email when there are item depositors" do
           login_as_archivist1
           @coll.apo_person_roles = {:"hydrus-collection-item-depositor" => "jdoe"}
+          @coll.stub(:workflow_step_is_done).and_return(true)
           expect {@coll.publish(true)}.to change { ActionMailer::Base.deliveries.count }.by(1)
           last_email_sent = ActionMailer::Base.deliveries.last
           last_email_sent.to.should == ["jdoe@stanford.edu"]
@@ -282,6 +283,7 @@ describe("Collection edit", :type => :request, :integration => true) do
         end
         it "should not send an email when there are no item depositors" do
           login_as_archivist1
+          @coll.stub(:workflow_step_is_done).and_return(true)
           expect {@coll.publish(true)}.to change { ActionMailer::Base.deliveries.count }.by(0)
         end
       end

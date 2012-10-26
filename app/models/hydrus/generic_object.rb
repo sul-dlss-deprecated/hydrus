@@ -28,6 +28,10 @@ class Hydrus::GenericObject < Dor::Item
     ],
   )
 
+  def is_item?
+    self.class == Hydrus::Item
+  end
+
   def is_collection?
     self.class == Hydrus::Collection
   end
@@ -44,7 +48,7 @@ class Hydrus::GenericObject < Dor::Item
   # We override save() so we can control whether editing events are logged.
   def save(opts = {})
     log_editing_events() unless opts[:no_edit_logging]
-    super()
+    super() unless opts[:no_super]  # This option is purely for unit testing.
   end
 
   # Lazy initializers for instance variables.
@@ -236,11 +240,13 @@ class Hydrus::GenericObject < Dor::Item
   def do_approve
     # Approve.
     complete_workflow_step('approve')
-    events.add_event('hydrus', @current_user, "#{hydrus_class_to_s()} approved") if to_bool(requires_human_approval)
+    if is_item? and to_bool(requires_human_approval)
+      events.add_event('hydrus', @current_user, "#{hydrus_class_to_s()} approved")
+    end
     hydrusProperties.remove_nodes(:disapproval_reason)
     # Start common assembly.
     if should_start_common_assembly
-      update_content_metadata unless is_collection?
+      update_content_metadata if is_item?
       complete_workflow_step('start-assembly')
       initiate_apo_workflow('assemblyWF')
     end
