@@ -63,7 +63,25 @@ Unify our handling of object status.
 
   Implementation plan:
 
-    -- Tap into complete_workflow_step, and modify hydrusProperties as well.
+    -- Add objectStatus to fixtures.
+
+    -- Tap into complete_workflow_step(), and modify hydrusProperties as well.
+
+        app/models/hydrus/collection.rb
+          submit
+
+        app/models/hydrus/item.rb
+          submit
+
+        app/models/hydrus/generic_object.rb
+          approve
+          start-assembly
+
+        spec/models/hydrus/collection_spec.rb
+        spec/models/hydrus/generic_object_spec.rb
+        spec/models/hydrus/item_spec.rb
+
+    -- Change disapprove and resubmit to modify hydrusProperties as well.
 
     -- Create object_status() method to check hydrusProperties.
 
