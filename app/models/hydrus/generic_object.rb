@@ -132,7 +132,7 @@ class Hydrus::GenericObject < Dor::Item
   end
 
   def url
-   "http://purl.stanford.edu/#{pid}"
+   "#{Dor::Config.purl.base_url}#{pid}"
   end
 
   def related_items
@@ -375,6 +375,14 @@ class Hydrus::GenericObject < Dor::Item
 
   def workflow_step_is_done(step)
     return workflows.workflow_step_is_done(step)
+  end
+  
+  def purl_page_ready?
+    begin
+      Dor::WorkflowService.get_workflow_status('dor', pid, 'accessionWF', 'publish') == 'completed'
+    rescue
+      false
+    end
   end
 
 end

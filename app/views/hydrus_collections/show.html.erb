@@ -27,14 +27,14 @@
 
     </dl>
 
+		<% unless hydrus_is_empty?(@document_fedora.related_items) %>
      <div class="collection-items">
-         <h4>Links to related information</h4>
-    	<% unless hydrus_is_empty?(@document_fedora.related_items) %>
-        <%- @document_fedora.related_items.each_with_index do |related_item, index| -%>
-          <dd>&raquo; <%= related_item.url.blank? ? hydrus_object_setting_value(related_item.url) : link_to(related_item.title, related_item.url) %></dd>
-        <%- end -%>
-    	<% end %>
+         <h4>Links to related information</h4>    	
+	        <%- @document_fedora.related_items.each_with_index do |related_item, index| -%>
+	          <dd>&raquo; <%= related_item.url.blank? ? hydrus_object_setting_value(related_item.url) : link_to(related_item.title, related_item.url) %></dd>
+	        <%- end -%>
     </div>
+  	<% end %>
 
     <div class="collection-items">
          <h4>Release and visibility of content</h4>

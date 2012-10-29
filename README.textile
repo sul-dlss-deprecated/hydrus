@@ -43,6 +43,10 @@ h2. Starting the app
 	
 Go to http://localhost:3000
 
+Or for a quieter output on the console:
+
+	rake server
+	
 h2. Default user
 
 Note that you will need to be logged in to see any objects, since there is an

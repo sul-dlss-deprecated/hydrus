@@ -70,6 +70,10 @@ Hydrus::Application.configure do
 end
 
 Dor::Config.configure do
+
+  purl do
+    base_url 'http://purl-test.stanford.edu/'
+  end  
   
   hydrus do
     host 'hydrus-test.stanford.edu'

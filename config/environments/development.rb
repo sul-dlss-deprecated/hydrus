@@ -39,6 +39,10 @@ Hydrus::Application.configure do
 end
 
 Dor::Config.configure do
+
+  purl do
+    base_url 'http://purl.stanford.edu/'
+  end
   
   hydrus do
     host 'localhost:3000'
