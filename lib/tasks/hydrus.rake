@@ -14,6 +14,6 @@ end
 
 desc "rails server with suppressed output"
 task :server => :environment do
-  Rake::Task['jetty:start'].invoke
+  system "rake jetty:start"
   system "rails s 2>&1 | grep --line-buffered -Fv 'WARN  Could not determine content-length of response body.' | grep --line-buffered -v '^Loaded datastream druid:' | grep --line-buffered -v '^Solr response: '"
 end
