@@ -60,7 +60,7 @@ class Hydrus::Item < Hydrus::GenericObject
     # Add roleMetadata with current user as hydrus-item-depositor.
     item.roleMetadata.add_person_with_role(user, 'hydrus-item-depositor')
     # Set object status.
-    coll.object_status = 'draft'
+    item.object_status = 'draft'
     # Add event.
     item.events.add_event('hydrus', user, 'Item created')
     # Check to see if this user needs to agree again for this new item, if not, indicate agreement has already occured automatically

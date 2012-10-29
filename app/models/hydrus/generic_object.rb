@@ -10,7 +10,7 @@ class Hydrus::GenericObject < Dor::Item
 
   REQUIRED_FIELDS=[:title,:abstract,:contact]
   REQUIRED_FIELDS.each {|field| validates field, :not_empty => true, :if => :should_validate}
-  
+
   validates :pid, :is_druid => true
 
   setup_delegations(
@@ -43,8 +43,8 @@ class Hydrus::GenericObject < Dor::Item
     # and indicates if this is blank.
     validate! ? true : (errors.keys & REQUIRED_FIELDS).size == 0
   end
-  #################################  
-  
+  #################################
+
   # We override save() so we can control whether editing events are logged.
   def save(opts = {})
     log_editing_events() unless opts[:no_edit_logging]
@@ -75,11 +75,11 @@ class Hydrus::GenericObject < Dor::Item
     :label => 'Hydrus Properties',
     :control_group => 'M')
 
-  
+
   def is_approvable
     is_published ? false : (to_bool(requires_human_approval) ? validate! && !is_submitted_for_approval : false)
   end
-  
+
   # Returns true only if the Item is unpublished.
   def is_destroyable
     return not(is_published)
@@ -95,11 +95,11 @@ class Hydrus::GenericObject < Dor::Item
   def is_submitted
     workflow_step_is_done('submit')
   end
-  
+
   def is_submitted_for_approval
     return (is_submitted and !workflow_step_is_done('approve'))
   end
-  
+
   def is_approved
     return (is_submitted and workflow_step_is_done('approve'))
   end
@@ -109,7 +109,7 @@ class Hydrus::GenericObject < Dor::Item
   def publish=(val)  publish(val) end
   def approve=(val)  approve(val) end
   def resubmit=(val) resubmit(val) end
-    
+
   def object_type
     # TODO: this is not what we want.
     return identityMetadata.objectType.first
@@ -165,7 +165,7 @@ class Hydrus::GenericObject < Dor::Item
       ]
     }
   end
-  
+
   def self.license_type(code)
     if code[0..1].downcase == 'cc'
       "creativeCommons"
@@ -215,14 +215,14 @@ class Hydrus::GenericObject < Dor::Item
   def recipients_for_object_returned_email
     is_collection? ? owner : item_depositor_id
   end
-  
+
   def send_object_returned_email_notification(opts={})
-    return if recipients_for_object_returned_email.blank?      
+    return if recipients_for_object_returned_email.blank?
     email=HydrusMailer.object_returned(:returned_by => @current_user, :object => self, :item_url=>opts[:item_url])
-    email.deliver unless email.blank? 
+    email.deliver unless email.blank?
   end
-  
-  # Optionally takes a hash like this: 
+
+  # Optionally takes a hash like this:
   #   { 'value'  => 'yes|no', 'reason' => 'blah blah' }
   # Implements approve/disapprove accordingly.
   def approve(h = nil)
@@ -239,14 +239,16 @@ class Hydrus::GenericObject < Dor::Item
   # process as well. In that case, we also generate content metadata.
   def do_approve
     # Approve.
+    isi = is_item?
     complete_workflow_step('approve')
-    if is_item? and to_bool(requires_human_approval)
+    self.object_status = 'published' if isi
+    hydrusProperties.remove_nodes(:disapproval_reason)
+    if isi and to_bool(requires_human_approval)
       events.add_event('hydrus', @current_user, "#{hydrus_class_to_s()} approved")
     end
-    hydrusProperties.remove_nodes(:disapproval_reason)
     # Start common assembly.
     if should_start_common_assembly
-      update_content_metadata if is_item?
+      update_content_metadata if isi
       complete_workflow_step('start-assembly')
       initiate_apo_workflow('assemblyWF')
     end
@@ -254,14 +256,17 @@ class Hydrus::GenericObject < Dor::Item
 
   # Disapproves an object by setting the reason is the hydrusProperties datastream.
   def do_disapprove(reason)
-    events.add_event('hydrus', @current_user, "Item returned: #{reason}")
+    self.object_status = 'returned'
     self.disapproval_reason = reason
+    events.add_event('hydrus', @current_user, "Item returned: #{reason}")
     send_object_returned_email_notification
   end
-  
+
   # Returns true if there is a non-blank disapproval_reason.
   def is_disapproved
-    is_published ? false : (to_bool(requires_human_approval) ? !disapproval_reason.blank? : false)
+    return false if is_published
+    return false unless to_bool(requires_human_approval)
+    return !disapproval_reason.blank?
   end
 
   # Returns value of Dor::Config.hydrus.start_common_assembly.

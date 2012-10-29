@@ -75,23 +75,6 @@ Unify our handling of object status.
 
   Implementation plan:
 
-    -- Tap into complete_workflow_step(), and modify hydrusProperties as well.
-
-        app/models/hydrus/item.rb
-          submit
-
-        app/models/hydrus/generic_object.rb
-          approve
-          start-assembly
-
-        spec/models/hydrus/collection_spec.rb
-        spec/models/hydrus/generic_object_spec.rb
-        spec/models/hydrus/item_spec.rb
-
-    -- Change disapprove and resubmit to modify hydrusProperties as well.
-
-    -- Create object_status() method to check hydrusProperties.
-
     -- Convert workflow_step_is_done() calls to use object_status() instead.
 
   Relevant methods
@@ -181,7 +164,6 @@ WAITING
 
 Convert any unit tests that require jetty to be running to use stubbed/mocked
 objects so we don't have a dependency on real objects for unit tests.
-
 
 Work with Willy to switch local dev environment to use a local workflow service
 rather than the workflow service on sul-lyberservices-dev.

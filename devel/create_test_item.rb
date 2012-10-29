@@ -3,7 +3,8 @@
 
 def create_test_collection(*args)
   # Create a new Collection and set all required values.
-  hc                         = Hydrus::Collection.create('archivist1')
+  user                       = args.shift || 'archivist1'
+  hc                         = Hydrus::Collection.create(user)
   hc.title                   = "Title for: #{hc.pid}"
   hc.abstract                = 'abstract'
   hc.contact                 = 'contact'
@@ -17,15 +18,16 @@ def create_test_collection(*args)
   # Publish, save, and return a refreshed object.
   hc.publish('true') if args.delete('--publish')
   hc.save
-  puts "Created collection: #{hc.pid}"
+  puts "Created collection: user=#{user} pid=#{hc.pid}"
   return Hydrus::Collection.find(hc.pid)
 end
 
 def create_test_item(*args)
   # Create a new Item and set all required values.
   hc_pid         = args.shift
+  user           = args.shift || 'archivist1'
   hc_pid         = "druid:#{hc_pid}" unless hc_pid =~ /^druid:/
-  hi             = Hydrus::Item.create(hc_pid, 'archivist1')
+  hi             = Hydrus::Item.create(hc_pid, user)
   hi.title       = "Title for: #{hi.pid}"
   hi.abstract    = 'abstract'
   hi.contact     = 'contact'
@@ -45,7 +47,7 @@ def create_test_item(*args)
   # Save and return a refreshed object.
   f.save
   hi.save
-  puts "Created item: #{hi.pid}"
+  puts "Created item: user=#{user} pid=#{hi.pid}"
   return Hydrus::Item.find(hi.pid)
 end
 
@@ -96,8 +98,8 @@ def help(msg = nil)
   rrf = "rails runner #{__FILE__}"
   puts <<-EOS.gsub(/^ {4}/, '')
     Usage:
-        #{rrf} collection    [--publish]
-        #{rrf} item COLL_PID [--publish] [--approve | --disapprove]
+        #{rrf} collection [USER] [--publish]
+        #{rrf} item COLL_PID [USER] [--publish] [--approve | --disapprove]
         #{rrf} batch [c|cp|i|ip|ia|id]...
         #{rrf} batch # Uses defaults.
         #{rrf} help
