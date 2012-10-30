@@ -180,18 +180,6 @@ class Hydrus::Item < Hydrus::GenericObject
       :include_root_xml => false)
   end
 
-  def status
-    if is_published 
-      return "published"
-    elsif is_disapproved
-      return "item returned"      
-    elsif is_awaiting_approval
-      return "waiting for approval"
-    else
-      return "draft"
-    end
-  end
-  
   # Returns true only if the Item has an open Collection.
   def collection_is_open
     c = collection

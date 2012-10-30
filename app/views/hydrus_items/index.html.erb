@@ -36,7 +36,7 @@
               <td><%= item_title_link(item) %></td>
               <td><%= item.item_depositor_id %></td>
               <!-- <td><%#= item.object_type %></td> -->
-              <td><%= item.status %></td>
+              <td><%= item.status_label %></td>
               <td><%= item.files.size %></td>
               <td><%= hydrus_format_date(item.deposit_time) %></td>
             </tr>

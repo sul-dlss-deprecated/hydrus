@@ -98,6 +98,11 @@ class Hydrus::GenericObject < Dor::Item
     return object_status[0..8] == 'published'
   end
 
+  # Returns true if the object status is currently returned-by-reviewer.
+  def is_disapproved
+    return object_status == 'returned'
+  end
+
   # Returns true if the object can be submitted for approval:
   # a valid draft object that actually requires human approval.
   def can_be_submitted_for_approval
@@ -198,6 +203,22 @@ class Hydrus::GenericObject < Dor::Item
     }
   end
 
+  # Returns a human readable label corresponding to the object status.
+  def status_label
+    h = {
+      # Applies to both types of objects.
+      'draft'             => "draft",
+      # Applies to collections.
+      'published_open'    => "published",
+      'published_closed'  => "published",
+      # Applies to items.
+      'awaiting_approval' => "waiting for approval",
+      'returned'          => "item returned",
+      'published'         => "published",
+    }
+    return h[object_status]
+  end
+  
   # Registers an object in Dor, and returns it.
   def self.register_dor_object(*args)
     params = self.dor_registration_params(*args)
@@ -269,13 +290,6 @@ class Hydrus::GenericObject < Dor::Item
     self.disapproval_reason = reason
     events.add_event('hydrus', @current_user, "Item returned: #{reason}")
     send_object_returned_email_notification
-  end
-
-  # Returns true if there is a non-blank disapproval_reason.
-  def is_disapproved
-    return false if is_published
-    return false unless to_bool(requires_human_approval)
-    return !disapproval_reason.blank?
   end
 
   # Returns value of Dor::Config.hydrus.start_common_assembly.

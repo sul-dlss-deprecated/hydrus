@@ -5,7 +5,7 @@
 	  	<li><span class="divider">/</span> <%= truncate(@document_fedora.title) %></li>
 	  <% else %>
 			<li><span class="divider">/</span> <%= link_to truncate(@document_fedora.collection.title), hydrus_collection_path(@document_fedora.collection)%> </li>
-			<li><span class="divider">/</span> <%= "#{truncate(@document_fedora.title)} (#{@document_fedora.status})"%></li>
+			<li><span class="divider">/</span> <%= "#{truncate(@document_fedora.title)} (#{@document_fedora.status_label})"%></li>
 		<% end %>
 	<% end %>
 </ul>

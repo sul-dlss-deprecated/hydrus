@@ -488,20 +488,6 @@ describe Hydrus::Item do
     @hi.tracked_fields.should be_an_instance_of(Hash)
   end
 
-  it "status()" do
-    @hi.stub(:requires_human_approval).and_return("no")
-    @hi.stub(:is_published).and_return(true)
-    @hi.status.should == 'published'
-    @hi.stub(:is_published).and_return(false)
-    @hi.stub(:is_awaiting_approval).and_return(false)
-    @hi.status.should == 'draft'
-    @hi.stub(:is_awaiting_approval).and_return(true)
-    @hi.status.should == 'waiting for approval'
-    @hi.stub(:requires_human_approval).and_return("yes")
-    @hi.stub(:disapproval_reason).and_return('it is crappola')
-    @hi.status.should == 'item returned'
-  end
-
   it "is_destroyable() should return the negative of is_published" do
     @hi.stub(:is_published).and_return(false)
     @hi.is_destroyable.should == true

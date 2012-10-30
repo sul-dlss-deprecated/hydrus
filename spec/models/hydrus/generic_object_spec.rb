@@ -593,4 +593,17 @@ describe Hydrus::GenericObject do
     go.is_collection?.should == false
   end
 
+  it "can exercise status_label()" do
+    tests = {
+      'draft'          => 'draft',
+      'published_open' => 'published',
+      'published'      => 'published',
+      'returned'       => 'item returned',
+    }
+    tests.each do |status, exp|
+      @go.stub(:object_status).and_return(status)
+      @go.status_label.should == exp 
+    end
+  end
+
 end

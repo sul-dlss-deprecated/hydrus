@@ -108,7 +108,6 @@ Unify our handling of object status.
 
   Implementation plan:
 
-    -- Remove the Item.status method and tests.
     -- Switch dashboard to use hydrusProperties instead of workflow.
     -- Delete/replace workflow_ds_extension and tests.
     -- Stop using workflow for submit_time, etc.

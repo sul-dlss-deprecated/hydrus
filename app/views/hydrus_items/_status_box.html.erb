@@ -1,7 +1,7 @@
  <div class="well item-status">
    <div class="box-header">
 			<span>Status</span>
-				<span id="status-label" class="label label-<%=button_color(@document_fedora.status)%> status-label"><%=@document_fedora.status.capitalize%></span>
+				<span id="status-label" class="label label-<%=button_color(@document_fedora.status_label)%> status-label"><%=@document_fedora.status_label.capitalize%></span>
    </div>
 	 <div class="box-body">
 	 	<% unless @document_fedora.is_published %>
