@@ -1,3 +1,24 @@
+-------------
+November 2012
+-------------
+* File Level Restrictions
+ 	- support for file level licenses - entered as a description for now, need to adjust DOR data model later
+ 	- support hiding of files, which means setting preserve=true, publish=false, shelve=false
+ 	- add an option to simply hide all the files
+* Items 
+	- Reserving a PURL - show the DRUID of an item as soon as it is created so that users can see what this link will be
+	- Allow user to enter custom terms of use by collection or item
+* Collections
+	- Add a "Save and Open Deposit" button
+* Integration with DOR/PURL
+	- Refactor object status and fix state machine
+	- Set up production VM and deploy to production
+	- Allow deletion of non published items
+	- Create real APO
+	- Debug rightsmetadata problems.
+	- Try and get an item to PURL page.
+
+
 --------------
 October 2012
 --------------
@@ -16,7 +37,7 @@ October 2012
 - Email notifications when users are invited to add to a collection. [done]
 
 * Integration with DOR/PURL
-- Connect hydrus-test to dor-test with local solr
+- Connect hydrus-test to dor-test with local solr [done]
 - Set up ActiveMQ listener.
 - Check file system mounts for uploaded files. [done]
 - Run full integration tests with robots and see if objects make it to PURL. Debug.
@@ -26,7 +47,7 @@ October 2012
 * Technical debt
 - Fix Javascript and multi-valued field glitches on Item edit page.
 - Deploy to Hydrus-test with own Fedora. [done]
-- Improve tests on Embargo Dates 
+- Improve tests on Embargo Dates [done]
 - Add a local listener so that developers can advance workflow state and have
-  it reflected in local solr
+  it reflected in local solr [NOT NEEDED ANYMORE]
 
