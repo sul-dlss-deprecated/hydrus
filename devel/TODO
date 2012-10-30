@@ -149,6 +149,21 @@ we distinguish between different item types.
 
 Move datastreams to a subdirectory, which is conventional in hydra projects.
 
+Support delete action.
+
+Gryphondor for Hydrus objects.
+
+File-level licensing.
+
+Reserving a PURL.
+
+PURL display of Hydrus objects.
+
+Ability to hide files: individually or for entire object..
+
+Custom terms of use.
+
+
 ****************
 WAITING
 ****************
