@@ -93,14 +93,17 @@ class Hydrus::GenericObject < Dor::Item
   end
 
   def is_submitted
+    # return object_status != 'draft'
     workflow_step_is_done('submit')
   end
 
   def is_submitted_for_approval
+    # return object_status == 'awaiting_approval'
     return (is_submitted and !workflow_step_is_done('approve'))
   end
 
   def is_approved
+    # return object_status[0..8] == 'published'
     return (is_submitted and workflow_step_is_done('approve'))
   end
 
@@ -238,14 +241,16 @@ class Hydrus::GenericObject < Dor::Item
   # additional calls will be made to the workflow service to begin that
   # process as well. In that case, we also generate content metadata.
   def do_approve
+    # If collection and already approved, return??
+    # TODO
+
     # Approve.
     isi = is_item?
+    rha = to_bool(requires_human_approval)
     complete_workflow_step('approve')
     self.object_status = 'published' if isi
     hydrusProperties.remove_nodes(:disapproval_reason)
-    if isi and to_bool(requires_human_approval)
-      events.add_event('hydrus', @current_user, "#{hydrus_class_to_s()} approved")
-    end
+    events.add_event('hydrus', @current_user, "Item approved") if isi && rha
     # Start common assembly.
     if should_start_common_assembly
       update_content_metadata if isi
@@ -284,6 +289,7 @@ class Hydrus::GenericObject < Dor::Item
   # Takes the name of a step in the Hydrus workflow.
   # Calls the workflow service to mark that step as completed.
   def complete_workflow_step(step)
+    return if workflow_step_is_done(step)
     awf = Dor::Config.hydrus.app_workflow
     Dor::WorkflowService.update_workflow_status('dor', pid, awf, step, 'completed')
     workflows_content_is_stale

@@ -219,12 +219,23 @@ describe Hydrus::GenericObject do
       @go.workflow_step_is_done('submit').should        == false
     end
 
-    it "can exercise complete_workflow_step(), stubbed" do
-      step = 'submit'
-      args = ['dor', @go.pid, kind_of(Symbol), step, 'completed']
-      Dor::WorkflowService.should_receive(:update_workflow_status).with(*args)
-      @go.should_receive(:workflows_content_is_stale)
-      @go.complete_workflow_step(step)
+    describe "complete_workflow_step()" do
+      
+      it "should do nothing if the step is already completed" do
+        Dor::WorkflowService.should_not_receive(:update_workflow_status)
+        @go.stub(:workflow_step_is_done).and_return(true)
+        @go.complete_workflow_step('foo')
+      end
+
+      it "can exercise the method, stubbing out call to WF service" do
+        step = 'submit'
+        args = ['dor', @go.pid, kind_of(Symbol), step, 'completed']
+        Dor::WorkflowService.should_receive(:update_workflow_status).with(*args)
+        @go.stub(:workflow_step_is_done).and_return(false)
+        @go.should_receive(:workflows_content_is_stale)
+        @go.complete_workflow_step(step)
+      end
+
     end
 
     it "can exercise workflows_content_is_stale, stubbed" do

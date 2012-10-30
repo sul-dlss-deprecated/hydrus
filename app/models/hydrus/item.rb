@@ -92,6 +92,7 @@ class Hydrus::Item < Hydrus::GenericObject
     rha                = to_bool(requires_human_approval)
     s                  = 'submit'
     self.object_status = rha ? 'awaiting_approval' : 'published'
+    # unless is_submitted()
     unless workflow_step_is_done(s)
       complete_workflow_step(s)
       if rha

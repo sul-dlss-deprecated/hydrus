@@ -34,25 +34,24 @@ describe Hydrus::Collection do
       @hc.stub(:apo).and_return(apo)
     end
     
-    it "publish(no) should set deposit_status to closed, and add an event" do
+    it "publish(no) should set status to closed, and add an event" do
       @hc.apo.deposit_status.should == ''
       @hc.get_hydrus_events.size.should == 0
-      @hc.should_not_receive(:workflow_step_is_done)
+      @hc.should_not_receive(:approve)
       @hc.publish('no')
       @hc.apo.deposit_status.should == 'closed'
       @hc.get_hydrus_events.size.should > 0
     end
     
-    it "if already published, should set titles but not call approve" do
+    it "publish(yes) should set status to open, add event, call approve" do
       hc_title      = 'blah blah blah'
       apo_title     = "APO for #{hc_title}"
       @hc.title     = hc_title
       @hc.apo.title = apo_title
       @hc.apo.deposit_status.should == ''
       @hc.get_hydrus_events.size.should == 0
-      @hc.stub(:workflow_step_is_done).and_return(true)
-      @hc.should_not_receive(:approve)
-      @hc.should_not_receive(:complete_workflow_step)
+      @hc.should_receive(:complete_workflow_step).once
+      @hc.should_receive(:approve).once
       @hc.publish('yes')
       @hc.apo.deposit_status.should == 'open'
       @hc.get_hydrus_events.size.should > 0
@@ -61,15 +60,6 @@ describe Hydrus::Collection do
       @hc.identityMetadata.objectLabel.should     == [hc_title]
       @hc.label.should                            == hc_title
       @hc.apo.label.should                        == apo_title
-    end
-    
-    it "if not published, should call approve" do
-      @hc.stub(:workflow_step_is_done).and_return(false)
-      @hc.should_receive(:approve)
-      @hc.should_receive(:complete_workflow_step)
-      @hc.publish('yes')
-      @hc.apo.deposit_status.should == 'open'
-      @hc.get_hydrus_events.size.should > 0
     end
     
   end

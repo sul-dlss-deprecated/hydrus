@@ -110,11 +110,8 @@ class Hydrus::Collection < Hydrus::GenericObject
       # If needed, advance the workflow to record that the object has been published.
       # At this time we can also approve the collection, because collections never
       # require human approval, even when their items do.
-      s = 'submit'
-      unless workflow_step_is_done(s)
-        complete_workflow_step(s)
-        approve()
-      end
+      complete_workflow_step('submit')
+      approve()
     else
       # Close the collection.
       apo.deposit_status = 'closed'
