@@ -84,7 +84,7 @@ class Hydrus::GenericObject < Dor::Item
 
   # Returns true if the object is waiting for approval by a reviewer.
   # Note that collections are never in this state.
-  def is_submitted_for_approval
+  def is_awaiting_approval
     return object_status == 'awaiting_approval'
   end
 

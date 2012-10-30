@@ -185,7 +185,7 @@ class Hydrus::Item < Hydrus::GenericObject
       return "published"
     elsif is_disapproved
       return "item returned"      
-    elsif is_submitted_for_approval
+    elsif is_awaiting_approval
       return "waiting for approval"
     else
       return "draft"

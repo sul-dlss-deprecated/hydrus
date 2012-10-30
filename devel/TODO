@@ -62,7 +62,12 @@ Integration tests for role-protection and gated discovery:
 
 Unify our handling of object status.
 
-  object_status and workflow states
+  Write documentation
+
+    - Never consult workflows for information. The Hydrus app can advance the
+      hydrusAssemblyWF to the next state, but nothing more.
+
+    - object_status and workflow states:
 
         # Collection.
         draft                      start-deposit
@@ -74,9 +79,6 @@ Unify our handling of object status.
         awaiting_approval          submit
         returned                   "
         published                  approve --> start-assembly
-
-        :collection => %w(draft published_open published_closed),
-        :item       => %w(draft awaiting_approval returned published),
 
   Test backlog
 
@@ -102,14 +104,11 @@ Unify our handling of object status.
       - Modify UI controls accordingly.
       - Set titles/labels only during actualy publishing.
 
-    Rename is_submitted_for_approval() to is_awaiting_approval().
-
     Item: similar refactor of publish().
 
   Implementation plan:
 
-    -- Convert workflow_step_is_done() calls to use object_status() instead.
-
+    -- Remove the Item.status method and tests.
     -- Switch dashboard to use hydrusProperties instead of workflow.
     -- Delete/replace workflow_ds_extension and tests.
     -- Stop using workflow for submit_time, etc.
@@ -153,20 +152,6 @@ Unify our handling of object status.
         def resubmit
         def publish
         def collection_is_open
-
-  1. For all app logic, refer to hydrusProperties, not workflow,
-     to determine object state. Unlike workflow, these steps
-     are not one-way: the object can toggle back and forth
-     between awaiting_approval and returned.
-
-  2. As the object advances through the process, we will advance
-     the workflow (as we are currently doing), but the app will
-     never consult the workflow XML for any information about state.
-     The workflow states will remain as they are now. In effect,
-     workflow XML is write (or advance), but never read.
-
-  3. Get rid of the to_solr code in WorkflowDsExtension. Instead
-     we need to make sure that hydrusProperties is solrized as needed.
 
 Search results: display these fields: title; depositor; object type; object
 status; date added. [waiting on work to unify handling of object status]

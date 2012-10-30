@@ -31,7 +31,7 @@
 			</label>
 
 			<% if to_bool(@document_fedora.requires_human_approval) %>
-				<%=check_box_tag 'item_submitted_approval_checkbox', true, @document_fedora.is_submitted_for_approval, :disabled=>true%> 
+				<%=check_box_tag 'item_submitted_approval_checkbox', true, @document_fedora.is_awaiting_approval, :disabled=>true%> 
 				<label for="item_submitted_approval_checkbox">
 					<%= select_status_checkbox_icon(@document_fedora.is_submitted_for_approval) %>
 					Item submitted for approval
