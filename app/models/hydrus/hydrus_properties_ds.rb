@@ -16,9 +16,8 @@ class Hydrus::HydrusPropertiesDS < ActiveFedora::NokogiriDatastream
   
     t.requires_human_approval   :path => 'requiresHumanApproval'
     t.reviewed_release_settings :path => 'reviewedReleaseSettings'
-    t.object_status             :path => 'objectStatus'
+    t.object_status             :path => 'objectStatus', :index_as => [:facetable, :searchable]
     t.disapproval_reason        :path => 'disapprovalReason'
-    
   end
 
   define_template :user do |xml,username,date_accepted|

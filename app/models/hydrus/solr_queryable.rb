@@ -99,7 +99,7 @@ module Hydrus::SolrQueryable
       :rows          => 0,
       :fl            => '',
       :facet         => true,
-      :'facet.pivot' => 'is_member_of_s,hydrus_wf_status_facet',
+      :'facet.pivot' => 'is_member_of_s,object_status_facet',
       :q             => '*',
       :fq            => [ %Q<is_member_of_s:(#{imo})> ],
     }

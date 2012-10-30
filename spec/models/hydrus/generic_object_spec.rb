@@ -618,4 +618,11 @@ describe Hydrus::GenericObject do
     end
   end
 
+  it "can exercise Hydrus::GenericObject.status_labels()" do
+    tests = [:collection, :item]
+    tests.each do |k|
+      Hydrus::GenericObject.status_labels(k).should be_instance_of Hash
+    end
+  end
+
 end

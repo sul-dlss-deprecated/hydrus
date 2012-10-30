@@ -388,29 +388,27 @@ class Hydrus::Collection < Hydrus::GenericObject
   end
 
   # Takes an array of APO druids.
-  # Returns an arra of druids for the Collections governed by those APOs.
+  # Returns an array of druids for the Collections governed by those APOs.
   def self.collections_of_apos(apo_pids)
     h           = squery_collections_of_apos(apo_pids)
     resp, sdocs = issue_solr_query(h)
     return get_druids_from_response(resp)
   end
 
+  # Returns a hash with all Item object_status values as the
+  # keys and zeros as the values.
   def self.initial_item_counts
-    return {
-      "published"        => 0,
-      "waiting_approval" => 0,
-      "draft"            => 0,
-    }
+    return Hash[ status_labels(:item).keys.map { |s| [s,0]  } ]
   end
 
   # Takes an array of Collection druids.
-  # Returns a hash of item counts, broken down by workflow status.
+  # Returns a hash of item counts, broken down by object status.
   def self.item_counts_of_collections(coll_pids)
     # Initalize the hash of item counts.
     counts = Hash[ coll_pids.map { |cp| [cp, initial_item_counts()] } ]
 
     # Run SOLR query to get items counts.
-    h           = squery_item_counts_of_collections(counts.keys)
+    h = squery_item_counts_of_collections(counts.keys)
     resp, sdocs = issue_solr_query(h)
 
     # Extract needed counts from SOLR response and put them into to the hash.
@@ -449,6 +447,10 @@ class Hydrus::Collection < Hydrus::GenericObject
   # Written as a separate method for testing purposes.
   def self.get_facet_counts_from_response(resp)
     return resp.facet_counts['facet_pivot'].values.first
+  end
+
+  def item_counts_with_labels
+    return item_counts.map { |s, n| [n, Hydrus::GenericObject.status_label(:item, s)] }
   end
 
 end

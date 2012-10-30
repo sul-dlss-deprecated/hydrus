@@ -398,7 +398,9 @@ describe Hydrus::Collection do
     end
 
     it "can exercise initial_item_counts()" do
-      @HC.initial_item_counts().should be_instance_of(Hash)
+      h = @HC.initial_item_counts()
+      h.should be_instance_of(Hash)
+      h.values.should == [0,0,0,0]
     end
 
     it "can exercise methods returning APO and Collection druids" do
@@ -428,19 +430,22 @@ describe Hydrus::Collection do
     it "item_counts_of_collections()" do
       exp = {
         "druid:xx000xx0001" => {
-          "draft"            => 1,
-          "waiting_approval" => 2,
-          "published"        => 3,
+          "draft"             => 1,
+          "awaiting_approval" => 2,
+          "returned"          => 3,
+          "published"         => 4,
         },
         "druid:xx000xx0002" => {
-          "draft"            => 14,
-          "waiting_approval" => 15,
-          "published"        => 16,
+          "draft"             => 14,
+          "awaiting_approval" => 15,
+          "returned"          => 16,
+          "published"         => 17,
         },
         "druid:xx000xx0003" => {
-          "draft"            => 0,
-          "waiting_approval" => 0,
-          "published"        => 0,
+          "draft"             => 0,
+          "awaiting_approval" => 0,
+          "returned"          => 0,
+          "published"         => 0,
         },
       }
       coll_pids = exp.keys
@@ -448,17 +453,19 @@ describe Hydrus::Collection do
         {
           "value" => "info:fedora/#{coll_pids[0]}",
           "pivot" => [
-            { "value" => "draft",            "count" => 1 },
-            { "value" => "waiting_approval", "count" => 2 },
-            { "value" => "published",        "count" => 3 },
+            { "value" => "draft",             "count" => 1 },
+            { "value" => "awaiting_approval", "count" => 2 },
+            { "value" => "returned",          "count" => 3 },
+            { "value" => "published",         "count" => 4 },
           ],
         },
         {
           "value" => "info:fedora/#{coll_pids[1]}",
           "pivot" => [
-            { "value" => "draft",            "count" => 14 },
-            { "value" => "waiting_approval", "count" => 15 },
-            { "value" => "published",        "count" => 16 },
+            { "value" => "draft",             "count" => 14 },
+            { "value" => "awaiting_approval", "count" => 15 },
+            { "value" => "returned",          "count" => 16 },
+            { "value" => "published",         "count" => 17 },
           ],
         },
       ]

@@ -198,20 +198,37 @@ class Hydrus::GenericObject < Dor::Item
     }
   end
 
-  # Returns a human readable label corresponding to the object status.
-  def status_label
+  # Takes a symbol (:collection or :item).
+  # Returns a hash, with object_status values as keys and
+  # human readable labels as values.
+  def self.status_labels(typ, status = nil)
     h = {
-      # Applies to both types of objects.
-      'draft'             => "draft",
-      # Applies to collections.
-      'published_open'    => "published",
-      'published_closed'  => "published",
-      # Applies to items.
-      'awaiting_approval' => "waiting for approval",
-      'returned'          => "item returned",
-      'published'         => "published",
+      :collection => {
+        'draft'             => "draft",
+        'published_open'    => "published",
+        'published_closed'  => "published",
+      },
+      :item       => {
+        'draft'             => "draft",
+        'awaiting_approval' => "waiting for approval",
+        'returned'          => "item returned",
+        'published'         => "published",
+      },
     }
-    return h[object_status]
+    return status ? h[typ] : h[typ]
+  end
+  
+  # Takes an object status value.
+  # Returns its corresponding label.
+  def self.status_label(typ, status)
+    return status_labels(typ)[status]
+  end
+  
+  # Returns a human readable label corresponding to the object's status.
+  def status_label
+    h1 = Hydrus::GenericObject.status_labels(:collection)
+    h2 = Hydrus::GenericObject.status_labels(:item)
+    return h1.merge(h2)[object_status]
   end
   
   # Registers an object in Dor, and returns it.

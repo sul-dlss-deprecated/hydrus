@@ -31,7 +31,7 @@
           	<% end %>
 					</td>
           <td>
-            <%= c.item_counts.collect {|state,num| "#{num} #{state.gsub('_',' ')}"}.join(', ') %>
+            <%= c.item_counts_with_labels.map { |n, lab| "#{n} #{lab}" }.join('; ') %>
           </td>
         </tr> 
         <% end %>

@@ -37,30 +37,10 @@ Update to latest dor-services-gem:
   - remove hydrusWF workflow definition from APO
 	- Set up WF object (currently oo000oo0099) on test/prod/dev as needed
 
---------
-Misc implementation tasks
---------
 
-Stub out workflow calls in unit and integration tests that create objects with
-the "fake" PID, so that we don't run into random test failures.
-
-Bundle update OM.
-
-Look into rightsMD: what rightsMD should our objects contain?
-
-Redirect unauthenticated users back to the page they were trying to view after
-logging in.
-
-Integration tests for role-protection and gated discovery:
-  Collection:
-    open collection
-    discard collection
-    close collection
-    add new Item
-  Item:
-    submit for approval
-
-Unify our handling of object status.
+-----------------------------------
+Unify our handling of object status
+-----------------------------------
 
   Write documentation
 
@@ -89,6 +69,8 @@ Unify our handling of object status.
     Item.create: check object_status
     Coll.publish: check object_status
     can_be_submitted_for_approval
+    self.status_label(typ, status)
+    item_counts_with_labels
 
   refactor
 
@@ -115,7 +97,6 @@ Unify our handling of object status.
 
   Implementation plan:
 
-    -- Switch dashboard to use hydrusProperties instead of workflow.
     -- Delete/replace workflow_ds_extension and tests.
     -- Stop using workflow for submit_time, etc.
         submit_time
@@ -125,6 +106,30 @@ Unify our handling of object status.
         workflow_step_is_done
         workflows
         get_workflow_step
+
+
+--------
+Misc implementation tasks
+--------
+
+Stub out workflow calls in unit and integration tests that create objects with
+the "fake" PID, so that we don't run into random test failures.
+
+Bundle update OM.
+
+Look into rightsMD: what rightsMD should our objects contain?
+
+Redirect unauthenticated users back to the page they were trying to view after
+logging in.
+
+Integration tests for role-protection and gated discovery:
+  Collection:
+    open collection
+    discard collection
+    close collection
+    add new Item
+  Item:
+    submit for approval
 
 Search results: display these fields: title; depositor; object type; object
 status; date added. [waiting on work to unify handling of object status]
