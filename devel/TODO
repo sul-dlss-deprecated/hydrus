@@ -80,6 +80,9 @@ Unify our handling of object status.
         returned                   "
         published                  approve --> start-assembly
 
+  Make sure publish(), approve(), etc are guarded at the model not, not just
+  at the UI level.
+
   Test backlog
 
     Coll.create: check object_status
@@ -93,6 +96,7 @@ Unify our handling of object status.
       is_published
       is_publishable
       is_approved
+      is_disapproved
 
     Can we delete is_approved and its tests?
 
@@ -106,6 +110,9 @@ Unify our handling of object status.
 
     Item: similar refactor of publish().
 
+    See APO: is_open and related methods. Seems out of sync with new code.
+    The method is also in Collection.
+
   Implementation plan:
 
     -- Switch dashboard to use hydrusProperties instead of workflow.
@@ -118,39 +125,6 @@ Unify our handling of object status.
         workflow_step_is_done
         workflows
         get_workflow_step
-
-  Relevant methods
-
-      Hydrus::Publishable
-
-      collection
-        def is_destroyable
-        def publish           # open/close
-        def is_open
-
-      generic_object
-        def is_approvable
-        def is_destroyable
-        def is_published
-        def is_submitted
-        def is_submitted_for_approval
-        def is_approved
-        def publish=
-        def approve=
-        def resubmit=
-        def approve
-        def do_approve
-        def do_disapprove
-        def is_disapproved
-        def complete_workflow_step
-        def submit_time
-        def deposit_time
-        def publish_lifecycle_time
-
-      item
-        def resubmit
-        def publish
-        def collection_is_open
 
 Search results: display these fields: title; depositor; object type; object
 status; date added. [waiting on work to unify handling of object status]

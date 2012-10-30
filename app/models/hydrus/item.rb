@@ -115,6 +115,11 @@ class Hydrus::Item < Hydrus::GenericObject
     end
   end
 
+  # Returns true only if the Item is unpublished.
+  def is_destroyable
+    return not(is_published)
+  end
+
   # Returns the Item's Collection.
   def collection
     cs = super       # Get all collections.
@@ -126,23 +131,21 @@ class Hydrus::Item < Hydrus::GenericObject
     collection.requires_human_approval
   end
     
-  #################################
-  # methods used to build sidebar
-
+  # method used to build sidebar
   def files_uploaded?
     validate! ? true : !errors.keys.include?(:files)
   end
 
+  # method used to build sidebar
   def terms_of_deposit_accepted?
     validate! ? true : !errors.keys.include?(:terms_of_deposit)
   end
   
+  # method used to build sidebar
   def reviewed_release_settings?
     validate! ? true : !errors.keys.include?(:release_settings)    
   end
 
-  ###########################
-  
   def base_file_directory
     f = File.join(Rails.root, "public", Hydrus::Application.config.file_upload_path)
     DruidTools::Druid.new(pid, f).path

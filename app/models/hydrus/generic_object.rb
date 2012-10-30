@@ -111,11 +111,6 @@ class Hydrus::GenericObject < Dor::Item
     return validate!
   end
 
-  # Returns true only if the Item is unpublished.
-  def is_destroyable
-    return not(is_published)
-  end
-
   # The controller will call these methods, which we simply forward to
   # the Collection or Item class.
   def publish=(val)  publish(val) end

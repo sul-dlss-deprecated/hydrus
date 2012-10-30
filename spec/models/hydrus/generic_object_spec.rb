@@ -325,33 +325,45 @@ describe Hydrus::GenericObject do
 
     describe "is_disapproved()" do
 
-      it "should always return false for published objects" do
-        @go.stub(:requires_human_approval).and_return('yes')
-        @go.stub(:disapproval_reason).and_return('some reason')
-        @go.stub(:is_published).and_return(true)
-        @go.is_disapproved.should == false
-      end
-
-      it "should always return false for objects not requiring approval" do
-        @go.stub(:requires_human_approval).and_return('no')
-        @go.stub(:disapproval_reason).and_return('some reason')
-        @go.stub(:is_published).and_return(false)
-        @go.is_disapproved.should == false
-      end
-
-      it "should return true if disapproval_reason has length" do
+      it "should return true if object_status is returned" do
         tests = {
-          'blah' => true,
-          ''     => false,
-          nil    => false,
+          'returned'  => true,
+          'published' => false,
+          'blah'      => false,
         }
-        @go.stub(:is_published).and_return(false)
-        @go.stub(:requires_human_approval).and_return('yes')
-        tests.each do |reason, exp|
-          @go.stub(:disapproval_reason).and_return(reason)
+        tests.each do |status, exp|
+          @go.stub(:object_status).and_return(status)
           @go.is_disapproved.should == exp
         end
       end
+
+      # it "should always return false for published objects" do
+      #   @go.stub(:requires_human_approval).and_return('yes')
+      #   @go.stub(:disapproval_reason).and_return('some reason')
+      #   @go.stub(:is_published).and_return(true)
+      #   @go.is_disapproved.should == false
+      # end
+
+      # it "should always return false for objects not requiring approval" do
+      #   @go.stub(:requires_human_approval).and_return('no')
+      #   @go.stub(:disapproval_reason).and_return('some reason')
+      #   @go.stub(:is_published).and_return(false)
+      #   @go.is_disapproved.should == false
+      # end
+
+      # it "should return true if disapproval_reason has length" do
+      #   tests = {
+      #     'blah' => true,
+      #     ''     => false,
+      #     nil    => false,
+      #   }
+      #   @go.stub(:is_published).and_return(false)
+      #   @go.stub(:requires_human_approval).and_return('yes')
+      #   tests.each do |reason, exp|
+      #     @go.stub(:disapproval_reason).and_return(reason)
+      #     @go.is_disapproved.should == exp
+      #   end
+      # end
 
     end
 
