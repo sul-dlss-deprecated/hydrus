@@ -75,18 +75,34 @@ Unify our handling of object status.
         returned                   "
         published                  approve --> start-assembly
 
+        :collection => %w(draft published_open published_closed),
+        :item       => %w(draft awaiting_approval returned published),
+
   Test backlog
 
     Coll.create: check object_status
     Item.create: check object_status
     Coll.publish: check object_status
+    can_be_submitted_for_approval
 
   refactor
+
+    Spec for generic_object: delete commented tests
+      is_published
+      is_publishable
+      is_approved
+
+    Can we delete is_approved and its tests?
+
+    spec for collection
+      tests for valid? do not fit the current code
 
     Collection: refactor publish()
       - Use separately named methods to communicate actual steps: open() and close().
       - Modify UI controls accordingly.
       - Set titles/labels only during actualy publishing.
+
+    Rename is_submitted_for_approval() to is_awaiting_approval().
 
     Item: similar refactor of publish().
 
@@ -94,17 +110,16 @@ Unify our handling of object status.
 
     -- Convert workflow_step_is_done() calls to use object_status() instead.
 
-        x  app/models/hydrus/collection.rb
-        .  app/models/hydrus/generic_object.rb
-        .  app/models/hydrus/item.rb
-        .  app/models/hydrus/workflow_ds_extension.rb   # Will delete/replace.
-           spec/integration/collection_edit_spec.rb
-           spec/models/hydrus/collection_spec.rb
-           spec/models/hydrus/generic_object_spec.rb
-           spec/models/hydrus/item_spec.rb
-
     -- Switch dashboard to use hydrusProperties instead of workflow.
-    -- Delete Hydrus::WorkflowDsExtension
+    -- Delete/replace workflow_ds_extension and tests.
+    -- Stop using workflow for submit_time, etc.
+        submit_time
+        deposit_time
+        publish_lifecycle_time
+    -- Search for:
+        workflow_step_is_done
+        workflows
+        get_workflow_step
 
   Relevant methods
 

@@ -89,19 +89,14 @@ class Hydrus::Item < Hydrus::GenericObject
     self.label                   = title # The label in Fedora's foxml:objectProperties.
     self.save
     # Advance workflow to record that the object has been published.
+    # And auto-approve, unless human review is needed.
     rha                = to_bool(requires_human_approval)
     s                  = 'submit'
-    self.object_status = rha ? 'awaiting_approval' : 'published'
-    # unless is_submitted()
-    unless workflow_step_is_done(s)
-      complete_workflow_step(s)
-      if rha
-        events.add_event('hydrus', @current_user, 'Item submitted for approval')
-      else
-        events.add_event('hydrus', @current_user, "Item published")
-        approve()
-      end
-    end
+    self.object_status = rha ? 'awaiting_approval'      : 'published'
+    msg                = rha ? 'submitted for approval' : 'published'
+    complete_workflow_step(s)
+    approve() unless rha
+    events.add_event('hydrus', @current_user, "Item #{msg}")
   end
 
   # indicates if this item has an accepted terms of deposit, or if the supplied user (logged in user) has accepted a terms of deposit for another item in this collection within the last year

@@ -245,50 +245,71 @@ describe Hydrus::GenericObject do
 
     describe "is_published()" do
 
-      it "should return false when submit step is waiting" do
-        @go.stub(:requires_human_approval).and_return('no')
-        @go.is_published.should == false
+      it "should return true if object status is any flavor of publish" do
+        tests = {
+          'published'         => true,
+          'published_open'    => true,
+          'published_closed'  => true,
+          'draft'             => false,
+          'awaiting_approval' => false,
+        }
+        tests.each do |status, exp|
+          @go.stub(:object_status).and_return(status)
+          @go.is_published.should == exp
+        end
       end
 
-      it "should return true when submit step is completed" do
-        @workflow.find_by_xpath('//process[@name="submit"]').first['status'] = 'completed'
-        @go.stub(:requires_human_approval).and_return('no')
-        @go.is_published.should == true
-      end
+      # it "should return false when submit step is waiting" do
+      #   @go.stub(:requires_human_approval).and_return('no')
+      #   @go.is_published.should == false
+      # end
 
-      it "should not call workflow_step_is_done() a second time" do
-        @go.should_receive(:workflow_step_is_done).once.and_return(false)
-        @go.stub(:requires_human_approval).and_return('no')
-        @go.is_published.should == false
-        @go.is_published.should == false
-      end
+      # it "should return true when submit step is completed" do
+      #   @workflow.find_by_xpath('//process[@name="submit"]').first['status'] = 'completed'
+      #   @go.stub(:requires_human_approval).and_return('no')
+      #   @go.is_published.should == true
+      # end
+
+      # it "should not call workflow_step_is_done() a second time" do
+      #   @go.should_receive(:workflow_step_is_done).once.and_return(false)
+      #   @go.stub(:requires_human_approval).and_return('no')
+      #   @go.is_published.should == false
+      #   @go.is_published.should == false
+      # end
 
     end
 
     describe "is_approved()" do
 
-      it "should return false if item not published yet" do
-        @go.stub(:is_published).and_return(true)
-        @go.is_approved.should == false
+      it "should return value of is_published" do
+        [true, false, true].each do |v|
+          @go.stub(:is_published).and_return(v)
+          @go.is_approved.should == v
+        end
       end
 
-      it "should return true if approved step is completed" do
-        @go.stub(:is_published).and_return(true)
-        @go.stub(:requies_human_approval).and_return('yes')
-        @workflow.find_by_xpath('//process[@name="approve"]').first['status'] = 'completed'
-        @workflow.find_by_xpath('//process[@name="submit"]').first['status'] = 'completed'
-        @go.is_approved.should == true
-      end
+      # it "should return false if item not published yet" do
+      #   @go.stub(:is_published).and_return(true)
+      #   @go.is_approved.should == false
+      # end
+
+      # it "should return true if approved step is completed" do
+      #   @go.stub(:is_published).and_return(true)
+      #   @go.stub(:requies_human_approval).and_return('yes')
+      #   @workflow.find_by_xpath('//process[@name="approve"]').first['status'] = 'completed'
+      #   @workflow.find_by_xpath('//process[@name="submit"]').first['status'] = 'completed'
+      #   @go.is_approved.should == true
+      # end
 
     end
 
-    it "is_publishable() should return the value of valid?" do
-      @go.stub(:requires_human_approval).and_return('no')
-      @go.stub(:pid).and_return('blah')
-      @go.valid?.should == false    # Bad PID.
-      @go.stub(:pid).and_return('druid:oo000oo0001')
-      @go.valid?.should == true     # OK PID.
-    end
+    # it "is_publishable() should return the value of valid?" do
+    #   @go.stub(:requires_human_approval).and_return('no')
+    #   @go.stub(:pid).and_return('blah')
+    #   @go.valid?.should == false    # Bad PID.
+    #   @go.stub(:pid).and_return('druid:oo000oo0001')
+    #   @go.valid?.should == true     # OK PID.
+    # end
 
     it "publish=() should delegate to publish()" do
       v = 9876

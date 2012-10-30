@@ -39,7 +39,7 @@
           <% end %>
 
         <!-- Submit/Publish button. -->
-        <% elsif (@document_fedora.is_publishable || @document_fedora.is_approvable) && can?(:edit, @document_fedora)%>
+        <% elsif (@document_fedora.is_publishable || @document_fedora.can_be_submitted_for_approval) && can?(:edit, @document_fedora)%>
             <p>
               <button type="submit" class="btn btn-small save-edits"
                       name="hydrus_item[publish]" value="true"

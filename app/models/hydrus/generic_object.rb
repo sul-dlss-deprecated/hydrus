@@ -76,35 +76,39 @@ class Hydrus::GenericObject < Dor::Item
     :control_group => 'M')
 
 
-  def is_approvable
-    is_published ? false : (to_bool(requires_human_approval) ? validate! && !is_submitted_for_approval : false)
+  # Returns true if the object is beyond the draft state -- that is,
+  # it has been submitted or gone even farther in the process.
+  def is_submitted
+    return object_status != 'draft'
+  end
+
+  # Returns true if the object is waiting for approval by a reviewer.
+  # Note that collections are never in this state.
+  def is_submitted_for_approval
+    return object_status == 'awaiting_approval'
+  end
+
+  # Not sure why this method is needed?
+  def is_approved
+    return is_published
+  end
+
+  # Returns true if the object status is any flavor of published.
+  def is_published
+    return object_status[0..8] == 'published'
+  end
+
+  # Returns true if the object can be submitted for approval:
+  # a valid draft object that actually requires human approval.
+  def can_be_submitted_for_approval
+    return false unless object_status == 'draft'
+    return false unless to_bool(requires_human_approval)
+    return validate!
   end
 
   # Returns true only if the Item is unpublished.
   def is_destroyable
     return not(is_published)
-  end
-
-  def is_published
-    unless defined?(@is_published)
-      @is_published = to_bool(requires_human_approval) ?  is_approved : is_submitted
-    end
-    return @is_published
-  end
-
-  def is_submitted
-    # return object_status != 'draft'
-    workflow_step_is_done('submit')
-  end
-
-  def is_submitted_for_approval
-    # return object_status == 'awaiting_approval'
-    return (is_submitted and !workflow_step_is_done('approve'))
-  end
-
-  def is_approved
-    # return object_status[0..8] == 'published'
-    return (is_submitted and workflow_step_is_done('approve'))
   end
 
   # The controller will call these methods, which we simply forward to

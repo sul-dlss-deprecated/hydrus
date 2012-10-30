@@ -86,6 +86,7 @@ describe Hydrus::Collection do
       @apo.stub(:is_open).and_return(true)
       @hc.stub(:workflows).and_return(@workflow)
       @hc.stub(:apo).and_return(@apo)
+      @hc.stub(:should_validate).and_return(true)
     end
 
     it "should validate both Collection and its APO, and merge their errors" do
@@ -103,7 +104,9 @@ describe Hydrus::Collection do
     end
 
     it "should return true when both Collection and APO are valid" do
-      @hc.stub(:pid).and_return('druid:tt000tt0001')
+      [:pid, :title, :abstract, :contact].each do |k|
+        @hc.stub(k).and_return('druid:tt000tt0001')
+      end
       @apo.stub(:'valid?').and_return(true)
       @hc.valid?.should == true
     end

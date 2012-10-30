@@ -267,27 +267,38 @@ describe("Collection edit", :type => :request, :integration => true) do
   end
 
   describe "emails" do
+
     describe "when publishing" do
+
       before(:each) do
         @coll = Hydrus::Collection.new
       end
+
       describe "on open" do
+
+        before(:each) do
+          @coll.should_receive(:complete_workflow_step)
+          @coll.should_receive(:approve)
+        end
+
         it "should send an email when there are item depositors" do
           login_as_archivist1
           @coll.apo_person_roles = {:"hydrus-collection-item-depositor" => "jdoe"}
-          @coll.stub(:workflow_step_is_done).and_return(true)
           expect {@coll.publish(true)}.to change { ActionMailer::Base.deliveries.count }.by(1)
           last_email_sent = ActionMailer::Base.deliveries.last
           last_email_sent.to.should == ["jdoe@stanford.edu"]
           last_email_sent.subject.should == "Collection opened for deposit in the Stanford Digital Repository"
         end
+
         it "should not send an email when there are no item depositors" do
           login_as_archivist1
-          @coll.stub(:workflow_step_is_done).and_return(true)
           expect {@coll.publish(true)}.to change { ActionMailer::Base.deliveries.count }.by(0)
         end
+
       end
+
       describe "on close" do
+
         it "should send an email when there are item depositors" do
           login_as_archivist1
           @coll.apo_person_roles = {:"hydrus-collection-item-depositor" => "jdoe"}
@@ -296,11 +307,14 @@ describe("Collection edit", :type => :request, :integration => true) do
           last_email_sent.to.should == ["jdoe@stanford.edu"]
           last_email_sent.subject.should == "Collection closed for deposit in the Stanford Digital Repository"
         end
+
         it "should not send an email when there are no item depositors" do
           login_as_archivist1
           expect {@coll.publish(false)}.to change { ActionMailer::Base.deliveries.count }.by(0)
         end
+
       end      
+
     end
     
     describe "when updating a collection" do

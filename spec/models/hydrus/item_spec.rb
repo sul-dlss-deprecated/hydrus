@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Hydrus::Item do
-  
+
   before(:each) do
     @hi = Hydrus::Item.new
     @workflow_xml = <<-END
@@ -67,7 +67,7 @@ describe Hydrus::Item do
     @hi.embargo_date='1/1/2100'
     @hi.visibility.should == []
   end
-  
+
   it "should be able to add and remove an item from a collection" do
     collection_pid = 'druid:xx99xx9999'
     exp_uri        = "info:fedora/#{collection_pid}"
@@ -96,7 +96,7 @@ describe Hydrus::Item do
       subject.files.should == m
     end
   end
-  
+
   describe "#actors" do
     subject { Hydrus::Item.new }
     let(:descMetadata_xml) { <<-eos
@@ -117,7 +117,7 @@ describe Hydrus::Item do
      eos
     }
     let(:descMetadata) { Hydrus::DescMetadataDS.from_xml(descMetadata_xml) }
-    
+
     before(:each) do
       subject.stub(:descMetadata) { descMetadata }
     end
@@ -154,7 +154,7 @@ describe Hydrus::Item do
       subject.remove_from_collection('collection_pid')
     end
   end
-  
+
   describe "roleMetadata in the item" do
     subject { Hydrus::Item.find('druid:oo000oo0001') }
     it "should have a roleMetadata datastream" do
@@ -201,8 +201,8 @@ describe Hydrus::Item do
     end
 
   end
-  
-  
+
+
   describe "item level APO information" do
     describe "visibility" do
       subject {Hydrus::Item.new}
@@ -251,7 +251,7 @@ describe Hydrus::Item do
           subject.rightsMetadata.read_access.machine.group.include?("stanford").should be_true
         end
       end
-      
+
       describe "future" do
         it "should remove the world read access from rightsMD" do
           subject.embargo = "immediate"
@@ -343,7 +343,7 @@ describe Hydrus::Item do
         end
       end
     end
-    
+
     describe "license() and license=" do
 
       subject {Hydrus::Item.new}
@@ -361,7 +361,7 @@ describe Hydrus::Item do
           subject.stub_chain(:rightsMetadata, :use, :machine).and_return([exp])
           subject.license.should == exp
         end
-        
+
       end
 
       it "should set the human readable version properly" do
@@ -379,9 +379,9 @@ describe Hydrus::Item do
          subject.rightsMetadata.ng_xml.to_s.should match(/type=\"openDataCommons\"/)
       end
 
-    end  
+    end
   end
-        
+
   describe "class methods" do
     it "should provide an array of person roles" do
       Hydrus::Item.person_roles.should be_a Array
@@ -389,7 +389,7 @@ describe Hydrus::Item do
   end
 
   describe "strip_whitespace_from_fields()" do
-    
+
     before(:each) do
       xml = <<-eos
        <mods xmlns="http://www.loc.gov/mods/v3">
@@ -439,7 +439,7 @@ describe Hydrus::Item do
       @hi.valid?.should == false
       @hi.errors.messages.keys.should include(*@exp)
     end
-    
+
     it "should provide an error when the embargo date is out of the collection's embargo range" do
       coll = mock("collection")
       item = Hydrus::Item.new
@@ -455,7 +455,7 @@ describe Hydrus::Item do
       item.errors.messages.should have_key(:embargo_date)
       item.errors.messages[:embargo_date].first.should =~ /must be in the date range \d{2}\/\d{2}\/\d{4} - \d{2}\/\d{2}\/\d{4}/
     end
-    
+
     it "fully populated Item should be valid" do
       dru = 'druid:ll000ll0001'
       @hi.stub(:collection_is_open).and_return(true)
@@ -465,7 +465,7 @@ describe Hydrus::Item do
       @hi.stub_chain([:collection, :embargo_option]).and_return("varies")
       @hi.valid?.should == true
     end
-    
+
   end
 
   it "collection_is_open() should return true only if the Item is in an open Collection" do
@@ -493,15 +493,15 @@ describe Hydrus::Item do
     @hi.stub(:is_published).and_return(true)
     @hi.status.should == 'published'
     @hi.stub(:is_published).and_return(false)
-    @hi.stub(:is_submitted_for_approval).and_return(false)    
+    @hi.stub(:is_submitted_for_approval).and_return(false)
     @hi.status.should == 'draft'
-    @hi.stub(:is_submitted_for_approval).and_return(true)    
-    @hi.status.should == 'waiting for approval'    
-    @hi.stub(:requires_human_approval).and_return("yes")    
-    @hi.stub(:disapproval_reason).and_return('it is crappola')    
-    @hi.status.should == 'item returned'    
+    @hi.stub(:is_submitted_for_approval).and_return(true)
+    @hi.status.should == 'waiting for approval'
+    @hi.stub(:requires_human_approval).and_return("yes")
+    @hi.stub(:disapproval_reason).and_return('it is crappola')
+    @hi.status.should == 'item returned'
   end
-  
+
   it "is_destroyable() should return the negative of is_published" do
     @hi.stub(:is_published).and_return(false)
     @hi.is_destroyable.should == true
@@ -531,37 +531,63 @@ describe Hydrus::Item do
     )
   end
 
-    
+
   describe "publish()" do
 
     # More substantive testing is done at integration level.
 
-    it "if already published, just set titles" do
-      @hi.stub(:workflow_step_is_done).and_return(true)
-      exp_title = 'blah blah blah'
-      @hi.title = exp_title
-      @hi.should_not_receive(:approve)
-      @hi.should_not_receive(:complete_workflow_step)
+    before(:each) do
+      @exp_title = 'blah blah blah'
+      @hi.title = @exp_title
       @hi.stub(:save).and_return(true)
+      @hi.should_receive(:complete_workflow_step)
+      @hi.events.should_receive(:add_event)
+    end
+
+    it "object requires human approval" do
       @hi.stub(:requires_human_approval).and_return('yes')
+      @hi.should_not_receive(:approve)
       @hi.publish
-      @hi.identityMetadata.objectLabel.should == [exp_title]
-      @hi.label.should == exp_title
+      @hi.identityMetadata.objectLabel.should == [@exp_title]
+      @hi.label.should == @exp_title
+      @hi.object_status.should == 'awaiting_approval'
     end
-    
-    it "if not published, should set titles and call approve" do
-      @hi.stub(:workflow_step_is_done).and_return(false)
-      @hi.stub(:requires_human_approval).and_return("no")
-      exp_title = 'blah blah blah'
-      @hi.title = exp_title
-      @hi.should_receive(:complete_workflow_step).with('submit')
+
+    it "object does not require human approval" do
+      @hi.stub(:requires_human_approval).and_return('no')
       @hi.should_receive(:approve)
-      @hi.stub(:save).and_return(true)      
       @hi.publish
-      @hi.identityMetadata.objectLabel.should == [exp_title]
-      @hi.label.should == exp_title
+      @hi.identityMetadata.objectLabel.should == [@exp_title]
+      @hi.label.should == @exp_title
+      @hi.object_status.should == 'published'
     end
-    
+
+    # it "if already published, just set titles" do
+    #   @hi.stub(:workflow_step_is_done).and_return(true)
+    #   exp_title = 'blah blah blah'
+    #   @hi.title = exp_title
+    #   @hi.should_not_receive(:approve)
+    #   @hi.should_not_receive(:complete_workflow_step)
+    #   @hi.stub(:save).and_return(true)
+    #   @hi.stub(:requires_human_approval).and_return('yes')
+    #   @hi.publish
+    #   @hi.identityMetadata.objectLabel.should == [exp_title]
+    #   @hi.label.should == exp_title
+    # end
+
+    # it "if not published, should set titles and call approve" do
+    #   @hi.stub(:workflow_step_is_done).and_return(false)
+    #   @hi.stub(:requires_human_approval).and_return("no")
+    #   exp_title = 'blah blah blah'
+    #   @hi.title = exp_title
+    #   @hi.should_receive(:complete_workflow_step).with('submit')
+    #   @hi.should_receive(:approve)
+    #   @hi.stub(:save).and_return(true)
+    #   @hi.publish
+    #   @hi.identityMetadata.objectLabel.should == [exp_title]
+    #   @hi.label.should == exp_title
+    # end
+
   end
 
   it "should indicate no files have been uploaded yet" do
@@ -571,13 +597,13 @@ describe Hydrus::Item do
   it "should indicate that release settings have not been reviewed yet" do
     @hi.reviewed_release_settings?.should == false
     @hi.reviewed_release_settings="true"
-    @hi.reviewed_release_settings?.should == true    
+    @hi.reviewed_release_settings?.should == true
   end
 
   it "should indicate that terms of deposit have not been accepted yet" do
     @hi.terms_of_deposit_accepted?.should == false
   end
-  
+
   it "should indicate if we do not require terms acceptance if user already accepted terms" do
     @hi.stub(:accepted_terms_of_deposit).and_return(true)
     @hi.requires_terms_acceptance('archivist1').should be false
@@ -585,15 +611,15 @@ describe Hydrus::Item do
 
   it "should indicate if we do require terms acceptance if user has never accepted terms on another item in the same collection" do
     @coll=Hydrus::Collection.new
-    @coll.stub(:users_accepted_terms_of_deposit).and_return({'archivist3'=>'10-12-2008 00:00:00','archivist4'=>'10-12-2009 00:00:05'})    
+    @coll.stub(:users_accepted_terms_of_deposit).and_return({'archivist3'=>'10-12-2008 00:00:00','archivist4'=>'10-12-2009 00:00:05'})
     @hi.stub(:accepted_terms_of_deposit).and_return(false)
     @hi.stub(:collection).and_return(@coll)
     @hi.requires_terms_acceptance('archivist1').should be true
   end
-  
+
   it "should indicate if we do require terms acceptance if user already accepted terms on another item in the same collection, but it was more than 1 year ago" do
     @coll=Hydrus::Collection.new
-    @coll.stub(:users_accepted_terms_of_deposit).and_return({'archivist1'=>'10-12-2008 00:00:00','archivist2'=>'10-12-2009 00:00:05'})    
+    @coll.stub(:users_accepted_terms_of_deposit).and_return({'archivist1'=>'10-12-2008 00:00:00','archivist2'=>'10-12-2009 00:00:05'})
     @hi.stub(:accepted_terms_of_deposit).and_return(false)
     @hi.stub(:collection).and_return(@coll)
     @hi.requires_terms_acceptance('archivist1').should be true
@@ -601,23 +627,23 @@ describe Hydrus::Item do
 
   it "should indicate if we do not require terms acceptance if user already accepted terms on another item in the same collection, and it was less than 1 year ago" do
     @coll=Hydrus::Collection.new
-    @coll.stub(:users_accepted_terms_of_deposit).and_return({'archivist1'=>Time.now - 364.days,'archivist2'=>'10-12-2009 00:00:05'})    
+    @coll.stub(:users_accepted_terms_of_deposit).and_return({'archivist1'=>Time.now - 364.days,'archivist2'=>'10-12-2009 00:00:05'})
     @hi.stub(:accepted_terms_of_deposit).and_return(false)
     @hi.stub(:collection).and_return(@coll)
     @hi.requires_terms_acceptance('archivist1').should be false
   end
-  
+
   it "should accept the terms of deposit for a user" do
     @coll=Hydrus::Collection.new
     @coll.stub(:accept_terms_of_deposit)
-    @hi.stub(:collection).and_return(@coll)   
-    @hi.terms_of_deposit_accepted?.should == false 
+    @hi.stub(:collection).and_return(@coll)
+    @hi.terms_of_deposit_accepted?.should == false
     @hi.accepted_terms_of_deposit.should_not == 'true'
     @hi.accept_terms_of_deposit('archivist1')
     @hi.accepted_terms_of_deposit.should == 'true'
     @hi.terms_of_deposit_accepted?.should == true
   end
-    
+
   it "embargo_date_is_correct_format() should add an error if embargo_date is bogus" do
     k = :embargo_date
     # Valid date.
