@@ -2,7 +2,7 @@
 <foxml:digitalObject VERSION="1.1" PID="druid:oo000oo0002" xmlns:foxml="info:fedora/fedora-system:def/foxml#" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/definitions/1/0/foxml1-1.xsd">
   <foxml:objectProperties>
     <foxml:property NAME="info:fedora/fedora-system:def/model#state" VALUE="Active" />
-    <foxml:property NAME="info:fedora/fedora-system:def/model#label" VALUE="APO for Hydrus SSDS Social Science Data Collection" />
+    <foxml:property NAME="info:fedora/fedora-system:def/model#label" VALUE="APO for SSDS Social Science Data Collection" />
     <foxml:property NAME="info:fedora/fedora-system:def/model#ownerId" VALUE="DOR" />
     <foxml:property NAME="info:fedora/fedora-system:def/model#createdDate" VALUE="2011-07-05T17:12:18.757Z" />
     <foxml:property NAME="info:fedora/fedora-system:def/view#lastModifiedDate" VALUE="2011-07-25T20:32:10.617Z" />
@@ -25,7 +25,7 @@
         <identityMetadata>
           <objectId>druid:oo000oo0002</objectId>
           <objectType>adminPolicy</objectType>
-          <objectLabel>APO for Hydrus SSDS Social Science Data Collection</objectLabel>
+          <objectLabel>APO for SSDS Social Science Data Collection</objectLabel>
           <objectCreator>DOR</objectCreator>
           <otherId name="uuid">cd838e54-9ffd-11e1-bc41-02231e89cef0</otherId>
           <tag>Project : DOR</tag>

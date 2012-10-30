@@ -144,7 +144,7 @@
           </deposit>
           <accessioning>
             <workflow id="accessionWF">
-              <process lifecycle="inprocess" name="start-accession"
+              <process lifecycle="submitted" name="start-accession"
                 status="completed"/>
               <process name="transfer-content" status="waiting"/>
               <process name="descriptive-metadata" status="waiting"/>

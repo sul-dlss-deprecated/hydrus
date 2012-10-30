@@ -2,7 +2,7 @@
 <foxml:digitalObject VERSION="1.1" PID="druid:oo000oo0004" xmlns:foxml="info:fedora/fedora-system:def/foxml#" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/definitions/1/0/foxml1-1.xsd">
   <foxml:objectProperties>
     <foxml:property NAME="info:fedora/fedora-system:def/model#state" VALUE="Active" />
-    <foxml:property NAME="info:fedora/fedora-system:def/model#label" VALUE="SSDS Social Science Data Collection" />
+    <foxml:property NAME="info:fedora/fedora-system:def/model#label" VALUE="Large Network Dataset Collection" />
     <foxml:property NAME="info:fedora/fedora-system:def/model#ownerId" VALUE="DOR" />
     <foxml:property NAME="info:fedora/fedora-system:def/model#createdDate" VALUE="2010-02-25T17:12:18.757Z" />
     <foxml:property NAME="info:fedora/fedora-system:def/view#lastModifiedDate" VALUE="2011-07-25T20:32:10.617Z" />
