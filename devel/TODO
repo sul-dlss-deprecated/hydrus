@@ -30,6 +30,7 @@ marked as 'waiting' instead of 'completed' when the assembly robots are
 completed.  This prevents the accessioning robots from running.
 
 Figure out why the publish robot in test does not actually publish items to the purl page.
+RightsMetadata issue?
 
 Update to latest dor-services-gem:
   - update gemfile

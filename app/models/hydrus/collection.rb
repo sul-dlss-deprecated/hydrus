@@ -179,6 +179,7 @@ class Hydrus::Collection < Hydrus::GenericObject
   
   def save_apo
     apo.label="APO for #{label}"
+    apo.title="APO for #{title}"
     apo.save
   end
 

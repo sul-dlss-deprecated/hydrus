@@ -60,7 +60,8 @@ describe("Collection create", :type => :request, :integration => true) do
     }
     coll.collection_depositor.should == 'archivist1'
     # Check APO.descMetadata.
-    apo.title.should == Dor::Config.hydrus.initial_apo_title
+    apo.title.should == "APO for #{ni.title}"
+    apo.label.should == "APO for Hydrus"
     # Check events.
     exp = [
       /\ACollection created/,
