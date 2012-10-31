@@ -39,9 +39,7 @@ Update to latest dor-services-gem:
 Unify our handling of object status
 -----------------------------------
 
-Wrap up:
-
-  -- Quick review of all relevant methods.
+Wrap up: review of relevant methods.
 
 Refactor
 
@@ -50,6 +48,8 @@ Refactor
     is_submitted
     is_disapproved
     is_open
+
+    And does Collection need is_open?
 
   Can we delete is_approved and its tests?
 
@@ -68,6 +68,8 @@ Refactor
     - Set titles/labels only during actualy publishing.
 
   Item: similar refactor of publish().
+
+  cleanup_usernames(): is this needed?
 
 Test backlog
 

@@ -47,9 +47,10 @@ class Hydrus::GenericObject < Dor::Item
   end
 
   # We override save() so we can control whether editing events are logged.
+  # Note: the no_super option exists purely for unit tests.
   def save(opts = {})
     log_editing_events() unless opts[:no_edit_logging]
-    super() unless opts[:no_super]  # This option is purely for unit testing.
+    super() unless opts[:no_super]
   end
 
   # Lazy initializers for instance variables.
@@ -119,7 +120,6 @@ class Hydrus::GenericObject < Dor::Item
   def resubmit=(val) resubmit(val) end
 
   def object_type
-    # TODO: this is not what we want.
     return identityMetadata.objectType.first
   end
 
