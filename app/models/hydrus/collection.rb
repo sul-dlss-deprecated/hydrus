@@ -75,6 +75,11 @@ class Hydrus::Collection < Hydrus::GenericObject
     return hydrus_items.size > 0
   end
 
+  # Returns true if the collection is open.
+  def is_open
+    return object_status == 'published_open'
+  end
+
   # the users who will receive email notifications when a collection is opened or closed
   def recipients_for_collection_update_emails
     (
@@ -92,7 +97,6 @@ class Hydrus::Collection < Hydrus::GenericObject
   def publish(value)
     if to_bool(value)
       # Open the collection.
-      apo.deposit_status = 'open'
       self.object_status = 'published_open'
       events.add_event('hydrus', @current_user, 'Collection opened')
 
@@ -113,7 +117,6 @@ class Hydrus::Collection < Hydrus::GenericObject
       approve()
     else
       # Close the collection.
-      apo.deposit_status = 'closed'
       self.object_status = 'published_closed'
       events.add_event('hydrus', @current_user, 'Collection closed')
     end
@@ -158,10 +161,6 @@ class Hydrus::Collection < Hydrus::GenericObject
     save
   end
   
-  def is_open
-    return apo.is_open
-  end
-
   def strip_whitespace
      strip_whitespace_from_fields [:title,:abstract,:contact]
   end
@@ -218,10 +217,6 @@ class Hydrus::Collection < Hydrus::GenericObject
 
   def collection_depositor= val
     apo.collection_depositor= val
-  end
-
-  def deposit_status *args
-    apo.deposit_status *args
   end
 
   def embargo *args

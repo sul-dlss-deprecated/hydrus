@@ -200,8 +200,8 @@ class Hydrus::GenericObject < Dor::Item
   end
 
   # Takes a symbol (:collection or :item).
-  # Returns a hash, with object_status values as keys and
-  # human readable labels as values.
+  # Returns a hash of two hash, each having object_status as its
+  # keys and human readable labels as values.
   def self.status_labels(typ, status = nil)
     h = {
       :collection => {
@@ -219,7 +219,7 @@ class Hydrus::GenericObject < Dor::Item
     return status ? h[typ] : h[typ]
   end
 
-  # Takes an object status value.
+  # Takes an object_status value.
   # Returns its corresponding label.
   def self.status_label(typ, status)
     return status_labels(typ)[status]

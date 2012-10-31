@@ -8,13 +8,13 @@ class Hydrus::Item < Hydrus::GenericObject
 
   attr_accessor :embargo
   
-  validate :collection_is_open, :on => :create
+  validate :enforce_collection_is_open, :on => :create
   validates :actors, :at_least_one=>true, :if => :should_validate
   validates :files, :at_least_one=>true, :if => :should_validate
   validate  :must_accept_terms_of_deposit, :if => :should_validate
   validate  :must_review_release_settings, :if => :should_validate
-  # validate  :embargo_date_is_correct_format # TODO
   validate :embargo_date_in_range, :if => :should_validate
+  # validate  :embargo_date_is_correct_format # TODO
 
   setup_delegations(
     # [:METHOD_NAME,               :uniq, :at... ]
@@ -64,10 +64,12 @@ class Hydrus::Item < Hydrus::GenericObject
     item.deposit_time  = Time.now.to_s
     # Add event.
     item.events.add_event('hydrus', user, 'Item created')
-    # Check to see if this user needs to agree again for this new item, if not, indicate agreement has already occured automatically
+    # Check to see if this user needs to agree again for this new item, if not,
+    # indicate agreement has already occured automatically
     if item.requires_terms_acceptance(user.to_s,coll) == false
-      item.accepted_terms_of_deposit="true"
-      item.events.add_event('hydrus', user, 'Terms of deposit accepted due to previous item acceptance in collection')
+      item.accepted_terms_of_deposit = "true"
+      msg = 'Terms of deposit accepted due to previous item acceptance in collection'
+      item.events.add_event('hydrus', user, msg)
     else
       item.accepted_terms_of_deposit="false"      
     end
@@ -86,8 +88,9 @@ class Hydrus::Item < Hydrus::GenericObject
   # Publish the Item.
   def publish(value = nil)
     # At the moment of publication, we refresh various titles.
+    # Note: the label resides in Fedora's foxml:objectProperties.
     identityMetadata.objectLabel = title
-    self.label                   = title # The label in Fedora's foxml:objectProperties.
+    self.label                   = title
     self.save
     # Advance workflow to record that the object has been published.
     # And auto-approve, unless human review is needed.
@@ -185,8 +188,10 @@ class Hydrus::Item < Hydrus::GenericObject
       :include_root_xml => false)
   end
 
-  # Returns true only if the Item has an open Collection.
-  def collection_is_open
+  # A validation used before creating a new Item.
+  # Returns true if the collection is open; otherwise,
+  # returns false and adds a validation error.
+  def enforce_collection_is_open
     c = collection
     return true if c && c.is_open
     errors.add(:collection, "must be open to have new items added")

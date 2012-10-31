@@ -35,11 +35,9 @@ describe Hydrus::Collection do
     end
     
     it "publish(no) should set status to closed, and add an event" do
-      @hc.apo.deposit_status.should == ''
       @hc.get_hydrus_events.size.should == 0
       @hc.should_not_receive(:approve)
       @hc.publish('no')
-      @hc.apo.deposit_status.should == 'closed'
       @hc.get_hydrus_events.size.should > 0
     end
     
@@ -48,12 +46,10 @@ describe Hydrus::Collection do
       apo_title     = "APO for #{hc_title}"
       @hc.title     = hc_title
       @hc.apo.title = apo_title
-      @hc.apo.deposit_status.should == ''
       @hc.get_hydrus_events.size.should == 0
       @hc.should_receive(:complete_workflow_step).once
       @hc.should_receive(:approve).once
       @hc.publish('yes')
-      @hc.apo.deposit_status.should == 'open'
       @hc.get_hydrus_events.size.should > 0
       @hc.apo.identityMetadata.objectLabel.should == [apo_title]
       @hc.apo.title.should                        == apo_title
@@ -90,6 +86,8 @@ describe Hydrus::Collection do
     end
 
     it "should validate both Collection and its APO, and merge their errors" do
+      pending "Will move APO validations to Collection"
+      next
       @hc.valid?.should == false
       es = @hc.errors.messages
       es.should include(:pid, :embargo)
@@ -134,13 +132,17 @@ describe Hydrus::Collection do
     @hc.has_items.should == true
   end
   
-  it "is_open() should delegate to the APO" do
-    apo = double('apo', :is_open => false)
-    @hc.stub(:apo).and_return(apo)
-    @hc.is_open.should == false
-    apo = double('apo', :is_open => true)
-    @hc.stub(:apo).and_return(apo)
-    @hc.is_open.should == true
+  it "is_open() should return true if the collection is open for deposit" do
+    tests = {
+      'published_open' => true,
+      'published'      => false,
+      'draft'          => false,
+      nil              => false,
+    }
+    tests.each do |status, exp|
+      @hc.stub(:object_status).and_return(status)
+      @hc.is_open.should == exp
+    end
   end
   
   describe "invite email" do
@@ -276,7 +278,6 @@ describe Hydrus::Collection do
 
     it "simple getters/setters should forward to APO" do
       methods = %w(
-        deposit_status
         embargo
         embargo=
         embargo_option

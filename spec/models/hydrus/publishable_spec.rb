@@ -13,34 +13,20 @@ describe Hydrus::Publishable do
 
   describe "should_validate()" do
 
-    it "should return true directly if @should_validate is true" do
+    it "should not call is_submitted() when @should_validate is true" do
       obj = MockPublishable.new(true)
-      obj.should_not_receive(:is_published)
+      obj.should_not_receive(:is_submitted)
       obj.should_validate.should == true
     end
-    
-    it "should return value of is_published() when @should_validate is false or nil, and be true then @should_validate is true" do
-      obj = MockPublishable.new(false)
-      obj.should_receive(:is_published).and_return(true)
-      obj.should_validate.should == true      
+
+    it "should return the value of is_submitted() when @should_validate is false" do
       obj = MockPublishable.new(nil)
-      obj.should_receive(:is_published).and_return(false)
-      obj.should_receive(:is_submitted).and_return(false)  
-      obj.should_receive(:is_disapproved).and_return(false)                
-      obj.should_validate.should == false
-      obj = MockPublishable.new(nil)
-      obj.should_receive(:is_published).and_return(false)
-      obj.should_receive(:is_submitted).and_return(true)  
-      obj.should_validate.should == true      
-      obj = MockPublishable.new(nil)
-      obj.should_receive(:is_published).and_return(false)
-      obj.should_receive(:is_submitted).and_return(false)  
-      obj.should_receive(:is_disapproved).and_return(true)                
-      obj.should_validate.should == true
-      obj = MockPublishable.new(true)
-      obj.should_validate.should == true      
+      [false, true, false].each do |exp|
+        obj.stub(:is_submitted).and_return(exp)
+        obj.should_validate.should == exp
+      end
     end
-    
+
   end
 
   describe "is_publishable() should return value of valid?" do

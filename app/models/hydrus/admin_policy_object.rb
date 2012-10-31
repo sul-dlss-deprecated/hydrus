@@ -26,11 +26,12 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
     :label => 'Role Metadata',
     :control_group => 'M')
 
+  # Note: all other APO validation occurs in the Collection class.
   validates :pid, :is_druid => true
-  validates :embargo_option, :presence => true, :if => :should_validate
-  validates :license_option, :presence => true, :if => :should_validate
-  validate  :check_embargo_options, :if => :should_validate
-  validate  :check_license_options, :if => :should_validate
+  # validates :embargo_option, :presence => true, :if => :should_validate
+  # validates :license_option, :presence => true, :if => :should_validate
+  # validate  :check_embargo_options, :if => :should_validate
+  # validate  :check_license_options, :if => :should_validate
 
   setup_delegations(
     # [:METHOD_NAME,          :uniq, :at... ]
@@ -42,7 +43,6 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
       [:collection_depositor, true, :collection_depositor, :person, :identifier],
     ],
     "administrativeMetadata" => [
-      [:deposit_status,       true,  :hydrus, :depositStatus],
       [:embargo,              true,  :hydrus, :embargo],
       [:embargo_option,       true,  :hydrus, :embargo, :option],
       [:license,              true,  :hydrus, :license],
@@ -95,22 +95,6 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
     "apo"
   end
   
-  def is_published
-    return is_open
-  end
-
-  def is_submitted
-    return is_open
-  end
-  
-  def is_disapproved
-    false
-  end
-  
-  def is_open
-    return deposit_status == "open"
-  end
-
   # Returns a hash of info needed for licenses in the APO.
   # Keys correspond to the license_option in the OM terminology.
   # Values are displayed in the web form.

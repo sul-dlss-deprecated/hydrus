@@ -14,7 +14,6 @@ class Hydrus::AdministrativeMetadataDS < ActiveFedora::NokogiriDatastream
     t.root :path => 'administrativeMetadata', :index_as => [:not_searchable]
     t.relationships :index_as => [:not_searchable]
     t.hydrus :index_as => [:not_searchable] do
-      t.depositStatus
       t.reviewRequired
       t.termsOfDeposit
       t.embargo    { t.option :path => {:attribute => 'option'} }
@@ -57,7 +56,6 @@ class Hydrus::AdministrativeMetadataDS < ActiveFedora::NokogiriDatastream
       xml.administrativeMetadata {
         xml.relationships
         xml.hydrus {
-          xml.depositStatus
           xml.reviewRequired
           xml.termsOfDeposit
           xml.embargo

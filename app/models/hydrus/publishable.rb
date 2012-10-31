@@ -1,4 +1,5 @@
 # A mixin for is_publishable() and related methods.
+
 module Hydrus::Publishable
 
   # This method is used to control whether validations are run.
@@ -7,7 +8,9 @@ module Hydrus::Publishable
   # unpublished objects. The @should_validate instance variable
   # provides a mechanism to short-circuit the typical logic.
   def should_validate
-    return (@should_validate || is_published || is_submitted || is_disapproved)
+    return true if @should_validate
+    return true if self.class == Hydrus::AdminPolicyObject
+    return is_submitted
   end
   
   def is_publishable

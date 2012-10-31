@@ -64,6 +64,8 @@ describe Hydrus::AdminPolicyObject do
     end
 
     it "blank slate APO (open) should include all validation errors" do
+      pending "Will move APO validations to Collection"
+      next
       @apo.stub(:should_validate).and_return(true)
       @apo.valid?.should == false
       @apo.errors.messages.keys.should include(*@exp)

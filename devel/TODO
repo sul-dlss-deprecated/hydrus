@@ -33,34 +33,38 @@ RightsMetadata issue?
 Update to latest dor-services-gem:
   - update gemfile
   - remove hydrusWF workflow definition from APO
-	- Set up WF object (currently oo000oo0099) on test/prod/dev as needed
+  - Set up WF object (currently oo000oo0099) on test/prod/dev as needed
 
 -----------------------------------
 Unify our handling of object status
 -----------------------------------
 
-Wrap up: review of relevant methods.
+Refactor and test backlog:
 
-Refactor
+  Shift APO validation to Collection: currently commented out and pending.
 
-  APO: remove deposit_status from the app, and then remove these methods from APO.
-    is_published
-    is_submitted
-    is_disapproved
-    is_open
+  see Hydrus::Publishable and is_publishable
 
-    And does Collection need is_open?
+  Test backlog:
+    Coll.create: check object_status, submit_time, deposit_time
+    Item.create: check object_status, submit_time, deposit_time
+    Coll.publish: check object_status
+    Item.publish: check object_status
+    can_be_submitted_for_approval
+    self.status_label(typ, status)
+    item_counts_with_labels
+    HydrusPropertiesDS: tests for the new terms
 
   Can we delete is_approved and its tests?
 
   purl_page_ready: refactor to use workflow_ds_extension
 
+  GenericObject.url: rename to purl_url.
+
   Move tests for workflow_ds_extension out of gen_obj_spec.
     
   spec for collection
     tests for valid? do not fit the current code
-
-  is_publishable
 
   Collection: refactor publish()
     - Use separately named methods to communicate actual steps: open() and close().
@@ -69,20 +73,16 @@ Refactor
 
   Item: similar refactor of publish().
 
+  Item.create: reverse if logic.
+
+  Item.requires_human_approval: convert to boolean? Maybe not.
+
   cleanup_usernames(): is this needed?
 
-Test backlog
+  Make sure publish(), approve(), etc are guarded at the model, not just at the
+  UI level.
 
-  Coll.create: check object_status, submit_time, deposit_time
-  Item.create: check object_status, submit_time, deposit_time
-  Coll.publish: check object_status
-  Item.publish: check object_status
-  can_be_submitted_for_approval
-  self.status_label(typ, status)
-  item_counts_with_labels
-
-Make sure publish(), approve(), etc are guarded at the model not, not just
-at the UI level.
+  Whitespace.
 
 --------
 Misc implementation tasks
@@ -93,8 +93,6 @@ object_type() in GenericObject.
 
 Stub out workflow calls in unit and integration tests that create objects with
 the "fake" PID, so that we don't run into random test failures.
-
-Bundle update OM.
 
 Look into rightsMD: what rightsMD should our objects contain?
 

@@ -458,7 +458,7 @@ describe Hydrus::Item do
 
     it "fully populated Item should be valid" do
       dru = 'druid:ll000ll0001'
-      @hi.stub(:collection_is_open).and_return(true)
+      @hi.stub(:enforce_collection_is_open).and_return(true)
       @hi.stub(:accepted_terms_of_deposit).and_return(true)
       @hi.stub(:reviewed_release_settings).and_return(true)
       @exp.each { |e| @hi.stub(e).and_return(dru) }
@@ -468,14 +468,14 @@ describe Hydrus::Item do
 
   end
 
-  it "collection_is_open() should return true only if the Item is in an open Collection" do
+  it "enforce_collection_is_open() should return true only if the Item is in an open Collection" do
     n  = 0
     [true, false, nil].each do |stub_val|
       c    = double('collection', :is_open => stub_val)
       exp  = not(not(stub_val))
       n   += 1 unless exp
       @hi.stub(:collection).and_return(c)
-      @hi.collection_is_open.should == exp
+      @hi.enforce_collection_is_open.should == exp
       @hi.errors.size.should == n
     end
   end

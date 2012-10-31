@@ -114,7 +114,6 @@ describe("Collection create", :type => :request, :integration => true) do
     coll.is_destroyable.should == true
     coll.valid?.should == true  # Because unpublished, so validation is limited.
     coll.is_open.should == false
-    apo.is_open.should == false
     # Go back to edit page and fill in required elements.
     should_visit_edit_page(coll)
     fill_in "hydrus_collection_abstract", :with => ni.abstract
@@ -133,7 +132,6 @@ describe("Collection create", :type => :request, :integration => true) do
     coll.is_destroyable.should == true
     coll.valid?.should == true
     coll.is_open.should == false
-    apo.is_open.should == false
     # Open the Collection.
     click_button(open_button)
     find(@alert).should have_content(@notice)
@@ -149,7 +147,6 @@ describe("Collection create", :type => :request, :integration => true) do
     coll.is_destroyable.should == false
     coll.valid?.should == true
     coll.is_open.should == true
-    apo.is_open.should == true
     # Close the Collection.
     click_button(close_button)
     find(@alert).should have_content(@notice)
@@ -165,7 +162,6 @@ describe("Collection create", :type => :request, :integration => true) do
     coll.is_destroyable.should == false
     coll.valid?.should == true
     coll.is_open.should == false
-    apo.is_open.should == false
     # Return to edit page, and try to save Collection with an empty title.
     click_link "Edit Collection"
     fill_in "hydrus_collection_title", :with => ''
@@ -191,7 +187,6 @@ describe("Collection create", :type => :request, :integration => true) do
     coll.is_destroyable.should == false
     coll.valid?.should == true
     coll.is_open.should == true
-    apo.is_open.should == true
     # Check events.
     exp = [
       /\ACollection created/,

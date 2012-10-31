@@ -290,27 +290,6 @@ describe Hydrus::GenericObject do
 
   end
 
-  describe "should_validate()" do
-
-    it "should not call is_published() when @should_validate is true" do
-      @go.instance_variable_set('@should_validate', true)
-      @go.should_not_receive(:is_published)
-      @go.should_validate.should == true
-    end
-
-    it "should return the value of is_published() when @should_validate is false" do
-      [false, true].each do |exp|
-        @go.stub(:requires_human_approval).and_return('no')
-        @go.instance_variable_set('@should_validate', nil)
-        @go.stub(:is_published).and_return(exp)
-        @go.stub(:is_submitted).and_return(false)
-        @go.stub(:is_approved).and_return(false)
-        @go.should_validate.should == exp
-      end
-    end
-
-  end
-
   describe "validations" do
 
     before(:each) do
