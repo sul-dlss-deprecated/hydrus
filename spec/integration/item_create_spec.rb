@@ -55,7 +55,6 @@ describe("Item create", :type => :request, :integration => true) do
     # Check events.
     exp = [
       /\AItem created/,
-      /\AItem modified/, # Visibility. Do not expect this. Refactor of rightsMD might fix.
       /\AItem modified/,
     ]
     es = item.get_hydrus_events
@@ -235,7 +234,6 @@ describe("Item create", :type => :request, :integration => true) do
     # Check events.
     exp = [
       /\AItem created/,
-      /\AItem modified/, # Visibility. Do not expect this. Refactor of rightsMD might fix.
       /\AItem modified/,
       /\AItem modified/,
       /\ATerms of deposit accepted/,
@@ -346,7 +344,6 @@ describe("Item create", :type => :request, :integration => true) do
     # Check events.
     exp = [
       /\AItem created/,
-      /\AItem modified/, # Visibility. Do not expect this. Refactor of rightsMD might fix.
       /\AItem modified/,
       /\AItem modified/,
       /\ATerms of deposit accepted/,

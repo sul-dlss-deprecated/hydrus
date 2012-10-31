@@ -13,7 +13,7 @@ class Hydrus::Item < Hydrus::GenericObject
   validates :files, :at_least_one=>true, :if => :should_validate
   validate  :must_accept_terms_of_deposit, :if => :should_validate
   validate  :must_review_release_settings, :if => :should_validate
-  # validate  :embargo_date_is_correct_format # TODO
+  validate  :embargo_date_is_correct_format # TODO
   validate :embargo_date_in_range, :if => :should_validate
 
   setup_delegations(
@@ -269,17 +269,29 @@ class Hydrus::Item < Hydrus::GenericObject
       rightsMetadata.remove_world_read_access
       rightsMetadata.remove_all_group_read_nodes
       update_access_blocks(embargoMetadata, val)
-      embargoMetadata.release_date = Date.strptime(embargo_date, "%m/%d/%Y")
+      embargoMetadata.release_date = Date.strptime(embargo_date, "%m/%d/%Y") unless embargo_date.blank?
     end
   end
 
   def embargo_date *args
     date = (rightsMetadata.read_access.machine.embargo_release_date *args).first
-    Date.parse(date).strftime("%m/%d/%Y") unless date.blank?
+    unless date.blank?
+      begin
+        Date.parse(date).strftime("%m/%d/%Y") 
+     rescue
+        ""
+      end
+    else 
+       ""
+    end
   end
 
   def embargo_date= val
-    date = val.blank? ? "" : Date.strptime(val, "%m/%d/%Y").to_s
+    begin
+      date = val.blank? ? "" : Date.strptime(val, "%m/%d/%Y").to_s
+    rescue
+      date=""
+    end
     (rightsMetadata.read_access.machine.embargo_release_date= date) unless date.blank?
   end
 
@@ -298,13 +310,14 @@ class Hydrus::Item < Hydrus::GenericObject
   end
 
   def embargo_date_is_correct_format
-    # TODO: This isn't really working when a bad date is entered.
-    # This doesn't end up erroring out and it errors up in embargo_date instead
-    begin
-      Date.strptime(embargo_date, "%m/%d/%Y")
-    rescue ArgumentError
+   # TODO: This isn't really working when a bad date is entered.
+   # This doesn't end up erroring out and it errors up in embargo_date= instead
+   return if embargo_date.blank?
+   begin
+     Date.strptime(embargo_date, "%m/%d/%Y").to_s
+   rescue ArgumentError
       errors.add(:embargo_date, 'must be a valid date')
-    end
+   end
   end
 
   def under_embargo?

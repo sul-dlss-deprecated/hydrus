@@ -40,6 +40,10 @@ Unify our handling of object status
 -----------------------------------
 
 Wrap up: review of relevant methods.
+Fix embargo_date_is_correct_format validation method for items.
+
+Stub out workflow calls in unit and integration tests that create objects with the "fake" PID, so that
+we don't run into random test failures.
 
 Refactor
 

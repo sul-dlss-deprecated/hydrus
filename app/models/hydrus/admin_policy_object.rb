@@ -26,6 +26,12 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
     :label => 'Role Metadata',
     :control_group => 'M')
 
+  has_metadata(
+    :name => "defaultObjectRights",
+    :type => Hydrus::RightsMetadataDS,
+    :label => 'Default Object Rights',
+    :control_group => 'M')
+      
   validates :pid, :is_druid => true
   validates :embargo_option, :presence => true, :if => :should_validate
   validates :license_option, :presence => true, :if => :should_validate
@@ -71,9 +77,15 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
     end
     # Add minimal descMetadata with a title.
     apo.title = dconf.hydrus.initial_apo_title
+    apo.label = apo.title
+    
     # Add roleMetadata with current user as hydrus-collection-manager.
     apo.roleMetadata.add_person_with_role(user, 'hydrus-collection-manager')
     apo.roleMetadata.add_person_with_role(user, 'hydrus-collection-depositor')
+    
+    # create defaultObjectRights datastream
+    apo.defaultObjectRights.ng_xml  
+    
     # Save and return.
     apo.save
     return apo

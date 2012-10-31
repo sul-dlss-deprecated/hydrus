@@ -50,6 +50,7 @@
 		        </tbody>
 		      </table>
 		    </div>
+			  <% end %>
 		
 			 <div class="collection-items">
 			     <h4>Abstract and keywords</h4>
@@ -84,8 +85,65 @@
 		       <% end %>
 		     <% end %>
 		 </div>
-	  
-	  <% end %>
+
+		 <div class="collection-items">
+			 <h4>Release, Visibility and License</h4>
+	    <dt>Visibility</dt>
+			<dd>
+	   <% case @document_fedora.collection.visibility_option_value %>
+	    <% when 'everyone' %>
+	      After its release, this item can be downloaded and discovered by 
+	      <span class="highlight-value">
+	        everyone.
+	      </span>
+	    <% when 'varies' %>
+	      After its release, this item can be downloaded and discovered by <span class="highlight-value"><%= @document_fedora.visibility == ['world'] ? 'anyone' : 'the Stanford community'%></span>.
+	    <% when 'stanford' %>
+	      After its release, this item can be downloaded and discovered by 
+	      <span class="highlight-value">
+	        the Stanford community.
+	      </span>
+	    <% end %>
+		</dd>
+		  <dt>Release</dt>
+			<dd>
+		    <% case @document_fedora.collection.embargo_option %>
+		    <% when 'none' %>
+		      This item will be released for discovery and download 
+		      <span class="highlight-value">
+		        as soon as it is published.
+		      </span>
+		    <% when 'varies' %>
+		      This item will be released for discovery and download 
+					<%= @document_fedora.embargo_date.blank? ? 'immediately' : "on #{@document_fedora.embargo_date}"%>.
+		    <% when 'fixed' %>
+		      This item will be released for discovery and download 
+		      <span class="highlight-value">
+		        <%= @document_fedora.collection.embargo %>
+		        after deposit.
+		      </span>
+		    <% end %>
+		</dd>
+		<dt>License</dt>
+		<dd>
+		<% case @document_fedora.collection.license_option %>
+    <% when 'none' %>
+      No license will be applied to this item. All rights reserved by content creator.
+    <% when 'varies' %>
+      This item will be licensed under 
+      <span class="highlight-value">
+        <%= Hydrus::Collection.license_human(@document_fedora.license) %>.
+      </span>
+    <% when 'fixed' %>
+      This work will be licensed under 
+      <span class="highlight-value">
+        <%= Hydrus::Collection.license_human(@document_fedora.collection.license) %>.
+      </span>
+    <% end %>
+		</dd>
+			</div>
+
+		
   </div> <!-- object-content-wrapper --> 
   	<div id="druid-footer"><%= @document_fedora.pid %></div>
 </div>

@@ -6,7 +6,6 @@ November 2012
  	- support hiding of files, which means setting preserve=true, publish=false, shelve=false
  	- add an option to simply hide all the files
 * Items 
-	- Reserving a PURL - show the DRUID of an item as soon as it is created so that users can see what this link will be
 	- Allow user to enter custom terms of use by collection or item
 * Collections
 	- Add a "Save and Open Deposit" button
