@@ -14,17 +14,19 @@ class Hydrus::GenericObject < Dor::Item
   validates :pid, :is_druid => true
 
   setup_delegations(
-    # [:METHOD_NAME,         :uniq, :at... ]
+    # [:METHOD_NAME,            :uniq, :at... ]
     "descMetadata" => [
-      [:title,               true,  :main_title ],
-      [:abstract,            true   ],
-      [:related_item_title,  false, :relatedItem, :titleInfo, :title],
-      [:related_item_url,    false, :relatedItem, :location, :url],
-      [:contact,             true   ],
+      [:title,                  true,  :main_title ],
+      [:abstract,               true   ],
+      [:related_item_title,     false, :relatedItem, :titleInfo, :title],
+      [:related_item_url,       false, :relatedItem, :location, :url],
+      [:contact,                true   ],
     ],
     "hydrusProperties" => [
-      [:disapproval_reason,  true   ],
-      [:object_status,       true   ],
+      [:disapproval_reason,     true   ],
+      [:object_status,          true   ],
+      [:submit_time,            true   ],
+      [:deposit_time,           true   ],
     ],
   )
 
@@ -43,7 +45,6 @@ class Hydrus::GenericObject < Dor::Item
     # and indicates if this is blank.
     validate! ? true : (errors.keys & REQUIRED_FIELDS).size == 0
   end
-  #################################
 
   # We override save() so we can control whether editing events are logged.
   def save(opts = {})
@@ -217,20 +218,20 @@ class Hydrus::GenericObject < Dor::Item
     }
     return status ? h[typ] : h[typ]
   end
-  
+
   # Takes an object status value.
   # Returns its corresponding label.
   def self.status_label(typ, status)
     return status_labels(typ)[status]
   end
-  
+
   # Returns a human readable label corresponding to the object's status.
   def status_label
     h1 = Hydrus::GenericObject.status_labels(:collection)
     h2 = Hydrus::GenericObject.status_labels(:item)
     return h1.merge(h2)[object_status]
   end
-  
+
   # Registers an object in Dor, and returns it.
   def self.register_dor_object(*args)
     params = self.dor_registration_params(*args)
@@ -279,7 +280,6 @@ class Hydrus::GenericObject < Dor::Item
   # process as well. In that case, we also generate content metadata.
   def do_approve
     # If collection and already approved, return??
-    # TODO
 
     # Approve.
     isi = is_item?
@@ -333,25 +333,6 @@ class Hydrus::GenericObject < Dor::Item
   # resolarized.
   def workflows_content_is_stale
     %w(@content @ng_xml).each { |v| workflows.instance_variable_set(v, nil) }
-  end
-
-  def submit_time
-    s = 'submit'
-    return nil unless workflow_step_is_done(s)
-    return get_workflow_step(s)['datetime']
-  end
-
-  def deposit_time
-    s = 'start-deposit'
-    return nil unless workflow_step_is_done(s)
-    return get_workflow_step(s)['datetime']
-  end
-
-  def publish_lifecycle_time
-    q = "//process[@lifecycle='published']"
-    node = workflows.find_by_xpath(q).first
-    return nil unless (node and node['status'] == 'completed')
-    return node['datetime']
   end
 
   def get_hydrus_events
@@ -417,7 +398,7 @@ class Hydrus::GenericObject < Dor::Item
   def workflow_step_is_done(step)
     return workflows.workflow_step_is_done(step)
   end
-  
+
   def purl_page_ready?
     begin
       Dor::WorkflowService.get_workflow_status('dor', pid, 'accessionWF', 'publish') == 'completed'

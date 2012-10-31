@@ -243,73 +243,26 @@ describe Hydrus::GenericObject do
       @go.workflows_content_is_stale
     end
 
-    describe "is_published()" do
-
-      it "should return true if object status is any flavor of publish" do
-        tests = {
-          'published'         => true,
-          'published_open'    => true,
-          'published_closed'  => true,
-          'draft'             => false,
-          'awaiting_approval' => false,
-        }
-        tests.each do |status, exp|
-          @go.stub(:object_status).and_return(status)
-          @go.is_published.should == exp
-        end
+    it "is_published() should return true if object status is any flavor of publish" do
+      tests = {
+        'published'         => true,
+        'published_open'    => true,
+        'published_closed'  => true,
+        'draft'             => false,
+        'awaiting_approval' => false,
+      }
+      tests.each do |status, exp|
+        @go.stub(:object_status).and_return(status)
+        @go.is_published.should == exp
       end
-
-      # it "should return false when submit step is waiting" do
-      #   @go.stub(:requires_human_approval).and_return('no')
-      #   @go.is_published.should == false
-      # end
-
-      # it "should return true when submit step is completed" do
-      #   @workflow.find_by_xpath('//process[@name="submit"]').first['status'] = 'completed'
-      #   @go.stub(:requires_human_approval).and_return('no')
-      #   @go.is_published.should == true
-      # end
-
-      # it "should not call workflow_step_is_done() a second time" do
-      #   @go.should_receive(:workflow_step_is_done).once.and_return(false)
-      #   @go.stub(:requires_human_approval).and_return('no')
-      #   @go.is_published.should == false
-      #   @go.is_published.should == false
-      # end
-
     end
 
-    describe "is_approved()" do
-
-      it "should return value of is_published" do
-        [true, false, true].each do |v|
-          @go.stub(:is_published).and_return(v)
-          @go.is_approved.should == v
-        end
+    it "is_approved() should return value of is_published" do
+      [true, false, true].each do |v|
+        @go.stub(:is_published).and_return(v)
+        @go.is_approved.should == v
       end
-
-      # it "should return false if item not published yet" do
-      #   @go.stub(:is_published).and_return(true)
-      #   @go.is_approved.should == false
-      # end
-
-      # it "should return true if approved step is completed" do
-      #   @go.stub(:is_published).and_return(true)
-      #   @go.stub(:requies_human_approval).and_return('yes')
-      #   @workflow.find_by_xpath('//process[@name="approve"]').first['status'] = 'completed'
-      #   @workflow.find_by_xpath('//process[@name="submit"]').first['status'] = 'completed'
-      #   @go.is_approved.should == true
-      # end
-
     end
-
-    # it "is_publishable() should return the value of valid?" do
-    #   @go.stub(:requires_human_approval).and_return('no')
-    #   @go.stub(:pid).and_return('blah')
-    #   @go.valid?.should == false    # Bad PID.
-    #   @go.stub(:pid).and_return('druid:oo000oo0001')
-    #   @go.valid?.should == true     # OK PID.
-    # end
 
     it "publish=() should delegate to publish()" do
       v = 9876
@@ -323,80 +276,16 @@ describe Hydrus::GenericObject do
       @go.approve= v
     end
 
-    describe "is_disapproved()" do
-
-      it "should return true if object_status is returned" do
-        tests = {
-          'returned'  => true,
-          'published' => false,
-          'blah'      => false,
-        }
-        tests.each do |status, exp|
-          @go.stub(:object_status).and_return(status)
-          @go.is_disapproved.should == exp
-        end
+    it "is_disapproved() should return true if object_status is returned" do
+      tests = {
+        'returned'  => true,
+        'published' => false,
+        'blah'      => false,
+      }
+      tests.each do |status, exp|
+        @go.stub(:object_status).and_return(status)
+        @go.is_disapproved.should == exp
       end
-
-      # it "should always return false for published objects" do
-      #   @go.stub(:requires_human_approval).and_return('yes')
-      #   @go.stub(:disapproval_reason).and_return('some reason')
-      #   @go.stub(:is_published).and_return(true)
-      #   @go.is_disapproved.should == false
-      # end
-
-      # it "should always return false for objects not requiring approval" do
-      #   @go.stub(:requires_human_approval).and_return('no')
-      #   @go.stub(:disapproval_reason).and_return('some reason')
-      #   @go.stub(:is_published).and_return(false)
-      #   @go.is_disapproved.should == false
-      # end
-
-      # it "should return true if disapproval_reason has length" do
-      #   tests = {
-      #     'blah' => true,
-      #     ''     => false,
-      #     nil    => false,
-      #   }
-      #   @go.stub(:is_published).and_return(false)
-      #   @go.stub(:requires_human_approval).and_return('yes')
-      #   tests.each do |reason, exp|
-      #     @go.stub(:disapproval_reason).and_return(reason)
-      #     @go.is_disapproved.should == exp
-      #   end
-      # end
-
-    end
-
-    describe "submit_time()" do
-
-      it "should return nil if Item is unpublished" do
-        @go.submit_time.should == nil
-      end
-
-      it "should return the datetime of the submit step, but only if step is completed" do
-        # Set datetime of step, but don't complete it.
-        d = '1999-01-01 00:00:01'
-        node = @workflow.find_by_xpath('//process[@name="submit"]').first
-        node['datetime'] = d
-        @go.submit_time.should == nil
-        # Complete the step.
-        node['status'] = 'completed'
-        @go.submit_time.should == d
-      end
-
-    end
-
-    it "publish_lifecycle_time() should return datetime only if published step is completed" do
-      # The publish lifecycle not completed yet.
-      d = '1999-01-01'
-      @go.publish_lifecycle_time().should == nil
-      node = @workflow.find_by_xpath('//process[@lifecycle="published"]').first
-      # Still not completed, even though we have a datetime.
-      node['datetime'] = d
-      @go.publish_lifecycle_time().should == nil
-      # Complete the step.
-      node['status'] = 'completed'
-      @go.publish_lifecycle_time().should == d
     end
 
   end

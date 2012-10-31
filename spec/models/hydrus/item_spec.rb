@@ -548,32 +548,6 @@ describe Hydrus::Item do
       @hi.object_status.should == 'published'
     end
 
-    # it "if already published, just set titles" do
-    #   @hi.stub(:workflow_step_is_done).and_return(true)
-    #   exp_title = 'blah blah blah'
-    #   @hi.title = exp_title
-    #   @hi.should_not_receive(:approve)
-    #   @hi.should_not_receive(:complete_workflow_step)
-    #   @hi.stub(:save).and_return(true)
-    #   @hi.stub(:requires_human_approval).and_return('yes')
-    #   @hi.publish
-    #   @hi.identityMetadata.objectLabel.should == [exp_title]
-    #   @hi.label.should == exp_title
-    # end
-
-    # it "if not published, should set titles and call approve" do
-    #   @hi.stub(:workflow_step_is_done).and_return(false)
-    #   @hi.stub(:requires_human_approval).and_return("no")
-    #   exp_title = 'blah blah blah'
-    #   @hi.title = exp_title
-    #   @hi.should_receive(:complete_workflow_step).with('submit')
-    #   @hi.should_receive(:approve)
-    #   @hi.stub(:save).and_return(true)
-    #   @hi.publish
-    #   @hi.identityMetadata.objectLabel.should == [exp_title]
-    #   @hi.label.should == exp_title
-    # end
-
   end
 
   it "should indicate no files have been uploaded yet" do

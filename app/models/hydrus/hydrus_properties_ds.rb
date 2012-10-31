@@ -18,6 +18,8 @@ class Hydrus::HydrusPropertiesDS < ActiveFedora::NokogiriDatastream
     t.reviewed_release_settings :path => 'reviewedReleaseSettings'
     t.object_status             :path => 'objectStatus', :index_as => [:facetable, :searchable]
     t.disapproval_reason        :path => 'disapprovalReason'
+    t.submit_time               :path => 'submitTime'
+    t.deposit_time              :path => 'depositTime'
   end
 
   define_template :user do |xml,username,date_accepted|

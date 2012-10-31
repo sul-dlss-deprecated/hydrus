@@ -61,6 +61,7 @@ class Hydrus::Item < Hydrus::GenericObject
     item.roleMetadata.add_person_with_role(user, 'hydrus-item-depositor')
     # Set object status.
     item.object_status = 'draft'
+    item.deposit_time  = Time.now.to_s
     # Add event.
     item.events.add_event('hydrus', user, 'Item created')
     # Check to see if this user needs to agree again for this new item, if not, indicate agreement has already occured automatically
@@ -94,6 +95,7 @@ class Hydrus::Item < Hydrus::GenericObject
     s                  = 'submit'
     self.object_status = rha ? 'awaiting_approval'      : 'published'
     msg                = rha ? 'submitted for approval' : 'published'
+    self.submit_time   = Time.now.to_s
     complete_workflow_step(s)
     approve() unless rha
     events.add_event('hydrus', @current_user, "Item #{msg}")

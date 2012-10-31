@@ -37,6 +37,7 @@ class Hydrus::Collection < Hydrus::GenericObject
     coll.embargo_option          = 'none'
     coll.requires_human_approval = 'no'
     coll.license_option          = 'none'
+    coll.deposit_time            = Time.now.to_s
     # Set object status.
     coll.object_status = 'draft'
     # Save and return.
@@ -107,6 +108,7 @@ class Hydrus::Collection < Hydrus::GenericObject
       # If needed, advance the workflow to record that the object has been published.
       # At this time we can also approve the collection, because collections never
       # require human approval, even when their items do.
+      self.submit_time = Time.now.to_s
       complete_workflow_step('submit')
       approve()
     else

@@ -2,12 +2,10 @@
 UI Redesign
 --------
 
-After finishing more thorough UI rework, look at: responsive issues;
+After finishing more thorough UI rework, look at: responsiveness issues;
 accessibility issues.
 
 Update search results page; UI redesign degraded formatting of it.
-
-Make date format consistent (YYYY-MM-DD)
 
 Update SUL-chrome gem to latest Bootstrap (needed to be able to use the
 unchecked checkbox icon, which is not available in our current SUL-chrome gem).
@@ -37,80 +35,75 @@ Update to latest dor-services-gem:
   - remove hydrusWF workflow definition from APO
 	- Set up WF object (currently oo000oo0099) on test/prod/dev as needed
 
-
 -----------------------------------
 Unify our handling of object status
 -----------------------------------
 
-  Write documentation
+Wrap up:
 
-    - Never consult workflows for information. The Hydrus app can advance the
-      hydrusAssemblyWF to the next state, but nothing more.
+  -- Delete/replace workflow_ds_extension and tests.
+  -- Search for:
+      workflow_step_is_done
+      workflows
+      get_workflow_step
+  -- Quick review of all relevant methods.
 
-    - object_status and workflow states:
+Refactor
 
-        # Collection.
-        draft                      start-deposit
-        published_open             submit --> approve --> start-assembly
-        published_closed           "
+  Can we delete is_approved and its tests?
 
-        # Item
-        draft                      start-deposit
-        awaiting_approval          submit
-        returned                   "
-        published                  approve --> start-assembly
+  spec for collection
+    tests for valid? do not fit the current code
 
-  Make sure publish(), approve(), etc are guarded at the model not, not just
-  at the UI level.
+  is_publishable
 
-  Test backlog
+  Collection: refactor publish()
+    - Use separately named methods to communicate actual steps: open() and close().
+    - Modify UI controls accordingly.
+    - Set titles/labels only during actualy publishing.
 
-    Coll.create: check object_status
-    Item.create: check object_status
-    Coll.publish: check object_status
-    can_be_submitted_for_approval
-    self.status_label(typ, status)
-    item_counts_with_labels
+  Item: similar refactor of publish().
 
-  refactor
+  See APO: is_open and related methods. Seems out of sync with new code.
+  The method is also in Collection.
 
-    Spec for generic_object: delete commented tests
-      is_published
-      is_publishable
-      is_approved
-      is_disapproved
+Test backlog
 
-    Can we delete is_approved and its tests?
+  Coll.create: check object_status, submit_time, deposit_time
+  Item.create: check object_status, submit_time, deposit_time
+  Coll.publish: check object_status
+  Item.publish: check object_status
+  can_be_submitted_for_approval
+  self.status_label(typ, status)
+  item_counts_with_labels
 
-    spec for collection
-      tests for valid? do not fit the current code
+Write documentation
 
-    Collection: refactor publish()
-      - Use separately named methods to communicate actual steps: open() and close().
-      - Modify UI controls accordingly.
-      - Set titles/labels only during actualy publishing.
+  - Never consult workflows for information. The Hydrus app can advance the
+    hydrusAssemblyWF to the next state, but nothing more.
 
-    Item: similar refactor of publish().
+  - object_status and workflow states:
 
-    See APO: is_open and related methods. Seems out of sync with new code.
-    The method is also in Collection.
+      # Collection.
+      draft                      start-deposit
+      published_open             submit --> approve --> start-assembly
+      published_closed           "
 
-  Implementation plan:
+      # Item
+      draft                      start-deposit
+      awaiting_approval          submit
+      returned                   "
+      published                  approve --> start-assembly
 
-    -- Delete/replace workflow_ds_extension and tests.
-    -- Stop using workflow for submit_time, etc.
-        submit_time
-        deposit_time
-        publish_lifecycle_time
-    -- Search for:
-        workflow_step_is_done
-        workflows
-        get_workflow_step
-
+Make sure publish(), approve(), etc are guarded at the model not, not just
+at the UI level.
 
 --------
 Misc implementation tasks
 --------
+
+Store Item type in hydrusProp. Currently hardcoded to :dataset. Also see
+object_type() in GenericObject.
 
 Stub out workflow calls in unit and integration tests that create objects with
 the "fake" PID, so that we don't run into random test failures.
@@ -153,15 +146,10 @@ Support delete action.
 
 Gryphondor for Hydrus objects.
 
-File-level licensing.
+Check whether roleMetadata have an XML namespace.
 
-Reserving a PURL.
+Make date format consistent (YYYY-MM-DD)
 
-PURL display of Hydrus objects.
-
-Ability to hide files: individually or for entire object..
-
-Custom terms of use.
 
 
 ****************
@@ -192,9 +180,6 @@ Consider moving Hydrus::Responsible into RoleMDDS. Not sure that we need the
 module.  Also, there is currently some duplication between Hydrus::Responsible
 and the to_solr() method in RoleMDDS.
 
-Need a place to store Item types. Currently hardcoded to :dataset. Also see
-object_type() in GenericObject. [Lynn and Hannah will discuss]
-
 APO RELS-EXT datastream needs to add a child node to <rdf:Description>:
 <hydra:referencesAgreement rdf:resource="info:fedora/druid:XXX"/>, where XXX is
 the PID of the global Hydrus Agreement object. [The Hydrus agreement object
@@ -206,15 +191,25 @@ Use reified WFs rather than putting them in the APO. (a) Set up WF objects on
 Collection create: APO.roleMetadata: set the value of <name> for the
 collection-manager [waiting on LDAP].
 
-Collection create: APO.descMetadata. Flesh out. [waiting on spec from Lynn]
-
-Should roleMetadata have an XML namespace? If so, what should it be? Could not
-find any definitive examples in Consul. [waiting on response from Lynn]
-
 Item view page: the actions box div is called "div.collection-actions".
-[Postpone this until we have GG's new design for sidebar, etc.]
+Is this a problem?
 
 The home page is producing explosive volumes of SOLR logging.  This occurs
 during the super() call in index() of catalog_controller.rb, which invokes a
 Blacklight method that logs the entire SOLR response. A bug has been filed; in
 the meantime, you can monkey-patch solr_helper.rb in Blacklight.
+
+
+****************
+NEW FEATURES
+****************
+
+File-level licensing.
+
+Reserving a PURL.
+
+PURL display of Hydrus objects.
+
+Ability to hide files: individually or for entire object.
+
+Custom terms of use.
