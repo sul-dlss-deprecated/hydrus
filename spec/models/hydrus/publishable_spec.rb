@@ -32,6 +32,9 @@ describe Hydrus::Publishable do
   describe "is_publishable() should return value of valid?" do
 
     it "and should not address the APO for non-Collections" do
+      pending "will refactor is_publishable()"
+      next
+
       obj = MockPublishable.new(false)
       obj.should_not_receive(:apo)
       obj.stub(:is_published).and_return(false)      
@@ -44,6 +47,9 @@ describe Hydrus::Publishable do
     end
     
     it "and should address the APO for Collections" do
+      pending "will refactor is_publishable()"
+      next
+
       obj = Hydrus::Collection.new
       apo = MockPublishable.new(false)
       obj.stub(:is_published).and_return(false)      

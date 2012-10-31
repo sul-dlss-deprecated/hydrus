@@ -41,8 +41,6 @@ Unify our handling of object status
 
 Refactor and test backlog:
 
-  Shift APO validation to Collection: currently commented out and pending.
-
   see Hydrus::Publishable and is_publishable
 
   Test backlog:
@@ -54,6 +52,7 @@ Refactor and test backlog:
     self.status_label(typ, status)
     item_counts_with_labels
     HydrusPropertiesDS: tests for the new terms
+    validate!: make sure it preserves should_validate
 
   Can we delete is_approved and its tests?
 

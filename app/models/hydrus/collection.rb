@@ -8,6 +8,23 @@ class Hydrus::Collection < Hydrus::GenericObject
   before_validation :remove_values_for_associated_attribute_with_value_none
   after_validation :strip_whitespace, :cleanup_usernames
 
+  validates :embargo_option, :presence => true, :if => :should_validate
+  validates :license_option, :presence => true, :if => :should_validate
+  validate  :check_embargo_options,             :if => :should_validate
+  validate  :check_license_options,             :if => :should_validate
+
+  def check_embargo_options
+    if embargo_option != 'none' && embargo.blank?
+      errors.add(:embargo, "must have a time period specified")
+    end
+  end
+
+  def check_license_options
+    if license_option != 'none' && license.blank?
+      errors.add(:license, "must be specified")
+    end
+  end
+
   attr_accessor :item_counts
 
   setup_delegations(

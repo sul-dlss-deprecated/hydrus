@@ -63,48 +63,46 @@ describe Hydrus::Collection do
   describe "valid?()" do
 
     before(:each) do
-      xml = <<-EOXML
-        <workflows>
-          <workflow id="foo">
-            <process status="waiting" name="aa"/>
-            <process status="waiting" name="bb"/>
-          </workflow>
-          <workflow id="hydrusAssemblyWF">
-            <process status="completed" name="start-deposit" lifecycle="registered"/>
-            <process status="waiting"   name="submit"/>
-            <process status="waiting"   name="approve"/>
-            <process status="waiting"   name="start-assembly"/>
-          </workflow>
-        </workflows>
-      EOXML
-      @workflow = Dor::WorkflowDs.from_xml(noko_doc(xml))
-      @apo      = Hydrus::AdminPolicyObject.new
-      @apo.stub(:is_open).and_return(true)
-      @hc.stub(:workflows).and_return(@workflow)
+      @apo = Hydrus::AdminPolicyObject.new
       @hc.stub(:apo).and_return(@apo)
       @hc.stub(:should_validate).and_return(true)
+      @exp_errs = [
+        :title, 
+        :abstract,
+        :contact,
+        :embargo,
+        :embargo_option,
+        :license,
+        :license_option,
+      ]
+      @dru = 'druid:oo000oo9999'
     end
 
     it "should validate both Collection and its APO, and merge their errors" do
-      pending "Will move APO validations to Collection"
-      next
+      # Give Collection a valid pid.
+      @hc.stub(:pid).and_return(@dru)
+      # Collection error messages should include :pid, which came from the APO.
       @hc.valid?.should == false
       es = @hc.errors.messages
-      es.should include(:pid, :embargo)
+      es.should include(:pid)
     end
 
     it "should get only the Collection errors when the APO is valid" do
+      # Give Collection a valid pid, and stub the APO as valid.
+      @hc.stub(:pid).and_return(@dru)
       @apo.stub(:'valid?').and_return(true)
+      # Collection errors should not include PID, but should include the rest.
       @hc.valid?.should == false
       es = @hc.errors.messages
-      es.should     include(:pid)
-      es.should_not include(:embargo)
+      es.should_not include(:pid)
+      es.should     include(*@exp_errs)
     end
 
     it "should return true when both Collection and APO are valid" do
-      [:pid, :title, :abstract, :contact].each do |k|
-        @hc.stub(k).and_return('druid:tt000tt0001')
+      @exp_errs.each do |k|
+        @hc.stub(k).and_return(@dru)
       end
+      @hc.stub(:pid).and_return(@dru)
       @apo.stub(:'valid?').and_return(true)
       @hc.valid?.should == true
     end

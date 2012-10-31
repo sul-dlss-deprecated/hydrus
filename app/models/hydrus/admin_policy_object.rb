@@ -28,10 +28,6 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
 
   # Note: all other APO validation occurs in the Collection class.
   validates :pid, :is_druid => true
-  # validates :embargo_option, :presence => true, :if => :should_validate
-  # validates :license_option, :presence => true, :if => :should_validate
-  # validate  :check_embargo_options, :if => :should_validate
-  # validate  :check_license_options, :if => :should_validate
 
   setup_delegations(
     # [:METHOD_NAME,          :uniq, :at... ]
@@ -54,7 +50,6 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
 
   def initialize(*args)
     super
-    @should_validate = false
   end
 
   def self.create(user)
@@ -77,18 +72,6 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
     # Save and return.
     apo.save
     return apo
-  end
-
-  def check_embargo_options
-    if embargo_option != 'none' && embargo.blank?
-      errors.add(:embargo, "must have a time period specified")
-    end
-  end
-
-  def check_license_options
-    if license_option != 'none' && license.blank?
-      errors.add(:license, "must be specified")
-    end
   end
 
   def hydrus_class_to_s
