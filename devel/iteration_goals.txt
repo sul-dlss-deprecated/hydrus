@@ -13,8 +13,9 @@ November 2012
 	- Refactor object status and fix state machine
 	- Set up production VM and deploy to production
 	- Allow deletion of non published items
-	- Create real APO
+	- Create real uber Hydrus APO
 	- Debug rightsmetadata problems.
+	- Update to latest dor-services-gem and debug problems
 	- Try and get an item to PURL page.
 
 

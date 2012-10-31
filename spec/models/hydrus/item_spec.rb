@@ -606,6 +606,8 @@ describe Hydrus::Item do
 
   it "embargo_date_is_correct_format() should add an error if embargo_date is bogus" do
     k = :embargo_date
+    @hi.stub(:under_embargo?).and_return(true)
+    @hi.stub(:embargo).and_return("future")    
     # Valid date.
     @hi.stub(k).and_return('12/31/2012')
     @hi.embargo_date_is_correct_format

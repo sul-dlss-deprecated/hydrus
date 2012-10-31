@@ -55,6 +55,8 @@ class Hydrus::Item < Hydrus::GenericObject
     item.assert_content_model
     # Add the Item to the Collection.
     item.add_to_collection(coll.pid)
+    # Create default rightsMetadata from the collection
+    item.rightsMetadata.content = coll.rightsMetadata.ng_xml.to_s
     # Add some Hydrus-specific info to identityMetadata.
     item.augment_identity_metadata(:dataset)  # TODO: hard-coded value.
     # Add roleMetadata with current user as hydrus-item-depositor.
@@ -244,7 +246,7 @@ class Hydrus::Item < Hydrus::GenericObject
 
   def visibility *args
     groups = []
-    if embargo_date
+    if !embargo_date.blank?
       if embargoMetadata.release_access_node.at_xpath('//access[@type="read"]/machine/world')
         groups << "world"
       else
@@ -275,14 +277,11 @@ class Hydrus::Item < Hydrus::GenericObject
 
   def embargo_date *args
     date = (rightsMetadata.read_access.machine.embargo_release_date *args).first
-    unless date.blank?
-      begin
-        Date.parse(date).strftime("%m/%d/%Y") 
-     rescue
-        ""
-      end
-    else 
-       ""
+    return "" if date.blank?
+    begin
+      return Date.parse(date).strftime("%m/%d/%Y") 
+    rescue
+      return ""
     end
   end
 
@@ -310,9 +309,7 @@ class Hydrus::Item < Hydrus::GenericObject
   end
 
   def embargo_date_is_correct_format
-   # TODO: This isn't really working when a bad date is entered.
-   # This doesn't end up erroring out and it errors up in embargo_date= instead
-   return if embargo_date.blank?
+   return unless under_embargo? && embargo=='future'
    begin
      Date.strptime(embargo_date, "%m/%d/%Y").to_s
    rescue ArgumentError
@@ -325,7 +322,7 @@ class Hydrus::Item < Hydrus::GenericObject
   end
 
   def embargo_date_in_range
-    if under_embargo? and embargo == "future"
+    if under_embargo? and embargo == "future" and !embargo_date.blank?
       unless (Date.strptime(beginning_of_embargo_range, "%m/%d/%Y")...Date.strptime(end_of_embargo_range, "%m/%d/%Y")).include?(Date.strptime(embargo_date, "%m/%d/%Y"))
         errors.add(:embargo_date, "must be in the date range #{beginning_of_embargo_range} - #{end_of_embargo_range}")
       end

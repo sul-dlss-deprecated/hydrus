@@ -90,21 +90,14 @@
 			 <h4>Release, Visibility and License</h4>
 	    <dt>Visibility</dt>
 			<dd>
-	   <% case @document_fedora.collection.visibility_option_value %>
-	    <% when 'everyone' %>
-	      After its release, this item can be downloaded and discovered by 
-	      <span class="highlight-value">
-	        everyone.
-	      </span>
-	    <% when 'varies' %>
-	      After its release, this item can be downloaded and discovered by <span class="highlight-value"><%= @document_fedora.visibility == ['world'] ? 'anyone' : 'the Stanford community'%></span>.
-	    <% when 'stanford' %>
-	      After its release, this item can be downloaded and discovered by 
-	      <span class="highlight-value">
-	        the Stanford community.
-	      </span>
-	    <% end %>
-		</dd>
+				After its release, this item can be downloaded and discovered by <span class="highlight-value">
+				<%if @document_fedora.visibility.blank? %>
+					<%= @document_fedora.collection.visibility == 'world' ? 'anyone' : 'the Stanford community'%>.
+				<% else %>
+					<%= @document_fedora.visibility == ['world'] ? 'anyone' : 'the Stanford community'%>.
+				<% end %>
+				</span>
+			</dd>
 		  <dt>Release</dt>
 			<dd>
 		    <% case @document_fedora.collection.embargo_option %>

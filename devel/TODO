@@ -15,6 +15,8 @@ select_status_checkbox_icon helper method (application_helper.rb).
 Item View page: Fix conditional display of metadata sections when only some
 required fields have been saved.
 
+Fix embargo date UI datepicker not being reselected when an invalid date is entered and a validation error occurs.
+
 --------
 Integration with DOR
 --------
@@ -22,10 +24,6 @@ Integration with DOR
 Set up the listener scripts to update the Hydrus SOLR when Hydrus objects are
 updated outside of the Hydrus app. See the argo/bin directory for the latest
 copies of the scripts.
-
-Figure out why the 'accessionWF' workflow initial step 'start-accession' is
-marked as 'waiting' instead of 'completed' when the assembly robots are
-completed.  This prevents the accessioning robots from running.
 
 Figure out why the publish robot in test does not actually publish items to the purl page.
 RightsMetadata issue?
@@ -40,7 +38,6 @@ Unify our handling of object status
 -----------------------------------
 
 Wrap up: review of relevant methods.
-Fix embargo_date_is_correct_format validation method for items.
 
 Stub out workflow calls in unit and integration tests that create objects with the "fake" PID, so that
 we don't run into random test failures.
@@ -100,10 +97,10 @@ the "fake" PID, so that we don't run into random test failures.
 
 Bundle update OM.
 
-Look into rightsMD: what rightsMD should our objects contain?
-
-Redirect unauthenticated users back to the page they were trying to view after
-logging in.
+Look into rightsMD
+  - what rightsMD should our objects contain?
+  - tests
+	- refactor to take advantage of OM and generic_ds.rb.
 
 Integration tests for role-protection and gated discovery:
   Collection:
@@ -122,8 +119,6 @@ the Collection, for two reasons: (1) it parallels the roleMD stored in the
 Item; (2) without it, we don't have access to the collection depositor
 during search results (at least not without mucking with the to_solr method).
 
-rightsMD: (a) tests; (b) refactor to take advantage of OM and generic_ds.rb.
-
 Perform server side validation to make sure users are not able to publish or
 submit for approval objects that should not be allowed to have this step performed.
 
@@ -132,14 +127,11 @@ we distinguish between different item types.
 
 Move datastreams to a subdirectory, which is conventional in hydra projects.
 
-Support delete action.
+Support item delete action.
 
 Gryphondor for Hydrus objects.
 
 Check whether roleMetadata have an XML namespace.
-
-Make date format consistent (YYYY-MM-DD)
-
 
 
 ****************
