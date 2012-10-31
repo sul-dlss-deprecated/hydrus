@@ -77,24 +77,6 @@ Test backlog
   self.status_label(typ, status)
   item_counts_with_labels
 
-Write documentation
-
-  - Never consult workflows for information. The Hydrus app can advance the
-    hydrusAssemblyWF to the next state, but nothing more.
-
-  - object_status and workflow states:
-
-      # Collection.
-      draft                      start-deposit
-      published_open             submit --> approve --> start-assembly
-      published_closed           "
-
-      # Item
-      draft                      start-deposit
-      awaiting_approval          submit
-      returned                   "
-      published                  approve --> start-assembly
-
 Make sure publish(), approve(), etc are guarded at the model not, not just
 at the UI level.
 

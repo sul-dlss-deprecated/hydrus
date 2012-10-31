@@ -180,3 +180,72 @@ Starting Jetty on the hydrus-dev or -test servers:
   nohup java -Djetty.port=8983 -Dsolr.solr.home=/home/lyberadmin/hydrus/shared/jetty/solr \
              -XX:MaxPermSize=128m -Xmx256m -jar start.jar                                 \
              > logs/2012_10_05.request.log 2>&1 <&- &
+
+h2. Workflow steps and object_status
+
+General points:
+
+- The Hydrus application advances an object through the steps of the hydrusAssemblyWF.
+  However, the application does not consult the hydrusAssemblyWF for information.
+
+- Instead, the application consults hydrusProperty for all information related to
+  the status of an object and its flow through the steps in the Hydrus deposit
+  process.
+
+- Because they have somewhat different purposes, the hydrusAssemblyWF steps and
+  the Hydrus object_status values do not have a one-to-one correspondence.
+
+- Whereas a workflow is designed to move only in the forward direction as various
+  steps are accomplished, Hydrus object_status can toggle back and forth between
+  various states during the edit-and-review and collection-open-and-close processes.
+
+Relationship between object_status and workflow steps for collections:
+
+      object_status              workflow steps
+      ----------------------------------------------------
+      draft                      start-deposit
+
+      published_open             submit --> approve --> start-assembly
+
+      published_closed           approve OR start-assembly
+      ----------------------------------------------------
+
+      Notes:
+
+      - The first time a collection is opened, it automatically advances
+        through a few workflow steps.
+
+      - Whether the collection advances all the way to start-assembly or just
+        to approve is controlled by configuration.
+
+      - After that, the collection manager can toggle the collection between
+        open and closed states, but the collection cannot be unpublished
+        and the workflow steps do not move backward.
+
+Relationship between object_status and workflow steps for items:
+
+      object_status              workflow steps
+      ----------------------------------------------------
+      draft                      start-deposit
+      published                  submit --> approve --> start-assembly
+      ----------------------------------------------------
+
+      Notes:
+
+      - For collections that do not require review of items, the object
+        goes directly from draft to published status and advances through
+        several workflow steps.
+
+      object_status              workflow steps
+      ----------------------------------------------------
+      draft                      start-deposit
+      awaiting_approval          submit
+      returned                   submit
+      published                  approve --> start-assembly
+      ----------------------------------------------------
+
+      Notes:
+
+      - Items can toggle back and forth between awaiting_approval and returned
+        during the edit-and-review process. During that time, the workflow
+        remains at the submit step.
