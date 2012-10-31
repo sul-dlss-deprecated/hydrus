@@ -22,7 +22,7 @@ describe(Hydrus::GenericObject, :integration => true) do
       # Code to check workflow statuses.
       check_statuses = lambda {
         hi = Hydrus::Item.find(hi.pid)  # A refreshed copy of object.
-        statuses = steps.map { |s| [s, hi.get_workflow_status(s)] }
+        statuses = steps.map { |s| [s, hi.workflows.get_workflow_status(s)] }
         Hash[statuses].should == exp
       }
       # Initial statuses.

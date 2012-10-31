@@ -319,7 +319,7 @@ class Hydrus::GenericObject < Dor::Item
   # Takes the name of a step in the Hydrus workflow.
   # Calls the workflow service to mark that step as completed.
   def complete_workflow_step(step)
-    return if workflow_step_is_done(step)
+    return if workflows.workflow_step_is_done(step)
     awf = Dor::Config.hydrus.app_workflow
     Dor::WorkflowService.update_workflow_status('dor', pid, awf, step, 'completed')
     workflows_content_is_stale
@@ -376,27 +376,6 @@ class Hydrus::GenericObject < Dor::Item
   def editing_event_message(fields)
     fs = fields.map { |e| e.to_s }.join(', ')
     return "#{hydrus_class_to_s()} modified: #{fs}"
-  end
-
-  ####
-  # Delegate some functionality to workflow DS.
-  # Could not get this to work using delegate().
-  ####
-
-  def get_workflow_node
-    return workflows.get_workflow_node
-  end
-
-  def get_workflow_step(step)
-    return workflows.get_workflow_step(step)
-  end
-
-  def get_workflow_status(step)
-    return workflows.get_workflow_status(step)
-  end
-
-  def workflow_step_is_done(step)
-    return workflows.workflow_step_is_done(step)
   end
 
   def purl_page_ready?

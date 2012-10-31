@@ -41,17 +41,22 @@ Unify our handling of object status
 
 Wrap up:
 
-  -- Delete/replace workflow_ds_extension and tests.
-  -- Search for:
-      workflow_step_is_done
-      workflows
-      get_workflow_step
   -- Quick review of all relevant methods.
 
 Refactor
 
+  APO: remove deposit_status from the app, and then remove these methods from APO.
+    is_published
+    is_submitted
+    is_disapproved
+    is_open
+
   Can we delete is_approved and its tests?
 
+  purl_page_ready: refactor to use workflow_ds_extension
+
+  Move tests for workflow_ds_extension out of gen_obj_spec.
+    
   spec for collection
     tests for valid? do not fit the current code
 
@@ -63,9 +68,6 @@ Refactor
     - Set titles/labels only during actualy publishing.
 
   Item: similar refactor of publish().
-
-  See APO: is_open and related methods. Seems out of sync with new code.
-  The method is also in Collection.
 
 Test backlog
 

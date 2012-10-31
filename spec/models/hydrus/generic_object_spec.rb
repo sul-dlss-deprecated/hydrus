@@ -197,33 +197,33 @@ describe Hydrus::GenericObject do
     end
 
     it "get_workflow_node() should return a node with correct id attribute" do
-      node = @go.get_workflow_node
+      node = @go.workflows.get_workflow_node
       node.should be_instance_of Nokogiri::XML::Element
       node['id'].should == Dor::Config.hydrus.app_workflow.to_s
     end
 
     it "get_workflow_step() should return a node with correct name attribute" do
-      node = @go.get_workflow_step('approve')
+      node = @go.workflows.get_workflow_step('approve')
       node.should be_instance_of Nokogiri::XML::Element
       node['name'].should == 'approve'
     end
 
     it "get_workflow_status() should return the current status of a step" do
-      @go.get_workflow_status('start-deposit').should == 'completed'
-      @go.get_workflow_status('submit').should        == 'waiting'
-      @go.get_workflow_status('blort').should         == nil
+      @go.workflows.get_workflow_status('start-deposit').should == 'completed'
+      @go.workflows.get_workflow_status('submit').should        == 'waiting'
+      @go.workflows.get_workflow_status('blort').should         == nil
     end
 
     it "workflow_step_is_done() should return correct value" do
-      @go.workflow_step_is_done('start-deposit').should == true
-      @go.workflow_step_is_done('submit').should        == false
+      @go.workflows.workflow_step_is_done('start-deposit').should == true
+      @go.workflows.workflow_step_is_done('submit').should        == false
     end
 
     describe "complete_workflow_step()" do
-      
+
       it "should do nothing if the step is already completed" do
         Dor::WorkflowService.should_not_receive(:update_workflow_status)
-        @go.stub(:workflow_step_is_done).and_return(true)
+        @go.stub_chain(:workflows, :workflow_step_is_done).and_return(true)
         @go.complete_workflow_step('foo')
       end
 
@@ -231,7 +231,7 @@ describe Hydrus::GenericObject do
         step = 'submit'
         args = ['dor', @go.pid, kind_of(Symbol), step, 'completed']
         Dor::WorkflowService.should_receive(:update_workflow_status).with(*args)
-        @go.stub(:workflow_step_is_done).and_return(false)
+        @go.stub_chain(:workflows, :workflow_step_is_done).and_return(false)
         @go.should_receive(:workflows_content_is_stale)
         @go.complete_workflow_step(step)
       end
@@ -503,7 +503,7 @@ describe Hydrus::GenericObject do
     }
     tests.each do |status, exp|
       @go.stub(:object_status).and_return(status)
-      @go.status_label.should == exp 
+      @go.status_label.should == exp
     end
   end
 

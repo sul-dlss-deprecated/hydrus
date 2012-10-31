@@ -3,17 +3,6 @@ end
 
 class Dor::WorkflowDs
 
-  # def to_solr(solr_doc = {}, *args)
-  #   super(solr_doc, *args)
-  #   status = workflow_step_is_done('approve') ? 'published' :
-  #            workflow_step_is_done('submit')  ? 'waiting_approval' : 'draft'
-  #   add_solr_value(
-  #     solr_doc, 'hydrus_wf_status', status,
-  #     :string, [:facetable, :searchable]
-  #   )
-  #   return solr_doc
-  # end
-
   # Returns the hydrusAssemblyWF node from the object's workflows.
   def get_workflow_node
     wf = Dor::Config.hydrus.app_workflow
