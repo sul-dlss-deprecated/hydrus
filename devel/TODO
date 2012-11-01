@@ -33,45 +33,33 @@ Update to latest dor-services-gem:
   - remove hydrusWF workflow definition from APO
   - Set up WF object (currently oo000oo0099) on test/prod/dev as needed
 
------------------------------------
-Unify our handling of object status
------------------------------------
-
-Misc wrap-up and refactoring:
-
-  Refactor Item actions box: logic is complex and maybe bad.
-    app/views/hydrus_items/_actions_box_show.html.erb
-
-    is_awaiting_approval && can(:review)
-      approve/return
-    is_returned   && can(:edit)
-      resubmit
-    is_publishable || can_be_submitted_for_approval) && can(:edit)
-      publish/submit for aproval
-
-
-  Collection: refactor publish()
-    - Use separately named methods to communicate actual steps: open() and close().
-    - Modify UI controls accordingly.
-    - Set titles/labels only during actualy publishing.
-
-  Item: similar refactor of publish(). Also reverse the if logic.
-
-  Make sure publish(), approve(), etc are guarded at the model, not just at the
-  UI level.
-
-  Move tests for workflow_ds_extension out of gen_obj_spec.
-
-  Whitespace.
-
-  purl_page_ready: refactor to use workflow_ds_extension
-
 --------
 Misc implementation tasks
 --------
 
+Make sure publish(), approve(), etc are guarded at the model and controller
+levels, not just at the UI level.
+  - Collection.publish(). Refactor into separate open() and close() methods.
+    Set titles/labels only during actualy publishing.
+  - Model-level: call the relevant is_ method before running the action.
+    For example, in publish() call is_publishable() before doing anything.
+  - Controller-level: refactor so that each action (publish, open, close,
+    approve, etc) is handled by a different controller method rather that by
+    the update() method. Then, each of those methods should make the relevant
+    can() call to ensure that the user has sufficient powers (this approach
+    also requires some routing configuration).
+
+Disable edit tab for published items.
+
+After a collection has been published, is it editable? If so, do we need
+to push it through the accessioning pipeline again?
+
 Store Item type in hydrusProp. Currently hardcoded to :dataset. Also see
 object_type() in GenericObject.
+
+Refactor purl_page_ready() to use workflow_ds_extension.
+
+Move tests for workflow_ds_extension out of gen_obj_spec and into its own spec.
 
 Stub out workflow calls in unit and integration tests that create objects with
 the "fake" PID, so that we don't run into random test failures.
