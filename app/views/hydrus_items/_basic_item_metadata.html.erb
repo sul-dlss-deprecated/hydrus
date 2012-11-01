@@ -9,7 +9,19 @@
 <dd><%= hydrus_format_date(@document_fedora.create_date) %></dd>
 
 <dt>PURL</dt>
-<dd><%= @document_fedora.is_published ? (@document_fedora.purl_page_ready? ? link_to(@document_fedora.url, @document_fedora.url) : "In processing") : "Not published yet" %></dd>
+<dd>
+<% if @document_fedora.is_published
+		if @document_fedora.purl_page_ready? %>
+			<%= link_to(@document_fedora.url, @document_fedora.url) %>
+		<% else %>
+			 <%= @document_fedora.url%>
+			<p class="help">URL not operational yet - item is still processing</p>
+		<% end %>
+<% else %>
+	<%= @document_fedora.url%>
+	<p class="help">URL not operational since item is not published</p>
+<% end %>
+</dd>
 
 <dt>Contact email</dt>
 <dd><%= @document_fedora.contact.blank? ? hydrus_object_setting_value(@document_fedora.contact) : mail_to(@document_fedora.contact) %></dd>

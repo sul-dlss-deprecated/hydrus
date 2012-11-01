@@ -13,8 +13,8 @@ class Hydrus::Item < Hydrus::GenericObject
   validates :files, :at_least_one=>true, :if => :should_validate
   validate  :must_accept_terms_of_deposit, :if => :should_validate
   validate  :must_review_release_settings, :if => :should_validate
+  validate  :embargo_date_is_correct_format # TODO
   validate :embargo_date_in_range, :if => :should_validate
-  # validate  :embargo_date_is_correct_format # TODO
 
   setup_delegations(
     # [:METHOD_NAME,               :uniq, :at... ]
@@ -55,6 +55,8 @@ class Hydrus::Item < Hydrus::GenericObject
     item.assert_content_model
     # Add the Item to the Collection.
     item.add_to_collection(coll.pid)
+    # Create default rightsMetadata from the collection
+    item.rightsMetadata.content = coll.rightsMetadata.ng_xml.to_s
     # Add some Hydrus-specific info to identityMetadata.
     item.augment_identity_metadata(:dataset)  # TODO: hard-coded value.
     # Add roleMetadata with current user as hydrus-item-depositor.
@@ -267,7 +269,7 @@ class Hydrus::Item < Hydrus::GenericObject
 
   def visibility *args
     groups = []
-    if embargo_date
+    if !embargo_date.blank?
       if embargoMetadata.release_access_node.at_xpath('//access[@type="read"]/machine/world')
         groups << "world"
       else
@@ -292,17 +294,26 @@ class Hydrus::Item < Hydrus::GenericObject
       rightsMetadata.remove_world_read_access
       rightsMetadata.remove_all_group_read_nodes
       update_access_blocks(embargoMetadata, val)
-      embargoMetadata.release_date = Date.strptime(embargo_date, "%m/%d/%Y")
+      embargoMetadata.release_date = Date.strptime(embargo_date, "%m/%d/%Y") unless embargo_date.blank?
     end
   end
 
   def embargo_date *args
     date = (rightsMetadata.read_access.machine.embargo_release_date *args).first
-    Date.parse(date).strftime("%m/%d/%Y") unless date.blank?
+    return "" if date.blank?
+    begin
+      return Date.parse(date).strftime("%m/%d/%Y") 
+    rescue
+      return ""
+    end
   end
 
   def embargo_date= val
-    date = val.blank? ? "" : Date.strptime(val, "%m/%d/%Y").to_s
+    begin
+      date = val.blank? ? "" : Date.strptime(val, "%m/%d/%Y").to_s
+    rescue
+      date=""
+    end
     (rightsMetadata.read_access.machine.embargo_release_date= date) unless date.blank?
   end
 
@@ -321,13 +332,12 @@ class Hydrus::Item < Hydrus::GenericObject
   end
 
   def embargo_date_is_correct_format
-    # TODO: This isn't really working when a bad date is entered.
-    # This doesn't end up erroring out and it errors up in embargo_date instead
-    begin
-      Date.strptime(embargo_date, "%m/%d/%Y")
-    rescue ArgumentError
+   return unless under_embargo? && embargo=='future'
+   begin
+     Date.strptime(embargo_date, "%m/%d/%Y").to_s
+   rescue ArgumentError
       errors.add(:embargo_date, 'must be a valid date')
-    end
+   end
   end
 
   def under_embargo?
@@ -335,7 +345,7 @@ class Hydrus::Item < Hydrus::GenericObject
   end
 
   def embargo_date_in_range
-    if under_embargo? and embargo == "future"
+    if under_embargo? and embargo == "future" and !embargo_date.blank?
       unless (Date.strptime(beginning_of_embargo_range, "%m/%d/%Y")...Date.strptime(end_of_embargo_range, "%m/%d/%Y")).include?(Date.strptime(embargo_date, "%m/%d/%Y"))
         errors.add(:embargo_date, "must be in the date range #{beginning_of_embargo_range} - #{end_of_embargo_range}")
       end

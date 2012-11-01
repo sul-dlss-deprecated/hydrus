@@ -6,7 +6,6 @@ November 2012
  	- support hiding of files, which means setting preserve=true, publish=false, shelve=false
  	- add an option to simply hide all the files
 * Items 
-	- Reserving a PURL - show the DRUID of an item as soon as it is created so that users can see what this link will be
 	- Allow user to enter custom terms of use by collection or item
 * Collections
 	- Add a "Save and Open Deposit" button
@@ -14,8 +13,9 @@ November 2012
 	- Refactor object status and fix state machine
 	- Set up production VM and deploy to production
 	- Allow deletion of non published items
-	- Create real APO
+	- Create real uber Hydrus APO
 	- Debug rightsmetadata problems.
+	- Update to latest dor-services-gem and debug problems
 	- Try and get an item to PURL page.
 
 
