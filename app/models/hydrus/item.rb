@@ -13,7 +13,7 @@ class Hydrus::Item < Hydrus::GenericObject
   validates :files, :at_least_one=>true, :if => :should_validate
   validate  :must_accept_terms_of_deposit, :if => :should_validate
   validate  :must_review_release_settings, :if => :should_validate
-  validate  :embargo_date_is_correct_format # TODO
+  validate  :embargo_date_is_correct_format, :if => :should_validate
   validate :embargo_date_in_range, :if => :should_validate
 
   setup_delegations(
