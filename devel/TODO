@@ -37,12 +37,10 @@ Update to latest dor-services-gem:
 Unify our handling of object status
 -----------------------------------
 
-Refactor and test backlog:
+Misc wrap-up and refactoring:
 
   Refactor Item actions box: logic is complex and maybe bad.
     app/views/hydrus_items/_actions_box_show.html.erb
-
-  Collection: the tests for valid? do not fit the current code
 
   Collection: refactor publish()
     - Use separately named methods to communicate actual steps: open() and close().
@@ -57,8 +55,6 @@ Refactor and test backlog:
   Move tests for workflow_ds_extension out of gen_obj_spec.
 
   Item.requires_human_approval: convert to boolean? Maybe not.
-
-  cleanup_usernames(): is this needed?
 
   Whitespace.
 
