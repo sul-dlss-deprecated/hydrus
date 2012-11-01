@@ -137,7 +137,6 @@
             </workflow>
           </registration>
           <deposit>
-            <depositStatus>closed</depositStatus>
             <approval required="no"/>
             <termsOfDeposit>When depositing stuff, you must agree to the terms.</termsOfDeposit>
             <embargo default="6 months" maximum="2 years" minimum="0"/>

@@ -43,6 +43,7 @@ describe("Collection create", :type => :request, :integration => true) do
     coll.abstract.should == ni.abstract
     coll.contact.should  == ni.contact
     coll.should be_instance_of Hydrus::Collection
+    coll.deposit_time.should_not be_blank
     # Get the APO of the Collection.
     apo = coll.apo
     apo.should be_instance_of Hydrus::AdminPolicyObject
@@ -98,23 +99,18 @@ describe("Collection create", :type => :request, :integration => true) do
     # offer the Open Collection button.
     div_cs = find("div.collection-actions")
     div_cs.should_not have_button(open_button)
-    # err_msgs = div_cs.all('li').map { |e| e.text }.join("\n")
-    # exp = [
-    #   /^Abstract/,
-    #   /^Contact/,
-    # ]
-    # exp.each { |e| err_msgs.should =~ e }
     # Get the Collection and APO objects from fedora.
     coll = Hydrus::Collection.find(druid)
     apo = coll.apo
     # Check various Collection attributes and methods.
-    coll.is_publishable.should == false
+    coll.object_status.should == 'draft'
+    coll.is_openable.should == false
     coll.is_published.should == false
     coll.is_approved.should == false
     coll.is_destroyable.should == true
+    coll.submit_time.should be_blank
     coll.valid?.should == true  # Because unpublished, so validation is limited.
     coll.is_open.should == false
-    apo.is_open.should == false
     # Go back to edit page and fill in required elements.
     should_visit_edit_page(coll)
     fill_in "hydrus_collection_abstract", :with => ni.abstract
@@ -127,13 +123,13 @@ describe("Collection create", :type => :request, :integration => true) do
     coll = Hydrus::Collection.find(druid)
     apo = coll.apo
     # Check various Collection attributes and methods.
-    coll.is_publishable.should == true
+    coll.object_status.should == 'draft'
+    coll.is_openable.should == true
     coll.is_published.should == false
     coll.is_approved.should == false
     coll.is_destroyable.should == true
     coll.valid?.should == true
     coll.is_open.should == false
-    apo.is_open.should == false
     # Open the Collection.
     click_button(open_button)
     find(@alert).should have_content(@notice)
@@ -143,13 +139,14 @@ describe("Collection create", :type => :request, :integration => true) do
     coll = Hydrus::Collection.find(druid)
     apo = coll.apo
     # Check various Collection attributes and methods.
-    coll.is_publishable.should == true
+    coll.object_status.should == 'published_open'
+    coll.is_openable.should == false
     coll.is_published.should == true
     coll.is_approved.should == true
     coll.is_destroyable.should == false
+    coll.submit_time.should_not be_blank
     coll.valid?.should == true
     coll.is_open.should == true
-    apo.is_open.should == true
     # Close the Collection.
     click_button(close_button)
     find(@alert).should have_content(@notice)
@@ -159,13 +156,13 @@ describe("Collection create", :type => :request, :integration => true) do
     coll = Hydrus::Collection.find(druid)
     apo = coll.apo
     # Check various Collection attributes and methods.
-    coll.is_publishable.should == true
+    coll.object_status.should == 'published_closed'
+    coll.is_openable.should == true
     coll.is_published.should == true
     coll.is_approved.should == true
     coll.is_destroyable.should == false
     coll.valid?.should == true
     coll.is_open.should == false
-    apo.is_open.should == false
     # Return to edit page, and try to save Collection with an empty title.
     click_link "Edit Collection"
     fill_in "hydrus_collection_title", :with => ''
@@ -185,13 +182,13 @@ describe("Collection create", :type => :request, :integration => true) do
     coll = Hydrus::Collection.find(druid)
     apo = coll.apo
     # Check various Collection attributes and methods.
-    coll.is_publishable.should == true
+    coll.object_status.should == 'published_open'
+    coll.is_openable.should == false
     coll.is_published.should == true
     coll.is_approved.should == true
     coll.is_destroyable.should == false
     coll.valid?.should == true
     coll.is_open.should == true
-    apo.is_open.should == true
     # Check events.
     exp = [
       /\ACollection created/,

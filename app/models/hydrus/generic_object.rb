@@ -78,10 +78,9 @@ class Hydrus::GenericObject < Dor::Item
     :control_group => 'M')
 
 
-  # Returns true if the object is beyond the draft state -- that is,
-  # it has been submitted or gone even farther in the process.
-  def is_submitted
-    return object_status != 'draft'
+  # Returns true if the object is in the draft state.
+  def is_draft
+    return object_status == 'draft'
   end
 
   # Returns true if the object is waiting for approval by a reviewer.
@@ -105,20 +104,13 @@ class Hydrus::GenericObject < Dor::Item
     return object_status == 'returned'
   end
 
-  # Returns true if the object can be submitted for approval:
-  # a valid draft object that actually requires human approval.
-  def can_be_submitted_for_approval
-    return false unless object_status == 'draft'
-    return false unless to_bool(requires_human_approval)
-    return validate!
-  end
-
   # The controller will call these methods, which we simply forward to
   # the Collection or Item class.
   def publish=(val)  publish(val) end
   def approve=(val)  approve(val) end
   def resubmit=(val) resubmit(val) end
 
+  # Returns the object type: item or collection.
   def object_type
     return identityMetadata.objectType.first
   end
@@ -139,7 +131,7 @@ class Hydrus::GenericObject < Dor::Item
     return rightsMetadata.discover_access.first
   end
 
-  def url
+  def purl_url
    "#{Dor::Config.purl.base_url}#{pid}"
   end
 
@@ -200,8 +192,8 @@ class Hydrus::GenericObject < Dor::Item
   end
 
   # Takes a symbol (:collection or :item).
-  # Returns a hash, with object_status values as keys and
-  # human readable labels as values.
+  # Returns a hash of two hash, each having object_status as its
+  # keys and human readable labels as values.
   def self.status_labels(typ, status = nil)
     h = {
       :collection => {
@@ -219,7 +211,7 @@ class Hydrus::GenericObject < Dor::Item
     return status ? h[typ] : h[typ]
   end
 
-  # Takes an object status value.
+  # Takes an object_status value.
   # Returns its corresponding label.
   def self.status_label(typ, status)
     return status_labels(typ)[status]

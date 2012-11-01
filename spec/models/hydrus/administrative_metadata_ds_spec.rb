@@ -12,7 +12,6 @@ describe Hydrus::AdministrativeMetadataDS do
       #{@amd_start}
         <relationships />
         <hydrus>
-          <depositStatus>open</depositStatus>
           <reviewRequired>yes</reviewRequired>
           <termsOfDeposit>Blah-blah</termsOfDeposit>
           <embargo option="varies">1-year</embargo>
@@ -44,7 +43,6 @@ describe Hydrus::AdministrativeMetadataDS do
 
   it "should get expected values from OM terminology" do
     tests = [
-      [[:hydrus, :depositStatus], %w(open)],
       [[:hydrus, :reviewRequired], %w(yes)],
       [[:hydrus, :termsOfDeposit], %w(Blah-blah)],
       [[:hydrus, :embargo], %w(1-year)],
@@ -67,7 +65,6 @@ describe Hydrus::AdministrativeMetadataDS do
       #{@amd_start}
         <relationships/>
         <hydrus>
-          <depositStatus/>
           <reviewRequired/>
           <termsOfDeposit/>
           <embargo/>

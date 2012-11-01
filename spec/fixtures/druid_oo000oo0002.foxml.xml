@@ -83,7 +83,6 @@
       <foxml:xmlContent>
         <administrativeMetadata objectId="druid:oo000oo0002">
           <hydrus>
-            <depositStatus>open</depositStatus>
             <reviewRequired>yes</reviewRequired>
             <termsOfDeposit>When depositing stuff, you must agree to the terms.</termsOfDeposit>
             <embargo option="varies">1 year</embargo>

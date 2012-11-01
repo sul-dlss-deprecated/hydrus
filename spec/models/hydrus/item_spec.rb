@@ -458,7 +458,7 @@ describe Hydrus::Item do
 
     it "fully populated Item should be valid" do
       dru = 'druid:ll000ll0001'
-      @hi.stub(:collection_is_open).and_return(true)
+      @hi.stub(:enforce_collection_is_open).and_return(true)
       @hi.stub(:accepted_terms_of_deposit).and_return(true)
       @hi.stub(:reviewed_release_settings).and_return(true)
       @exp.each { |e| @hi.stub(e).and_return(dru) }
@@ -468,14 +468,14 @@ describe Hydrus::Item do
 
   end
 
-  it "collection_is_open() should return true only if the Item is in an open Collection" do
+  it "enforce_collection_is_open() should return true only if the Item is in an open Collection" do
     n  = 0
     [true, false, nil].each do |stub_val|
       c    = double('collection', :is_open => stub_val)
       exp  = not(not(stub_val))
       n   += 1 unless exp
       @hi.stub(:collection).and_return(c)
-      @hi.collection_is_open.should == exp
+      @hi.enforce_collection_is_open.should == exp
       @hi.errors.size.should == n
     end
   end
@@ -488,11 +488,73 @@ describe Hydrus::Item do
     @hi.tracked_fields.should be_an_instance_of(Hash)
   end
 
+  describe "can_be_submitted_for_approval()" do
+
+    it "if item is not a draft, should return false" do
+      # Normally this would lead to a true result.
+      @hi.stub(:requires_human_approval).and_return('yes')
+      @hi.stub('validate!').and_return(true)
+      # But since the item is not a draft, we expect false.
+      @hi.stub(:object_status).and_return('returned')
+      @hi.can_be_submitted_for_approval.should == false
+    end
+
+    it "if item does not require human approval, should return false" do
+      # Normally this would lead to a true result.
+      @hi.stub(:object_status).and_return('draft')
+      @hi.stub('validate!').and_return(true)
+      # But since the item does not require human approval, we expect false.
+      @hi.stub(:requires_human_approval).and_return('no')
+      @hi.can_be_submitted_for_approval.should == false
+    end
+
+    it "otherwise, should return the value of validate!" do
+      @hi.stub(:object_status).and_return('draft')
+      @hi.stub(:requires_human_approval).and_return('yes')
+      [true, false, true, false].each do |exp|
+        @hi.stub('validate!').and_return(exp)
+        @hi.can_be_submitted_for_approval.should == exp
+      end
+    end
+
+  end
+
   it "is_destroyable() should return the negative of is_published" do
     @hi.stub(:is_published).and_return(false)
     @hi.is_destroyable.should == true
     @hi.stub(:is_published).and_return(true)
     @hi.is_destroyable.should == false
+  end
+
+  describe "is_publishable()" do
+
+    it "invalid object: should always return false" do
+      # If the item were valid, this setup would cause the method to return true.
+      @hi.stub(:requires_human_approval).and_return('no')
+      @hi.stub(:is_draft).and_return(true)
+      # But it's not valid, so we should get false.
+      @hi.stub('validate!').and_return(false)
+      @hi.is_publishable.should == false
+    end
+
+    it "valid object: requires approval: should return value of is_awaiting_approval()" do
+      @hi.stub('validate!').and_return(true)
+      @hi.stub(:requires_human_approval).and_return('yes')
+      [true, false, true, false].each do |exp|
+        @hi.stub(:is_awaiting_approval).and_return(exp)
+        @hi.is_publishable.should == exp
+      end
+    end
+
+    it "valid object: does not require approval: should return value of is_draft()" do
+      @hi.stub('validate!').and_return(true)
+      @hi.stub(:requires_human_approval).and_return('no')
+      [true, false, true, false].each do |exp|
+        @hi.stub(:is_draft).and_return(exp)
+        @hi.is_publishable.should == exp
+      end
+    end
+
   end
 
   it "content_directory()" do

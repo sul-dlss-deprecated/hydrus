@@ -35,11 +35,9 @@ describe Hydrus::Collection do
     end
     
     it "publish(no) should set status to closed, and add an event" do
-      @hc.apo.deposit_status.should == ''
       @hc.get_hydrus_events.size.should == 0
       @hc.should_not_receive(:approve)
       @hc.publish('no')
-      @hc.apo.deposit_status.should == 'closed'
       @hc.get_hydrus_events.size.should > 0
     end
     
@@ -48,12 +46,10 @@ describe Hydrus::Collection do
       apo_title     = "APO for #{hc_title}"
       @hc.title     = hc_title
       @hc.apo.title = apo_title
-      @hc.apo.deposit_status.should == ''
       @hc.get_hydrus_events.size.should == 0
       @hc.should_receive(:complete_workflow_step).once
       @hc.should_receive(:approve).once
       @hc.publish('yes')
-      @hc.apo.deposit_status.should == 'open'
       @hc.get_hydrus_events.size.should > 0
       @hc.apo.identityMetadata.objectLabel.should == [apo_title]
       @hc.apo.title.should                        == apo_title
@@ -67,46 +63,46 @@ describe Hydrus::Collection do
   describe "valid?()" do
 
     before(:each) do
-      xml = <<-EOXML
-        <workflows>
-          <workflow id="foo">
-            <process status="waiting" name="aa"/>
-            <process status="waiting" name="bb"/>
-          </workflow>
-          <workflow id="hydrusAssemblyWF">
-            <process status="completed" name="start-deposit" lifecycle="registered"/>
-            <process status="waiting"   name="submit"/>
-            <process status="waiting"   name="approve"/>
-            <process status="waiting"   name="start-assembly"/>
-          </workflow>
-        </workflows>
-      EOXML
-      @workflow = Dor::WorkflowDs.from_xml(noko_doc(xml))
-      @apo      = Hydrus::AdminPolicyObject.new
-      @apo.stub(:is_open).and_return(true)
-      @hc.stub(:workflows).and_return(@workflow)
+      @apo = Hydrus::AdminPolicyObject.new
       @hc.stub(:apo).and_return(@apo)
       @hc.stub(:should_validate).and_return(true)
+      @exp_errs = [
+        :title, 
+        :abstract,
+        :contact,
+        :embargo,
+        :embargo_option,
+        :license,
+        :license_option,
+      ]
+      @dru = 'druid:oo000oo9999'
     end
 
     it "should validate both Collection and its APO, and merge their errors" do
+      # Give Collection a valid pid.
+      @hc.stub(:pid).and_return(@dru)
+      # Collection error messages should include :pid, which came from the APO.
       @hc.valid?.should == false
       es = @hc.errors.messages
-      es.should include(:pid, :embargo)
+      es.should include(:pid)
     end
 
     it "should get only the Collection errors when the APO is valid" do
+      # Give Collection a valid pid, and stub the APO as valid.
+      @hc.stub(:pid).and_return(@dru)
       @apo.stub(:'valid?').and_return(true)
+      # Collection errors should not include PID, but should include the rest.
       @hc.valid?.should == false
       es = @hc.errors.messages
-      es.should     include(:pid)
-      es.should_not include(:embargo)
+      es.should_not include(:pid)
+      es.should     include(*@exp_errs)
     end
 
     it "should return true when both Collection and APO are valid" do
-      [:pid, :title, :abstract, :contact].each do |k|
-        @hc.stub(k).and_return('druid:tt000tt0001')
+      @exp_errs.each do |k|
+        @hc.stub(k).and_return(@dru)
       end
+      @hc.stub(:pid).and_return(@dru)
       @apo.stub(:'valid?').and_return(true)
       @hc.valid?.should == true
     end
@@ -134,15 +130,37 @@ describe Hydrus::Collection do
     @hc.has_items.should == true
   end
   
-  it "is_open() should delegate to the APO" do
-    apo = double('apo', :is_open => false)
-    @hc.stub(:apo).and_return(apo)
-    @hc.is_open.should == false
-    apo = double('apo', :is_open => true)
-    @hc.stub(:apo).and_return(apo)
-    @hc.is_open.should == true
+  it "is_open() should return true if the collection is open for deposit" do
+    tests = {
+      'published_open' => true,
+      'published'      => false,
+      'draft'          => false,
+      nil              => false,
+    }
+    tests.each do |status, exp|
+      @hc.stub(:object_status).and_return(status)
+      @hc.is_open.should == exp
+    end
   end
   
+  describe "is_openable()" do
+    
+    it "collection already open: should return false no matter what" do
+      @hc.stub('validate!').and_return(true)
+      @hc.stub(:object_status).and_return('published_open')
+      @hc.is_openable.should == false  # False in spite of being valid.
+    end
+
+    it "collection not open: should return true if valid" do
+      @hc.stub(:is_open).and_return(false)
+      [true, false, true].each do |exp|
+        @hc.stub('validate!').and_return(exp)
+        @hc.is_openable.should == exp
+      end
+    end
+
+  end
+    
   describe "invite email" do
     it "should provide a method to send deposit invites" do
       mail = @hc.send_invitation_email_notification("jdoe")
@@ -276,7 +294,6 @@ describe Hydrus::Collection do
 
     it "simple getters/setters should forward to APO" do
       methods = %w(
-        deposit_status
         embargo
         embargo=
         embargo_option
@@ -425,6 +442,23 @@ describe Hydrus::Collection do
       fcs  = {'facet_pivot' => {:a => exp}}
       resp = double('resp', :facet_counts => fcs)
       @HC.get_facet_counts_from_response(resp).should == exp
+    end
+
+    it "can exercise item_counts_with_labels()" do
+      cs = {
+          "draft"             => 1,
+          "awaiting_approval" => 2,
+          "returned"          => 3,
+          "published"         => 4,
+      }
+      @hc.stub(:item_counts).and_return(cs)
+      exp = [
+        [1, "draft"], 
+        [2, "waiting for approval"], 
+        [3, "item returned"], 
+        [4, "published"],
+      ]
+      @hc.item_counts_with_labels.should == exp
     end
 
     it "item_counts_of_collections()" do

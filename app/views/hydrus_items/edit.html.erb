@@ -133,12 +133,10 @@
       </span>
     <% when 'varies' %>
       This item will be released for discovery and download 
-      <div data-behavior="radio-group" class="embargo-section">
-        <%= f.radio_button :embargo, "immediate", :checked => @document_fedora.embargo_date.blank? %> <%= f.label :embargo_immediate, "immediately" %>
-        <div data-behavior="radio-option" class="embargo-section">
-          <%= f.radio_button :embargo, "future", :checked => !@document_fedora.embargo_date.blank? %> <%= f.label :embargo_future, "on this date" %>
-          <%= f.text_field :embargo_date, :"data-behavior" => "datepicker", :"data-start-date" => @document_fedora.beginning_of_embargo_range , :"data-end-date" => @document_fedora.end_of_embargo_range, :class => "datepicker" %>
-        </div>
+      <div data-behavior="radio-disable-group" class="embargo-section">
+        <%= f.radio_button :embargo, "immediate", :checked => @document_fedora.embargo_date.blank?, :"data-control-element" => "#hydrus_item_embargo_date", :"data-control-disable" => "true" %> <%= f.label :embargo_immediate, "immediately" %>
+        <%= f.radio_button :embargo, "future", :checked => !@document_fedora.embargo_date.blank?, :"data-control-element" => "#hydrus_item_embargo_date", :"data-control-disable" => "false" %> <%= f.label :embargo_future, "on this date" %>
+        <%= f.text_field :embargo_date, :"data-behavior" => "datepicker", :"data-start-date" => @document_fedora.beginning_of_embargo_range , :"data-end-date" => @document_fedora.end_of_embargo_range, :class => "datepicker" %>
       </div>
     <% when 'fixed' %>
       This item will be released for discovery and download 

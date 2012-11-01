@@ -8,7 +8,7 @@ class Hydrus::Item < Hydrus::GenericObject
 
   attr_accessor :embargo
   
-  validate :collection_is_open, :on => :create
+  validate :enforce_collection_is_open, :on => :create
   validates :actors, :at_least_one=>true, :if => :should_validate
   validates :files, :at_least_one=>true, :if => :should_validate
   validate  :must_accept_terms_of_deposit, :if => :should_validate
@@ -66,10 +66,12 @@ class Hydrus::Item < Hydrus::GenericObject
     item.deposit_time  = Time.now.to_s
     # Add event.
     item.events.add_event('hydrus', user, 'Item created')
-    # Check to see if this user needs to agree again for this new item, if not, indicate agreement has already occured automatically
+    # Check to see if this user needs to agree again for this new item, if not,
+    # indicate agreement has already occured automatically
     if item.requires_terms_acceptance(user.to_s,coll) == false
-      item.accepted_terms_of_deposit="true"
-      item.events.add_event('hydrus', user, 'Terms of deposit accepted due to previous item acceptance in collection')
+      item.accepted_terms_of_deposit = "true"
+      msg = 'Terms of deposit accepted due to previous item acceptance in collection'
+      item.events.add_event('hydrus', user, msg)
     else
       item.accepted_terms_of_deposit="false"      
     end
@@ -88,8 +90,9 @@ class Hydrus::Item < Hydrus::GenericObject
   # Publish the Item.
   def publish(value = nil)
     # At the moment of publication, we refresh various titles.
+    # Note: the label resides in Fedora's foxml:objectProperties.
     identityMetadata.objectLabel = title
-    self.label                   = title # The label in Fedora's foxml:objectProperties.
+    self.label                   = title
     self.save
     # Advance workflow to record that the object has been published.
     # And auto-approve, unless human review is needed.
@@ -119,9 +122,27 @@ class Hydrus::Item < Hydrus::GenericObject
     end
   end
 
+  # Returns true if the object can be submitted for approval:
+  # a valid draft object that actually requires human approval.
+  # Note: returned is not a valid object_status here, because this
+  # test concerns itself with the initial submission for approval.
+  def can_be_submitted_for_approval
+    return false unless object_status == 'draft'
+    return false unless to_bool(requires_human_approval)
+    return validate!
+  end
+
   # Returns true only if the Item is unpublished.
   def is_destroyable
     return not(is_published)
+  end
+
+  # Returns true if the item is publishable: must be valid and must
+  # have the correct object_status.
+  def is_publishable
+    return false unless validate!
+    return is_awaiting_approval if to_bool(requires_human_approval)
+    return is_draft
   end
 
   # Returns the Item's Collection.
@@ -187,8 +208,10 @@ class Hydrus::Item < Hydrus::GenericObject
       :include_root_xml => false)
   end
 
-  # Returns true only if the Item has an open Collection.
-  def collection_is_open
+  # A validation used before creating a new Item.
+  # Returns true if the collection is open; otherwise,
+  # returns false and adds a validation error.
+  def enforce_collection_is_open
     c = collection
     return true if c && c.is_open
     errors.add(:collection, "must be open to have new items added")

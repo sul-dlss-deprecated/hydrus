@@ -32,11 +32,8 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
     :label => 'Default Object Rights',
     :control_group => 'M')
       
+  # Note: all other APO validation occurs in the Collection class.
   validates :pid, :is_druid => true
-  validates :embargo_option, :presence => true, :if => :should_validate
-  validates :license_option, :presence => true, :if => :should_validate
-  validate  :check_embargo_options, :if => :should_validate
-  validate  :check_license_options, :if => :should_validate
 
   setup_delegations(
     # [:METHOD_NAME,          :uniq, :at... ]
@@ -48,7 +45,6 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
       [:collection_depositor, true, :collection_depositor, :person, :identifier],
     ],
     "administrativeMetadata" => [
-      [:deposit_status,       true,  :hydrus, :depositStatus],
       [:embargo,              true,  :hydrus, :embargo],
       [:embargo_option,       true,  :hydrus, :embargo, :option],
       [:license,              true,  :hydrus, :license],
@@ -60,7 +56,6 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
 
   def initialize(*args)
     super
-    @should_validate = false
   end
 
   def self.create(user)
@@ -91,38 +86,10 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
     return apo
   end
 
-  def check_embargo_options
-    if embargo_option != 'none' && embargo.blank?
-      errors.add(:embargo, "must have a time period specified")
-    end
-  end
-
-  def check_license_options
-    if license_option != 'none' && license.blank?
-      errors.add(:license, "must be specified")
-    end
-  end
-
   def hydrus_class_to_s
     "apo"
   end
   
-  def is_published
-    return is_open
-  end
-
-  def is_submitted
-    return is_open
-  end
-  
-  def is_disapproved
-    false
-  end
-  
-  def is_open
-    return deposit_status == "open"
-  end
-
   # Returns a hash of info needed for licenses in the APO.
   # Keys correspond to the license_option in the OM terminology.
   # Values are displayed in the web form.

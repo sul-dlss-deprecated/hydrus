@@ -93,6 +93,10 @@ form.step .peer_reviewed label {
 	display: inline;
 }
 
+form .field_with_errors {
+	display: inline-block;
+}
+
 .dropdown-menu a {border-bottom: none;}
 .dropdown-menu .disabled a {color: #cccccc;}
 .dropdown-menu li.disabled:hover, .dropdown-menu .disabled a:hover {cursor: default; background: none; color:#cccccc}

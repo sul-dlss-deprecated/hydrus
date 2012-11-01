@@ -8,6 +8,23 @@ class Hydrus::Collection < Hydrus::GenericObject
   before_validation :remove_values_for_associated_attribute_with_value_none
   after_validation :strip_whitespace, :cleanup_usernames
 
+  validates :embargo_option, :presence => true, :if => :should_validate
+  validates :license_option, :presence => true, :if => :should_validate
+  validate  :check_embargo_options,             :if => :should_validate
+  validate  :check_license_options,             :if => :should_validate
+
+  def check_embargo_options
+    if embargo_option != 'none' && embargo.blank?
+      errors.add(:embargo, "must have a time period specified")
+    end
+  end
+
+  def check_license_options
+    if license_option != 'none' && license.blank?
+      errors.add(:license, "must be specified")
+    end
+  end
+
   attr_accessor :item_counts
 
   setup_delegations(
@@ -75,6 +92,17 @@ class Hydrus::Collection < Hydrus::GenericObject
     return hydrus_items.size > 0
   end
 
+  # Returns true if the collection is open.
+  def is_open
+    return object_status == 'published_open'
+  end
+
+  # Returns true if the collection can be opened.
+  def is_openable
+    return false if is_open
+    return validate!
+  end
+
   # the users who will receive email notifications when a collection is opened or closed
   def recipients_for_collection_update_emails
     (
@@ -92,7 +120,6 @@ class Hydrus::Collection < Hydrus::GenericObject
   def publish(value)
     if to_bool(value)
       # Open the collection.
-      apo.deposit_status = 'open'
       self.object_status = 'published_open'
       events.add_event('hydrus', @current_user, 'Collection opened')
 
@@ -113,7 +140,6 @@ class Hydrus::Collection < Hydrus::GenericObject
       approve()
     else
       # Close the collection.
-      apo.deposit_status = 'closed'
       self.object_status = 'published_closed'
       events.add_event('hydrus', @current_user, 'Collection closed')
     end
@@ -158,10 +184,6 @@ class Hydrus::Collection < Hydrus::GenericObject
     save
   end
   
-  def is_open
-    return apo.is_open
-  end
-
   def strip_whitespace
      strip_whitespace_from_fields [:title,:abstract,:contact]
   end
@@ -218,10 +240,6 @@ class Hydrus::Collection < Hydrus::GenericObject
 
   def collection_depositor= val
     apo.collection_depositor= val
-  end
-
-  def deposit_status *args
-    apo.deposit_status *args
   end
 
   def embargo *args
@@ -404,7 +422,8 @@ class Hydrus::Collection < Hydrus::GenericObject
   end
 
   # Takes an array of Collection druids.
-  # Returns a hash of item counts, broken down by object status.
+  # Returns a hash-of-hashes of item counts, broken down by object status.
+  # See unit test for an example.
   def self.item_counts_of_collections(coll_pids)
     # Initalize the hash of item counts.
     counts = Hash[ coll_pids.map { |cp| [cp, initial_item_counts()] } ]
@@ -418,9 +437,9 @@ class Hydrus::Collection < Hydrus::GenericObject
     #   {
     #     "value" => "info:fedora/druid:oo000oo0003",
     #     "pivot" => [
-    #       { "value" => "draft",            "count" => 1 },
-    #       { "value" => "waiting_approval", "count" => 3 },
-    #       { "value" => "published",        "count" => 0 },
+    #       { "value" => "draft",             "count" => 1 },
+    #       { "value" => "awaiting_approval", "count" => 3 },
+    #       { "value" => "published",         "count" => 0 },
     #     ]
     #   }
     get_facet_counts_from_response(resp).each { |fc|
@@ -451,6 +470,9 @@ class Hydrus::Collection < Hydrus::GenericObject
     return resp.facet_counts['facet_pivot'].values.first
   end
 
+  # Returns an array-of-arrays containing the collection's @item_counts
+  # information. Instead of using object_status values, the info
+  # uses human readable labels for the UI. See unit test for an example.
   def item_counts_with_labels
     return item_counts.map { |s, n| [n, Hydrus::GenericObject.status_label(:item, s)] }
   end

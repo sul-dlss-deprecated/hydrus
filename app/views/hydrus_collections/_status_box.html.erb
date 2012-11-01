@@ -26,9 +26,9 @@
 			License details provided
 		</label>
 
-		<%=check_box_tag 'collection_opened_checkbox', true, @document_fedora.is_publishable, :disabled=>true%>
+		<%=check_box_tag 'collection_opened_checkbox', true, @document_fedora.is_openable, :disabled=>true%>
 		<label for="collection_opened_checkbox">
-			<%= select_status_checkbox_icon(@document_fedora.is_publishable) %>
+			<%= select_status_checkbox_icon(@document_fedora.is_openable) %>
 			Collection can be opened for deposit
 		</label>
 	<% end %>

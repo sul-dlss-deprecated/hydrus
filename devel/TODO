@@ -31,37 +31,33 @@ RightsMetadata issue?
 Update to latest dor-services-gem:
   - update gemfile
   - remove hydrusWF workflow definition from APO
-	- Set up WF object (currently oo000oo0099) on test/prod/dev as needed
+  - Set up WF object (currently oo000oo0099) on test/prod/dev as needed
 
 -----------------------------------
 Unify our handling of object status
 -----------------------------------
 
-Wrap up: review of relevant methods.
+Refactor and test backlog:
 
-Stub out workflow calls in unit and integration tests that create objects with the "fake" PID, so that
-we don't run into random test failures.
+  Rename Hydrus::Publishable to Hydrus:Validatable
+    Unit test: make sure validate! preserves should_validate
 
-Refactor
+  Delete is_approved:
+    app/models/hydrus/generic_object.rb
+    app/views/hydrus_items/_actions_box_show.html.erb
+    app/views/hydrus_items/_status_box.html.erb
+    spec/integration/collection_create_spec.rb
+    spec/integration/item_create_spec.rb
+    spec/models/hydrus/generic_object_spec.rb
 
-  APO: remove deposit_status from the app, and then remove these methods from APO.
-    is_published
-    is_submitted
-    is_disapproved
-    is_open
-
-    And does Collection need is_open?
-
-  Can we delete is_approved and its tests?
+  Refactor Item actions box: logic is complex and maybe bad.
+    app/views/hydrus_items/_actions_box_show.html.erb
 
   purl_page_ready: refactor to use workflow_ds_extension
 
   Move tests for workflow_ds_extension out of gen_obj_spec.
-    
-  spec for collection
-    tests for valid? do not fit the current code
 
-  is_publishable
+  Collection: the tests for valid? do not fit the current code
 
   Collection: refactor publish()
     - Use separately named methods to communicate actual steps: open() and close().
@@ -70,20 +66,16 @@ Refactor
 
   Item: similar refactor of publish().
 
+  Item.create: reverse if logic.
+
+  Item.requires_human_approval: convert to boolean? Maybe not.
+
   cleanup_usernames(): is this needed?
 
-Test backlog
+  Make sure publish(), approve(), etc are guarded at the model, not just at the
+  UI level.
 
-  Coll.create: check object_status, submit_time, deposit_time
-  Item.create: check object_status, submit_time, deposit_time
-  Coll.publish: check object_status
-  Item.publish: check object_status
-  can_be_submitted_for_approval
-  self.status_label(typ, status)
-  item_counts_with_labels
-
-Make sure publish(), approve(), etc are guarded at the model not, not just
-at the UI level.
+  Whitespace.
 
 --------
 Misc implementation tasks
@@ -95,12 +87,11 @@ object_type() in GenericObject.
 Stub out workflow calls in unit and integration tests that create objects with
 the "fake" PID, so that we don't run into random test failures.
 
-Bundle update OM.
+Look into rightsMD: what rightsMD should our objects contain? Refactor to
+take better advantage of OM and generic_ds.rb.
 
-Look into rightsMD
-  - what rightsMD should our objects contain?
-  - tests
-	- refactor to take advantage of OM and generic_ds.rb.
+Redirect unauthenticated users back to the page they were trying to view after
+logging in.
 
 Integration tests for role-protection and gated discovery:
   Collection:
