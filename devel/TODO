@@ -41,11 +41,7 @@ Unify our handling of object status
 
 Refactor and test backlog:
 
-  Test backlog:
-    can_be_submitted_for_approval
-    self.status_label(typ, status)
-    item_counts_with_labels
-    HydrusPropertiesDS: tests for the new terms
+  HydrusPropertiesDS: tests for the new terms
 
   Rename Hydrus::Publishable to Hydrus:Validatable
     Unit test: make sure validate! preserves should_validate
@@ -67,8 +63,7 @@ Refactor and test backlog:
 
   Move tests for workflow_ds_extension out of gen_obj_spec.
 
-  spec for collection
-    tests for valid? do not fit the current code
+  Collection: the tests for valid? do not fit the current code
 
   Collection: refactor publish()
     - Use separately named methods to communicate actual steps: open() and close().

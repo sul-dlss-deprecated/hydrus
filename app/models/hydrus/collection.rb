@@ -422,7 +422,8 @@ class Hydrus::Collection < Hydrus::GenericObject
   end
 
   # Takes an array of Collection druids.
-  # Returns a hash of item counts, broken down by object status.
+  # Returns a hash-of-hashes of item counts, broken down by object status.
+  # See unit test for an example.
   def self.item_counts_of_collections(coll_pids)
     # Initalize the hash of item counts.
     counts = Hash[ coll_pids.map { |cp| [cp, initial_item_counts()] } ]
@@ -436,9 +437,9 @@ class Hydrus::Collection < Hydrus::GenericObject
     #   {
     #     "value" => "info:fedora/druid:oo000oo0003",
     #     "pivot" => [
-    #       { "value" => "draft",            "count" => 1 },
-    #       { "value" => "waiting_approval", "count" => 3 },
-    #       { "value" => "published",        "count" => 0 },
+    #       { "value" => "draft",             "count" => 1 },
+    #       { "value" => "awaiting_approval", "count" => 3 },
+    #       { "value" => "published",         "count" => 0 },
     #     ]
     #   }
     get_facet_counts_from_response(resp).each { |fc|
@@ -469,6 +470,9 @@ class Hydrus::Collection < Hydrus::GenericObject
     return resp.facet_counts['facet_pivot'].values.first
   end
 
+  # Returns an array-of-arrays containing the collection's @item_counts
+  # information. Instead of using object_status values, the info
+  # uses human readable labels for the UI. See unit test for an example.
   def item_counts_with_labels
     return item_counts.map { |s, n| [n, Hydrus::GenericObject.status_label(:item, s)] }
   end

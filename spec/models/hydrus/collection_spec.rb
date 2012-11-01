@@ -444,6 +444,23 @@ describe Hydrus::Collection do
       @HC.get_facet_counts_from_response(resp).should == exp
     end
 
+    it "can exercise item_counts_with_labels()" do
+      cs = {
+          "draft"             => 1,
+          "awaiting_approval" => 2,
+          "returned"          => 3,
+          "published"         => 4,
+      }
+      @hc.stub(:item_counts).and_return(cs)
+      exp = [
+        [1, "draft"], 
+        [2, "waiting for approval"], 
+        [3, "item returned"], 
+        [4, "published"],
+      ]
+      @hc.item_counts_with_labels.should == exp
+    end
+
     it "item_counts_of_collections()" do
       exp = {
         "druid:xx000xx0001" => {
