@@ -95,7 +95,7 @@ class Hydrus::GenericObject < Dor::Item
   end
 
   # Returns true if the object status is currently returned-by-reviewer.
-  def is_disapproved
+  def is_returned
     return object_status == 'returned'
   end
 

@@ -269,7 +269,7 @@ describe Hydrus::GenericObject do
       @go.approve= v
     end
 
-    it "is_disapproved() should return true if object_status is returned" do
+    it "is_returned() should return true if object_status is returned" do
       tests = {
         'returned'  => true,
         'published' => false,
@@ -277,7 +277,7 @@ describe Hydrus::GenericObject do
       }
       tests.each do |status, exp|
         @go.stub(:object_status).and_return(status)
-        @go.is_disapproved.should == exp
+        @go.is_returned.should == exp
       end
     end
 

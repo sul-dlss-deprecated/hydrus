@@ -30,7 +30,7 @@
               </p>
 
             <% end %>
-          <% elsif @document_fedora.is_disapproved && can?(:edit, @document_fedora) %>
+          <% elsif @document_fedora.is_returned && can?(:edit, @document_fedora) %>
 
                 <p><strong>Return reason:</strong> <%=@document_fedora.disapproval_reason%></p>
                 <p><button type="submit" class="btn btn-small save-edits"

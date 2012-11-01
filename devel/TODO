@@ -42,6 +42,14 @@ Misc wrap-up and refactoring:
   Refactor Item actions box: logic is complex and maybe bad.
     app/views/hydrus_items/_actions_box_show.html.erb
 
+    is_awaiting_approval && can(:review)
+      approve/return
+    is_returned   && can(:edit)
+      resubmit
+    is_publishable || can_be_submitted_for_approval) && can(:edit)
+      publish/submit for aproval
+
+
   Collection: refactor publish()
     - Use separately named methods to communicate actual steps: open() and close().
     - Modify UI controls accordingly.
@@ -53,8 +61,6 @@ Misc wrap-up and refactoring:
   UI level.
 
   Move tests for workflow_ds_extension out of gen_obj_spec.
-
-  Item.requires_human_approval: convert to boolean? Maybe not.
 
   Whitespace.
 
