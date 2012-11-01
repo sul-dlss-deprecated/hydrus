@@ -12,13 +12,13 @@
 <dd>
 <% if @document_fedora.is_published
 		if @document_fedora.purl_page_ready? %>
-			<%= link_to(@document_fedora.url, @document_fedora.url) %>
+			<%= link_to(@document_fedora.purl_url, @document_fedora.purl_url) %>
 		<% else %>
-			 <%= @document_fedora.url%>
+			 <%= @document_fedora.purl_url%>
 			<p class="help">URL not operational yet - item is still processing</p>
 		<% end %>
 <% else %>
-	<%= @document_fedora.url%>
+	<%= @document_fedora.purl_url%>
 	<p class="help">URL not operational since item is not published</p>
 <% end %>
 </dd>

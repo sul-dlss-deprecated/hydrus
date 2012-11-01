@@ -131,7 +131,7 @@ class Hydrus::GenericObject < Dor::Item
     return rightsMetadata.discover_access.first
   end
 
-  def url
+  def purl_url
    "#{Dor::Config.purl.base_url}#{pid}"
   end
 
