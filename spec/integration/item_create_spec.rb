@@ -112,7 +112,6 @@ describe("Item create", :type => :request, :integration => true) do
     item.object_status.should == 'draft'
     item.is_publishable.should == false
     item.is_published.should == false
-    item.is_approved.should == false
     item.is_disapproved.should == false
     item.is_destroyable.should == true
     item.submit_time.should be_blank
@@ -147,7 +146,6 @@ describe("Item create", :type => :request, :integration => true) do
     item.is_publishable.should == false
     item.can_be_submitted_for_approval.should == true    
     item.is_published.should == false
-    item.is_approved.should == false
     item.is_disapproved.should == false
     item.is_destroyable.should == true
     item.valid?.should == true
@@ -164,7 +162,6 @@ describe("Item create", :type => :request, :integration => true) do
     item.is_publishable.should == true
     item.requires_human_approval.should == "yes"
     item.is_published.should == false
-    item.is_approved.should == false
     item.is_disapproved.should == false
     item.is_destroyable.should == true
     item.submit_time.should_not be_blank
@@ -192,7 +189,6 @@ describe("Item create", :type => :request, :integration => true) do
     item.object_status.should == 'returned'
     item.is_publishable.should == false
     item.is_published.should == false
-    item.is_approved.should == false
     item.is_disapproved.should == true
     item.is_destroyable.should == true
     item.valid?.should == true
@@ -212,7 +208,6 @@ describe("Item create", :type => :request, :integration => true) do
     item.object_status.should == 'awaiting_approval'
     item.is_publishable.should == true
     item.is_published.should == false
-    item.is_approved.should == false
     item.is_disapproved.should == false
     item.is_destroyable.should == true
     item.valid?.should == true
@@ -236,7 +231,6 @@ describe("Item create", :type => :request, :integration => true) do
     item.object_status.should == 'published'
     item.is_publishable.should == false
     item.is_published.should == true
-    item.is_approved.should == true
     item.is_disapproved.should == false
     item.is_destroyable.should == false
     item.valid?.should == true
@@ -291,7 +285,6 @@ describe("Item create", :type => :request, :integration => true) do
     item.object_status.should == 'draft'
     item.is_publishable.should == false
     item.is_published.should == false
-    item.is_approved.should == false
     item.is_disapproved.should == false
     item.is_destroyable.should == true
     item.accepted_terms_of_deposit.should == "false"
@@ -325,7 +318,6 @@ describe("Item create", :type => :request, :integration => true) do
     item.requires_human_approval.should == "no"
     item.can_be_submitted_for_approval.should == false    
     item.is_published.should == false
-    item.is_approved.should == false
     item.is_disapproved.should == false
     item.is_destroyable.should == true
     item.valid?.should == true
@@ -340,7 +332,6 @@ describe("Item create", :type => :request, :integration => true) do
     item.object_status.should == 'published'
     item.is_publishable.should == false
     item.is_published.should == true
-    item.is_approved.should == true
     item.is_disapproved.should == false
     item.is_destroyable.should == false
     item.valid?.should == true

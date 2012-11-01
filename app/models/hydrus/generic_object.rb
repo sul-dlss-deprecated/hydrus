@@ -89,11 +89,6 @@ class Hydrus::GenericObject < Dor::Item
     return object_status == 'awaiting_approval'
   end
 
-  # Not sure why this method is needed?
-  def is_approved
-    return is_published
-  end
-
   # Returns true if the object status is any flavor of published.
   def is_published
     return object_status[0..8] == 'published'

@@ -257,13 +257,6 @@ describe Hydrus::GenericObject do
       end
     end
 
-    it "is_approved() should return value of is_published" do
-      [true, false, true].each do |v|
-        @go.stub(:is_published).and_return(v)
-        @go.is_approved.should == v
-      end
-    end
-
     it "publish=() should delegate to publish()" do
       v = 9876
       @go.should_receive(:publish).with(v)

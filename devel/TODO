@@ -42,20 +42,8 @@ Refactor and test backlog:
   Rename Hydrus::Publishable to Hydrus:Validatable
     Unit test: make sure validate! preserves should_validate
 
-  Delete is_approved:
-    app/models/hydrus/generic_object.rb
-    app/views/hydrus_items/_actions_box_show.html.erb
-    app/views/hydrus_items/_status_box.html.erb
-    spec/integration/collection_create_spec.rb
-    spec/integration/item_create_spec.rb
-    spec/models/hydrus/generic_object_spec.rb
-
   Refactor Item actions box: logic is complex and maybe bad.
     app/views/hydrus_items/_actions_box_show.html.erb
-
-  purl_page_ready: refactor to use workflow_ds_extension
-
-  Move tests for workflow_ds_extension out of gen_obj_spec.
 
   Collection: the tests for valid? do not fit the current code
 
@@ -64,18 +52,20 @@ Refactor and test backlog:
     - Modify UI controls accordingly.
     - Set titles/labels only during actualy publishing.
 
-  Item: similar refactor of publish().
+  Item: similar refactor of publish(). Also reverse the if logic.
 
-  Item.create: reverse if logic.
+  Make sure publish(), approve(), etc are guarded at the model, not just at the
+  UI level.
+
+  Move tests for workflow_ds_extension out of gen_obj_spec.
 
   Item.requires_human_approval: convert to boolean? Maybe not.
 
   cleanup_usernames(): is this needed?
 
-  Make sure publish(), approve(), etc are guarded at the model, not just at the
-  UI level.
-
   Whitespace.
+
+  purl_page_ready: refactor to use workflow_ds_extension
 
 --------
 Misc implementation tasks

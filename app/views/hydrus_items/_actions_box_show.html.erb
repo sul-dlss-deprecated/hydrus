@@ -8,7 +8,7 @@
         <!-- Approve/disapprove buttons. -->
         <% if !@document_fedora.is_draft %>
           <% if can?(:review, @document_fedora) %>
-            <% unless @document_fedora.is_approved %>
+            <% unless @document_fedora.is_published %>
 
               <p>
                 <button type="submit" class="btn btn-small save-edits"
