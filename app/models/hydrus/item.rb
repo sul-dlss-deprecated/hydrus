@@ -125,6 +125,14 @@ class Hydrus::Item < Hydrus::GenericObject
     return not(is_published)
   end
 
+  # Returns true if the item is publishable: must be valid and must
+  # have the correct object_status.
+  def is_publishable
+    return false unless validate!
+    return is_awaiting_approval if to_bool(requires_human_approval)
+    return is_draft
+  end
+
   # Returns the Item's Collection.
   def collection
     cs = super       # Get all collections.

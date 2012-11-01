@@ -156,7 +156,7 @@ describe("Item create", :type => :request, :integration => true) do
     find('span#status-label').should have_content('Waiting for approval')    
     # Check various Item attributes and methods.
     item = Hydrus::Item.find(druid)
-    item.is_publishable.should == false
+    item.is_publishable.should == true
     item.requires_human_approval.should == "yes"
     item.is_published.should == false
     item.is_approved.should == false
@@ -202,7 +202,7 @@ describe("Item create", :type => :request, :integration => true) do
     click_button(resubmit_button)
     # Check various Item attributes and methods.
     item = Hydrus::Item.find(druid)
-    item.is_publishable.should == false
+    item.is_publishable.should == true
     item.is_published.should == false
     item.is_approved.should == false
     item.is_disapproved.should == false
@@ -225,7 +225,7 @@ describe("Item create", :type => :request, :integration => true) do
     find('span#status-label').should have_content('Published')        
     # Check various Item attributes and methods.
     item = Hydrus::Item.find(druid)
-    item.is_publishable.should == true
+    item.is_publishable.should == false
     item.is_published.should == true
     item.is_approved.should == true
     item.is_disapproved.should == false
@@ -326,7 +326,7 @@ describe("Item create", :type => :request, :integration => true) do
     find('span#status-label').should have_content('Published')    
     # Check various Item attributes and methods.
     item = Hydrus::Item.find(druid)
-    item.is_publishable.should == true
+    item.is_publishable.should == false
     item.is_published.should == true
     item.is_approved.should == true
     item.is_disapproved.should == false

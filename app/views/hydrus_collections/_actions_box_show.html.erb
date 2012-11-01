@@ -9,7 +9,7 @@
               <button type="submit" class="btn btn-small save-edits"
                       name="hydrus_collection[publish]" value="false"
                       id="hydrus_collection_publish">Close Collection</button>
-      <% elsif @document_fedora.is_publishable %>
+      <% elsif @document_fedora.is_openable %>
         <button type="submit" class="btn btn-small save-edits"
                 name="hydrus_collection[publish]" value="true"
                 id="hydrus_collection_publish">Open Collection</button>
@@ -18,7 +18,7 @@
   <% end %>
 
  <% if can? :create_items_in, @document_fedora %>
-			<% message = @document_fedora.is_publishable ? "To add items, you must open the collection." : "To add items, you must fill in all required fields and open the collection." %> 
+			<% message = @document_fedora.is_openable ? "To add items, you must open the collection." : "To add items, you must fill in all required fields and open the collection." %> 
       <div class="btn-group add-content-dropdown" <%=raw "data-placement=\"bottom\" rel=\"tooltip\" data-original-title=\"#{message}\"" unless is_open%> style="display:none;" >
         <button class="<%="disabled" unless is_open%> btn btn-small">Add new &hellip;</button>
         <button class="<%="disabled" unless is_open%> btn btn-small dropdown-toggle" data-toggle="dropdown">

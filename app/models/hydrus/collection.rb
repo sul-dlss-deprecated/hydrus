@@ -97,6 +97,12 @@ class Hydrus::Collection < Hydrus::GenericObject
     return object_status == 'published_open'
   end
 
+  # Returns true if the collection can be opened.
+  def is_openable
+    return false if is_open
+    return validate!
+  end
+
   # the users who will receive email notifications when a collection is opened or closed
   def recipients_for_collection_update_emails
     (

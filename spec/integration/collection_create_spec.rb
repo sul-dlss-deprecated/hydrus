@@ -108,7 +108,7 @@ describe("Collection create", :type => :request, :integration => true) do
     coll = Hydrus::Collection.find(druid)
     apo = coll.apo
     # Check various Collection attributes and methods.
-    coll.is_publishable.should == false
+    coll.is_openable.should == false
     coll.is_published.should == false
     coll.is_approved.should == false
     coll.is_destroyable.should == true
@@ -126,7 +126,7 @@ describe("Collection create", :type => :request, :integration => true) do
     coll = Hydrus::Collection.find(druid)
     apo = coll.apo
     # Check various Collection attributes and methods.
-    coll.is_publishable.should == true
+    coll.is_openable.should == true
     coll.is_published.should == false
     coll.is_approved.should == false
     coll.is_destroyable.should == true
@@ -141,7 +141,7 @@ describe("Collection create", :type => :request, :integration => true) do
     coll = Hydrus::Collection.find(druid)
     apo = coll.apo
     # Check various Collection attributes and methods.
-    coll.is_publishable.should == true
+    coll.is_openable.should == false
     coll.is_published.should == true
     coll.is_approved.should == true
     coll.is_destroyable.should == false
@@ -156,7 +156,7 @@ describe("Collection create", :type => :request, :integration => true) do
     coll = Hydrus::Collection.find(druid)
     apo = coll.apo
     # Check various Collection attributes and methods.
-    coll.is_publishable.should == true
+    coll.is_openable.should == true
     coll.is_published.should == true
     coll.is_approved.should == true
     coll.is_destroyable.should == false
@@ -181,7 +181,7 @@ describe("Collection create", :type => :request, :integration => true) do
     coll = Hydrus::Collection.find(druid)
     apo = coll.apo
     # Check various Collection attributes and methods.
-    coll.is_publishable.should == true
+    coll.is_openable.should == false
     coll.is_published.should == true
     coll.is_approved.should == true
     coll.is_destroyable.should == false

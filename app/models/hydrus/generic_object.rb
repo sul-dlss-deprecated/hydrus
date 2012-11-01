@@ -78,10 +78,9 @@ class Hydrus::GenericObject < Dor::Item
     :control_group => 'M')
 
 
-  # Returns true if the object is beyond the draft state -- that is,
-  # it has been submitted or gone even farther in the process.
-  def is_submitted
-    return object_status != 'draft'
+  # Returns true if the object is in the draft state.
+  def is_draft
+    return object_status == 'draft'
   end
 
   # Returns true if the object is waiting for approval by a reviewer.
@@ -119,6 +118,7 @@ class Hydrus::GenericObject < Dor::Item
   def approve=(val)  approve(val) end
   def resubmit=(val) resubmit(val) end
 
+  # Returns the object type: item or collection.
   def object_type
     return identityMetadata.objectType.first
   end

@@ -44,9 +44,10 @@
 				</label>
 			<% end %>
 			
-			<%=check_box_tag 'item_opened_checkbox', true, @document_fedora.is_publishable, :disabled=>true%> 
+			<% ispub = @document_fedora.is_publishable %> 
+			<%=check_box_tag 'item_opened_checkbox', true, ispub, :disabled=>true%> 
 			<label for="item_opened_checkbox">
-				<%= select_status_checkbox_icon(@document_fedora.is_publishable) %>
+				<%= select_status_checkbox_icon(ispub) %>
 				Item can be published
 			</label>
 

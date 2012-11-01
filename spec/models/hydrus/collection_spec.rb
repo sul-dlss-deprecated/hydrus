@@ -143,6 +143,24 @@ describe Hydrus::Collection do
     end
   end
   
+  describe "is_openable()" do
+    
+    it "collection already open: should return false no matter what" do
+      @hc.stub('validate!').and_return(true)
+      @hc.stub(:object_status).and_return('published_open')
+      @hc.is_openable.should == false  # False in spite of being valid.
+    end
+
+    it "collection not open: should return true if valid" do
+      @hc.stub(:is_open).and_return(false)
+      [true, false, true].each do |exp|
+        @hc.stub('validate!').and_return(exp)
+        @hc.is_openable.should == exp
+      end
+    end
+
+  end
+    
   describe "invite email" do
     it "should provide a method to send deposit invites" do
       mail = @hc.send_invitation_email_notification("jdoe")

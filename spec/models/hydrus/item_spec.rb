@@ -495,6 +495,37 @@ describe Hydrus::Item do
     @hi.is_destroyable.should == false
   end
 
+  describe "is_publishable()" do
+
+    it "invalid object: should always return false" do
+      # If the item were valid, this setup would cause the method to return true.
+      @hi.stub(:requires_human_approval).and_return('no')
+      @hi.stub(:is_draft).and_return(true)
+      # But it's not valid, so we should get false.
+      @hi.stub('validate!').and_return(false)
+      @hi.is_publishable.should == false
+    end
+
+    it "valid object: requires approval: should return value of is_awaiting_approval()" do
+      @hi.stub('validate!').and_return(true)
+      @hi.stub(:requires_human_approval).and_return('yes')
+      [true, false, true, false].each do |exp|
+        @hi.stub(:is_awaiting_approval).and_return(exp)
+        @hi.is_publishable.should == exp
+      end
+    end
+
+    it "valid object: does not require approval: should return value of is_draft()" do
+      @hi.stub('validate!').and_return(true)
+      @hi.stub(:requires_human_approval).and_return('no')
+      [true, false, true, false].each do |exp|
+        @hi.stub(:is_draft).and_return(exp)
+        @hi.is_publishable.should == exp
+      end
+    end
+
+  end
+
   it "content_directory()" do
     dru = 'oo000oo9999'
     @hi.stub(:pid).and_return("druid:#{dru}")
