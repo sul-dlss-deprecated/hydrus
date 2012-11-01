@@ -43,6 +43,7 @@ describe("Collection create", :type => :request, :integration => true) do
     coll.abstract.should == ni.abstract
     coll.contact.should  == ni.contact
     coll.should be_instance_of Hydrus::Collection
+    coll.deposit_time.should_not be_blank
     # Get the APO of the Collection.
     apo = coll.apo
     apo.should be_instance_of Hydrus::AdminPolicyObject
@@ -98,20 +99,16 @@ describe("Collection create", :type => :request, :integration => true) do
     # offer the Open Collection button.
     div_cs = find("div.collection-actions")
     div_cs.should_not have_button(open_button)
-    # err_msgs = div_cs.all('li').map { |e| e.text }.join("\n")
-    # exp = [
-    #   /^Abstract/,
-    #   /^Contact/,
-    # ]
-    # exp.each { |e| err_msgs.should =~ e }
     # Get the Collection and APO objects from fedora.
     coll = Hydrus::Collection.find(druid)
     apo = coll.apo
     # Check various Collection attributes and methods.
+    coll.object_status.should == 'draft'
     coll.is_openable.should == false
     coll.is_published.should == false
     coll.is_approved.should == false
     coll.is_destroyable.should == true
+    coll.submit_time.should be_blank
     coll.valid?.should == true  # Because unpublished, so validation is limited.
     coll.is_open.should == false
     # Go back to edit page and fill in required elements.
@@ -126,6 +123,7 @@ describe("Collection create", :type => :request, :integration => true) do
     coll = Hydrus::Collection.find(druid)
     apo = coll.apo
     # Check various Collection attributes and methods.
+    coll.object_status.should == 'draft'
     coll.is_openable.should == true
     coll.is_published.should == false
     coll.is_approved.should == false
@@ -141,10 +139,12 @@ describe("Collection create", :type => :request, :integration => true) do
     coll = Hydrus::Collection.find(druid)
     apo = coll.apo
     # Check various Collection attributes and methods.
+    coll.object_status.should == 'published_open'
     coll.is_openable.should == false
     coll.is_published.should == true
     coll.is_approved.should == true
     coll.is_destroyable.should == false
+    coll.submit_time.should_not be_blank
     coll.valid?.should == true
     coll.is_open.should == true
     # Close the Collection.
@@ -156,6 +156,7 @@ describe("Collection create", :type => :request, :integration => true) do
     coll = Hydrus::Collection.find(druid)
     apo = coll.apo
     # Check various Collection attributes and methods.
+    coll.object_status.should == 'published_closed'
     coll.is_openable.should == true
     coll.is_published.should == true
     coll.is_approved.should == true
@@ -181,6 +182,7 @@ describe("Collection create", :type => :request, :integration => true) do
     coll = Hydrus::Collection.find(druid)
     apo = coll.apo
     # Check various Collection attributes and methods.
+    coll.object_status.should == 'published_open'
     coll.is_openable.should == false
     coll.is_published.should == true
     coll.is_approved.should == true

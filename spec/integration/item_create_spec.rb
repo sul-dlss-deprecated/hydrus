@@ -44,6 +44,7 @@ describe("Item create", :type => :request, :integration => true) do
     item.person.first.should == 'person_foo'
     item.abstract.should == 'abstract_foo'
     item.should be_instance_of Hydrus::Item
+    item.deposit_time.should_not be_blank
     # Check workflow of Item.
     wf_nodes = item.workflows.find_by_terms(:workflow)
     wf_nodes.size.should == 1
@@ -108,11 +109,13 @@ describe("Item create", :type => :request, :integration => true) do
     find('span#status-label').should have_content('Draft')    
     # Check various Item attributes and methods.
     item = Hydrus::Item.find(druid)
+    item.object_status.should == 'draft'
     item.is_publishable.should == false
     item.is_published.should == false
     item.is_approved.should == false
     item.is_disapproved.should == false
     item.is_destroyable.should == true
+    item.submit_time.should be_blank
     item.accepted_terms_of_deposit.should == "false"
     item.valid?.should == true  # Because unpublished, so validation is limited.
     # Go back to edit page and fill in required elements.
@@ -140,6 +143,7 @@ describe("Item create", :type => :request, :integration => true) do
 
     # Check various Item attributes and methods.
     item = Hydrus::Item.find(druid)
+    item.object_status.should == 'draft'
     item.is_publishable.should == false
     item.can_be_submitted_for_approval.should == true    
     item.is_published.should == false
@@ -156,12 +160,14 @@ describe("Item create", :type => :request, :integration => true) do
     find('span#status-label').should have_content('Waiting for approval')    
     # Check various Item attributes and methods.
     item = Hydrus::Item.find(druid)
+    item.object_status.should == 'awaiting_approval'
     item.is_publishable.should == true
     item.requires_human_approval.should == "yes"
     item.is_published.should == false
     item.is_approved.should == false
     item.is_disapproved.should == false
     item.is_destroyable.should == true
+    item.submit_time.should_not be_blank
     item.valid?.should == true
     # Return to edit page, and try to save Item with an empty title.
     click_link "Edit Draft"
@@ -183,6 +189,7 @@ describe("Item create", :type => :request, :integration => true) do
     
     # Check various Item attributes and methods.
     item = Hydrus::Item.find(druid)
+    item.object_status.should == 'returned'
     item.is_publishable.should == false
     item.is_published.should == false
     item.is_approved.should == false
@@ -202,6 +209,7 @@ describe("Item create", :type => :request, :integration => true) do
     click_button(resubmit_button)
     # Check various Item attributes and methods.
     item = Hydrus::Item.find(druid)
+    item.object_status.should == 'awaiting_approval'
     item.is_publishable.should == true
     item.is_published.should == false
     item.is_approved.should == false
@@ -225,6 +233,7 @@ describe("Item create", :type => :request, :integration => true) do
     find('span#status-label').should have_content('Published')        
     # Check various Item attributes and methods.
     item = Hydrus::Item.find(druid)
+    item.object_status.should == 'published'
     item.is_publishable.should == false
     item.is_published.should == true
     item.is_approved.should == true
@@ -279,6 +288,7 @@ describe("Item create", :type => :request, :integration => true) do
     find('span#status-label').should have_content('Draft')    
     # Check various Item attributes and methods.
     item = Hydrus::Item.find(druid)
+    item.object_status.should == 'draft'
     item.is_publishable.should == false
     item.is_published.should == false
     item.is_approved.should == false
@@ -310,6 +320,7 @@ describe("Item create", :type => :request, :integration => true) do
     find("div.collection-actions").should have_button(submit_button)
     # Check various Item attributes and methods.
     item = Hydrus::Item.find(druid)
+    item.object_status.should == 'draft'
     item.is_publishable.should == true
     item.requires_human_approval.should == "no"
     item.can_be_submitted_for_approval.should == false    
@@ -326,6 +337,7 @@ describe("Item create", :type => :request, :integration => true) do
     find('span#status-label').should have_content('Published')    
     # Check various Item attributes and methods.
     item = Hydrus::Item.find(druid)
+    item.object_status.should == 'published'
     item.is_publishable.should == false
     item.is_published.should == true
     item.is_approved.should == true

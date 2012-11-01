@@ -42,8 +42,6 @@ Unify our handling of object status
 Refactor and test backlog:
 
   Test backlog:
-    Coll.create: check object_status, submit_time, deposit_time
-    Item.create: check object_status, submit_time, deposit_time
     Coll.publish: check object_status
     Item.publish: check object_status
     can_be_submitted_for_approval
