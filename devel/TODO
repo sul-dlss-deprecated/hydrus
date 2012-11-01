@@ -39,9 +39,6 @@ Unify our handling of object status
 
 Refactor and test backlog:
 
-  Rename Hydrus::Publishable to Hydrus:Validatable
-    Unit test: make sure validate! preserves should_validate
-
   Refactor Item actions box: logic is complex and maybe bad.
     app/views/hydrus_items/_actions_box_show.html.erb
 

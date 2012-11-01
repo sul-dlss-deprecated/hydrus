@@ -1,7 +1,7 @@
 class Hydrus::GenericObject < Dor::Item
 
   include Hydrus::ModelHelper
-  include Hydrus::Publishable
+  include Hydrus::Validatable
   include Hydrus::WorkflowDsExtension
   extend  Hydrus::Delegatable
   include ActiveModel::Validations
