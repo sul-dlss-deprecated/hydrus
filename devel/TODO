@@ -15,8 +15,6 @@ select_status_checkbox_icon helper method (application_helper.rb).
 Item View page: Fix conditional display of metadata sections when only some
 required fields have been saved.
 
-Fix embargo date UI datepicker not being reselected when an invalid date is entered and a validation error occurs.
-
 --------
 Integration with DOR
 --------
@@ -178,8 +176,6 @@ NEW FEATURES
 ****************
 
 File-level licensing.
-
-Reserving a PURL.
 
 PURL display of Hydrus objects.
 

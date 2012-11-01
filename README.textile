@@ -41,11 +41,12 @@ h2. Starting the app
 	rake jetty:start
 	rails server
 	
-Go to http://localhost:3000
-
 Or for a quieter output on the console:
-
+	
 	rake server
+
+	Go to http://localhost:3000
+	
 	
 h2. Default user
 
@@ -112,6 +113,12 @@ multiple working branches if you are developing multiple features at once that
 you don't want to mix together.  Just create a different local branch and
 replace "working" above with your local branch name.
 
+h2. Creating test items
+
+You can create test collections and items quickly using a developer script.  For help using the script:
+
+	rails runner devel/create_test_item.rb help
+
 h2. Deploying
 
   cd deploy
@@ -131,6 +138,8 @@ h2. Useful commands
 h3. Using Rails console:
 
 	rails console
+	
+	rails console production # for production mode
 	
 h3. Dropping databases entirely:
 
