@@ -72,19 +72,25 @@ $(document).ready(function(){
 
 // Manage groups of radio buttons that have related fields that need to be disabled.
 function manage_radio_groups() {
-	$('[data-behavior="radio-group"]').each(function(){
-		var group = $(this)
-		// Disable all selects and inputs (except radio buttons)
-		$('select, input:not([type="radio"])', group).each(function(){
-			// Don't disable an input/select if we have a selected radio button in the grouping.
-			if($('input:radio:checked', $(this).parents('[data-behavior="radio-option"]')).length == 0){
-  			$(this).prop("disabled",true);
-			}
+	$('[data-behavior="radio-disable-group"]').each(function(){
+		var group = $(this);
+		// disable all non-radio inputs in group
+		$('select, input:not([type="radio"])', group).prop("disabled","disabled");
+		// enable any elements that correspond to a pre-checked radio that would enable the element on click
+		$('[data-control-disable="false"]:checked', group).each(function(){
+			$($(this).attr("data-control-element"), group).each(function(){
+			  $(this).removeAttr("disabled");
+			});
 		});
-		// Add click function to all radio buttons in group to enable related selects/inputs
-		$('input:radio', group).live("click",function(){
-			$('select, input:not([type="radio"])', group).prop("disabled", true);
-			$(this).parents('[data-behavior="radio-option"]').children('select, input').prop("disabled", false);
+		// add click events to radios in disable group to disable or enable the element referred in the data-control-element attribute.
+		$('[data-control-element]', group).on("click",function(){
+			if($(this).attr("data-control-disable") == "true") {
+				$($(this).attr("data-control-element"), group).prop("disabled", "disabled");
+			}else{
+				$($(this).attr("data-control-element"), group).each(function(){
+					$(this).removeAttr("disabled");
+				});
+			}
 		});
 	});
 }
