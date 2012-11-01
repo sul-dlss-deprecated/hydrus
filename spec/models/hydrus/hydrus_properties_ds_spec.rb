@@ -17,6 +17,8 @@ describe Hydrus::HydrusPropertiesDS do
         <acceptedTermsOfDeposit>false</acceptedTermsOfDeposit>
         <objectStatus>draft</objectStatus>
         <disapprovalReason>Idiota</disapprovalReason>
+        <depositTime>2011-09-02</deposit_time>
+        <submitTime>2011-09-03</submit_time>
       #{@ds_end}
     EOF
     @dsdoc = Hydrus::HydrusPropertiesDS.from_xml(xml)
@@ -30,6 +32,8 @@ describe Hydrus::HydrusPropertiesDS do
       [:accepted_terms_of_deposit, ["false"]],
       [:object_status, ["draft"]],
       [:disapproval_reason, ["Idiota"]],
+      [:deposit_time, ["2011-09-02"]],
+      [:submit_time,  ["2011-09-03"]],
     ]
     tests.each do |terms, exp|
       @dsdoc.term_values(*terms).should == exp
