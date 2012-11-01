@@ -104,14 +104,6 @@ class Hydrus::GenericObject < Dor::Item
     return object_status == 'returned'
   end
 
-  # Returns true if the object can be submitted for approval:
-  # a valid draft object that actually requires human approval.
-  def can_be_submitted_for_approval
-    return false unless object_status == 'draft'
-    return false unless to_bool(requires_human_approval)
-    return validate!
-  end
-
   # The controller will call these methods, which we simply forward to
   # the Collection or Item class.
   def publish=(val)  publish(val) end

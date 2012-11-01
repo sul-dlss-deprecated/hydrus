@@ -42,8 +42,6 @@ Unify our handling of object status
 Refactor and test backlog:
 
   Test backlog:
-    Coll.publish: check object_status
-    Item.publish: check object_status
     can_be_submitted_for_approval
     self.status_label(typ, status)
     item_counts_with_labels
@@ -68,8 +66,6 @@ Refactor and test backlog:
   GenericObject.url: rename to purl_url.
 
   Move tests for workflow_ds_extension out of gen_obj_spec.
-
-  can_be_submitted_for_approval: move to Item.
 
   spec for collection
     tests for valid? do not fit the current code

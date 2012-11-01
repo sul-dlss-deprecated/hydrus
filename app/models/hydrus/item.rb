@@ -120,6 +120,16 @@ class Hydrus::Item < Hydrus::GenericObject
     end
   end
 
+  # Returns true if the object can be submitted for approval:
+  # a valid draft object that actually requires human approval.
+  # Note: returned is not a valid object_status here, because this
+  # test concerns itself with the initial submission for approval.
+  def can_be_submitted_for_approval
+    return false unless object_status == 'draft'
+    return false unless to_bool(requires_human_approval)
+    return validate!
+  end
+
   # Returns true only if the Item is unpublished.
   def is_destroyable
     return not(is_published)

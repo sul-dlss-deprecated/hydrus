@@ -488,6 +488,37 @@ describe Hydrus::Item do
     @hi.tracked_fields.should be_an_instance_of(Hash)
   end
 
+  describe "can_be_submitted_for_approval()" do
+
+    it "if item is not a draft, should return false" do
+      # Normally this would lead to a true result.
+      @hi.stub(:requires_human_approval).and_return('yes')
+      @hi.stub('validate!').and_return(true)
+      # But since the item is not a draft, we expect false.
+      @hi.stub(:object_status).and_return('returned')
+      @hi.can_be_submitted_for_approval.should == false
+    end
+
+    it "if item does not require human approval, should return false" do
+      # Normally this would lead to a true result.
+      @hi.stub(:object_status).and_return('draft')
+      @hi.stub('validate!').and_return(true)
+      # But since the item does not require human approval, we expect false.
+      @hi.stub(:requires_human_approval).and_return('no')
+      @hi.can_be_submitted_for_approval.should == false
+    end
+
+    it "otherwise, should return the value of validate!" do
+      @hi.stub(:object_status).and_return('draft')
+      @hi.stub(:requires_human_approval).and_return('yes')
+      [true, false, true, false].each do |exp|
+        @hi.stub('validate!').and_return(exp)
+        @hi.can_be_submitted_for_approval.should == exp
+      end
+    end
+
+  end
+
   it "is_destroyable() should return the negative of is_published" do
     @hi.stub(:is_published).and_return(false)
     @hi.is_destroyable.should == true
