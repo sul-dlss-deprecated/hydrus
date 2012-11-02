@@ -3,7 +3,7 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
   include Dor::Processable  # TODO: needed until dor-services gem includes in its APOs.
   include Hydrus::ModelHelper
   include Hydrus::Responsible
-  include Hydrus::Publishable
+  include Hydrus::Validatable
   extend  Hydrus::Delegatable
 
   # has_relationship('governed_objects', :is_governed_by, :inbound => true)

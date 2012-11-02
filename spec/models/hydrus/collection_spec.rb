@@ -284,6 +284,19 @@ describe Hydrus::Collection do
     @hc.tracked_fields.should be_an_instance_of(Hash)
   end
 
+  it "cleaned_usernames() should process the apo_person_roles info as expected" do
+    apr = {
+      'role1' => Set.new(%w(foo bar@blah quux@blah.edu)),
+      'role2' => Set.new(%w(abc@def xyz www@stanford.edu)),
+    }
+    exp = {
+      'role1' => 'foo,bar,quux',
+      'role2' => 'abc,xyz,www',
+    }
+    @hc.stub(:apo_person_roles).and_return(apr)
+    @hc.cleaned_usernames.should == exp
+  end
+
   describe "methods forwarded to the APO" do
     
     before(:each) do

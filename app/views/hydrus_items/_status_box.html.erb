@@ -37,9 +37,9 @@
 					Item submitted for approval
 				</label>
 			
-				<%=check_box_tag 'item_approved_checkbox', true, @document_fedora.is_approved, :disabled=>true%> 
+				<%=check_box_tag 'item_approved_checkbox', true, @document_fedora.is_published, :disabled=>true%> 
 				<label for="item_approved_checkbox">
-					<%= select_status_checkbox_icon(@document_fedora.is_approved) %>
+					<%= select_status_checkbox_icon(@document_fedora.is_published) %>
 					Item approved
 				</label>
 			<% end %>

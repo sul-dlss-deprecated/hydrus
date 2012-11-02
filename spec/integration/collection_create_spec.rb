@@ -106,7 +106,6 @@ describe("Collection create", :type => :request, :integration => true) do
     coll.object_status.should == 'draft'
     coll.is_openable.should == false
     coll.is_published.should == false
-    coll.is_approved.should == false
     coll.is_destroyable.should == true
     coll.submit_time.should be_blank
     coll.valid?.should == true  # Because unpublished, so validation is limited.
@@ -126,7 +125,6 @@ describe("Collection create", :type => :request, :integration => true) do
     coll.object_status.should == 'draft'
     coll.is_openable.should == true
     coll.is_published.should == false
-    coll.is_approved.should == false
     coll.is_destroyable.should == true
     coll.valid?.should == true
     coll.is_open.should == false
@@ -142,7 +140,6 @@ describe("Collection create", :type => :request, :integration => true) do
     coll.object_status.should == 'published_open'
     coll.is_openable.should == false
     coll.is_published.should == true
-    coll.is_approved.should == true
     coll.is_destroyable.should == false
     coll.submit_time.should_not be_blank
     coll.valid?.should == true
@@ -159,7 +156,6 @@ describe("Collection create", :type => :request, :integration => true) do
     coll.object_status.should == 'published_closed'
     coll.is_openable.should == true
     coll.is_published.should == true
-    coll.is_approved.should == true
     coll.is_destroyable.should == false
     coll.valid?.should == true
     coll.is_open.should == false
@@ -185,7 +181,6 @@ describe("Collection create", :type => :request, :integration => true) do
     coll.object_status.should == 'published_open'
     coll.is_openable.should == false
     coll.is_published.should == true
-    coll.is_approved.should == true
     coll.is_destroyable.should == false
     coll.valid?.should == true
     coll.is_open.should == true

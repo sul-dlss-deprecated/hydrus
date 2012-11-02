@@ -1,7 +1,7 @@
 class Hydrus::GenericObject < Dor::Item
 
   include Hydrus::ModelHelper
-  include Hydrus::Publishable
+  include Hydrus::Validatable
   include Hydrus::WorkflowDsExtension
   extend  Hydrus::Delegatable
   include ActiveModel::Validations
@@ -89,18 +89,13 @@ class Hydrus::GenericObject < Dor::Item
     return object_status == 'awaiting_approval'
   end
 
-  # Not sure why this method is needed?
-  def is_approved
-    return is_published
-  end
-
   # Returns true if the object status is any flavor of published.
   def is_published
     return object_status[0..8] == 'published'
   end
 
   # Returns true if the object status is currently returned-by-reviewer.
-  def is_disapproved
+  def is_returned
     return object_status == 'returned'
   end
 

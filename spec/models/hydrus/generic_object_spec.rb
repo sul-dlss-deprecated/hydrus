@@ -257,13 +257,6 @@ describe Hydrus::GenericObject do
       end
     end
 
-    it "is_approved() should return value of is_published" do
-      [true, false, true].each do |v|
-        @go.stub(:is_published).and_return(v)
-        @go.is_approved.should == v
-      end
-    end
-
     it "publish=() should delegate to publish()" do
       v = 9876
       @go.should_receive(:publish).with(v)
@@ -276,7 +269,7 @@ describe Hydrus::GenericObject do
       @go.approve= v
     end
 
-    it "is_disapproved() should return true if object_status is returned" do
+    it "is_returned() should return true if object_status is returned" do
       tests = {
         'returned'  => true,
         'published' => false,
@@ -284,7 +277,7 @@ describe Hydrus::GenericObject do
       }
       tests.each do |status, exp|
         @go.stub(:object_status).and_return(status)
-        @go.is_disapproved.should == exp
+        @go.is_returned.should == exp
       end
     end
 
