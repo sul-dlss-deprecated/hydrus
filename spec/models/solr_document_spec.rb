@@ -22,4 +22,21 @@ describe SolrDocument do
     sdoc.to_model()
   end
 
+  it "can exercise simple getters" do
+    h = {
+      'main_title_t'                => 'foo title',
+      'identityMetadata_objectId_t' => 'foo:pid',
+      'has_model_s'                 => 'info:fedora/afmodel:Hydrus_Item',
+      'object_status_t'             => 'awaiting_approval',
+      "roleMetadata_item_depositor_person_identifier_t" => 'foo_user',
+    }
+    sdoc = SolrDocument.new h
+    sdoc.main_title.should    == h['main_title_t']
+    sdoc.pid.should           == h['identityMetadata_objectId_t']
+    sdoc.object_type.should   == 'item'
+    sdoc.object_status.should == 'waiting for approval'
+    sdoc.depositor.should     == 'foo_user'
+    sdoc.path.should          == '/items/foo:pid'
+  end
+
 end

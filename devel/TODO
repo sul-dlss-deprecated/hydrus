@@ -1,5 +1,38 @@
 --------
-UI Redesign
+Integration with DOR
+--------
+
+Set up the listener scripts to update the Hydrus SOLR when Hydrus objects are
+updated outside of the Hydrus app. See the argo/bin directory for the latest
+copies of the scripts.
+
+Figure out why the publish robot in test does not actually publish items to the
+purl page. RightsMetadata issue?
+
+--------
+MH: current work
+--------
+
+Make sure publish(), approve(), etc are guarded at the model and controller
+levels, not just at the UI level.
+
+Collection.publish(). Refactor into separate open() and close() methods.  Set
+titles/labels only during actualy publishing.
+
+Model-level: call the relevant is_ method before running the action.  For
+example, in publish() call is_publishable() before doing anything.
+
+Controller-level: refactor so that each action (publish, open, close, approve,
+etc) is handled by a different controller method rather that by the update()
+method. Then, each of those methods should make the relevant can() call to
+ensure that the user has sufficient powers (this approach also requires some
+routing configuration).
+
+Integration tests for role-protection and gated discovery: Collection: open,
+close, discard, add item. Item: submit, approve, return.
+
+--------
+Other
 --------
 
 After finishing more thorough UI rework, look at: responsiveness issues;
@@ -15,55 +48,16 @@ select_status_checkbox_icon helper method (application_helper.rb).
 Item View page: Fix conditional display of metadata sections when only some
 required fields have been saved.
 
---------
-Integration with DOR
---------
-
-Set up the listener scripts to update the Hydrus SOLR when Hydrus objects are
-updated outside of the Hydrus app. See the argo/bin directory for the latest
-copies of the scripts.
-
-Figure out why the publish robot in test does not actually publish items to the purl page.
-RightsMetadata issue?
-
---------
-MH: current work
---------
-
-Make sure publish(), approve(), etc are guarded at the model and controller
-levels, not just at the UI level.
-  - Collection.publish(). Refactor into separate open() and close() methods.
-    Set titles/labels only during actualy publishing.
-  - Model-level: call the relevant is_ method before running the action.
-    For example, in publish() call is_publishable() before doing anything.
-  - Controller-level: refactor so that each action (publish, open, close,
-    approve, etc) is handled by a different controller method rather that by
-    the update() method. Then, each of those methods should make the relevant
-    can() call to ensure that the user has sufficient powers (this approach
-    also requires some routing configuration).
-
-Integration tests for role-protection and gated discovery:
-  Collection:
-    open collection
-    discard collection
-    close collection
-    add new Item
-  Item:
-    submit for approval
-
-Search results: display these fields: title; depositor; object type; object
-status; date added. [waiting on work to unify handling of object status]
-
---------
-Other
---------
+Fix embargo date UI datepicker not being reselected when an invalid date is
+entered and a validation error occurs.
 
 Refactor and write tests for redirect_if_not_correct_object_type: seems more
 complex than it needs to be. Also, the code probably won't run as written
 because the APO class does not have an object_type method (that might be a
-problem as well). 
+problem as well).
 
-Disable edit tab for published items. (NOTE: THIS ALREADY HAPPENS AUTOMATICALLY WHEN NOT IN DEVELOPMENT MODE)
+Disable edit tab for published items. NOTE: this already happens automatically
+when not in development mode.
 
 After a collection has been published, is it editable? If so, do we need
 to push it through the accessioning pipeline again?
