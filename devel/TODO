@@ -34,7 +34,7 @@ Update to latest dor-services-gem:
   - Set up WF object (currently oo000oo0099) on test/prod/dev as needed
 
 --------
-Misc implementation tasks
+MH: current work
 --------
 
 Make sure publish(), approve(), etc are guarded at the model and controller
@@ -49,26 +49,8 @@ levels, not just at the UI level.
     can() call to ensure that the user has sufficient powers (this approach
     also requires some routing configuration).
 
-Disable edit tab for published items.
-
-After a collection has been published, is it editable? If so, do we need
-to push it through the accessioning pipeline again?
-
 Store Item type in hydrusProp. Currently hardcoded to :dataset. Also see
 object_type() in GenericObject.
-
-Refactor purl_page_ready() to use workflow_ds_extension.
-
-Move tests for workflow_ds_extension out of gen_obj_spec and into its own spec.
-
-Stub out workflow calls in unit and integration tests that create objects with
-the "fake" PID, so that we don't run into random test failures.
-
-Look into rightsMD: what rightsMD should our objects contain? Refactor to
-take better advantage of OM and generic_ds.rb.
-
-Redirect unauthenticated users back to the page they were trying to view after
-logging in.
 
 Integration tests for role-protection and gated discovery:
   Collection:
@@ -82,29 +64,44 @@ Integration tests for role-protection and gated discovery:
 Search results: display these fields: title; depositor; object type; object
 status; date added. [waiting on work to unify handling of object status]
 
+Move datastreams to a subdirectory, which is conventional in hydra projects.
+
+Check whether roleMetadata have an XML namespace.
+
+--------
+Other
+--------
+
+Disable edit tab for published items.
+
+After a collection has been published, is it editable? If so, do we need
+to push it through the accessioning pipeline again?
+
+Refactor purl_page_ready() to use workflow_ds_extension.
+
+Move tests for workflow_ds_extension out of gen_obj_spec and into its own spec.
+
+Stub out workflow calls in unit and integration tests that create objects with
+the "fake" PID, so that we don't run into random test failures. Step 1:
+identify methods that advance the workflow (publish and its cousins). Step 2:
+identify tests that invoke those methods in a non-druid-minting context.
+
+rightsMD: Refactor to take better advantage of OM and generic_ds.rb.
+
+Redirect unauthenticated users back to the page they were trying to view after
+logging in.
+
 Consider moving the actual collection-depositor roleMD info from the APO to
 the Collection, for two reasons: (1) it parallels the roleMD stored in the
 Item; (2) without it, we don't have access to the collection depositor
 during search results (at least not without mucking with the to_solr method).
 
-Perform server side validation to make sure users are not able to publish or
-submit for approval objects that should not be allowed to have this step performed.
-
 Collection Items page: Type column is temporarily commented out. Add back when
 we distinguish between different item types.
-
-Move datastreams to a subdirectory, which is conventional in hydra projects.
 
 Support item delete action.
 
 Gryphondor for Hydrus objects.
-
-Check whether roleMetadata have an XML namespace.
-
-
-****************
-WAITING
-****************
 
 Convert any unit tests that require jetty to be running to use stubbed/mocked
 objects so we don't have a dependency on real objects for unit tests.
@@ -127,7 +124,7 @@ have the user click "Add" button first. Collection: links to related items.
 Item: related citations; and links to related items.
 
 Consider moving Hydrus::Responsible into RoleMDDS. Not sure that we need the
-module.  Also, there is currently some duplication between Hydrus::Responsible
+module. Also, there is currently some duplication between Hydrus::Responsible
 and the to_solr() method in RoleMDDS.
 
 APO RELS-EXT datastream needs to add a child node to <rdf:Description>:
@@ -148,11 +145,6 @@ The home page is producing explosive volumes of SOLR logging.  This occurs
 during the super() call in index() of catalog_controller.rb, which invokes a
 Blacklight method that logs the entire SOLR response. A bug has been filed; in
 the meantime, you can monkey-patch solr_helper.rb in Blacklight.
-
-
-****************
-NEW FEATURES
-****************
 
 File-level licensing.
 
