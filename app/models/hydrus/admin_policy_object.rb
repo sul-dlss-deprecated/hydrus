@@ -73,14 +73,11 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
     # Add minimal descMetadata with a title.
     apo.title = dconf.hydrus.initial_apo_title
     apo.label = apo.title
-    
     # Add roleMetadata with current user as hydrus-collection-manager.
     apo.roleMetadata.add_person_with_role(user, 'hydrus-collection-manager')
     apo.roleMetadata.add_person_with_role(user, 'hydrus-collection-depositor')
-    
     # create defaultObjectRights datastream
     apo.defaultObjectRights.ng_xml  
-    
     # Save and return.
     apo.save
     return apo

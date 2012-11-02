@@ -49,9 +49,6 @@ levels, not just at the UI level.
     can() call to ensure that the user has sufficient powers (this approach
     also requires some routing configuration).
 
-Store Item type in hydrusProp. Currently hardcoded to :dataset. Also see
-object_type() in GenericObject.
-
 Integration tests for role-protection and gated discovery:
   Collection:
     open collection
@@ -64,13 +61,14 @@ Integration tests for role-protection and gated discovery:
 Search results: display these fields: title; depositor; object type; object
 status; date added. [waiting on work to unify handling of object status]
 
-Move datastreams to a subdirectory, which is conventional in hydra projects.
-
-Check whether roleMetadata have an XML namespace.
-
 --------
 Other
 --------
+
+Refacor and write tests for redirect_if_not_correct_object_type: seems more
+complex than it needs to be. Also, the code probably won't run as written
+because the APO class does not have an object_type method (that might be a
+problem as well).
 
 Disable edit tab for published items.
 

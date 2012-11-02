@@ -45,6 +45,7 @@ describe("Item create", :type => :request, :integration => true) do
     item.abstract.should == 'abstract_foo'
     item.should be_instance_of Hydrus::Item
     item.deposit_time.should_not be_blank
+    item.item_type.should == 'dataset'
     # Check workflow of Item.
     wf_nodes = item.workflows.find_by_terms(:workflow)
     wf_nodes.size.should == 1

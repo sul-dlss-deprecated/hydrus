@@ -46,7 +46,9 @@ class Hydrus::Item < Hydrus::GenericObject
     :label => 'Rights Metadata',
     :control_group => "M")
 
-  def self.create(collection_pid, user)
+  # Note: currently all items of of type :dataset. In the future,
+  # the calling code can pass in the needed value.
+  def self.create(collection_pid, user, itype = :dataset)
     # Create the object, with the correct model.
     coll     = Hydrus::Collection.find(collection_pid)
     dor_item = Hydrus::GenericObject.register_dor_object(user, 'item', coll.apo_pid)
@@ -57,8 +59,9 @@ class Hydrus::Item < Hydrus::GenericObject
     item.add_to_collection(coll.pid)
     # Create default rightsMetadata from the collection
     item.rightsMetadata.content = coll.rightsMetadata.ng_xml.to_s
-    # Add some Hydrus-specific info to identityMetadata.
-    item.augment_identity_metadata(:dataset)  # TODO: hard-coded value.
+    # Set the item_type, and add some Hydrus-specific info to identityMetadata.
+    item.item_type = itype.to_s
+    item.augment_identity_metadata(itype)
     # Add roleMetadata with current user as hydrus-item-depositor.
     item.roleMetadata.add_person_with_role(user, 'hydrus-item-depositor')
     # Set object status.

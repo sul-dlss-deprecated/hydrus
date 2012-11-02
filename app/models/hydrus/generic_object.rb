@@ -27,6 +27,7 @@ class Hydrus::GenericObject < Dor::Item
       [:object_status,          true   ],
       [:submit_time,            true   ],
       [:deposit_time,           true   ],
+      [:item_type,              true   ],      
     ],
   )
 
@@ -105,7 +106,7 @@ class Hydrus::GenericObject < Dor::Item
   def approve=(val)  approve(val) end
   def resubmit=(val) resubmit(val) end
 
-  # Returns the object type: item or collection.
+  # Returns the object type as a string: item, collection, or adminPolicy.
   def object_type
     return identityMetadata.objectType.first
   end
@@ -136,10 +137,11 @@ class Hydrus::GenericObject < Dor::Item
     }
   end
 
+  # Takes an item_type: :dataset, etc. for items, or just :collection for collections.
   # Adds some Hydrus-specific information to the identityMetadata.
-  def augment_identity_metadata(object_type)
-    identityMetadata.add_value(:objectType, 'set') if object_type == :collection
-    identityMetadata.add_value(:tag, "Hydrus : #{object_type}")
+  def augment_identity_metadata(typ)
+    identityMetadata.add_value(:objectType, 'set') if typ == :collection
+    identityMetadata.add_value(:tag, "Hydrus : #{typ}")
     identityMetadata.content_will_change!
   end
 
@@ -226,14 +228,14 @@ class Hydrus::GenericObject < Dor::Item
   end
 
   # Returns a hash of info needed to register a Dor object.
-  def self.dor_registration_params(user_string, object_type, apo_pid)
+  def self.dor_registration_params(user_string, obj_typ, apo_pid)
     proj = 'Hydrus'
-    wfs  = object_type == 'adminPolicy' ? [] : [Dor::Config.hydrus.app_workflow]
+    wfs  = obj_typ == 'adminPolicy' ? [] : [Dor::Config.hydrus.app_workflow]
     tm   = Time.now.strftime('%Y-%m-%d %H:%M:%S.%L %z')  # With milliseconds.
     return {
-      :object_type       => object_type,
+      :object_type       => obj_typ,
       :admin_policy      => apo_pid,
-      :source_id         => { proj => "#{object_type}-#{user_string}-#{tm}" },
+      :source_id         => { proj => "#{obj_typ}-#{user_string}-#{tm}" },
       :label             => proj,
       :tags              => ["Project : #{proj}"],
       :initiate_workflow => wfs,

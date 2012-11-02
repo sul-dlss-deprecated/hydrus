@@ -45,8 +45,11 @@ class Hydrus::Collection < Hydrus::GenericObject
     coll    = dor_obj.adapt_to(Hydrus::Collection)
     coll.remove_relationship :has_model, 'info:fedora/afmodel:Dor_Collection'
     coll.assert_content_model
-    # Add some Hydrus-specific info to identityMetadata.
-    coll.augment_identity_metadata(:collection)
+    # Set the item_type, and add some Hydrus-specific info to identityMetadata.
+    # Note that item_type can vary for items but is always :collection here.
+    itype = :collection
+    coll.item_type = itype.to_s
+    coll.augment_identity_metadata(itype)
     # Add event.
     coll.events.add_event('hydrus', user, 'Collection created')
     # Set defaults for visability, embargo, etc.
