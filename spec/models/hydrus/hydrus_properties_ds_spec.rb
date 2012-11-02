@@ -15,6 +15,7 @@ describe Hydrus::HydrusPropertiesDS do
         </usersAcceptedTermsOfDeposit>
         <requiresHumanApproval>no</requiresHumanApproval>
         <acceptedTermsOfDeposit>false</acceptedTermsOfDeposit>
+        <itemType>dataset</itemType>
         <objectStatus>draft</objectStatus>
         <disapprovalReason>Idiota</disapprovalReason>
         <depositTime>2011-09-02</deposit_time>
@@ -30,6 +31,7 @@ describe Hydrus::HydrusPropertiesDS do
       [[:users_accepted_terms_of_deposit,:user,:date_accepted],["2011-09-02 01:02:32 -0700","2012-05-02 12:02:44 -0700","2011-10-02 02:05:31 -0700","2011-10-02 02:05:31 -0700"]],
       [:requires_human_approval, ["no"]],
       [:accepted_terms_of_deposit, ["false"]],
+      [:item_type, ["dataset"]],
       [:object_status, ["draft"]],
       [:disapproval_reason, ["Idiota"]],
       [:deposit_time, ["2011-09-02"]],

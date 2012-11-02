@@ -44,6 +44,7 @@ describe("Collection create", :type => :request, :integration => true) do
     coll.contact.should  == ni.contact
     coll.should be_instance_of Hydrus::Collection
     coll.deposit_time.should_not be_blank
+    coll.item_type.should == 'collection'
     # Get the APO of the Collection.
     apo = coll.apo
     apo.should be_instance_of Hydrus::AdminPolicyObject
