@@ -1,18 +1,7 @@
 source :rubygems
 source 'http://sul-gems.stanford.edu'
 
-# def dor_services_gem_params
-#   p = '/afs/ir/dev/dlss/git/lyberteam/dor-services-gem.git'
-#   if ENV['USE_LOCAL_DOR_SERVICES']
-#     return { :path => ENV['USE_LOCAL_DOR_SERVICES'] }
-#   elsif ENV['USE_SSH_OVER_OPENAFS_PATH']
-#     return { :git => "ssh://corn.stanford.edu#{p}", :branch => 'hydrus' }
-#   else
-#     return { :git => p, :branch => 'hydrus' }
-#   end
-# end
-
-gem 'dor-services', "<= 3.9.1"  # , dor_services_gem_params
+gem 'dor-services' 
 gem 'druid-tools', '>= 0.2.0'
 gem 'sul_chrome'
 gem 'about_page'
@@ -67,10 +56,3 @@ end
 
 gem 'quiet_assets', :group => :development
 
-#group :deployment do
-#  gem 'capistrano'
-##  gem 'capistrano-ext'
-#  gem 'rvm-capistrano'
-#  gem 'lyberteam-devel', '>=0.7.0'
-##  gem 'net-ssh-kerberos'
-#end

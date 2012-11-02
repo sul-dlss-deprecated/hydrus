@@ -89,38 +89,6 @@
             <visibility option="fixed">stanford</visibility>
             <license option="fixed">cc-by</license>
           </hydrus>
-          <hydrusAssembly>
-            <workflow id="hydrusAssemblyWF">
-              <process name="start-deposit" status="completed" lifecycle="registered"/>
-              <process name="submit" status="waiting"/>
-              <process name="approve" status="waiting"/>
-              <process name="start-assembly" status="waiting"/>
-            </workflow>
-          </hydrusAssembly>
-          <assembly>
-            <workflow id="assemblyWF">
-              <process name="start-assembly" status="completed" lifecycle="inprocess"/>
-              <process name="jp2-create" status="completed"/>
-              <process name="checksum-compute" status="waiting"/>
-              <process name="exif-collect" status="waiting"/>
-              <process name="accessioning-initiate" status="waiting"/>
-            </workflow>
-          </assembly>
-          <accession>
-            <workflow id="accessionWF">
-              <process name="start-accession" status="completed" lifecycle="submitted"/>
-              <process name="content-metadata" status="waiting"/>
-              <process name="descriptive-metadata" status="waiting" lifecycle="described"/>
-              <process name="rights-metadata" status="waiting"/>
-              <process name="technical-metadata" status="waiting"/>
-              <process name="provenance-metadata" status="waiting"/>
-              <process name="remediate-object" status="waiting"/>
-              <process name="shelve" status="waiting"/>
-              <process name="publish" status="waiting" lifecycle="published"/>
-              <process name="sdr-ingest-transfer" status="waiting"/>
-              <process name="cleanup" status="waiting" lifecycle="accessioned"/>
-            </workflow>
-          </accession>
         </administrativeMetadata>
       </foxml:xmlContent>
     </foxml:datastreamVersion>

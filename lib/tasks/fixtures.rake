@@ -40,12 +40,29 @@ namespace :hydrus do
       ENV["pid"] = pid
       Rake::Task['repo:load'].reenable
       Rake::Task['repo:load'].invoke
+      Rake::Task['hydrus:reindex'].reenable      
+      Rake::Task['hydrus:reindex'].invoke
     }
     if !["test","development"].include?(Rails.env) 
       puts "****NOTE: For security reasons, you might want to change passwords for default users after this task using \"RAILS_ENV=#{ENV['RAILS_ENV']}rake hydrus:update_passwords['newpassword']\"*****"
     end
   end
 
+  # call with rake hydrus:reindex pid=druid:oo000oo99
+  desc "reindex specified pid"
+  task :reindex do 
+    require File.expand_path('config/environment')
+    pid=ENV["pid"]
+    obj = Dor.load_instance pid
+    unless obj.nil?
+      puts "Reindexing #{pid} in solr"
+      solr_doc = obj.to_solr
+      Dor::SearchService.solr.add(solr_doc, :add_attributes => {:commitWithin => 1000})
+    else
+      puts "#{pid} not found"
+    end
+  end
+  
   # call with hydrus:update_passwords['newpassword']
   desc "update all fixture user passwords"
   task :update_passwords, :new_password do |t,args|
