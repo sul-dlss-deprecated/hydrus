@@ -26,11 +26,6 @@ copies of the scripts.
 Figure out why the publish robot in test does not actually publish items to the purl page.
 RightsMetadata issue?
 
-Update to latest dor-services-gem:
-  - update gemfile
-  - remove hydrusWF workflow definition from APO
-  - Set up WF object (currently oo000oo0099) on test/prod/dev as needed
-
 --------
 MH: current work
 --------
@@ -63,12 +58,12 @@ status; date added. [waiting on work to unify handling of object status]
 Other
 --------
 
-Refacor and write tests for redirect_if_not_correct_object_type: seems more
+Refactor and write tests for redirect_if_not_correct_object_type: seems more
 complex than it needs to be. Also, the code probably won't run as written
 because the APO class does not have an object_type method (that might be a
-problem as well).
+problem as well). 
 
-Disable edit tab for published items.
+Disable edit tab for published items. (NOTE: THIS ALREADY HAPPENS AUTOMATICALLY WHEN NOT IN DEVELOPMENT MODE)
 
 After a collection has been published, is it editable? If so, do we need
 to push it through the accessioning pipeline again?
@@ -127,9 +122,6 @@ APO RELS-EXT datastream needs to add a child node to <rdf:Description>:
 <hydra:referencesAgreement rdf:resource="info:fedora/druid:XXX"/>, where XXX is
 the PID of the global Hydrus Agreement object. [The Hydrus agreement object
 needs to be created -- need more details].
-
-Use reified WFs rather than putting them in the APO. (a) Set up WF objects on
--dev. (b) Work with Willy to deploy the feature to -dev.
 
 Collection create: APO.roleMetadata: set the value of <name> for the
 collection-manager [waiting on LDAP].

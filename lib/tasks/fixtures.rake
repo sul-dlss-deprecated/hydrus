@@ -40,9 +40,12 @@ namespace :hydrus do
       ENV["pid"] = pid
       Rake::Task['repo:load'].reenable
       Rake::Task['repo:load'].invoke
-      Rake::Task['hydrus:reindex'].reenable      
-      Rake::Task['hydrus:reindex'].invoke
     }
+    
+    # index the workflow object
+    ENV["pid"] = 'druid:oo000oo0099'    
+            Rake::Task['hydrus:reindex'].invoke
+    
     if !["test","development"].include?(Rails.env) 
       puts "****NOTE: For security reasons, you might want to change passwords for default users after this task using \"RAILS_ENV=#{ENV['RAILS_ENV']}rake hydrus:update_passwords['newpassword']\"*****"
     end

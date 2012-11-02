@@ -141,24 +141,6 @@
             <termsOfDeposit>When depositing stuff, you must agree to the terms.</termsOfDeposit>
             <embargo default="6 months" maximum="2 years" minimum="0"/>
           </deposit>
-          <accessioning>
-            <workflow id="accessionWF">
-              <process lifecycle="submitted" name="start-accession"
-                status="completed"/>
-              <process name="transfer-content" status="waiting"/>
-              <process name="descriptive-metadata" status="waiting"/>
-              <process name="technical-metadata" status="waiting"/>
-              <process name="content-metadata" status="waiting"/>
-              <process name="shelve" status="waiting"/>
-              <process lifecycle="released" name="publish" status="waiting"/>
-              <process name="provenance-metadata" status="waiting"/>
-              <process name="sdr-ingest-transfer" status="waiting"/>
-              <process name="sdr-ingest-deposit" status="waiting"/>
-              <process lifecycle="archived" name="sdr-ingest-archive"
-                status="waiting"/>
-              <process lifecycle="accessioned" name="cleanup" status="waiting"/>
-            </workflow>
-          </accessioning>
           <preservation> ... storage, replication, audit requirements, e.g. </preservation>
           <dissemination>
             <releaseDelayLimit>20 years</releaseDelayLimit>
