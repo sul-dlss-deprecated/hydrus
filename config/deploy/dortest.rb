@@ -11,4 +11,3 @@ role :db,  deployment_host, :primary => true
 
 after "deploy", "files:create_upload_symlink"
 after "deploy", "files:refresh_fixtures"
-after "deploy", "db:migrate"
