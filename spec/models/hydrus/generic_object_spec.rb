@@ -284,6 +284,27 @@ describe Hydrus::GenericObject do
     end
   end
 
+  describe "start_common_assembly()" do
+
+    it "should do nothing if the app is not configured to start common assembly" do
+      @go.stub(:should_start_common_assembly).and_return(false)
+      @go.should_not_receive(:update_content_metadata)
+      @go.should_not_receive(:complete_workflow_step)
+      @go.should_not_receive(:initiate_apo_workflow)
+      @go.start_common_assembly
+    end
+
+    it "can exercise the method, stubbed" do
+      @go.stub(:should_start_common_assembly).and_return(true)
+      @go.stub('is_item?').and_return(true)
+      @go.should_receive(:update_content_metadata).once
+      @go.should_receive(:complete_workflow_step).once
+      @go.should_receive(:initiate_apo_workflow).once
+      @go.start_common_assembly
+    end
+
+  end
+
   it "can exercise should_start_common_assembly()" do
     @go.should_start_common_assembly.should == Dor::Config.hydrus.start_common_assembly
   end

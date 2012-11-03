@@ -19,28 +19,47 @@ levels, not just at the UI level.
 Collection.publish(). Refactor into separate open() and close() methods. Set
 titles/labels only during actualy publishing.
 
-Model-level: call the relevant is_ method before running the action. For
-example, in publish() call is_publishable() before doing anything.
+Model-level
 
-  # Collection
-  def self.create
-  def publish
+  - Refactor into discrete and correctly named methods.
+  
+  - Call the relevant is_ method before running the action.
+
+  # Collection: current.
+  publish
+
+  # Collection: refactored.
+  open          is_openable
+  close         --
 
   # Item
-  def self.create
-  def resubmit
-  def publish
-  def approve
+  publish
+  approve
+  resubmit
+
+  # Item: refactored.
+  publish                is_publishable                  # Method relevant only if rha=no.
+  submit_for_approval    can_be_submitted_for_approval
+  approve                is_publishable
+  disapprove             ??
+  resubmit               ??
 
   # GenericObject
-  def save
+  save
 
-Controller-level: refactor so that each action (publish, open, close, approve,
-etc) is handled by a different controller method rather that by the update()
-method. Then, each of those methods should make the relevant can() call to
-ensure that the user has sufficient powers (this approach also requires some
-routing configuration).
+Controller-level:
 
+  - Refactor so that each action (create, open, close, submit_for_approval,
+    approve, disapprove, resubmit, publish) is handled by a different
+    controller method rather that by update().
+
+  - Make the needed routing configuration.
+
+  - Those methods should make the relevant can() call to ensure that the user
+    has sufficient powers
+
+  - Remove publish= and similar methods, which won't be needed.
+    
 Integration tests for role-protection and gated discovery: Collection: open,
 close, discard, add item. Item: submit, approve, return.
 

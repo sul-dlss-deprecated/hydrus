@@ -647,20 +647,19 @@ describe Hydrus::Item do
 
   describe "do_approve()" do
 
-    it "should make expected calls (start_common_assembly = false)" do
-      @hi.stub(:should_start_common_assembly).and_return(false)
+    it "should make expected calls (requires_human_approval = false)" do
       @hi.stub(:requires_human_approval).and_return(false)
       @hi.should_receive(:complete_workflow_step).with('approve').once
-      @hi.should_not_receive(:initiate_apo_workflow)
+      @hi.events.should_not_receive(:add_event)
+      @hi.should_receive(:start_common_assembly).once
       @hi.do_approve()
     end
 
-    it "should make expected calls (start_common_assembly = true)" do
-      @hi.stub(:should_start_common_assembly).and_return(true)
-      @hi.stub(:requires_human_approval).and_return(false)
+    it "should make expected calls (requires_human_approval = true)" do
+      @hi.stub(:requires_human_approval).and_return(true)
       @hi.should_receive(:complete_workflow_step).with('approve').once
-      @hi.should_receive(:complete_workflow_step).with('start-assembly').once
-      @hi.should_receive(:initiate_apo_workflow).once
+      @hi.events.should_receive(:add_event).once
+      @hi.should_receive(:start_common_assembly).once
       @hi.do_approve()
     end
 
@@ -730,7 +729,7 @@ describe Hydrus::Item do
   it "embargo_date_is_correct_format() should add an error if embargo_date is bogus" do
     k = :embargo_date
     @hi.stub(:under_embargo?).and_return(true)
-    @hi.stub(:embargo).and_return("future")    
+    @hi.stub(:embargo).and_return("future")
     # Valid date.
     @hi.stub(k).and_return('12/31/2012')
     @hi.embargo_date_is_correct_format

@@ -124,26 +124,13 @@ class Hydrus::Item < Hydrus::GenericObject
     end
   end
 
-  # Approves an object by marking the 'approve' step in the Hydrus workflow as
-  # completed. If the app is configured to start the common assembly workflow,
-  # additional calls will be made to the workflow service to begin that
-  # process as well. In that case, we also generate content metadata.
+  # Approves an Item.
   def do_approve
-    # If collection and already approved, return??
-
-    # Approve.
-    isi = is_item?
-    rha = to_bool(requires_human_approval)
     complete_workflow_step('approve')
-    self.object_status = 'published' if isi
+    self.object_status = 'published'
     hydrusProperties.remove_nodes(:disapproval_reason)
-    events.add_event('hydrus', @current_user, "Item approved") if isi && rha
-    # Start common assembly.
-    if should_start_common_assembly
-      update_content_metadata if isi
-      complete_workflow_step('start-assembly')
-      initiate_apo_workflow('assemblyWF')
-    end
+    events.add_event('hydrus', @current_user, "Item approved") if to_bool(requires_human_approval)
+    start_common_assembly()
   end
 
   # Disapproves an object by setting the reason is the hydrusProperties datastream.

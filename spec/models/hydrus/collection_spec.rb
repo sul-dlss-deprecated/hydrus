@@ -43,6 +43,7 @@ describe Hydrus::Collection do
     it "publish(no) should set status to closed, and add an event" do
       @hc.get_hydrus_events.size.should == 0
       @hc.should_not_receive(:approve)
+      @hc.should_receive(:send_publish_email_notification).once
       @hc.publish('no')
       @hc.get_hydrus_events.size.should > 0
     end
@@ -53,8 +54,9 @@ describe Hydrus::Collection do
       @hc.title     = hc_title
       @hc.apo.title = apo_title
       @hc.get_hydrus_events.size.should == 0
-      @hc.should_receive(:complete_workflow_step).once
-      @hc.should_receive(:approve).once
+      @hc.should_receive(:complete_workflow_step).twice
+      @hc.should_receive(:start_common_assembly).once
+      @hc.should_receive(:send_publish_email_notification).once
       @hc.publish('yes')
       @hc.get_hydrus_events.size.should > 0
       @hc.apo.identityMetadata.objectLabel.should == [apo_title]
@@ -62,6 +64,7 @@ describe Hydrus::Collection do
       @hc.identityMetadata.objectLabel.should     == [hc_title]
       @hc.label.should                            == hc_title
       @hc.apo.label.should                        == apo_title
+      @hc.submit_time.should_not be_blank
     end
     
   end

@@ -246,6 +246,16 @@ class Hydrus::GenericObject < Dor::Item
     email.deliver unless email.blank?
   end
 
+  # If the app is configured to start the common assembly workflow, calls will
+  # be made to the workflow service to begin that process. In addition,
+  # contentMetadata is generated for Items.
+  def start_common_assembly
+    return unless should_start_common_assembly
+    update_content_metadata if is_item?
+    complete_workflow_step('start-assembly')
+    initiate_apo_workflow('assemblyWF')
+  end
+
   # Returns value of Dor::Config.hydrus.start_common_assembly.
   # Wrapped in method to simplify testing stubs.
   def should_start_common_assembly

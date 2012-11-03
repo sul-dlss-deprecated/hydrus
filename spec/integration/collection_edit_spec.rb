@@ -276,14 +276,10 @@ describe("Collection edit", :type => :request, :integration => true) do
 
       describe "on open" do
 
-        before(:each) do
-          @coll.should_receive(:complete_workflow_step)
-          @coll.should_receive(:approve)
-        end
-
         it "should send an email when there are item depositors" do
           login_as_archivist1
           @coll.apo_person_roles = {:"hydrus-collection-item-depositor" => "jdoe"}
+          @coll.should_receive(:complete_workflow_step).twice
           expect {@coll.publish(true)}.to change { ActionMailer::Base.deliveries.count }.by(1)
           last_email_sent = ActionMailer::Base.deliveries.last
           last_email_sent.to.should == ["jdoe@stanford.edu"]
@@ -292,6 +288,7 @@ describe("Collection edit", :type => :request, :integration => true) do
 
         it "should not send an email when there are no item depositors" do
           login_as_archivist1
+          @coll.should_receive(:complete_workflow_step).twice
           expect {@coll.publish(true)}.to change { ActionMailer::Base.deliveries.count }.by(0)
         end
 

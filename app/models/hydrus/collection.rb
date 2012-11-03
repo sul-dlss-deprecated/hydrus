@@ -115,7 +115,10 @@ class Hydrus::Collection < Hydrus::GenericObject
     ).to_a.join(', ')
   end
 
-  def publish=(val)  publish(val)  end  # Forward the call from the controller.
+  # Forward the call from the controller.
+  def publish=(val)
+    publish(val)
+  end
   
   # Takes a boolean-like value.
   # If true, opens the collection and publishes it (the latter if needed).
@@ -142,7 +145,8 @@ class Hydrus::Collection < Hydrus::GenericObject
       # require human approval, even when their items do.
       self.submit_time = Time.now.to_s
       complete_workflow_step('submit')
-      approve()
+      complete_workflow_step('approve')
+      start_common_assembly()
     else
       # Close the collection.
       self.object_status = 'published_closed'
