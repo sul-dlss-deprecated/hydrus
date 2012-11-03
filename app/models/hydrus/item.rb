@@ -100,7 +100,8 @@ class Hydrus::Item < Hydrus::GenericObject
     # Note: the label resides in Fedora's foxml:objectProperties.
     identityMetadata.objectLabel = title
     self.label                   = title
-    self.save
+    # self.save
+
     # Advance workflow to record that the object has been published.
     # And auto-approve, unless human review is needed.
     rha                = to_bool(requires_human_approval)
