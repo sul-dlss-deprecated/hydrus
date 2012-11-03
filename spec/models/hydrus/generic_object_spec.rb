@@ -116,60 +116,6 @@ describe Hydrus::GenericObject do
     end
   end
 
-  describe "approve()" do
-
-    it "approve() should dispatch to do_approve() when passed no arguments" do
-      @go.should_receive(:do_approve).once
-      @go.approve
-    end
-
-    it "approve() should dispatch to do_approve() when value is true-ish" do
-      tests = ['yes', 'true', true]
-      @go.should_receive(:do_approve).exactly(tests.length).times
-      tests.each do |v|
-        @go.approve('value' => v, 'reason' => 'fooblah')
-      end
-    end
-
-    it "approve() should dispatch to do_disapprove() when value is false-ish" do
-      tests = ['no', 'false', false]
-      r = 'fooblah'
-      @go.should_receive(:do_disapprove).exactly(tests.length).times.with(r)
-      tests.each do |v|
-        @go.approve('value' => v, 'reason' => r)
-      end
-    end
-
-  end
-
-  describe "do_approve()" do
-
-    it "should make expected calls (start_common_assembly = false)" do
-      @go.stub(:should_start_common_assembly).and_return(false)
-      @go.stub(:requires_human_approval).and_return(false)
-      @go.should_receive(:complete_workflow_step).with('approve').once
-      @go.should_not_receive(:initiate_apo_workflow)
-      @go.do_approve()
-    end
-
-    it "should make expected calls (start_common_assembly = true)" do
-      @go.stub(:should_start_common_assembly).and_return(true)
-      @go.stub(:requires_human_approval).and_return(false)
-      @go.should_receive(:complete_workflow_step).with('approve').once
-      @go.should_receive(:complete_workflow_step).with('start-assembly').once
-      @go.should_receive(:initiate_apo_workflow).once
-      @go.do_approve()
-    end
-
-  end
-
-  it "do_disapprove()" do
-    @go.stub(:is_collection?).and_return(false)
-    @go.stub(:item_depositor_id).and_return('')
-    @go.do_disapprove('foo')
-    @go.disapproval_reason.should == 'foo'
-  end
-
   describe "workflow stuff" do
 
     before(:each) do
@@ -255,18 +201,6 @@ describe Hydrus::GenericObject do
         @go.stub(:object_status).and_return(status)
         @go.is_published.should == exp
       end
-    end
-
-    it "publish=() should delegate to publish()" do
-      v = 9876
-      @go.should_receive(:publish).with(v)
-      @go.publish= v
-    end
-
-    it "approve=() should delegate to approve()" do
-      v = 9876
-      @go.should_receive(:approve).with(v)
-      @go.approve= v
     end
 
     it "is_returned() should return true if object_status is returned" do

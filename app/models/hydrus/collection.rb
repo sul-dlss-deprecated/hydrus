@@ -114,6 +114,8 @@ class Hydrus::Collection < Hydrus::GenericObject
       apo.persons_with_role("hydrus-collection-depositor")
     ).to_a.join(', ')
   end
+
+  def publish=(val)  publish(val)  end  # Forward the call from the controller.
   
   # Takes a boolean-like value.
   # If true, opens the collection and publishes it (the latter if needed).

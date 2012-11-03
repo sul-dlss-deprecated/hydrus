@@ -579,6 +579,13 @@ describe Hydrus::Item do
     )
   end
 
+  it "publish=() approve=() and resubmit=() should delegate" do
+    %w(publish approve resubmit).each do |meth|
+      v = "#{meth}_VAL"
+      @hi.should_receive(meth).with(v)
+      @hi.send("#{meth}=", v)
+    end
+  end
 
   describe "publish()" do
 
@@ -610,6 +617,60 @@ describe Hydrus::Item do
       @hi.object_status.should == 'published'
     end
 
+  end
+
+  describe "approve()" do
+
+    it "approve() should dispatch to do_approve() when passed no arguments" do
+      @hi.should_receive(:do_approve).once
+      @hi.approve
+    end
+
+    it "approve() should dispatch to do_approve() when value is true-ish" do
+      tests = ['yes', 'true', true]
+      @hi.should_receive(:do_approve).exactly(tests.length).times
+      tests.each do |v|
+        @hi.approve('value' => v, 'reason' => 'fooblah')
+      end
+    end
+
+    it "approve() should dispatch to do_disapprove() when value is false-ish" do
+      tests = ['no', 'false', false]
+      r = 'fooblah'
+      @hi.should_receive(:do_disapprove).exactly(tests.length).times.with(r)
+      tests.each do |v|
+        @hi.approve('value' => v, 'reason' => r)
+      end
+    end
+
+  end
+
+  describe "do_approve()" do
+
+    it "should make expected calls (start_common_assembly = false)" do
+      @hi.stub(:should_start_common_assembly).and_return(false)
+      @hi.stub(:requires_human_approval).and_return(false)
+      @hi.should_receive(:complete_workflow_step).with('approve').once
+      @hi.should_not_receive(:initiate_apo_workflow)
+      @hi.do_approve()
+    end
+
+    it "should make expected calls (start_common_assembly = true)" do
+      @hi.stub(:should_start_common_assembly).and_return(true)
+      @hi.stub(:requires_human_approval).and_return(false)
+      @hi.should_receive(:complete_workflow_step).with('approve').once
+      @hi.should_receive(:complete_workflow_step).with('start-assembly').once
+      @hi.should_receive(:initiate_apo_workflow).once
+      @hi.do_approve()
+    end
+
+  end
+
+  it "do_disapprove()" do
+    @hi.stub(:is_collection?).and_return(false)
+    @hi.stub(:item_depositor_id).and_return('')
+    @hi.do_disapprove('foo')
+    @hi.disapproval_reason.should == 'foo'
   end
 
   it "should indicate no files have been uploaded yet" do

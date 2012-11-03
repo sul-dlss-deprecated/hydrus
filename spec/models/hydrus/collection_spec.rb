@@ -24,6 +24,12 @@ describe Hydrus::Collection do
     Hydrus::Collection.create('USERFOO').pid.should == druid
   end
 
+  it "publish=() should delegate to publish()" do
+    v = 9876
+    @hc.should_receive(:publish).with(v)
+    @hc.publish= v
+  end
+
   describe "publish()" do
 
     # More substantive testing is done at integration level.

@@ -16,11 +16,24 @@ MH: current work
 Make sure publish(), approve(), etc are guarded at the model and controller
 levels, not just at the UI level.
 
-Collection.publish(). Refactor into separate open() and close() methods.  Set
+Collection.publish(). Refactor into separate open() and close() methods. Set
 titles/labels only during actualy publishing.
 
-Model-level: call the relevant is_ method before running the action.  For
+Model-level: call the relevant is_ method before running the action. For
 example, in publish() call is_publishable() before doing anything.
+
+  # Collection
+  def self.create
+  def publish
+
+  # Item
+  def self.create
+  def resubmit
+  def publish
+  def approve
+
+  # GenericObject
+  def save
 
 Controller-level: refactor so that each action (publish, open, close, approve,
 etc) is handled by a different controller method rather that by the update()
@@ -123,7 +136,7 @@ collection-manager [waiting on LDAP].
 Item view page: the actions box div is called "div.collection-actions".
 Is this a problem?
 
-The home page is producing explosive volumes of SOLR logging.  This occurs
+The home page is producing explosive volumes of SOLR logging. This occurs
 during the super() call in index() of catalog_controller.rb, which invokes a
 Blacklight method that logs the entire SOLR response. A bug has been filed; in
 the meantime, you can monkey-patch solr_helper.rb in Blacklight.

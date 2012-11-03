@@ -100,12 +100,6 @@ class Hydrus::GenericObject < Dor::Item
     return object_status == 'returned'
   end
 
-  # The controller will call these methods, which we simply forward to
-  # the Collection or Item class.
-  def publish=(val)  publish(val) end
-  def approve=(val)  approve(val) end
-  def resubmit=(val) resubmit(val) end
-
   # Returns the object type as a string: item, collection, or adminPolicy.
   def object_type
     return identityMetadata.objectType.first
@@ -250,47 +244,6 @@ class Hydrus::GenericObject < Dor::Item
     return if recipients_for_object_returned_email.blank?
     email=HydrusMailer.object_returned(:returned_by => @current_user, :object => self, :item_url=>opts[:item_url])
     email.deliver unless email.blank?
-  end
-
-  # Optionally takes a hash like this:
-  #   { 'value'  => 'yes|no', 'reason' => 'blah blah' }
-  # Implements approve/disapprove accordingly.
-  def approve(h = nil)
-    if h.nil? or to_bool(h['value'])
-      do_approve()
-    else
-      do_disapprove(h['reason'])
-    end
-  end
-
-  # Approves an object by marking the 'approve' step in the Hydrus workflow as
-  # completed. If the app is configured to start the common assembly workflow,
-  # additional calls will be made to the workflow service to begin that
-  # process as well. In that case, we also generate content metadata.
-  def do_approve
-    # If collection and already approved, return??
-
-    # Approve.
-    isi = is_item?
-    rha = to_bool(requires_human_approval)
-    complete_workflow_step('approve')
-    self.object_status = 'published' if isi
-    hydrusProperties.remove_nodes(:disapproval_reason)
-    events.add_event('hydrus', @current_user, "Item approved") if isi && rha
-    # Start common assembly.
-    if should_start_common_assembly
-      update_content_metadata if isi
-      complete_workflow_step('start-assembly')
-      initiate_apo_workflow('assemblyWF')
-    end
-  end
-
-  # Disapproves an object by setting the reason is the hydrusProperties datastream.
-  def do_disapprove(reason)
-    self.object_status = 'returned'
-    self.disapproval_reason = reason
-    events.add_event('hydrus', @current_user, "Item returned: #{reason}")
-    send_object_returned_email_notification
   end
 
   # Returns value of Dor::Config.hydrus.start_common_assembly.
