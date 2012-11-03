@@ -13,59 +13,110 @@ purl page. RightsMetadata issue?
 MH: current work
 --------
 
-Make sure publish(), approve(), etc are guarded at the model and controller
-levels, not just at the UI level.
+Model refactoring: rewrite publish, approve, etc. as discrete and correctly
+named methods, each with the appropriate is_* guard at the outset of each
+method. Raise an exception if the is_* test fails.
 
-Collection.publish(). Refactor into separate open() and close() methods. Set
-titles/labels only during actualy publishing.
+  - Refactor the Collection model.
 
-Model-level
+    open          is_openable
+    close         is_closable
+    publish       # Keep for now.
 
-  - Refactor into discrete and correctly named methods.
-  
-  - Call the relevant is_ method before running the action.
+  - Modify Collection controller and view to agree with new model.
 
-  # Collection: current.
-  publish
+    - Button naming: use open() and close() rather than publish().
+    - Delete publish().
 
-  # Collection: refactored.
-  open          is_openable
-  close         --
+  - Refactor the Item model.
 
-  # Item
-  publish
-  approve
-  resubmit
-
-  # Item: refactored.
-  publish                is_publishable                  # Method relevant only if rha=no.
-  submit_for_approval    can_be_submitted_for_approval
-  approve                is_publishable
-  disapprove             ??
-  resubmit               ??
-
-  # GenericObject
-  save
-
-Controller-level:
-
-  - Refactor so that each action (create, open, close, submit_for_approval,
-    approve, disapprove, resubmit, publish) is handled by a different
-    controller method rather that by update().
-
-  - Make the needed routing configuration.
-
-  - Those methods should make the relevant can() call to ensure that the user
-    has sufficient powers
-
-  - Remove publish= and similar methods, which won't be needed.
+    publish_directly
     
-Integration tests for role-protection and gated discovery: Collection: open,
-close, discard, add item. Item: submit, approve, return.
+      - test: is_publishable  # New for Collection.
+      - Needed actions:
+        self.submit_time=
+        complete_workflow_step('submit')
+        do_publish
+
+    submit_for_approval
+    
+      - test: can_be_submitted_for_approval
+      - Needed actions:
+        self.object_status=
+        self.submit_time=
+        complete_workflow_step('submit')
+        events.add_event
+
+    approve
+
+      - test: is_approvable
+      - Needed actions:
+        hydrusProperties.remove_nodes(:disapproval_reason)
+        events.add_event: Approved
+        do_publish
+
+    disapprove
+    
+      -test: is_disapprovable
+      - Needed actions:
+        self.object_status = 'returned'
+        self.disapproval_reason = reason
+        events.add_event
+        send email
+
+    resubmit
+    
+      - test: is_resubmittable
+      - Needed actions:
+        events.add_event
+        hydrusProperties.remove_nodes(:disapproval_reason)
+        self.object_status = 'awaiting_approval'
+
+    do_publish
+
+      - Needed actions:
+        refresh titles/labels
+        complete_workflow_step('approve')
+        self.object_status = 'published'
+        events.add_event: Published
+        start_common_assembly()
+
+  - Modify Item controller and view to agree with new model.
+
+    - Button renaming.
+
+  - GenericObject.save. Should this have an is_* test?
+
+Controller refactor: dispatch to particular actions (open, close,
+submit_for_approval, etc.) rather than to the general-purpose update(). In
+addition, guard those controller methods with relevant can() calls.
+
+  - Collection:
+
+    - Modify forms, controller, and routing to use specific methods
+      rather than update().
+
+    - Delete publish=().
+
+    - Add can() calls.
+
+  - Item:
+
+    - Modify forms, controller, and routing to use specific methods
+      rather than update().
+
+    - Delete approve=() and analogous methods.
+
+    - Add can() calls.
+
+Integration tests for role-protection: Collection: open, close, discard, add
+item. Item: submit, approve, return.
 
 --------
 Other
 --------
+
+Should submit_for_approval() and resubmit() send email messages?
 
 After finishing more thorough UI rework, look at: responsiveness issues;
 accessibility issues.
