@@ -441,4 +441,8 @@ describe Hydrus::GenericObject do
     end
   end
 
+  it "cannot_do() should raise an exception" do
+    expect { @go.cannot_do(:foo) }.to raise_error(/^Cannot perform action.+=foo/)
+  end
+
 end

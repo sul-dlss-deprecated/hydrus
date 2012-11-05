@@ -338,4 +338,11 @@ class Hydrus::GenericObject < Dor::Item
     end
   end
 
+  # A utility method that raises an exception indicating that the
+  # object cannot perform an action like open(), close(), approve(), etc.
+  def cannot_do(action)
+    msg = "object_type=#{hydrus_class_to_s}, action=#{action}, pid=#{pid}"
+    raise "Cannot perform action: #{msg}."
+  end
+
 end

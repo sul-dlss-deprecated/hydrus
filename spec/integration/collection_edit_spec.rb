@@ -279,16 +279,16 @@ describe("Collection edit", :type => :request, :integration => true) do
         it "should send an email when there are item depositors" do
           login_as_archivist1
           @coll.apo_person_roles = {:"hydrus-collection-item-depositor" => "jdoe"}
-          @coll.should_receive(:complete_workflow_step).twice
+          @coll.should_receive(:open).once
           expect {@coll.publish(true)}.to change { ActionMailer::Base.deliveries.count }.by(1)
-          last_email_sent = ActionMailer::Base.deliveries.last
-          last_email_sent.to.should == ["jdoe@stanford.edu"]
-          last_email_sent.subject.should == "Collection opened for deposit in the Stanford Digital Repository"
+          email = ActionMailer::Base.deliveries.last
+          email.to.should == ["jdoe@stanford.edu"]
+          email.subject.should =~ /^Collection opened for deposit/
         end
 
         it "should not send an email when there are no item depositors" do
           login_as_archivist1
-          @coll.should_receive(:complete_workflow_step).twice
+          @coll.should_receive(:open).once
           expect {@coll.publish(true)}.to change { ActionMailer::Base.deliveries.count }.by(0)
         end
 
@@ -299,14 +299,16 @@ describe("Collection edit", :type => :request, :integration => true) do
         it "should send an email when there are item depositors" do
           login_as_archivist1
           @coll.apo_person_roles = {:"hydrus-collection-item-depositor" => "jdoe"}
+          @coll.should_receive(:close).once
           expect {@coll.publish(false)}.to change { ActionMailer::Base.deliveries.count }.by(1)
-          last_email_sent = ActionMailer::Base.deliveries.last
-          last_email_sent.to.should == ["jdoe@stanford.edu"]
-          last_email_sent.subject.should == "Collection closed for deposit in the Stanford Digital Repository"
+          email = ActionMailer::Base.deliveries.last
+          email.to.should == ["jdoe@stanford.edu"]
+          email.subject.should =~ /Collection closed for deposit/
         end
 
         it "should not send an email when there are no item depositors" do
           login_as_archivist1
+          @coll.should_receive(:close).once
           expect {@coll.publish(false)}.to change { ActionMailer::Base.deliveries.count }.by(0)
         end
 
@@ -333,9 +335,9 @@ describe("Collection edit", :type => :request, :integration => true) do
         
         expect {click_button("Open Collection")}.to change { ActionMailer::Base.deliveries.count }.by(1)
         
-        last_email_sent = ActionMailer::Base.deliveries.last
-        last_email_sent.to.should == ["jdoe@stanford.edu","archivist1@stanford.edu"]
-        last_email_sent.subject.should == "Collection opened for deposit in the Stanford Digital Repository"
+        email = ActionMailer::Base.deliveries.last
+        email.to.should == ["jdoe@stanford.edu","archivist1@stanford.edu"]
+        email.subject.should == "Collection opened for deposit in the Stanford Digital Repository"
       end
       it "should handle complex changes to depositors" do
         login_as_archivist1
@@ -351,9 +353,9 @@ describe("Collection edit", :type => :request, :integration => true) do
         
         fill_in "hydrus_collection_apo_person_roles[hydrus-collection-item-depositor]", :with => "jandoe, leland, jondoe"
         expect {click_button("Save")}.to change { ActionMailer::Base.deliveries.count }.by(1)
-        last_email_sent = ActionMailer::Base.deliveries.last
-        last_email_sent.to.should == ["jandoe@stanford.edu", "jondoe@stanford.edu"]
-        last_email_sent.subject.should == "Invitation to deposit in the Stanford Digital Repository"
+        email = ActionMailer::Base.deliveries.last
+        email.to.should == ["jandoe@stanford.edu", "jondoe@stanford.edu"]
+        email.subject.should == "Invitation to deposit in the Stanford Digital Repository"
       end
       it "should not send an email if the collection is closed" do
         login_as_archivist1

@@ -17,12 +17,6 @@ Model refactoring: rewrite publish, approve, etc. as discrete and correctly
 named methods, each with the appropriate is_* guard at the outset of each
 method. Raise an exception if the is_* test fails.
 
-  - Refactor the Collection model.
-
-    open          is_openable
-    close         is_closable
-    publish       # Keep for now.
-
   - Modify Collection controller and view to agree with new model.
 
     - Button naming: use open() and close() rather than publish().
@@ -111,6 +105,8 @@ addition, guard those controller methods with relevant can() calls.
 
 Integration tests for role-protection: Collection: open, close, discard, add
 item. Item: submit, approve, return.
+
+Allow collections to be opened without being published. Assess.
 
 --------
 Other
