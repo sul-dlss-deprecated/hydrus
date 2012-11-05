@@ -268,54 +268,39 @@ describe("Collection edit", :type => :request, :integration => true) do
 
   describe "emails" do
 
-    describe "when publishing" do
+    describe "send_publish_email_notification()" do
 
       before(:each) do
         @coll = Hydrus::Collection.new
       end
 
-      describe "on open" do
-
-        it "should send an email when there are item depositors" do
-          login_as_archivist1
-          @coll.apo_person_roles = {:"hydrus-collection-item-depositor" => "jdoe"}
-          @coll.should_receive(:open).once
-          expect {@coll.publish(true)}.to change { ActionMailer::Base.deliveries.count }.by(1)
-          email = ActionMailer::Base.deliveries.last
-          email.to.should == ["jdoe@stanford.edu"]
-          email.subject.should =~ /^Collection opened for deposit/
-        end
-
-        it "should not send an email when there are no item depositors" do
-          login_as_archivist1
-          @coll.should_receive(:open).once
-          expect {@coll.publish(true)}.to change { ActionMailer::Base.deliveries.count }.by(0)
-        end
-
+      it "should send open email when there are item depositors" do
+        @coll.apo_person_roles = {:"hydrus-collection-item-depositor" => "jdoe"}
+        e = expect { @coll.send_publish_email_notification(true) }
+        e.to change { ActionMailer::Base.deliveries.count }.by(1)
+        email = ActionMailer::Base.deliveries.last
+        email.to.should == ["jdoe@stanford.edu"]
+        email.subject.should =~ /^Collection opened for deposit/
       end
 
-      describe "on close" do
+      it "should send close email when there are item depositors" do
+        @coll.apo_person_roles = {:"hydrus-collection-item-depositor" => "jdoe"}
+        e = expect { @coll.send_publish_email_notification(false) }
+        e.to change { ActionMailer::Base.deliveries.count }.by(1)
+        email = ActionMailer::Base.deliveries.last
+        email.to.should == ["jdoe@stanford.edu"]
+        email.subject.should =~ /Collection closed for deposit/
+      end
 
-        it "should send an email when there are item depositors" do
-          login_as_archivist1
-          @coll.apo_person_roles = {:"hydrus-collection-item-depositor" => "jdoe"}
-          @coll.should_receive(:close).once
-          expect {@coll.publish(false)}.to change { ActionMailer::Base.deliveries.count }.by(1)
-          email = ActionMailer::Base.deliveries.last
-          email.to.should == ["jdoe@stanford.edu"]
-          email.subject.should =~ /Collection closed for deposit/
-        end
-
-        it "should not send an email when there are no item depositors" do
-          login_as_archivist1
-          @coll.should_receive(:close).once
-          expect {@coll.publish(false)}.to change { ActionMailer::Base.deliveries.count }.by(0)
-        end
-
-      end      
+      it "should not send an email when there are no item depositors" do
+        e = expect {@coll.send_publish_email_notification(true)}
+        e.to change { ActionMailer::Base.deliveries.count }.by(0)
+        e = expect {@coll.send_publish_email_notification(false)}
+        e.to change { ActionMailer::Base.deliveries.count }.by(0)
+      end
 
     end
-    
+
     describe "when updating a collection" do
       before(:each) do
         @prev_mint_ids = config_mint_ids()

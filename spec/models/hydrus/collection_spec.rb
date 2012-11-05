@@ -24,13 +24,14 @@ describe Hydrus::Collection do
     Hydrus::Collection.create('USERFOO').pid.should == druid
   end
 
-  it "publish=() should delegate to publish()" do
-    v = 9876
-    @hc.should_receive(:publish).with(v)
-    @hc.publish= v
+  it "open=() and close=() should delegate" do
+    %w(open close).each do |meth|
+      @hc.should_receive(meth)
+      @hc.send("#{meth}=", 'true')
+    end
   end
 
-  describe "publish(), open(), and close()" do
+  describe "open() and close()" do
 
     # More substantive testing is done at integration level.
 
@@ -38,18 +39,6 @@ describe Hydrus::Collection do
       apo_druid = 'druid:oo000oo9991'
       apo = Hydrus::AdminPolicyObject.new(:pid => apo_druid)
       @hc.stub(:apo).and_return(apo)
-    end
-    
-    it "publish('yes') should dispatch to open() and send open email" do
-      @hc.should_receive(:send_publish_email_notification).once.with(true)
-      @hc.should_receive(:open).once
-      @hc.publish('yes')
-    end
-    
-    it "publish('no') should dispatch to close() and send close email" do
-      @hc.should_receive(:send_publish_email_notification).once.with(false)
-      @hc.should_receive(:close).once
-      @hc.publish('no')
     end
     
     it "open() should set object_status, add event, call approve" do
@@ -60,7 +49,9 @@ describe Hydrus::Collection do
       @hc.get_hydrus_events.size.should == 0
       @hc.should_receive(:complete_workflow_step).twice
       @hc.should_receive(:start_common_assembly).once
+      @hc.should_receive(:send_publish_email_notification).once.with(true)
       @hc.stub(:is_openable).and_return(true)
+      @hc.stub(:is_draft).and_return(true)
       @hc.open
       @hc.get_hydrus_events.size.should > 0
       @hc.apo.identityMetadata.objectLabel.should == [apo_title]
@@ -74,12 +65,13 @@ describe Hydrus::Collection do
     it "close() should set object_status and add an event" do
       @hc.get_hydrus_events.size.should == 0
       @hc.should_not_receive(:approve)
+      @hc.should_receive(:send_publish_email_notification).once.with(false)
       @hc.stub(:is_closeable).and_return(true)
       @hc.close
       @hc.get_hydrus_events.size.should > 0
     end
 
-    it "open() and close() should raise exceptions if the object cannot be opened/closed" do
+    it "should raise exceptions if the object cannot be opened/closed" do
       tests = {
         :open  => :is_openable,
         :close => :is_closeable,

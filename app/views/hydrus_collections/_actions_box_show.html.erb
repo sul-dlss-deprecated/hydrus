@@ -7,12 +7,12 @@
                  :html => {:class => "step", :novalidate=>""}) do |f| -%>
       <% if @document_fedora.is_open %>
               <button type="submit" class="btn btn-small save-edits"
-                      name="hydrus_collection[publish]" value="false"
-                      id="hydrus_collection_publish">Close Collection</button>
+                      name="hydrus_collection[close]" value="false"
+                      id="hydrus_collection_close">Close Collection</button>
       <% elsif @document_fedora.is_openable %>
         <button type="submit" class="btn btn-small save-edits"
-                name="hydrus_collection[publish]" value="true"
-                id="hydrus_collection_publish">Open Collection</button>
+                name="hydrus_collection[open]" value="true"
+                id="hydrus_collection_open">Open Collection</button>
       <% end %>
     <% end %>
   <% end %>

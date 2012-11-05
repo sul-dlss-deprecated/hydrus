@@ -120,25 +120,18 @@ class Hydrus::Collection < Hydrus::GenericObject
     ).to_a.join(', ')
   end
 
-  # Forward the call from the controller.
-  def publish=(val)
-    publish(val)
-  end
-  
-  # Takes a boolean-like value.
-  # If true, opens the collection; otherwise, closes it.
-  def publish(value)
-    v = to_bool(value)
-    self.send(v ? :open : :close)
-    send_publish_email_notification(v)
-  end
+  def open=(val)   open()   end  # Forward the call from the controller.
+  def close=(val)  close()  end  # Forward the call from the controller.
 
   # Opens the collection.
   # The first time a collection is opened, it is also published.
   # After that, the user can toggle the open-closed state, but
   # the publishing step is irreversible.
   def open
-    cannot_do(:open) unless is_openable
+    cannot_do(:open) unless is_openable()
+
+    # Determine if this is the first time the collection is being opened.
+    first_time = is_draft()
 
     self.object_status = 'published_open'
     events.add_event('hydrus', @current_user, 'Collection opened')
@@ -155,10 +148,15 @@ class Hydrus::Collection < Hydrus::GenericObject
     # If needed, advance the workflow to record that the object has been published.
     # At this time we can also approve the collection, because collections never
     # require human approval, even when their items do.
-    self.submit_time = Time.now.to_s
-    complete_workflow_step('submit')
-    complete_workflow_step('approve')
-    start_common_assembly()
+    if first_time
+      self.submit_time = Time.now.to_s
+      complete_workflow_step('submit')
+      complete_workflow_step('approve')
+      start_common_assembly()
+    end
+
+    # Send email.
+    send_publish_email_notification(true)
   end
 
   # Closes the collection.
@@ -166,6 +164,7 @@ class Hydrus::Collection < Hydrus::GenericObject
     cannot_do(:close) unless is_closeable
     self.object_status = 'published_closed'
     events.add_event('hydrus', @current_user, 'Collection closed')
+    send_publish_email_notification(false)
   end
 
   def send_invitation_email_notification(new_depositors)
@@ -176,12 +175,8 @@ class Hydrus::Collection < Hydrus::GenericObject
   
   def send_publish_email_notification(value)
     return if recipients_for_collection_update_emails.blank?
-    case value
-      when true 
-        email=HydrusMailer.open_notification(:object => self) 
-      when false 
-        email=HydrusMailer.close_notification(:object => self)
-    end
+    meth = value ? 'open' : 'close'
+    email = HydrusMailer.send("#{meth}_notification", :object => self) 
     email.deliver unless email.to.blank?
   end
   
