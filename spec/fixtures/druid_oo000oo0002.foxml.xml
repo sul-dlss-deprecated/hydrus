@@ -58,20 +58,20 @@
   <foxml:datastream ID="rightsMetadata" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
     <foxml:datastreamVersion ID="rightsMetadata.0" LABEL="Rights Metadata" CREATED="2011-07-05T20:46:24.337Z" MIMETYPE="text/xml" SIZE="293">
       <foxml:xmlContent>
-        <rightsMetadata xmlns="http://hydra-collab.stanford.edu/schemas/rightsMetadata/v1" version="0.1" objectId="druid:oo000oo0002">
+        <rightsMetadata objectId="druid:oo000oo0002">
           <access type="discover">
             <machine>
-              <group>public</group>
-            </machine>
+            	<world/>
+						</machine>
           </access>
           <access type="read">
             <machine>
-              <group>public</group>
+            	<world/>
             </machine>
           </access>
           <access type="edit">
             <machine>
-              <group>public</group>
+              <group>stanford</group>
             </machine>
           </access>
         </rightsMetadata>

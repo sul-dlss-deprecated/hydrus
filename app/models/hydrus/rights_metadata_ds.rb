@@ -1,10 +1,8 @@
 class Hydrus::RightsMetadataDS < ActiveFedora::NokogiriDatastream
   include Hydrus::GenericDS
  
-  RM_NS = "http://hydra-collab.stanford.edu/schemas/rightsMetadata/v1"
-
   set_terminology do |t|
-    t.root :path => 'rightsMetadata', :xmlns => RM_NS, :version => "0.1"
+    t.root :path => 'rightsMetadata'
     
     t.access do
       t.human
@@ -47,17 +45,15 @@ class Hydrus::RightsMetadataDS < ActiveFedora::NokogiriDatastream
   end
   
   def add_read_group(group)
-    ns = "xmlns:"
-    unless ng_xml.at_xpath("//#{ns}access[@type='read']/#{ns}machine/#{ns}group[text()='#{group}']")
-      ng_xml.at_xpath("//#{ns}access[@type='read']/#{ns}machine").add_child("<group>#{group}</group>")
+    unless ng_xml.at_xpath("//access[@type='read']/machine/group[text()='#{group}']")
+      ng_xml.at_xpath("//access[@type='read']/machine").add_child("<group>#{group}</group>")
       content_will_change!
     end
   end
   
   def make_world_readable
     remove_all_group_read_nodes
-    ns = "xmlns:"
-    q  = "//#{ns}access[@type='read']/#{ns}machine/#{ns}world"
+    q  = "//access[@type='read']/machine/world"
     remove_nodes_by_xpath(q)
     read_access.machine.world = ""
   end
@@ -68,32 +64,28 @@ class Hydrus::RightsMetadataDS < ActiveFedora::NokogiriDatastream
   end
   
   def remove_all_group_read_nodes
-    ns = "xmlns:"
-    q  = "//#{ns}access[@type='read']/#{ns}machine/#{ns}group"
+    q  = "//access[@type='read']/machine/group"
     remove_nodes_by_xpath(q)
   end
   
   def remove_world_node(type)
-    ns = "xmlns:"
-    q = "/#{ns}rightsMetadata/#{ns}access[@type='#{type}']/#{ns}machine/#{ns}world"
+    q = "/rightsMetadata/access[@type='#{type}']/machine/world"
     remove_nodes_by_xpath(q)
   end
   
   def remove_group_node(type,group)
-    ns = "xmlns:"
-    q = "/#{ns}rightsMetadata/#{ns}access[@type='#{type}']/#{ns}machine/#{ns}group[text()='#{group}']"
+    q = "/rightsMetadata/access[@type='#{type}']/machine/group[text()='#{group}']"
     remove_nodes_by_xpath(q)
   end
   
   def remove_embargo_date
-    ns = "xmlns:"
-    q = "/#{ns}rightsMetadata/#{ns}access[@type='read']/#{ns}machine/#{ns}embargoReleaseDate"
+    q = "/rightsMetadata/access[@type='read']/machine/embargoReleaseDate"
     remove_nodes_by_xpath(q)
   end
   
   def self.xml_template
     Nokogiri::XML::Builder.new do |xml|
-      xml.rightsMetadata(:xmlns=>RM_NS, :version => "0.1"){
+      xml.rightsMetadata{
         xml.access(:type => "discover") {
           xml.machine {
             xml.world # at Stanford metadata is publicly visible by policy 

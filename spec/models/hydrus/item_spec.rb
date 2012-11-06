@@ -350,13 +350,13 @@ describe Hydrus::Item do
 
       describe "license()" do
 
-        it "Item-level license is present: just return it" do
+        it "Item-level license is blank: return Collection-level license" do
           exp = 'foo COLL_LICENSE'
           subject.stub_chain(:collection, :license).and_return(exp)
           subject.license.should == exp
         end
 
-        it "Item-level license is blank: return Collection-level license" do
+        it "Item-level license is present: just return it" do
           exp = 'foo ITEM_LICENSE'
           subject.stub_chain(:rightsMetadata, :use, :machine).and_return([exp])
           subject.license.should == exp

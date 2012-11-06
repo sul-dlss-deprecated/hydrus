@@ -51,7 +51,7 @@ namespace :hydrus do
     end
   end
 
-  # call with rake hydrus:reindex pid=druid:oo000oo99
+  # call with rake hydrus:reindex pid=druid:oo000oo0099
   desc "reindex specified pid"
   task :reindex do 
     require File.expand_path('config/environment')

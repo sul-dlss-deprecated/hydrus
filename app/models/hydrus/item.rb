@@ -58,7 +58,7 @@ class Hydrus::Item < Hydrus::GenericObject
     # Add the Item to the Collection.
     item.add_to_collection(coll.pid)
     # Create default rightsMetadata from the collection
-    item.rightsMetadata.content = coll.rightsMetadata.ng_xml.to_s
+    #item.rightsMetadata.content = coll.rightsMetadata.ng_xml.to_s
     # Set the item_type, and add some Hydrus-specific info to identityMetadata.
     item.item_type = itype.to_s
     item.augment_identity_metadata(itype)
@@ -206,6 +206,7 @@ class Hydrus::Item < Hydrus::GenericObject
     return Assembly::ContentMetadata.create_content_metadata(
       :druid            => pid,
       :objects          => objects,
+      :add_file_attributes => true,
       :style            => Hydrus::Application.config.cm_style,
       :file_attributes  => Hydrus::Application.config.cm_file_attributes,
       :include_root_xml => false)
