@@ -51,6 +51,12 @@ class SolrDocument
     return get('has_model_s').gsub(/.+:Hydrus_/, '').downcase
   end
 
+  def object_status
+    typ    = object_type.to_sym
+    status = get('object_status_t')
+    return Hydrus::GenericObject.status_label(typ, status)
+  end
+
   def depositor
     return get("roleMetadata_#{object_type}_depositor_person_identifier_t")
   end

@@ -106,6 +106,11 @@ class Hydrus::Collection < Hydrus::GenericObject
     return validate!
   end
 
+  # Returns true if the collection can be closed.
+  def is_closeable
+    return is_open
+  end
+
   # the users who will receive email notifications when a collection is opened or closed
   def recipients_for_collection_update_emails
     (
@@ -114,40 +119,53 @@ class Hydrus::Collection < Hydrus::GenericObject
       apo.persons_with_role("hydrus-collection-depositor")
     ).to_a.join(', ')
   end
+
+  # Forward the call from the controller.
+  def publish=(val)
+    publish(val)
+  end
   
   # Takes a boolean-like value.
-  # If true, opens the collection and publishes it (the latter if needed).
-  # Otherwise, closes the collection.
-  #
-  # Note: unlike open-close, which the user can toggle, publishing is irreversible.
+  # If true, opens the collection; otherwise, closes it.
   def publish(value)
-    if to_bool(value)
-      # Open the collection.
-      self.object_status = 'published_open'
-      events.add_event('hydrus', @current_user, 'Collection opened')
+    v = to_bool(value)
+    self.send(v ? :open : :close)
+    send_publish_email_notification(v)
+  end
 
-      # Also, at the moment of publication, we refresh various titles and labels.
-      # Note that the two label attributes reside in Fedora's foxml:objectProperties.
-      apo_title = "APO for #{title}"
-      apo.identityMetadata.objectLabel = apo_title
-      apo.title                        = apo_title
-      identityMetadata.objectLabel     = title
-      self.label                       = title
-      apo.label                        = apo_title
+  # Opens the collection.
+  # The first time a collection is opened, it is also published.
+  # After that, the user can toggle the open-closed state, but
+  # the publishing step is irreversible.
+  def open
+    cannot_do(:open) unless is_openable
 
-      # If needed, advance the workflow to record that the object has been published.
-      # At this time we can also approve the collection, because collections never
-      # require human approval, even when their items do.
-      self.submit_time = Time.now.to_s
-      complete_workflow_step('submit')
-      approve()
-    else
-      # Close the collection.
-      self.object_status = 'published_closed'
-      events.add_event('hydrus', @current_user, 'Collection closed')
-    end
-    # Email.
-    send_publish_email_notification(to_bool(value))
+    self.object_status = 'published_open'
+    events.add_event('hydrus', @current_user, 'Collection opened')
+
+    # Also, at the moment of publication, we refresh various titles and labels.
+    # Note that the two label attributes reside in Fedora's foxml:objectProperties.
+    apo_title = "APO for #{title}"
+    apo.identityMetadata.objectLabel = apo_title
+    apo.title                        = apo_title
+    identityMetadata.objectLabel     = title
+    self.label                       = title
+    apo.label                        = apo_title
+
+    # If needed, advance the workflow to record that the object has been published.
+    # At this time we can also approve the collection, because collections never
+    # require human approval, even when their items do.
+    self.submit_time = Time.now.to_s
+    complete_workflow_step('submit')
+    complete_workflow_step('approve')
+    start_common_assembly()
+  end
+
+  # Closes the collection.
+  def close
+    cannot_do(:close) unless is_closeable
+    self.object_status = 'published_closed'
+    events.add_event('hydrus', @current_user, 'Collection closed')
   end
 
   def send_invitation_email_notification(new_depositors)

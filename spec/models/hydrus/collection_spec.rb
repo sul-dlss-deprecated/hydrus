@@ -24,7 +24,13 @@ describe Hydrus::Collection do
     Hydrus::Collection.create('USERFOO').pid.should == druid
   end
 
-  describe "publish()" do
+  it "publish=() should delegate to publish()" do
+    v = 9876
+    @hc.should_receive(:publish).with(v)
+    @hc.publish= v
+  end
+
+  describe "publish(), open(), and close()" do
 
     # More substantive testing is done at integration level.
 
@@ -34,28 +40,54 @@ describe Hydrus::Collection do
       @hc.stub(:apo).and_return(apo)
     end
     
-    it "publish(no) should set status to closed, and add an event" do
-      @hc.get_hydrus_events.size.should == 0
-      @hc.should_not_receive(:approve)
-      @hc.publish('no')
-      @hc.get_hydrus_events.size.should > 0
+    it "publish('yes') should dispatch to open() and send open email" do
+      @hc.should_receive(:send_publish_email_notification).once.with(true)
+      @hc.should_receive(:open).once
+      @hc.publish('yes')
     end
     
-    it "publish(yes) should set status to open, add event, call approve" do
+    it "publish('no') should dispatch to close() and send close email" do
+      @hc.should_receive(:send_publish_email_notification).once.with(false)
+      @hc.should_receive(:close).once
+      @hc.publish('no')
+    end
+    
+    it "open() should set object_status, add event, call approve" do
       hc_title      = 'blah blah blah'
       apo_title     = "APO for #{hc_title}"
       @hc.title     = hc_title
       @hc.apo.title = apo_title
       @hc.get_hydrus_events.size.should == 0
-      @hc.should_receive(:complete_workflow_step).once
-      @hc.should_receive(:approve).once
-      @hc.publish('yes')
+      @hc.should_receive(:complete_workflow_step).twice
+      @hc.should_receive(:start_common_assembly).once
+      @hc.stub(:is_openable).and_return(true)
+      @hc.open
       @hc.get_hydrus_events.size.should > 0
       @hc.apo.identityMetadata.objectLabel.should == [apo_title]
       @hc.apo.title.should                        == apo_title
       @hc.identityMetadata.objectLabel.should     == [hc_title]
       @hc.label.should                            == hc_title
       @hc.apo.label.should                        == apo_title
+      @hc.submit_time.should_not be_blank
+    end
+    
+    it "close() should set object_status and add an event" do
+      @hc.get_hydrus_events.size.should == 0
+      @hc.should_not_receive(:approve)
+      @hc.stub(:is_closeable).and_return(true)
+      @hc.close
+      @hc.get_hydrus_events.size.should > 0
+    end
+
+    it "open() and close() should raise exceptions if the object cannot be opened/closed" do
+      tests = {
+        :open  => :is_openable,
+        :close => :is_closeable,
+      }
+      tests.each do |meth, predicate|
+        @hc.stub(predicate).and_return(false)
+        expect { @hc.send(meth) }.to raise_error
+      end
     end
     
   end
@@ -161,6 +193,13 @@ describe Hydrus::Collection do
 
   end
     
+  it "is_closeable() should return the value of is_open()" do
+    [true, false, true].each do |exp|
+      @hc.stub(:is_open).and_return(exp)
+      @hc.is_closeable.should == exp
+    end
+  end
+
   describe "invite email" do
     it "should provide a method to send deposit invites" do
       mail = @hc.send_invitation_email_notification("jdoe")

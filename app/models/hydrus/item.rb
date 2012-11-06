@@ -90,13 +90,18 @@ class Hydrus::Item < Hydrus::GenericObject
     self.object_status = 'awaiting_approval'
   end
   
+  def publish=(val)  publish(val)  end  # Forward the call from the controller.
+  def approve=(val)  approve(val)  end  # Forward the call from the controller.
+  def resubmit=(val) resubmit(val) end  # Forward the call from the controller.
+
   # Publish the Item.
   def publish(value = nil)
     # At the moment of publication, we refresh various titles.
     # Note: the label resides in Fedora's foxml:objectProperties.
     identityMetadata.objectLabel = title
     self.label                   = title
-    self.save
+    # self.save
+
     # Advance workflow to record that the object has been published.
     # And auto-approve, unless human review is needed.
     rha                = to_bool(requires_human_approval)
@@ -107,6 +112,34 @@ class Hydrus::Item < Hydrus::GenericObject
     complete_workflow_step(s)
     approve() unless rha
     events.add_event('hydrus', @current_user, "Item #{msg}")
+  end
+
+  # Optionally takes a hash like this:
+  #   { 'value'  => 'yes|no', 'reason' => 'blah blah' }
+  # Implements approve/disapprove accordingly.
+  def approve(h = nil)
+    if h.nil? or to_bool(h['value'])
+      do_approve()
+    else
+      do_disapprove(h['reason'])
+    end
+  end
+
+  # Approves an Item.
+  def do_approve
+    complete_workflow_step('approve')
+    self.object_status = 'published'
+    hydrusProperties.remove_nodes(:disapproval_reason)
+    events.add_event('hydrus', @current_user, "Item approved") if to_bool(requires_human_approval)
+    start_common_assembly()
+  end
+
+  # Disapproves an object by setting the reason is the hydrusProperties datastream.
+  def do_disapprove(reason)
+    self.object_status = 'returned'
+    self.disapproval_reason = reason
+    events.add_event('hydrus', @current_user, "Item returned: #{reason}")
+    send_object_returned_email_notification
   end
 
   # indicates if this item has an accepted terms of deposit, or if the supplied user (logged in user) has accepted a terms of deposit for another item in this collection within the last year
