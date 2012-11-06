@@ -4,6 +4,7 @@ require 'spec_helper'
 describe Hydrus::GenericObject do
 
   before(:each) do
+    @cannot_do_regex = /\ACannot perform action/
     @go      = Hydrus::GenericObject.new
     @apo_pid = 'druid:oo000oo0002'
   end
@@ -203,18 +204,6 @@ describe Hydrus::GenericObject do
       end
     end
 
-    it "is_returned() should return true if object_status is returned" do
-      tests = {
-        'returned'  => true,
-        'published' => false,
-        'blah'      => false,
-      }
-      tests.each do |status, exp|
-        @go.stub(:object_status).and_return(status)
-        @go.is_returned.should == exp
-      end
-    end
-
   end
 
   describe "validations" do
@@ -294,8 +283,15 @@ describe Hydrus::GenericObject do
       @go.start_common_assembly
     end
 
+    it "should raise exception if the object is not assemblable" do
+      @go.stub(:should_start_common_assembly).and_return(true)
+      @go.stub(:is_assemblable).and_return(false)
+      expect { @go.start_common_assembly }.to raise_exception(@cannot_do_regex)
+    end
+
     it "can exercise the method, stubbed" do
       @go.stub(:should_start_common_assembly).and_return(true)
+      @go.stub(:is_assemblable).and_return(true)
       @go.stub('is_item?').and_return(true)
       @go.should_receive(:update_content_metadata).once
       @go.should_receive(:complete_workflow_step).once

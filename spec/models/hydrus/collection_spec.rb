@@ -192,6 +192,24 @@ describe Hydrus::Collection do
     end
   end
 
+  describe "is_assemblable()" do
+
+    it "closed collection: should always return false" do
+      @hc.stub(:is_open).and_return(false)
+      @hc.should_not_receive('validate!')
+      @hc.is_assemblable.should == false
+    end
+
+    it "published item: should return value of validate!" do
+      @hc.stub(:is_open).and_return(true)
+      [true, false].each do |exp|
+        @hc.stub('validate!').and_return(exp)
+        @hc.is_assemblable.should == exp
+      end
+    end
+
+  end
+
   describe "invite email" do
     it "should provide a method to send deposit invites" do
       mail = @hc.send_invitation_email_notification("jdoe")

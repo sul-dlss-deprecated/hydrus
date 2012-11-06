@@ -75,6 +75,21 @@ class HydrusItemsController < ApplicationController
     ####
 
     if params.has_key?("hydrus_item")
+
+      # TEMP hack until controller is refactored.
+      d = params['hydrus_item']['disapprove']
+      if d
+        if d['value'] == 'yes'
+          # User clicked Return Item.
+          # Flatten disapprove key to store only the reason.
+          params['hydrus_item']['disapprove'] = d['reason']
+        else
+          # User clicked Approve Item.
+          # Delete disapprove key to prevent disapprove=() from being called.
+          params['hydrus_item'].delete('disapprove')
+        end
+      end
+
       @document_fedora.attributes = params["hydrus_item"]
     end
 

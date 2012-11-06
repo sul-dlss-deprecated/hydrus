@@ -84,20 +84,9 @@ class Hydrus::GenericObject < Dor::Item
     return object_status == 'draft'
   end
 
-  # Returns true if the object is waiting for approval by a reviewer.
-  # Note that collections are never in this state.
-  def is_awaiting_approval
-    return object_status == 'awaiting_approval'
-  end
-
   # Returns true if the object status is any flavor of published.
   def is_published
     return object_status[0..8] == 'published'
-  end
-
-  # Returns true if the object status is currently returned-by-reviewer.
-  def is_returned
-    return object_status == 'returned'
   end
 
   # Returns the object type as a string: item, collection, or adminPolicy.
@@ -251,6 +240,7 @@ class Hydrus::GenericObject < Dor::Item
   # contentMetadata is generated for Items.
   def start_common_assembly
     return unless should_start_common_assembly
+    cannot_do(:start_common_assembly) unless is_assemblable()
     update_content_metadata if is_item?
     complete_workflow_step('start-assembly')
     initiate_apo_workflow('assemblyWF')

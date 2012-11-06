@@ -17,65 +17,6 @@ Model refactoring: rewrite publish, approve, etc. as discrete and correctly
 named methods, each with the appropriate is_* guard at the outset of each
 method. Raise an exception if the is_* test fails.
 
-  - Refactor the Item model.
-
-    publish_directly
-    
-      - test: is_publishable
-      - Needed actions:
-        self.submit_time=
-        complete_workflow_step('submit')
-        do_publish
-
-    submit_for_approval
-    
-      - test: can_be_submitted_for_approval
-      - Needed actions:
-        self.object_status=
-        self.submit_time=
-        complete_workflow_step('submit')
-        events.add_event
-
-    approve
-
-      - test: is_approvable
-      - Needed actions:
-        hydrusProperties.remove_nodes(:disapproval_reason)
-        events.add_event: Approved
-        do_publish
-
-    disapprove
-    
-      -test: is_disapprovable
-      - Needed actions:
-        self.object_status = 'returned'
-        self.disapproval_reason = reason
-        events.add_event
-        send email
-
-    resubmit
-    
-      - test: is_resubmittable
-      - Needed actions:
-        events.add_event
-        hydrusProperties.remove_nodes(:disapproval_reason)
-        self.object_status = 'awaiting_approval'
-
-    do_publish
-
-      - Needed actions:
-        refresh titles/labels
-        complete_workflow_step('approve')
-        self.object_status = 'published'
-        events.add_event: Published
-        start_common_assembly()
-
-  - Modify Item controller and view to agree with new model.
-
-    - Button renaming.
-
-  - GenericObject.save. Should this have an is_* test?
-
 Controller refactor: dispatch to particular actions (open, close,
 submit_for_approval, etc.) rather than to the general-purpose update(). In
 addition, guard those controller methods with relevant can() calls.
@@ -101,7 +42,8 @@ addition, guard those controller methods with relevant can() calls.
 Integration tests for role-protection: Collection: open, close, discard, add
 item. Item: submit, approve, return.
 
-Allow collections to be opened without being published. Assess.
+Assess allowing collections to be opened without being published.  In effect,
+this would be an open, draft Collection.
 
 --------
 Other

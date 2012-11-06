@@ -83,75 +83,86 @@ class Hydrus::Item < Hydrus::GenericObject
     return item
   end
 
-  # Resubmits an object by resetting the reason in the hydrusProperties datastream
-  def resubmit(value = nil)
-    events.add_event('hydrus', @current_user, "Item resubmitted for approval")
-    hydrusProperties.remove_nodes(:disapproval_reason)
-    self.object_status = 'awaiting_approval'
-  end
-  
-  def publish=(val)  publish(val)  end  # Forward the call from the controller.
-  def approve=(val)  approve(val)  end  # Forward the call from the controller.
-  def resubmit=(val) resubmit(val) end  # Forward the call from the controller.
+  # Forward calls from the controller.
+  def publish_directly=(val)     publish_directly     end
+  def submit_for_approval=(val)  submit_for_approval  end
+  def approve=(val)              approve              end
+  def disapprove=(val)           disapprove(val)      end
+  def resubmit=(val)             resubmit             end
 
-  # Publish the Item.
-  def publish(value = nil)
-    # At the moment of publication, we refresh various titles.
-    # Note: the label resides in Fedora's foxml:objectProperties.
-    identityMetadata.objectLabel = title
-    self.label                   = title
-    # self.save
-
-    # Advance workflow to record that the object has been published.
-    # And auto-approve, unless human review is needed.
-    rha                = to_bool(requires_human_approval)
-    s                  = 'submit'
-    self.object_status = rha ? 'awaiting_approval'      : 'published'
-    msg                = rha ? 'submitted for approval' : 'published'
-    self.submit_time   = Time.now.to_s
-    complete_workflow_step(s)
-    approve() unless rha
-    events.add_event('hydrus', @current_user, "Item #{msg}")
+  # Publish the Item directly, bypassing human approval.
+  def publish_directly
+    cannot_do(:publish_directly) unless is_publishable()
+    self.submit_time = Time.now.to_s
+    complete_workflow_step('submit')
+    do_publish()
   end
 
-  # Optionally takes a hash like this:
-  #   { 'value'  => 'yes|no', 'reason' => 'blah blah' }
-  # Implements approve/disapprove accordingly.
-  def approve(h = nil)
-    if h.nil? or to_bool(h['value'])
-      do_approve()
-    else
-      do_disapprove(h['reason'])
-    end
-  end
-
-  # Approves an Item.
-  def do_approve
-    complete_workflow_step('approve')
+  # A method to implement the steps steps associated with publishing an Item.
+  # Called by publish_directly() and approve(), not by the controller.
+  def do_publish
+    t = title()
+    identityMetadata.objectLabel = t
+    self.label                   = t
     self.object_status = 'published'
-    hydrusProperties.remove_nodes(:disapproval_reason)
-    events.add_event('hydrus', @current_user, "Item approved") if to_bool(requires_human_approval)
+    complete_workflow_step('approve')
+    events.add_event('hydrus', @current_user, "Item published")
     start_common_assembly()
   end
 
-  # Disapproves an object by setting the reason is the hydrusProperties datastream.
-  def do_disapprove(reason)
-    self.object_status = 'returned'
-    self.disapproval_reason = reason
-    events.add_event('hydrus', @current_user, "Item returned: #{reason}")
-    send_object_returned_email_notification
+  # Submit the Item for approval by a reviewer.
+  # This method handles the initial submission, not resubmissions.
+  def submit_for_approval
+    cannot_do(:submit_for_approval) unless is_submittable_for_approval()
+    self.object_status = 'awaiting_approval'
+    self.submit_time   = Time.now.to_s
+    complete_workflow_step('submit')
+    events.add_event('hydrus', @current_user, "Item submitted for approval")
   end
 
-  # indicates if this item has an accepted terms of deposit, or if the supplied user (logged in user) has accepted a terms of deposit for another item in this collection within the last year
-  # you can pass in a specific collection to check, if not specified, defaults to this item's collection (useful when creating new items)
+  # Approve the Item.
+  def approve
+    cannot_do(:approve) unless is_approvable()
+    hydrusProperties.remove_nodes(:disapproval_reason)
+    events.add_event('hydrus', @current_user, "Item approved")
+    do_publish()
+  end
+
+  # Disapprove the Item -- return it for further editing.
+  # Expects to receive a hash with a 'reason' key.
+  def disapprove(reason)
+    cannot_do(:disapprove) unless is_disapprovable()
+    self.object_status      = 'returned'
+    self.disapproval_reason = reason
+    events.add_event('hydrus', @current_user, "Item returned")
+    send_object_returned_email_notification()
+  end
+
+  # Resubmits an object after it was disapproved/returned.
+  def resubmit
+    cannot_do(:resubmit) unless is_resubmittable()
+    self.object_status = 'awaiting_approval'
+    hydrusProperties.remove_nodes(:disapproval_reason)
+    events.add_event('hydrus', @current_user, "Item resubmitted for approval")
+  end
+  
+  # indicates if this item has an accepted terms of deposit, or if the supplied
+  # user (logged in user) has accepted a terms of deposit for another item in
+  # this collection within the last year you can pass in a specific collection
+  # to check, if not specified, defaults to this item's collection (useful when
+  # creating new items)
   def requires_terms_acceptance(user,coll=self.collection)
-    if to_bool(accepted_terms_of_deposit) # if this item has previously been accepted, no further checks are needed
+    if to_bool(accepted_terms_of_deposit) 
+      # if this item has previously been accepted, no further checks are needed
       return false 
     else
-      # if this item has not been accepted, let's look at the collection
-      users=coll.users_accepted_terms_of_deposit # get the users who have accepted the terms of deposit for any other items in this collection
-      if users && users.keys.include?(user) # if there are users, find out if the supplied user is one of them
-        return (Time.now - 1.year) > coll.users_accepted_terms_of_deposit[user].to_datetime # if so, have agreed within the last year?
+      # if this item has not been accepted, let's look at the collection.
+      # Get the users who have accepted the terms of deposit for any other items in this collection.
+      # If there are users, find out if the supplied user is one of them.
+      # And if so, have they agreed within the last year?
+      users=coll.users_accepted_terms_of_deposit 
+      if users && users.keys.include?(user) 
+        return (Time.now - 1.year) > coll.users_accepted_terms_of_deposit[user].to_datetime
       else
         return true
       end
@@ -162,15 +173,37 @@ class Hydrus::Item < Hydrus::GenericObject
   # a valid draft object that actually requires human approval.
   # Note: returned is not a valid object_status here, because this
   # test concerns itself with the initial submission for approval.
-  def can_be_submitted_for_approval
+  def is_submittable_for_approval
     return false unless object_status == 'draft'
     return false unless to_bool(requires_human_approval)
     return validate!
   end
 
-  # Returns true only if the Item is unpublished.
-  def is_destroyable
-    return not(is_published)
+  # Returns true if the object is waiting for approval by a reviewer.
+  def is_awaiting_approval
+    return object_status == 'awaiting_approval'
+  end
+
+  # Returns true if the object status is currently returned-by-reviewer.
+  def is_returned
+    return object_status == 'returned'
+  end
+
+  # Returns true if the object can be approved by a reviewer.
+  def is_approvable
+    return false unless is_awaiting_approval
+    return validate!
+  end
+
+  # Returns true if the object can be returned by a reviewer.
+  def is_disapprovable
+    return is_awaiting_approval
+  end
+
+  # Returns true if the object can be resubmitted for approval.
+  def is_resubmittable
+    return false unless is_returned
+    return validate!
   end
 
   # Returns true if the item is publishable: must be valid and must
@@ -179,6 +212,18 @@ class Hydrus::Item < Hydrus::GenericObject
     return false unless validate!
     return is_awaiting_approval if to_bool(requires_human_approval)
     return is_draft
+  end
+
+  # Returns true if the object is ready for common assembly.
+  # It's not strictly necessary to involve validate!, but it provides extra insurance.
+  def is_assemblable
+    return false unless is_published
+    return validate!
+  end
+
+  # Returns true only if the Item is unpublished.
+  def is_destroyable
+    return not(is_published)
   end
 
   # Returns the Item's Collection.

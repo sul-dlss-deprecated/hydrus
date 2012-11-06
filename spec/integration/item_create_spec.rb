@@ -145,7 +145,7 @@ describe("Item create", :type => :request, :integration => true) do
     item = Hydrus::Item.find(druid)
     item.object_status.should == 'draft'
     item.is_publishable.should == false
-    item.can_be_submitted_for_approval.should == true    
+    item.is_submittable_for_approval.should == true    
     item.is_published.should == false
     item.is_returned.should == false
     item.is_destroyable.should == true
@@ -182,7 +182,7 @@ describe("Item create", :type => :request, :integration => true) do
     login_as_archivist1
     visit hydrus_item_path(:id=>item.pid)
     page.should have_content('Welcome archivist1!')
-    fill_in "hydrus_item_approve_reason", :with => ni.reason
+    fill_in "hydrus_item_disapprove_reason", :with => ni.reason
     expect {click_button(disapprove_button)}.to change { ActionMailer::Base.deliveries.count }.by(1)
     
     # Check various Item attributes and methods.
@@ -215,10 +215,9 @@ describe("Item create", :type => :request, :integration => true) do
     item.disapproval_reason.should == nil
     find('span#status-label').should have_content('Waiting for approval')
     
-    # now login as archivist 1 and approve the item
+    # Now login as archivist 1 and approve the item.
     login_as_archivist1
     visit hydrus_item_path(:id=>item.pid)
-    # Approve the Item.
     click_button(approve_button)
     page.should have_content(@notice)
     # The view page should not offer the Publish, Approve, or Disapprove buttons.
@@ -244,7 +243,7 @@ describe("Item create", :type => :request, :integration => true) do
       /\AItem modified/,
       /\ATerms of deposit accepted/,
       /\AItem submitted for approval/,
-      /\AItem returned:/,
+      /\AItem returned/,
       /\AItem resubmitted for approval/,
       /\AItem approved/,      
       /\AItem published/,
@@ -317,7 +316,7 @@ describe("Item create", :type => :request, :integration => true) do
     item.object_status.should == 'draft'
     item.is_publishable.should == true
     item.requires_human_approval.should == "no"
-    item.can_be_submitted_for_approval.should == false    
+    item.is_submittable_for_approval.should == false    
     item.is_published.should == false
     item.is_returned.should == false
     item.is_destroyable.should == true

@@ -3,6 +3,7 @@ require 'spec_helper'
 describe Hydrus::Item do
 
   before(:each) do
+    @cannot_do_regex = /\ACannot perform action/
     @hi = Hydrus::Item.new
     @workflow_xml = <<-END
       <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
@@ -488,7 +489,7 @@ describe Hydrus::Item do
     @hi.tracked_fields.should be_an_instance_of(Hash)
   end
 
-  describe "can_be_submitted_for_approval()" do
+  describe "is_submittable_for_approval()" do
 
     it "if item is not a draft, should return false" do
       # Normally this would lead to a true result.
@@ -496,7 +497,7 @@ describe Hydrus::Item do
       @hi.stub('validate!').and_return(true)
       # But since the item is not a draft, we expect false.
       @hi.stub(:object_status).and_return('returned')
-      @hi.can_be_submitted_for_approval.should == false
+      @hi.is_submittable_for_approval.should == false
     end
 
     it "if item does not require human approval, should return false" do
@@ -505,7 +506,7 @@ describe Hydrus::Item do
       @hi.stub('validate!').and_return(true)
       # But since the item does not require human approval, we expect false.
       @hi.stub(:requires_human_approval).and_return('no')
-      @hi.can_be_submitted_for_approval.should == false
+      @hi.is_submittable_for_approval.should == false
     end
 
     it "otherwise, should return the value of validate!" do
@@ -513,7 +514,76 @@ describe Hydrus::Item do
       @hi.stub(:requires_human_approval).and_return('yes')
       [true, false, true, false].each do |exp|
         @hi.stub('validate!').and_return(exp)
-        @hi.can_be_submitted_for_approval.should == exp
+        @hi.is_submittable_for_approval.should == exp
+      end
+    end
+
+  end
+
+  it "is_awaiting_approval() should return true object_status has expected value" do
+    tests = {
+      'awaiting_approval' => true,
+      'returned'          => false,
+      'draft'             => false,
+      'published'         => false,
+    }
+    tests.each do |status, exp|
+      @hi.stub(:object_status).and_return(status)
+      @hi.is_awaiting_approval.should == exp
+    end
+  end
+
+  it "is_returned() should return true object_status has expected value" do
+    tests = {
+      'awaiting_approval' => false,
+      'returned'          => true,
+      'draft'             => false,
+      'published'         => false,
+    }
+    tests.each do |status, exp|
+      @hi.stub(:object_status).and_return(status)
+      @hi.is_returned.should == exp
+    end
+  end
+
+  describe "is_approvable()" do
+
+    it "item not awaiting approval: should always return false" do
+      @hi.stub(:is_awaiting_approval).and_return(false)
+      @hi.should_not_receive('validate!')
+      @hi.is_approvable.should == false
+    end
+
+    it "item not awaiting approval: should return value of validate!" do
+      @hi.stub(:is_awaiting_approval).and_return(true)
+      [true, false].each do |exp|
+        @hi.stub('validate!').and_return(exp)
+        @hi.is_approvable.should == exp
+      end
+    end
+
+  end
+
+  it "is_disapprovable() should return the value of is_awaiting_approval()" do
+    [true, false].each do |exp|
+      @hi.stub(:is_awaiting_approval).and_return(exp)
+      @hi.is_disapprovable.should == exp
+    end
+  end
+
+  describe "is_resubmittable()" do
+
+    it "item not returned: should always return false" do
+      @hi.stub(:is_returned).and_return(false)
+      @hi.should_not_receive('validate!')
+      @hi.is_resubmittable.should == false
+    end
+
+    it "item not returned: should return value of validate!" do
+      @hi.stub(:is_returned).and_return(true)
+      [true, false].each do |exp|
+        @hi.stub('validate!').and_return(exp)
+        @hi.is_resubmittable.should == exp
       end
     end
 
@@ -557,6 +627,24 @@ describe Hydrus::Item do
 
   end
 
+  describe "is_assemblable()" do
+
+    it "unpublished item: should always return false" do
+      @hi.stub(:is_published).and_return(false)
+      @hi.should_not_receive('validate!')
+      @hi.is_assemblable.should == false
+    end
+
+    it "published item: should return value of validate!" do
+      @hi.stub(:is_published).and_return(true)
+      [true, false].each do |exp|
+        @hi.stub('validate!').and_return(exp)
+        @hi.is_assemblable.should == exp
+      end
+    end
+
+  end
+
   it "content_directory()" do
     dru = 'oo000oo9999'
     @hi.stub(:pid).and_return("druid:#{dru}")
@@ -579,97 +667,115 @@ describe Hydrus::Item do
     )
   end
 
-  it "publish=() approve=() and resubmit=() should delegate" do
-    %w(publish approve resubmit).each do |meth|
-      v = "#{meth}_VAL"
-      @hi.should_receive(meth).with(v)
-      @hi.send("#{meth}=", v)
+  it "publish_directly=(), etc should delegate to the appropriate model method" do
+    methods = %w(publish_directly submit_for_approval approve disapprove resubmit)
+    methods.each do |m|
+      @hi.should_receive(m)
+      @hi.send("#{m}=", 'foo')
     end
   end
 
-  describe "publish()" do
+  describe "publish_directly()" do
 
-    # More substantive testing is done at integration level.
-
-    before(:each) do
-      @exp_title = 'blah blah blah'
-      @hi.title = @exp_title
-      @hi.stub(:save).and_return(true)
-      @hi.should_receive(:complete_workflow_step)
-      @hi.events.should_receive(:add_event)
+    it "item is not publishable: should raise exception" do
+      @hi.stub(:is_publishable).and_return(false)
+      expect { @hi.publish_directly }.to raise_exception(@cannot_do_regex)
     end
 
-    it "object requires human approval" do
-      @hi.stub(:requires_human_approval).and_return('yes')
-      @hi.should_not_receive(:approve)
-      @hi.publish
-      @hi.identityMetadata.objectLabel.should == [@exp_title]
-      @hi.label.should == @exp_title
+    it "item is publishable: should call the expected methods and set submit_time" do
+      @hi.stub(:is_publishable).and_return(true)
+      @hi.should_receive(:complete_workflow_step).with('submit')
+      @hi.should_receive(:do_publish)
+      @hi.submit_time.should be_blank
+      @hi.publish_directly
+      @hi.submit_time.should_not be_blank
+    end
+
+  end
+
+  it "do_publish() should set labels/status and call expected methods" do
+    exp = 'foobar title'
+    @hi.stub(:title).and_return(exp)
+    @hi.should_receive(:complete_workflow_step).with('approve')
+    @hi.should_receive(:start_common_assembly)
+    @hi.do_publish
+    @hi.label.should == exp
+    @hi.object_status.should == 'published'
+  end
+
+  describe "submit_for_approval()" do
+
+    it "item is not submittable: should raise exception" do
+      @hi.stub(:is_submittable_for_approval).and_return(false)
+      expect { @hi.submit_for_approval }.to raise_exception(@cannot_do_regex)
+    end
+
+    it "item is submittable: should set submit_time and status, and call expected methods" do
+      @hi.stub(:is_submittable_for_approval).and_return(true)
+      @hi.should_receive(:complete_workflow_step).with('submit')
+      @hi.submit_time.should be_blank
+      @hi.object_status.should_not == 'awaiting_approval'
+      @hi.submit_for_approval
+      @hi.submit_time.should_not be_blank
       @hi.object_status.should == 'awaiting_approval'
-    end
-
-    it "object does not require human approval" do
-      @hi.stub(:requires_human_approval).and_return('no')
-      @hi.should_receive(:approve)
-      @hi.publish
-      @hi.identityMetadata.objectLabel.should == [@exp_title]
-      @hi.label.should == @exp_title
-      @hi.object_status.should == 'published'
     end
 
   end
 
   describe "approve()" do
 
-    it "approve() should dispatch to do_approve() when passed no arguments" do
-      @hi.should_receive(:do_approve).once
+    it "item is not approvable: should raise exception" do
+      @hi.stub(:is_approvable).and_return(false)
+      expect { @hi.approve }.to raise_exception(@cannot_do_regex)
+    end
+
+    it "item is approvable: should remove disapproval_reason and call expected methods" do
+      @hi.stub(:is_approvable).and_return(true)
+      @hi.should_receive(:do_publish)
+      @hi.disapproval_reason = 'some reason'
       @hi.approve
-    end
-
-    it "approve() should dispatch to do_approve() when value is true-ish" do
-      tests = ['yes', 'true', true]
-      @hi.should_receive(:do_approve).exactly(tests.length).times
-      tests.each do |v|
-        @hi.approve('value' => v, 'reason' => 'fooblah')
-      end
-    end
-
-    it "approve() should dispatch to do_disapprove() when value is false-ish" do
-      tests = ['no', 'false', false]
-      r = 'fooblah'
-      @hi.should_receive(:do_disapprove).exactly(tests.length).times.with(r)
-      tests.each do |v|
-        @hi.approve('value' => v, 'reason' => r)
-      end
+      @hi.disapproval_reason.should == nil
     end
 
   end
 
-  describe "do_approve()" do
+  describe "disapprove()" do
 
-    it "should make expected calls (requires_human_approval = false)" do
-      @hi.stub(:requires_human_approval).and_return(false)
-      @hi.should_receive(:complete_workflow_step).with('approve').once
-      @hi.events.should_not_receive(:add_event)
-      @hi.should_receive(:start_common_assembly).once
-      @hi.do_approve()
+    it "item is not disapprovable: should raise exception" do
+      reason = 'some reason'
+      @hi.stub(:is_disapprovable).and_return(false)
+      expect { @hi.disapprove(reason) }.to raise_exception(@cannot_do_regex)
     end
 
-    it "should make expected calls (requires_human_approval = true)" do
-      @hi.stub(:requires_human_approval).and_return(true)
-      @hi.should_receive(:complete_workflow_step).with('approve').once
-      @hi.events.should_receive(:add_event).once
-      @hi.should_receive(:start_common_assembly).once
-      @hi.do_approve()
+    it "item is disapprovable: should set disapproval_reason and object status and call expected methods" do
+      reason = 'some reason'
+      @hi.stub(:is_disapprovable).and_return(true)
+      @hi.should_receive(:send_object_returned_email_notification)
+      @hi.disapproval_reason.should == nil
+      @hi.object_status.should_not == 'returned'
+      @hi.disapprove(reason)
+      @hi.disapproval_reason.should == reason
+      @hi.object_status.should == 'returned'
     end
 
   end
 
-  it "do_disapprove()" do
-    @hi.stub(:is_collection?).and_return(false)
-    @hi.stub(:item_depositor_id).and_return('')
-    @hi.do_disapprove('foo')
-    @hi.disapproval_reason.should == 'foo'
+  describe "resubmit()" do
+
+    it "item is not resubmittable: should raise exception" do
+      @hi.stub(:is_resubmittable).and_return(false)
+      expect { @hi.resubmit }.to raise_exception(@cannot_do_regex)
+    end
+
+    it "item is resubmittable: should remove disapproval_reason, set object status, and call expected methods" do
+      @hi.stub(:is_resubmittable).and_return(true)
+      @hi.disapproval_reason = 'some reason'
+      @hi.object_status.should_not == 'awaiting_approval'
+      @hi.resubmit
+      @hi.disapproval_reason.should == nil
+      @hi.object_status.should == 'awaiting_approval'
+    end
+
   end
 
   it "should indicate no files have been uploaded yet" do

@@ -41,4 +41,46 @@ describe(Hydrus::Item, :integration => true) do
 
   end
 
+  describe "do_publish()" do
+
+    before(:each) do
+      @prev_mint_ids = config_mint_ids()
+    end
+
+    after(:each) do
+      config_mint_ids(@prev_mint_ids)
+    end
+
+    it "should modify workflows as expected" do
+      # Setup.
+      druid = 'druid:oo000oo0003'
+      hi    = Hydrus::Item.create(druid, 'user_foo')
+      wf    = Dor::Config.hydrus.app_workflow
+      steps = Dor::Config.hydrus.workflow_steps[wf].map { |s| s[:name] }
+      exp   = Hash[ steps.map { |s| [s, 'waiting'] } ]
+      # Code to check workflow statuses.
+      check_statuses = lambda {
+        hi = Hydrus::Item.find(hi.pid)  # A refreshed copy of object.
+        statuses = steps.map { |s| [s, hi.workflows.get_workflow_status(s)] }
+        Hash[statuses].should == exp
+      }
+      # Initial statuses.
+      exp['start-deposit'] = 'completed'
+      check_statuses.call()
+      # After running do_publish, with start_common_assembly=false.
+      hi.stub(:should_start_common_assembly).and_return(false)
+      hi.do_publish()
+      exp['approve'] = 'completed'
+      check_statuses.call()
+      # After running do_publish, with start_common_assembly=true.
+      hi.stub(:should_start_common_assembly).and_return(true)
+      hi.stub(:is_assemblable).and_return(true)
+      hi.should_receive(:initiate_apo_workflow).once
+      hi.do_publish()
+      exp['start-assembly'] = 'completed'
+      check_statuses.call()
+    end
+
+  end
+
 end

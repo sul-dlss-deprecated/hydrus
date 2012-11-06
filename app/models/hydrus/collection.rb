@@ -111,6 +111,13 @@ class Hydrus::Collection < Hydrus::GenericObject
     return is_open
   end
 
+  # Returns true if the object is ready for common assembly.
+  # It's not strictly necessary to involve validate!, but it provides extra insurance.
+  def is_assemblable
+    return false unless is_open
+    return validate!
+  end
+
   # the users who will receive email notifications when a collection is opened or closed
   def recipients_for_collection_update_emails
     (

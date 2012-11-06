@@ -9,18 +9,18 @@
       <% if @document_fedora.is_awaiting_approval && can?(:review, @document_fedora) %>
         <p>
           <button type="submit" class="btn btn-small save-edits"
-                  name="hydrus_item[approve][value]" value="yes"
+                  name="hydrus_item[approve]" value="yes"
                   id="hydrus_item_approve">Approve Item</button>
         </p>
         <p>
           <button type="submit" class="btn btn-small save-edits"
-                  name="hydrus_item[approve][value]" value="no"
+                  name="hydrus_item[disapprove][value]" value="yes"
                   id="hydrus_item_disapprove">Return Item</button>
         </p>
         <p>
           <%= label_tag("hydrus_item_disapproval_reason", "Reason for return", 
                         :class => "return-item") %>
-          <%= text_field_tag("hydrus_item[approve][reason]",
+          <%= text_field_tag("hydrus_item[disapprove][reason]",
                              @document_fedora.disapproval_reason,
                              :class => "return-item", :autofocus => true) -%>
           <span class="help">Item depositor will be notified by email</span>
@@ -38,21 +38,21 @@
         </p>
 
       <!-- Submit for Approval button. -->
-      <% elsif @document_fedora.can_be_submitted_for_approval && can?(:edit, @document_fedora)%>
+      <% elsif @document_fedora.is_submittable_for_approval && can?(:edit, @document_fedora)%>
         <p>
           <button type="submit" class="btn btn-small save-edits"
-                  name="hydrus_item[publish]" value="true"
-                  id="hydrus_item_publish">
+                  name="hydrus_item[submit_for_approval]" value="true"
+                  id="hydrus_item_submit_for_approval">
             Submit for Approval
           </button>
         </p>
 
-      <!-- Publish button. -->
+      <!-- Publish button (applies only to items not requiring approval by reviewer). -->
       <% elsif @document_fedora.is_publishable && can?(:edit, @document_fedora)%>
         <p>
           <button type="submit" class="btn btn-small save-edits"
-                  name="hydrus_item[publish]" value="true"
-                  id="hydrus_item_publish">
+                  name="hydrus_item[publish_directly]" value="true"
+                  id="hydrus_item_publish_directly">
             Publish
           </button>
         </p>
