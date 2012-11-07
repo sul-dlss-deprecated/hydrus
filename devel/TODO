@@ -13,10 +13,6 @@ purl page. RightsMetadata issue?
 MH: current work
 --------
 
-Model refactoring: rewrite publish, approve, etc. as discrete and correctly
-named methods, each with the appropriate is_* guard at the outset of each
-method. Raise an exception if the is_* test fails.
-
 Controller refactor: dispatch to particular actions (open, close,
 submit_for_approval, etc.) rather than to the general-purpose update(). In
 addition, guard those controller methods with relevant can() calls.

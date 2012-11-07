@@ -15,5 +15,12 @@ end
 desc "rails server with suppressed output"
 task :server => :environment do
   system "rake jetty:start" unless `rake jetty:status` =~ /^Running:/
-  system "rails s 2>&1 | grep --line-buffered -Fv 'WARN  Could not determine content-length of response body.' | grep --line-buffered -v '^Loaded datastream druid:' | grep --line-buffered -v '^Solr response: '"
+  cmd = [
+    "rails s 2>&1",
+    "grep --line-buffered -Fv 'WARN  Could not determine content-length of response'",
+    "grep --line-buffered -v  '^Loaded datastream druid:'",
+    "grep --line-buffered -v  '^Loaded datastream list'",
+    "grep --line-buffered -v  '^Solr response: '"
+  ].join(' | ')
+  system cmd
 end
