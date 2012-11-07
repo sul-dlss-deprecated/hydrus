@@ -20,6 +20,9 @@ Hydrus::Application.routes.draw do
     get 'agree_to_terms_of_deposit', :as =>'agree_to_terms_of_deposit', :on=>:collection
   end
   
+  post "collections/open/:id"  => "hydrus_collections#open",  :as => 'open_collection'
+  post "collections/close/:id" => "hydrus_collections#close", :as => 'close_collection'
+
   match "items/:id/destroy_value" => "hydrus_items#destroy_value", :as => 'destroy_hydrus_item_value', :via => "get"
   match "collections/:id/destroy_value" => "hydrus_collections#destroy_value", :as => 'destroy_hydrus_collection_value', :via => "get"
   match "collections/:id/destroy_actor" => "hydrus_collections#destroy_actor", :as => 'destroy_hydrus_collection_actor', :via => "get"

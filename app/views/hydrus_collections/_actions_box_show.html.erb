@@ -1,46 +1,58 @@
-<% is_open = @document_fedora.is_open %>
+<% isopen = @document_fedora.is_open %>
+
 <div class="collection-actions box-header">Actions</div>
 
 <div class="box-body">
+
+  <!-- Open/close. -->
   <% if can? :edit, @document_fedora %>
-    <%= form_for(@document_fedora, :method => 'PUT', 
-                 :html => {:class => "step", :novalidate=>""}) do |f| -%>
-      <% if @document_fedora.is_open %>
-              <button type="submit" class="btn btn-small save-edits"
-                      name="hydrus_collection[close]" value="false"
-                      id="hydrus_collection_close">Close Collection</button>
-      <% elsif @document_fedora.is_openable %>
-        <button type="submit" class="btn btn-small save-edits"
-                name="hydrus_collection[open]" value="true"
-                id="hydrus_collection_open">Open Collection</button>
-      <% end %>
+    <% if isopen %>
+      <p>
+        <%= button_to(
+              "Close Collection", 
+              close_collection_path(@document_fedora),
+              :id    => 'hydrus_collection_close',
+              :class => 'btn btn-small save-edits') %>
+      </p>
+    <% elsif @document_fedora.is_openable %>
+      <p>
+        <%= button_to(
+              "Open Collection", 
+              open_collection_path(@document_fedora),
+              :id    => 'hydrus_collection_open',
+              :class => 'btn btn-small save-edits') %>
+      </p>
     <% end %>
   <% end %>
 
- <% if can? :create_items_in, @document_fedora %>
-			<% message = @document_fedora.is_openable ? "To add items, you must open the collection." : "To add items, you must fill in all required fields and open the collection." %> 
-      <div class="btn-group add-content-dropdown" <%=raw "data-placement=\"bottom\" rel=\"tooltip\" data-original-title=\"#{message}\"" unless is_open%> style="display:none;" >
-        <button class="<%="disabled" unless is_open%> btn btn-small">Add new &hellip;</button>
-        <button class="<%="disabled" unless is_open%> btn btn-small dropdown-toggle" data-toggle="dropdown">
-          <span class="caret"></span>
-        </button>
-        <%= render :partial => "shared/add_content_options",
-                   :locals => {:parent => @document_fedora} %>
-      </div>
-      <noscript>
-        <%= form_tag(new_hydrus_item_path, :method=>"GET", :class=>"add-content-options") do %>
-          <%= select_tag(
-                "collection", 
-                options_for_select([["item", @document_fedora.pid]]),
-                :class=>"add-content-options"
-              )
-          %>
-          <%= submit_tag("Add", :class=>"btn btn-small") %>
-        <%- end -%>
-      </noscript>
-
+  <!-- Create item. -->
+  <% if can? :create_items_in, @document_fedora %>
+    <% message = @document_fedora.is_openable ?
+                 "To add items, you must open the collection." :
+                 "To add items, you must fill in all required fields and open the collection."
+    %> 
+    <div class="btn-group add-content-dropdown" <%=raw "data-placement=\"bottom\" rel=\"tooltip\" data-original-title=\"#{message}\"" unless isopen%> style="display:none;" >
+      <button class="<%="disabled" unless isopen%> btn btn-small">Add new &hellip;</button>
+      <button class="<%="disabled" unless isopen%> btn btn-small dropdown-toggle" data-toggle="dropdown">
+        <span class="caret"></span>
+      </button>
+      <%= render :partial => "shared/add_content_options",
+                 :locals => {:parent => @document_fedora} %>
+    </div>
+    <noscript>
+      <%= form_tag(new_hydrus_item_path, :method=>"GET", :class=>"add-content-options") do %>
+        <%= select_tag(
+              "collection", 
+              options_for_select([["item", @document_fedora.pid]]),
+              :class=>"add-content-options"
+            )
+        %>
+        <%= submit_tag("Add", :class=>"btn btn-small") %>
+      <%- end -%>
+    </noscript>
   <% end %>
 
+  <!-- Delete. -->
   <% if can? :edit, @document_fedora %>
     <% if @document_fedora.is_destroyable %>
       <p class="discard-item">
@@ -54,4 +66,5 @@
       </p>
     <% end %>
   <% end %>
+
 </div>

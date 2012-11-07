@@ -57,4 +57,28 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  # Take a Collection or Item.
+  # Using the objection's validation errors, builds an HTML-ready 
+  # string for display in a flash message.
+  def errors_for_display(obj)
+    es = obj.errors.messages.map { |field, error|
+      "#{field.to_s.humanize.capitalize} #{error.join(', ')}."
+    }
+    return es.join("<br/>").html_safe
+  end
+
+  # Take a Collection/Item and a message.
+  # Tries to save the object.
+  # Returns the value of that save() call, and also sets
+  # the appropriate flash message.
+  def try_to_save(obj, success_msg)
+    v = obj.save
+    if v
+      flash[:notice] = success_msg
+    else
+      flash[:error] = errors_for_display(obj)
+    end
+    return v
+  end
+
 end

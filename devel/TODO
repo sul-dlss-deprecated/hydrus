@@ -17,15 +17,6 @@ Controller refactor: dispatch to particular actions (open, close,
 submit_for_approval, etc.) rather than to the general-purpose update(). In
 addition, guard those controller methods with relevant can() calls.
 
-  - Collection:
-
-    - Modify forms, controller, and routing to use specific methods
-      rather than update().
-
-    - Delete publish=().
-
-    - Add can() calls.
-
   - Item:
 
     - Modify forms, controller, and routing to use specific methods
@@ -34,6 +25,12 @@ addition, guard those controller methods with relevant can() calls.
     - Delete approve=() and analogous methods.
 
     - Add can() calls.
+
+  - Tests
+      def errors_for_display(obj)
+      def try_to_save(obj, success_msg)
+      def open
+      def close
 
 Integration tests for role-protection: Collection: open, close, discard, add
 item. Item: submit, approve, return.
@@ -51,6 +48,8 @@ After finishing more thorough UI rework, look at: responsiveness issues;
 accessibility issues.
 
 Update search results page; UI redesign degraded formatting of it.
+
+Rename @document_fedora to something pithier.
 
 Update SUL-chrome gem to latest Bootstrap (needed to be able to use the
 unchecked checkbox icon, which is not available in our current SUL-chrome gem).

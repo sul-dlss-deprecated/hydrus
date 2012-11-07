@@ -127,9 +127,6 @@ class Hydrus::Collection < Hydrus::GenericObject
     ).to_a.join(', ')
   end
 
-  def open=(val)   open()   end  # Forward the call from the controller.
-  def close=(val)  close()  end  # Forward the call from the controller.
-
   # Opens the collection.
   # The first time a collection is opened, it is also published.
   # After that, the user can toggle the open-closed state, but

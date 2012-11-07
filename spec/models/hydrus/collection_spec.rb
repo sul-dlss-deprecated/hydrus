@@ -24,13 +24,6 @@ describe Hydrus::Collection do
     Hydrus::Collection.create('USERFOO').pid.should == druid
   end
 
-  it "open=() and close=() should delegate" do
-    %w(open close).each do |meth|
-      @hc.should_receive(meth)
-      @hc.send("#{meth}=", 'true')
-    end
-  end
-
   describe "open() and close()" do
 
     # More substantive testing is done at integration level.

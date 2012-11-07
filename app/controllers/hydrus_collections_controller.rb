@@ -113,4 +113,18 @@ class HydrusCollectionsController < ApplicationController
     end
   end
 
+  def open
+    @document_fedora.cannot_do(:open) unless can?(:edit, @document_fedora)
+    @document_fedora.open
+    try_to_save(@document_fedora, "Collection opened")
+    redirect_to(hydrus_collection_path)
+  end
+
+  def close
+    @document_fedora.cannot_do(:close) unless can?(:edit, @document_fedora)
+    @document_fedora.close
+    try_to_save(@document_fedora, "Collection closed")
+    redirect_to(hydrus_collection_path)
+  end
+
 end
