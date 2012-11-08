@@ -1,34 +1,15 @@
 --------
-Integration with DOR
+MH: current work
 --------
+
+Integration tests for role-protection: open, close, publish_directly,
+submit_for_approval, approve, disapprove, resubmit.
+
+Purl page of a published item: figure out why files cannot be downloaded.
 
 Set up the listener scripts to update the Hydrus SOLR when Hydrus objects are
 updated outside of the Hydrus app. See the argo/bin directory for the latest
 copies of the scripts.
-
-Figure out why the publish robot in test does not actually publish items to the
-purl page. RightsMetadata issue?
-
---------
-MH: current work
---------
-
-Controller refactor: dispatch to particular actions (open, close,
-submit_for_approval, etc.) rather than to the general-purpose update(). In
-addition, guard those controller methods with relevant can() calls.
-
-Unit tests
-    errors_for_display
-    try_to_save
-
-Integration tests for role-protection:
-    open
-    close
-    publish_directly
-    submit_for_approval
-    approve
-    disapprove
-    resubmit
 
 --------
 Other

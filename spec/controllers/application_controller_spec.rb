@@ -25,4 +25,32 @@ describe ApplicationController do
     end
   end
 
+  it "can exercise errors_for_display()" do
+    obj = double('mock-object')
+    msgs = {
+      :files => ['foo bar', 'fubb'],
+      :title => ['blah blah'],
+    }
+    exp = 'Files foo bar, fubb.<br/>Title blah blah.'
+    obj.stub_chain(:errors, :messages).and_return(msgs)
+    controller.send(:errors_for_display, obj).should == exp
+  end
+
+  it "can exercise try_to_save()" do
+    # Successful save().
+    flash[:notice].should == nil
+    obj = double('obj', :save => true)
+    msg = 'foo message'
+    controller.send(:try_to_save, obj, msg).should == true
+    flash[:notice].should == msg
+
+    # Failed save().
+    flash[:error].should == nil
+    obj = double('obj', :save => false)
+    msg = 'foo error message'
+    controller.stub(:errors_for_display).and_return(msg)
+    controller.send(:try_to_save, obj, 'blah').should == false
+    flash[:error].should == msg
+  end
+  
 end
