@@ -335,11 +335,11 @@ describe Hydrus::Item do
 
         it "should get the end date range properly based on the collection's APO" do
           subject.stub(:beginning_of_embargo_range).and_return("08/01/2012")
-          subject.stub_chain([:collection, :apo, :embargo]).and_return("6 months")
+          subject.stub_chain([:collection,:embargo_terms]).and_return("6 months")          
           subject.end_of_embargo_range.should == "02/01/2013"
-          subject.stub_chain([:collection, :apo, :embargo]).and_return("1 year")
+          subject.stub_chain([:collection,:embargo_terms]).and_return("1 year")          
           subject.end_of_embargo_range.should == "08/01/2013"
-          subject.stub_chain([:collection, :apo, :embargo]).and_return("5 years")
+          subject.stub_chain([:collection,:embargo_terms]).and_return("5 years")          
           subject.end_of_embargo_range.should == "08/01/2017"
         end
       end
@@ -351,13 +351,7 @@ describe Hydrus::Item do
 
       describe "license()" do
 
-        it "Item-level license is blank: return Collection-level license" do
-          exp = 'foo COLL_LICENSE'
-          subject.stub_chain(:collection, :license).and_return(exp)
-          subject.license.should == exp
-        end
-
-        it "Item-level license is present: just return it" do
+        it "Item-level license is present" do
           exp = 'foo ITEM_LICENSE'
           subject.stub_chain(:rightsMetadata, :use, :machine).and_return([exp])
           subject.license.should == exp
@@ -447,7 +441,7 @@ describe Hydrus::Item do
       item.instance_variable_set('@should_validate', true)
       coll.stub(:is_open).and_return(true)
       coll.stub(:embargo_option).and_return("varies")
-      coll.stub_chain([:apo, :embargo]).and_return("1 year")
+      coll.stub(:embargo_terms).and_return("1 year")
       item.stub(:collection).and_return(coll)
       item.embargo = "future"
       item.embargo_date = (Date.today + 2.years).strftime("%m/%d/%Y")
@@ -807,7 +801,7 @@ describe Hydrus::Item do
 
   it "should indicate if we do not require terms acceptance if user already accepted terms on another item in the same collection, and it was less than 1 year ago" do
     @coll=Hydrus::Collection.new
-    @coll.stub(:users_accepted_terms_of_deposit).and_return({'archivist1'=>Time.now - 364.days,'archivist2'=>'10-12-2009 00:00:05'})
+    @coll.stub(:users_accepted_terms_of_deposit).and_return({'archivist1'=>Time.now.in_time_zone - 364.days,'archivist2'=>'10-12-2009 00:00:05'})
     @hi.stub(:accepted_terms_of_deposit).and_return(false)
     @hi.stub(:collection).and_return(@coll)
     @hi.requires_terms_acceptance('archivist1').should be false

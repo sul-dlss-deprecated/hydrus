@@ -29,17 +29,17 @@ describe SigninController do
     it "should set the flash message letting the user know they have been logged out" do
       get :logout
       flash[:notice].should == "You have successfully logged out of WebAuth."
-      response.should redirect_to("/somepath")
+      response.should redirect_to("/")
     end
     it "should not set the flash message if the user is still logged into WebAuth." do
       request.env["WEBAUTH_USER"] = "not-a-real-user"
       get :logout
       flash[:notice].should be_nil
-      response.should redirect_to("/somepath")
+      response.should redirect_to("/")
     end
-    it "should redirect back after logout" do
+    it "should redirect back to home page after logout" do
       get :logout
-      response.should redirect_to("/somepath")
+      response.should redirect_to("/")
     end
   end
   

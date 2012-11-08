@@ -13,6 +13,10 @@ describe Hydrus::HydrusPropertiesDS do
         	<user dateAccepted="2011-10-02 02:05:31 -0700">cornellian</user>
         	<user dateAccepted="2011-10-02 02:05:31 -0700">mhamster</user>
         </usersAcceptedTermsOfDeposit>
+        <embargoTerms>1 year</embargoTerms>
+        <embargoOption>varies</embargoOption>
+        <licenseOption>fixed</licenseOption>
+        <visibilityOption>fixed</visibilityOption>        
         <requiresHumanApproval>no</requiresHumanApproval>
         <acceptedTermsOfDeposit>false</acceptedTermsOfDeposit>
         <itemType>dataset</itemType>
@@ -29,6 +33,10 @@ describe Hydrus::HydrusPropertiesDS do
     tests = [
       [[:users_accepted_terms_of_deposit,:user],%w{cardinal crimson cornellian mhamster}],
       [[:users_accepted_terms_of_deposit,:user,:date_accepted],["2011-09-02 01:02:32 -0700","2012-05-02 12:02:44 -0700","2011-10-02 02:05:31 -0700","2011-10-02 02:05:31 -0700"]],
+      [:embargo_terms, ["1 year"]],
+      [:embargo_option, ["varies"]],
+      [:license_option, ["fixed"]],
+      [:visibility_option, ["fixed"]],
       [:requires_human_approval, ["no"]],
       [:accepted_terms_of_deposit, ["false"]],
       [:item_type, ["dataset"]],

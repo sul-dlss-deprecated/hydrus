@@ -13,13 +13,6 @@ class Hydrus::AdministrativeMetadataDS < ActiveFedora::NokogiriDatastream
   set_terminology do |t|
     t.root :path => 'administrativeMetadata', :index_as => [:not_searchable]
     t.relationships :index_as => [:not_searchable]
-    t.hydrus :index_as => [:not_searchable] do
-      t.reviewRequired
-      t.termsOfDeposit
-      t.embargo    { t.option :path => {:attribute => 'option'} }
-      t.visibility { t.option :path => {:attribute => 'option'} }
-      t.license    { t.option :path => {:attribute => 'option'} }
-    end
 
     # Define OM terms for all of the workflows.
     Dor::Config.hydrus.workflow_steps.keys.each do |wf_name|
@@ -55,13 +48,6 @@ class Hydrus::AdministrativeMetadataDS < ActiveFedora::NokogiriDatastream
     Nokogiri::XML::Builder.new do |xml|
       xml.administrativeMetadata {
         xml.relationships
-        xml.hydrus {
-          xml.reviewRequired
-          xml.termsOfDeposit
-          xml.embargo
-          xml.visibility
-          xml.license
-        }
       }
     end.doc
   end

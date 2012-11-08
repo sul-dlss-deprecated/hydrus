@@ -119,6 +119,7 @@ describe Hydrus::Collection do
       @exp_errs.each do |k|
         @hc.stub(k).and_return(@dru)
       end
+      @hc.stub(:embargo_terms).and_return(@dru)
       @hc.stub(:pid).and_return(@dru)
       @apo.stub(:'valid?').and_return(true)
       @hc.valid?.should == true
@@ -339,49 +340,25 @@ describe Hydrus::Collection do
     @hc.cleaned_usernames.should == exp
   end
 
-  describe "methods forwarded to the APO" do
+  describe "getters and setters" do
     
     before(:each) do
-      @apo = Hydrus::AdminPolicyObject.new
-      @hc.stub(:apo).and_return(@apo)
       @arg = 'foobar'
-    end
-
-    it "simple getters/setters should forward to APO" do
-      methods = %w(
-        embargo
-        embargo=
-        embargo_option
-        embargo_option=
-        license
-        license=
-        license_option
-        license_option=
-        person_id
-        visibility
-        visibility=
-        visibility_option
-        visibility_option=
-      )
-      methods.each do |m|
-        @apo.should_receive(m).with(@arg)
-        @hc.send(m, @arg)
-      end
     end
 
     describe "embargo/license conditional getters and setters" do
 
       before(:each) do
         @combos = [
-          %w(embargo fixed),
-          %w(embargo varies),
-          %w(license fixed),
-          %w(license varies),
+          %w(embargo fixed embargo_terms),
+          %w(embargo varies embargo_terms),
+          %w(license fixed license),
+          %w(license varies license),
         ]
       end
 
       it "FOO_VAL() should return FOO() if FOO_option() returns VAL" do
-        @combos.each do |typ, val|
+        @combos.each do |typ, val, att|
           # Example:
           #   FOO_VAL()     embargo_fixed()
           #   FOO_option()  embargo_option()
@@ -393,25 +370,25 @@ describe Hydrus::Collection do
           # And if FOO_option() returns VAL, then FOO_VAL() will return FOO().
           exp = 'blah blah!!'
           @hc.stub("#{typ}_option").and_return(val)
-          @hc.stub(typ).and_return(exp)
+          @hc.stub(att).and_return(exp)
           @hc.send(m).should == exp
         end
       end
       
-      it "setters should not call apo.FOO= because FOO_option() does not return VAL" do
-        @combos.each do |typ, val|
+      it "setters should not call FOO= because FOO_option() does not return VAL" do
+        @combos.each do |typ, val, att|
           m = "#{typ}="
-          @apo.should_not_receive("#{typ}=")
+          @hc.should_not_receive(m)
           @hc.stub("#{typ}_option").and_return('')
           @hc.send("#{typ}_#{val}=", 'new_val')
         end
       end
       
-      it "setters should call apo.FOO= because FOO_option() does return VAL" do
-        @combos.each do |typ, val|
-          m   = "#{typ}="
+      it "setters should call FOO= because FOO_option() does return VAL" do
+        @combos.each do |typ, val, att|
+          m   = "#{att}="
           exp = 'new value!'
-          @apo.should_receive("#{typ}=").with(exp).once
+          @hc.should_receive(m).with(exp).once
           @hc.stub("#{typ}_option").and_return(val)
           @hc.send("#{typ}_#{val}=", exp)
         end
@@ -422,14 +399,14 @@ describe Hydrus::Collection do
     describe "visibility_option_value getter and setter" do
       
       it "can exercise the getter" do
-        @apo.stub(:visibility_option).and_return('fixed')
-        @apo.stub(:visibility).and_return('world')
+        @hc.stub(:visibility_option).and_return('fixed')
+        @hc.stub(:visibility).and_return(['world'])
         @hc.visibility_option_value.should == 'everyone'
       end
 
-      it "the setter should call the expected setters on the APO" do
-        @apo.should_receive('visibility_option=').with('fixed')
-        @apo.should_receive('visibility=').with('world')
+      it "the setter should call the expected setters" do
+        @hc.should_receive('visibility_option=').with('fixed')
+        @hc.should_receive('visibility=').with('world')
         @hc.visibility_option_value = 'everyone'
       end
 

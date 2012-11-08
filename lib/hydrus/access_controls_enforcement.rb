@@ -14,7 +14,7 @@ module Hydrus::AccessControlsEnforcement
 
   def redirect_to_correct_page(url) 
     session['user_return_to']=request.fullpath
-    current_user.nil? ? redirect_to(new_signin_path(:referrer => request.fullpath)) : redirect_to(url)
+    current_user.nil? ? redirect_to(new_signin_path(:referrer => request.fullpath || root_url)) : redirect_to(url)
   end
   
   # Redirects to the Item/Collection view page with a flash error

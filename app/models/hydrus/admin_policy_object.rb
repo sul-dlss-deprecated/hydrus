@@ -5,7 +5,7 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
   include Hydrus::Responsible
   include Hydrus::Validatable
   extend  Hydrus::Delegatable
-
+  
   # has_relationship('governed_objects', :is_governed_by, :inbound => true)
 
   has_metadata(
@@ -44,16 +44,17 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
       [:person_id,            false, :role, :person, :identifier],
       [:collection_depositor, true, :collection_depositor, :person, :identifier],
     ],
-    "administrativeMetadata" => [
-      [:embargo,              true,  :hydrus, :embargo],
-      [:embargo_option,       true,  :hydrus, :embargo, :option],
-      [:license,              true,  :hydrus, :license],
-      [:license_option,       true,  :hydrus, :license, :option],
-      [:visibility,           true,  :hydrus, :visibility],
-      [:visibility_option,    true,  :hydrus, :visibility, :option],
-    ],
+    "hydrusProperties" => [
+      [:reviewed_release_settings, true   ],
+      [:accepted_terms_of_deposit, true   ],      
+    ]
   )
 
+  # Returns the object type as a string: item, collection, or adminPolicy.
+  def object_type
+    return identityMetadata.objectType.first
+  end
+      
   def initialize(*args)
     super
   end

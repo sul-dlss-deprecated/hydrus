@@ -268,7 +268,7 @@ describe("Item edit", :type => :request, :integration => true) do
   it "should have editible license information once the parent collection's license is set to varies" do
     varies_radio = "hydrus_collection_license_option_varies"
     collection_licenses = "license_option_varies"
-    new_collection_license = "CC BY-NC Attribution-NonCommercial"
+    new_collection_license = "CC BY Attribution"
     item_licenses = "hydrus_item_license"
     new_item_license = "PDDL Public Domain Dedication and License"
     

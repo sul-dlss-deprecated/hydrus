@@ -6,7 +6,8 @@ class Hydrus::Collection < Hydrus::GenericObject
   before_save :save_apo
 
   before_validation :remove_values_for_associated_attribute_with_value_none
-  after_validation :strip_whitespace, :cleanup_usernames
+  after_validation :cleanup_usernames
+  after_validation :strip_whitespace
 
   validates :embargo_option, :presence => true, :if => :should_validate
   validates :license_option, :presence => true, :if => :should_validate
@@ -14,7 +15,7 @@ class Hydrus::Collection < Hydrus::GenericObject
   validate  :check_license_options,             :if => :should_validate
 
   def check_embargo_options
-    if embargo_option != 'none' && embargo.blank?
+    if embargo_option != 'none' && embargo_terms.blank?
       errors.add(:embargo, "must have a time period specified")
     end
   end
@@ -31,6 +32,10 @@ class Hydrus::Collection < Hydrus::GenericObject
     # [:METHOD_NAME,            :uniq,  :at... ]
     "hydrusProperties" => [
       [:requires_human_approval, true   ],
+      [:embargo_option,       true,  ],
+      [:embargo_terms,       true,  ],
+      [:license_option,       true,  ],
+      [:visibility_option,    true,  ],      
     ],
   )
 
@@ -57,7 +62,7 @@ class Hydrus::Collection < Hydrus::GenericObject
     coll.embargo_option          = 'none'
     coll.requires_human_approval = 'no'
     coll.license_option          = 'none'
-    coll.deposit_time            = Time.now.to_s
+    coll.deposit_time            = Time.now.in_time_zone.to_s
     # Set object status.
     coll.object_status = 'draft'
     # Save and return.
@@ -75,6 +80,10 @@ class Hydrus::Collection < Hydrus::GenericObject
     return v1 && v2
   end
 
+  def embargo
+    embargo_date.blank? ? 'immediate' : 'future' 
+  end
+    
   # method used to build sidebar
   def license_details_provided?
     validate! ? true : (errors.keys & [:license,:license_option]).size == 0
@@ -142,18 +151,13 @@ class Hydrus::Collection < Hydrus::GenericObject
 
     # Also, at the moment of publication, we refresh various titles and labels.
     # Note that the two label attributes reside in Fedora's foxml:objectProperties.
-    apo_title = "APO for #{title}"
-    apo.identityMetadata.objectLabel = apo_title
-    apo.title                        = apo_title
-    identityMetadata.objectLabel     = title
-    self.label                       = title
-    apo.label                        = apo_title
+    refresh_titles
 
     # If needed, advance the workflow to record that the object has been published.
     # At this time we can also approve the collection, because collections never
     # require human approval, even when their items do.
     if first_time
-      self.submit_time = Time.now.to_s
+      self.submit_time = Time.now.in_time_zone.to_s
       complete_workflow_step('submit')
       complete_workflow_step('approve')
       start_common_assembly()
@@ -171,6 +175,21 @@ class Hydrus::Collection < Hydrus::GenericObject
     send_publish_email_notification(false)
   end
 
+  # update APO defaultObjectRights datastream from collection objectRights
+  def refresh_default_object_rights
+    apo.defaultObjectRights.content = self.rightsMetadata.to_xml
+  end
+  
+  # update various apo titles and collection titles from value set by user
+  def refresh_titles
+    apo_title = "APO for #{title}"
+    apo.identityMetadata.objectLabel = apo_title
+    apo.title                        = apo_title
+    identityMetadata.objectLabel     = title
+    self.label                       = title
+    apo.label                        = apo_title  
+  end
+  
   def send_invitation_email_notification(new_depositors)
     return if new_depositors.blank?
     email=HydrusMailer.invitation(:to =>  new_depositors, :object =>  self)
@@ -228,13 +247,13 @@ class Hydrus::Collection < Hydrus::GenericObject
   end
 
   def save_apo
-    apo.label="APO for #{label}"
-    apo.title="APO for #{title}"
+    refresh_titles
+    refresh_default_object_rights
     apo.save
   end
 
   def remove_values_for_associated_attribute_with_value_none
-    self.embargo = nil if embargo_option == "none"
+    self.embargo_terms = nil if embargo_option == "none"
     self.license = nil if license_option == "none"
   end
 
@@ -251,7 +270,7 @@ class Hydrus::Collection < Hydrus::GenericObject
   end
 
   ####
-  # Simple getters and settings forwarded to the APO.
+  # Simple getters and settings 
   #
   # These are needed because ActiveFedora's delegate()
   # does not work when we need to delegate through to the APO.
@@ -274,36 +293,20 @@ class Hydrus::Collection < Hydrus::GenericObject
     apo.collection_depositor= val
   end
 
-  def embargo *args
-    apo.embargo *args
-  end
-
-  def embargo= val
-    apo.embargo= val
-  end
-
-  def embargo_option *args
-    apo.embargo_option *args
-  end
-
-  def embargo_option= val
-    apo.embargo_option= val
-  end
-
   def embargo_fixed
-    embargo_option == "fixed" ? embargo : ""
+    embargo_option == "fixed" ? embargo_terms : ""
   end
 
   def embargo_varies
-    embargo_option == "varies" ? embargo : ""
+    embargo_option == "varies" ? embargo_terms : ""
   end
 
   def embargo_fixed= val
-    apo.embargo= val if embargo_option == "fixed"
+    self.embargo_terms= val if embargo_option == "fixed"
   end
 
   def embargo_varies= val
-    apo.embargo= val if embargo_option == "varies"
+    self.embargo_terms= val if embargo_option == "varies"
   end
 
   def license_fixed
@@ -315,27 +318,11 @@ class Hydrus::Collection < Hydrus::GenericObject
   end
 
   def license_fixed= val
-    apo.license= val if license_option == "fixed"
+    self.license= val if license_option == "fixed"
   end
 
   def license_varies= val
-    apo.license= val if license_option == "varies"
-  end
-
-  def license *args
-    apo.license *args
-  end
-
-  def license= val
-    apo.license= val
-  end
-
-  def license_option *args
-    apo.license_option *args
-  end
-
-  def license_option= val
-    apo.license_option= val
+    self.license= val if license_option == "varies"
   end
 
   def person_id *args
@@ -354,32 +341,16 @@ class Hydrus::Collection < Hydrus::GenericObject
     return apo.persons_with_role(role)
   end
 
-  def visibility *args
-    apo.visibility *args
-  end
-
-  def visibility= val
-    apo.visibility= val
-  end
-
-  def visibility_option *args
-    apo.visibility_option *args
-  end
-
-  def visibility_option= val
-    apo.visibility_option= val
-  end
-
   def visibility_option_value *args
-    opt = apo.visibility_option # fixed or varies
-    vis = apo.visibility        # world or stanford
+    opt = visibility_option # fixed or varies
+    vis = visibility.first        # world or stanford
     return vov_lookup["#{opt}_#{vis}"]
   end
 
   def visibility_option_value= val
     opt, vis              = vov_lookup[val].split('_')
-    apo.visibility_option = opt # fixed or varies
-    apo.visibility        = vis # world or stanford
+    self.visibility_option= opt # fixed or varies
+    self.visibility= vis # world or stanford
   end
 
   ####
@@ -387,14 +358,11 @@ class Hydrus::Collection < Hydrus::GenericObject
   ####
 
   def vov_lookup
-    return {
+    lookup = {
       'everyone'       => 'fixed_world',
       'varies'         => 'varies_world',
-      'stanford'       => 'fixed_stanford',
-      'fixed_world'    => 'everyone',
-      'varies_world'   => 'varies',
-      'fixed_stanford' => 'stanford',
-    }
+      'stanford'       => 'fixed_stanford'  }
+      return lookup.merge(lookup.invert)
   end
 
   def tracked_fields

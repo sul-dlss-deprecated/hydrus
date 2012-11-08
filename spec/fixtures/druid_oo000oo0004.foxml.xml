@@ -81,14 +81,16 @@
           </access>
           <access type="read">
             <machine>
-            	<world/>
+							<group>stanford</group>
             </machine>
           </access>
           <access type="edit">
-            <machine>
-              <group>archivist</group>
-            </machine>
+            <machine/>
           </access>
+				  <use>
+				    <human type="creativeCommons">CC BY Attribution</human>
+				    <machine type="creativeCommons">cc-by</machine>
+				  </use>
         </rightsMetadata>
       </foxml:xmlContent>
     </foxml:datastreamVersion>
@@ -99,6 +101,10 @@
       CREATED="2011-07-05T20:49:25.801Z" MIMETYPE="text/xml" SIZE="345">
       <foxml:xmlContent>
         <hydrusProperties>
+	        <embargoTerms>1 year</embargoTerms>
+          <embargoOption>varies</embargoOption>
+          <licenseOption>fixed</licenseOption>
+          <visibilityOption>fixed</visibilityOption>	
           <requiresHumanApproval>no</requiresHumanApproval>
 		      <usersAcceptedTermsOfDeposit>
 		      </usersAcceptedTermsOfDeposit>

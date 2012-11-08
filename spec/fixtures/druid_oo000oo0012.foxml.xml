@@ -187,10 +187,12 @@ The calculated Fermi surface of RbCu4S3 reveals one three-dimensional pocket and
             </machine>
           </access>
           <access type="edit">
-            <machine>
-              <group>archivist</group>
-            </machine>
+            <machine/>
           </access>
+				  <use>
+				    <human type="creativeCommons">CC BY Attribution</human>
+				    <machine type="creativeCommons">cc-by</machine>
+				  </use>
         </rightsMetadata>
       </foxml:xmlContent>
     </foxml:datastreamVersion>

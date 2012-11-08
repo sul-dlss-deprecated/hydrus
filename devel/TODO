@@ -5,8 +5,6 @@ MH: current work
 Integration tests for role-protection: open, close, publish_directly,
 submit_for_approval, approve, disapprove, resubmit.
 
-Purl page of a published item: figure out why files cannot be downloaded.
-
 Set up the listener scripts to update the Hydrus SOLR when Hydrus objects are
 updated outside of the Hydrus app. See the argo/bin directory for the latest
 copies of the scripts.
@@ -41,16 +39,13 @@ select_status_checkbox_icon helper method (application_helper.rb).
 Item View page: Fix conditional display of metadata sections when only some
 required fields have been saved.
 
-Fix embargo date UI datepicker not being reselected when an invalid date is
-entered and a validation error occurs.
-
 Refactor and write tests for redirect_if_not_correct_object_type: seems more
 complex than it needs to be. Also, the code probably won't run as written
 because the APO class does not have an object_type method (that might be a
 problem as well).
 
-Disable edit tab for published items. NOTE: this already happens automatically
-when not in development mode.
+Disable edit tab for published items. [PETER NOTE: this already happens automatically
+when not in development mode.]
 
 After a collection has been published, is it editable? If so, do we need
 to push it through the accessioning pipeline again?

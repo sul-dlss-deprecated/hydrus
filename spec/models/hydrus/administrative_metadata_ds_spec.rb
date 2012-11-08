@@ -11,13 +11,6 @@ describe Hydrus::AdministrativeMetadataDS do
     xml = <<-EOF
       #{@amd_start}
         <relationships />
-        <hydrus>
-          <reviewRequired>yes</reviewRequired>
-          <termsOfDeposit>Blah-blah</termsOfDeposit>
-          <embargo option="varies">1-year</embargo>
-          <visibility option="fixed">stanford</visibility>
-          <license option="fixed">cc-by</license>
-        </hydrus>
         <hydrusAssembly>
           <workflow id="hydrusAssemblyWF">
             <process name="start-deposit" status="completed" lifecycle="registered"/>
@@ -43,12 +36,6 @@ describe Hydrus::AdministrativeMetadataDS do
 
   it "should get expected values from OM terminology" do
     tests = [
-      [[:hydrus, :reviewRequired], %w(yes)],
-      [[:hydrus, :termsOfDeposit], %w(Blah-blah)],
-      [[:hydrus, :embargo], %w(1-year)],
-      [[:hydrus, :embargo, :option], %w(varies)],
-      [[:hydrus, :visibility, :option], %w(fixed)],
-      [[:hydrus, :license, :option], %w(fixed)],
       [[:hydrusAssembly, :workflow, :process, :name], %w(start-deposit submit)],
       [[:hydrusAssembly, :workflow, :process, :status], %w(completed waiting)],
       [[:hydrusAssembly, :workflow, :process, :lifecycle], %w(registered)],
@@ -64,13 +51,6 @@ describe Hydrus::AdministrativeMetadataDS do
     exp_xml = %Q(
       #{@amd_start}
         <relationships/>
-        <hydrus>
-          <reviewRequired/>
-          <termsOfDeposit/>
-          <embargo/>
-          <visibility/>
-          <license/>
-        </hydrus>
       #{@amd_end}
     )
     exp_xml = noko_doc(exp_xml)

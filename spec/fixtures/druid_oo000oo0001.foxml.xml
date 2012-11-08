@@ -211,10 +211,12 @@
             </machine>
           </access>
           <access type="edit">
-            <machine>
-              <group>archivist</group>
-            </machine>
+            <machine/>
           </access>
+				  <use>
+				    <human type="creativeCommons">CC BY Attribution</human>
+				    <machine type="creativeCommons">cc-by</machine>
+				  </use>
         </rightsMetadata>
       </foxml:xmlContent>
     </foxml:datastreamVersion>

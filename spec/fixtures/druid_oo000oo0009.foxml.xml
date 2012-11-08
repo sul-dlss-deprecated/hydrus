@@ -55,10 +55,10 @@
       </foxml:xmlContent>
     </foxml:datastreamVersion>
   </foxml:datastream>
-  <foxml:datastream ID="rightsMetadata" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
-    <foxml:datastreamVersion ID="rightsMetadata.0" LABEL="Rights Metadata" CREATED="2011-07-05T20:46:24.337Z" MIMETYPE="text/xml" SIZE="293">
+  <foxml:datastream ID="defaultObjectRights" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
+    <foxml:datastreamVersion ID="defaultObjectRights.0" LABEL="Default Object Rights" CREATED="2011-07-05T20:46:24.337Z" MIMETYPE="text/xml" SIZE="293">
       <foxml:xmlContent>
-        <rightsMetadata objectId="druid:oo000oo0009">
+        <defaultObjectRights objectId="druid:oo000oo0009">
           <access type="discover">
             <machine>
             	<world/>
@@ -66,15 +66,27 @@
           </access>
           <access type="read">
             <machine>
-            	<world/>
-            </machine>
-          </access>
-          <access type="edit">
-            <machine>
               <group>stanford</group>
             </machine>
           </access>
-        </rightsMetadata>
+          <access type="edit">
+            <machine/>
+          </access>
+				  <use>
+				    <human type="creativeCommons">CC BY Attribution</human>
+				    <machine type="creativeCommons">cc-by</machine>
+				  </use>
+        </defaultObjectRights>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+  <foxml:datastream ID="hydrusProperties" STATE="A" CONTROL_GROUP="X"
+    VERSIONABLE="false">
+    <foxml:datastreamVersion ID="hydrusProperties.0" LABEL="Hydrus Properties"
+      CREATED="2011-07-05T20:49:25.801Z" MIMETYPE="text/xml" SIZE="345">
+      <foxml:xmlContent>
+        <hydrusProperties>
+        </hydrusProperties>
       </foxml:xmlContent>
     </foxml:datastreamVersion>
   </foxml:datastream>
@@ -82,13 +94,6 @@
     <foxml:datastreamVersion ID="administrativeMetadata.0" LABEL="Administrative Metadata" CREATED="2011-07-05T20:59:01.385Z" MIMETYPE="text/xml" SIZE="1186">
       <foxml:xmlContent>
         <administrativeMetadata objectId="druid:oo000oo0009">
-          <hydrus>
-            <reviewRequired>no</reviewRequired>
-            <termsOfDeposit>When depositing stuff, you must agree to the terms.</termsOfDeposit>
-            <embargo option="varies">1 year</embargo>
-            <visibility option="fixed">stanford</visibility>
-            <license option="fixed">cc-by</license>
-          </hydrus>
         </administrativeMetadata>
       </foxml:xmlContent>
     </foxml:datastreamVersion>

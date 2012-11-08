@@ -5,14 +5,34 @@ class Hydrus::GenericObject < Dor::Item
   include Hydrus::WorkflowDsExtension
   extend  Hydrus::Delegatable
   include ActiveModel::Validations
+  include Hydrus::PropertiesSettable    
+  include Hydrus::EmbargoMetadataDsExtension
 
   attr_accessor :files_were_changed
-
+  
   REQUIRED_FIELDS=[:title,:abstract,:contact]
   REQUIRED_FIELDS.each {|field| validates field, :not_empty => true, :if => :should_validate}
 
   validates :pid, :is_druid => true
 
+  has_metadata(
+    :name => "rightsMetadata",
+    :type => Hydrus::RightsMetadataDS,
+    :label => 'Rights Metadata',
+    :control_group => "M")
+
+  has_metadata(
+    :name => "descMetadata",
+    :type => Hydrus::DescMetadataDS,
+    :label => 'Descriptive Metadata',
+    :control_group => 'M')
+
+  has_metadata(
+    :name => "hydrusProperties",
+    :type => Hydrus::HydrusPropertiesDS,
+    :label => 'Hydrus Properties',
+    :control_group => 'M')
+    
   setup_delegations(
     # [:METHOD_NAME,            :uniq, :at... ]
     "descMetadata" => [
@@ -30,7 +50,7 @@ class Hydrus::GenericObject < Dor::Item
       [:item_type,              true   ],      
     ],
   )
-
+  
   def is_item?
     self.class == Hydrus::Item
   end
@@ -65,19 +85,6 @@ class Hydrus::GenericObject < Dor::Item
   def current_user=(val)
     @current_user = val
   end
-
-  has_metadata(
-    :name => "descMetadata",
-    :type => Hydrus::DescMetadataDS,
-    :label => 'Descriptive Metadata',
-    :control_group => 'M')
-
-  has_metadata(
-    :name => "hydrusProperties",
-    :type => Hydrus::HydrusPropertiesDS,
-    :label => 'Hydrus Properties',
-    :control_group => 'M')
-
 
   # Returns true if the object is in the draft state.
   def is_draft
@@ -118,6 +125,15 @@ class Hydrus::GenericObject < Dor::Item
     @related_items ||= descMetadata.find_by_terms(:relatedItem).map { |n|
       Hydrus::RelatedItem.new_from_node(n)
     }
+  end
+
+  def update_access_blocks(ds,group)
+    if group == "world"
+      ds.send(:make_world_readable)
+    else
+      ds.send(:remove_world_read_access)
+      ds.send(:add_read_group, group)
+    end
   end
 
   # Takes an item_type: :dataset, etc. for items, or just :collection for collections.
@@ -214,7 +230,7 @@ class Hydrus::GenericObject < Dor::Item
   def self.dor_registration_params(user_string, obj_typ, apo_pid)
     proj = 'Hydrus'
     wfs  = obj_typ == 'adminPolicy' ? [] : [Dor::Config.hydrus.app_workflow]
-    tm   = Time.now.strftime('%Y-%m-%d %H:%M:%S.%L %z')  # With milliseconds.
+    tm   = Time.now.in_time_zone.strftime('%Y-%m-%d %H:%M:%S.%L %z')  # With milliseconds.
     return {
       :object_type       => obj_typ,
       :admin_policy      => apo_pid,

@@ -21,6 +21,11 @@ class Hydrus::HydrusPropertiesDS < ActiveFedora::NokogiriDatastream
     t.disapproval_reason        :path => 'disapprovalReason'
     t.submit_time               :path => 'submitTime'
     t.deposit_time              :path => 'depositTime'
+    t.embargo_option            :path => 'embargoOption'
+    t.embargo_terms             :path => 'embargoTerms'
+    t.visibility_option         :path => 'visibilityOption'
+    t.license_option            :path => 'licenseOption'
+    
   end
 
   define_template :user do |xml,username,date_accepted|

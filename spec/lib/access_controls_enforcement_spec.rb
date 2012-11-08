@@ -41,6 +41,7 @@ describe Hydrus::AccessControlsEnforcement do
 
     it "should redirect to root path if user cannot read the object" do
       @mc.stub('can?').and_return(false)
+      @mc.stub(:root_url).and_return('/')
       @mc.should_receive(:redirect_to).with(@exp_rp)
       @mc.enforce_show_permissions
       f = @mc.flash
@@ -132,6 +133,7 @@ describe Hydrus::AccessControlsEnforcement do
 
     it "should redirect to home page if user cannot do it" do
       @mc.stub('can?').and_return(false)
+      @mc.stub(:root_url).and_return('/')
       @mc.should_receive(:redirect_to).with(@exp_rp)
       @mc.enforce_create_permissions
       f = @mc.flash

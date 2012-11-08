@@ -15,7 +15,13 @@ class ApplicationController < ActionController::Base
 
   def exception_on_website(exception)
     # TODO also log this exception in some special way and notify someone?
-    (Rails.env.development? || Rails.env.test?) ? raise(exception) : redirect_to(error_url) 
+    if (Rails.env.development? || Rails.env.test?) 
+        raise(exception)
+      else
+        logger.error(exception.message)
+        logger.error(exception.backtrace.join("\n"))
+        redirect_to(error_url) 
+     end
   end
 
   # Used to determine if we should show beta message in UI.

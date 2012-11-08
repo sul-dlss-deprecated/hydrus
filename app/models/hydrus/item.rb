@@ -1,11 +1,9 @@
 class Hydrus::Item < Hydrus::GenericObject
 
-  include Hydrus::EmbargoMetadataDsExtension
   include Hydrus::Responsible
   extend  Hydrus::Delegatable
 
-  after_validation :strip_whitespace
-
+  after_validation :strip_whitespace    
   attr_accessor :embargo
   
   validate :enforce_collection_is_open, :on => :create
@@ -40,11 +38,6 @@ class Hydrus::Item < Hydrus::GenericObject
     :label => 'Role Metadata',
     :control_group => 'M')
 
-  has_metadata(
-    :name => "rightsMetadata",
-    :type => Hydrus::RightsMetadataDS,
-    :label => 'Rights Metadata',
-    :control_group => "M")
 
   # Note: currently all items of of type :dataset. In the future,
   # the calling code can pass in the needed value.
@@ -66,7 +59,7 @@ class Hydrus::Item < Hydrus::GenericObject
     item.roleMetadata.add_person_with_role(user, 'hydrus-item-depositor')
     # Set object status.
     item.object_status = 'draft'
-    item.deposit_time  = Time.now.to_s
+    item.deposit_time  = Time.now.in_time_zone.to_s
     # Add event.
     item.events.add_event('hydrus', user, 'Item created')
     # Check to see if this user needs to agree again for this new item, if not,
@@ -86,7 +79,7 @@ class Hydrus::Item < Hydrus::GenericObject
   # Publish the Item directly, bypassing human approval.
   def publish_directly
     cannot_do(:publish_directly) unless is_publishable()
-    self.submit_time = Time.now.to_s
+    self.submit_time = Time.now.in_time_zone.to_s
     complete_workflow_step('submit')
     do_publish()
   end
@@ -108,7 +101,7 @@ class Hydrus::Item < Hydrus::GenericObject
   def submit_for_approval
     cannot_do(:submit_for_approval) unless is_submittable_for_approval()
     self.object_status = 'awaiting_approval'
-    self.submit_time   = Time.now.to_s
+    self.submit_time   = Time.now.in_time_zone.to_s
     complete_workflow_step('submit')
     events.add_event('hydrus', @current_user, "Item submitted for approval")
   end
@@ -155,7 +148,7 @@ class Hydrus::Item < Hydrus::GenericObject
       # And if so, have they agreed within the last year?
       users=coll.users_accepted_terms_of_deposit 
       if users && users.keys.include?(user) 
-        return (Time.now - 1.year) > coll.users_accepted_terms_of_deposit[user].to_datetime
+        return (Time.now.in_time_zone - 1.year) > coll.users_accepted_terms_of_deposit[user].to_datetime
       else
         return true
       end
@@ -310,95 +303,17 @@ class Hydrus::Item < Hydrus::GenericObject
   # accepts terms of deposit for the given user
   def accept_terms_of_deposit(user)
     self.accepted_terms_of_deposit="true"
-    self.collection.accept_terms_of_deposit(user,Time.now) # update the collection level user acceptance list
+    self.collection.accept_terms_of_deposit(user,Time.now.in_time_zone) # update the collection level user acceptance list
     events.add_event('hydrus', user, 'Terms of deposit accepted')
   end
   
-  # Returns the Item's license, if present.
-  # Otherwise, return's the Collection's license.
-  def license *args
-    lic = rightsMetadata.use.machine(*args).first
-    return lic unless lic.blank?
-    return collection.license
-  end
-
-  def license= val
-    rightsMetadata.remove_nodes(:use)
-    Hydrus::Collection.licenses.each do |type,licenses|
-      licenses.each do |license|
-        if license.last == val
-          # I would like to do this type_attribute part better.
-          # Maybe infer the insert method and call send on rightsMetadata.
-          type_attribute = Hydrus::Collection.license_commons[type]
-          if type_attribute == "creativeCommons"
-            rightsMetadata.insert_creative_commons
-          elsif type_attribute == "openDataCommons"
-            rightsMetadata.insert_open_data_commons
-          end
-          rightsMetadata.use.machine = val
-          rightsMetadata.use.human = license.first
-        end
-      end
-    end
-  end
-
-  def visibility *args
-    groups = []
-    if !embargo_date.blank?
-      if embargoMetadata.release_access_node.at_xpath('//access[@type="read"]/machine/world')
-        groups << "world"
-      else
-        node = embargoMetadata.release_access_node.at_xpath('//access[@type="read"]/machine/group')
-        groups << node.text if node
-      end
-    else
-      (rightsMetadata.read_access.machine.group).collect{|g| groups << g}
-      (rightsMetadata.read_access.machine.world).collect{|g| groups << "world" if g.blank?}
-    end
-    groups
-  end
-
-  def visibility= val
-    embargoMetadata.release_access_node = Nokogiri::XML(generic_release_access_xml) unless embargoMetadata.ng_xml.at_xpath("//access")
-    if embargo == "immediate"
-      embargoMetadata.release_access_node = Nokogiri::XML("<releaseAccess/>")
-      rightsMetadata.remove_embargo_date
-      embargoMetadata.remove_embargo_date
-      update_access_blocks(rightsMetadata, val)
-    elsif embargo == "future"
-      rightsMetadata.remove_world_read_access
-      rightsMetadata.remove_all_group_read_nodes
-      update_access_blocks(embargoMetadata, val)
-      embargoMetadata.release_date = Date.strptime(embargo_date, "%m/%d/%Y") unless embargo_date.blank?
-    end
-  end
-
-  def embargo_date *args
-    date = (rightsMetadata.read_access.machine.embargo_release_date *args).first
-    return "" if date.blank?
-    begin
-      return Date.parse(date).strftime("%m/%d/%Y") 
-    rescue
-      return ""
-    end
-  end
-
-  def embargo_date= val
-    begin
-      date = val.blank? ? "" : Date.strptime(val, "%m/%d/%Y").to_s
-    rescue
-      date=""
-    end
-    (rightsMetadata.read_access.machine.embargo_release_date= date) unless date.blank?
-  end
-
   def beginning_of_embargo_range
     submit_time ? Date.parse(submit_time).strftime("%m/%d/%Y") :
                   Date.today.strftime("%m/%d/%Y")
   end
 
   def end_of_embargo_range
-    length = collection.apo.embargo
+    length = collection.embargo_terms
     number = length.split(" ").first.to_i
     increment = length.split(" ").last
     # number.send(increment) is essentially doing 6.months, 2.years, etc.
@@ -430,7 +345,7 @@ class Hydrus::Item < Hydrus::GenericObject
   def files
     Hydrus::ObjectFile.find_all_by_pid(pid,:order=>'weight')  # coming from the database
   end
-
+  
   def strip_whitespace
     strip_whitespace_from_fields [:preferred_citation,:title,:abstract,:contact]
   end
@@ -469,15 +384,6 @@ class Hydrus::Item < Hydrus::GenericObject
     return if keywords == kws
     descMetadata.remove_nodes(:subject)
     kws.each { |kw| descMetadata.insert_topic(kw)  }
-  end
-
-  def update_access_blocks(ds,group)
-    if group == "world"
-      ds.send(:make_world_readable)
-    else
-      ds.send(:remove_world_read_access)
-      ds.send(:add_read_group, group)
-    end
   end
 
   def self.person_roles
