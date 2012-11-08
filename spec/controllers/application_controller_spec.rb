@@ -24,5 +24,5 @@ describe ApplicationController do
       controller.is_production?.should == exp
     end
   end
-  
+
 end

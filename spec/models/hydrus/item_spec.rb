@@ -667,14 +667,6 @@ describe Hydrus::Item do
     )
   end
 
-  it "publish_directly=(), etc should delegate to the appropriate model method" do
-    methods = %w(publish_directly submit_for_approval approve disapprove resubmit)
-    methods.each do |m|
-      @hi.should_receive(m)
-      @hi.send("#{m}=", 'foo')
-    end
-  end
-
   describe "publish_directly()" do
 
     it "item is not publishable: should raise exception" do

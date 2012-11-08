@@ -1,4 +1,5 @@
 Hydrus::Application.routes.draw do
+
   mount AboutPage::Engine => '/about(.:format)'
 
   Blacklight.add_routes(self)
@@ -8,18 +9,23 @@ Hydrus::Application.routes.draw do
 
   devise_for :users
 
-  # See how all your routes lay out with "rake routes"
-
   resources :collections, :controller => 'hydrus_collections', :as => 'hydrus_collections' do
     resources :events, :only=>:index
     resources :items, :only=>:index, :controller=>"hydrus_items"
   end
-  resources :items,       :controller => 'hydrus_items', :as => 'hydrus_items' do
+
+  resources :items, :controller => 'hydrus_items', :as => 'hydrus_items' do
     resources :events, :only=>:index
     get 'terms_of_deposit', :as =>'terms_of_deposit', :on=>:collection
     get 'agree_to_terms_of_deposit', :as =>'agree_to_terms_of_deposit', :on=>:collection
   end
-  
+
+  post "items/publish_directly/:id"    => "hydrus_items#publish_directly",    :as => 'publish_directly_item'
+  post "items/submit_for_approval/:id" => "hydrus_items#submit_for_approval", :as => 'submit_for_approval_item'
+  post "items/approve/:id"             => "hydrus_items#approve",             :as => 'approve_item'
+  post "items/disapprove/:id"          => "hydrus_items#disapprove",          :as => 'disapprove_item'
+  post "items/resubmit/:id"            => "hydrus_items#resubmit",            :as => 'resubmit_item'
+
   post "collections/open/:id"  => "hydrus_collections#open",  :as => 'open_collection'
   post "collections/close/:id" => "hydrus_collections#close", :as => 'close_collection'
 
@@ -29,9 +35,8 @@ Hydrus::Application.routes.draw do
   match "users/auth/webauth" => "signin#login", :as => "webauth_login"
   match "users/auth/webauth/logout" => "signin#logout", :as => "webauth_logout"
   match "error" => "signin#error", :as => "error"
-    
+
   resources :object_files
   resources :signin
-  
 
 end

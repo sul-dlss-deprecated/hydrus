@@ -1,77 +1,99 @@
-<%= form_for(@document_fedora, :method => 'PUT',
-             :html => {:class => "step", :novalidate=>""}) do |f| -%>
+<div class="well actions-box collection-actions">
+  <div class="box-header">Actions</div>
+  <div class="box-body">
 
-  <div class="well actions-box collection-actions">
-    <div class="box-header">Actions</div>
-    <div class="box-body">
+    <!-- Approve/disapprove. -->
+    <% if @document_fedora.is_awaiting_approval && can?(:review, @document_fedora) %>
 
-      <!-- Approve/disapprove buttons. -->
-      <% if @document_fedora.is_awaiting_approval && can?(:review, @document_fedora) %>
+      <!-- Approve. -->
+      <p>
+        <%= button_to(
+              "Approve Item", 
+              approve_item_path(@document_fedora),
+              :id    => 'hydrus_item_approve',
+              :class => 'btn btn-small save-edits') %>
+      </p>
+
+      <!-- Disapprove. -->
+      <%= form_tag(disapprove_item_path(@document_fedora)) do -%>
         <p>
-          <button type="submit" class="btn btn-small save-edits"
-                  name="hydrus_item[approve]" value="yes"
-                  id="hydrus_item_approve">Approve Item</button>
+          <%= button_tag(
+                "Return Item", 
+                :id    => 'hydrus_item_disapprove',
+                :class => 'btn btn-small save-edits') %>
         </p>
         <p>
-          <button type="submit" class="btn btn-small save-edits"
-                  name="hydrus_item[disapprove][value]" value="yes"
-                  id="hydrus_item_disapprove">Return Item</button>
-        </p>
-        <p>
-          <%= label_tag("hydrus_item_disapproval_reason", "Reason for return", 
+          <%= label_tag("hydrus_item_disapproval_reason",
+                        "Reason for return", 
                         :class => "return-item") %>
-          <%= text_field_tag("hydrus_item[disapprove][reason]",
+          <%= text_field_tag("hydrus_item_disapproval_reason",
                              @document_fedora.disapproval_reason,
                              :class => "return-item", :autofocus => true) -%>
           <span class="help">Item depositor will be notified by email</span>
         </p>
+      <% end -%>
 
-      <!-- Resubmit button. -->
-      <% elsif @document_fedora.is_returned && can?(:edit, @document_fedora) %>
-        <p>
-          <strong>Return reason:</strong>
-          <%=@document_fedora.disapproval_reason%>
-        </p>
-        <p><button type="submit" class="btn btn-small save-edits"
-                name="hydrus_item[resubmit]" value="true"
-                id="hydrus_item_resubmit">Resubmit for Approval</button>
-        </p>
+    <!-- Resubmit. -->
+    <% elsif @document_fedora.is_returned && can?(:edit, @document_fedora) %>
+      <p>
+        <strong>Return reason:</strong>
+        <%= @document_fedora.disapproval_reason %>
+      </p>
+      <p>
+        <%= button_to(
+              "Resubmit for Approval", 
+              resubmit_item_path(@document_fedora),
+              :id    => 'hydrus_item_resubmit',
+              :class => 'btn btn-small save-edits') %>
+      </p>
 
-      <!-- Submit for Approval button. -->
-      <% elsif @document_fedora.is_submittable_for_approval && can?(:edit, @document_fedora)%>
-        <p>
-          <button type="submit" class="btn btn-small save-edits"
-                  name="hydrus_item[submit_for_approval]" value="true"
-                  id="hydrus_item_submit_for_approval">
-            Submit for Approval
-          </button>
-        </p>
+    <!-- Submit for Approval. -->
+    <% elsif @document_fedora.is_submittable_for_approval && can?(:edit, @document_fedora)%>
+      <p>
+        <%= button_to(
+              "Submit for Approval", 
+              submit_for_approval_item_path(@document_fedora),
+              :id    => 'hydrus_item_submit_for_approval',
+              :class => 'btn btn-small save-edits') %>
+      </p>
 
-      <!-- Publish button (applies only to items not requiring approval by reviewer). -->
-      <% elsif @document_fedora.is_publishable && can?(:edit, @document_fedora)%>
-        <p>
-          <button type="submit" class="btn btn-small save-edits"
-                  name="hydrus_item[publish_directly]" value="true"
-                  id="hydrus_item_publish_directly">
-            Publish
-          </button>
+    <!-- Publish directly (applies only to items not requiring approval by reviewer). -->
+    <% elsif @document_fedora.is_publishable && can?(:edit, @document_fedora) %>
+      <p>
+        <%= button_to(
+              "Publish", 
+              publish_directly_item_path(@document_fedora),
+              :id    => 'hydrus_item_publish_directly',
+              :class => 'btn btn-small save-edits') %>
+      </p>
+
+    <% end %>
+
+    <!-- Terms of deposit. -->
+    <p class="popup-link">
+      <i class="icon-share"></i>
+      <% tod_path = terms_of_deposit_path(@document_fedora) %>
+      <%= link_to(
+            @document_fedora.terms_of_deposit_accepted? ? 
+              "View Terms of Deposit" : 
+              "View and agree with Terms of Deposit", 
+            tod_path, 
+            :target     => '_blank', 
+            :class      => 'tod_link', 
+            :"data-url" => "#{tod_path}&from=#{controller.action_name}"
+          )
+      %>
+    </p>
+
+    <!-- Delete link (currently a no-op). -->
+    <% if @document_fedora.is_destroyable %>
+      <% if can?(:edit, @document_fedora) %>
+        <p class="discard-item muted">
+          <i class="icon-trash"></i>
+          Discard <%=@document_fedora.object_type%>
         </p>
       <% end %>
-
-      <p class="popup-link"><i class="icon-share"></i><%=link_to(@document_fedora.terms_of_deposit_accepted? ? "View Terms of Deposit" : "View and agree with Terms of Deposit", terms_of_deposit_path(@document_fedora.id), :target=>'_blank', :class=>'tod_link', :"data-url" => "#{terms_of_deposit_path(@document_fedora.id)}&from=#{controller.action_name}" )%></p>
-
-      <!-- Delete link (currently a no-op). -->
-      <% if @document_fedora.is_destroyable %>
-        <% if can?(:edit, @document_fedora) %>
-          <p class="discard-item muted">
-            <i class="icon-trash"></i>
-            Discard <%=@document_fedora.object_type%>
-          </p>
-        <% end %>
-      <% end %>
-
-    </div>
+    <% end %>
 
   </div>
-
-<% end %>
+</div>

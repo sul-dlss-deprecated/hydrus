@@ -17,30 +17,31 @@ Controller refactor: dispatch to particular actions (open, close,
 submit_for_approval, etc.) rather than to the general-purpose update(). In
 addition, guard those controller methods with relevant can() calls.
 
-  - Item:
+Unit tests
+    errors_for_display
+    try_to_save
 
-    - Modify forms, controller, and routing to use specific methods
-      rather than update().
-
-    - Delete approve=() and analogous methods.
-
-    - Add can() calls.
-
-  - Tests
-      def errors_for_display(obj)
-      def try_to_save(obj, success_msg)
-      def open
-      def close
-
-Integration tests for role-protection: Collection: open, close, discard, add
-item. Item: submit, approve, return.
-
-Assess allowing collections to be opened without being published.  In effect,
-this would be an open, draft Collection.
+Integration tests for role-protection:
+    open
+    close
+    publish_directly
+    submit_for_approval
+    approve
+    disapprove
+    resubmit
 
 --------
 Other
 --------
+
+Dates and times. We are creating, parsing, displaying dates and times in
+various ways throughout the app, both in code and in tests. Create some utility
+methods to consolidate the needed behavior so that it will be easy to being
+consistent across the app with respect to display format, storage format, and
+timezone (for the latter, use GMT).
+
+Assess allowing collections to be opened without being published. In effect,
+this would be an open, draft Collection.
 
 Should submit_for_approval() and resubmit() send email messages?
 
@@ -49,7 +50,7 @@ accessibility issues.
 
 Update search results page; UI redesign degraded formatting of it.
 
-Rename @document_fedora to something pithier.
+Views and controllers: rename @document_fedora to something more compact.
 
 Update SUL-chrome gem to latest Bootstrap (needed to be able to use the
 unchecked checkbox icon, which is not available in our current SUL-chrome gem).

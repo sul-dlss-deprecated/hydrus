@@ -83,13 +83,6 @@ class Hydrus::Item < Hydrus::GenericObject
     return item
   end
 
-  # Forward calls from the controller.
-  def publish_directly=(val)     publish_directly     end
-  def submit_for_approval=(val)  submit_for_approval  end
-  def approve=(val)              approve              end
-  def disapprove=(val)           disapprove(val)      end
-  def resubmit=(val)             resubmit             end
-
   # Publish the Item directly, bypassing human approval.
   def publish_directly
     cannot_do(:publish_directly) unless is_publishable()
@@ -507,6 +500,7 @@ class Hydrus::Item < Hydrus::GenericObject
     }
   end
 
+  # See GenericObject#changed_fields for discussion.
   def tracked_fields
     return {
       :title      => [:title],

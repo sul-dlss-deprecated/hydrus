@@ -75,21 +75,6 @@ class HydrusItemsController < ApplicationController
     ####
 
     if params.has_key?("hydrus_item")
-
-      # TEMP hack until controller is refactored.
-      d = params['hydrus_item']['disapprove']
-      if d
-        if d['value'] == 'yes'
-          # User clicked Return Item.
-          # Flatten disapprove key to store only the reason.
-          params['hydrus_item']['disapprove'] = d['reason']
-        else
-          # User clicked Approve Item.
-          # Delete disapprove key to prevent disapprove=() from being called.
-          params['hydrus_item'].delete('disapprove')
-        end
-      end
-
       @document_fedora.attributes = params["hydrus_item"]
     end
 
@@ -185,6 +170,41 @@ class HydrusItemsController < ApplicationController
       want.html {redirect_to :back}
       want.js
     end
+  end
+
+  def publish_directly
+    @document_fedora.cannot_do(:publish_directly) unless can?(:edit, @document_fedora)
+    @document_fedora.publish_directly
+    try_to_save(@document_fedora, "Item published.")
+    redirect_to(hydrus_item_path)
+  end
+
+  def submit_for_approval
+    @document_fedora.cannot_do(:submit_for_approval) unless can?(:edit, @document_fedora)
+    @document_fedora.submit_for_approval
+    try_to_save(@document_fedora, "Item submitted for approval.")
+    redirect_to(hydrus_item_path)
+  end
+
+  def approve
+    @document_fedora.cannot_do(:approve) unless can?(:review, @document_fedora)
+    @document_fedora.approve
+    try_to_save(@document_fedora, "Item approved and published.")
+    redirect_to(hydrus_item_path)
+  end
+
+  def disapprove
+    @document_fedora.cannot_do(:disapprove) unless can?(:review, @document_fedora)
+    @document_fedora.disapprove(params['hydrus_item_disapproval_reason'])
+    try_to_save(@document_fedora, "Item returned.")
+    redirect_to(hydrus_item_path)
+  end
+
+  def resubmit
+    @document_fedora.cannot_do(:resubmit) unless can?(:edit, @document_fedora)
+    @document_fedora.resubmit
+    try_to_save(@document_fedora, "Item resubmitted for approval.")
+    redirect_to(hydrus_item_path)
   end
 
   protected
