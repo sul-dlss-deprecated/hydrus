@@ -100,22 +100,24 @@ def login_pw
 end
 
 def login_as_archivist1
-  login_as "archivist1@example.com", login_pw
+  login_as "archivist1", login_pw
 end
 
 def login_as_archivist2
-  login_as "archivist2@example.com", login_pw
+  login_as "archivist2", login_pw
 end
 
 def login_as_archivist6
-  login_as "archivist6@example.com", login_pw
+  login_as "archivist6", login_pw
 end
 
 def login_as_archivist99
-  login_as "archivist99@example.com", login_pw
+  login_as "archivist99", login_pw
 end
 
-def login_as(email, password)
+def login_as(email, password = nil)
+  password ||= login_pw
+  email += '@example.com' unless email.include?('@')
   logout
   visit new_user_session_path
   fill_in "Email", :with => email 
@@ -177,12 +179,103 @@ end
 # order to pass validations. This method can be used to set the mint_ids
 # configuration to true, and then latter restore the previous value.
 def config_mint_ids(prev = nil)
-  dcc = Dor::Config.configure
+  suri = Dor::Config.configure.suri
   if prev.nil?
-    prev = dcc.suri.mint_ids
-    dcc.suri.mint_ids = true
+    prev = suri.mint_ids
+    suri.mint_ids = true
   else
-    dcc.suri.mint_ids = prev
+    suri.mint_ids = prev
   end
   return prev
+end
+
+# Creates a new collection through the UI.
+# User can pass in options to control how the form is filled out.
+# Returns the new collection.
+def create_new_collection(opts = {})
+  # Setup options.
+  default_opts = {
+    :user                    => 'archivist1',
+    :title                   => 'title_foo',
+    :abstract                => 'abstract_foo',
+    :contact                 => 'foo@bar.com',
+    :requires_human_approval => 'yes',
+    :viewers                 => '',
+  }
+  opts = hash2struct(default_opts.merge opts)
+  # Login and create new collection.
+  send("login_as_#{opts.user}")
+  visit(new_hydrus_collection_path)
+  # Extract the druid from the URL.
+  r = Regexp.new('/collections/(druid:\w{11})/edit')
+  m = r.match(current_path)
+  m.should_not(be_nil)
+  druid = m[1]
+  # Fill in required fields.
+  hc    = 'hydrus_collection'
+  rmdiv = find('div#role-management')
+  dk    = 'hydrus_collection_apo_person_roles'
+  fill_in "#{hc}_title",    :with => opts.title
+  fill_in "#{hc}_abstract", :with => opts.abstract
+  fill_in "#{hc}_contact",  :with => opts.contact
+  fill_in "#{hc}_apo_person_roles[hydrus-collection-viewer]", :with => opts.viewers
+  choose  "#{hc}_requires_human_approval_" + opts.requires_human_approval
+  # Save.
+  click_button "Save"
+  current_path.should == "/collections/#{druid}"
+  find('div.alert').should have_content("Your changes have been saved")
+  # Get the collection from Fedora and return it.
+  return Hydrus::Collection.find(druid)
+end
+
+# Creates a new item through the UI.
+# User can pass in options to control how the form is filled out.
+# Returns the new item.
+def create_new_item(opts = {})
+  # Setup options.
+  default_opts = {
+    :collection_pid          => 'druid:oo000oo0003',
+    :user                    => 'archivist1',
+    :title                   => 'title_foo',
+    :abstract                => 'abstract_foo',
+    :person                  => 'foo_person',
+    :contact                 => 'foo@bar.com',
+    :requires_human_approval => 'yes',
+  }
+  opts = hash2struct(default_opts.merge opts)
+  # Set the Collection's require_human_approval value.
+  hc = Hydrus::Collection.find(opts.collection_pid)
+  hc.requires_human_approval = opts.requires_human_approval
+  hc.save
+  # Login and create new item.
+  send("login_as_#{opts.user}")
+  visit new_hydrus_item_path(:collection => hc.pid)
+  # Extract the druid from the URL.
+  r = Regexp.new('/items/(druid:\w{11})/edit')
+  m = r.match(current_path)
+  m.should_not(be_nil)
+  druid = m[1]
+  # Fill in the required fields.
+  click_button('Add Person')
+  fill_in "hydrus_item_person_0", :with => opts.person
+  fill_in "Title of item",        :with => opts.title
+  fill_in "hydrus_item_abstract", :with => opts.abstract
+  fill_in "hydrus_item_contact",  :with => opts.contact
+  check "release_settings"
+  # Add a file.
+  f      = Hydrus::ObjectFile.new
+  f.pid  = druid
+  f.file = Tempfile.new('mock_HydrusObjectFile_')
+  f.save
+  # Save.
+  click_button "Save"
+  current_path.should == "/items/#{druid}"
+  find('div.alert').should have_content("Your changes have been saved")
+  # Agree to terms of deposit (hard to do via the UI).
+  hi = Hydrus::Item.find(druid)
+  hi.accept_terms_of_deposit(opts.user)
+  hi.save
+  # Get the item from Fedora and return it.
+  should_visit_view_page(hi)
+  return Hydrus::Item.find(druid)
 end

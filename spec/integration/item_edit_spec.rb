@@ -7,6 +7,16 @@ describe("Item edit", :type => :request, :integration => true) do
     @druid = 'druid:oo000oo0001'
     @hi    = Hydrus::Item.find @druid
     @notice = "Your changes have been saved."
+    @buttons = {
+      :add                 => 'Add',
+      :save                => 'Save',
+      :add_person          => 'Add Person',
+      :submit_for_approval => 'Submit for Approval',
+      :resubmit            => 'Resubmit for Approval',
+      :disapprove          => 'Return Item',
+      :approve             => 'Approve Item',
+      :publish_directly    => 'Publish',
+    }
   end
 
   it "If not logged in, should be redirected to the login page, then back to our intended page after logging in" do
@@ -307,6 +317,97 @@ describe("Item edit", :type => :request, :integration => true) do
       selected_license = find("optgroup/option[@selected='selected']").text
       selected_license.should == new_item_license
     end
+  end
+
+  describe "role-protection" do
+
+    before(:each) do
+      @prev_mint_ids = config_mint_ids()
+    end
+
+    after(:each) do
+      config_mint_ids(@prev_mint_ids)
+    end
+
+    it "action buttons should not be accessible to users with insufficient powers" do
+
+      # Create an item.
+      owner    = 'archivist1'
+      reviewer = 'archivist5'
+      viewer   = 'archivist7'
+      hi = create_new_item()
+
+      # Submit for approval.
+      # A viewer should not see the button.
+      b = @buttons[:submit_for_approval]
+      login_as(viewer)
+      should_visit_view_page(hi)
+      page.should_not have_button(b)
+
+      # But the owner should see the button.
+      # Submit it for approval.
+      login_as(owner)
+      should_visit_view_page(hi)
+      click_button(b)
+
+      # Disapprove item.
+      # A viewer should not see the button.
+      b = @buttons[:disapprove]
+      login_as(viewer)
+      should_visit_view_page(hi)
+      page.should_not have_button(b)
+
+      # But the reviewer should see the button.
+      # Disapprove the item.
+      login_as(reviewer)
+      should_visit_view_page(hi)
+      fill_in "hydrus_item_disapproval_reason", :with => "Doh!"
+      click_button(b)
+
+      # Resubmit item.
+      # A viewer should not see the button.
+      b = @buttons[:resubmit]
+      login_as(viewer)
+      should_visit_view_page(hi)
+      page.should_not have_button(b)
+
+      # But the owner should see the button.
+      # Resubmit the item.
+      login_as(owner)
+      should_visit_view_page(hi)
+      click_button(b)
+
+      # Approve item.
+      # A viewer should not see the button.
+      b = @buttons[:approve]
+      login_as(viewer)
+      should_visit_view_page(hi)
+      page.should_not have_button(b)
+
+      # But the reviewer should see the button.
+      # Disapprove the item.
+      login_as(reviewer)
+      should_visit_view_page(hi)
+      click_button(b)
+
+      # Create another item, one not requiring review.
+      hi = create_new_item(:requires_human_approval => 'no')
+
+      # Publish directly.
+      # A viewer should not see the button.
+      b = @buttons[:publish_directly]
+      login_as(viewer)
+      should_visit_view_page(hi)
+      page.should_not have_button(b)
+
+      # But the owner should see the button.
+      # Publish directly.
+      login_as(owner)
+      should_visit_view_page(hi)
+      click_button(b)
+
+    end
+
   end
 
 end

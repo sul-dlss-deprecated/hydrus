@@ -30,7 +30,7 @@ archivist6:
 
 archivist7:
   id: 7
-  email: archivist7@example.coma
+  email: archivist7@example.com
   encrypted_password: "$2a$10$mhcz9WtWgJpF7RAooWcK8OhyBxnp1qRSW/BCAnJqk7QZVDyKxullm" # beatcal
 
 archivist99:

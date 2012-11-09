@@ -42,7 +42,7 @@ describe HydrusCollectionsController do
       destroy_hydrus_collection_value_path("123").should match(/collections\/123\/destroy_value/)
     end
     
-  end # Routes and Mapping
+  end
   
   describe "Show Action", :integration => true do
     
@@ -67,6 +67,20 @@ describe HydrusCollectionsController do
       put :update, :id => @pid
       response.should redirect_to hydrus_collection_path(@pid)
       flash[:error].should =~ /You do not have sufficient privileges to edit/
+    end
+
+  end
+
+  describe "open/close", :integration => true do
+
+    it "should raise exception if user lacks required permissions" do
+      pid = "druid:oo000oo0003"
+      err_msg = /\ACannot perform action:/
+      controller.stub(:current_user).and_return(mock_user)
+      [:open, :close].each do |action|
+        e = expect { post(action, :id => pid) }
+        e.to raise_exception(err_msg)
+      end
     end
 
   end

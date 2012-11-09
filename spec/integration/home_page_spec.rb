@@ -23,7 +23,7 @@ describe("Home page", :type => :request, :integration => true) do
   end
 
   it "if logged in, should see intro text, search box, and listing of collections" do
-    login_as_archivist1
+    login_as('archivist1')
     visit root_path
     page.should have_content(@sdr)
     page.should have_content(@your_cs)
@@ -32,11 +32,11 @@ describe("Home page", :type => :request, :integration => true) do
 
   it "dashboard: collections shown should vary by user and their roles" do
     exp = {
-      'archivist1@example.com' => %w(oo000oo0003 oo000oo0004 oo000oo0010),
-      'archivist2@example.com' => %w(oo000oo0010),
+      'archivist1' => %w(oo000oo0003 oo000oo0004 oo000oo0010),
+      'archivist2' => %w(oo000oo0010),
     }
     exp.each do |user, drus|
-      login_as(user, login_pw)
+      login_as(user)
       visit root_path
       drus.each do |dru|
         xp = "//a[@href='/collections/druid:#{dru}']"
@@ -47,12 +47,12 @@ describe("Home page", :type => :request, :integration => true) do
 
   it "search results should vary by user and their roles" do
     exp = {
-      'archivist1@example.com' => 10,
-      'archivist2@example.com' => 4,
+      'archivist1' => 10,
+      'archivist2' => 9,
     }
     exp.each do |user, exp_n|
-      login_as(user, login_pw)
-      visit @search_url
+      login_as(user)
+      visit(@search_url)
       find('div.pageEntriesInfo').should have_content("Displaying all #{exp_n} items")
     end
   end
@@ -63,7 +63,7 @@ describe("Home page", :type => :request, :integration => true) do
     visit root_path
     page.should_not have_css(@breadcrumbs)
     # Logged in
-    login_as_archivist1
+    login_as('archivist1')
     visit root_path
     page.should_not have_css(@breadcrumbs)
   end
@@ -74,7 +74,7 @@ describe("Home page", :type => :request, :integration => true) do
     visit root_path
     page.should_not have_selector(@cc_button)
     # Yes
-    login_as_archivist1
+    login_as('archivist1')
     visit root_path
     page.should have_selector(@cc_button)
   end

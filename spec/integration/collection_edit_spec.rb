@@ -7,13 +7,20 @@ describe("Collection edit", :type => :request, :integration => true) do
     @druid          = 'druid:oo000oo0003'
     @druid_no_files = 'druid:oo000oo0004'
     @hc             = Hydrus::Collection.find @druid
+    @buttons = {
+      :sign_in  => 'Sign in',
+      :save     => 'Save',
+      :add_link => 'Add anothoer link',
+      :open     => 'Open Collection',
+      :close    => 'Close Collection',
+    }
   end
 
   it "if not logged in, should be redirected to the login page, then back to our intended page after logging in" do
     logout
     visit edit_polymorphic_path(@hc)
     current_path.should == new_signin_path
-    fill_in "Email", :with => 'archivist1@example.com' 
+    fill_in "Email", :with => 'archivist1@example.com'
     fill_in "Password", :with => login_pw
     click_button "Sign in"
     current_path.should == edit_polymorphic_path(@hc)
@@ -136,12 +143,10 @@ describe("Collection edit", :type => :request, :integration => true) do
     current_path.should == polymorphic_path(@hc)
     # Visit view page, and confirm that changes occured.
     visit polymorphic_path(@hc)
-
     @hc             = Hydrus::Collection.find @druid
     params={:visibility=>'stanford',:license_code=>'odc-odbl',:embargo_date=>''}
     confirm_rights(@hc,params)
     confirm_rights_metadata_in_apo(@hc)
-
   end
 
   it "can edit embargo content" do
@@ -207,7 +212,7 @@ describe("Collection edit", :type => :request, :integration => true) do
       Hydrus::Responsible.role_labels(:collection_level).each do |role, h|
         ids = rmdiv.find("input[id^='#{dk}[#{role}]']")[:value]
         ids = Hydrus::ModelHelper.parse_delimited(ids)
-        got[role] = Set.new(ids) if ids.length > 0 
+        got[role] = Set.new(ids) if ids.length > 0
       end
       got.should == role_info
     end
@@ -263,7 +268,7 @@ describe("Collection edit", :type => :request, :integration => true) do
         'hydrus-collection-item-depositor' => Set.new(%w(ff)),
         'hydrus-collection-viewer'         => Set.new(%w(gg hh ii)),
         'hydrus-collection-depositor'      => Set.new(%w(archivist3)),
-      }      
+      }
       rmdiv = find('div#role-management')
       dk    = 'hydrus_collection_apo_person_roles'
       role_info.each do |role,ids|
@@ -277,7 +282,7 @@ describe("Collection edit", :type => :request, :integration => true) do
       @hc = Hydrus::Collection.find @druid
       @hc.apo_person_roles.should == role_info_stripped
       confirm_rights_metadata_in_apo(@hc)
-  end
+    end
     
   end
 
@@ -317,12 +322,15 @@ describe("Collection edit", :type => :request, :integration => true) do
     end
 
     describe "when updating a collection" do
+
       before(:each) do
         @prev_mint_ids = config_mint_ids()
       end
+
       after(:each) do
         config_mint_ids(@prev_mint_ids)
       end
+
       it "should send an email to new depositors when we're updating a collection" do
         login_as_archivist1
         visit new_hydrus_collection_path()
@@ -332,13 +340,14 @@ describe("Collection edit", :type => :request, :integration => true) do
         fill_in "hydrus_collection_apo_person_roles[hydrus-collection-item-depositor]", :with => "jdoe"
         click_button("Save")
         page.should have_content("Your changes have been saved.")
-        
+
         expect {click_button("Open Collection")}.to change { ActionMailer::Base.deliveries.count }.by(1)
-        
+
         email = ActionMailer::Base.deliveries.last
         email.to.should == ["jdoe@stanford.edu","archivist1@stanford.edu"]
         email.subject.should == "Collection opened for deposit in the Stanford Digital Repository"
       end
+
       it "should handle complex changes to depositors" do
         login_as_archivist1
         visit new_hydrus_collection_path()
@@ -350,20 +359,62 @@ describe("Collection edit", :type => :request, :integration => true) do
         page.should have_content("Your changes have been saved.")
         click_button("Open Collection")
         click_link("Edit Collection")
-        
+
         fill_in "hydrus_collection_apo_person_roles[hydrus-collection-item-depositor]", :with => "jandoe, leland, jondoe"
         expect {click_button("Save")}.to change { ActionMailer::Base.deliveries.count }.by(1)
         email = ActionMailer::Base.deliveries.last
         email.to.should == ["jandoe@stanford.edu", "jondoe@stanford.edu"]
         email.subject.should == "Invitation to deposit in the Stanford Digital Repository"
       end
+
       it "should not send an email if the collection is closed" do
         login_as_archivist1
         visit new_hydrus_collection_path()
         fill_in "hydrus_collection_apo_person_roles[hydrus-collection-item-depositor]", :with => "jdoe"
         expect {click_button("Save")}.to change { ActionMailer::Base.deliveries.count }.by(0)
       end
+
     end
+  end
+
+  describe "role-protection" do
+
+    before(:each) do
+      @prev_mint_ids = config_mint_ids()
+    end
+
+    after(:each) do
+      config_mint_ids(@prev_mint_ids)
+    end
+
+    it "action buttons should not be accessible to users with insufficient powers" do
+      # Create a collection.
+      owner  = 'archivist2'
+      viewer = 'archivist6'
+      opts = {
+        :user    => owner,
+        :viewers => viewer,
+      }
+      hc = create_new_collection(opts)
+      # Should see the open collection button.
+      login_as(owner)
+      should_visit_view_page(hc)
+      page.should have_button(@buttons[:open])
+      # But another user should not see the button.
+      login_as(viewer)
+      should_visit_view_page(hc)
+      page.should_not have_button(@buttons[:open])
+      # Open the collection. Should see close button.
+      login_as(owner)
+      should_visit_view_page(hc)
+      click_button(@buttons[:open])
+      page.should have_button(@buttons[:close])
+      # But another user should not see the button.
+      login_as(viewer)
+      should_visit_view_page(hc)
+      page.should_not have_button(@buttons[:close])
+    end
+
   end
 
 end

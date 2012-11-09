@@ -111,14 +111,10 @@
                 <identifier type="sunetid">archivist4</identifier>
                 <name>Archivist, Four</name>
              </person>
-             <person>
-                <identifier type="sunetid">archivist5</identifier>
-                <name>Archivist, Five</name>
-             </person>
           </role>
           <role type="hydrus-collection-item-depositor">
              <person>
-                <identifier type="sunetid">archivist3</identifier>
+                <identifier type="sunetid">archivist2</identifier>
                 <name>Archivist, Three</name>
              </person>
              <person>
@@ -129,6 +125,18 @@
           <role type="hydrus-collection-depositor">
              <person>
                 <identifier type="sunetid">archivist3</identifier>
+                <name>Archivist, Three</name>
+             </person>
+          </role>
+          <role type="hydrus-collection-reviewer">
+             <person>
+                <identifier type="sunetid">archivist5</identifier>
+                <name>Archivist, Three</name>
+             </person>
+          </role>
+          <role type="hydrus-collection-viewer">
+             <person>
+                <identifier type="sunetid">archivist7</identifier>
                 <name>Archivist, Three</name>
              </person>
           </role>
