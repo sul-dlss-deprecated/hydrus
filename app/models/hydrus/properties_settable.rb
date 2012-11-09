@@ -9,7 +9,7 @@ module Hydrus::PropertiesSettable
     Hydrus::Collection.licenses.each do |type,licenses|
       licenses.each do |license|
         if license.last == val
-          # I would like to do this type_attribute part better.
+          # TODO I would like to do this type_attribute part better.
           # Maybe infer the insert method and call send on rightsMetadata.
           type_attribute = Hydrus::Collection.license_commons[type]
           if type_attribute == "creativeCommons"
@@ -26,7 +26,7 @@ module Hydrus::PropertiesSettable
 
   def visibility *args
     groups = []
-    if !embargo_date.blank?
+    if embargo == "future"
       if embargoMetadata.release_access_node.at_xpath('//access[@type="read"]/machine/world')
         groups << "world"
       else
@@ -71,7 +71,7 @@ module Hydrus::PropertiesSettable
     rescue
       date=""
     end
-    (rightsMetadata.read_access.machine.embargo_release_date= date) unless date.blank?
+    (rightsMetadata.read_access.machine.embargo_release_date= date)
   end
 
 end

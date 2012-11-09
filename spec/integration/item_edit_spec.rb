@@ -272,6 +272,8 @@ describe("Item edit", :type => :request, :integration => true) do
     item_licenses = "hydrus_item_license"
     new_item_license = "PDDL Public Domain Dedication and License"
     
+    confirm_rights(@hi,'world','cc-by','')    
+    
     login_as_archivist1
     should_visit_edit_page(Hydrus::Collection.find("druid:oo000oo0003"))
     
@@ -292,6 +294,10 @@ describe("Item edit", :type => :request, :integration => true) do
     select new_item_license, :from => item_licenses
 
     click_button "Save"
+    
+    @hi    = Hydrus::Item.find @druid
+    confirm_rights(@hi,'world','pddl','')    
+    
     page.should have_content(@notice)
     
     should_visit_edit_page(@hi)

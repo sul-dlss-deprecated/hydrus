@@ -204,7 +204,7 @@ describe Hydrus::Item do
   end
 
 
-  describe "item level APO information" do
+  describe "item level rights and embargo information" do
     describe "visibility" do
       subject {Hydrus::Item.new}
       describe "immediate" do

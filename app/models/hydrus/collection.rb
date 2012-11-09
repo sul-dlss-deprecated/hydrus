@@ -81,7 +81,7 @@ class Hydrus::Collection < Hydrus::GenericObject
   end
 
   def embargo
-    embargo_date.blank? ? 'immediate' : 'future' 
+    embargo_terms.blank? ? 'immediate' : 'future' 
   end
     
   # method used to build sidebar

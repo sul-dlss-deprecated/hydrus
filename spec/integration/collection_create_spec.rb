@@ -50,6 +50,7 @@ describe("Collection create", :type => :request, :integration => true) do
     # Get the APO of the Collection.
     apo = coll.apo
     apo.should be_instance_of Hydrus::AdminPolicyObject
+    apo.defaultObjectRights.ng_xml.should be_equivalent_to coll.rightsMetadata.ng_xml # collection rights metadata should be equal to apo default object rights
     # Check workflow of Collection.
     wf_nodes = coll.workflows.find_by_terms(:workflow)
     wf_nodes.size.should == 1
@@ -65,7 +66,7 @@ describe("Collection create", :type => :request, :integration => true) do
     coll.collection_depositor.should == 'archivist1'
     # Check APO.descMetadata.
     apo.title.should == "APO for #{ni.title}"
-    apo.label.should == "APO for Hydrus"
+    apo.label.should == "APO for #{ni.title}"
     # Check events.
     exp = [
       /\ACollection created/,

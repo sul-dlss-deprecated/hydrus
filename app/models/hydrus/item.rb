@@ -4,7 +4,6 @@ class Hydrus::Item < Hydrus::GenericObject
   extend  Hydrus::Delegatable
 
   after_validation :strip_whitespace    
-  attr_accessor :embargo
   
   validate :enforce_collection_is_open, :on => :create
   validates :actors, :at_least_one=>true, :if => :should_validate
@@ -322,7 +321,7 @@ class Hydrus::Item < Hydrus::GenericObject
   end
 
   def embargo_date_is_correct_format
-   return unless under_embargo? && embargo=='future'
+   return unless under_embargo?
    begin
      Date.strptime(embargo_date, "%m/%d/%Y").to_s
    rescue ArgumentError
@@ -330,8 +329,16 @@ class Hydrus::Item < Hydrus::GenericObject
    end
   end
 
+  def embargo
+    self.embargo_date.blank? ? 'immediate' : 'future' 
+  end  
+
+  def embargo=(val)
+    self.embargo_date='' if val == 'immediate' 
+  end
+  
   def under_embargo?
-    !collection.blank? and collection.embargo_option == "varies"
+    embargo=='future' && !collection.blank? && collection.embargo_option == "varies"
   end
 
   def embargo_date_in_range

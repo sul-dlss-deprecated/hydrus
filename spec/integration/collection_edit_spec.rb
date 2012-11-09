@@ -109,7 +109,7 @@ describe("Collection edit", :type => :request, :integration => true) do
 
   end
 
-  it "can edit APO license content" do
+  it "can edit license content" do
     # Setup and login.
     orig_license        = @hc.license         # original value = cc-by, will set to: odc-odbl
     orig_license_label  = "CC BY Attribution"
@@ -118,7 +118,9 @@ describe("Collection edit", :type => :request, :integration => true) do
     new_license         = 'odc-odbl'
     new_license_label   = 'ODC-ODbl Open Database License'
     new_license_option  = 'varies'
-    new_check_field     = "hydrus_collection_license_option_#{new_license_option}"
+    new_check_field     = "hydrus_collection_license_option_#{new_license_option}"    
+    confirm_rights(@hc,'stanford','cc-by','')    
+    
     login_as_archivist1
     # Visit edit page, and confirm content.
     should_visit_edit_page(@hc)
@@ -133,12 +135,16 @@ describe("Collection edit", :type => :request, :integration => true) do
     current_path.should == polymorphic_path(@hc)
     # Visit view page, and confirm that changes occured.
     visit polymorphic_path(@hc)
-#    find("div.collection-settings").should have_content(new_license)
+
+    @hc             = Hydrus::Collection.find @druid
+    confirm_rights(@hc,'stanford','odc-odbl','')
+    confirm_rights_metadata_in_apo(@hc)
+
   end
 
-  it "can edit APO embargo content" do
+  it "can edit embargo content" do
     # Setup and login.
-    orig_embargo        = @hc.embargo         # original value = 1 year, will set to 3 years
+    orig_embargo        = @hc.embargo_terms   # original value = 1 year, will set to 3 years
     orig_embargo_option = @hc.embargo_option  # original value = varies, will set to fixed
     orig_check_field    = "hydrus_collection_embargo_option_#{orig_embargo_option}"
     new_embargo         = '3 years'
@@ -147,6 +153,8 @@ describe("Collection edit", :type => :request, :integration => true) do
     no_embargo_option   = 'none'
     no_embargo          = ''
     no_embargo_check_field    = "hydrus_collection_embargo_option_#{no_embargo_option}"
+    confirm_rights(@hc,'stanford','cc-by','')    
+    @hc.embargo.should == 'future'
     login_as_archivist1
     # Visit edit page, and confirm content.
     should_visit_edit_page(@hc)
@@ -161,7 +169,6 @@ describe("Collection edit", :type => :request, :integration => true) do
     current_path.should == polymorphic_path(@hc)
     # Visit view-page, and confirm that changes occured.
     visit polymorphic_path(@hc)
- #   find("div.collection-settings").should have_content(new_embargo)
     # Undo changes, and confirm.
     should_visit_edit_page(@hc)
     page.has_select?('embargo_option_varies', :selected => nil).should == true
@@ -170,7 +177,6 @@ describe("Collection edit", :type => :request, :integration => true) do
     select(orig_embargo, :from => "embargo_option_#{orig_embargo_option}")
     click_button "Save"
     current_path.should == polymorphic_path(@hc)
-#    find("div.collection-settings").should have_content(orig_embargo)
     # Set to no embargo after embargo was previously set and ensure there is no longer an embargo period set.
     should_visit_edit_page(@hc)
     page.has_select?('embargo_option_varies', :selected => "#{orig_embargo} after deposit").should == true
@@ -178,8 +184,12 @@ describe("Collection edit", :type => :request, :integration => true) do
     click_button "Save"
     current_path.should == polymorphic_path(@hc)
     find("div.collection-settings").should_not have_content(orig_embargo)
-    # verify embargo is now 'none'
-    @hc.embargo == 'none'
+    # verify embargo is now 'none' and terms are not set
+    @hc             = Hydrus::Collection.find @druid
+    @hc.embargo.should == 'immediate'
+    @hc.embargo_option.should == 'none'
+    @hc.embargo_terms.should == ''
+    confirm_rights_metadata_in_apo(@hc)
   end
 
   context "modifying persons and roles" do
@@ -226,6 +236,7 @@ describe("Collection edit", :type => :request, :integration => true) do
       # Confirm new content in fedora.
       @hc = Hydrus::Collection.find @druid
       @hc.apo_person_roles.should == role_info
+      confirm_rights_metadata_in_apo(@hc)
     end
 
     it "should be able to strip email addresses to leave just sunetIDs from persons with various roles" do
@@ -262,7 +273,8 @@ describe("Collection edit", :type => :request, :integration => true) do
       # Confirm new content in fedora.
       @hc = Hydrus::Collection.find @druid
       @hc.apo_person_roles.should == role_info_stripped
-    end
+      confirm_rights_metadata_in_apo(@hc)
+  end
     
   end
 

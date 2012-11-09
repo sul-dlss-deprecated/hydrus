@@ -142,6 +142,37 @@ def should_visit_edit_page(obj)
   current_path.should == edit_polymorphic_path(obj)
 end
 
+def confirm_rights_metadata_in_apo(obj)
+  obj.apo.defaultObjectRights.ng_xml.should be_equivalent_to obj.rightsMetadata.ng_xml # collection rights metadata should be equal to apo default object rights    
+end
+
+def confirm_rights(obj,visibility,license_code,embargo_date)
+    
+  # all should be world discoverable
+  obj.rightsMetadata.ng_xml.xpath('//access[@type="discover"]/machine/world').size.should == 1
+  obj.embargoMetadata.ng_xml.xpath('//access[@type="discover"]/machine/world').size.should == 1 if obj.embargo == 'future'
+
+  datastream = (obj.embargo == 'future' ? obj.embargoMetadata : obj.rightsMetadata)
+  case visibility
+    when "stanford" 
+      datastream.ng_xml.xpath('//access[@type="read"]/machine/group').size.should == 1
+      datastream.ng_xml.at_xpath('//access[@type="read"]/machine/group').content.should == 'stanford'
+      datastream.ng_xml.xpath('//access[@type="read"]/machine/world').size.should == 0
+    when "world"
+      datastream.ng_xml.xpath('//access[@type="read"]/machine/group').size.should == 0
+      datastream.ng_xml.xpath('//access[@type="read"]/machine/world').size.should == 1
+  end
+
+  if embargo_date == ""
+    obj.rightsMetadata.ng_xml.xpath('//access[@type="read"]/machine/embargoReleaseDate').size.should == 0 
+  else
+    obj.rightsMetadata.ng_xml.at_xpath('//access[@type="read"]/machine/embargoReleaseDate').content.should == embargo_date    
+  end
+  
+  obj.rightsMetadata.ng_xml.at_xpath('//use/machine').content.should == license_code
+  
+end
+
 # Some integration tests requires the minting of a valid druid in
 # order to pass validations. This method can be used to set the mint_ids
 # configuration to true, and then latter restore the previous value.

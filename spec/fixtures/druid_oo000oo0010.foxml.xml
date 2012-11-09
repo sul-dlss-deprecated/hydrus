@@ -93,6 +93,26 @@
       </foxml:xmlContent>
     </foxml:datastreamVersion>
   </foxml:datastream>
+  <foxml:datastream ID="embargoMetadata" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
+    <foxml:datastreamVersion ID="embargoMetadata.0" LABEL="Embargo Metadata" CREATED="2011-07-05T20:46:24.337Z" MIMETYPE="text/xml" SIZE="293">
+      <foxml:xmlContent>
+				<embargoMetadata>
+				  <status/>
+				  <releaseDate/>
+				  <releaseAccess>
+				  		<access type="discover">
+				  			<machine>
+				  				<world/>
+				  			</machine>
+				  		</access>
+				  		<access type="read">
+				  			<machine><group>stanford</group></machine>
+				  		</access>
+				  	</releaseAccess>
+				</embargoMetadata>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
   <foxml:datastream ID="hydrusProperties" STATE="A" CONTROL_GROUP="X"
     VERSIONABLE="false">
     <foxml:datastreamVersion ID="hydrusProperties.0" LABEL="Hydrus Properties"
