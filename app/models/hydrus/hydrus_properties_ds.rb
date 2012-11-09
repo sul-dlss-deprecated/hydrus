@@ -20,7 +20,6 @@ class Hydrus::HydrusPropertiesDS < ActiveFedora::NokogiriDatastream
     t.object_status             :path => 'objectStatus', :index_as => [:facetable, :searchable]
     t.disapproval_reason        :path => 'disapprovalReason'
     t.submit_time               :path => 'submitTime'
-    t.deposit_time              :path => 'depositTime'
     t.embargo_option            :path => 'embargoOption'
     t.embargo_terms             :path => 'embargoTerms'
     t.visibility_option         :path => 'visibilityOption'

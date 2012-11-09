@@ -126,6 +126,7 @@
       CREATED="2011-07-05T20:49:25.801Z" MIMETYPE="text/xml" SIZE="345">
       <foxml:xmlContent>
         <hydrusProperties>
+					<submitTime>11/01/2012</submitTime>
           <embargoOption>varies</embargoOption>
           <embargoTerms>1 year</embargoTerms>
           <licenseOption>fixed</licenseOption>

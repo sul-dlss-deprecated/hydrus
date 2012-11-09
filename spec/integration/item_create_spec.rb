@@ -70,7 +70,7 @@ describe("Item create", :type => :request, :integration => true) do
     item.person.first.should == 'person_foo'
     item.abstract.should == 'abstract_foo'
     item.should be_instance_of Hydrus::Item
-    item.deposit_time.should_not be_blank
+    item.create_date.should_not be_blank
     item.item_type.should == 'dataset'
     # Check workflow of Item.
     wf_nodes = item.workflows.find_by_terms(:workflow)
@@ -280,7 +280,12 @@ describe("Item create", :type => :request, :integration => true) do
     item.is_destroyable.should == false
     item.valid?.should == true
     item.disapproval_reason.should == nil
-
+    item.embargo.should == 'immediate'
+    item.embargo_date.should == ''
+    item.visibility.should == ["stanford"]
+    params={:visibility=>'stanford',:license_code=>'cc-by',:embargo_date=>''}
+    confirm_rights(item,params)    
+    
     # Check events.
     exp = [
       /\AItem created/,
@@ -297,7 +302,7 @@ describe("Item create", :type => :request, :integration => true) do
     es[0...exp.size].zip(exp).each { |e, exp| e.text.should =~ exp  }
   end
 
-  it "Does not require approval: should be able to publish directly" do
+  it "Does not require approval: should be able to publish directly, with world visible rights and a different license than collection" do
     ni = hash2struct(
       :title    => 'title_foo',
       :abstract => 'abstract_foo',
@@ -305,10 +310,14 @@ describe("Item create", :type => :request, :integration => true) do
       :reason   => 'Idiota',
       :person   => 'person_foo',
     )
-    # Force Items to not receive human approval.
+    # Force Items to not receive human approval and have varied visiblity and licenses
     coll = Hydrus::Collection.find(@hc_druid)
     coll.requires_human_approval = 'no'
+    coll.visibility_option_value = 'varies'
+    coll.license = 'cc-by-sa'
+    coll.license_option = 'varies'
     coll.save
+    
     # Login as a item depositor for this collection, go to new Item page, and store the druid of the new Item.
     login_as_archivist1
     visit new_hydrus_item_path(:collection => @hc_druid)
@@ -318,6 +327,8 @@ describe("Item create", :type => :request, :integration => true) do
     click_button(@buttons[:add_person])
     fill_in "hydrus_item_person_0", :with => ni.person
     fill_in "Title of item", :with => ni.title
+    select "everyone", :from=>"hydrus_item_visibility"
+    select "CC BY-ND Attribution-NoDerivs", :from=>"hydrus_item_license"
     click_button(@buttons[:save])
     find(@div_alert).should have_content(@notices[:save])
     # The view page should display some validation error messages, and should not
@@ -333,6 +344,7 @@ describe("Item create", :type => :request, :integration => true) do
     item.is_destroyable.should == true
     item.accepted_terms_of_deposit.should == "false"
     item.valid?.should == true  # Because unpublished, so validation is limited.
+    
     # Go back to edit page and fill in required elements.
     should_visit_edit_page(item)
     check "release_settings"
@@ -379,6 +391,9 @@ describe("Item create", :type => :request, :integration => true) do
     item.is_returned.should == false
     item.is_destroyable.should == false
     item.valid?.should == true
+    params={:visibility=>'world',:license_code=>'cc-by-nd',:embargo_date=>''}
+    confirm_rights(item,params)
+
     # Return to edit page, and try to save Item with an empty title.
     click_link "Edit Draft"
     fill_in "hydrus_item_title", :with => ''
@@ -389,12 +404,13 @@ describe("Item create", :type => :request, :integration => true) do
     fill_in "hydrus_item_title", :with => ni.title
     click_button(@buttons[:save])
     find(@div_alert).should have_content(@notices[:save])
-
+        
     # Check events.
     exp = [
       /\AItem created/,
       /\AItem modified/,
       /\AItem modified/,
+      /\AItem modified/,      
       /\ATerms of deposit accepted/,
       /\AItem published/,
     ]

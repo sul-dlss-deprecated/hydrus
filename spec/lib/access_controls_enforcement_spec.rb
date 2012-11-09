@@ -70,6 +70,7 @@ describe Hydrus::AccessControlsEnforcement do
 
     it "should redirect to view page if user cannot edit the object" do
       @mc.stub('can?').and_return(false)
+      @mc.stub(:root_url).and_return('/')
       @mc.stub('current_user').and_return(OpenStruct.new)
       @mc.stub(:polymorphic_path).and_return(@exp_pp)
       @mc.should_receive(:redirect_to).with(@exp_pp)
@@ -102,6 +103,7 @@ describe Hydrus::AccessControlsEnforcement do
 
     it "should redirect to collection view if user cannot do it" do
       @mc.stub('can?').and_return(false)
+      @mc.stub(:root_url).and_return('/')
       @mc.stub('params').and_return({:collection=>'druid:oo000oo0003'})      
       @mc.stub(:polymorphic_path).and_return(@exp_pp)
       @mc.should_receive(:redirect_to).with(@exp_pp)

@@ -31,14 +31,14 @@
         <tbody>
           <!-- iterate through collection items  -->
           <!-- Can use Hydrus::Item.milestones.last to get status. Speak with Lynn. -->
-          <% @document_fedora.hydrus_items.sort_by{|i|[i.deposit_time]}.reverse.each do |item| %>
+          <% @document_fedora.hydrus_items.sort_by{|i|i.create_date}.reverse.each do |item| %>
             <tr class="document <%= cycle("even","odd") %>">
               <td><%= item_title_link(item) %></td>
               <td><%= item.item_depositor_id %></td>
               <!-- <td><%#= item.object_type %></td> -->
               <td><%= item.status_label %></td>
               <td><%= item.files.size %></td>
-              <td><%= hydrus_format_date(item.deposit_time) %></td>
+              <td><%= hydrus_format_date(item.create_date) %></td>
             </tr>
           <% end %>
         </tbody>

@@ -56,9 +56,22 @@ class Hydrus::Item < Hydrus::GenericObject
     item.augment_identity_metadata(itype)
     # Add roleMetadata with current user as hydrus-item-depositor.
     item.roleMetadata.add_person_with_role(user, 'hydrus-item-depositor')
+    # Set default object visibility
+    case item.collection.visibility_option_value
+      when 'everyone'
+        item.visibility='world'
+      when 'stanford'
+        item.visibility='stanford'
+    end
+    # Set default license
+    case item.collection.license_option
+      when 'none'
+        item.license='none'        
+      when 'fixed'
+        item.license=item.collection.license
+    end    
     # Set object status.
     item.object_status = 'draft'
-    item.deposit_time  = Time.now.in_time_zone.to_s
     # Add event.
     item.events.add_event('hydrus', user, 'Item created')
     # Check to see if this user needs to agree again for this new item, if not,

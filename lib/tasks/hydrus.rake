@@ -9,7 +9,6 @@ namespace :hydrus do
     cp("#{Rails.root}/config/workflow.yml.example", "#{Rails.root}/config/workflow.yml") unless File.exists?("#{Rails.root}/config/workflow.yml")
     cp("#{Rails.root}/config/ssl_certs.yml.example", "#{Rails.root}/config/ssl_certs.yml") unless File.exists?("#{Rails.root}/config/ssl_certs.yml")
   end
-
 end
 
 desc "rails server with suppressed output"
@@ -24,3 +23,4 @@ task :server => :environment do
   ].join(' | ')
   system cmd
 end
+

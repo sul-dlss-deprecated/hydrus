@@ -22,7 +22,6 @@ describe Hydrus::HydrusPropertiesDS do
         <itemType>dataset</itemType>
         <objectStatus>draft</objectStatus>
         <disapprovalReason>Idiota</disapprovalReason>
-        <depositTime>2011-09-02</deposit_time>
         <submitTime>2011-09-03</submit_time>
       #{@ds_end}
     EOF
@@ -42,7 +41,6 @@ describe Hydrus::HydrusPropertiesDS do
       [:item_type, ["dataset"]],
       [:object_status, ["draft"]],
       [:disapproval_reason, ["Idiota"]],
-      [:deposit_time, ["2011-09-02"]],
       [:submit_time,  ["2011-09-03"]],
     ]
     tests.each do |terms, exp|

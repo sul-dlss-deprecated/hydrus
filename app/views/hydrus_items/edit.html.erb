@@ -150,12 +150,11 @@
   <!-- Visiblity -->
   <div class="row field-group">
     <div class="span9">
-    <% case @document_fedora.collection.visibility_option %>
+    <% case @document_fedora.collection.visibility_option_value %>
     <% when 'everyone' %>
       After its release, this item can be downloaded and discovered by 
       <span class="highlight-value">
         everyone.
-        <%= f.hidden_field :visibility, :value => "world" %>
       </span>
     <% when 'varies' %>
       After its release, this item can be downloaded and discovered by 
@@ -164,7 +163,6 @@
       After its release, this item can be downloaded and discovered by 
       <span class="highlight-value">
         the Stanford community.
-        <%= f.hidden_field :visibility, :value => "stanford" %>
       </span>
     <% end %>
     </div>

@@ -38,7 +38,7 @@ describe HydrusItemsController do
 
   end
   
-  describe "New Action" do
+  describe "New Action", :integration => true do
 
     it "should restrict access to non authed user" do
       controller.stub(:current_user).and_return(mock_user)

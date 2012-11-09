@@ -91,13 +91,6 @@ describe ApplicationHelper do
     hydrus_strip(nil).should == ''    
   end
   
-  it "should return item title links, showing special text when blank" do
-    hi=Hydrus::Item.new
-    hi2=Hydrus::Item.find('druid:oo000oo0001')
-    item_title_link(hi).should == '<a href="/items">new item</a>'
-    item_title_link(hi2).should == '<a href="/items/druid:oo000oo0001">How Couples Meet and Stay Together</a>'
-  end
-  
   it "should show select status checkbox icon" do
     select_status_checkbox_icon(true).should == '<i class="icon-check"></i>'
     select_status_checkbox_icon(false).should == '<i class="icon-minus"></i>'
@@ -143,6 +136,17 @@ describe ApplicationHelper do
       view_path_from_model(Hydrus::Collection.new(:pid=>"1234")).should == "hydrus_collections"
       view_path_from_model(Hydrus::Item.new(:pid=>"1234")).should       == "hydrus_items"
     end
+  end
+  
+  describe "item title link helpers", :integration=>true do 
+    
+    it "should return item title links, showing special text when blank" do
+      hi=Hydrus::Item.new
+      hi2=Hydrus::Item.find('druid:oo000oo0001')
+      item_title_link(hi).should == '<a href="/items">new item</a>'
+      item_title_link(hi2).should == '<a href="/items/druid:oo000oo0001">How Couples Meet and Stay Together</a>'
+    end
+    
   end
 
 end

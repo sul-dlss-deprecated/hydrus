@@ -62,7 +62,6 @@ class Hydrus::Collection < Hydrus::GenericObject
     coll.embargo_option          = 'none'
     coll.requires_human_approval = 'no'
     coll.license_option          = 'none'
-    coll.deposit_time            = Time.now.in_time_zone.to_s
     # Set object status.
     coll.object_status = 'draft'
     # Save and return.

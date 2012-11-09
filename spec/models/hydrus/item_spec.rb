@@ -5,6 +5,8 @@ describe Hydrus::Item do
   before(:each) do
     @cannot_do_regex = /\ACannot perform action/
     @hi = Hydrus::Item.new
+    @hc = Hydrus::Collection.new
+    @hi.stub(:collection).and_return(@hc)
     @workflow_xml = <<-END
       <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
       <workflows objectId="druid:oo000oo0001">
@@ -33,7 +35,9 @@ describe Hydrus::Item do
     @hi.stub(:pid).and_return(druid)
     @hi.stub(:adapt_to).and_return(@hi)
     hc = Hydrus::Collection.new
+    hc.stub(:visibility_option_value).and_return('varies')
     Hydrus::Collection.stub(:find).and_return(hc)
+    @hi.stub(:collection).and_return(hc)
     Hydrus::GenericObject.stub(:register_dor_object).and_return(@hi)
     Hydrus::Item.create(hc.pid, 'USERFOO').pid.should == druid
   end
@@ -53,8 +57,10 @@ describe Hydrus::Item do
     @hi.stub(:adapt_to).and_return(@hi)
     @hi.stub(:requires_terms_acceptance).and_return(false)
     hc = Hydrus::Collection.new
+    hc.stub(:visibility_option_value).and_return('varies')
     Hydrus::Collection.stub(:find).and_return(hc)
     Hydrus::GenericObject.stub(:register_dor_object).and_return(@hi)
+    @hi.stub(:collection).and_return(hc)
     new_item=Hydrus::Item.create(hc.pid, 'USERFOO')
     new_item.pid.should == druid
     new_item.terms_of_deposit_accepted?.should be true
@@ -156,7 +162,7 @@ describe Hydrus::Item do
     end
   end
 
-  describe "roleMetadata in the item" do
+  describe "roleMetadata in the item", :integration=>true do
     subject { Hydrus::Item.find('druid:oo000oo0001') }
     it "should have a roleMetadata datastream" do
       subject.roleMetadata.should be_an_instance_of(Hydrus::RoleMetadataDS)

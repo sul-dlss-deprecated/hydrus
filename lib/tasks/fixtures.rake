@@ -53,7 +53,7 @@ namespace :hydrus do
 
   # call with rake hydrus:reindex pid=druid:oo000oo0099
   desc "reindex specified pid"
-  task :reindex do 
+  task :reindex => :environment do 
     require File.expand_path('config/environment')
     pid=ENV["pid"]
     obj = Dor.load_instance pid
@@ -63,6 +63,24 @@ namespace :hydrus do
       Dor::SearchService.solr.add(solr_doc, :add_attributes => {:commitWithin => 1000})
     else
       puts "#{pid} not found"
+    end
+  end
+  
+  # call with rake hydrus:delete_objects pid=druid:oo000oo0003
+  desc "delete a given hydrus collection object and all associated items and APOs"
+  task :delete_objects => :environment do
+    require File.expand_path('config/environment')
+    pid=ENV["pid"]
+    collection=Hydrus::Collection.find pid
+    unless collection.nil?
+      items_pids=collection.hydrus_items.collect{|item| item.pid}
+      all_pids = items_pids << collection.pid << collection.apo.pid
+      all_pids.each do |pid|
+        puts "Deleteing #{pid}"
+        Dor::Config.fedora.client["objects/#{pid}"].delete
+        Dor::SearchService.solr.delete_by_id(pid)
+        #TODO delete from our local solr index
+      end
     end
   end
   

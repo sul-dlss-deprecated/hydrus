@@ -46,7 +46,6 @@ class Hydrus::GenericObject < Dor::Item
       [:disapproval_reason,     true   ],
       [:object_status,          true   ],
       [:submit_time,            true   ],
-      [:deposit_time,           true   ],
       [:item_type,              true   ],      
     ],
   )
