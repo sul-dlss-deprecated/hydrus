@@ -12,7 +12,9 @@ gem 'solrizer-fedora'
 
 gem 'blacklight', '~>3.5', :git => 'http://github.com/projectblacklight/blacklight.git'
 gem 'hydra-head', '~> 4.1.1'
-gem 'rubydora', '~> 0.5.11'
+gem 'rubydora',   '~> 0.5.11'
+# gem 'rubydora', :git => 'http://github.com/cbeer/rubydora.git', :ref => '7546d89542'
+
 gem 'devise'
 gem 'carrierwave'
 gem 'rails', '3.2.3'
