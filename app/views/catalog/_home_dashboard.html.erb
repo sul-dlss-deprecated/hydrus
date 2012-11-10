@@ -16,7 +16,7 @@
       <tbody>
       <% @collections.each do |c| %>
         <tr>
-          <td><%= link_to(c.title, polymorphic_path(c)) %></td>
+          <td><%= item_title_link(c) %></td>
           <td>
             <%=
               rs = c.roles_of_person(current_user.to_s)
@@ -43,7 +43,8 @@
       <%= link_to(
             "Create a new collection", 
             new_polymorphic_path(Hydrus::Collection),
-            :class => 'btn')  %>
+            :class => 'btn', 
+						:"disable-after-click"=>'true')  %>
     <% end %>
   </form>
 </div>

@@ -40,9 +40,7 @@ Item View page: Fix conditional display of metadata sections when only some
 required fields have been saved.
 
 Refactor and write tests for redirect_if_not_correct_object_type: seems more
-complex than it needs to be. Also, the code probably won't run as written
-because the APO class does not have an object_type method (that might be a
-problem as well).
+complex than it needs to be.
 
 Disable edit tab for published items. [PETER NOTE: this already happens automatically
 when not in development mode.]
@@ -61,9 +59,6 @@ identify tests that invoke those methods in a non-druid-minting context.
 
 rightsMD: Refactor to take better advantage of OM and generic_ds.rb.
 
-Redirect unauthenticated users back to the page they were trying to view after
-logging in.
-
 Consider moving the actual collection-depositor roleMD info from the APO to
 the Collection, for two reasons: (1) it parallels the roleMD stored in the
 Item; (2) without it, we don't have access to the collection depositor
@@ -75,9 +70,6 @@ we distinguish between different item types.
 Support item delete action.
 
 Gryphondor for Hydrus objects.
-
-Convert any unit tests that require jetty to be running to use stubbed/mocked
-objects so we don't have a dependency on real objects for unit tests.
 
 Work with Willy to switch local dev environment to use a local workflow service
 rather than the workflow service on sul-lyberservices-dev.

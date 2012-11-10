@@ -42,6 +42,7 @@ $(document).ready(function(){
 	if ($('#hydrus_collections-edit').length == 1 || $('#hydrus_collections-update').length == 1) {collection_edit_init();}
 	if ($('#hydrus_items-edit').length == 1 || $('#hydrus_items-update').length == 1) {item_edit_init();}
 	if ($('#itemsTable').length == 1) {$("#itemsTable").tablesorter();}
+	setup_links_that_disable();
 	
 	$(".abstract").truncate({max_length: 350});
 
@@ -115,7 +116,9 @@ function activate_edit_controls() {
 	$("#item-actions, #collection-actions").toggle();
 	$("#item-actions button[type=submit], #collection-actions button[type=submit]").click(function(){
 		$("form.step").append("<input type='hidden' value='" + $(this).attr('value') + "' name='" + $(this).attr('name') + "' />");	
-  	$("form.step").submit();
+  	$(this).attr("disabled","disabled");
+  	$(this).text("Please wait...");
+		$("form.step").submit();
 	});
 
 	$("#add_person, #add_link, #add_related_citation").live('click',function(){
@@ -169,6 +172,21 @@ function validate_hydrus_collection() {
 			all_required_filled = false;
 		}
 	});
+}
+
+// href links with the disable-after-click=true attribute will be automatically disabled after clicking to prevent double clicks
+function setup_links_that_disable() {
+	$("[disable-after-click='true']").each(function(){
+		$(this).click(function(e){
+			e.preventDefault(); // stop default href behavior
+			ajax_loading_indicator(); // show loading indicator in UI
+			url=$(this).attr("href"); // grab the URL
+			$(this).attr("href","#"); // remove it so even if clicked again, nothing will happen!
+			$(this).text('Please wait...'); // change the text
+			$(this).parent().addClass('disabled'); // disable the element visually
+			window.location.href=url; // go to the URL
+		  });
+		});
 }
 
 function setup_form_state_change_tracking() {

@@ -95,11 +95,6 @@ class Hydrus::GenericObject < Dor::Item
     return object_status[0..8] == 'published'
   end
 
-  # Returns the object type as a string: item, collection, or adminPolicy.
-  def object_type
-    return identityMetadata.objectType.first
-  end
-
   def apo
     @apo ||= (apo_pid ? get_fedora_item(apo_pid) : Hydrus::AdminPolicyObject.new)
   end

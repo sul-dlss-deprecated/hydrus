@@ -11,7 +11,8 @@
               "Approve Item", 
               approve_item_path(@document_fedora),
               :id    => 'hydrus_item_approve',
-              :class => 'btn btn-small save-edits') %>
+              :class => 'btn btn-small save-edits',
+							:disable_with => "Please wait..."	) %>
       </p>
 
       <!-- Disapprove. -->
@@ -20,7 +21,8 @@
           <%= button_tag(
                 "Return Item", 
                 :id    => 'hydrus_item_disapprove',
-                :class => 'btn btn-small save-edits') %>
+                :class => 'btn btn-small save-edits',
+								:disable_with => "Please wait..."	) %>
         </p>
         <p>
           <%= label_tag("hydrus_item_disapproval_reason",
@@ -28,7 +30,7 @@
                         :class => "return-item") %>
           <%= text_field_tag("hydrus_item_disapproval_reason",
                              @document_fedora.disapproval_reason,
-                             :class => "return-item", :autofocus => true) -%>
+                             :class => "return-item", :autofocus => true) -%><br />
           <span class="help">Item depositor will be notified by email</span>
         </p>
       <% end -%>
@@ -44,7 +46,8 @@
               "Resubmit for Approval", 
               resubmit_item_path(@document_fedora),
               :id    => 'hydrus_item_resubmit',
-              :class => 'btn btn-small save-edits') %>
+              :class => 'btn btn-small save-edits', 
+							:disable_with => "Please wait..."	) %>
       </p>
 
     <!-- Submit for Approval. -->
@@ -54,7 +57,8 @@
               "Submit for Approval", 
               submit_for_approval_item_path(@document_fedora),
               :id    => 'hydrus_item_submit_for_approval',
-              :class => 'btn btn-small save-edits') %>
+              :class => 'btn btn-small save-edits',
+							:disable_with => "Please wait..."	) %>
       </p>
 
     <!-- Publish directly (applies only to items not requiring approval by reviewer). -->
@@ -64,7 +68,8 @@
               "Publish", 
               publish_directly_item_path(@document_fedora),
               :id    => 'hydrus_item_publish_directly',
-              :class => 'btn btn-small save-edits') %>
+              :class => 'btn btn-small save-edits',
+							:disable_with => "Please wait..."	) %>
       </p>
 
     <% end %>

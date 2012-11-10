@@ -32,10 +32,6 @@ module ApplicationHelper
       end
   end
 
-  def hydrus_format_date(input_string)
-    input_string.blank? ? '' : input_string.to_date.strftime("%Y-%m-%d")
-  end
-
   def seen_beta_dialog?
     if session[:seen_beta_dialog]
       return true
@@ -90,8 +86,12 @@ module ApplicationHelper
 
   # a helper to create links to items that may or may not have titles yet
   def item_title_link(item)
-    title_text=item.title.blank? ? 'new item' : item.title
+    title_text=item.title.blank? ? "new #{item.object_type}" : item.title
     return link_to(title_text, polymorphic_path(item))
+  end
+    
+  def hydrus_format_date(input_string)
+    input_string.blank? ? '' : input_string.to_date.strftime("%Y-%m-%d")
   end
   
   # Take a datetime string.
@@ -104,6 +104,11 @@ module ApplicationHelper
     end
   end
 
+  def datetime_format(k)
+    return (k == :date ? '%d-%b-%Y' :
+            k == :time ? '%I:%M %P' : '%d-%b-%Y %I:%M %P')
+  end
+  
   # this checks to see if the object passed in is "empty", which could be nil, a blank string, an array of strings with all elements that are blank, 
   # an arbitrary object whose attributes are all blank, or an array of arbitrary objects whose attributes are all blank
   def hydrus_is_empty?(obj)
@@ -127,11 +132,6 @@ module ApplicationHelper
   # this returns an array of the attributes that have setter methods on any arbitrary object (stripping out attribures you don't want), "=" stripped out as well
   def get_attributes(obj)
     obj.methods.grep(/\w=$/).collect{|method| method.to_s.gsub('=','')}-['validation_context','_validate_callbacks','_validators']
-  end
-  
-  def datetime_format(k)
-    return (k == :date ? '%d-%b-%Y' :
-            k == :time ? '%I:%M %P' : '%d-%b-%Y %I:%M %P')
   end
 
   def render_contextual_navigation(model)

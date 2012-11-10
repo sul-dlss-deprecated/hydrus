@@ -49,11 +49,6 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
       [:accepted_terms_of_deposit, true   ],      
     ]
   )
-
-  # Returns the object type as a string: item, collection, or adminPolicy.
-  def object_type
-    return identityMetadata.objectType.first
-  end
       
   def initialize(*args)
     super

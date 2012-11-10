@@ -12,7 +12,8 @@
               "Close Collection", 
               close_collection_path(@document_fedora),
               :id    => 'hydrus_collection_close',
-              :class => 'btn btn-small save-edits') %>
+              :class => 'btn btn-small save-edits',
+							:disable_with => "Please wait..."	) %>
       </p>
     <% elsif @document_fedora.is_openable %>
       <p>
@@ -20,7 +21,8 @@
               "Open Collection", 
               open_collection_path(@document_fedora),
               :id    => 'hydrus_collection_open',
-              :class => 'btn btn-small save-edits') %>
+              :class => 'btn btn-small save-edits',
+							:disable_with => "Please wait..."	) %>
       </p>
     <% end %>
   <% end %>
