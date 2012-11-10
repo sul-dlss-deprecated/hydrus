@@ -99,22 +99,6 @@ def login_pw
   'beatcal'
 end
 
-def login_as_archivist1
-  login_as "archivist1", login_pw
-end
-
-def login_as_archivist2
-  login_as "archivist2", login_pw
-end
-
-def login_as_archivist6
-  login_as "archivist6", login_pw
-end
-
-def login_as_archivist99
-  login_as "archivist99", login_pw
-end
-
 def login_as(email, password = nil)
   password ||= login_pw
   email += '@example.com' unless email.include?('@')
@@ -204,7 +188,7 @@ def create_new_collection(opts = {})
   }
   opts = hash2struct(default_opts.merge opts)
   # Login and create new collection.
-  send("login_as_#{opts.user}")
+  login_as(opts.user)
   visit(new_hydrus_collection_path)
   # Extract the druid from the URL.
   r = Regexp.new('/collections/(druid:\w{11})/edit')
@@ -248,7 +232,7 @@ def create_new_item(opts = {})
   hc.requires_human_approval = opts.requires_human_approval
   hc.save
   # Login and create new item.
-  send("login_as_#{opts.user}")
+  login_as(opts.user)
   visit new_hydrus_item_path(:collection => hc.pid)
   # Extract the druid from the URL.
   r = Regexp.new('/items/(druid:\w{11})/edit')

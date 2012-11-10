@@ -33,7 +33,7 @@ describe("Collection edit", :type => :request, :integration => true) do
     new_contact   = 'ted@gonzo.com'
     orig_contact  = @hc.contact
 
-    login_as_archivist1
+    login_as('archivist1')
     should_visit_edit_page(@hc)
 
     page.should have_content(orig_abstract)
@@ -51,13 +51,13 @@ describe("Collection edit", :type => :request, :integration => true) do
   end
 
   it "does not shows deletion link for a collection if it has any items in it" do
-    login_as_archivist1
+    login_as('archivist1')
     should_visit_edit_page(@hc)
     page.should_not have_css(".discard-item")
   end
 
   it "does not shows deletion link for a collection if has no items but is stil open" do
-    login_as_archivist1
+    login_as('archivist1')
     @hc = Hydrus::Collection.find(@druid_no_files)
     should_visit_edit_page(@hc)
     page.should_not have_css(".discard-item")
@@ -72,7 +72,7 @@ describe("Collection edit", :type => :request, :integration => true) do
     original_url_field = "hydrus_collection_related_item_url_1"
     original_label_field = "hydrus_collection_related_item_title_1"
 
-    login_as_archivist1
+    login_as('archivist1')
     should_visit_edit_page(@hc)
 
     page.should_not have_css("##{new_url_field}")
@@ -129,7 +129,7 @@ describe("Collection edit", :type => :request, :integration => true) do
     params={:visibility=>'stanford',:license_code=>'cc-by',:embargo_date=>''}
     confirm_rights(@hc,params)
     
-    login_as_archivist1
+    login_as('archivist1')
     # Visit edit page, and confirm content.
     should_visit_edit_page(@hc)
     page.should have_checked_field(orig_check_field)
@@ -163,7 +163,7 @@ describe("Collection edit", :type => :request, :integration => true) do
     params={:visibility=>'stanford',:license_code=>'cc-by',:embargo_date=>''}
     confirm_rights(@hc,params)    
     @hc.embargo.should == 'future'
-    login_as_archivist1
+    login_as('archivist1')
     # Visit edit page, and confirm content.
     should_visit_edit_page(@hc)
     page.should have_checked_field(orig_check_field)
@@ -219,7 +219,7 @@ describe("Collection edit", :type => :request, :integration => true) do
 
     it "should be able to add/remove persons with various roles" do
       # Visit edit page.
-      login_as_archivist1
+      login_as('archivist1')
       should_visit_edit_page(@hc)
       # Check the initial role-management section.
       role_info = @hc.apo_person_roles
@@ -249,7 +249,7 @@ describe("Collection edit", :type => :request, :integration => true) do
 
     it "should be able to strip email addresses to leave just sunetIDs from persons with various roles" do
       # Visit edit page.
-      login_as_archivist1
+      login_as('archivist1')
       should_visit_edit_page(@hc)
       # Check the initial role-management section.
       role_info = @hc.apo_person_roles
@@ -332,7 +332,7 @@ describe("Collection edit", :type => :request, :integration => true) do
       end
 
       it "should send an email to new depositors when we're updating a collection" do
-        login_as_archivist1
+        login_as('archivist1')
         visit new_hydrus_collection_path()
         fill_in "hydrus_collection_title", :with => "TestingTitle"
         fill_in "hydrus_collection_abstract", :with => "Summary of my content"
@@ -349,7 +349,7 @@ describe("Collection edit", :type => :request, :integration => true) do
       end
 
       it "should handle complex changes to depositors" do
-        login_as_archivist1
+        login_as('archivist1')
         visit new_hydrus_collection_path()
         fill_in "hydrus_collection_title", :with => "TestingTitle"
         fill_in "hydrus_collection_abstract", :with => "Summary of my content"
@@ -368,7 +368,7 @@ describe("Collection edit", :type => :request, :integration => true) do
       end
 
       it "should not send an email if the collection is closed" do
-        login_as_archivist1
+        login_as('archivist1')
         visit new_hydrus_collection_path()
         fill_in "hydrus_collection_apo_person_roles[hydrus-collection-item-depositor]", :with => "jdoe"
         expect {click_button("Save")}.to change { ActionMailer::Base.deliveries.count }.by(0)

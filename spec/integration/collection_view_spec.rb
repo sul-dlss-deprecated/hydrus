@@ -21,7 +21,7 @@ describe("Collection view", :type => :request, :integration => true) do
   end
 
   it "Breadcrumbs should be displayed with home link and unlinked trucated collection name" do
-    login_as_archivist1
+    login_as('archivist1')
     visit polymorphic_path(@hc)
     page.should have_selector("ul.breadcrumb li a", :text => "Home")
     page.should have_selector("ul.breadcrumb li", :text => "SSDS Social Science Data Co...")
@@ -29,7 +29,7 @@ describe("Collection view", :type => :request, :integration => true) do
   
   it "should redirect to the collection page if the requested druid is a collection but is visited at the item page URL" do
     @bad_url = "/items/#{@druid}" # this is actually a collection druid
-    login_as_archivist1
+    login_as('archivist1')
     visit @bad_url
     current_path.should == polymorphic_path(@hc)    
   end
@@ -39,7 +39,7 @@ describe("Collection view", :type => :request, :integration => true) do
       "SSDS Social Science Data Collection",
       "Description",
     ]
-    login_as_archivist1
+    login_as('archivist1')
     visit polymorphic_path(@hc)
     current_path.should == polymorphic_path(@hc)
     exp_content.each do |exp|
@@ -53,7 +53,7 @@ describe("Collection view", :type => :request, :integration => true) do
       "Ethnic Collective Action",
       'archivist3'
     ]
-    login_as_archivist1
+    login_as('archivist1')
     visit polymorphic_path([@hc, :items])
     current_path.should == polymorphic_path([@hc, :items])
     coll_items = find('div#items')
@@ -67,7 +67,7 @@ describe("Collection view", :type => :request, :integration => true) do
       "Collection created",
       "archivist1"
     ]
-    login_as_archivist1
+    login_as('archivist1')
     visit polymorphic_path([@hc, :events])
     current_path.should == polymorphic_path([@hc, :events])
     coll_items = find('div.event-history')
@@ -81,7 +81,7 @@ describe("Collection view", :type => :request, :integration => true) do
   #     "cc-by",
   #     "1 year",
   #   ]
-  #   login_as_archivist1
+  #   login_as('archivist1')
   #   visit polymorphic_path(@hc)
   #   current_path.should == polymorphic_path(@hc)
   #   exp_content.each do |exp|

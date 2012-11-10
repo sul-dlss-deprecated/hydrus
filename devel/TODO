@@ -9,9 +9,6 @@ Purl page of a published item: files cannot be downloaded, because rightsMD
 MH: current work
 --------
 
-Remove login_as_archivist* methods. They are unneeded now that login_as()
-has been improved.
-
 Set up the listener update the Hydrus SOLR when Hydrus objects are
 updated outside of the Hydrus app.
   - Fedora sends message to ActiveMQ.
@@ -123,10 +120,10 @@ during the super() call in index() of catalog_controller.rb, which invokes a
 Blacklight method that logs the entire SOLR response. A bug has been filed; in
 the meantime, you can monkey-patch solr_helper.rb in Blacklight.
 
-File-level licensing.
+File-level licensing. [new work]
 
-PURL display of Hydrus objects.
+PURL display of Hydrus objects. [new work]
 
-Ability to hide files: individually or for entire object.
+Ability to hide files: individually or for entire object. [new work]
 
-Custom terms of use.
+Custom terms of use. [new work]

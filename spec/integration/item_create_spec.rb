@@ -43,7 +43,7 @@ describe("Item create", :type => :request, :integration => true) do
   end
 
   it "should have a non-js select list for depositing items into collections" do
-    login_as_archivist1
+    login_as('archivist1')
     visit hydrus_collection_path(:id=>@hc_druid)
     select "item", :from => "collection"
     click_button(@buttons[:add])
@@ -53,7 +53,7 @@ describe("Item create", :type => :request, :integration => true) do
 
   it "should be able to create a new Item, with expected datastreams" do
     # Login, go to new Item page, and store the druid of the new Item.
-    login_as_archivist1
+    login_as('archivist1')
     visit new_hydrus_item_path(:collection => @hc_druid)
     current_path.should =~ @edit_path_regex
     druid = @edit_path_regex.match(current_path)[1]
@@ -95,7 +95,7 @@ describe("Item create", :type => :request, :integration => true) do
   end
 
   it "should be able to access create-new-Item screen via the Collection view page" do
-    login_as_archivist1
+    login_as('archivist1')
     collection = Hydrus::Collection.find(@hc_druid)
     visit polymorphic_path(collection)
     click_link('item')
@@ -119,7 +119,7 @@ describe("Item create", :type => :request, :integration => true) do
 
     # Login as a item depositor for this collection, go to new Item page, and
     # store the druid of the new Item.
-    login_as_archivist6
+    login_as('archivist6')
     visit new_hydrus_item_path(:collection => @hc_druid)
     page.should have_content('Welcome archivist6!')
     current_path.should =~ @edit_path_regex
@@ -217,7 +217,7 @@ describe("Item create", :type => :request, :integration => true) do
     find(@div_alert).should have_content(@notices[:save])
 
     # now login as archivist 1 (collection manager) and Disapprove the Item.
-    login_as_archivist1
+    login_as('archivist1')
     visit hydrus_item_path(:id=>item.pid)
     page.should have_content('Welcome archivist1!')
     fill_in "hydrus_item_disapproval_reason", :with => ni.reason
@@ -239,7 +239,7 @@ describe("Item create", :type => :request, :integration => true) do
     find(@span_status).should have_content(@status_msgs[:returned])
 
     # now login as archivist 6 (depositor) and resubmit the Item.
-    login_as_archivist6
+    login_as('archivist6')
     visit hydrus_item_path(:id=>item.pid)
     page.should have_content('Welcome archivist6!')
     page.should have_content(ni.reason)
@@ -259,7 +259,7 @@ describe("Item create", :type => :request, :integration => true) do
     find(@span_status).should have_content(@status_msgs[:awaiting_approval])
 
     # Now login as archivist 1 and approve the item.
-    login_as_archivist1
+    login_as('archivist1')
     visit hydrus_item_path(:id=>item.pid)
     click_button(@buttons[:approve])
     find(@div_alert).should have_content(@notices[:approve])
@@ -319,7 +319,7 @@ describe("Item create", :type => :request, :integration => true) do
     coll.save
     
     # Login as a item depositor for this collection, go to new Item page, and store the druid of the new Item.
-    login_as_archivist1
+    login_as('archivist1')
     visit new_hydrus_item_path(:collection => @hc_druid)
     current_path.should =~ @edit_path_regex
     druid = @edit_path_regex.match(current_path)[1]

@@ -19,7 +19,7 @@ describe("Item view", :type => :request, :integration => true) do
   end
 
   it "Breadcrumbs should be displayed with home link, linked trucated collection name, and unlinked item name with state" do
-    login_as_archivist1
+    login_as('archivist1')
     visit polymorphic_path(@hi)
     page.should have_selector("ul.breadcrumb li a", :text => "Home")
     page.should have_selector("ul.breadcrumb li a", :text => "SSDS Social Science Data Co...")
@@ -28,7 +28,7 @@ describe("Item view", :type => :request, :integration => true) do
 
   it "should redirect to the item page if the requested druid is an item but is visited at the collection page URL" do
     @bad_url = "/collections/#{@druid}" # this is actually an item druid
-    login_as_archivist1
+    login_as('archivist1')
     visit @bad_url
     current_path.should == polymorphic_path(@hi)    
   end
@@ -47,7 +47,7 @@ describe("Item view", :type => :request, :integration => true) do
       'Keywords', # keywords label
       'pinocchio.htm', # file
     ]
-    login_as_archivist1
+    login_as('archivist1')
     visit polymorphic_path(@hi)
     current_path.should == polymorphic_path(@hi)
     exp_content.each do |exp|
@@ -74,7 +74,7 @@ describe("Item view", :type => :request, :integration => true) do
       'Event History for This Item',
       'Item created'
     ]
-    login_as_archivist1
+    login_as('archivist1')
     visit polymorphic_path([@hi, :events])
     current_path.should == polymorphic_path([@hi, :events])
     exp_content.each do |exp|

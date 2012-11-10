@@ -38,7 +38,7 @@ describe("Item edit", :type => :request, :integration => true) do
     )
     comma_join  = '  ,  '
     # Visit edit page.
-    login_as_archivist1
+    login_as('archivist1')
     should_visit_edit_page(@hi)
     # Make sure the object does not have the new content yet.
     @hi.abstract.should_not == ni.abstract
@@ -71,7 +71,7 @@ describe("Item edit", :type => :request, :integration => true) do
     orig_role = "Principal Investigator"
     new_role  = "Collector"
 
-    login_as_archivist1
+    login_as('archivist1')
     should_visit_edit_page(@hi)
 
     find_field(field_np).value.should == orig_name
@@ -94,7 +94,7 @@ describe("Item edit", :type => :request, :integration => true) do
     new_delete_button = "remove_name_5"
     person = "Mr. Test Person"
 
-    login_as_archivist1
+    login_as('archivist1')
     should_visit_edit_page(@hi)
 
     page.should have_css("input#hydrus_item_person_4")
@@ -129,7 +129,7 @@ describe("Item edit", :type => :request, :integration => true) do
     new_title   = "foo_TITLE_bar"
     field_title = "hydrus_item_related_item_title_0"
 
-    login_as_archivist1
+    login_as('archivist1')
     should_visit_edit_page(@hi)
 
     find_field(field_link).value.should == orig_link
@@ -153,7 +153,7 @@ describe("Item edit", :type => :request, :integration => true) do
     url               = "http://library.stanford.edu"
     label             = "Library Website"
 
-    login_as_archivist1
+    login_as('archivist1')
     should_visit_edit_page(@hi)
 
     page.should have_css("input#hydrus_item_related_item_title_0")
@@ -199,7 +199,7 @@ describe("Item edit", :type => :request, :integration => true) do
       :url_f    => "hydrus_item_related_item_url_0",
     )
     # Visit edit page.
-    login_as_archivist1
+    login_as('archivist1')
     should_visit_edit_page(@hi)
     # Make sure the object does not have the new content yet.
     old_title = find_field(ni.title_f).value
@@ -223,7 +223,7 @@ describe("Item edit", :type => :request, :integration => true) do
     new_pref_cit  = "new_citation_FOO"
     orig_pref_cit = @hi.preferred_citation
 
-    login_as_archivist1
+    login_as('archivist1')
     should_visit_edit_page(@hi)
 
     find_field(citation_field).value.strip.should == orig_pref_cit
@@ -242,7 +242,7 @@ describe("Item edit", :type => :request, :integration => true) do
     new_delete_button    = "remove_related_citation_2"
     new_citation_text    = " This is a citation for a related item! "
 
-    login_as_archivist1
+    login_as('archivist1')
     should_visit_edit_page(@hi)
 
     page.should have_css("textarea#hydrus_item_related_citation_0")
@@ -284,7 +284,7 @@ describe("Item edit", :type => :request, :integration => true) do
     params={:visibility=>'world',:license_code=>'cc-by',:embargo_date=>''}
     confirm_rights(@hi,params)    
     
-    login_as_archivist1
+    login_as('archivist1')
     should_visit_edit_page(Hydrus::Collection.find("druid:oo000oo0003"))
     
     choose varies_radio

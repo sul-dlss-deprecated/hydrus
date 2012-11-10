@@ -16,7 +16,7 @@ describe("Collection create", :type => :request, :integration => true) do
   end
 
   it "should not be able to visit new collection URL if user lacks authority to create collections" do
-    login_as_archivist99
+    login_as('archivist99')
     visit new_hydrus_collection_path
     current_path.should == root_path
     find(@alert).should have_content("You do not have sufficient privileges")
@@ -29,7 +29,7 @@ describe("Collection create", :type => :request, :integration => true) do
       :contact  => 'ozzy@hell.com',
     )
     # Login, go to new Collection page, and store the druid of the new Collection.
-    login_as_archivist1
+    login_as('archivist1')
     visit new_hydrus_collection_path()
     current_path.should =~ @edit_path_regex
     druid = @edit_path_regex.match(current_path)[1]
@@ -90,7 +90,7 @@ describe("Collection create", :type => :request, :integration => true) do
     open_button    = "Open Collection"
     close_button   = "Close Collection"
     # Login, go to new Collection page, and store the druid of the new Collection.
-    login_as_archivist1
+    login_as('archivist1')
     visit new_hydrus_collection_path()
     current_path.should =~ @edit_path_regex
     druid = @edit_path_regex.match(current_path)[1]
