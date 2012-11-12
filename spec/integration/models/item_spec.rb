@@ -4,12 +4,12 @@ describe(Hydrus::Item, :integration => true) do
 
   describe("Content metadata generation") do
 
-    it "should be able to generate content metadata, returning blank when no files exist and setting content metadata stream to blank" do
+    it "should be able to generate content metadata, returning blank CM when no files exist and setting content metadata stream to a blank template" do
       hi = Hydrus::Item.new
-      hi.create_content_metadata.should == ''
+      hi.create_content_metadata.should == "<contentMetadata objectId=\"__DO_NOT_USE__\" type=\"file\"/>"
       lambda{ hi.datastreams['contentMetadata'].content }.should raise_error
       hi.update_content_metadata
-      hi.datastreams['contentMetadata'].content.should == ''
+      hi.datastreams['contentMetadata'].content.should be_equivalent_to "<contentMetadata objectId=\"__DO_NOT_USE__\" type=\"file\"/>"
     end
 
     it "should be able to generate content metadata, returning and setting correct cm when files exist" do

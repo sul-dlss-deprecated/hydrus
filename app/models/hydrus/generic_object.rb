@@ -58,6 +58,11 @@ class Hydrus::GenericObject < Dor::Item
     self.class == Hydrus::Collection
   end
 
+  # the pid without the druid: prefix
+  def dru
+    pid.gsub('druid:','')
+  end
+  
   # Returns true if all required fields are filled in.
   def required_fields_completed?
     # If validations are true, returns true.
@@ -112,7 +117,7 @@ class Hydrus::GenericObject < Dor::Item
   end
 
   def purl_url
-   "#{Dor::Config.purl.base_url}#{pid}"
+   "#{Dor::Config.purl.base_url}#{dru}"
   end
 
   def related_items
