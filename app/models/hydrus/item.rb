@@ -250,44 +250,6 @@ class Hydrus::Item < Hydrus::GenericObject
     validate! ? true : !errors.keys.include?(:release_settings)    
   end
 
-  def base_file_directory
-    f = File.join(Rails.root, "public", Hydrus::Application.config.file_upload_path)
-    DruidTools::Druid.new(pid, f).path
-  end
-
-  def content_directory
-    File.join(base_file_directory, "content")
-  end
-
-  def metadata_directory
-    File.join(base_file_directory, "metadata")
-  end
-
-  def update_content_metadata
-    xml = create_content_metadata
-    if !xml.strip.blank? && DruidTools::Druid.valid?(self.pid)
-      # write xml to a file
-      Dir.mkdir(metadata_directory) unless File.directory? metadata_directory
-      f = File.join(metadata_directory, 'contentMetadata.xml')
-      File.open(f, 'w') { |fh| fh.puts xml }
-    end
-    datastreams['contentMetadata'].content = xml
-  end
-
-  def create_content_metadata
-    objects = files.collect { |file|
-      Assembly::ObjectFile.new(file.current_path, :label=>file.label)
-    }
-    return '' if objects.empty?
-    return Assembly::ContentMetadata.create_content_metadata(
-      :druid            => pid,
-      :objects          => objects,
-      :add_file_attributes => true,
-      :style            => Hydrus::Application.config.cm_style,
-      :file_attributes  => Hydrus::Application.config.cm_file_attributes,
-      :include_root_xml => false)
-  end
-
   # A validation used before creating a new Item.
   # Returns true if the collection is open; otherwise,
   # returns false and adds a validation error.

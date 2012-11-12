@@ -44,6 +44,7 @@ Dor::Config.configure do
   end
   
   hydrus do
+    workflow_object_druids ['druid:oo000oo0099']
     host 'localhost:3000'    
     start_common_assembly(false)
   end

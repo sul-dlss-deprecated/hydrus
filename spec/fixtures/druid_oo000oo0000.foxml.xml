@@ -5,7 +5,7 @@
   xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/definitions/1/0/foxml1-1.xsd">
   <foxml:objectProperties>
     <foxml:property NAME="info:fedora/fedora-system:def/model#state" VALUE="Active"/>
-    <foxml:property NAME="info:fedora/fedora-system:def/model#label" VALUE="Internal Objects"/>
+    <foxml:property NAME="info:fedora/fedora-system:def/model#label" VALUE="Hydrus Ur-APO"/>
     <foxml:property NAME="info:fedora/fedora-system:def/model#createdDate" VALUE="2011-04-18T18:18:53.666Z"/>
     <foxml:property NAME="info:fedora/fedora-system:def/view#lastModifiedDate" VALUE="2012-07-03T21:23:13.584Z"/>
   </foxml:objectProperties>
@@ -63,7 +63,7 @@
         <identityMetadata>
           <objectId>druid:oo000oo0000</objectId>
           <objectType>adminPolicy</objectType>
-          <objectLabel>Internal Objects</objectLabel>
+          <objectLabel>Hydrus Ur-APO</objectLabel>
           <objectDescription>Ur-APO</objectDescription>
           <otherId name="uuid">661e629a-24c8-2ef3-227e-883eb4e2c6d4</otherId>
           <tag>AdminPolicy : Ur-APO</tag>

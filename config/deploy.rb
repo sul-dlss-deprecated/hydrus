@@ -80,6 +80,11 @@ namespace :db do
   end
 end
 
+namespace :solr do
+  task :reindex_workflow_objects do
+    run "cd #{deploy_to}/current && rake hydrus:reindex_workflow_objects"
+  end
+end
 namespace :files do
   task :refresh_fixtures do
     run "cd #{deploy_to}/current && rake hydrus:refresh_upload_files"

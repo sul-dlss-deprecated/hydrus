@@ -245,13 +245,52 @@ class Hydrus::GenericObject < Dor::Item
     email.deliver unless email.blank?
   end
 
+  def base_file_directory
+    f = File.join(Rails.root, "public", Hydrus::Application.config.file_upload_path)
+    DruidTools::Druid.new(pid, f).path
+  end
+
+  def content_directory
+    File.join(base_file_directory, "content")
+  end
+
+  def metadata_directory
+    File.join(base_file_directory, "metadata")
+  end
+
+  def update_content_metadata
+    xml = create_content_metadata
+    if DruidTools::Druid.valid?(self.pid)
+      # write xml to a file
+      FileUtils.mkdir_p(metadata_directory) unless File.directory? metadata_directory
+      f = File.join(metadata_directory, 'contentMetadata.xml')
+      File.open(f, 'w') { |fh| fh.puts xml }
+    end
+    datastreams['contentMetadata'].content = xml
+  end
+
+  def create_content_metadata
+    if is_item?
+      objects = files.collect { |file| Assembly::ObjectFile.new(file.current_path, :label=>file.label)}
+    else
+      objects = []
+    end
+    return Assembly::ContentMetadata.create_content_metadata(
+      :druid            => pid,
+      :objects          => objects,
+      :add_file_attributes => true,
+      :style            => Hydrus::Application.config.cm_style,
+      :file_attributes  => Hydrus::Application.config.cm_file_attributes,
+      :include_root_xml => false)
+  end
+  
   # If the app is configured to start the common assembly workflow, calls will
   # be made to the workflow service to begin that process. In addition,
   # contentMetadata is generated for Items.
   def start_common_assembly
     return unless should_start_common_assembly
     cannot_do(:start_common_assembly) unless is_assemblable()
-    update_content_metadata if is_item?
+    update_content_metadata
     complete_workflow_step('start-assembly')
     initiate_apo_workflow('assemblyWF')
   end

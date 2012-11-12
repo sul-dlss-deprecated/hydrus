@@ -9,8 +9,6 @@ require File.expand_path(File.join(current_path, 'rsolr_no_certificate')) if no_
 
 Hydrus::Application.configure do
  
-  config.resource_base_path = '/dor/assembly'
-
   # this is the path from the root of the public folder into which file uploads will be stored
   config.file_upload_path = 'uploads'
  
@@ -36,7 +34,12 @@ Dor::Config.configure do
     yaml = load_yaml_config.call('fedora.yml')
     user = yaml['user']
     pw   = yaml['password']
-    url yaml['url'].sub /:\/\//, "://#{user}:#{pw}@"
+    fedora_url = yaml['url']
+    if !(user.blank? || pw.blank?) 
+      url fedora_url.sub /:\/\//, "://#{user}:#{pw}@"
+    else
+      url fedora_url
+    end
   end
   
   suri do

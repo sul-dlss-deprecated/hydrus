@@ -76,6 +76,7 @@ Dor::Config.configure do
    end
   
   hydrus do
+    workflow_object_druids ['druid:oo000oo0099','druid:rs056hz6024']
     host 'hydrus.stanford.edu'    
     start_common_assembly(true)
   end
