@@ -128,10 +128,17 @@ h2. Deploying
 Note that if you want to blanket change all passwords for default fixture users 
 (useful for public facing websites), you can use a rake command for that environment.
 
-e.g. RAILS_ENV=dortest rake hydrus:update_passwords['NEW_PASSWORD_HERE']
+RAILS_ENV=dortest rake hydrus:update_passwords['NEW_PASSWORD_HERE']
 
 By default the dortest environment does not refresh users after each deploy, so this command
 is only needed if you refresh fixtures.
+
+You may also need to clear all objects out of the associated hydrus solr index if you are deleting
+objects from Fedora (when in staging for example).  To do this, issue the following rake command
+(but be careful!!)
+
+RAILS_ENV=dortest rake hydrus:solr_nuke
+
 
 h2. Useful commands
 

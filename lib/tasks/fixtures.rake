@@ -190,4 +190,22 @@ namespace :hydrus do
     Rake::Task['jetty:start'].invoke
   end
 
+  desc "delete all existing objects in solr without nuking jetty (objects will remain in fedora)"
+  task :solr_nuke => :environment do 
+    require File.expand_path('config/environment')
+    url1="curl #{Dor::Config.solrizer.url}/update --data '<delete><query>*:*</query></delete>' -H 'Content-type:text/xml; charset=utf-8'"
+    url2="curl #{Dor::Config.solrizer.url}/update --data '<commit/>' -H 'Content-type:text/xml; charset=utf-8'"
+    puts url1
+    puts url2
+    puts "Delete all objects at SOLR URL #{Dor::Config.solrizer.url} in Rails environment '#{Rails.env}'? (type yes to proceed)"
+    confirm = $stdin.gets.chomp
+    if confirm == "yes"      
+      puts "Nuking solr"
+      `#{url1}`
+      `#{url2}`
+    else
+      puts "Aborting"
+    end
+  end
+
 end
