@@ -13,6 +13,10 @@ MH: current work
 Other
 --------
 
+Ask Willy about submitted_dt. Getting multiple values in SOLR doc.
+
+Remove all code that puts WF into the APO. Search for workflow_steps.
+
 Dates and times. We are creating, parsing, displaying dates and times in
 various ways throughout the app, both in code and in tests. Create some utility
 methods to consolidate the needed behavior so that it will be easy to be

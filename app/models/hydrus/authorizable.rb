@@ -7,6 +7,8 @@ module Hydrus::Authorizable
   def self.administrators
     return Set.new %w(
       hfrost
+      petucket
+      hindman
     )
   end
 
@@ -17,8 +19,6 @@ module Hydrus::Authorizable
       amyhodge
       ronbo
       mmarosti
-      petucket
-      hindman
     )
     return administrators.union(ids)
   end
