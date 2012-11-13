@@ -20,15 +20,6 @@ Hydrus::Application.routes.draw do
     get 'agree_to_terms_of_deposit', :as =>'agree_to_terms_of_deposit', :on=>:collection
   end
 
-  post "items/publish_directly/:id"    => "hydrus_items#publish_directly",    :as => 'publish_directly_item'
-  post "items/submit_for_approval/:id" => "hydrus_items#submit_for_approval", :as => 'submit_for_approval_item'
-  post "items/approve/:id"             => "hydrus_items#approve",             :as => 'approve_item'
-  post "items/disapprove/:id"          => "hydrus_items#disapprove",          :as => 'disapprove_item'
-  post "items/resubmit/:id"            => "hydrus_items#resubmit",            :as => 'resubmit_item'
-
-  post "collections/open/:id"  => "hydrus_collections#open",  :as => 'open_collection'
-  post "collections/close/:id" => "hydrus_collections#close", :as => 'close_collection'
-
   match "items/:id/destroy_value" => "hydrus_items#destroy_value", :as => 'destroy_hydrus_item_value', :via => "get"
   match "collections/:id/destroy_value" => "hydrus_collections#destroy_value", :as => 'destroy_hydrus_collection_value', :via => "get"
   match "collections/:id/destroy_actor" => "hydrus_collections#destroy_actor", :as => 'destroy_hydrus_collection_actor', :via => "get"
@@ -38,5 +29,20 @@ Hydrus::Application.routes.draw do
 
   resources :object_files
   resources :signin
+
+  # Actions to advance Collections through the Hydrus process.
+  post "collections/open/:id"  => "hydrus_collections#open",  :as => 'open_collection'
+  post "collections/close/:id" => "hydrus_collections#close", :as => 'close_collection'
+
+  # Actions to advance Items through the Hydrus process.
+  post "items/publish_directly/:id"    => "hydrus_items#publish_directly",    :as => 'publish_directly_item'
+  post "items/submit_for_approval/:id" => "hydrus_items#submit_for_approval", :as => 'submit_for_approval_item'
+  post "items/approve/:id"             => "hydrus_items#approve",             :as => 'approve_item'
+  post "items/disapprove/:id"          => "hydrus_items#disapprove",          :as => 'disapprove_item'
+  post "items/resubmit/:id"            => "hydrus_items#resubmit",            :as => 'resubmit_item'
+
+  # Actions for the HydrusSolrController.
+  match "hydrus_solr/reindex/:id"           => "hydrus_solr#reindex",           :as => 'reindex'
+  match "hydrus_solr/delete_from_index/:id" => "hydrus_solr#delete_from_index", :as => 'delete_from_index'
 
 end

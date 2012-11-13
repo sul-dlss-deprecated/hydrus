@@ -9,25 +9,13 @@ Purl page of a published item: files cannot be downloaded, because rightsMD
 MH: current work
 --------
 
-Set up the listener update the Hydrus SOLR when Hydrus objects are
-updated outside of the Hydrus app.
-  - Fedora sends message to ActiveMQ.
-  - Camel is the subscriber to that queue.
-  - Camel sends a REST message to the Hydrus app.
-  - The Hydrus app will have a controller analogous Argo's dor_controller.
-    - See argo/app/controllers/dor_controller.rb
-    - See argo/config/routes.rb
-  - That controller will re-solrize any Hydrus objects it sees.
-  - To determine whether an object is a Hydrus object, get it from
-    Fedora and check something (tag or maybe the class).
-
 --------
 Other
 --------
 
 Dates and times. We are creating, parsing, displaying dates and times in
 various ways throughout the app, both in code and in tests. Create some utility
-methods to consolidate the needed behavior so that it will be easy to being
+methods to consolidate the needed behavior so that it will be easy to be
 consistent across the app with respect to display format, storage format, and
 timezone (for the latter, use GMT).
 
