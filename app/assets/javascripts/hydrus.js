@@ -183,7 +183,8 @@ function setup_links_that_disable() {
 			url=$(this).attr("href"); // grab the URL
 			$(this).attr("href","#"); // remove it so even if clicked again, nothing will happen!
 			$(this).text('Please wait...'); // change the text
-			$(this).parent().addClass('disabled'); // disable the element visually
+			$(this).parent().addClass('disabled'); // disable the parent's element visually
+			$(this).addClass('disabled'); // disable the element visually
 			window.location.href=url; // go to the URL
 		  });
 		});
