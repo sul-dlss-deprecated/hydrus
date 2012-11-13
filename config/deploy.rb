@@ -67,22 +67,19 @@ namespace :jetty do
     run "if [ -d #{deploy_to}/current ]; then cd #{deploy_to}/current && rake jetty:stop; fi"
   end
   task :ingest_fixtures do
-    run "cd #{deploy_to}/current && rake hydrus:refreshfix"
+    run "cd #{deploy_to}/current && rake hydrus:refreshfix RAILS_ENV=#{rails_env}"
   end
 end
 
 namespace :db do
-  task :migrate do
-    run "cd #{deploy_to}/current && rake db:migrate"    
-  end
   task :loadfixtures do
-    run "cd #{deploy_to}/current && rake db:fixtures:load"
+    run "cd #{deploy_to}/current && rake db:fixtures:load RAILS_ENV=#{rails_env}"
   end
 end
 
 namespace :solr do
   task :reindex_workflow_objects do
-    run "cd #{deploy_to}/current && rake hydrus:reindex_workflow_objects"
+    run "cd #{deploy_to}/current && rake hydrus:reindex_workflow_objects RAILS_ENV=#{rails_env}"
   end
 end
 namespace :files do
