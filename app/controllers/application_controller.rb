@@ -14,14 +14,19 @@ class ApplicationController < ActionController::Base
   end
 
   def exception_on_website(exception)
-    # TODO also log this exception in some special way and notify someone?
-    if (Rails.env.development? || Rails.env.test?) 
-        raise(exception)
+    
+    @exception=exception
+    
+    HydrusMailer.error_notification(:exception=>@exception,:current_user=>current_user).deliver unless Dor::Config.hydrus.exception_recipients.blank? 
+    
+    if Dor::Config.hydrus.exception_error_page 
+        logger.error(@exception.message)
+        logger.error(@exception.backtrace.join("\n"))
+        render 'signin/error'
       else
-        logger.error(exception.message)
-        logger.error(exception.backtrace.join("\n"))
-        redirect_to(error_url) 
+        raise(@exception)
      end
+
   end
 
   # Used to determine if we should show beta message in UI.

@@ -25,6 +25,14 @@ class HydrusMailer < ActionMailer::Base
     mail(:to=>HydrusMailer.process_user_list(@document_fedora.recipients_for_collection_update_emails), :subject=>"Collection closed for deposit in the Stanford Digital Repository") unless ignore?(@document_fedora.pid)
   end
   
+  def error_notification(opts={})
+    @exception=opts[:exception]
+    @host=host
+    @mode=Rails.env
+    @current_user=opts[:current_user]
+    mail(:to=>Dor::Config.hydrus.exception_recipients, :subject=>"Hydrus Exception Notification from #{@host} running in #{@mode} mode")
+  end
+  
   protected  
   def ignore?(pid)
     Hydrus::Application.config.fixture_list.include?(pid)

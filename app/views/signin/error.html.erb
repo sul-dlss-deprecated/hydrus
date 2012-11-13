@@ -1,5 +1,21 @@
-<h2>Oops</h2>
+<h2>Error Occurred</h2>
 
-Well, that wasn't supposed to happen.  Sorry about that, we'll look into it if you <%= mail_to("sdr-contact@lists.stanford.edu","let us know how you got here",:subject=>'error occurred on website') %>.
+Well, that wasn't supposed to happen.  Sorry about that, we'll look into it.  You can help if you <%= mail_to("sdr-contact@lists.stanford.edu","let us know how you got here",:subject=>'error occurred on website') %>.
 
 <p><%=link_to("Head back to the home page.",root_url)%></p>
+
+<% if Dor::Config.hydrus.exception_error_panel && !@exception.blank?%>
+	
+	<a onclick="JavaScript:toggleErrors();" href="#">[toggle full error message display]</a>
+	<div style="display:none" id="errors">
+		<strong><%= @exception.message %></strong><br /><br />
+		<%= raw @exception.backtrace.join("<br />") %>
+	</div>
+	
+<% end %>
+
+<script language="JavaScript">
+  	function toggleErrors() {
+			$( "#errors" ).toggle('blind');
+		}
+</script>

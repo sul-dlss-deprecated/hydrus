@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+  </head>
+  <body>
+    <p>The following exception occurred in the Hydrus app:</p>
+ 		<p><strong>Host:</strong> <%=@host%></p>
+ 		<p><strong>Rails mode:</strong> <%=@mode%></p>
+		<p><strong>Time:</strong> <%=Time.now%></p>
+		<p><strong>User:</strong> <%=@current_user || "none" %></p>
+		<p><strong>Exception:</strong> <%=@exception.message%></p>
+		<p><strong>Backtrace:</strong> </p>
+		<p><%=raw @exception.backtrace.join('<br />')%></p>
+  </body>
+</html>
