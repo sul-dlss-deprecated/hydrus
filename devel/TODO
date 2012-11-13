@@ -5,15 +5,11 @@ DOR integration
 Purl page of a published item: files cannot be downloaded, because rightsMD
 "read" node needs machine/group/stanford or machine/group/world.
 
---------
-MH: current work
---------
+Work with Chris to have Camel post requests to HydrusSolrController.
 
 --------
 Other
 --------
-
-Ask Willy about submitted_dt. Getting multiple values in SOLR doc.
 
 Remove all code that puts WF into the APO. Search for workflow_steps.
 
