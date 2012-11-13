@@ -42,7 +42,7 @@ describe(HydrusSolrController, :integration => true) do
     pids.each do |pid|
       visit "/hydrus_solr/reindex/#{pid}"
     end
-    sleep 5  # Need to give SOLR time to reindex.
+    sleep 6  # Need to give SOLR time to reindex.
     n, druids = get_solr_docs()
     n.should == n_initial
     pids.all? { |p| druids.include?(p) }.should == true
