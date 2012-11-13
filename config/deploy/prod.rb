@@ -11,3 +11,4 @@ role :db,  deployment_host, :primary => true
 
 after "deploy", "files:create_upload_symlink"
 after "deploy", "solr:reindex_workflow_objects"
+after "deploy", "app:add_date_to_version"

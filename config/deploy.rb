@@ -59,6 +59,12 @@ namespace :rvm do
   end
 end
 
+namespace :app do
+  task :add_date_to_version do
+    run "cd #{deploy_to}/current && date >> VERSION"
+  end
+end
+
 namespace :jetty do
   task :start do 
     run "cd #{deploy_to}/current && rake hydra:jetty:config && rake jetty:start"
@@ -82,6 +88,7 @@ namespace :solr do
     run "cd #{deploy_to}/current && rake hydrus:reindex_workflow_objects RAILS_ENV=#{rails_env}"
   end
 end
+
 namespace :files do
   task :refresh_fixtures do
     run "cd #{deploy_to}/current && rake hydrus:refresh_upload_files"
