@@ -2,10 +2,13 @@
 DOR integration
 --------
 
-Purl page of a published item: files cannot be downloaded, because rightsMD
-"read" node needs machine/group/stanford or machine/group/world.
+Check PURL pages:
+  http://purl-test.stanford.edu/mt280xn7114
+  http://purl-test.stanford.edu/jx878wn5122
 
 Work with Chris to have Camel post requests to HydrusSolrController.
+
+Set up production environment.
 
 --------
 Other

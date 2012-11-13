@@ -202,7 +202,8 @@ h2. Workflow steps and object_status
 General points:
 
 - The Hydrus application advances an object through the steps of the hydrusAssemblyWF.
-  However, the application does not consult the hydrusAssemblyWF for information.
+  However, the application does not consult the hydrusAssemblyWF for information. The
+  only exception is when checking whether the PURL page is ready.
 
 - Instead, the application consults hydrusProperty for all information related to
   the status of an object and its flow through the steps in the Hydrus deposit
