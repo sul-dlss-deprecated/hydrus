@@ -47,7 +47,14 @@ Or for a quieter output on the console:
 
 	Go to http://localhost:3000
 	
+	More info about the app:
 	
+	http://localhost:3000/about
+	
+	You can look at the about page in any environment to see what Rails environment you are running in, other app info,
+	 as well as the app version number (as defined in the VERSION file).  When deployed via capistrano, a timestamp 
+	is added to the version number so you know when it was deployed.
+
 h2. Default user
 
 Note that you will need to be logged in to see any objects, since there is an
