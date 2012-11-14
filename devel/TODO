@@ -2,17 +2,31 @@
 DOR integration
 --------
 
-Check PURL pages:
-  http://purl-test.stanford.edu/mt280xn7114
-  http://purl-test.stanford.edu/jx878wn5122
-
 Work with Chris to have Camel post requests to HydrusSolrController.
 
-Set up production environment.
+Set up production VM and prove that we can deploy to production.
+
+Create real uber Hydrus APO.
 
 --------
 Other
 --------
+
+Assess allowing collections to be opened without being published. In effect,
+this would be an open, draft Collection.
+
+After a collection has been published, is it editable? If so, do we need
+to push it through the accessioning pipeline again?
+
+Support item delete action.
+
+Gryphondor for Hydrus objects.
+
+Update to Rubydora 0.6.0, which might speed up integration tests. [We
+are blocked by dor-services gem restriction, which seems too strict. Speak
+with Jon D.]
+
+Should submit_for_approval() and resubmit() send email messages?
 
 Remove all code that puts WF into the APO. Search for workflow_steps.
 
@@ -21,11 +35,6 @@ various ways throughout the app, both in code and in tests. Create some utility
 methods to consolidate the needed behavior so that it will be easy to be
 consistent across the app with respect to display format, storage format, and
 timezone (for the latter, use GMT).
-
-Assess allowing collections to be opened without being published. In effect,
-this would be an open, draft Collection.
-
-Should submit_for_approval() and resubmit() send email messages?
 
 After finishing more thorough UI rework, look at: responsiveness issues;
 accessibility issues.
@@ -45,13 +54,12 @@ required fields have been saved.
 Refactor and write tests for redirect_if_not_correct_object_type: seems more
 complex than it needs to be.
 
-Disable edit tab for published items. [PETER NOTE: this already happens automatically
-when not in development mode.]
+Disable edit tab for published items. NOTE: this already happens automatically
+when not in development mode.
 
-After a collection has been published, is it editable? If so, do we need
-to push it through the accessioning pipeline again?
-
-Refactor purl_page_ready() to use workflow_ds_extension.
+Refactor purl_page_ready() to use workflow_ds_extension. Ask Chris J. whether
+the PURL app provides an API we could use to check PURL status, rather than
+querying workflow.
 
 Move tests for workflow_ds_extension out of gen_obj_spec and into its own spec.
 
@@ -70,10 +78,6 @@ during search results (at least not without mucking with the to_solr method).
 Collection Items page: Type column is temporarily commented out. Add back when
 we distinguish between different item types.
 
-Support item delete action.
-
-Gryphondor for Hydrus objects.
-
 Work with Willy to switch local dev environment to use a local workflow service
 rather than the workflow service on sul-lyberservices-dev.
 
@@ -81,10 +85,6 @@ Should the hydrus app be logging more systematically?
 
 Dashboard: implement hyperlinks to items-by-status. For example, "3 published"
 should be a hyperlink to the 3 published items for the applicable collection.
-
-Item view page. The "Test Version" image in the top left corner interferes with
-the user's ability to click the Collection hyperlink, especially when the
-Collection has a very short title.
 
 Collection/Item create. Rather than starting a new Item/Collection with blank
 text boxes, use the approach we have adopted elsewhere for non-required items:
@@ -109,12 +109,5 @@ Is this a problem?
 The home page is producing explosive volumes of SOLR logging. This occurs
 during the super() call in index() of catalog_controller.rb, which invokes a
 Blacklight method that logs the entire SOLR response. A bug has been filed; in
-the meantime, you can monkey-patch solr_helper.rb in Blacklight.
-
-File-level licensing. [new work]
-
-PURL display of Hydrus objects. [new work]
-
-Ability to hide files: individually or for entire object. [new work]
-
-Custom terms of use. [new work]
+the meantime, you can use the `rake server` task, which filters out most of the
+noise.
