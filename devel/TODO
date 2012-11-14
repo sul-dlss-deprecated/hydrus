@@ -6,6 +6,9 @@ Work with Chris to have Camel post requests to HydrusSolrController.
 
 Set up production VM and prove that we can deploy to production.
 
+Hydrus objects end up with 2 values for published_dt, because two WFs are using
+the published lifecycle.
+
 Create real uber Hydrus APO.
 
 --------

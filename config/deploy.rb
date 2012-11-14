@@ -1,11 +1,11 @@
-require "rvm/capistrano"                               # Load RVM's capistrano plugin.
+require "rvm/capistrano"
 require 'net/ssh/kerberos'
 require 'bundler/setup'
 require 'bundler/capistrano'
 require 'dlss/capistrano'
 require 'pathname'
 
-set :stages, %W(burndown dev dortest prod)
+set :stages, %W(burndown development dortest production)
 set :default_stage, "dortest"
 set :bundle_flags, "--quiet"
 set :rvm_ruby_string, "1.9.3@hydrus"
