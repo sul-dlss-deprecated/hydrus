@@ -50,4 +50,7 @@ public/plugin_assets/
 .project
 .buildpath
 
+.rvmrc
+deploy/.rvmrc
+
 ## PROJECT::SPECIFIC
