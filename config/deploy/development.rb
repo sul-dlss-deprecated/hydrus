@@ -20,6 +20,8 @@ end
 
 before "deploy", "jetty:stop"
 after "deploy", "jetty:start"
+after "deploy", "files:create_upload_symlink"
 after "deploy", "db:loadfixtures"
 after "jetty:start", "jetty:ingest_fixtures"
 after "deploy", "app:add_date_to_version"
+after "deploy", "solr:reindex_workflow_objects"
