@@ -1,0 +1,66 @@
+<mods>
+
+  <titleInfo>
+    <title>How Couples Meet and Stay Together</title>
+  </titleInfo>
+
+  <abstract>Blah blah blah</abstract>
+
+  <typeOfResource>Data</typeOfResource>
+
+  <name type="personal">
+    <namePart>Rosenfeld, Michael J.</namePart>
+    <role>
+      <roleTerm authority="marcrelator" type="text">Principal Investigator</roleTerm>
+    </role>
+  </name>
+
+  <name type="personal">
+    <namePart>Frisbee, Hannah</namePart>
+    <role>
+      <roleTerm type="text">Contributing Author</roleTerm>
+    </role>
+  </name>
+
+  <name type="corporate">
+    <namePart>US National Science Foundation, award SES-0751613</namePart>
+    <role>
+      <roleTerm authority="marcrelator" type="text">Sponsor</roleTerm>
+    </role>
+  </name>
+
+  <subject>
+    <topic>civil union</topic>
+  </subject>
+  <subject>
+    <topic>divorce</topic>
+  </subject>
+  <subject>
+    <topic>marriage</topic>
+  </subject>
+
+  <note type="preferred citation">Rosenfeld, Michael J.. 2011. Blah</note>
+  <note type="citation/reference">Nolan, K., Ward, L., Conroy, T. Blah</note> 
+  <note type="citation/reference">Nolan, K. (2010). Blah</note> 
+
+  <note type="contact">archivist1@example.com</note>
+
+  <relatedItem type="references">
+    <titleInfo>
+      <title>NPR, "blah blah"</title>
+    </titleInfo>
+    <location>
+      <url>http://some/url</url>
+    </location>
+  </relatedItem>
+
+  <relatedItem type="references">
+    <titleInfo>
+      <title>USA Today, Feb 11, 2010 story</title>
+    </titleInfo>
+    <location>
+      <url>http://some/url</url>
+    </location>
+  </relatedItem>
+
+</mods>

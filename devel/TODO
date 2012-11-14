@@ -57,9 +57,9 @@ complex than it needs to be.
 Disable edit tab for published items. NOTE: this already happens automatically
 when not in development mode.
 
-Refactor purl_page_ready() to use workflow_ds_extension. Ask Chris J. whether
-the PURL app provides an API we could use to check PURL status, rather than
-querying workflow.
+Refactor purl_page_ready() to use workflow_ds_extension. We could ask the PURL
+app directly: it returns a 404 (according to Chris J) if you ask for an object
+that is not known it its document cache.
 
 Move tests for workflow_ds_extension out of gen_obj_spec and into its own spec.
 
