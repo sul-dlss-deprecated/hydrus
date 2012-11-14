@@ -1,21 +1,26 @@
 -------------
 November 2012
 -------------
+
 * File Level Restrictions
- 	- support for file level licenses - entered as a description for now, need to adjust DOR data model later
- 	- support hiding of files, which means setting preserve=true, publish=false, shelve=false
- 	- add an option to simply hide all the files
+- Support for file level licenses - entered as a description for now, need to 
+  adjust DOR data model later.
+- Support hiding of files, which means setting preserve=true, publish=false, shelve=false.
+- Add an option to simply hide all the files.
+
 * Items 
-	- Allow user to enter custom terms of use by collection or item
+- Allow user to enter custom terms of use by collection or item.
+
 * Collections
-	- Add a "Save and Open Deposit" button
+- Add a "Save and Open Deposit" button.
+
 * Integration with DOR/PURL
-	- Refactor object status and fix state machine
-	- Set up production VM and deploy to production
-	- Allow deletion of non published items
-	- Create real uber Hydrus APO
-	- Debug rightsmetadata problems.
-	- Try and get an item to PURL page.
+- Set up production VM and deploy to production.
+- Create real uber Hydrus APO.
+- Allow deletion of non published items.
+- Refactor object status and fix state machine. [done]
+- Debug rightsmetadata problems. [done]
+- Try and get an item to PURL page. [done]
 
 
 --------------
