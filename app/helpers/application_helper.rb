@@ -81,13 +81,16 @@ module ApplicationHelper
   end
   
   def hydrus_object_setting_value(obj)
-    hydrus_is_empty?(obj) ? content_tag(:span, "not specified", :class => "unspecified") : obj
+    hydrus_is_empty?(obj) ? content_tag(:span, "not yet entered", :class => "unspecified") : obj
   end
 
+  def title_text(obj)
+    obj.title.blank? ? "Untitled" : obj.title
+  end
+  
   # a helper to create links to items that may or may not have titles yet
-  def item_title_link(item)
-    title_text=item.title.blank? ? "new #{item.object_type}" : item.title
-    return link_to(title_text, polymorphic_path(item))
+  def title_link(obj)
+    return link_to(title_text(obj), polymorphic_path(obj))
   end
     
   def hydrus_format_date(input_string)

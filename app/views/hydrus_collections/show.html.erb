@@ -1,4 +1,4 @@
-<%- @page_title = "#{@document_fedora.title} - #{application_name}" -%>
+<%=render :partial=>'shared/set_page_title' %>
 
 <%- sidebar_items << capture do -%>
 
@@ -17,7 +17,7 @@
   </span>
 
   <div id="object-content-wrapper">
-    <h3><%= hydrus_object_setting_value(@document_fedora.title) %></h3>
+    <h3><%= title_text(@document_fedora) %></h3>
     <h4 class="muted">Collection Settings</h4>
     <dl class="dl-horizontal collection-view">
       <%= render "hydrus_collections/basic_collection_metadata" %>

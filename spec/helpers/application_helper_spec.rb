@@ -64,8 +64,8 @@ describe ApplicationHelper do
   end
   
   it "should set the correct text for empty objects" do
-    hydrus_object_setting_value(nil).should == '<span class="unspecified">not specified</span>'
-    hydrus_object_setting_value('').should == '<span class="unspecified">not specified</span>'
+    hydrus_object_setting_value(nil).should == '<span class="unspecified">not yet entered</span>'
+    hydrus_object_setting_value('').should == '<span class="unspecified">not yet entered</span>'
     hydrus_object_setting_value('cool dude').should == 'cool dude'
   end
 
@@ -143,8 +143,10 @@ describe ApplicationHelper do
     it "should return item title links, showing special text when blank" do
       hi=Hydrus::Item.new
       hi2=Hydrus::Item.find('druid:oo000oo0001')
-      item_title_link(hi).should == '<a href="/items">new item</a>'
-      item_title_link(hi2).should == '<a href="/items/druid:oo000oo0001">How Couples Meet and Stay Together</a>'
+      title_text(hi).should == 'Untitled'
+      title_text(hi2).should == 'How Couples Meet and Stay Together'
+      title_link(hi).should == '<a href="/items">Untitled</a>'
+      title_link(hi2).should == '<a href="/items/druid:oo000oo0001">How Couples Meet and Stay Together</a>'
     end
     
   end

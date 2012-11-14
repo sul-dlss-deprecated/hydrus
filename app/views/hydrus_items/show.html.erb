@@ -1,4 +1,4 @@
-<%- @page_title = "#{@document_fedora.title} - #{application_name}" -%>
+<%=render :partial=>'shared/set_page_title' %>
 
 <% sidebar_items << capture do %>
 
@@ -15,18 +15,22 @@
   </div>
 
   <div id="object-content-wrapper">
-  	<h3><%= hydrus_object_setting_value(@document_fedora.title) %></h3>
+  	<h3><%= title_text(@document_fedora) %></h3>
 		<h4 class="muted">Item Settings</h4>
 	  <dl class="dl-horizontal item-view clearfix">
 
 			<%= render "hydrus_items/basic_item_metadata" %>
 
 			 <div class="collection-items">
-			     <h4>People and organizations responsible for this item</h4>
-			    <% @document_fedora.actors.each do |actor| %>
-			      <dt><%= actor.role %></dt>
-			      <dd><%= actor.name %></dd>
-			    <% end %>
+			     <h4>Contributors</h4>
+					<% if hydrus_is_empty?(@document_fedora.actors) %>
+						  <dt>Author</dt><dd><%= hydrus_object_setting_value(@document_fedora.actors)%></dd>
+					<% else %>
+				    <% @document_fedora.actors.each do |actor| %>
+				      <dt><%= actor.role %></dt>
+				      <dd><%= actor.name %></dd>
+				    <% end %>
+					<% end %>
 			</div>
 
 		  <% unless @document_fedora.files.size == 0 %>
@@ -64,28 +68,30 @@
 							<% end %>						
 			</div>
 
-			 <div class="collection-items">
-			     <h4>Related Links and Citations</h4>
-		     <% unless hydrus_is_empty?(@document_fedora.preferred_citation) %>
-		       <dt>Cite this item as</dt>
-		       <dd><%= @document_fedora.preferred_citation %></dd>
-		     <% end %>
+			 <% unless hydrus_is_empty?(@document_fedora.preferred_citation) && hydrus_is_empty?(@document_fedora.related_citation) && hydrus_is_empty?(@document_fedora.related_items) %>
+				 <div class="collection-items">
+				     <h4>Related Links and Citations</h4>
+			     <% unless hydrus_is_empty?(@document_fedora.preferred_citation) %>
+			       <dt>Cite this item as</dt>
+			       <dd><%= @document_fedora.preferred_citation %></dd>
+			     <% end %>
 		 
-		     <% unless hydrus_is_empty?(@document_fedora.related_citation) %>
-		       <% @document_fedora.related_citation.each_with_index do |related_citation, index| %>
-		         <dt class="<%= 'hidden-label' if index > 0 %>">Related published work</dt>
-		         <dd><%= related_citation %></dd>
-		       <% end %>
-		     <% end %>
+			     <% unless hydrus_is_empty?(@document_fedora.related_citation) %>
+			       <% @document_fedora.related_citation.each_with_index do |related_citation, index| %>
+			         <dt class="<%= 'hidden-label' if index > 0 %>">Related published work</dt>
+			         <dd><%= related_citation %></dd>
+			       <% end %>
+			     <% end %>
 		 
-		     <% unless hydrus_is_empty?(@document_fedora.related_items) %>
-		       <% @document_fedora.related_items.each_with_index do |related_item, index| %>
-		         <dt class="<%= 'hidden-label' if index > 0 %>">Related links</dt>
-		         <dd><%= related_item.url.blank? ? hydrus_object_setting_value(related_item.url) : link_to(related_item.title, related_item.url) %></dd>
-		       <% end %>
-		     <% end %>
-		 </div>
-
+			     <% unless hydrus_is_empty?(@document_fedora.related_items) %>
+			       <% @document_fedora.related_items.each_with_index do |related_item, index| %>
+			         <dt class="<%= 'hidden-label' if index > 0 %>">Related links</dt>
+			         <dd><%= related_item.url.blank? ? hydrus_object_setting_value(related_item.url) : link_to(related_item.title, related_item.url) %></dd>
+			       <% end %>
+			     <% end %>
+			 	</div>
+		 <% end %>
+		
 		 <div class="collection-items">
 			 <h4>Release, Visibility and License</h4>
 	    <dt>Visibility</dt>

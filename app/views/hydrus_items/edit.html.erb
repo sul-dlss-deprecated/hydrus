@@ -1,4 +1,5 @@
-<%- @page_title = "Editing '#{@document_fedora.title}' - #{application_name}" -%>
+<%=render :partial=>'shared/set_page_title', :locals=>{:action=>"Editing"} %>
+
 <%- object_type = @document_fedora.object_type -%>
 <% sidebar_items << capture do %>
 	<div id="status-box"><%= render :partial => "status_box"%></div>
@@ -13,7 +14,7 @@
   </div>
 </div>
 <div id="object-content-wrapper">
-  <h3><%= hydrus_object_setting_value(@document_fedora.title) %></h3>
+  <h3><%= title_text(@document_fedora) %></h3>
   <h4 class="muted">Item Settings</h4>
 <%= form_for(@document_fedora, :method => 'PUT', :html => {:class=>"step", :multipart=>true, :"data-track-state-change"=>"true", :novalidate=>""}) do |f| -%>
   <%= hidden_field_tag("object_id", params[:id]) -%>
@@ -35,7 +36,7 @@
     <%- end -%>
   </div>
 
-  <%= hydrus_form_header(:required=>true) {"People and organizations responsible for this #{object_type}"} -%>
+  <%= hydrus_form_header(:required=>true) {"Contributors"} -%>
   <div class="row field-group">
     <!-- <%= hydrus_form_label do %> -->
       <!-- <%= f.label :person_0, "People" -%> -->
@@ -190,13 +191,6 @@
         <%= Hydrus::Collection.license_human(@document_fedora.collection.license) %>
       </span>
     <% end %>
-    </div>
-  </div>
-
-  <%= hydrus_form_header{"Terms of Use"} %>
-  <div class="row field-group">
-    <div class="span9">
-      People who can discover and download this item will agree to these <%=link_to("terms of deposit", terms_of_deposit_path(@document_fedora.id), :target=>'_blank', :class=>'tod_link', :"data-url" => "#{terms_of_deposit_path(@document_fedora.id)}&from=#{controller.action_name}")%>.
     </div>
   </div>
 

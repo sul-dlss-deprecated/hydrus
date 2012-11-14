@@ -16,7 +16,7 @@
       <tbody>
       <% @collections.each do |c| %>
         <tr>
-          <td><%= item_title_link(c) %></td>
+          <td><%= title_link(c) %></td>
           <td>
             <%=
               rs = c.roles_of_person(current_user.to_s)

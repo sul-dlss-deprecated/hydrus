@@ -1,4 +1,5 @@
-<%- @page_title = "Editing '#{@document_fedora.title}' - #{application_name}" -%>
+<%=render :partial=>'shared/set_page_title', :locals=>{:action=>"Editing"} %>
+
 <%- object_type = @document_fedora.object_type -%>
 <%= form_for(@document_fedora, :method => 'PUT', :html => {:class => "step", :"data-track-state-change"=>"true", :novalidate=>""}) do |f| -%>
 
@@ -20,7 +21,7 @@
   </div>
 </div>
 <div id="object-content-wrapper">
-  <h3><%= hydrus_object_setting_value(@document_fedora.title) %></h3>
+  <h3><%= title_text(@document_fedora) %></h3>
   <h4 class="muted">Collection Settings</h4>
 
     <%= hydrus_form_header(:required=>true, :first=>true) {"Name, description, contact"} %>
@@ -29,7 +30,7 @@
         <%= f.label :title, "Collection name" %>
       <%- end -%>
       <%= hydrus_form_value do %>
-        <%= f.text_field :title, :value => (@document_fedora.title || ""), :required => true %>
+        <%= f.text_field :title, :value => (@document_fedora.title || ""), :size=>60, :required => true %>
       <%- end -%>
     </div>
     <div class="row field-group">
@@ -37,7 +38,7 @@
         <%= f.label :abstract, "Description" %>
       <%- end -%>
       <%= hydrus_form_value(:class=>"short-textarea") do %>
-        <%= f.text_area :abstract, :value => (@document_fedora.abstract || ""),:required => true %>
+        <%= f.text_area :abstract, :value => (@document_fedora.abstract || ""),:cols=>60, :required => true %>
       <%- end -%>
     </div>
     <div class="row field-group">
@@ -45,7 +46,7 @@
         Contact email
       <%- end -%>
       <%= hydrus_form_value do %>
-        <%= f.text_field :contact, :value => (@document_fedora.contact || ""),:required => true%>
+        <%= f.text_field :contact, :value => (@document_fedora.contact || ""), :size=>60,:required => true%>
       <%- end -%>
     </div>
 
