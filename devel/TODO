@@ -11,8 +11,7 @@ Deal with time zone issues
 - do we then have to convert back to local time for zone for display to the user?
 
 Support discard of an unpublished item and collection
-- Need to delete objects from local solr
-- Need to test delete confirmation with JS off
+- Need to delete objects from local solr in application_controller delete_object method
 
 Support delete of a file in an unpublished item
 

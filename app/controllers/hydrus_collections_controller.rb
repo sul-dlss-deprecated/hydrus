@@ -36,8 +36,13 @@ class HydrusCollectionsController < ApplicationController
   end
 
   def discard_confirmation
-    @id=params[:id]
-    render 'shared/discard_confirmation'
+    if @document_fedora.is_destroyable && can?(:edit, @document_fedora)
+      @id=params[:id]
+      render 'shared/discard_confirmation'
+    else
+      flash[:warning]="You do not have permissions to delete this collection."
+      redirect_to root_url 
+    end   
   end
 
   def new

@@ -42,6 +42,16 @@ class HydrusItemsController < ApplicationController
      end
     redirect_to polymorphic_path([collection,:items])
   end
+
+  def discard_confirmation
+    if @document_fedora.is_destroyable && can?(:edit, @document_fedora)
+      @id=params[:id]
+      render 'shared/discard_confirmation'
+    else
+     flash[:warning]="You do not have permissions to delete this item."
+     redirect_to polymorphic_path([@document_fedora.collection,:items])
+    end
+  end
   
   def new
     coll_pid = params[:collection]
@@ -172,11 +182,6 @@ class HydrusItemsController < ApplicationController
       format.html
       format.js
     end
-  end
-
-  def discard_confirmation
-    @id=params[:id]
-    render 'shared/discard_confirmation'
   end
   
   def send_purl_email
