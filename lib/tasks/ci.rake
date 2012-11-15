@@ -53,7 +53,7 @@ task :ci_alt do
   dst   = File.absolute_path(ENV['DEST'] || '../alt_hydrus')
   files = "lib/tasks/ci.rake config/fedora.yml config/solr.yml"
   cmds = [
-    "rsync -a -q #{src}/ #{dst}/",
+    "rsync --archive --delete --quiet #{src}/ #{dst}/",
     "cd #{dst}",
     "perl -p -i -e 's/8983/8984/g' #{files}",
     "rake ci",
