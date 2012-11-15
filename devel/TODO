@@ -2,8 +2,6 @@
 Development Tasks - 14 November 2012
 ------------------
 
-Debug multiple submit times in solr (multiple lifecycle problem)
-
 Dates and times. We are creating, parsing, displaying dates and times in
 various ways throughout the app, both in code and in tests. Create some utility
 methods to consolidate the needed behavior so that it will be easy to be
@@ -19,23 +17,18 @@ Terms of Deposit
 
 Keyword metadata field - at least one keyword is required
 
-Item View and Item Edit pages - text changes
--- Add "People and organizations responsible for this item" as a subtitle for the contributors section? (check with Gary re: design)
-
 --------
 DOR integration
 --------
 
-Work with Chris to have Camel post requests to HydrusSolrController.
-
-Hydrus objects end up with 2 values for published_dt, because two WFs are using
-the published lifecycle. [Waiting on new dor-services gem].
-
-Try to use hydrus-prod. [Waiting on new dor-services gem in production.]
-
 Create real uber Hydrus APO on test and prod. Get druid on test. Upload
 oo000oo0000 under that druid. Export. Import to prod. Register that druid
 with suri on prod.
+
+Hydrus objects end up with 2 values for published_dt, because two WFs are using
+the published lifecycle. [Waiting on new dor-services gem.]
+
+Try to use hydrus-prod. [Waiting on new dor-services gem in production.]
 
 --------
 Other
