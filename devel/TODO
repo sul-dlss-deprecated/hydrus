@@ -10,46 +10,48 @@ timezone (for the latter, use GMT).
 - Convert back to local time for zone for display to the user -- (pacific for now, timezone per user later if needed)
 - Display and parse dates consistently with helpers
 
-Support delete of a file in an unpublished item
+Support delete of a file in an unpublished item.
 
-Terms of Deposit
--- create PDF and tie to save action in popup window
+Terms of Deposit: create PDF and tie to save action in popup window.
 
-Keyword metadata field - at least one keyword is required
+Keywords: require at least one.
 
 --------
 DOR integration
 --------
-
-Create real uber Hydrus APO on test and prod. Get druid on test. Upload
-oo000oo0000 under that druid. Export. Import to prod. Register that druid
-with suri on prod.
 
 Hydrus objects end up with 2 values for published_dt, because two WFs are using
 the published lifecycle. [Waiting on new dor-services gem.]
 
 Try to use hydrus-prod. [Waiting on new dor-services gem in production.]
 
+Set up Camel to send messages to hydrus-prod. [Waiting until we start running
+the app on hydrus-prod.]
+
 --------
 Other
 --------
 
-Move Terms of Deposit acceptance pop-up so it shows (if needed) when an item is created.
+Create a view for hydrus admin users to list all collections, regardless of
+roleMD.
 
-Desc metadata: remove emtpy stuff and improve formatting. [Waiting
-on details from Hannah]
+Move Terms of Deposit acceptance pop-up so it shows (if needed) when an item is
+created.
+
+Desc metadata: remove emtpy stuff and improve formatting. [Waiting on details
+from Hannah]
 
 Assess allowing collections to be opened without being published. In effect,
 this would be an open, draft Collection.
 
-After a collection has been published, is it editable? If so, do we need
-to push it through the accessioning pipeline again?
+After a collection has been published, is it editable? If so, do we need to
+push it through the accessioning pipeline again?
 
 Gryphondor for Hydrus objects.
 
-Update to Rubydora 0.6.0, which might speed up integration tests. [We
-are blocked by dor-services gem restriction, which seems too strict. Speak
-with Jon D.]
+Update to Rubydora 0.6.0, which might speed up integration tests. [We are
+blocked by dor-services gem restriction, which seems too strict. Speak with Jon
+D.]
 
 Should submit_for_approval() and resubmit() send email messages?
 
@@ -86,10 +88,10 @@ identify tests that invoke those methods in a non-druid-minting context.
 
 rightsMD: Refactor to take better advantage of OM and generic_ds.rb.
 
-Consider moving the actual collection-depositor roleMD info from the APO to
-the Collection, for two reasons: (1) it parallels the roleMD stored in the
-Item; (2) without it, we don't have access to the collection depositor
-during search results (at least not without mucking with the to_solr method).
+Consider moving the actual collection-depositor roleMD info from the APO to the
+Collection, for two reasons: (1) it parallels the roleMD stored in the Item;
+(2) without it, we don't have access to the collection depositor during search
+results (at least not without mucking with the to_solr method).
 
 Collection Items page: Type column is temporarily commented out. Add back when
 we distinguish between different item types.
@@ -119,8 +121,8 @@ needs to be created -- need more details].
 Collection create: APO.roleMetadata: set the value of <name> for the
 collection-manager [waiting on LDAP].
 
-Item view page: the actions box div is called "div.collection-actions".
-Is this a problem?
+Item view page: the actions box div is called "div.collection-actions".  Is
+this a problem?
 
 The home page is producing explosive volumes of SOLR logging. This occurs
 during the super() call in index() of catalog_controller.rb, which invokes a
