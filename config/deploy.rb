@@ -1,4 +1,3 @@
-require "rvm/capistrano"
 require 'net/ssh/kerberos'
 require 'bundler/setup'
 require 'bundler/capistrano'
@@ -8,13 +7,8 @@ require 'pathname'
 set :stages, %W(burndown development dortest production)
 set :default_stage, "dortest"
 set :bundle_flags, "--quiet"
-set :rvm_ruby_string, "1.9.3@hydrus"
-set :rvm_type, :system
 
 require 'capistrano/ext/multistage'
-
-after "deploy:assets:symlink", "rvm:trust_rvmrc"
-#after "deploy:restart", "dlss:log_release"
 
 set :shared_children, %w(
   log 
@@ -47,16 +41,10 @@ set :keep_releases, 2
 set :deploy_to, "#{destination}/#{application}"
 
 set :branch do
-# DEFAULT_TAG = `git tag`.split("\n").last
+  # DEFAULT_TAG = `git tag`.split("\n").last
   tag = Capistrano::CLI.ui.ask "Tag or branch to deploy (make sure to push the tag or branch first): [#{DEFAULT_TAG}] "
   tag = DEFAULT_TAG if tag.empty?
   tag
-end
-
-namespace :rvm do
-  task :trust_rvmrc do
-    run "/usr/local/rvm/bin/rvm rvmrc trust #{latest_release}"
-  end
 end
 
 namespace :app do
