@@ -4,12 +4,13 @@
 def create_test_collection(*args)
   # Create a new Collection and set all required values.
   user                       = args.shift || 'archivist1'
+  user                       = User.new(:email => "#{user}@example.com")
   hc                         = Hydrus::Collection.create(user)
   hc.title                   = "Title for: #{hc.pid}"
   hc.abstract                = 'abstract'
   hc.contact                 = 'contact'
   hc.embargo_option          = 'varies'
-  hc.embargo                 = '2 years'
+  hc.embargo_terms           = '2 years'
   hc.license_option          = 'varies'
   hc.license                 = 'cc-by-nc'
   hc.visibility_option       = 'varies'
@@ -26,6 +27,7 @@ def create_test_item(*args)
   # Create a new Item and set all required values.
   hc_pid         = args.shift
   user           = args.shift || 'archivist1'
+  user           = User.new(:email => "#{user}@example.com")
   hc_pid         = "druid:#{hc_pid}" unless hc_pid =~ /^druid:/
   hi             = Hydrus::Item.create(hc_pid, user)
   hi.title       = "Title for: #{hi.pid}"

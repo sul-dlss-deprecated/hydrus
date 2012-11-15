@@ -20,6 +20,9 @@ Keywords: require at least one.
 DOR integration
 --------
 
+Deploy to hydrus-test, and delete objects in the dortest enironment.
+Run this: `RAILS_ENV=dortest rake hydrus:delete_objects pid=DRUID:COLLECTION`
+
 Hydrus objects end up with 2 values for published_dt, because two WFs are using
 the published lifecycle. [Waiting on new dor-services gem.]
 
@@ -31,6 +34,19 @@ the app on hydrus-prod.]
 --------
 Other
 --------
+
+Protect actions at the model level:
+    # Collection.create
+    # Will need to make cannot_do() callable by Collection class.
+    cannot_do(:create) unless Hydrus::Authorizable.can_create_collections(user)
+
+    # Item.create
+    coll.cannot_do(:create_item_in) unless coll.is_open()
+
+    # Item:
+    accept_terms_of_deposit()
+
+Rake task to list all Hydrus pids.
 
 Create a view for hydrus admin users to list all collections, regardless of
 roleMD.
