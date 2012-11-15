@@ -17,7 +17,13 @@ h2. Getting your environment setup:
 
 	git clone git@github.com:sul-dlss/hydrus.git
 	cd hydrus
-
+	
+	cp .rvmrc.example .rvmrc
+	cp deploy/.rvmrc.example deploy/.rvmrc
+	
+	cd ..
+	cd hydrus
+	
 	bundle install
 
 	git submodule init
