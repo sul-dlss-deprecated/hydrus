@@ -4,7 +4,11 @@ Development Tasks - 14 November 2012
 
 Debug multiple submit times in solr (multiple lifecycle problem)
 
-Use standard date format
+Dates and times. We are creating, parsing, displaying dates and times in
+various ways throughout the app, both in code and in tests. Create some utility
+methods to consolidate the needed behavior so that it will be easy to be
+consistent across the app with respect to display format, storage format, and
+timezone (for the latter, use GMT).
 - Date must be stored in a format consistent with DOR’s (UTC).
 - Convert back to local time for zone for display to the user -- (pacific for now, timezone per user later if needed)
 - Display and parse dates consistently with helpers
@@ -39,13 +43,13 @@ Create real uber Hydrus APO.
 Other
 --------
 
+Move Terms of Deposit acceptance pop-up so it shows (if needed) when an item is created.
+
 Assess allowing collections to be opened without being published. In effect,
 this would be an open, draft Collection.
 
 After a collection has been published, is it editable? If so, do we need
 to push it through the accessioning pipeline again?
-
-Support item delete action.
 
 Gryphondor for Hydrus objects.
 
@@ -56,12 +60,6 @@ with Jon D.]
 Should submit_for_approval() and resubmit() send email messages?
 
 Remove all code that puts WF into the APO. Search for workflow_steps.
-
-Dates and times. We are creating, parsing, displaying dates and times in
-various ways throughout the app, both in code and in tests. Create some utility
-methods to consolidate the needed behavior so that it will be easy to be
-consistent across the app with respect to display format, storage format, and
-timezone (for the latter, use GMT).
 
 After finishing more thorough UI rework, look at: responsiveness issues;
 accessibility issues.
@@ -74,9 +72,6 @@ Update SUL-chrome gem to latest Bootstrap (needed to be able to use the
 unchecked checkbox icon, which is not available in our current SUL-chrome gem).
 When this is done, change "icon-minus" to "icon-check-empty" in the
 select_status_checkbox_icon helper method (application_helper.rb).
-
-Item View page: Fix conditional display of metadata sections when only some
-required fields have been saved.
 
 Refactor and write tests for redirect_if_not_correct_object_type: seems more
 complex than it needs to be.
