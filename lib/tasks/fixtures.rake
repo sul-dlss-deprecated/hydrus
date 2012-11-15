@@ -90,7 +90,7 @@ namespace :hydrus do
         puts "Deleteing #{pid}"
         Dor::Config.fedora.client["objects/#{pid}"].delete
         Dor::SearchService.solr.delete_by_id(pid)
-        #TODO delete from our local solr index
+        Dor::SearchService.solr.commit
       end
     end
   end
