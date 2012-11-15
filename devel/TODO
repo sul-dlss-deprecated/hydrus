@@ -32,12 +32,14 @@ DOR integration
 
 Work with Chris to have Camel post requests to HydrusSolrController.
 
-Set up production VM and prove that we can deploy to production.
-
 Hydrus objects end up with 2 values for published_dt, because two WFs are using
 the published lifecycle.
 
-Create real uber Hydrus APO.
+Try to use hydrus-prod. [Waiting on new dor-services gem in production.]
+
+Create real uber Hydrus APO on test and prod. Get druid on test. Upload
+oo000oo0000 under that druid. Export. Import to prod. Register that druid
+with suri on prod.
 
 --------
 Other
