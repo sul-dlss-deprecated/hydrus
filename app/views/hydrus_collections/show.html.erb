@@ -18,12 +18,9 @@
 
   <div id="object-content-wrapper">
     <h3><%= title_text(@document_fedora) %></h3>
-    <h4 class="muted">Collection Settings</h4>
+    <h4 class="muted">Collection Details</h4>
     <dl class="dl-horizontal collection-view">
       <%= render "hydrus_collections/basic_collection_metadata" %>
-
-  <!--     <dt>APO PID </dt>
-      <dd><%= @document_fedora.apo.pid %></dd> -->
 
     </dl>
 
@@ -98,7 +95,7 @@
     </div>
 
     <div class="collection-items">
-         <h4>Other contributors to this collection</h4>
+         <h4>Collection participants</h4>
     			<dl class="dl-horizontal collection-view">
     				<% Hydrus::Responsible.role_labels(:only_labels,:collection_level).each do |role, role_label| %>
     	       <tr class="document <%= cycle("even","odd") %>">

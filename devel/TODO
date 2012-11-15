@@ -1,3 +1,30 @@
+------------------
+Development Tasks - 14 November 2012
+------------------
+
+Debug multiple submit times in solr (multiple lifecycle problem)
+
+Use standard date format - Date must be stored in a format consistent with DOR’s (UTC).
+
+Deal with time zone issues
+- do we store times in local time or UTC (currently app time zone is set to UTC; but all storage is local time, except for "create date" which comes from fedora)?
+- do we then have to convert back to local time for zone for display to the user?
+
+Support discard of an unpublished item
+
+Support delete of a file in an unpublished item
+
+Terms of Deposit
+-- create PDF and tie to save action in popup window
+
+Keyword metadata field - at least one keyword is required
+
+Item View and Item Edit pages - text changes
+-- Add "People and organizations responsible for this item" as a subtitle for the contributors section? (check with Gary re: design)
+
+Homepage dashboard - remove approval/review statuses for items when not relevant (“0 waiting for approval; 0 item returned)”
+
+
 --------
 DOR integration
 --------

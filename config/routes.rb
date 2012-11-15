@@ -40,6 +40,7 @@ Hydrus::Application.routes.draw do
   post "items/approve/:id"             => "hydrus_items#approve",             :as => 'approve_item'
   post "items/disapprove/:id"          => "hydrus_items#disapprove",          :as => 'disapprove_item'
   post "items/resubmit/:id"            => "hydrus_items#resubmit",            :as => 'resubmit_item'
+  post "items/send_purl_email"         => "hydrus_items#send_purl_email",     :as => 'send_purl_email'
 
   # Actions for the HydrusSolrController.
   match "hydrus_solr/reindex/:id"           => "hydrus_solr#reindex",           :as => 'reindex'

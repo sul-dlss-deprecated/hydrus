@@ -57,7 +57,8 @@
       CREATED="2011-07-05T20:49:25.801Z" MIMETYPE="text/xml" SIZE="345">
       <foxml:xmlContent>
         <hydrusProperties>
-					<submitTime>11/01/2012</submitTime>
+					<publishTime>11/01/2012</publishTime>
+					<lastModifyTime>11/01/2012 00:00:10</lastModifyTime>
           <reviewedReleaseSettings>true</reviewedReleaseSettings>		  
           <acceptedTermsOfDeposit>true</acceptedTermsOfDeposit>
           <objectStatus>published</objectStatus>

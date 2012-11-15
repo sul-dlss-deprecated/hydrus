@@ -91,7 +91,6 @@ class Hydrus::Item < Hydrus::GenericObject
   # Publish the Item directly, bypassing human approval.
   def publish_directly
     cannot_do(:publish_directly) unless is_publishable()
-    self.submit_time = Time.now.in_time_zone.to_s
     complete_workflow_step('submit')
     do_publish()
   end
@@ -100,6 +99,7 @@ class Hydrus::Item < Hydrus::GenericObject
   # Called by publish_directly() and approve(), not by the controller.
   def do_publish
     t = title()
+    self.publish_time   = Time.now.to_s
     identityMetadata.objectLabel = t
     self.label                   = t
     self.object_status = 'published'
@@ -112,8 +112,8 @@ class Hydrus::Item < Hydrus::GenericObject
   # This method handles the initial submission, not resubmissions.
   def submit_for_approval
     cannot_do(:submit_for_approval) unless is_submittable_for_approval()
+    self.submit_for_approval_time   = Time.now.to_s
     self.object_status = 'awaiting_approval'
-    self.submit_time   = Time.now.in_time_zone.to_s
     complete_workflow_step('submit')
     events.add_event('hydrus', @current_user, "Item submitted for approval")
   end
@@ -139,6 +139,7 @@ class Hydrus::Item < Hydrus::GenericObject
   # Resubmits an object after it was disapproved/returned.
   def resubmit
     cannot_do(:resubmit) unless is_resubmittable()
+    self.submit_for_approval_time   = Time.now.to_s    # set submit for appoval time to be the last submission for approval
     self.object_status = 'awaiting_approval'
     hydrusProperties.remove_nodes(:disapproval_reason)
     events.add_event('hydrus', @current_user, "Item resubmitted for approval")
@@ -160,7 +161,7 @@ class Hydrus::Item < Hydrus::GenericObject
       # And if so, have they agreed within the last year?
       users=coll.users_accepted_terms_of_deposit 
       if users && users.keys.include?(user) 
-        return (Time.now.in_time_zone - 1.year) > coll.users_accepted_terms_of_deposit[user].to_datetime
+        return (Time.now - 1.year) > coll.users_accepted_terms_of_deposit[user].to_datetime
       else
         return true
       end
@@ -277,12 +278,12 @@ class Hydrus::Item < Hydrus::GenericObject
   # accepts terms of deposit for the given user
   def accept_terms_of_deposit(user)
     self.accepted_terms_of_deposit="true"
-    self.collection.accept_terms_of_deposit(user,Time.now.in_time_zone) # update the collection level user acceptance list
+    self.collection.accept_terms_of_deposit(user,Time.now) # update the collection level user acceptance list
     events.add_event('hydrus', user, 'Terms of deposit accepted')
   end
   
   def beginning_of_embargo_range
-    submit_time ? Date.parse(submit_time).strftime("%m/%d/%Y") :
+    publish_time ? Date.parse(publish_time).strftime("%m/%d/%Y") :
                   Date.today.strftime("%m/%d/%Y")
   end
 

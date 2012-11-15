@@ -81,7 +81,7 @@ module ApplicationHelper
   end
   
   def hydrus_object_setting_value(obj)
-    hydrus_is_empty?(obj) ? content_tag(:span, "not yet entered", :class => "unspecified") : obj
+    hydrus_is_empty?(obj) ? content_tag(:span, "to be entered", :class => "unspecified") : obj
   end
 
   def title_text(obj)

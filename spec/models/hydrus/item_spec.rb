@@ -331,11 +331,11 @@ describe Hydrus::Item do
       end
       describe "date ranges" do
         it "should return today's date if there is no completed submit time in the workflowDataStream",:integration => true do
-          subject.stub(:submit_time).and_return(nil)
+          subject.stub(:publish_time).and_return(nil)
           subject.beginning_of_embargo_range.should == Date.today.strftime("%m/%d/%Y")
         end
         it "should return the submit time if one is available" do
-          subject.stub(:submit_time).and_return(Date.strptime("08/01/2012", "%m/%d/%Y").to_s)
+          subject.stub(:publish_time).and_return(Date.strptime("08/01/2012", "%m/%d/%Y").to_s)
           subject.beginning_of_embargo_range.should == "08/01/2012"
         end
 
@@ -451,7 +451,7 @@ describe Hydrus::Item do
       item.stub(:collection).and_return(coll)
       item.embargo = "future"
       item.embargo_date = (Date.today + 2.years).strftime("%m/%d/%Y")
-      item.stub(:submit_time).and_return Date.today.to_s
+      item.stub(:publish_time).and_return Date.today.to_s
       item.valid?.should == false
       item.errors.messages.should have_key(:embargo_date)
       item.errors.messages[:embargo_date].first.should =~ /must be in the date range \d{2}\/\d{2}\/\d{4} - \d{2}\/\d{2}\/\d{4}/
@@ -674,24 +674,24 @@ describe Hydrus::Item do
       expect { @hi.publish_directly }.to raise_exception(@cannot_do_regex)
     end
 
-    it "item is publishable: should call the expected methods and set submit_time" do
+    it "item is publishable: should call the expected methods" do
       @hi.stub(:is_publishable).and_return(true)
       @hi.should_receive(:complete_workflow_step).with('submit')
       @hi.should_receive(:do_publish)
-      @hi.submit_time.should be_blank
       @hi.publish_directly
-      @hi.submit_time.should_not be_blank
     end
 
   end
 
-  it "do_publish() should set labels/status and call expected methods" do
+  it "do_publish() should set labels/status and call expected methods and set publish_time" do
     exp = 'foobar title'
     @hi.stub(:title).and_return(exp)
     @hi.should_receive(:complete_workflow_step).with('approve')
     @hi.should_receive(:start_common_assembly)
+    @hi.publish_time.should be_blank
     @hi.do_publish
     @hi.label.should == exp
+    @hi.publish_time.should_not be_blank    
     @hi.object_status.should == 'published'
   end
 
@@ -702,13 +702,13 @@ describe Hydrus::Item do
       expect { @hi.submit_for_approval }.to raise_exception(@cannot_do_regex)
     end
 
-    it "item is submittable: should set submit_time and status, and call expected methods" do
+    it "item is submittable: should set publish_time and status, and call expected methods" do
       @hi.stub(:is_submittable_for_approval).and_return(true)
       @hi.should_receive(:complete_workflow_step).with('submit')
-      @hi.submit_time.should be_blank
+      @hi.submit_for_approval_time.should be_blank
       @hi.object_status.should_not == 'awaiting_approval'
       @hi.submit_for_approval
-      @hi.submit_time.should_not be_blank
+      @hi.submit_for_approval_time.should_not be_blank
       @hi.object_status.should == 'awaiting_approval'
     end
 
@@ -807,7 +807,7 @@ describe Hydrus::Item do
 
   it "should indicate if we do not require terms acceptance if user already accepted terms on another item in the same collection, and it was less than 1 year ago" do
     @coll=Hydrus::Collection.new
-    @coll.stub(:users_accepted_terms_of_deposit).and_return({'archivist1'=>Time.now.in_time_zone - 364.days,'archivist2'=>'10-12-2009 00:00:05'})
+    @coll.stub(:users_accepted_terms_of_deposit).and_return({'archivist1'=>Time.now - 364.days,'archivist2'=>'10-12-2009 00:00:05'})
     @hi.stub(:accepted_terms_of_deposit).and_return(false)
     @hi.stub(:collection).and_return(@coll)
     @hi.requires_terms_acceptance('archivist1').should be false

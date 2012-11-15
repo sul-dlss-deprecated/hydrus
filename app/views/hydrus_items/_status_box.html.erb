@@ -4,7 +4,6 @@
 				<span id="status-label" class="label label-<%=button_color(@document_fedora.status_label)%> status-label"><%=@document_fedora.status_label.capitalize%></span>
    </div>
 	 <div class="box-body">
-	 	<% unless @document_fedora.is_published %>
 			
 			<%=check_box_tag 'required_fields_checkbox', true, @document_fedora.required_fields_completed?, :disabled=>true%> 
 			<label for="required_fields_checkbox">
@@ -21,22 +20,25 @@
 			<%=check_box_tag 'release_reviewed_checkbox', true, @document_fedora.reviewed_release_settings?, :disabled=>true%>
 			<label for="release_reviewed_checkbox">
 				<%= select_status_checkbox_icon(@document_fedora.reviewed_release_settings?) %>
-				Release and visibility of content settings reviewed
+				Release and visibility settings reviewed
 			</label>
 
 			<%=check_box_tag 'depositor_agreement_checkbox', true, @document_fedora.terms_of_deposit_accepted?, :disabled=>true%> 
 			<label for="depositor_agreement_checkbox">
 				<%= select_status_checkbox_icon(@document_fedora.terms_of_deposit_accepted?) %>
-				Depositor agreement with Terms of Deposit
+				Terms of Deposit accepted
 			</label>
 
 			<% if to_bool(@document_fedora.requires_human_approval) %>
-				<%=check_box_tag 'item_submitted_approval_checkbox', true, @document_fedora.is_awaiting_approval, :disabled=>true%> 
-				<label for="item_submitted_approval_checkbox">
-					<%= select_status_checkbox_icon(@document_fedora.is_awaiting_approval) %>
-					Item submitted for approval
-				</label>
 			
+				<% unless @document_fedora.is_published %>
+					<%=check_box_tag 'item_submitted_approval_checkbox', true, @document_fedora.is_awaiting_approval, :disabled=>true%> 
+					<label for="item_submitted_approval_checkbox">
+						<%= select_status_checkbox_icon(@document_fedora.is_awaiting_approval) %>
+						Item submitted for approval
+					</label>
+				 <% end %>
+				
 				<%=check_box_tag 'item_approved_checkbox', true, @document_fedora.is_published, :disabled=>true%> 
 				<label for="item_approved_checkbox">
 					<%= select_status_checkbox_icon(@document_fedora.is_published) %>
@@ -44,14 +46,14 @@
 				</label>
 			<% end %>
 			
-			<% ispub = @document_fedora.is_publishable %> 
-			<%=check_box_tag 'item_opened_checkbox', true, ispub, :disabled=>true%> 
-			<label for="item_opened_checkbox">
-				<%= select_status_checkbox_icon(ispub) %>
-				Item can be published
-			</label>
-
-		<% end %>
+			<% unless @document_fedora.is_published %>
+				<% ispub = @document_fedora.is_publishable %> 
+				<%=check_box_tag 'item_opened_checkbox', true, ispub, :disabled=>true%> 
+				<label for="item_opened_checkbox">
+					<%= select_status_checkbox_icon(ispub) %>
+					Item can be published
+				</label>
+			<% end %>
 	</div>
 
 </div>

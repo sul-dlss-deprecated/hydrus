@@ -7,7 +7,7 @@ class HydrusItemsController < ApplicationController
 
   #prepend_before_filter :sanitize_update_params, :only => :update
   before_filter :enforce_access_controls
-  before_filter :setup_attributes, :except => [:new, :index, :terms_of_deposit, :agree_to_terms_of_deposit]
+  before_filter :setup_attributes, :except => [:new, :index, :send_purl_email, :terms_of_deposit, :agree_to_terms_of_deposit]
   before_filter :check_for_collection, :only => :new
   before_filter :redirect_if_not_correct_object_type, :only => [:edit,:show,:update]
 
@@ -32,6 +32,10 @@ class HydrusItemsController < ApplicationController
   def edit
   end
 
+  def destroy
+    delete_object(params[:id]) if @document_fedora.is_destroyable
+  end
+  
   def new
     coll_pid = params[:collection]
     item = Hydrus::Item.create(coll_pid, current_user)
@@ -157,6 +161,18 @@ class HydrusItemsController < ApplicationController
     @document_fedora=Hydrus::Item.find(@pid)
     @document_fedora.accept_terms_of_deposit(current_user.to_s)
     @document_fedora.save
+    respond_to do |format|
+      format.html
+      format.js
+    end
+  end
+
+  def send_purl_email
+    @pid=params[:pid]
+    @from=params[:from]
+    @document_fedora=Hydrus::Item.find(@pid)
+    @recipients=params[:recipients]
+    HydrusMailer.send_purl(:recipients=>@recipients,:current_user=>current_user,:object=>@document_fedora).deliver unless @recipients.blank? 
     respond_to do |format|
       format.html
       format.js

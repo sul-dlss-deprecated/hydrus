@@ -16,7 +16,7 @@
 
   <div id="object-content-wrapper">
   	<h3><%= title_text(@document_fedora) %></h3>
-		<h4 class="muted">Item Settings</h4>
+		<h4 class="muted">Item Details</h4>
 	  <dl class="dl-horizontal item-view clearfix">
 
 			<%= render "hydrus_items/basic_item_metadata" %>
@@ -96,7 +96,7 @@
 			 <h4>Release, Visibility and License</h4>
 	    <dt>Visibility</dt>
 			<dd>
-				After its release, this item can be downloaded and discovered by <span class="highlight-value">
+				After its release, this item can be discovered and downloaded by <span class="highlight-value">
 				<%if @document_fedora.visibility.blank? %>
 					<%= @document_fedora.collection.visibility == 'world' ? 'anyone' : 'the Stanford community'%>.
 				<% else %>

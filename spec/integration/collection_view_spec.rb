@@ -37,7 +37,7 @@ describe("Collection view", :type => :request, :integration => true) do
   it "should show info from the Collection" do
     exp_content = [
       "SSDS Social Science Data Collection",
-      "Description",
+      "Described as",
     ]
     login_as('archivist1')
     visit polymorphic_path(@hc)

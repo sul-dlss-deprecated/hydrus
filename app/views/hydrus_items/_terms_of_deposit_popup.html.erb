@@ -8,7 +8,6 @@
 	</div>
 	<div class="modal-footer">
 		<a href="/terms_of_deposit_text.txt"><button class="btn">Save</button></a>
-		<button class="btn printbtn">Print</button>
 		<% if @document_fedora.terms_of_deposit_accepted?%>
 			<button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Close</button>
 		<% else %>
@@ -20,12 +19,6 @@
 
 <script language="JavaScript">
 $(document).ready(function(){
-	$(".printbtn").each(function(){
-		$(this).click(function(){
-			 window.print();
-			return false;
-		});
-	});
 	$(".tod-agree").each(function(){
 		$(this).click(function(){
 			$.ajax($(this).attr("data-url") + "&format=js");

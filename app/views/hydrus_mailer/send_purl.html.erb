@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+  </head>
+  <body>
+    <p><%= @current_user %> has shared this permanent URL (PURL) for <%=@document_fedora.object_type%> <%= @document_fedora.title %> in the Stanford Digital Repository:</p>
+    <p><%= link_to(@document_fedora.purl_url, @document_fedora.purl_url) %> 
+			<% unless @document_fedora.purl_page_ready? %>
+					Please note that the link may not work until the item is published.
+			<% end %>
+		</p>
+
+    <p>If you have any questions about the SDR, send a message to <%= mail_to("sdr-contact@lists.stanford.edu", "sdr-contact@lists.stanford.edu") %>.</p>
+  </body>
+</html>

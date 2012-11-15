@@ -25,6 +25,12 @@ class HydrusMailer < ActionMailer::Base
     mail(:to=>HydrusMailer.process_user_list(@document_fedora.recipients_for_collection_update_emails), :subject=>"Collection closed for deposit in the Stanford Digital Repository") unless ignore?(@document_fedora.pid)
   end
   
+  def send_purl(opts={})
+    @current_user=opts[:current_user]
+    @document_fedora = opts[:object]
+    mail(:to=>opts[:recipients], :subject=>"PURL page shared from the Stanford Digital Repository")
+  end
+
   def error_notification(opts={})
     @exception=opts[:exception]
     @host=host

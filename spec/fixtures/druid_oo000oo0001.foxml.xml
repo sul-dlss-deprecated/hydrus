@@ -59,7 +59,8 @@
           <reviewedReleaseSettings>true</reviewedReleaseSettings>
           <acceptedTermsOfDeposit>true</acceptedTermsOfDeposit>
           <objectStatus>published</objectStatus>
-					<submitTime>11/01/2012</submitTime>
+					<publishTime>11/01/2012</publishTime>
+					<lastModifyTime>11/01/2012 00:00:10</lastModifyTime>
         </hydrusProperties>
       </foxml:xmlContent>
     </foxml:datastreamVersion>

@@ -25,6 +25,10 @@ class HydrusCollectionsController < ApplicationController
   def edit
   end
 
+  def destroy
+    delete_object(params[:id]) if @document_fedora.is_destroyable
+  end
+
   def new
     collection = Hydrus::Collection.create(current_user)
     collection.current_user = current_user

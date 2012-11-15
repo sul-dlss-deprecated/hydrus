@@ -15,7 +15,7 @@
 </div>
 <div id="object-content-wrapper">
   <h3><%= title_text(@document_fedora) %></h3>
-  <h4 class="muted">Item Settings</h4>
+  <h4 class="muted">Item Details</h4>
 <%= form_for(@document_fedora, :method => 'PUT', :html => {:class=>"step", :multipart=>true, :"data-track-state-change"=>"true", :novalidate=>""}) do |f| -%>
   <%= hidden_field_tag("object_id", params[:id]) -%>
   <%= hydrus_form_header(:required=>true, :first=>true) {"Title and contact"} %>
@@ -52,6 +52,7 @@
   <div class="row field-group">
     <div class="span9" id="file-upload">
       <div id="uploaded-files">
+				<p>Choose files or drag and drop them here. Then enter a short description for each file.</p>
         <%- unless @document_fedora.files.blank? -%>
           <%- @document_fedora.files.each do |file| -%>
             <%= render :partial => "object_files/object_file", :locals => {:file => file} %>

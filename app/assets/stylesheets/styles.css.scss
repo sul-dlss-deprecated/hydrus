@@ -352,7 +352,7 @@ noscript #item-actions, noscript #collection-actions {
 }
 
 /* object views */
-.unspecified {font-style: italic;}
+.unspecified {color: red; font-style: italic;}
 
 #hydrus_items-show {
 	table.hydrus-striped-table {

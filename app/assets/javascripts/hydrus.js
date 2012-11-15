@@ -1,41 +1,3 @@
-function collection_edit_init(){
-	
-	// this method is called when the collection edit page is fully loaded
-	validate_hydrus_collection();
-	activate_edit_controls();
-	$("form input, form textarea").live("blur", function(){
-	    validate_hydrus_collection();
-	});	
-	
-	// Manage state of select dropdowns when the select should be enabled only when its associated radio button is selected
-	$('div.radio-select-group input:radio').click(function() { // when a radio button in the group is clicked
-		$('div.radio-select-group select').prop('disabled', true); // disable all the selects
-		$('div.radio-select-group input:radio:checked').parentsUntil('.radio-select-option').siblings('div.radio-label').children('select')
-			.prop('disabled', false); // re-enable the select that is associated with the selected radio button
-	});
-	// On page load, execute the code block above to disable appropriate select dropdowns
-	$('div.radio-select-group input:radio:checked').trigger('click');	
-	setup_form_state_change_tracking();
-}
-
-function item_edit_init(){
-	
-	// this method is called when the item edit page is fully loaded
-  validate_hydrus_item();
-	activate_edit_controls();
-	$("form input, form textarea").live("blur", function(){
-	    validate_hydrus_item();
-	});
-	$('[data-behavior="datepicker"]').each(function(){
-		$(this).datepicker({
-			endDate:   $(this).attr("data-end-date"),
-			startDate: $(this).attr("data-start-date")
-		});
-	});
-	manage_radio_groups();
-	setup_form_state_change_tracking();
-}
-
 // this is loaded on each page
 $(document).ready(function(){
 	
@@ -43,6 +5,7 @@ $(document).ready(function(){
 	if ($('#hydrus_items-edit').length == 1 || $('#hydrus_items-update').length == 1) {item_edit_init();}
 	if ($('#itemsTable').length == 1) {$("#itemsTable").tablesorter();}
 	setup_links_that_disable();
+	setup_purl_share_links();
 	
 	$(".abstract").truncate({max_length: 350});
 
@@ -174,6 +137,19 @@ function validate_hydrus_collection() {
 	});
 }
 
+function setup_purl_share_links() {
+	$('#share-purl').show();
+	$('#share-purl').click(function(e) {
+		e.preventDefault(); // stop default href behavior
+		$('#copy-purl-link-area').show();
+		$('#share-purl').hide();
+		$('#copy-purl-link').focus();
+		$('#copy-purl-link').select();
+	});
+	$("#copy-purl-link").click(function() {
+		$('#copy-purl-link').select();
+	});	
+}
 // href links with the disable-after-click=true attribute will be automatically disabled after clicking to prevent double clicks
 function setup_links_that_disable() {
 	$("[disable-after-click='true']").each(function(){
@@ -223,6 +199,46 @@ function check_tracked_form_state_change() {
 	});
 	return state_changed;
 }
+
+function collection_edit_init(){
+	
+	// this method is called when the collection edit page is fully loaded
+	validate_hydrus_collection();
+	activate_edit_controls();
+	$("form input, form textarea").live("blur", function(){
+	    validate_hydrus_collection();
+	});	
+	
+	// Manage state of select dropdowns when the select should be enabled only when its associated radio button is selected
+	$('div.radio-select-group input:radio').click(function() { // when a radio button in the group is clicked
+		$('div.radio-select-group select').prop('disabled', true); // disable all the selects
+		$('div.radio-select-group input:radio:checked').parentsUntil('.radio-select-option').siblings('div.radio-label').children('select')
+			.prop('disabled', false); // re-enable the select that is associated with the selected radio button
+	});
+	// On page load, execute the code block above to disable appropriate select dropdowns
+	$('div.radio-select-group input:radio:checked').trigger('click');	
+	setup_form_state_change_tracking();
+}
+
+function item_edit_init(){
+	
+	// this method is called when the item edit page is fully loaded
+  validate_hydrus_item();
+	activate_edit_controls();
+	$("form input, form textarea").live("blur", function(){
+	    validate_hydrus_item();
+	});
+	$('[data-behavior="datepicker"]').each(function(){
+		$(this).datepicker({
+			endDate:   $(this).attr("data-end-date"),
+			startDate: $(this).attr("data-start-date")
+		});
+	});
+	manage_radio_groups();
+	setup_form_state_change_tracking();
+}
+
+
 $(window).on('beforeunload', function() {
 	state_changed = check_tracked_form_state_change();
 	if(state_changed){

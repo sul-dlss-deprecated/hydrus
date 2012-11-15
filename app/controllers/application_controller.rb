@@ -13,6 +13,11 @@ class ApplicationController < ActionController::Base
    'sul_chrome/application'
   end
 
+  def delete_object(pid)
+    Dor::Config.fedora.client["objects/#{pid}"].delete
+    Dor::SearchService.solr.delete_by_id(pid)  
+  end
+  
   def exception_on_website(exception)
     
     @exception=exception

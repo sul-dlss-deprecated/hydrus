@@ -144,7 +144,7 @@ describe("Item create", :type => :request, :integration => true) do
     item.is_published.should == false
     item.is_returned.should == false
     item.is_destroyable.should == true
-    item.submit_time.should be_blank
+    item.publish_time.should be_blank
     item.accepted_terms_of_deposit.should == "false"
     item.valid?.should == true  # Because unpublished, so validation is limited.
 
@@ -180,6 +180,7 @@ describe("Item create", :type => :request, :integration => true) do
     item.object_status.should == 'draft'
     item.is_publishable.should == false
     item.is_submittable_for_approval.should == true
+    item.submit_for_approval_time.should be_blank    
     item.is_published.should == false
     item.is_returned.should == false
     item.is_destroyable.should == true
@@ -201,7 +202,8 @@ describe("Item create", :type => :request, :integration => true) do
     item.is_published.should == false
     item.is_returned.should == false
     item.is_destroyable.should == true
-    item.submit_time.should_not be_blank
+    item.publish_time.should be_blank
+    item.submit_for_approval_time.should_not be_blank
     item.valid?.should == true
 
     # Return to edit page, and try to save Item with an empty title.
@@ -282,6 +284,7 @@ describe("Item create", :type => :request, :integration => true) do
     item.disapproval_reason.should == nil
     item.embargo.should == 'immediate'
     item.embargo_date.should == ''
+    item.publish_time.should_not be_blank
     item.visibility.should == ["stanford"]
     params={:visibility=>'stanford',:license_code=>'cc-by',:embargo_date=>''}
     confirm_rights(item,params)    
@@ -455,7 +458,7 @@ describe("Item create", :type => :request, :integration => true) do
     it "should indicate that a new item in a collection does not require terms acceptance, if the user has already accepted another item in this collection less than 1 year ago" do
       user='archivist3'
       subject.users_accepted_terms_of_deposit.keys.include?(user).should == true
-      subject.users_accepted_terms_of_deposit[user] = (Time.now.in_time_zone - 1.month).to_s # make the acceptance 1 month ago
+      subject.users_accepted_terms_of_deposit[user] = (Time.now - 1.month).to_s # make the acceptance 1 month ago
       subject.save
       ni=Hydrus::Item.create(subject.pid,user)
       ni.requires_terms_acceptance(user,subject).should == false

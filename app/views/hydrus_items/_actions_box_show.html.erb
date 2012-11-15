@@ -74,6 +74,18 @@
 
     <% end %>
 
+    <!-- Share PURL. -->
+		<p><a style="display:none" href="#" id="share-purl">Share Item Link</a></p>
+		<div style="display:none" id="copy-purl-link-area">
+			<%= form_tag(send_purl_email_path, :remote => true) %>
+			<p>Copy item link: 	<%= text_field_tag "copy-purl-link", @document_fedora.purl_url, :readonly=>true %></p>
+			<p>Email item link to 
+				<%= hidden_field_tag "pid", @document_fedora.pid %>
+				<%= text_field_tag "recipients" %>
+				<%= submit_tag("Send Email",:class => 'btn btn-small', :id => 'hydrus_item_send_purl_email') %>
+				</p>
+		</div>
+
     <!-- Terms of deposit. -->
     <p class="popup-link">
       <i class="icon-share"></i>
@@ -90,14 +102,12 @@
       %>
     </p>
 
-    <!-- Delete link (currently a no-op). -->
-    <% if @document_fedora.is_destroyable %>
-      <% if can?(:edit, @document_fedora) %>
+    <!-- Delete link  -->
+    <% if can?(:edit, @document_fedora) && @document_fedora.is_destroyable %>
         <p class="discard-item muted">
           <i class="icon-trash"></i>
           Discard <%=@document_fedora.object_type%>
         </p>
-      <% end %>
     <% end %>
 
   </div>

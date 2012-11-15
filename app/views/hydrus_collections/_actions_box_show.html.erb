@@ -55,18 +55,11 @@
   <% end %>
 
   <!-- Delete. -->
-  <% if can? :edit, @document_fedora %>
-    <% if @document_fedora.is_destroyable %>
+  <% if can?(:edit, @document_fedora) && @document_fedora.is_destroyable %>
       <p class="discard-item">
         <i class="icon-trash"></i>
         <a href="#">Discard this collection</a>
       </p>
-    <% else %>
-      <p class="discard-item muted">
-        <i class="icon-trash"></i>
-        Cannot discard a published collection
-      </p>
-    <% end %>
   <% end %>
 
 </div>
