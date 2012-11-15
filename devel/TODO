@@ -9,7 +9,6 @@ various ways throughout the app, both in code and in tests. Create some utility
 methods to consolidate the needed behavior so that it will be easy to be
 consistent across the app with respect to display format, storage format, and
 timezone (for the latter, use GMT).
-- Date must be stored in a format consistent with DOR’s (UTC).
 - Convert back to local time for zone for display to the user -- (pacific for now, timezone per user later if needed)
 - Display and parse dates consistently with helpers
 
