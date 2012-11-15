@@ -12,16 +12,7 @@ class ApplicationController < ActionController::Base
   def layout_name
    'sul_chrome/application'
   end
-
-  def delete_object(pid)
-    obj=Hydrus::GenericObject.find(pid)
-    Dor::Config.fedora.client["objects/#{pid}"].delete
-    Dor::SearchService.solr.delete_by_id(pid)  
-    #TODO delete from our local solr too!
-    parent_object_directory=File.join(obj.base_file_directory,'..')
-    FileUtils.rm_rf(parent_object_directory) if File.directory?(parent_object_directory)
-  end
-  
+    
   def exception_on_website(exception)
     
     @exception=exception

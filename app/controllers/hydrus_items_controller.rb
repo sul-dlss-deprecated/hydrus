@@ -35,7 +35,7 @@ class HydrusItemsController < ApplicationController
   def destroy
     collection=@document_fedora.collection
     if @document_fedora.is_destroyable && can?(:edit, @document_fedora)
-       delete_object(params[:id])
+       @document_fedora.delete
        flash[:notice]="The item was deleted."
     else
        flash[:warning]="You do not have permissions to delete this item."

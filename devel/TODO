@@ -10,9 +10,6 @@ Deal with time zone issues
 - do we store times in local time or UTC (currently app time zone is set to UTC; but all storage is local time, except for "create date" which comes from fedora)
 - do we then have to convert back to local time for zone for display to the user?
 
-Support discard of an unpublished item and collection
-- Need to delete objects from local solr in application_controller delete_object method
-
 Support delete of a file in an unpublished item
 
 Terms of Deposit
