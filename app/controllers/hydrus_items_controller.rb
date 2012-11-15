@@ -33,7 +33,14 @@ class HydrusItemsController < ApplicationController
   end
 
   def destroy
-    delete_object(params[:id]) if @document_fedora.is_destroyable
+    collection=@document_fedora.collection
+    if @document_fedora.is_destroyable && can?(:edit, @document_fedora)
+       delete_object(params[:id])
+       flash[:notice]="The item was deleted."
+    else
+       flash[:warning]="You do not have permissions to delete this item."
+     end
+    redirect_to polymorphic_path([collection,:items])
   end
   
   def new
@@ -167,6 +174,11 @@ class HydrusItemsController < ApplicationController
     end
   end
 
+  def discard_confirmation
+    @id=params[:id]
+    render 'shared/discard_confirmation'
+  end
+  
   def send_purl_email
     @pid=params[:pid]
     @from=params[:from]

@@ -1,1 +1,7 @@
-Thanks, your email was sent <%=@recipients%>.  You can now close this window.
+<% if @recipients.blank? %>
+	To send an email, you need to enter an email address.
+<% else %>
+	Thanks, your email was sent <%=@recipients%>.
+<% end %>
+
+  You can now close this window.

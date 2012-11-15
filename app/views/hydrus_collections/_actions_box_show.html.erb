@@ -56,10 +56,13 @@
 
   <!-- Delete. -->
   <% if can?(:edit, @document_fedora) && @document_fedora.is_destroyable %>
-      <p class="discard-item">
+ 			<p style="display:none;" id="discard-item" class="discard-item">
         <i class="icon-trash"></i>
-        <a href="#">Discard this collection</a>
+				<%= link_to 'Discard this collection', @document_fedora, :method=>:delete, :confirm => 'Are you sure you want to delete this collection? This action cannot be undone.'%>
       </p>
+			<noscript>
+				<p class="discard-item"><i class="icon-trash"></i> <%=link_to 'Discard this collection', discard_item_confirmation_path(@document_fedora)%></p>
+			</noscript>
   <% end %>
 
 </div>

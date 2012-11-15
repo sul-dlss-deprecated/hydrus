@@ -41,6 +41,8 @@ Hydrus::Application.routes.draw do
   post "items/disapprove/:id"          => "hydrus_items#disapprove",          :as => 'disapprove_item'
   post "items/resubmit/:id"            => "hydrus_items#resubmit",            :as => 'resubmit_item'
   post "items/send_purl_email"         => "hydrus_items#send_purl_email",     :as => 'send_purl_email'
+  get  "items/discard_confirmation/:id"       => "hydrus_items#discard_confirmation",       :as => 'discard_item_confirmation'
+  get  "collections/discard_confirmation/:id" => "hydrus_collections#discard_confirmation", :as => 'discard_collection_confirmation'
 
   # Actions for the HydrusSolrController.
   match "hydrus_solr/reindex/:id"           => "hydrus_solr#reindex",           :as => 'reindex'

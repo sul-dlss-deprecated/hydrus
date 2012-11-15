@@ -5,7 +5,7 @@ $(document).ready(function(){
 	if ($('#hydrus_items-edit').length == 1 || $('#hydrus_items-update').length == 1) {item_edit_init();}
 	if ($('#itemsTable').length == 1) {$("#itemsTable").tablesorter();}
 	setup_links_that_disable();
-	setup_purl_share_links();
+	setup_action_links();
 	
 	$(".abstract").truncate({max_length: 350});
 
@@ -137,12 +137,13 @@ function validate_hydrus_collection() {
 	});
 }
 
-function setup_purl_share_links() {
+function setup_action_links() {
+	$('#discard-item').show();
 	$('#share-purl').show();
-	$('#share-purl').click(function(e) {
+	$('#copy-purl-link-area').hide();
+	$('#share-purl-link').click(function(e) {
 		e.preventDefault(); // stop default href behavior
-		$('#copy-purl-link-area').show();
-		$('#share-purl').hide();
+		$('#copy-purl-link-area').toggle();
 		$('#copy-purl-link').focus();
 		$('#copy-purl-link').select();
 	});
