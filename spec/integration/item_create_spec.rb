@@ -458,7 +458,7 @@ describe("Item create", :type => :request, :integration => true) do
     it "should indicate that a new item in a collection does not require terms acceptance, if the user has already accepted another item in this collection less than 1 year ago" do
       user='archivist3'
       subject.users_accepted_terms_of_deposit.keys.include?(user).should == true
-      subject.users_accepted_terms_of_deposit[user] = (Time.now - 1.month).to_s # make the acceptance 1 month ago
+      subject.users_accepted_terms_of_deposit[user] = (Time.now.in_time_zone - 1.month).to_s # make the acceptance 1 month ago
       subject.save
       ni=Hydrus::Item.create(subject.pid,user)
       ni.requires_terms_acceptance(user,subject).should == false

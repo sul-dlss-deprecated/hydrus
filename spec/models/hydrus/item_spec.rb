@@ -807,7 +807,7 @@ describe Hydrus::Item do
 
   it "should indicate if we do not require terms acceptance if user already accepted terms on another item in the same collection, and it was less than 1 year ago" do
     @coll=Hydrus::Collection.new
-    @coll.stub(:users_accepted_terms_of_deposit).and_return({'archivist1'=>Time.now - 364.days,'archivist2'=>'10-12-2009 00:00:05'})
+    @coll.stub(:users_accepted_terms_of_deposit).and_return({'archivist1'=>Time.now.in_time_zone - 364.days,'archivist2'=>'10-12-2009 00:00:05'})
     @hi.stub(:accepted_terms_of_deposit).and_return(false)
     @hi.stub(:collection).and_return(@coll)
     @hi.requires_terms_acceptance('archivist1').should be false

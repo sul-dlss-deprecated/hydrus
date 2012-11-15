@@ -83,7 +83,7 @@ class Hydrus::GenericObject < Dor::Item
   # We override save() so we can control whether editing events are logged.
   # Note: the no_super option exists purely for unit tests.
   def save(opts = {})
-    self.last_modify_time = Time.now.to_s
+    self.last_modify_time = Time.now.in_time_zone.to_s
     log_editing_events() unless opts[:no_edit_logging]
     super() unless opts[:no_super]
   end
@@ -239,7 +239,7 @@ class Hydrus::GenericObject < Dor::Item
   def self.dor_registration_params(user_string, obj_typ, apo_pid)
     proj = 'Hydrus'
     wfs  = obj_typ == 'adminPolicy' ? [] : [Dor::Config.hydrus.app_workflow]
-    tm   = Time.now.strftime('%Y-%m-%d %H:%M:%S.%L %z')  # With milliseconds.
+    tm   = Time.now.in_time_zone.strftime('%Y-%m-%d %H:%M:%S.%L %z')  # With milliseconds.
     return {
       :object_type       => obj_typ,
       :admin_policy      => apo_pid,

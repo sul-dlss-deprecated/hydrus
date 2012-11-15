@@ -156,7 +156,7 @@ class Hydrus::Collection < Hydrus::GenericObject
     # At this time we can also approve the collection, because collections never
     # require human approval, even when their items do.
     if first_time
-      self.publish_time = Time.now.to_s
+      self.publish_time = Time.now.in_time_zone.to_s
       complete_workflow_step('submit')
       complete_workflow_step('approve')
       start_common_assembly()
