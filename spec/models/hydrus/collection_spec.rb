@@ -496,7 +496,6 @@ describe Hydrus::Collection do
     it "item_counts_of_collections()" do
       exp = {
         "druid:xx000xx0001" => {
-          "draft"             => 1,
           "awaiting_approval" => 2,
           "returned"          => 3,
           "published"         => 4,
@@ -507,19 +506,14 @@ describe Hydrus::Collection do
           "returned"          => 16,
           "published"         => 17,
         },
-        "druid:xx000xx0003" => {
-          "draft"             => 0,
-          "awaiting_approval" => 0,
-          "returned"          => 0,
-          "published"         => 0,
-        },
+        "druid:xx000xx0003" => {},
       }
       coll_pids = exp.keys
       fcs = [
         {
           "value" => "info:fedora/#{coll_pids[0]}",
           "pivot" => [
-            { "value" => "draft",             "count" => 1 },
+            { "value" => "draft",             "count" => 0 },
             { "value" => "awaiting_approval", "count" => 2 },
             { "value" => "returned",          "count" => 3 },
             { "value" => "published",         "count" => 4 },

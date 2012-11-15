@@ -23,9 +23,6 @@ Keyword metadata field - at least one keyword is required
 Item View and Item Edit pages - text changes
 -- Add "People and organizations responsible for this item" as a subtitle for the contributors section? (check with Gary re: design)
 
-Homepage dashboard - remove approval/review statuses for items when not relevant (“0 waiting for approval; 0 item returned)”
-
-
 --------
 DOR integration
 --------

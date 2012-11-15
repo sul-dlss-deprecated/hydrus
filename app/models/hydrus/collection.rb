@@ -382,7 +382,7 @@ class Hydrus::Collection < Hydrus::GenericObject
   ####
 
   # Takes a user name.
-  # Returns a hash of item counts (broken down by workflow status) for 
+  # Returns a hash of item counts (broken down by object status) for 
   # collections in which the USER plays a role.
   def self.dashboard_stats(user)
     # Get PIDs of the APOs in which USER plays a role.
@@ -450,6 +450,11 @@ class Hydrus::Collection < Hydrus::GenericObject
         counts[druid][status] = n
       }
     }
+
+    # Prune the inner hashes, removing keys if the count is zero.
+    counts.each do |druid, h|
+      h.delete_if { |k,v| v == 0 }
+    end
 
     return counts
   end

@@ -118,9 +118,11 @@ class CatalogController < ApplicationController
     stats = Hydrus::Collection.dashboard_stats(current_user)
 
     # Get the collections, and add the counts as attributes.
+    # Before doing that, we prune the status hash of 
     @collections = stats.keys.map { |coll_dru|
-      hc  = Hydrus::Collection.find(coll_dru)
-      hc.item_counts = ( stats[hc.pid] || {} )
+      hc = Hydrus::Collection.find(coll_dru)
+      st = stats[hc.pid] || {}
+      hc.item_counts = st
       hc
     }
 
