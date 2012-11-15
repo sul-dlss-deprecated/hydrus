@@ -43,8 +43,6 @@ Other
 
 Move Terms of Deposit acceptance pop-up so it shows (if needed) when an item is created.
 
-Run rspec tests in random order.
-
 Desc metadata: remove emtpy stuff and improve formatting. [Waiting
 on details from Hannah]
 
