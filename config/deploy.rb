@@ -8,6 +8,9 @@ set :stages, %W(burndown development dortest production)
 set :default_stage, "dortest"
 set :bundle_flags, "--quiet"
 
+set :repository, "https://github.com/sul-dlss/hydrus.git"
+set :deploy_via, :remote_cache
+
 require 'capistrano/ext/multistage'
 
 set :shared_children, %w(
@@ -95,3 +98,7 @@ namespace :deploy do
 end
 
 after "deploy", "deploy:migrate"
+after "deploy", "app:add_date_to_version"
+after "deploy", "solr:reindex_workflow_objects"
+after "deploy", "files:create_upload_symlink"
+

@@ -1,9 +1,8 @@
 set :rails_env, "development"
 set :deployment_host, "hydrus-dev.stanford.edu"
-set :repository, File.expand_path(File.join(File.dirname(Pathname.new(__FILE__).realpath), "../.."))
-set :deploy_via, :copy
-DEFAULT_TAG='develop'
 set :bundle_without, [:deployment]
+
+DEFAULT_TAG='develop'
 
 role :web, deployment_host
 role :app, deployment_host
@@ -20,8 +19,5 @@ end
 
 before "deploy", "jetty:stop"
 after "deploy", "jetty:start"
-after "deploy", "files:create_upload_symlink"
 after "deploy", "db:loadfixtures"
 after "jetty:start", "jetty:ingest_fixtures"
-after "deploy", "app:add_date_to_version"
-after "deploy", "solr:reindex_workflow_objects"
