@@ -2,6 +2,12 @@
 Development Tasks - 14 November 2012
 ------------------
 
+Collection edit page, license: if user chooses varies or required but forgets
+to select something from the drop-down, the app needs to refuse to save.
+Otherwise, an exception is thrown when trying to render the view page --
+specifically, GenericObject.license_type(code) will be called with a nil code.
+[Bug reported on hydrus-test by Hannah; the exception can be seen in the log].
+
 Support delete of a file in an unpublished item.
 
 Terms of Deposit: create PDF and tie to save action in popup window.
