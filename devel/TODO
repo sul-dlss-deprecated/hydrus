@@ -2,47 +2,50 @@
 Development Tasks - 14 November 2012
 ------------------
 
-Dates and times. We are creating, parsing, displaying dates and times in
-various ways throughout the app, both in code and in tests. Create some utility
-methods to consolidate the needed behavior so that it will be easy to be
-consistent across the app with respect to display format, storage format, and
-timezone (for the latter, use GMT).
-- Convert back to local time for zone for display to the user (Pacific for now,
-  timezone-per-user later if needed).
-- Display and parse dates consistently with helpers
-
 Support delete of a file in an unpublished item.
 
 Terms of Deposit: create PDF and tie to save action in popup window.
 
 Keywords: require at least one.
 
-Protect actions at the model level:
-    # Collection.create
-    # Will need to make cannot_do() callable by Collection class.
-    cannot_do(:create) unless Hydrus::Authorizable.can_create_collections(user)
+System integration work. Details in separate section below.
 
-    # Item.create
-    coll.cannot_do(:create_item_in) unless coll.is_open()
+Dates and times: rationalize and centralize time logic in a module. Use iso8601
+(UTC) for back-end storage, and Pacific zone for UI display. Details in a
+separate section below.  [Monty]
 
-    # Item:
-    accept_terms_of_deposit()
-
-    # HydrusSolrController
-    # These guarded by Tomcat rules in our Puppet manifest.
-    Tighten up the restrictions: replace su_admin_nets with $foz_all_nets.
+Protect actions at the model level. This is mostly done, but a few actions remain.
+Details in a separate section below. [Monty]
 
 --------
-DOR integration
+System integration
 --------
 
-Hydrus objects end up with 2 values for published_dt, because two WFs are using
-the published lifecycle. [Waiting on new dor-services gem.]
+Hydrus objects end up with 2 values for submitted_dt and published_dt, because
+two WFs are using the those lifecycles. [Waiting on new dor-services gem.]
 
 Try to use hydrus-prod. [Waiting on new dor-services gem in production.]
 
 Set up Camel to send messages to hydrus-prod. [Waiting until we start running
 the app on hydrus-prod.]
+
+--------
+Protect actions at the model level
+--------
+
+# Collection.create
+# Will need to make cannot_do() callable by Collection class.
+cannot_do(:create) unless Hydrus::Authorizable.can_create_collections(user)
+
+# Item.create
+coll.cannot_do(:create_item_in) unless coll.is_open()
+
+# Item:
+accept_terms_of_deposit()
+
+# HydrusSolrController
+# These guarded by Tomcat rules in our Puppet manifest.
+Tighten up the restrictions: replace su_admin_nets with $foz_all_nets.
 
 --------
 Other
@@ -147,3 +150,122 @@ during the super() call in index() of catalog_controller.rb, which invokes a
 Blacklight method that logs the entire SOLR response. A bug has been filed; in
 the meantime, you can use the `rake server` task, which filters out most of the
 noise.
+
+------------------
+DateTime rationalization
+------------------
+
+Create a module to centralize time-related functionality.
+
+  module HyTime
+
+    self.local_timezone
+      return 'Pacific Time (US & Canada)'
+
+    self.formatted(dt, opts = {})
+      # Takes a String or DateTime.
+      f = (opts[:format] || :datetime)
+      p = (opts[:parse]  || :datetime)
+
+      # Convert the argument to a DateTime object, if needed.
+      dt = parse(dt, p) if dt.class == String
+
+      # Adjust to local timezone if using a display format.
+      dt = dt.in_time_zone(local_timezone) if f.to_s[-5..-1] == '_disp'
+
+      # Return string in the requested format.
+      return dt.strftime(formats(f))
+
+    self.parse(s, format = :datetime)
+      return DateTime.strptime(dt, format)
+
+    self.formats(k)
+      # Takes a key and returns a datetime format string.
+
+      # Back-end formats for storage are based on iso8601: "2012-11-16T23:40:11Z".
+      :date              => '%F'
+      :time              => '%T',
+      :datetime          => '%FT%TZ',    # Same as calling iso8601() on a DateTime.
+      :datetime_m        => '%FT%T.%LZ',
+
+      # Front-end formats for display.
+      # Same as back-end formats for now.
+      # Might need to modify some fixtures.
+      # Might need to modify what the UI returns from date picker or use :mdy below.
+      :date_disp
+      :time_disp
+      :datetime_disp
+      :mdy_disp       # mm/dd/yyyy From UI?
+
+    self.now()
+      return DateTime.now.in_time_zone
+
+    # Methods generated for each key from self.formats().
+    self.now_FOO
+      return formatted(now, :format => FOO)
+
+      # Example usages.
+      self.publish_time = HyTime.now_datetime   # String for XML.
+      <%= HyTime.now_date_disp >                # String for the UI.
+
+Usages:
+
+  app/helpers/application_helper.rb
+    hydrus_format_date(input_string)
+    formatted_datetime(datetime, k = :datetime)
+    datetime_format(k)
+
+  app/models/hydrus/collection.rb
+    self.publish_time = Time.now.in_time_zone.to_s
+    accept_terms_of_deposit(user,date_accepted)
+
+  app/models/hydrus/generic_object.rb
+    self.last_modify_time = Time.now.in_time_zone.to_s
+    tm   = Time.now.in_time_zone.strftime('%Y-%m-%d %H:%M:%S.%L %z')  # With milliseconds.
+
+  app/models/hydrus/item.rb
+    Time.now.in_time_zone.to_s
+    Time.now.in_time_zone.to_s
+    Time.now.in_time_zone.to_s
+    Time.now.in_time_zone - 1.year
+    Time.now.in_time_zone
+    Date.parse(publish_time).strftime("%m/%d/%Y")
+    Date.today.strftime("%m/%d/%Y")
+    (Date.strptime(beginning_of_embargo_range, "%m/%d/%Y") + number.send(increment)).strftime("%m/%d/%Y")
+    Date.strptime(embargo_date, "%m/%d/%Y").to_s
+    unless (Date.strptime(beginning_of_embargo_range, "%m/%d/%Y")...Date.strptime(end_of_embargo_range, "%m/%d/%Y")).include?(Date.strptime(embargo_date, "%m/%d/%Y"))
+
+  app/models/hydrus/properties_settable.rb
+    Date.strptime(embargo_date, "%m/%d/%Y")
+    Date.parse(date).strftime("%m/%d/%Y") 
+    Date.strptime(val, "%m/%d/%Y").to_s
+
+  app/views/events/index.html.erb
+    formatted_datetime(event.when, :datetime)
+
+  app/views/hydrus_items/_basic_item_metadata.html.erb
+    hydrus_format_date: several
+
+  app/views/hydrus_items/index.html.erb
+    hydrus_format_date(item.create_date)
+
+  app/views/hydrus_mailer/error_notification.html.erb
+    Time.now.in_time_zone
+
+  config/application.rb
+    config.time_zone = 'UTC'
+
+  test/fixtures/object_files.yml
+    Several uses of Time.now
+
+  spec/fixtures
+    Several datetimes as strings. Check the ones we care about.
+
+  spec/integration/item_create_spec.rb
+    (Time.now.in_time_zone - 1.month).to_s
+
+  spec/models/hydrus/item_spec.rb
+    several examples along these lines:
+      (Date.today + 2.days).strftime("%m/%d/%Y")
+      Date.today.strftime("%m/%d/%Y")
+      Date.strptime("08/01/2012", "%m/%d/%Y").to_s
