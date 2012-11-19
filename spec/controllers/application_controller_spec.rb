@@ -14,7 +14,7 @@ describe ApplicationController do
       [false,     true,              nil],
       [false,     true,              %w(foo -test)],
       [false,     true,              %w(foo -dev)],
-      [false,     true,              %w(foo localhost)],
+      [false,     true,              %w(foo -stage)],
     ]
     tests.each do |exp, prod_val, hh_val|
       mock_rails_env   = double('env', 'production?'.to_sym => prod_val)

@@ -35,7 +35,7 @@ class ApplicationController < ActionController::Base
       !request.env["HTTP_HOST"].nil? and
       !request.env["HTTP_HOST"].include?("-test") and
       !request.env["HTTP_HOST"].include?("-dev") and
-      !request.env["HTTP_HOST"].include?("localhost")
+      !request.env["HTTP_HOST"].include?("-stage")
     ))
   end
 

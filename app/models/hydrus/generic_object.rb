@@ -172,6 +172,7 @@ class Hydrus::GenericObject < Dor::Item
   end
 
   def self.license_type(code)
+    return "" if code.blank?
     if code[0..1].downcase == 'cc'
       "creativeCommons"
     elsif code.downcase == 'pddl' || code[0..2].downcase == 'odc'

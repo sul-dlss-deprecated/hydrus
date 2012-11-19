@@ -37,7 +37,7 @@
          <h4>Release and visibility of content</h4>
       <p>
     		<%if @document_fedora.embargo_option == 'none' %>
-    		There is no delay before content in this collection is released for public or Stanford-only discovery and download.
+    		There is <strong>no delay</strong> before content in this collection is released for public or Stanford-only discovery and download.
     	<% else %>
     		The delay before content in this collection is released for public or Stanford-only discovery and download
     			<strong>
@@ -46,7 +46,7 @@
     			<% else %>
     				is fixed
     			<% end %>
-    			from time of deposit to <%=@document_fedora.embargo%> after deposit.</strong>
+    			from time of deposit to <%=@document_fedora.embargo_terms%> after deposit.</strong>
     	<% end %>
     	</p>
     	

@@ -11,18 +11,18 @@ class Hydrus::Collection < Hydrus::GenericObject
 
   validates :embargo_option, :presence => true, :if => :should_validate
   validates :license_option, :presence => true, :if => :should_validate
-  validate  :check_embargo_options,             :if => :should_validate
-  validate  :check_license_options,             :if => :should_validate
+  validate  :check_embargo_options
+  validate  :check_license_options
 
   def check_embargo_options
     if embargo_option != 'none' && embargo_terms.blank?
-      errors.add(:embargo, "must have a time period specified")
+      errors.add(:embargo, "must have a maximum time period specified when the varies or fixed option is selected")
     end
   end
 
   def check_license_options
     if license_option != 'none' && license.blank?
-      errors.add(:license, "must be specified")
+      errors.add(:license, "must be specified when the varies or fixed license option is selected")
     end
   end
 
