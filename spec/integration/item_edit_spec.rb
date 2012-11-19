@@ -121,7 +121,7 @@ describe("Item edit", :type => :request, :integration => true) do
     page.should_not have_css("##{new_delete_button}")
   end
 
-  it "Related Content editing" do
+  it "Related Content editing with adding protocol if it is missing" do
     orig_link   = @hi.descMetadata.relatedItem.location.url.first
     new_link    = "foo_LINK_bar"
     field_link  = "hydrus_item_related_item_url_0"
@@ -143,8 +143,34 @@ describe("Item edit", :type => :request, :integration => true) do
     # Confirm new content in fedora.
     @hi = Hydrus::Item.find(@druid)
     @hi.descMetadata.relatedItem.titleInfo.title.first.should == new_title
+    @hi.descMetadata.relatedItem.location.url.first == "http://#{new_link}"
+  end
+
+  it "Related Content editing" do
+    orig_link   = @hi.descMetadata.relatedItem.location.url.first
+    new_link    = "https://foo_LINK_bar"
+    field_link  = "hydrus_item_related_item_url_0"
+    orig_title  = @hi.descMetadata.relatedItem.titleInfo.title.first
+    new_title   = "foo_TITLE_bar"
+    field_title = "hydrus_item_related_item_title_0"
+
+    login_as('archivist1')
+    should_visit_edit_page(@hi)
+
+    find_field(field_link).value.should == orig_link
+    find_field(field_title).value.should == orig_title
+
+    fill_in(field_link,  :with => new_link)
+    fill_in(field_title, :with => new_title)
+    click_button "Save"
+    page.should have_content(@notice)
+
+    # Confirm new content in fedora.
+    @hi = Hydrus::Item.find(@druid)
+    @hi.descMetadata.relatedItem.titleInfo.title.first.should == new_title
     @hi.descMetadata.relatedItem.location.url.first == new_link
   end
+
 
   it "Related Content adding and deleting" do
     new_label         = "hydrus_item_related_item_title_2"

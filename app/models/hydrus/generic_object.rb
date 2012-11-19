@@ -9,12 +9,13 @@ class Hydrus::GenericObject < Dor::Item
   include Hydrus::EmbargoMetadataDsExtension
 
   attr_accessor :files_were_changed
-  
+    
   REQUIRED_FIELDS=[:title,:abstract,:contact]
   REQUIRED_FIELDS.each {|field| validates field, :not_empty => true, :if => :should_validate}
 
   validates :pid, :is_druid => true
-
+  validates :contact, :email_format => {:message => 'is not a valid email address'}, :if => :should_validate 
+  
   has_metadata(
     :name => "rightsMetadata",
     :type => Hydrus::RightsMetadataDS,
@@ -83,6 +84,7 @@ class Hydrus::GenericObject < Dor::Item
   # We override save() so we can control whether editing events are logged.
   # Note: the no_super option exists purely for unit tests.
   def save(opts = {})
+    check_related_item_urls
     self.last_modify_time = Time.now.in_time_zone.to_s
     log_editing_events() unless opts[:no_edit_logging]
     super() unless opts[:no_super]
@@ -121,7 +123,18 @@ class Hydrus::GenericObject < Dor::Item
   def get_fedora_item(pid)
     return ActiveFedora::Base.find(pid, :cast => true)
   end
-
+  
+  # confirm that related items start with a known protocol, if not, just add http://
+  def check_related_item_urls
+    self.related_item_url = self.related_item_url.collect do |url|
+      if url.blank? || ['http://','https://','ftp://','sftp://'].any? {|protocol| url.include? protocol }
+        url
+      else
+        "http://" + url
+      end
+    end
+  end
+  
   def discover_access
     return rightsMetadata.discover_access.first
   end

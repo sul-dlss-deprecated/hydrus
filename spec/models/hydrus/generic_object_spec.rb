@@ -229,11 +229,19 @@ describe Hydrus::GenericObject do
       @go.errors.messages.should include(*@exp)
     end
 
-    it "fully populated object should be valid" do
+    it "fully populated object should not be valid if contact email is invalid" do
       dru = 'druid:ll000ll0001'
-      @exp.each { |e| @go.stub(e).and_return(dru) }
+      @exp.each { |e| @go.stub(e).and_return(dru)}
+      @go.valid?.should == false
+    end
+
+    it "fully populated object should be valid if contact email is valid" do
+      dru = 'druid:ll000ll0001'
+      @exp.each { |e| @go.stub(e).and_return(dru) unless e==:contact}
+      @go.stub(:contact).and_return('test@test.com')
       @go.valid?.should == true
     end
+
   end
 
   describe "events stuff" do

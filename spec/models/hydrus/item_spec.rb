@@ -462,7 +462,8 @@ describe Hydrus::Item do
       @hi.stub(:enforce_collection_is_open).and_return(true)
       @hi.stub(:accepted_terms_of_deposit).and_return(true)
       @hi.stub(:reviewed_release_settings).and_return(true)
-      @exp.each { |e| @hi.stub(e).and_return(dru) }
+      @exp.each { |e| @hi.stub(e).and_return(dru) unless e==:contact }
+      @hi.stub(:contact).and_return('test@test.com') # we need a valid email address 
       @hi.stub_chain([:collection, :embargo_option]).and_return("varies")
       @hi.valid?.should == true
     end

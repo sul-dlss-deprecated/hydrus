@@ -116,9 +116,8 @@ describe Hydrus::Collection do
     end
 
     it "should return true when both Collection and APO are valid" do
-      @exp_errs.each do |k|
-        @hc.stub(k).and_return(@dru)
-      end
+      @exp_errs.each { |e| @hc.stub(e).and_return(@dru) unless e==:contact }
+      @hc.stub(:contact).and_return('test@test.com') # we need a valid email address       
       @hc.stub(:embargo_terms).and_return(@dru)
       @hc.stub(:pid).and_return(@dru)
       @apo.stub(:'valid?').and_return(true)
