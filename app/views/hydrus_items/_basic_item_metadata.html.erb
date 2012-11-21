@@ -18,17 +18,17 @@
 <dd><%= @document_fedora.contact.blank? ? hydrus_object_setting_value(@document_fedora.contact) : mail_to(@document_fedora.contact) %></dd>
 
 <dt>Created on</dt>
-<dd><%= hydrus_format_date(@document_fedora.create_date) %></dd>
+<dd><%= HyTime.datetime_display(@document_fedora.create_date) %></dd>
 
 <dt>Last saved on</dt>
-<dd><%= hydrus_format_date(@document_fedora.last_modify_time) %></dd>
+<dd><%= HyTime.datetime_display(@document_fedora.last_modify_time) %></dd>
 
 <% if to_bool(@document_fedora.requires_human_approval) %>
 	<dt>Submitted for approval</dt>
-	<dd><%= hydrus_format_date(@document_fedora.submit_for_approval_time) %></dd>
+	<dd><%= HyTime.datetime_display(@document_fedora.submit_for_approval_time) %></dd>
 <% end %>
 
 <% if @document_fedora.is_published %>
 	<dt><%= to_bool(@document_fedora.requires_human_approval) ? "Approved" : "Published"%> on</dt>
-	<dd><%= hydrus_format_date(@document_fedora.publish_time) %></dd>
+	<dd><%= HyTime.datetime_display(@document_fedora.publish_time) %></dd>
 <% end %>

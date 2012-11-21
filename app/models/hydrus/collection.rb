@@ -83,6 +83,10 @@ class Hydrus::Collection < Hydrus::GenericObject
     embargo_terms.blank? ? 'immediate' : 'future' 
   end
     
+  def is_embargoed
+    return not(embargo_terms.blank?)
+  end
+
   # method used to build sidebar
   def license_details_provided?
     validate! ? true : (errors.keys & [:license,:license_option]).size == 0
@@ -156,7 +160,7 @@ class Hydrus::Collection < Hydrus::GenericObject
     # At this time we can also approve the collection, because collections never
     # require human approval, even when their items do.
     if first_time
-      self.publish_time = Time.now.in_time_zone.to_s
+      self.publish_time = HyTime.now_datetime
       complete_workflow_step('submit')
       complete_workflow_step('approve')
       start_common_assembly()
@@ -211,13 +215,16 @@ class Hydrus::Collection < Hydrus::GenericObject
     return result
   end
   
-  # a user accepts the terms of deposit, either update the time (if user has done this before) or add a new node
-  def accept_terms_of_deposit(user,date_accepted)
-    existing_user=hydrusProperties.ng_xml.xpath("//user[text()='#{user}']")
-    if existing_user.size == 0 # user not in there yet, so add new node
-      hydrusProperties.insert_user_accepting_terms_of_deposit(user,date_accepted)
-    else # update date of existing node for this user
-      existing_user[0]['dateAccepted']=date_accepted.to_s 
+  # Takes a user and a datetime string.
+  # A user accepts the terms of deposit: either update the time (if
+  # user has done this before) or add a new node.
+  # This XML logic probably belongs in the hydrusProperties datastream class.
+  def accept_terms_of_deposit(user, datetime_accepted)
+    existing_user = hydrusProperties.ng_xml.xpath("//user[text()='#{user}']")
+    if existing_user.size == 0
+      hydrusProperties.insert_user_accepting_terms_of_deposit(user, datetime_accepted)
+    else
+      existing_user[0]['dateAccepted'] = datetime_accepted
     end
     save
   end

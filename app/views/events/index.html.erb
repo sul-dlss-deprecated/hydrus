@@ -32,10 +32,10 @@
           <tr class="document <%= cycle("even","odd") %>">
             <td><%= event.text %></td>
             <td><%= event.who %></td>
-            <td><%= formatted_datetime(event.when, :datetime) %></td>
+            <td><%= HyTime.datetime_display(event.when) %></td>
           </tr>
         <% end %>
       </tbody>
     </table>
   </div>
-</div> <!-- object-content-wrapper --> 
+</div>

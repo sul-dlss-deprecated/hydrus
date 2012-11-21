@@ -3,19 +3,19 @@ class Hydrus::Item < Hydrus::GenericObject
   include Hydrus::Responsible
   extend  Hydrus::Delegatable
 
-  after_validation :strip_whitespace    
-  
-  validate :enforce_collection_is_open, :on => :create
+  after_validation :strip_whitespace
+
+  validate  :enforce_collection_is_open, :on => :create
   validates :actors, :at_least_one=>true, :if => :should_validate
   validates :files, :at_least_one=>true, :if => :should_validate
   validate  :must_accept_terms_of_deposit, :if => :should_validate
   validate  :must_review_release_settings, :if => :should_validate
   validate  :embargo_date_is_correct_format, :if => :should_validate
-  validate :embargo_date_in_range, :if => :should_validate
+  validate  :embargo_date_in_range, :if => :should_validate
 
   setup_delegations(
     # [:METHOD_NAME,               :uniq, :at... ]
-    "descMetadata" => [            
+    "descMetadata" => [
       [:preferred_citation,        true   ],
       [:related_citation,          false  ],
       [:person,                    false, :name, :namePart],
@@ -27,7 +27,7 @@ class Hydrus::Item < Hydrus::GenericObject
     ],
     "hydrusProperties" => [
       [:reviewed_release_settings, true   ],
-      [:accepted_terms_of_deposit, true   ],      
+      [:accepted_terms_of_deposit, true   ],
     ]
   )
 
@@ -66,10 +66,10 @@ class Hydrus::Item < Hydrus::GenericObject
     # Set default license
     case item.collection.license_option
       when 'none'
-        item.license='none'        
+        item.license='none'
       when 'fixed'
         item.license=item.collection.license
-    end    
+    end
     # Set object status.
     item.object_status = 'draft'
     # Add event.
@@ -81,7 +81,7 @@ class Hydrus::Item < Hydrus::GenericObject
       msg = 'Terms of deposit accepted due to previous item acceptance in collection'
       item.events.add_event('hydrus', user, msg)
     else
-      item.accepted_terms_of_deposit="false"      
+      item.accepted_terms_of_deposit="false"
     end
     # Save and return.
     item.save(:no_edit_logging => true)
@@ -99,7 +99,7 @@ class Hydrus::Item < Hydrus::GenericObject
   # Called by publish_directly() and approve(), not by the controller.
   def do_publish
     t = title()
-    self.publish_time   = Time.now.in_time_zone.to_s
+    self.publish_time   = HyTime.now_datetime
     identityMetadata.objectLabel = t
     self.label                   = t
     self.object_status = 'published'
@@ -112,7 +112,7 @@ class Hydrus::Item < Hydrus::GenericObject
   # This method handles the initial submission, not resubmissions.
   def submit_for_approval
     cannot_do(:submit_for_approval) unless is_submittable_for_approval()
-    self.submit_for_approval_time   = Time.now.in_time_zone.to_s
+    self.submit_for_approval_time   = HyTime.now_datetime
     self.object_status = 'awaiting_approval'
     complete_workflow_step('submit')
     events.add_event('hydrus', @current_user, "Item submitted for approval")
@@ -139,29 +139,30 @@ class Hydrus::Item < Hydrus::GenericObject
   # Resubmits an object after it was disapproved/returned.
   def resubmit
     cannot_do(:resubmit) unless is_resubmittable()
-    self.submit_for_approval_time   = Time.now.in_time_zone.to_s    # set submit for appoval time to be the last submission for approval
+    self.submit_for_approval_time   = HyTime.now_datetime
     self.object_status = 'awaiting_approval'
     hydrusProperties.remove_nodes(:disapproval_reason)
     events.add_event('hydrus', @current_user, "Item resubmitted for approval")
   end
-  
+
   # indicates if this item has an accepted terms of deposit, or if the supplied
   # user (logged in user) has accepted a terms of deposit for another item in
   # this collection within the last year you can pass in a specific collection
   # to check, if not specified, defaults to this item's collection (useful when
   # creating new items)
   def requires_terms_acceptance(user,coll=self.collection)
-    if to_bool(accepted_terms_of_deposit) 
+    if to_bool(accepted_terms_of_deposit)
       # if this item has previously been accepted, no further checks are needed
-      return false 
+      return false
     else
       # if this item has not been accepted, let's look at the collection.
       # Get the users who have accepted the terms of deposit for any other items in this collection.
       # If there are users, find out if the supplied user is one of them.
       # And if so, have they agreed within the last year?
-      users=coll.users_accepted_terms_of_deposit 
-      if users && users.keys.include?(user) 
-        return (Time.now.in_time_zone - 1.year) > coll.users_accepted_terms_of_deposit[user].to_datetime
+      users = coll.users_accepted_terms_of_deposit
+      if users && users.keys.include?(user)
+        dt = coll.users_accepted_terms_of_deposit[user].to_datetime
+        return (HyTime.now - 1.year) > dt
       else
         return true
       end
@@ -235,7 +236,7 @@ class Hydrus::Item < Hydrus::GenericObject
     # Delegate this question to the collection.
     collection.requires_human_approval
   end
-    
+
   # method used to build sidebar
   def files_uploaded?
     validate! ? true : !errors.keys.include?(:files)
@@ -245,10 +246,10 @@ class Hydrus::Item < Hydrus::GenericObject
   def terms_of_deposit_accepted?
     validate! ? true : !errors.keys.include?(:terms_of_deposit)
   end
-  
+
   # method used to build sidebar
   def reviewed_release_settings?
-    validate! ? true : !errors.keys.include?(:release_settings)    
+    validate! ? true : !errors.keys.include?(:release_settings)
   end
 
   # A validation used before creating a new Item.
@@ -260,7 +261,7 @@ class Hydrus::Item < Hydrus::GenericObject
     errors.add(:collection, "must be open to have new items added")
     return false
   end
-  
+
   # the user must accept the terms of deposit to publish
   def must_accept_terms_of_deposit
      if to_bool(accepted_terms_of_deposit) != true
@@ -274,61 +275,74 @@ class Hydrus::Item < Hydrus::GenericObject
       errors.add(:release_settings, "must be reviewed")
     end
   end
-  
+
   # accepts terms of deposit for the given user
   def accept_terms_of_deposit(user)
     self.accepted_terms_of_deposit="true"
-    self.collection.accept_terms_of_deposit(user,Time.now.in_time_zone) # update the collection level user acceptance list
+    self.collection.accept_terms_of_deposit(user,HyTime.now_datetime)
     events.add_event('hydrus', user, 'Terms of deposit accepted')
   end
-  
+
+  # Returns the publish_time or now, as a datetime string.
   def beginning_of_embargo_range
-    publish_time ? Date.parse(publish_time).strftime("%m/%d/%Y") :
-                  Date.today.strftime("%m/%d/%Y")
+    return publish_time || HyTime.now_datetime
   end
 
+  # Parses embargo_terms (eg, "2 years") into its number and time-unit parts.
+  # Uses those parts to add a time increment (eg 2.years) to the beginning
+  # of the embargo range. Returns that result as a datetime string.
   def end_of_embargo_range
-    length = collection.embargo_terms
-    number = length.split(" ").first.to_i
-    increment = length.split(" ").last
-    # number.send(increment) is essentially doing 6.months, 2.years, etc.
-    # This works because rails extends Fixnum to respond to things like #months, #years etc.
-    (Date.strptime(beginning_of_embargo_range, "%m/%d/%Y") + number.send(increment)).strftime("%m/%d/%Y")
+    n, time_unit = collection.embargo_terms.split
+    dt = beginning_of_embargo_range.to_datetime + n.to_i.send(time_unit)
+    return HyTime.datetime(dt)
   end
 
   def embargo_date_is_correct_format
-   return unless under_embargo?
-   begin
-     Date.strptime(embargo_date, "%m/%d/%Y").to_s
-   rescue ArgumentError
-      errors.add(:embargo_date, 'must be a valid date')
-   end
+    return unless under_embargo?
+    begin
+     embargo_date.to_datetime
+    rescue ArgumentError
+     msg = "must be a valid date (#{HyTime::DATE_PICKER_FORMAT})"
+     errors.add(:embargo_date, msg)
+    end
   end
 
   def embargo
-    self.embargo_date.blank? ? 'immediate' : 'future' 
-  end  
+    self.embargo_date.blank? ? 'immediate' : 'future'
+  end
 
   def embargo=(val)
-    self.embargo_date='' if val == 'immediate' 
+    self.embargo_date = '' if val == 'immediate'
   end
-  
+
+  def is_embargoed
+    return not(embargo_date.blank?)
+  end
+
+  # Returns true if the Item is under embargo.
   def under_embargo?
-    embargo=='future' && !collection.blank? && collection.embargo_option == "varies"
+    return false unless embargo == 'future'
+    return false unless collection
+    return collection.embargo_option == "varies"
   end
 
   def embargo_date_in_range
-    if under_embargo? and embargo == "future" and !embargo_date.blank?
-      unless (Date.strptime(beginning_of_embargo_range, "%m/%d/%Y")...Date.strptime(end_of_embargo_range, "%m/%d/%Y")).include?(Date.strptime(embargo_date, "%m/%d/%Y"))
-        errors.add(:embargo_date, "must be in the date range #{beginning_of_embargo_range} - #{end_of_embargo_range}")
-      end
+    return unless under_embargo?
+    return if embargo_date.blank?
+    b  = beginning_of_embargo_range.to_datetime
+    e  = end_of_embargo_range.to_datetime
+    dt = embargo_date.to_datetime
+    unless (b <= dt and dt <= e)
+      b = HyTime.date_display(b)
+      e = HyTime.date_display(e)
+      errors.add(:embargo_date, "must be in the range #{b} - #{e}")
     end
   end
 
   def files
-    Hydrus::ObjectFile.find_all_by_pid(pid,:order=>'weight')  # coming from the database
+    Hydrus::ObjectFile.find_all_by_pid(pid,:order=>'weight')
   end
-  
+
   def strip_whitespace
     strip_whitespace_from_fields [:preferred_citation,:title,:abstract,:contact]
   end
@@ -383,8 +397,8 @@ class Hydrus::Item < Hydrus::GenericObject
   end
 
   def self.discovery_roles
-    return { 
-      "everyone"      => "world", 
+    return {
+      "everyone"      => "world",
       "Stanford only" => "stanford",
     }
   end

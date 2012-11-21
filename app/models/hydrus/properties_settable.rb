@@ -24,54 +24,45 @@ module Hydrus::PropertiesSettable
     end
   end
 
-  def visibility *args
-    groups = []
-    if embargo == "future"
-      if embargoMetadata.release_access_node.at_xpath('//access[@type="read"]/machine/world')
-        groups << "world"
-      else
-        node = embargoMetadata.release_access_node.at_xpath('//access[@type="read"]/machine/group')
-        groups << node.text if node
-      end
-    else
-      (rightsMetadata.read_access.machine.group).collect{|g| groups << g}
-      (rightsMetadata.read_access.machine.world).collect{|g| groups << "world" if g.blank?}
-    end
-    groups
+  # Returns visibility as an array -- typically either ['world'] or ['stanford'].
+  # Embargo status determines which datastream is used to obtain the information.
+  def visibility
+    ds = is_embargoed ? embargoMetadata : rightsMetadata
+    return ["world"] if ds.has_world_read_node
+    return ds.group_read_nodes.map { |n| n.text }
   end
 
+  # Takes a visibility -- typically 'world' or 'stanford'.
+  # Modifies the embargoMetadata and rightsMetadata based on that visibility
+  # values, along with the embargo status.
   def visibility= val
-    embargoMetadata.release_access_node = Nokogiri::XML(generic_release_access_xml) unless embargoMetadata.ng_xml.at_xpath("//access")
-    if embargo == "immediate"
-      embargoMetadata.release_access_node = Nokogiri::XML("<releaseAccess/>")
-      rightsMetadata.remove_embargo_date
-      embargoMetadata.remove_embargo_date
-      update_access_blocks(rightsMetadata, val)
-    elsif embargo == "future"
+    if is_embargoed
+      # If embargoed, we set access info in embargoMetadata.
+      embargoMetadata.initialize_release_access_node(:generic)
+      embargoMetadata.update_access_blocks(val)
+      # And we clear our read access in rightsMetadata.
       rightsMetadata.remove_world_read_access
-      rightsMetadata.remove_all_group_read_nodes
-      update_access_blocks(embargoMetadata, val)
-      embargoMetadata.release_date = Date.strptime(embargo_date, "%m/%d/%Y") unless embargo_date.blank?
+      rightsMetadata.remove_group_read_nodes
+    else
+      # Otherwise, we clear out embargoMetadata.
+      embargoMetadata.initialize_release_access_node()
+      # And set access info in rightsMetadata.
+      rightsMetadata.remove_embargo_date
+      rightsMetadata.update_access_blocks(val)
     end
   end
 
-  def embargo_date *args
-    date = (rightsMetadata.read_access.machine.embargo_release_date *args).first
-    return "" if date.blank?
-    begin
-      return Date.parse(date).strftime("%m/%d/%Y") 
-    rescue
-      return ""
-    end
+  # Returns the embargo date from the embargoMetadata, not the rightsMetadata.
+  # The latter is a convenience copy used by the PURL app.
+  def embargo_date
+    return embargoMetadata.release_date
   end
 
+  # Sets the embargo date in both embargoMetadata and rightsMetadata.
   def embargo_date= val
-    begin
-      date = val.blank? ? "" : Date.strptime(val, "%m/%d/%Y").to_s
-    rescue
-      date=""
-    end
-    (rightsMetadata.read_access.machine.embargo_release_date= date)
+    ed = HyTime.datetime(val, :from_localtime => true)
+    embargoMetadata.release_date  = ed
+    self.rmd_embargo_release_date = ed
   end
 
 end

@@ -209,178 +209,205 @@ describe Hydrus::Item do
 
   end
 
+  describe "visibility" do
 
-  describe "item level rights and embargo information" do
-    describe "visibility" do
-      subject {Hydrus::Item.new}
-      describe "immediate" do
-        it "should remove the releaseAccess node from embargoMD" do
-          subject.embargo = "future"
-          subject.embargo_date = (Date.today + 2.days).strftime("%m/%d/%Y")
-          subject.visibility = "world"
-          subject.embargoMetadata.ng_xml.to_s.should match(/<releaseAccess>/)
-          subject.embargo = "immediate"
-          subject.visibility = "world"
-          subject.embargoMetadata.ng_xml.to_s.should match(/<releaseAccess\/>/)
-        end
-        it "should remove the embargo date from both the rightsMD and embargoMD" do
-          subject.embargo = "future"
-          subject.embargo_date = (Date.today + 2.days).strftime("%m/%d/%Y")
-          subject.visibility = "world"
-          subject.embargoMetadata.ng_xml.to_s.should match(/<releaseDate>#{(Date.today + 2.days).beginning_of_day.utc.xmlschema}<\/releaseDate>/)
-          subject.rightsMetadata.ng_xml.to_s.should match(/<embargoReleaseDate>#{(Date.today + 2.days).to_s}<\/embargoReleaseDate>/)
-          subject.embargo = "immediate"
-          subject.visibility = "world"
-          subject.embargoMetadata.ng_xml.to_s.should_not match(/<releaseDate/)
-          subject.rightsMetadata.ng_xml.to_s.should_not match(/<embargoReleaseDate/)
-        end
-        it "should set the current rightsMD to world readable for world" do
-          subject.embargo = "future"
-          subject.embargo_date = (Date.today + 2.days).strftime("%m/%d/%Y")
-          subject.visibility = "stanford"
-          subject.embargoMetadata.ng_xml.to_s.should match(/<group>stanford<\/group>/)
-          subject.rightsMetadata.read_access.machine.world.should == []
-          subject.embargo = "immediate"
-          subject.visibility = "world"
-          subject.embargoMetadata.ng_xml.to_s.should_not match(/<group>stanford<\/group>/)
-          subject.embargoMetadata.ng_xml.to_s.should match(/<releaseAccess\/>/)
-          subject.rightsMetadata.read_access.machine.world.should == [""]
-        end
-        it "should set the given group in rightsMD and remove world readability for groups being set" do
-          subject.embargo = "future"
-          subject.embargo_date = (Date.today + 2.days).strftime("%m/%d/%Y")
-          subject.visibility = "stanford"
-          subject.embargoMetadata.ng_xml.to_s.should match(/<world\/>/)
-          subject.embargo = "immediate"
-          subject.visibility = "stanford"
-          subject.embargoMetadata.ng_xml.to_s.should_not match(/<world\/>/)
-          subject.embargoMetadata.ng_xml.to_s.should match(/<releaseAccess\/>/)
-          subject.rightsMetadata.read_access.machine.group.include?("stanford").should be_true
-        end
+    describe "immediate" do
+
+      it "should remove the releaseAccess node from embargoMD" do
+        @hi.embargo = "future"
+        @hi.embargo_date = (Date.today + 2.days).strftime("%m/%d/%Y")
+        @hi.visibility = "world"
+        @hi.embargoMetadata.ng_xml.to_s.should match(/<releaseAccess>/)
+        @hi.embargo = "immediate"
+        @hi.visibility = "world"
+        @hi.embargoMetadata.ng_xml.to_s.should match(/<releaseAccess\/>/)
       end
 
-      describe "future" do
-        it "should remove the world read access from rightsMD" do
-          subject.embargo = "immediate"
-          subject.visibility = "world"
-          subject.rightsMetadata.ng_xml.to_s.should match(/<world\/>/)
-          subject.embargo = "future"
-          subject.embargo_date = (Date.today + 2.days).strftime("%m/%d/%Y")
-          subject.visibility = "world"
-          subject.rightsMetadata.read_access.machine.world.should == []
-          subject.embargoMetadata.ng_xml.to_s.should match(/<world\/>/)
-        end
-        it "should remove groups from the read access of the rightsMD" do
-          subject.embargo = "immediate"
-          subject.visibility = "stanford"
-          subject.rightsMetadata.read_access.machine.group.include?("stanford").should be_true
-          subject.embargo = "future"
-          subject.embargo_date = (Date.today + 2.days).strftime("%m/%d/%Y")
-          subject.visibility = "stanford"
-          subject.rightsMetadata.read_access.machine.group.include?("stanford").should be_false
-          subject.embargoMetadata.ng_xml.to_s.should match(/<group>stanford<\/group>/)
-        end
-        it "should set the current embargoMD to world readable for world" do
-          subject.embargo = "immediate"
-          subject.visibility = "stanford"
-          subject.rightsMetadata.read_access.machine.group.include?("stanford").should be_true
-          subject.embargo = "future"
-          subject.embargo_date = (Date.today + 2.days).strftime("%m/%d/%Y")
-          subject.visibility = "world"
-          subject.embargoMetadata.ng_xml.to_s.should match(/<releaseAccess>/)
-          subject.embargoMetadata.ng_xml.at_xpath("//access[@type='read']/machine/world").should_not be_nil
-          subject.rightsMetadata.ng_xml.to_s.should_not match(/<group>stanford<\/group>/)
-        end
-        it "should set the given group in emargoMD and remove world readability for groups being set" do
-          subject.embargo = "immediate"
-          subject.visibility = "world"
-          subject.rightsMetadata.read_access.machine.world.should == [""]
-          subject.embargo = "future"
-          subject.embargo_date = (Date.today + 2.days).strftime("%m/%d/%Y")
-          subject.visibility = "stanford"
-          subject.rightsMetadata.read_access.machine.world.should == []
-          subject.embargoMetadata.ng_xml.to_s.should match(/<releaseAccess>/)
-          subject.embargoMetadata.ng_xml.at_xpath("//access[@type='read']/machine/group[text()='stanford']").should_not be_nil
-          subject.rightsMetadata.read_access.machine.group.include?("stanford").should be_false
-        end
-        it "should set the embargo date in the rights and embargo datastreams" do
-          subject.embargo = "future"
-          subject.embargo_date = (Date.today + 2.days).strftime("%m/%d/%Y")
-          subject.visibility = "stanford"
-          subject.embargoMetadata.release_date.should == (Date.today + 2.days).beginning_of_day.utc.xmlschema
-          subject.rightsMetadata.read_access.machine.embargo_release_date.first.should == (Date.today + 2.days).to_s
-        end
-      end
-    end
-
-    describe "embargo" do
-      subject {Hydrus::Item.new}
-      it "should store the embargo_release_date element in the XML properly" do
-        subject.rightsMetadata.read_access.machine.embargo_release_date.should == []
-        subject.embargo_date= "8/1/2012"
-        subject.rightsMetadata.read_access.machine.embargo_release_date.should == ["2012-08-01"]
-        subject.rightsMetadata.ng_xml.to_s.should match(/embargoReleaseDate/)
-      end
-      it "should remove the embargo release date if the immediate radio button is selected (embargo= 'immediate')" do
-        subject.rightsMetadata.read_access.machine.embargo_release_date.should == []
-        subject.embargo_date= "8/1/2012"
-        subject.rightsMetadata.read_access.machine.embargo_release_date.should == ["2012-08-01"]
-        subject.embargo= 'immediate'
-        subject.visibility= "world"
-        subject.rightsMetadata.read_access.machine.embargo_release_date.should == []
-      end
-      describe "date ranges" do
-        it "should return today's date if there is no completed submit time in the workflowDataStream",:integration => true do
-          subject.stub(:publish_time).and_return(nil)
-          subject.beginning_of_embargo_range.should == Date.today.strftime("%m/%d/%Y")
-        end
-        it "should return the submit time if one is available" do
-          subject.stub(:publish_time).and_return(Date.strptime("08/01/2012", "%m/%d/%Y").to_s)
-          subject.beginning_of_embargo_range.should == "08/01/2012"
-        end
-
-        it "should get the end date range properly based on the collection's APO" do
-          subject.stub(:beginning_of_embargo_range).and_return("08/01/2012")
-          subject.stub_chain([:collection,:embargo_terms]).and_return("6 months")          
-          subject.end_of_embargo_range.should == "02/01/2013"
-          subject.stub_chain([:collection,:embargo_terms]).and_return("1 year")          
-          subject.end_of_embargo_range.should == "08/01/2013"
-          subject.stub_chain([:collection,:embargo_terms]).and_return("5 years")          
-          subject.end_of_embargo_range.should == "08/01/2017"
-        end
-      end
-    end
-
-    describe "license() and license=" do
-
-      subject {Hydrus::Item.new}
-
-      describe "license()" do
-
-        it "Item-level license is present" do
-          exp = 'foo ITEM_LICENSE'
-          subject.stub_chain(:rightsMetadata, :use, :machine).and_return([exp])
-          subject.license.should == exp
-        end
-
+      it "should remove the embargo date from both the rightsMD and embargoMD" do
+        @hi.embargo = "future"
+        @hi.embargo_date = (Date.today + 2.days).strftime("%m/%d/%Y")
+        @hi.visibility = "world"
+        @hi.embargoMetadata.ng_xml.to_s.should match(/<releaseDate>#{(Date.today + 2.days).beginning_of_day.utc.xmlschema}<\/releaseDate>/)
+        @hi.rightsMetadata.ng_xml.to_s.should match(/<embargoReleaseDate>#{(Date.today + 2.days).to_s}<\/embargoReleaseDate>/)
+        @hi.embargo = "immediate"
+        @hi.visibility = "world"
+        @hi.embargoMetadata.ng_xml.to_s.should_not match(/<releaseDate/)
+        @hi.rightsMetadata.ng_xml.to_s.should_not match(/<embargoReleaseDate/)
       end
 
-      it "should set the human readable version properly" do
-        subject.rightsMetadata.use.human.first.should be_blank
-        subject.license = "cc-by-nc"
-        subject.rightsMetadata.use.human.first.should == "CC BY-NC Attribution-NonCommercial"
+      it "should set the current rightsMD to world readable for world" do
+        @hi.embargo = "future"
+        @hi.embargo_date = (Date.today + 2.days).strftime("%m/%d/%Y")
+        @hi.visibility = "stanford"
+        @hi.embargoMetadata.ng_xml.to_s.should match(/<group>stanford<\/group>/)
+        @hi.rightsMetadata.read_access.machine.world.should == []
+        @hi.embargo = "immediate"
+        @hi.visibility = "world"
+        @hi.embargoMetadata.ng_xml.to_s.should_not match(/<group>stanford<\/group>/)
+        @hi.embargoMetadata.ng_xml.to_s.should match(/<releaseAccess\/>/)
+        @hi.rightsMetadata.read_access.machine.world.should == [""]
       end
 
-      it "should set the type attribute properly depending on the license applied" do
-         subject.rightsMetadata.use.human.first.should be_blank
-         subject.license = "cc-by-nc"
-         subject.rightsMetadata.ng_xml.to_s.should match(/type=\"creativeCommons\"/)
-         subject.license = "odc-odbl"
-         subject.rightsMetadata.ng_xml.to_s.should_not match(/type=\"creativeCommons\"/)
-         subject.rightsMetadata.ng_xml.to_s.should match(/type=\"openDataCommons\"/)
+      it "should set the given group in rightsMD and remove world readability for groups being set" do
+        @hi.embargo = "future"
+        @hi.embargo_date = (Date.today + 2.days).strftime("%m/%d/%Y")
+        @hi.visibility = "stanford"
+        @hi.embargoMetadata.ng_xml.to_s.should match(/<world\/>/)
+        @hi.embargo = "immediate"
+        @hi.visibility = "stanford"
+        @hi.embargoMetadata.ng_xml.to_s.should_not match(/<world\/>/)
+        @hi.embargoMetadata.ng_xml.to_s.should match(/<releaseAccess\/>/)
+        @hi.rightsMetadata.read_access.machine.group.include?("stanford").should be_true
       end
 
     end
+
+    describe "future" do
+
+      it "should remove the world read access from rightsMD" do
+        @hi.embargo = "immediate"
+        @hi.visibility = "world"
+        @hi.rightsMetadata.ng_xml.to_s.should match(/<world\/>/)
+        @hi.embargo = "future"
+        @hi.embargo_date = (Date.today + 2.days).strftime("%m/%d/%Y")
+        @hi.visibility = "world"
+        @hi.rightsMetadata.read_access.machine.world.should == []
+        @hi.embargoMetadata.ng_xml.to_s.should match(/<world\/>/)
+      end
+
+      it "should remove groups from the read access of the rightsMD" do
+        @hi.embargo = "immediate"
+        @hi.visibility = "stanford"
+        @hi.rightsMetadata.read_access.machine.group.include?("stanford").should be_true
+        @hi.embargo = "future"
+        @hi.embargo_date = (Date.today + 2.days).strftime("%m/%d/%Y")
+        @hi.visibility = "stanford"
+        @hi.rightsMetadata.read_access.machine.group.include?("stanford").should be_false
+        @hi.embargoMetadata.ng_xml.to_s.should match(/<group>stanford<\/group>/)
+      end
+
+      it "should set the current embargoMD to world readable for world" do
+        @hi.embargo = "immediate"
+        @hi.visibility = "stanford"
+        @hi.rightsMetadata.read_access.machine.group.include?("stanford").should be_true
+        @hi.embargo = "future"
+        @hi.embargo_date = (Date.today + 2.days).strftime("%m/%d/%Y")
+        @hi.visibility = "world"
+        @hi.embargoMetadata.ng_xml.to_s.should match(/<releaseAccess>/)
+        @hi.embargoMetadata.ng_xml.at_xpath("//access[@type='read']/machine/world").should_not be_nil
+        @hi.rightsMetadata.ng_xml.to_s.should_not match(/<group>stanford<\/group>/)
+      end
+
+      it "should set the given group in emargoMD and remove world readability for groups being set" do
+        @hi.embargo = "immediate"
+        @hi.visibility = "world"
+        @hi.rightsMetadata.read_access.machine.world.should == [""]
+        @hi.embargo = "future"
+        @hi.embargo_date = (Date.today + 2.days).strftime("%m/%d/%Y")
+        @hi.visibility = "stanford"
+        @hi.rightsMetadata.read_access.machine.world.should == []
+        @hi.embargoMetadata.ng_xml.to_s.should match(/<releaseAccess>/)
+        @hi.embargoMetadata.ng_xml.at_xpath("//access[@type='read']/machine/group[text()='stanford']").should_not be_nil
+        @hi.rightsMetadata.read_access.machine.group.include?("stanford").should be_false
+      end
+
+      it "should set the embargo date in the rights and embargo datastreams" do
+        @hi.embargo = "future"
+        @hi.embargo_date = (Date.today + 2.days).strftime("%m/%d/%Y")
+        @hi.visibility = "stanford"
+        @hi.embargoMetadata.release_date.should == (Date.today + 2.days).beginning_of_day.utc.xmlschema
+        @hi.rmd_embargo_release_date.first.should == (Date.today + 2.days).to_s
+      end
+
+    end
+
+  end
+
+  describe "embargo" do
+
+    describe "embargo_date() and embargo_date=()" do
+      
+      it "getter should return value from embargoMetadata" do
+        exp = 'foo release date'
+        @hi.stub_chain(:embargoMetadata, :release_date).and_return(exp)
+        @hi.embargo_date.should == exp
+      end
+
+      it "setter should store value in UTC in both embargoMD and rightsMD" do
+        rd = '2012-08-30'
+        rd_dt = HyTime.datetime("#{rd}T08:00:00Z")
+        @hi.embargo_date = rd
+        @hi.embargo_date.should == rd_dt
+        @hi.rmd_embargo_release_date.should == rd_dt
+      end
+
+    end
+
+    describe "beginning_of_embargo_range()" do
+
+      it "publish_time missing: should return now_datetime()" do
+        exp = 'foo bar'
+        HyTime.stub(:now_datetime).and_return(exp)
+        @hi.stub(:publish_time).and_return(nil)
+        @hi.beginning_of_embargo_range.should == exp
+      end
+
+      it "publish_time present: should return it" do
+        exp = 'foo bar blah'
+        @hi.stub(:publish_time).and_return(exp)
+        @hi.beginning_of_embargo_range.should == exp
+      end
+
+    end
+
+    describe "end_of_embargo_range()" do
+
+      it "should get the end date range properly based on the collection's APO" do
+        t = 'T00:00:00Z'
+        @hi.stub(:beginning_of_embargo_range).and_return("2012-08-01#{t}")
+        tests = {
+          '6 months' => "2013-02-01#{t}",
+          '1 year'   => "2013-08-01#{t}",
+          '5 years'  => "2017-08-01#{t}",
+        }
+        tests.each do |emb, exp|
+          @hi.stub_chain(:collection, :embargo_terms).and_return(emb)
+          @hi.end_of_embargo_range.should == exp
+        end
+
+      end
+
+    end
+
+  end
+
+  describe "license() and license=" do
+
+    describe "license()" do
+
+      it "Item-level license is present" do
+        exp = 'foo ITEM_LICENSE'
+        @hi.stub_chain(:rightsMetadata, :use, :machine).and_return([exp])
+        @hi.license.should == exp
+      end
+
+    end
+
+    it "should set the human readable version properly" do
+      @hi.rightsMetadata.use.human.first.should be_blank
+      @hi.license = "cc-by-nc"
+      @hi.rightsMetadata.use.human.first.should == "CC BY-NC Attribution-NonCommercial"
+    end
+
+    it "should set the type attribute properly depending on the license applied" do
+       @hi.rightsMetadata.use.human.first.should be_blank
+       @hi.license = "cc-by-nc"
+       @hi.rightsMetadata.ng_xml.to_s.should match(/type=\"creativeCommons\"/)
+       @hi.license = "odc-odbl"
+       @hi.rightsMetadata.ng_xml.to_s.should_not match(/type=\"creativeCommons\"/)
+       @hi.rightsMetadata.ng_xml.to_s.should match(/type=\"openDataCommons\"/)
+    end
+
   end
 
   describe "class methods" do
@@ -441,20 +468,52 @@ describe Hydrus::Item do
       @hi.errors.messages.keys.should include(*@exp)
     end
 
-    it "should provide an error when the embargo date is out of the collection's embargo range" do
-      coll = mock("collection")
-      item = Hydrus::Item.new
-      item.instance_variable_set('@should_validate', true)
-      coll.stub(:is_open).and_return(true)
-      coll.stub(:embargo_option).and_return("varies")
-      coll.stub(:embargo_terms).and_return("1 year")
-      item.stub(:collection).and_return(coll)
-      item.embargo = "future"
-      item.embargo_date = (Date.today + 2.years).strftime("%m/%d/%Y")
-      item.stub(:publish_time).and_return Date.today.to_s
-      item.valid?.should == false
-      item.errors.messages.should have_key(:embargo_date)
-      item.errors.messages[:embargo_date].first.should =~ /must be in the date range \d{2}\/\d{2}\/\d{4} - \d{2}\/\d{2}\/\d{4}/
+    describe "embargo_date_in_range()" do
+
+      it "should not perform validation unless preconditions are met" do
+        @hi.should_not_receive(:beginning_of_embargo_range)
+        # Not under embargo.
+        @hi.stub('under_embargo?').and_return(false)
+        @hi.embargo_date_in_range
+        # Not under embargo.
+        @hi.stub('under_embargo?').and_return(true)
+        @hi.stub(:embargo_date).and_return(nil)
+        @hi.embargo_date_in_range
+      end
+
+      it "should add a validation error when embargo_date falls outside the embargo range" do
+        # Set up beginning/end of embargo range.
+        b   = '2012-02-01'
+        e   = '2012-03-01'
+        bdt = HyTime.datetime(b, :from_localtime => true)
+        edt = HyTime.datetime(e, :from_localtime => true)
+        @hi.stub(:beginning_of_embargo_range).and_return(bdt)
+        @hi.stub(:end_of_embargo_range).and_return(edt)
+        exp_msg = "must be in the range #{b} - #{e}"
+        # Some embargo dates to validate.
+        dts = {
+          '2012-01-31' => false,
+          '2012-02-01' => true,
+          '2012-02-25' => true,
+          '2012-03-01' => true,
+          '2012-03-02' => false,
+        }
+        # Validate those dates.
+        @hi.stub('under_embargo?').and_return(true)
+        k = :embargo_date
+        dts.each do |dt, is_ok|
+          @hi.stub(k).and_return(HyTime.datetime(dt, :from_localtime => true))
+          @hi.embargo_date_in_range
+          if is_ok
+            @hi.errors.should_not have_key(k)
+          else
+            @hi.errors.should have_key(k)
+            @hi.errors.messages[k].first.should == exp_msg
+          end
+          @hi.errors.clear
+        end
+      end
+      
     end
 
     it "fully populated Item should be valid" do
@@ -692,7 +751,7 @@ describe Hydrus::Item do
     @hi.publish_time.should be_blank
     @hi.do_publish
     @hi.label.should == exp
-    @hi.publish_time.should_not be_blank    
+    @hi.publish_time.should_not be_blank
     @hi.object_status.should == 'published'
   end
 
@@ -825,18 +884,45 @@ describe Hydrus::Item do
     @hi.terms_of_deposit_accepted?.should == true
   end
 
-  it "embargo_date_is_correct_format() should add an error if embargo_date is bogus" do
-    k = :embargo_date
-    @hi.stub(:under_embargo?).and_return(true)
-    @hi.stub(:embargo).and_return("future")
-    # Valid date.
-    @hi.stub(k).and_return('12/31/2012')
-    @hi.embargo_date_is_correct_format
-    @hi.errors.messages.should_not include(k)
-    # Invalid date.
-    @hi.stub(k).and_return('blah!!')
-    @hi.embargo_date_is_correct_format
-    @hi.errors.messages.should include(k)
+  describe "embargo_date_is_correct_format()" do
+
+    it "should treat both datepicker and back-end datetimes as valid" do
+      k = :embargo_date
+      @hi.stub(:under_embargo?).and_return(true)
+      valid_dates = [
+        '2012-12-31',           # Format from datepicker.
+        '2012-12-31T08:00:00Z', # Format stored in XML.
+      ]
+      valid_dates.each do |dt|
+        @hi.stub(k).and_return(dt)
+        @hi.embargo_date_is_correct_format
+        @hi.errors.messages.should_not include(k)
+      end
+    end
+
+    it "should add validation errors if the date has an invalid format" do
+      k = :embargo_date
+      @hi.stub(:under_embargo?).and_return(true)
+      invalid_dates = [
+        '12-31-2012',  # Don't allow mm-dd-yyyy.
+        'blah!!',
+      ]
+      invalid_dates.each do |dt|
+        @hi.stub(k).and_return(dt)
+        @hi.embargo_date_is_correct_format
+        @hi.errors.messages.should include(k)
+        @hi.errors.clear
+      end
+    end
+
+    it "should not perform validation unless object is under embargo" do
+      k = :embargo_date
+      @hi.stub(:under_embargo?).and_return(false)
+      @hi.stub(k).and_return('blah!!!')
+      @hi.embargo_date_is_correct_format
+      @hi.errors.messages.should_not include(k)
+    end
+
   end
 
   it "requires_human_approval() should delegate to the collection" do

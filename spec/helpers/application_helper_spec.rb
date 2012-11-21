@@ -69,11 +69,6 @@ describe ApplicationHelper do
     hydrus_object_setting_value('cool dude').should == 'cool dude'
   end
 
-  it "should be able to exercise both branches of hydrus_format_date()" do
-    hydrus_format_date('').should == ''
-    hydrus_format_date('1999-03-31').should == '1999-03-31'
-  end
-
   it "should return a correct license image" do
     license_image('cc_by').should == "<img alt=\"Cc_by\" src=\"/images/licenses/cc_by.png\" />"
     license_image('pddl').should be nil
@@ -105,19 +100,6 @@ describe ApplicationHelper do
     seen_beta_dialog?.should == true
   end
 
-  it "formatted_datetime() should return formatted date strings" do
-    tests = [
-      ['2012-08-10T06:11:57-0700', :date,     '10-Aug-2012'],
-      ['2012-08-10T06:11:57-0700', :time,     '06:11 am'],
-      ['2012-08-10T06:11:57-0700', :datetime, '10-Aug-2012 06:11 am'],
-      ['blah'                    , nil,        nil],
-      [nil                       , nil,        nil],
-    ]
-    tests.each do |input, fmt, exp|
-      formatted_datetime(input, fmt).should == exp
-    end
-  end
-  
   it "should set the terms of deposit path" do
     terms_of_deposit_path('druid:oo000oo0001').should == '/items/terms_of_deposit?pid=druid%3Aoo000oo0001'
   end

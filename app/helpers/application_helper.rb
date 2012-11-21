@@ -93,25 +93,6 @@ module ApplicationHelper
     return link_to(title_text(obj), polymorphic_path(obj))
   end
     
-  def hydrus_format_date(input_string)
-    input_string.blank? ? '' : input_string.to_date.strftime("%Y-%m-%d")
-  end
-  
-  # Take a datetime string.
-  # Returns a string using the default Hydrus date format.
-  def formatted_datetime(datetime, k = :datetime)
-    begin
-      return Time.parse(datetime.to_s).strftime(datetime_format(k))
-    rescue
-      return nil
-    end
-  end
-
-  def datetime_format(k)
-    return (k == :date ? '%d-%b-%Y' :
-            k == :time ? '%I:%M %P' : '%d-%b-%Y %I:%M %P')
-  end
-  
   # this checks to see if the object passed in is "empty", which could be nil, a blank string, an array of strings with all elements that are blank, 
   # an arbitrary object whose attributes are all blank, or an array of arbitrary objects whose attributes are all blank
   def hydrus_is_empty?(obj)

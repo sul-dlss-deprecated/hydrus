@@ -38,7 +38,7 @@
               <!-- <td><%#= item.object_type %></td> -->
               <td><%= item.status_label %></td>
               <td><%= item.files.size %></td>
-              <td><%= hydrus_format_date(item.create_date) %></td>
+              <td><%= HyTime.datetime_display(item.create_date) %></td>
             </tr>
           <% end %>
         </tbody>

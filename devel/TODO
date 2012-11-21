@@ -27,6 +27,8 @@ Details in a separate section below. [Monty]
 System integration
 --------
 
+In hydrus-prod, the app should not show the "Test site" warnings and images.
+
 Hydrus objects end up with 2 values for submitted_dt and published_dt, because
 two WFs are using the those lifecycles. [Waiting on new dor-services gem.]
 
@@ -56,6 +58,9 @@ Tighten up the restrictions: replace su_admin_nets with $foz_all_nets.
 --------
 Other
 --------
+
+Check Hydrus::PropertiesSettable. Why is this code in a separate module? It
+appears to be used only in GenericObject.
 
 Rake task to list all Hydrus pids, along with their has_model_s value.
 
@@ -161,117 +166,46 @@ noise.
 DateTime rationalization
 ------------------
 
-Create a module to centralize time-related functionality.
+spec/models/hydrus/item_spec.rb
+  several examples using Date in the "visibility" section
 
-  module HyTime
+app/models/hydrus/properties_settable.rb
+  Date.strptime(embargo_date, "%m/%d/%Y")
+  Date.parse(date).strftime("%m/%d/%Y") 
+  Date.strptime(val, "%m/%d/%Y").to_s
 
-    self.local_timezone
-      return 'Pacific Time (US & Canada)'
+Check return values from datepicker.
 
-    self.formatted(dt, opts = {})
-      # Takes a String or DateTime.
-      f = (opts[:format] || :datetime)
-      p = (opts[:parse]  || :datetime)
+app/views/hydrus_mailer/error_notification.html.erb
+  Time.now.in_time_zone
 
-      # Convert the argument to a DateTime object, if needed.
-      dt = parse(dt, p) if dt.class == String
+test/fixtures/object_files.yml
+  Several uses of Time.now
 
-      # Adjust to local timezone if using a display format.
-      dt = dt.in_time_zone(local_timezone) if f.to_s[-5..-1] == '_disp'
+spec/fixtures
+  Several datetimes as strings. Check the ones we care about.
 
-      # Return string in the requested format.
-      return dt.strftime(formats(f))
+spec/integration/item_create_spec.rb
+  (Time.now.in_time_zone - 1.month).to_s
 
-    self.parse(s, format = :datetime)
-      return DateTime.strptime(dt, format)
+We probably need to set embargoMetadata.status. Can be done in visibility=().
 
-    self.formats(k)
-      # Takes a key and returns a datetime format string.
+Tests for Hydrus::Accessible.
 
-      # Back-end formats for storage are based on iso8601: "2012-11-16T23:40:11Z".
-      :date              => '%F'
-      :time              => '%T',
-      :datetime          => '%FT%TZ',    # Same as calling iso8601() on a DateTime.
-      :datetime_m        => '%FT%T.%LZ',
+See embargo_date() and embargo_date=(). Handle getter with delegation. Remove the
+from_localtime from the setter? The logic belongs in controller?
 
-      # Front-end formats for display.
-      # Same as back-end formats for now.
-      # Might need to modify some fixtures.
-      # Might need to modify what the UI returns from date picker or use :mdy below.
-      :date_disp
-      :time_disp
-      :datetime_disp
-      :mdy_disp       # mm/dd/yyyy From UI?
+Tests for from_localtime (assuming it survives).
 
-    self.now()
-      return DateTime.now.in_time_zone
+EmbargoMetadataDS. Add comments to release_date getter and setter -- specifically,
+that we are overriding the Dor methods because they do too much.
 
-    # Methods generated for each key from self.formats().
-    self.now_FOO
-      return formatted(now, :format => FOO)
+Change immediate|future to better terms no|yes.
 
-      # Example usages.
-      self.publish_time = HyTime.now_datetime   # String for XML.
-      <%= HyTime.now_date_disp >                # String for the UI.
-
-Usages:
-
-  app/helpers/application_helper.rb
-    hydrus_format_date(input_string)
-    formatted_datetime(datetime, k = :datetime)
-    datetime_format(k)
-
-  app/models/hydrus/collection.rb
-    self.publish_time = Time.now.in_time_zone.to_s
-    accept_terms_of_deposit(user,date_accepted)
-
-  app/models/hydrus/generic_object.rb
-    self.last_modify_time = Time.now.in_time_zone.to_s
-    tm   = Time.now.in_time_zone.strftime('%Y-%m-%d %H:%M:%S.%L %z')  # With milliseconds.
-
-  app/models/hydrus/item.rb
-    Time.now.in_time_zone.to_s
-    Time.now.in_time_zone.to_s
-    Time.now.in_time_zone.to_s
-    Time.now.in_time_zone - 1.year
-    Time.now.in_time_zone
-    Date.parse(publish_time).strftime("%m/%d/%Y")
-    Date.today.strftime("%m/%d/%Y")
-    (Date.strptime(beginning_of_embargo_range, "%m/%d/%Y") + number.send(increment)).strftime("%m/%d/%Y")
-    Date.strptime(embargo_date, "%m/%d/%Y").to_s
-    unless (Date.strptime(beginning_of_embargo_range, "%m/%d/%Y")...Date.strptime(end_of_embargo_range, "%m/%d/%Y")).include?(Date.strptime(embargo_date, "%m/%d/%Y"))
-
-  app/models/hydrus/properties_settable.rb
-    Date.strptime(embargo_date, "%m/%d/%Y")
-    Date.parse(date).strftime("%m/%d/%Y") 
-    Date.strptime(val, "%m/%d/%Y").to_s
-
-  app/views/events/index.html.erb
-    formatted_datetime(event.when, :datetime)
-
-  app/views/hydrus_items/_basic_item_metadata.html.erb
-    hydrus_format_date: several
-
-  app/views/hydrus_items/index.html.erb
-    hydrus_format_date(item.create_date)
-
-  app/views/hydrus_mailer/error_notification.html.erb
-    Time.now.in_time_zone
-
-  config/application.rb
-    config.time_zone = 'UTC'
-
-  test/fixtures/object_files.yml
-    Several uses of Time.now
-
-  spec/fixtures
-    Several datetimes as strings. Check the ones we care about.
-
-  spec/integration/item_create_spec.rb
-    (Time.now.in_time_zone - 1.month).to_s
-
-  spec/models/hydrus/item_spec.rb
-    several examples along these lines:
-      (Date.today + 2.days).strftime("%m/%d/%Y")
-      Date.today.strftime("%m/%d/%Y")
-      Date.strptime("08/01/2012", "%m/%d/%Y").to_s
+Write some README text on how this works.
+  # rightsMetadata
+  # <access type="read">                                embargo        visibility
+  #   <machine> <world></world>         </machine>    # immediate|no   world
+  #   <machine> <group>stanford</group> </machine>    # immediate|no   stanford
+  #   <machine> <embargoReleaseDate>... </machine>    # future   |yes  --
+  # </access>

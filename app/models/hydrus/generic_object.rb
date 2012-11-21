@@ -35,21 +35,24 @@ class Hydrus::GenericObject < Dor::Item
     :control_group => 'M')
     
   setup_delegations(
-    # [:METHOD_NAME,            :uniq, :at... ]
+    # [:METHOD_NAME,              :uniq, :at... ]
     "descMetadata" => [
-      [:title,                  true,  :main_title ],
-      [:abstract,               true   ],
-      [:related_item_title,     false, :relatedItem, :titleInfo, :title],
-      [:related_item_url,       false, :relatedItem, :location, :url],
-      [:contact,                true   ],
+      [:title,                    true,  :main_title ],
+      [:abstract,                 true   ],
+      [:related_item_title,       false, :relatedItem, :titleInfo, :title],
+      [:related_item_url,         false, :relatedItem, :location, :url],
+      [:contact,                  true   ],
     ],
     "hydrusProperties" => [
-      [:disapproval_reason,     true   ],
-      [:object_status,          true   ],
-      [:publish_time,           true   ],
-      [:submit_for_approval_time, true ],
-      [:last_modify_time,       true   ],
-      [:item_type,              true   ],      
+      [:disapproval_reason,       true   ],
+      [:object_status,            true   ],
+      [:publish_time,             true   ],
+      [:submit_for_approval_time, true   ],
+      [:last_modify_time,         true   ],
+      [:item_type,                true   ],      
+    ],
+    "rightsMetadata" => [
+      [:rmd_embargo_release_date, true,  :read_access, :machine, :embargo_release_date],
     ],
   )
   
@@ -85,7 +88,7 @@ class Hydrus::GenericObject < Dor::Item
   # Note: the no_super option exists purely for unit tests.
   def save(opts = {})
     check_related_item_urls
-    self.last_modify_time = Time.now.in_time_zone.to_s
+    self.last_modify_time = HyTime.now_datetime
     log_editing_events() unless opts[:no_edit_logging]
     super() unless opts[:no_super]
   end
@@ -147,15 +150,6 @@ class Hydrus::GenericObject < Dor::Item
     @related_items ||= descMetadata.find_by_terms(:relatedItem).map { |n|
       Hydrus::RelatedItem.new_from_node(n)
     }
-  end
-
-  def update_access_blocks(ds,group)
-    if group == "world"
-      ds.send(:make_world_readable)
-    else
-      ds.send(:remove_world_read_access)
-      ds.send(:add_read_group, group)
-    end
   end
 
   # Takes an item_type: :dataset, etc. for items, or just :collection for collections.
@@ -253,7 +247,7 @@ class Hydrus::GenericObject < Dor::Item
   def self.dor_registration_params(user_string, obj_typ, apo_pid)
     proj = 'Hydrus'
     wfs  = obj_typ == 'adminPolicy' ? [] : [Dor::Config.hydrus.app_workflow]
-    tm   = Time.now.in_time_zone.strftime('%Y-%m-%d %H:%M:%S.%L %z')  # With milliseconds.
+    tm   = HyTime.now_datetime_full
     return {
       :object_type       => obj_typ,
       :admin_policy      => apo_pid,
