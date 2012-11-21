@@ -66,15 +66,6 @@ describe Hydrus::Item do
     new_item.terms_of_deposit_accepted?.should be true
   end
 
-  it "should indicate blank item visibility if no metadata available" do
-    @hi.visibility.should == []
-  end
-
-  it "should indicate item visibility with an embargo date in the future" do
-    @hi.embargo_date='1/1/2100'
-    @hi.visibility.should == []
-  end
-
   it "should be able to add and remove an item from a collection" do
     collection_pid = 'druid:xx99xx9999'
     exp_uri        = "info:fedora/#{collection_pid}"
@@ -209,127 +200,103 @@ describe Hydrus::Item do
 
   end
 
-  describe "visibility" do
+  describe "visibility()" do
 
-    describe "immediate" do
-
-      it "should remove the releaseAccess node from embargoMD" do
-        pending
-        @hi.embargo = "future"
-        @hi.embargo_date = (Date.today + 2.days).strftime("%m/%d/%Y")
-        @hi.visibility = "world"
-        @hi.embargoMetadata.ng_xml.to_s.should match(/<releaseAccess>/)
-        @hi.embargo = "immediate"
-        @hi.visibility = "world"
-        @hi.embargoMetadata.ng_xml.to_s.should match(/<releaseAccess\/>/)
+    it "should return [] for initial visibility" do
+      tests = [true, false]
+      tests.each do |is_emb|
+        @hi.stub(:is_embargoed).and_return(is_emb)
+        @hi.visibility.should == []
       end
-
-      it "should remove the embargo date from both the rightsMD and embargoMD" do
-        pending
-        @hi.embargo = "future"
-        @hi.embargo_date = (Date.today + 2.days).strftime("%m/%d/%Y")
-        @hi.visibility = "world"
-        @hi.embargoMetadata.ng_xml.to_s.should match(/<releaseDate>#{(Date.today + 2.days).beginning_of_day.utc.xmlschema}<\/releaseDate>/)
-        @hi.rightsMetadata.ng_xml.to_s.should match(/<embargoReleaseDate>#{(Date.today + 2.days).to_s}<\/embargoReleaseDate>/)
-        @hi.embargo = "immediate"
-        @hi.visibility = "world"
-        @hi.embargoMetadata.ng_xml.to_s.should_not match(/<releaseDate/)
-        @hi.rightsMetadata.ng_xml.to_s.should_not match(/<embargoReleaseDate/)
-      end
-
-      it "should set the current rightsMD to world readable for world" do
-        pending
-        @hi.embargo = "future"
-        @hi.embargo_date = (Date.today + 2.days).strftime("%m/%d/%Y")
-        @hi.visibility = "stanford"
-        @hi.embargoMetadata.ng_xml.to_s.should match(/<group>stanford<\/group>/)
-        @hi.rightsMetadata.read_access.machine.world.should == []
-        @hi.embargo = "immediate"
-        @hi.visibility = "world"
-        @hi.embargoMetadata.ng_xml.to_s.should_not match(/<group>stanford<\/group>/)
-        @hi.embargoMetadata.ng_xml.to_s.should match(/<releaseAccess\/>/)
-        @hi.rightsMetadata.read_access.machine.world.should == [""]
-      end
-
-      it "should set the given group in rightsMD and remove world readability for groups being set" do
-        pending
-        @hi.embargo = "future"
-        @hi.embargo_date = (Date.today + 2.days).strftime("%m/%d/%Y")
-        @hi.visibility = "stanford"
-        @hi.embargoMetadata.ng_xml.to_s.should match(/<world\/>/)
-        @hi.embargo = "immediate"
-        @hi.visibility = "stanford"
-        @hi.embargoMetadata.ng_xml.to_s.should_not match(/<world\/>/)
-        @hi.embargoMetadata.ng_xml.to_s.should match(/<releaseAccess\/>/)
-        @hi.rightsMetadata.read_access.machine.group.include?("stanford").should be_true
-      end
-
     end
 
-    describe "future" do
-
-      it "should remove the world read access from rightsMD" do
-        pending
-        @hi.embargo = "immediate"
-        @hi.visibility = "world"
-        @hi.rightsMetadata.ng_xml.to_s.should match(/<world\/>/)
-        @hi.embargo = "future"
-        @hi.embargo_date = (Date.today + 2.days).strftime("%m/%d/%Y")
-        @hi.visibility = "world"
-        @hi.rightsMetadata.read_access.machine.world.should == []
-        @hi.embargoMetadata.ng_xml.to_s.should match(/<world\/>/)
+    it "should return ['world'] if item is world visible" do
+      tests = {
+        true  => :embargoMetadata,
+        false => :rightsMetadata,
+      }
+      tests.each do |is_emb, ds|
+        @hi.stub(:is_embargoed).and_return(is_emb)
+        @hi.stub_chain(ds, :has_world_read_node).and_return(true)
+        @hi.visibility.should == ['world']
       end
-
-      it "should remove groups from the read access of the rightsMD" do
-        pending
-        @hi.embargo = "immediate"
-        @hi.visibility = "stanford"
-        @hi.rightsMetadata.read_access.machine.group.include?("stanford").should be_true
-        @hi.embargo = "future"
-        @hi.embargo_date = (Date.today + 2.days).strftime("%m/%d/%Y")
-        @hi.visibility = "stanford"
-        @hi.rightsMetadata.read_access.machine.group.include?("stanford").should be_false
-        @hi.embargoMetadata.ng_xml.to_s.should match(/<group>stanford<\/group>/)
-      end
-
-      it "should set the current embargoMD to world readable for world" do
-        pending
-        @hi.embargo = "immediate"
-        @hi.visibility = "stanford"
-        @hi.rightsMetadata.read_access.machine.group.include?("stanford").should be_true
-        @hi.embargo = "future"
-        @hi.embargo_date = (Date.today + 2.days).strftime("%m/%d/%Y")
-        @hi.visibility = "world"
-        @hi.embargoMetadata.ng_xml.to_s.should match(/<releaseAccess>/)
-        @hi.embargoMetadata.ng_xml.at_xpath("//access[@type='read']/machine/world").should_not be_nil
-        @hi.rightsMetadata.ng_xml.to_s.should_not match(/<group>stanford<\/group>/)
-      end
-
-      it "should set the given group in emargoMD and remove world readability for groups being set" do
-        pending
-        @hi.embargo = "immediate"
-        @hi.visibility = "world"
-        @hi.rightsMetadata.read_access.machine.world.should == [""]
-        @hi.embargo = "future"
-        @hi.embargo_date = (Date.today + 2.days).strftime("%m/%d/%Y")
-        @hi.visibility = "stanford"
-        @hi.rightsMetadata.read_access.machine.world.should == []
-        @hi.embargoMetadata.ng_xml.to_s.should match(/<releaseAccess>/)
-        @hi.embargoMetadata.ng_xml.at_xpath("//access[@type='read']/machine/group[text()='stanford']").should_not be_nil
-        @hi.rightsMetadata.read_access.machine.group.include?("stanford").should be_false
-      end
-
-      it "should set the embargo date in the rights and embargo datastreams" do
-        pending
-        @hi.embargo = "future"
-        @hi.embargo_date = (Date.today + 2.days).strftime("%m/%d/%Y")
-        @hi.visibility = "stanford"
-        @hi.embargoMetadata.release_date.should == (Date.today + 2.days).beginning_of_day.utc.xmlschema
-        @hi.rmd_embargo_release_date.first.should == (Date.today + 2.days).to_s
-      end
-
     end
 
+    it "should return ['world'] if item is world visible" do
+      tests = {
+        true  => :embargoMetadata,
+        false => :rightsMetadata,
+      }
+      exp_groups = %w(foo bar)
+      mock_nodes = exp_groups.map { |g| double('', :text => g) }
+      tests.each do |is_emb, ds|
+        @hi.stub(:is_embargoed).and_return(is_emb)
+        @hi.stub_chain(ds, :has_world_read_node).and_return(false)
+        @hi.stub_chain(ds, :group_read_nodes).and_return(mock_nodes)
+        @hi.visibility.should == exp_groups
+      end
+    end
+
+  end
+
+  describe "visibility=()" do
+
+    before(:each) do
+      # XML snippets for various <access> nodes.
+      mw       = '<machine><world/></machine>'
+      ms       = '<machine><group>stanford</group></machine>'
+      rd_world = %Q[<access type="read">#{mw}</access>]
+      rd_stanf = %Q[<access type="read">#{ms}</access>]
+      rd_blank = %Q[<access type="read"><machine/></access>]
+      di_world = %Q[<access type="discover">#{mw}</access>]
+      # XML snippets for embargoMetadata.
+      em_start = %Q[<embargoMetadata><status/><releaseDate/>]
+      em_end   = %Q[</embargoMetadata>]
+      em_blank = %Q[<releaseAccess/>]
+      em_world = %Q[<releaseAccess>#{di_world}#{rd_world}</releaseAccess>]
+      em_stanf = %Q[<releaseAccess>#{di_world}#{rd_stanf}</releaseAccess>]
+      # XML snippets for rightsMetadata.
+      rm_start = %Q[<rightsMetadata>]
+      rm_end   = '<access type="edit"><machine/></access>' +
+                 '<use><human/><machine/></use></rightsMetadata>'
+      # Assemble expected Nokogiri XML for embargoMetadata and rightsMetadata.
+      @xml = {
+        :em_initial => noko_doc([em_start, em_blank, em_end].join),
+        :em_world   => noko_doc([em_start, em_world, em_end].join),
+        :em_stanf   => noko_doc([em_start, em_stanf, em_end].join),
+        :rm_initial => noko_doc([rm_start, di_world, rd_blank, rm_end].join),
+        :rm_world   => noko_doc([rm_start, di_world, rd_world, rm_end].join),
+        :rm_stanf   => noko_doc([rm_start, di_world, rd_stanf, rm_end].join),
+      }
+    end
+
+    it "initial XML should be correct" do
+      @hi.rightsMetadata.ng_xml.should  be_equivalent_to(@xml[:rm_initial])
+      @hi.embargoMetadata.ng_xml.should be_equivalent_to(@xml[:em_initial])
+    end
+    
+    it "can exercise all combinations of is_embargoed and visibility to get expected XML" do
+      tests = [
+        # All permutations of is_embargoed = true|false and visibility = world|stanford,
+        # along with the expected rightsMetadata and embargoMetadata XML keys.
+        [true,  'world',    :rm_initial, :em_world],
+        [true,  'stanford', :rm_initial, :em_stanf],
+        [false, 'world',    :rm_world,   :em_initial],
+        [false, 'stanford', :rm_stanf,   :em_initial],
+        # Ditto, but in a different order.
+        [false, 'stanford', :rm_stanf,   :em_initial],
+        [true,  'stanford', :rm_initial, :em_stanf],
+        [true,  'world',    :rm_initial, :em_world],
+        [false, 'world',    :rm_world,   :em_initial],
+      ]
+      tests.each do |is_emb, vis, exp_rm, exp_em|
+        @hi.stub(:is_embargoed).and_return(is_emb)
+        @hi.visibility = vis
+        @hi.rightsMetadata.ng_xml.should  be_equivalent_to(@xml[exp_rm])
+        @hi.embargoMetadata.ng_xml.should be_equivalent_to(@xml[exp_em])
+      end
+    end
+      
   end
 
   describe "embargo" do

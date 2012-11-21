@@ -40,7 +40,8 @@ module Hydrus::Accessible
   def make_world_readable
     remove_group_read_nodes
     remove_world_read_access
-    read_access.machine.world = ""
+    ng_xml.at_xpath(xp_machine).add_child('<world/>')
+    content_will_change!
   end
 
   # Returns true if there is a world read node.

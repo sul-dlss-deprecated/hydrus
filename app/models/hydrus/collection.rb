@@ -29,13 +29,13 @@ class Hydrus::Collection < Hydrus::GenericObject
   attr_accessor :item_counts
 
   setup_delegations(
-    # [:METHOD_NAME,            :uniq,  :at... ]
+    # [:METHOD_NAME,             :uniq,  :at... ]
     "hydrusProperties" => [
       [:requires_human_approval, true   ],
-      [:embargo_option,       true,  ],
-      [:embargo_terms,       true,  ],
-      [:license_option,       true,  ],
-      [:visibility_option,    true,  ],      
+      [:embargo_option,          true,  ],
+      [:embargo_terms,           true,  ],
+      [:license_option,          true,  ],
+      [:visibility_option,       true,  ],      
     ],
   )
 
