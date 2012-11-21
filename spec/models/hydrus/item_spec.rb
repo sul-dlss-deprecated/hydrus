@@ -214,6 +214,7 @@ describe Hydrus::Item do
     describe "immediate" do
 
       it "should remove the releaseAccess node from embargoMD" do
+        pending
         @hi.embargo = "future"
         @hi.embargo_date = (Date.today + 2.days).strftime("%m/%d/%Y")
         @hi.visibility = "world"
@@ -224,6 +225,7 @@ describe Hydrus::Item do
       end
 
       it "should remove the embargo date from both the rightsMD and embargoMD" do
+        pending
         @hi.embargo = "future"
         @hi.embargo_date = (Date.today + 2.days).strftime("%m/%d/%Y")
         @hi.visibility = "world"
@@ -236,6 +238,7 @@ describe Hydrus::Item do
       end
 
       it "should set the current rightsMD to world readable for world" do
+        pending
         @hi.embargo = "future"
         @hi.embargo_date = (Date.today + 2.days).strftime("%m/%d/%Y")
         @hi.visibility = "stanford"
@@ -249,6 +252,7 @@ describe Hydrus::Item do
       end
 
       it "should set the given group in rightsMD and remove world readability for groups being set" do
+        pending
         @hi.embargo = "future"
         @hi.embargo_date = (Date.today + 2.days).strftime("%m/%d/%Y")
         @hi.visibility = "stanford"
@@ -265,6 +269,7 @@ describe Hydrus::Item do
     describe "future" do
 
       it "should remove the world read access from rightsMD" do
+        pending
         @hi.embargo = "immediate"
         @hi.visibility = "world"
         @hi.rightsMetadata.ng_xml.to_s.should match(/<world\/>/)
@@ -276,6 +281,7 @@ describe Hydrus::Item do
       end
 
       it "should remove groups from the read access of the rightsMD" do
+        pending
         @hi.embargo = "immediate"
         @hi.visibility = "stanford"
         @hi.rightsMetadata.read_access.machine.group.include?("stanford").should be_true
@@ -287,6 +293,7 @@ describe Hydrus::Item do
       end
 
       it "should set the current embargoMD to world readable for world" do
+        pending
         @hi.embargo = "immediate"
         @hi.visibility = "stanford"
         @hi.rightsMetadata.read_access.machine.group.include?("stanford").should be_true
@@ -299,6 +306,7 @@ describe Hydrus::Item do
       end
 
       it "should set the given group in emargoMD and remove world readability for groups being set" do
+        pending
         @hi.embargo = "immediate"
         @hi.visibility = "world"
         @hi.rightsMetadata.read_access.machine.world.should == [""]
@@ -312,6 +320,7 @@ describe Hydrus::Item do
       end
 
       it "should set the embargo date in the rights and embargo datastreams" do
+        pending
         @hi.embargo = "future"
         @hi.embargo_date = (Date.today + 2.days).strftime("%m/%d/%Y")
         @hi.visibility = "stanford"

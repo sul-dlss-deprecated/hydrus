@@ -1,7 +1,7 @@
 # A module used to read and modify the <access> nodes that
 # exist in rightsMetadata and in embargoMetadata/releaseAccess.
 #
-# Some example <access> nodes:
+# For reference, here are some example <access> nodes:
 #
 #       <access type="discover">
 #         <machine>
@@ -23,7 +23,7 @@ module Hydrus::Accessible
   def xp_machine(type = 'read')
     return '//access[@type="read"]/machine'
   end
-      
+
   # Takes a group (for example, 'stanford').
   # Adds a group read node.
   def add_read_group(group)
@@ -34,7 +34,7 @@ module Hydrus::Accessible
       content_will_change!
     end
   end
-  
+
   # Removes all group read nodes and world read nodes.
   # Replaces them with a world read node.
   def make_world_readable
@@ -42,38 +42,38 @@ module Hydrus::Accessible
     remove_world_read_access
     read_access.machine.world = ""
   end
-  
-  # 
+
+  # Returns true if there is a world read node.
   def has_world_read_node
     return world_read_nodes.size > 0
   end
-  
-  # 
+
+  # Returns all world read nodes -- should be only one.
   def world_read_nodes
     q = "#{xp_machine}/world"
     return ng_xml.xpath(q)
   end
-  
-  # 
+
+  # Returns all group read nodes.
   def group_read_nodes
     q = "#{xp_machine}/group"
     return ng_xml.xpath(q)
   end
-  
+
   # Removes group read nodes.
   def remove_group_read_nodes
     q = "#{xp_machine}/group"
     remove_nodes_by_xpath(q)
     content_will_change!
   end
-  
+
   # Removes world read nodes.
   def remove_world_read_access
     q = "#{xp_machine}/world"
     remove_nodes_by_xpath(q)
     content_will_change!
   end
-  
+
   # Removes the embargo date node.
   # Note that the Xpath query differs by datastream.
   def remove_embargo_date
@@ -81,7 +81,7 @@ module Hydrus::Accessible
     q = "//embargoMetadata/releaseDate" if self.class == Dor::EmbargoMetadataDS
     remove_nodes_by_xpath(q)
   end
-  
+
   # Takes a group -- typically 'world' or 'stanford'.
   # Modifies the datastream accordingly.
   def update_access_blocks(group)
@@ -100,7 +100,7 @@ module Hydrus::Accessible
     content_will_change!
   end
 
-  #
+  # The Generic <releaseAccess> node for embargoMetadata.
   def generic_access_xml
     return <<-XML
       <releaseAccess>
@@ -115,5 +115,5 @@ module Hydrus::Accessible
       </embargoAccess>
     XML
   end
-  
+
 end
