@@ -12,13 +12,7 @@ System integration work. Details in separate section below.
 
 Dates and times: rationalize and centralize time logic in a module. Use iso8601
 (UTC) for back-end storage, and Pacific zone for UI display. [Monty]
-
-  - Get tests passing and commit.
-
-  - Unit tests for Hydrus::Accessible.
-
   - Check spec/fixtures for datetime string formats.
-
   - Evaluate from_localtime. Is it needed? Should this behavior reside in the
     controller? If retained, write tests for its behavior.
 
