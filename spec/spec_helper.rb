@@ -1,4 +1,4 @@
-# for test coverage 
+# for test coverage
 ruby_engine = defined?(RUBY_ENGINE) ? RUBY_ENGINE : "ruby"
 
 if ENV['COVERAGE'] == "true" and ruby_engine != "jruby"
@@ -53,7 +53,7 @@ RSpec.configure do |config|
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
   # instead of true.
-  config.use_transactional_fixtures = true 
+  config.use_transactional_fixtures = true
 
   # If true, the base class of anonymous controllers will be inferred
   # automatically. This will be the default behavior in future versions of
@@ -104,7 +104,7 @@ def login_as(email, password = nil)
   email += '@example.com' unless email.include?('@')
   logout
   visit new_user_session_path
-  fill_in "Email", :with => email 
+  fill_in "Email", :with => email
   fill_in "Password", :with => password
   click_button "Sign in"
 end
@@ -129,34 +129,41 @@ def should_visit_edit_page(obj)
 end
 
 def confirm_rights_metadata_in_apo(obj)
-  obj.apo.defaultObjectRights.ng_xml.should be_equivalent_to obj.rightsMetadata.ng_xml # collection rights metadata should be equal to apo default object rights    
+  obj.apo.defaultObjectRights.ng_xml.should be_equivalent_to obj.rightsMetadata.ng_xml # collection rights metadata should be equal to apo default object rights
 end
 
-def confirm_rights(obj,params)
-    
-  # all should be world discoverable
-  obj.rightsMetadata.ng_xml.xpath('//access[@type="discover"]/machine/world').size.should == 1
-  obj.embargoMetadata.ng_xml.xpath('//access[@type="discover"]/machine/world').size.should == 1 if obj.embargo == 'future'
+def confirm_rights(obj, params)
+  di = '//access[@type="discover"]/machine'
+  rd = '//access[@type="read"]/machine'
 
+  # All should be world discoverable.
+  obj.rightsMetadata.ng_xml.xpath("#{di}/world").size.should == 1
+  obj.embargoMetadata.ng_xml.xpath("#{di}/world").size.should == 1 if obj.embargo == 'future'
+
+  # Visibility.
   datastream = (obj.embargo == 'future' ? obj.embargoMetadata : obj.rightsMetadata)
-  case params[:visibility]
-    when "stanford" 
-      datastream.ng_xml.xpath('//access[@type="read"]/machine/group').size.should == 1
-      datastream.ng_xml.at_xpath('//access[@type="read"]/machine/group').content.should == 'stanford'
-      datastream.ng_xml.xpath('//access[@type="read"]/machine/world').size.should == 0
-    when "world"
-      datastream.ng_xml.xpath('//access[@type="read"]/machine/group').size.should == 0
-      datastream.ng_xml.xpath('//access[@type="read"]/machine/world').size.should == 1
+  g = datastream.ng_xml.xpath("#{rd}/group")
+  w = datastream.ng_xml.xpath("#{rd}/world")
+  if params[:visibility] == "stanford"
+    g.size.should == 1
+    g.first.content.should == 'stanford'
+    w.size.should == 0
+  else # "world"
+    g.size.should == 0
+    w.size.should == 1
   end
 
+  # Embargo release date node.
+  rel_date_node = obj.rightsMetadata.ng_xml.xpath("#{rd}/embargoReleaseDate")
   if params[:embargo_date] == ""
-    obj.rightsMetadata.ng_xml.xpath('//access[@type="read"]/machine/embargoReleaseDate').size.should == 0 
+    rel_date_node.size.should == 0
   else
-    obj.rightsMetadata.ng_xml.at_xpath('//access[@type="read"]/machine/embargoReleaseDate').content.should == params[:embargo_date]    
+    rel_date_node.first.content.should == params[:embargo_date]
   end
-  
-  obj.rightsMetadata.ng_xml.at_xpath('//use/machine').content.should == params[:license_code]
-  
+
+  # The <use> node.
+  u = obj.rightsMetadata.ng_xml.at_xpath('//use/machine')
+  u.content.should == params[:license_code]
 end
 
 # Some integration tests requires the minting of a valid druid in

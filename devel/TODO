@@ -2,12 +2,6 @@
 Development Tasks - 14 November 2012
 ------------------
 
-Collection edit page, license: if user chooses varies or required but forgets
-to select something from the drop-down, the app needs to refuse to save.
-Otherwise, an exception is thrown when trying to render the view page --
-specifically, GenericObject.license_type(code) will be called with a nil code.
-[Bug reported on hydrus-test by Hannah; the exception can be seen in the log].
-
 Support delete of a file in an unpublished item.
 
 Terms of Deposit: create PDF and tie to save action in popup window.
@@ -17,8 +11,18 @@ Keywords: require at least one.
 System integration work. Details in separate section below.
 
 Dates and times: rationalize and centralize time logic in a module. Use iso8601
-(UTC) for back-end storage, and Pacific zone for UI display. Details in a
-separate section below.  [Monty]
+(UTC) for back-end storage, and Pacific zone for UI display. [Monty]
+
+  - Get tests passing and commit.
+
+  - Unit tests for Hydrus::Accessible.
+
+  - Check spec/fixtures for datetime string formats.
+
+  - Evaluate from_localtime. Is it needed? Should this behavior reside in the
+    controller? If retained, write tests for its behavior.
+
+Embargo-visibility refactor. Details in a separate section below. [Monty]
 
 Protect actions at the model level. This is mostly done, but a few actions remain.
 Details in a separate section below. [Monty]
@@ -54,6 +58,44 @@ accept_terms_of_deposit()
 # HydrusSolrController
 # These guarded by Tomcat rules in our Puppet manifest.
 Tighten up the restrictions: replace su_admin_nets with $foz_all_nets.
+
+------------------
+Embargo-visibility refactor
+------------------
+
+Collections should not have the embargoMetadata datastream.
+
+Items should not have the embargoMetadata datastream (at all) unless the user
+has set an embargo date. Currently we have the datastream and it toggles state
+depending on whether there is an embargo date.
+
+If an Item is embargoed, we need to set embargoMetadata.status. This is not
+being done.
+
+Embargo date and visibility (world|stanford) cannot be set independently,
+because their logic is necessarily intertwined. Currently, the app works
+correctly only because embargo_date=() is called first, due to the layout of
+our web form.
+
+  - Option 1: a single setter that handles both.
+
+  - Option 2: the discrete setters could store values as instance variables,
+    and the datastream logic could be postponed until save() is called.
+
+  - The latter retains a bit more simplicity at the view level. If that
+    approach is taken, put it in a separate method like write_xml(), which
+    save() will invoke. That will allow unit tests and IRB code to check XML
+    without really saving.
+
+  - Write a good explanation for how visibility and embargo interact:
+      # rightsMetadata
+      # <access type="read">                                embargo        visibility
+      #   <machine> <world></world>         </machine>    # immediate|no   world
+      #   <machine> <group>stanford</group> </machine>    # immediate|no   stanford
+      #   <machine> <embargoReleaseDate>... </machine>    # future   |yes  --
+      # </access>
+
+Change immediate|future to better terms, probably no|yes.
 
 --------
 Other
@@ -153,7 +195,7 @@ needs to be created -- need more details].
 Collection create: APO.roleMetadata: set the value of <name> for the
 collection-manager [waiting on LDAP].
 
-Item view page: the actions box div is called "div.collection-actions".  Is
+Item view page: the actions box div is called "div.collection-actions". Is
 this a problem?
 
 The home page is producing explosive volumes of SOLR logging. This occurs
@@ -161,98 +203,3 @@ during the super() call in index() of catalog_controller.rb, which invokes a
 Blacklight method that logs the entire SOLR response. A bug has been filed; in
 the meantime, you can use the `rake server` task, which filters out most of the
 noise.
-
-------------------
-DateTime rationalization
-------------------
-
-Failing integration tests:
-
-  1) Item edit should have editible license information once the parent collection's license is set to varies
-     Failure/Error: confirm_rights(@hi,params)
-       expected: 0
-            got: 1 (using ==)
-     # ./spec/integration/item_edit_spec.rb:310:in `block (2 levels) in <top (required)>'
-
-  2) Item create Requires approval: should be able to submit, disapprove, resubmit, approve, etc
-     Failure/Error: confirm_rights(item,params)
-       expected: 0
-            got: 1 (using ==)
-     # ./spec/integration/item_create_spec.rb:290:in `block (2 levels) in <top (required)>'
-
-  3) Item create Does not require approval: should be able to publish directly, with world visible rights and a different license than collection
-     Failure/Error: coll.visibility_option_value = 'varies'
-     OM::XML::Terminology::BadPointerError:
-       This Terminology does not have a root term defined that corresponds to ":read_access"
-     # ./app/models/hydrus/accessible.rb:43:in `make_world_readable'
-     # ./app/models/hydrus/accessible.rb:89:in `update_access_blocks'
-     # ./app/models/hydrus/generic_object.rb:434:in `visibility='
-     # ./app/models/hydrus/collection.rb:359:in `visibility_option_value='
-     # ./spec/integration/item_create_spec.rb:319:in `block (2 levels) in <top (required)>'
-
-  4) Collection edit can edit embargo content
-     Failure/Error: click_button "Save"
-     RestClient::RequestTimeout:
-       Request Timeout
-     # ./app/models/hydrus/collection.rb:258:in `save_apo'
-     # ./app/models/hydrus/generic_object.rb:90:in `save'
-     # ./app/controllers/hydrus_collections_controller.rb:92:in `update'
-     # (eval):2:in `click_button'
-     # ./spec/integration/collection_edit_spec.rb:176:in `block (2 levels) in <top (required)>'
-
-  5) Collection edit modifying persons and roles should be able to add/remove persons with various roles
-     Failure/Error: click_button "Save"
-     RestClient::RequestTimeout:
-       Request Timeout
-     # ./app/models/hydrus/collection.rb:258:in `save_apo'
-     # ./app/models/hydrus/generic_object.rb:90:in `save'
-     # ./app/controllers/hydrus_collections_controller.rb:92:in `update'
-     # (eval):2:in `click_button'
-     # ./spec/integration/collection_edit_spec.rb:241:in `block (3 levels) in <top (required)>'
-
-Tests for Hydrus::Accessible.
-
-Check spec/fixtures for datetime strings.
-
-Evaluate from_localtime. Is it needed? If so, write tests for its behavior.
-Also, when setting the embargo date, should the from_localtime logic reside in
-the controller?
-
-
-------------------
-Embargo-visibility refactor
-------------------
-
-Collections should not have the embargoMetadata datastream.
-
-Items should not have the embargoMetadata datastream (at all) unless the user
-has set an embargo date. Currently we have the datastream and it toggles state
-depending on whether there is an embargo date.
-
-If an Item is embargoed, we need to set embargoMetadata.status. This is not
-being done.
-
-Embargo date and visibility (world|stanford) cannot be set independently,
-because their logic is necessarily intertwined.  Currently, the app works
-correctly only because embargo_date=() is called first, due to the layout of
-our web form.
-
-  - Option 1: a single setter that handles both.
-
-  - Option 2: the discrete setters could store values as instance variables,
-    and the datastream logic could be postponed until save() is called.
-
-  - The latter retains a bit more simplicity at the view level. If that
-    approach is taken, put it in a separate method like write_xml(), which
-    save() will invoke. That will allow unit tests and IRB code to check XML
-    without really saving.
-
-  - Write a good explanation for how visibility and embargo interact:
-      # rightsMetadata
-      # <access type="read">                                embargo        visibility
-      #   <machine> <world></world>         </machine>    # immediate|no   world
-      #   <machine> <group>stanford</group> </machine>    # immediate|no   stanford
-      #   <machine> <embargoReleaseDate>... </machine>    # future   |yes  --
-      # </access>
-
-Change immediate|future to better terms, probably no|yes.

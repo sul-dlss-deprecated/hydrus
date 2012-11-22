@@ -23,10 +23,10 @@ describe("Item edit", :type => :request, :integration => true) do
     logout
     visit edit_polymorphic_path(@hi)
     current_path.should == new_signin_path
-    fill_in "Email", :with => 'archivist1@example.com' 
+    fill_in "Email", :with => 'archivist1@example.com'
     fill_in "Password", :with => login_pw
     click_button "Sign in"
-    current_path.should == edit_polymorphic_path(@hi)    
+    current_path.should == edit_polymorphic_path(@hi)
   end
 
   it "should be able to edit simple items: abstract, contact, keywords" do
@@ -300,45 +300,48 @@ describe("Item edit", :type => :request, :integration => true) do
     page.should_not have_css("##{new_citation}")
     page.should_not have_css("##{new_delete_button}")
   end
-  
+
   it "should have editible license information once the parent collection's license is set to varies" do
-    varies_radio = "hydrus_collection_license_option_varies"
-    collection_licenses = "license_option_varies"
+    varies_radio           = "hydrus_collection_license_option_varies"
+    collection_licenses    = "license_option_varies"
     new_collection_license = "CC BY Attribution"
-    item_licenses = "hydrus_item_license"
-    new_item_license = "PDDL Public Domain Dedication and License"
-    params={:visibility=>'world',:license_code=>'cc-by',:embargo_date=>''}
-    confirm_rights(@hi,params)    
-    
+    item_licenses          = "hydrus_item_license"
+    new_item_license       = "PDDL Public Domain Dedication and License"
+
+    # Item has expected rights.
+    params = {:embargo_date=>'', :visibility=>'world', :license_code=>'cc-by'}
+    confirm_rights(@hi,params)
+
+    # Modify the collection to allow varying license.
     login_as('archivist1')
     should_visit_edit_page(Hydrus::Collection.find("druid:oo000oo0003"))
-    
     choose varies_radio
-    select new_collection_license , :from => collection_licenses
+    select(new_collection_license, :from => collection_licenses)
     click_button "Save"
     page.should have_content(@notice)
-    
+
+    # Item edit page should offer ability to select a license.
     should_visit_edit_page(@hi)
     page.should have_selector("##{item_licenses}")
 
-    # verifying that the default license set is from the collection
+    # Verify that the default license set at the collection-level is selected.
     within("select##{item_licenses}") do
       selected_license = find("optgroup/option[@selected='selected']").text
       selected_license.should == new_collection_license
     end
-    
-    select new_item_license, :from => item_licenses
 
+    # Select a different license, and save.
+    select(new_item_license, :from => item_licenses)
     click_button "Save"
-    
-    @hi    = Hydrus::Item.find @druid
-    params={:visibility=>'world',:license_code=>'pddl',:embargo_date=>''}
-    confirm_rights(@hi,params)    
-    
+    @hi = Hydrus::Item.find @druid
     page.should have_content(@notice)
-    
+
+    # Item has expected rights.
+    params = {:embargo_date => '', :visibility => 'world', :license_code => 'pddl'}
+    confirm_rights(@hi,params)
+
+    # Verify that the selected license is set.
     should_visit_edit_page(@hi)
-    
     within("select##{item_licenses}") do
       selected_license = find("optgroup/option[@selected='selected']").text
       selected_license.should == new_item_license

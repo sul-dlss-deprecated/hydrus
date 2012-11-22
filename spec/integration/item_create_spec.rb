@@ -180,7 +180,7 @@ describe("Item create", :type => :request, :integration => true) do
     item.object_status.should == 'draft'
     item.is_publishable.should == false
     item.is_submittable_for_approval.should == true
-    item.submit_for_approval_time.should be_blank    
+    item.submit_for_approval_time.should be_blank
     item.is_published.should == false
     item.is_returned.should == false
     item.is_destroyable.should == true
@@ -225,7 +225,7 @@ describe("Item create", :type => :request, :integration => true) do
     fill_in "hydrus_item_disapproval_reason", :with => ni.reason
     e = expect { click_button(@buttons[:disapprove]) }
     e.to change { ActionMailer::Base.deliveries.count }.by(1)
-    
+
     find(@div_alert).should have_content(@notices[:disapprove])
 
     # Check various Item attributes and methods.
@@ -287,8 +287,8 @@ describe("Item create", :type => :request, :integration => true) do
     item.publish_time.should_not be_blank
     item.visibility.should == ["stanford"]
     params={:visibility=>'stanford',:license_code=>'cc-by',:embargo_date=>''}
-    confirm_rights(item,params)    
-    
+    confirm_rights(item,params)
+
     # Check events.
     exp = [
       /\AItem created/,
@@ -320,7 +320,7 @@ describe("Item create", :type => :request, :integration => true) do
     coll.license = 'cc-by-sa'
     coll.license_option = 'varies'
     coll.save
-    
+
     # Login as a item depositor for this collection, go to new Item page, and store the druid of the new Item.
     login_as('archivist1')
     visit new_hydrus_item_path(:collection => @hc_druid)
@@ -347,7 +347,7 @@ describe("Item create", :type => :request, :integration => true) do
     item.is_destroyable.should == true
     item.accepted_terms_of_deposit.should == "false"
     item.valid?.should == true  # Because unpublished, so validation is limited.
-    
+
     # Go back to edit page and fill in required elements.
     should_visit_edit_page(item)
     check "release_settings"
@@ -407,13 +407,13 @@ describe("Item create", :type => :request, :integration => true) do
     fill_in "hydrus_item_title", :with => ni.title
     click_button(@buttons[:save])
     find(@div_alert).should have_content(@notices[:save])
-        
+
     # Check events.
     exp = [
       /\AItem created/,
       /\AItem modified/,
       /\AItem modified/,
-      /\AItem modified/,      
+      /\AItem modified/,
       /\ATerms of deposit accepted/,
       /\AItem published/,
     ]
