@@ -459,26 +459,26 @@ describe Hydrus::Item do
 
       it "should add a validation error when embargo_date falls outside the embargo range" do
         # Set up beginning/end of embargo range.
-        b   = '2012-02-01'
-        e   = '2012-03-01'
-        bdt = HyTime.datetime(b, :from_localtime => true)
-        edt = HyTime.datetime(e, :from_localtime => true)
+        b   = '2012-02-01T08:00:00Z'
+        e   = '2012-03-01T08:00:00Z'
+        bdt = HyTime.datetime(b)
+        edt = HyTime.datetime(e)
         @hi.stub(:beginning_of_embargo_range).and_return(bdt)
         @hi.stub(:end_of_embargo_range).and_return(edt)
-        exp_msg = "must be in the range #{b} - #{e}"
+        exp_msg = "must be in the range #{b[0..9]} - #{e[0..9]}"
         # Some embargo dates to validate.
         dts = {
-          '2012-01-31' => false,
-          '2012-02-01' => true,
-          '2012-02-25' => true,
-          '2012-03-01' => true,
-          '2012-03-02' => false,
+          '2012-01-31T08:00:00Z' => false,
+          '2012-02-01T08:00:00Z' => true,
+          '2012-02-25T08:00:00Z' => true,
+          '2012-03-01T08:00:00Z' => true,
+          '2012-03-02T08:00:00Z' => false,
         }
         # Validate those dates.
         @hi.stub('under_embargo?').and_return(true)
         k = :embargo_date
         dts.each do |dt, is_ok|
-          @hi.stub(k).and_return(HyTime.datetime(dt, :from_localtime => true))
+          @hi.stub(k).and_return(HyTime.datetime(dt))
           @hi.embargo_date_in_range
           if is_ok
             @hi.errors.should_not have_key(k)

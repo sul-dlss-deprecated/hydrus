@@ -119,17 +119,17 @@
       CREATED="2011-07-05T20:49:25.801Z" MIMETYPE="text/xml" SIZE="345">
       <foxml:xmlContent>
         <hydrusProperties>
-					<publishTime>11/01/2012</publishTime>
-					<lastModifyTime>11/01/2012 00:00:10</lastModifyTime>
+          <publishTime>2012-11-01T00:00:00Z</publishTime>
+          <lastModifyTime>2012-11-01T00:00:22Z</lastModifyTime>
           <embargoOption>varies</embargoOption>
           <embargoTerms>1 year</embargoTerms>
           <licenseOption>fixed</licenseOption>
           <visibilityOption>fixed</visibilityOption>	
           <requiresHumanApproval>no</requiresHumanApproval>
 		      <usersAcceptedTermsOfDeposit>
-		      	<user dateAccepted="2011-09-02 01:02:32 -0700">archivist1</user>
-		      	<user dateAccepted="2012-05-02 12:02:44 -0700">archivist2</user>
-		      	<user dateAccepted="2011-10-02 02:05:31 -0700">archivist3</user>
+		      	<user dateAccepted="2011-09-02T09:02:32Z">archivist1</user>
+		      	<user dateAccepted="2012-05-02T20:02:44Z">archivist2</user>
+		      	<user dateAccepted="2011-10-02T10:05:31Z">archivist3</user>
 		      </usersAcceptedTermsOfDeposit>
           <objectStatus>published_open</objectStatus>
         </hydrusProperties>
@@ -146,10 +146,10 @@
       CREATED="2011-07-05T20:46:24.337Z" MIMETYPE="text/xml" SIZE="293">
       <foxml:xmlContent>
         <events>
-          <event type="hydrus" when="2012-08-15T10:12:31-07:00" who="archivist7">Collection created</event>
-          <event type="hydrus" when="2012-08-15T10:12:32-07:00" who="archivist7">Collection modified: title, description</event>
-          <event type="hydrus" when="2012-08-15T10:13:33-09:00" who="archivist7">Collection opened</event>
-          <event type="hydrus" when="2012-08-15T10:13:34-07:00" who="archivist7">Collection approved</event>
+          <event type="hydrus" when="2012-08-15T18:12:31Z" who="archivist7">Collection created</event>
+          <event type="hydrus" when="2012-08-15T18:12:32Z" who="archivist7">Collection modified: title, description</event>
+          <event type="hydrus" when="2012-08-15T18:13:33Z" who="archivist7">Collection opened</event>
+          <event type="hydrus" when="2012-08-15T18:13:34Z" who="archivist7">Collection approved</event>
         </events>
       </foxml:xmlContent>
     </foxml:datastreamVersion>

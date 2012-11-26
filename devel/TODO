@@ -12,9 +12,14 @@ System integration work. Details in separate section below.
 
 Dates and times: rationalize and centralize time logic in a module. Use iso8601
 (UTC) for back-end storage, and Pacific zone for UI display. [Monty]
-  - Check spec/fixtures for datetime string formats.
   - Evaluate from_localtime. Is it needed? Should this behavior reside in the
     controller? If retained, write tests for its behavior.
+
+        app/models/hy_time.rb
+        64:    dt = dt - DateTime.local_offset if opts[:from_localtime]
+
+        app/models/hydrus/generic_object.rb
+        469:    ed = HyTime.datetime(val, :from_localtime => true)
 
 Embargo-visibility refactor. Details in a separate section below. [Monty]
 

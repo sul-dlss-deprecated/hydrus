@@ -435,9 +435,9 @@ describe("Item create", :type => :request, :integration => true) do
       users.class.should == Hash
       users.size.should == 2
       users.keys.include?('archivist1').should == true
-      users['archivist1'].should == '2011-09-02 01:02:32 -0700'
+      users['archivist1'].should == '2011-09-02T09:02:32Z'
       users.keys.include?('archivist3').should == true
-      users['archivist3'].should == '2012-05-02 12:02:44 -0700'
+      users['archivist3'].should == '2012-05-02T20:02:44Z'
     end
 
   end

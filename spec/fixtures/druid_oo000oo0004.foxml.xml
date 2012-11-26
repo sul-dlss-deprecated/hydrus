@@ -121,8 +121,8 @@
       CREATED="2011-07-05T20:49:25.801Z" MIMETYPE="text/xml" SIZE="345">
       <foxml:xmlContent>
         <hydrusProperties>
-					<publishTime>11/01/2012</publishTime>
-					<lastModifyTime>11/01/2012 00:00:10</lastModifyTime>	
+          <publishTime>2012-11-01T00:00:00Z</publishTime>
+          <lastModifyTime>2012-11-01T00:00:22Z</lastModifyTime>
 	        <embargoTerms>1 year</embargoTerms>
           <embargoOption>varies</embargoOption>
           <licenseOption>fixed</licenseOption>
@@ -145,10 +145,10 @@
       CREATED="2011-07-05T20:46:24.337Z" MIMETYPE="text/xml" SIZE="293">
       <foxml:xmlContent>
         <events>
-          <event type="hydrus" when="2012-08-15T10:12:31-07:00" who="archivist1">Collection created</event>
-          <event type="hydrus" when="2012-08-15T10:12:32-07:00" who="archivist1">Collection modified: title, description</event>
-          <event type="hydrus" when="2012-08-15T10:13:33-07:00" who="archivist1">Collection opened</event>
-          <event type="hydrus" when="2012-08-15T10:13:34-07:00" who="archivist1">Collection approved</event>
+          <event type="hydrus" when="2012-08-15T18:12:31Z" who="archivist1">Collection created</event>
+          <event type="hydrus" when="2012-08-15T18:12:32Z" who="archivist1">Collection modified: title, description</event>
+          <event type="hydrus" when="2012-08-15T18:13:33Z" who="archivist1">Collection opened</event>
+          <event type="hydrus" when="2012-08-15T18:13:34Z" who="archivist1">Collection approved</event>
         </events>
       </foxml:xmlContent>
     </foxml:datastreamVersion>
