@@ -2,24 +2,22 @@
 Development Tasks - 14 November 2012
 ------------------
 
-Support delete of a file in an unpublished item.
-
-Terms of Deposit: create PDF and tie to save action in popup window.
-
-Keywords: require at least one.
-
-System integration work. Details in separate section below.
+System integration work. Details in separate section below. [waiting]
 
 Embargo-visibility refactor. Details in a separate section below. [Monty]
 
 Protect actions at the model level. This is mostly done, but a few actions remain.
 Details in a separate section below. [Monty]
 
+Keywords: require at least one.
+
+Support delete of a file in an unpublished item.
+
+Terms of Deposit: create PDF and tie to save action in popup window.
+
 --------
 System integration
 --------
-
-In hydrus-prod, the app should not show the "Test site" warnings and images.
 
 Hydrus objects end up with 2 values for submitted_dt and published_dt, because
 two WFs are using the those lifecycles. [Waiting on new dor-services gem.]
@@ -28,24 +26,6 @@ Try to use hydrus-prod. [Waiting on new dor-services gem in production.]
 
 Set up Camel to send messages to hydrus-prod. [Waiting until we start running
 the app on hydrus-prod.]
-
---------
-Protect actions at the model level
---------
-
-# Collection.create
-# Will need to make cannot_do() callable by Collection class.
-cannot_do(:create) unless Hydrus::Authorizable.can_create_collections(user)
-
-# Item.create
-coll.cannot_do(:create_item_in) unless coll.is_open()
-
-# Item:
-accept_terms_of_deposit()
-
-# HydrusSolrController
-# These guarded by Tomcat rules in our Puppet manifest.
-Tighten up the restrictions: replace su_admin_nets with $foz_all_nets.
 
 ------------------
 Embargo-visibility refactor
@@ -86,11 +66,26 @@ our web form.
 Change immediate|future to better terms, probably no|yes.
 
 --------
-Other
+Protect actions at the model level
 --------
 
-Check Hydrus::PropertiesSettable. Why is this code in a separate module? It
-appears to be used only in GenericObject.
+# Collection.create
+# Will need to make cannot_do() callable by Collection class.
+cannot_do(:create) unless Hydrus::Authorizable.can_create_collections(user)
+
+# Item.create
+coll.cannot_do(:create_item_in) unless coll.is_open()
+
+# Item:
+accept_terms_of_deposit()
+
+# HydrusSolrController
+# These guarded by Tomcat rules in our Puppet manifest.
+Tighten up the restrictions: replace su_admin_nets with $foz_all_nets.
+
+--------
+Other
+--------
 
 Rake task to list all Hydrus pids, along with their has_model_s value.
 
@@ -101,7 +96,7 @@ Move Terms of Deposit acceptance pop-up so it shows (if needed) when an item is
 created.
 
 Desc metadata: remove emtpy stuff and improve formatting. [Waiting on details
-from Hannah]
+from Hannah.]
 
 Assess allowing collections to be opened without being published. In effect,
 this would be an open, draft Collection.

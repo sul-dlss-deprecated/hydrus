@@ -2,7 +2,7 @@
 
 <%- object_type = @document_fedora.object_type -%>
 <% sidebar_items << capture do %>
-	<div id="status-box"><%= render :partial => "status_box"%></div>
+  <div id="status-box"><%= render :partial => "status_box"%></div>
 
   <div id="actions-box"><%= render :partial => "actions_box_edit", :locals => {:id=>"js"}%></div>
 <%- end -%>
@@ -10,7 +10,7 @@
 
 <div class="row">
   <div class="span9">
-		<%=render :partial=>'navigation' %>
+    <%=render :partial=>'navigation' %>
   </div>
 </div>
 <div id="object-content-wrapper">
@@ -52,7 +52,7 @@
   <div class="row field-group">
     <div class="span9" id="file-upload">
       <div id="uploaded-files">
-				<p>Choose files or drag and drop them here. Then enter a short description for each file.</p>
+        <p>Choose files or drag and drop them here. Then enter a short description for each file.</p>
         <%- unless @document_fedora.files.blank? -%>
           <%- @document_fedora.files.each do |file| -%>
             <%= render :partial => "object_files/object_file", :locals => {:file => file} %>
@@ -179,7 +179,7 @@
   <div class="row field-group">
     <div class="span9 sub-section">
   <span>
-	  <br />
+    <br />
     <input type="checkbox" <%="checked disabled" if to_bool(@document_fedora.reviewed_release_settings)%> name="hydrus_item[reviewed_release_settings]" value="true" id="release_settings" /> I have reviewed the release and visibility settings above.
   </span>
   </div></div>

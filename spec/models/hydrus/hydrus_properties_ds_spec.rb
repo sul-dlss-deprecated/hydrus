@@ -8,10 +8,10 @@ describe Hydrus::HydrusPropertiesDS do
     xml = <<-EOF
       #{@ds_start}
         <usersAcceptedTermsOfDeposit>
-  	    	<user dateAccepted="2011-09-02T01:10:32Z">cardinal</user>
-        	<user dateAccepted="2012-05-02T12:10:44Z">crimson</user>
-        	<user dateAccepted="2011-10-02T02:13:31Z">cornellian</user>
-        	<user dateAccepted="2011-10-02T02:13:31Z">mhamster</user>
+          <user dateAccepted="2011-09-02T01:10:32Z">cardinal</user>
+          <user dateAccepted="2012-05-02T12:10:44Z">crimson</user>
+          <user dateAccepted="2011-10-02T02:13:31Z">cornellian</user>
+          <user dateAccepted="2011-10-02T02:13:31Z">mhamster</user>
         </usersAcceptedTermsOfDeposit>
         <embargoTerms>1 year</embargoTerms>
         <embargoOption>varies</embargoOption>

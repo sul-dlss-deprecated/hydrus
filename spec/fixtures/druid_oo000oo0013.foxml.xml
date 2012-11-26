@@ -59,7 +59,7 @@
         <hydrusProperties>
           <publishTime>2012-11-01T00:00:00Z</publishTime>
           <lastModifyTime>2012-11-01T00:00:22Z</lastModifyTime>
-          <reviewedReleaseSettings>true</reviewedReleaseSettings>		  
+          <reviewedReleaseSettings>true</reviewedReleaseSettings>      
           <acceptedTermsOfDeposit>true</acceptedTermsOfDeposit>
           <objectStatus>published</objectStatus>
         </hydrusProperties>
@@ -181,21 +181,21 @@
         <rightsMetadata objectId="druid:oo000oo0013">
           <access type="discover">
             <machine>
-            	<world/>
+              <world/>
             </machine>
           </access>
           <access type="read">
             <machine>
-            	<world/>
+              <world/>
             </machine>
           </access>
           <access type="edit">
             <machine/>
           </access>
-				  <use>
-				    <human type="creativeCommons">CC BY Attribution</human>
-				    <machine type="creativeCommons">cc-by</machine>
-				  </use>
+          <use>
+            <human type="creativeCommons">CC BY Attribution</human>
+            <machine type="creativeCommons">cc-by</machine>
+          </use>
         </rightsMetadata>
       </foxml:xmlContent>
     </foxml:datastreamVersion>

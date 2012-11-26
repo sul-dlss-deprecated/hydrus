@@ -12,7 +12,7 @@
               approve_item_path(@document_fedora),
               :id    => 'hydrus_item_approve',
               :class => 'btn btn-small save-edits',
-							:disable_with => "Please wait..."	) %>
+              :disable_with => "Please wait..."  ) %>
       </p>
 
       <!-- Disapprove. -->
@@ -22,7 +22,7 @@
                 "Return Item", 
                 :id    => 'hydrus_item_disapprove',
                 :class => 'btn btn-small save-edits',
-								:disable_with => "Please wait..."	) %>
+                :disable_with => "Please wait..."  ) %>
         </p>
         <p>
           <%= label_tag("hydrus_item_disapproval_reason",
@@ -47,7 +47,7 @@
               resubmit_item_path(@document_fedora),
               :id    => 'hydrus_item_resubmit',
               :class => 'btn btn-small save-edits', 
-							:disable_with => "Please wait..."	) %>
+              :disable_with => "Please wait..."  ) %>
       </p>
 
     <!-- Submit for Approval. -->
@@ -58,7 +58,7 @@
               submit_for_approval_item_path(@document_fedora),
               :id    => 'hydrus_item_submit_for_approval',
               :class => 'btn btn-small save-edits',
-							:disable_with => "Please wait..."	) %>
+              :disable_with => "Please wait..."  ) %>
       </p>
 
     <!-- Publish directly (applies only to items not requiring approval by reviewer). -->
@@ -69,7 +69,7 @@
               publish_directly_item_path(@document_fedora),
               :id    => 'hydrus_item_publish_directly',
               :class => 'btn btn-small save-edits',
-							:disable_with => "Please wait..."	) %>
+              :disable_with => "Please wait..."  ) %>
       </p>
 
     <% end %>
@@ -91,27 +91,27 @@
     </p>
 
     <!-- Share PURL. -->
-		<p class="popup-link"><span style="display:none" id="share-purl"><i class="icon-envelope"></i> <a href="#" id="share-purl-link">Share link to this item</a></span>
-		<div id="copy-purl-link-area">
-			<%= form_tag(send_purl_email_path, :remote => true,  :target => '_new' ) %>
-			<p>Copy item link: 	<%= text_field_tag "copy-purl-link", @document_fedora.purl_url, :readonly=>true %></p>
-			<p>Email item link to:
-				<%= hidden_field_tag "pid", @document_fedora.pid %>
-				<%= text_field_tag "recipients" %>
-				<%= submit_tag("Send Email",:class => 'btn btn-small', :id => 'hydrus_item_send_purl_email') %>
-				</p>
-		</div>
-		</p>
-		
+    <p class="popup-link"><span style="display:none" id="share-purl"><i class="icon-envelope"></i> <a href="#" id="share-purl-link">Share link to this item</a></span>
+    <div id="copy-purl-link-area">
+      <%= form_tag(send_purl_email_path, :remote => true,  :target => '_new' ) %>
+      <p>Copy item link:   <%= text_field_tag "copy-purl-link", @document_fedora.purl_url, :readonly=>true %></p>
+      <p>Email item link to:
+        <%= hidden_field_tag "pid", @document_fedora.pid %>
+        <%= text_field_tag "recipients" %>
+        <%= submit_tag("Send Email",:class => 'btn btn-small', :id => 'hydrus_item_send_purl_email') %>
+        </p>
+    </div>
+    </p>
+    
     <!-- Delete link  -->
     <% if can?(:edit, @document_fedora) && @document_fedora.is_destroyable %>
         <p style="display:none;" id="discard-item" class="discard-item">
           <i class="icon-trash"></i>
-					<%= link_to 'Discard this item', @document_fedora, :method=>:delete, :confirm => 'Are you sure you want to delete this item? This action cannot be undone.'%>
+          <%= link_to 'Discard this item', @document_fedora, :method=>:delete, :confirm => 'Are you sure you want to delete this item? This action cannot be undone.'%>
         </p>
-				<noscript>
-					<p class="discard-item"><i class="icon-trash"></i> <%=link_to 'Discard this item', discard_item_confirmation_path(@document_fedora)%></p>
-				</noscript>
+        <noscript>
+          <p class="discard-item"><i class="icon-trash"></i> <%=link_to 'Discard this item', discard_item_confirmation_path(@document_fedora)%></p>
+        </noscript>
     <% end %>
 
   </div>

@@ -44,16 +44,16 @@ module Hydrus::Authorizable
 
   def self.item_editor_roles
     return Set.new %w(
-      hydrus-collection-manager	
-      hydrus-collection-depositor	
-      hydrus-item-depositor	
+      hydrus-collection-manager  
+      hydrus-collection-depositor  
+      hydrus-item-depositor  
       hydrus-item-manager
     )
   end
 
   def self.item_reviewer_roles
     return Set.new %w(
-      hydrus-collection-reviewer	
+      hydrus-collection-reviewer  
     )
   end
 

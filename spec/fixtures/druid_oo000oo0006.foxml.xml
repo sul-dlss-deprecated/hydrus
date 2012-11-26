@@ -175,7 +175,7 @@
                 <name>Archivist, Five</name>
              </person>
           </role>
-	      </roleMetadata>
+        </roleMetadata>
       </foxml:xmlContent>
     </foxml:datastreamVersion>
   </foxml:datastream>
@@ -184,7 +184,7 @@
     <foxml:datastreamVersion ID="contentMetadata.0" LABEL="Content Metadata"
       CREATED="2012-05-02T23:10:37.034Z" MIMETYPE="text/xml" SIZE="928">
       <foxml:xmlContent>
-	      <contentMetadata>
+        <contentMetadata>
         </contentMetadata>
       </foxml:xmlContent>
     </foxml:datastreamVersion>
@@ -197,21 +197,21 @@
         <rightsMetadata objectId="druid:oo000oo0006">
           <access type="discover">
             <machine>
-            	<world/>
+              <world/>
             </machine>
           </access>
           <access type="read">
             <machine>
-            	<world/>
+              <world/>
             </machine>
           </access>
           <access type="edit">
             <machine/>
           </access>
-				  <use>
-				    <human type="creativeCommons">CC BY Attribution</human>
-				    <machine type="creativeCommons">cc-by</machine>
-				  </use>
+          <use>
+            <human type="creativeCommons">CC BY Attribution</human>
+            <machine type="creativeCommons">cc-by</machine>
+          </use>
         </rightsMetadata>
       </foxml:xmlContent>
     </foxml:datastreamVersion>

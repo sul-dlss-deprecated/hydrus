@@ -183,7 +183,7 @@
                 <name>Archivist, One</name>
              </person>
           </role>
-	      </roleMetadata>
+        </roleMetadata>
       </foxml:xmlContent>
     </foxml:datastreamVersion>
   </foxml:datastream>
@@ -204,21 +204,21 @@
         <rightsMetadata objectId="druid:oo000oo0001">
           <access type="discover">
             <machine>
-            	<world/>
-						</machine>
+              <world/>
+            </machine>
           </access>
           <access type="read">
             <machine>
-            	<world/>
+              <world/>
             </machine>
           </access>
           <access type="edit">
             <machine/>
           </access>
-				  <use>
-				    <human type="creativeCommons">CC BY Attribution</human>
-				    <machine type="creativeCommons">cc-by</machine>
-				  </use>
+          <use>
+            <human type="creativeCommons">CC BY Attribution</human>
+            <machine type="creativeCommons">cc-by</machine>
+          </use>
         </rightsMetadata>
       </foxml:xmlContent>
     </foxml:datastreamVersion>

@@ -2,14 +2,14 @@
 
 <%- sidebar_items << capture do -%>
   <div class="well actions-box collection-settings">
-  	<%=render :partial=>'hydrus_collections/status_box' %>
-		<%=render :partial=>'hydrus_collections/actions_box_show' %>
+    <%=render :partial=>'hydrus_collections/status_box' %>
+    <%=render :partial=>'hydrus_collections/actions_box_show' %>
   </div>
 <%- end -%>
 
 <div class="row">
   <div class="span9">
-		<%= render_contextual_navigation(@document_fedora) %>
+    <%= render_contextual_navigation(@document_fedora) %>
   </div>
 </div>
 <div id="object-content-wrapper">

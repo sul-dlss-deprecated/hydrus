@@ -1,11 +1,11 @@
 <%- c = @document_fedora.collection -%>
 <dt>Online at</dt>
 <dd>
-	<% if @document_fedora.purl_page_ready? %>
-		<%= link_to(@document_fedora.purl_url, @document_fedora.purl_url) %>
-	<% else %>
-		<span class="muted"><%= @document_fedora.purl_url %></span>
-	<% end %>
+  <% if @document_fedora.purl_page_ready? %>
+    <%= link_to(@document_fedora.purl_url, @document_fedora.purl_url) %>
+  <% else %>
+    <span class="muted"><%= @document_fedora.purl_url %></span>
+  <% end %>
 </dd>
 
 <dt>In collection</dt>
@@ -24,11 +24,11 @@
 <dd><%= HyTime.datetime_display(@document_fedora.last_modify_time) %></dd>
 
 <% if to_bool(@document_fedora.requires_human_approval) %>
-	<dt>Submitted for approval</dt>
-	<dd><%= HyTime.datetime_display(@document_fedora.submit_for_approval_time) %></dd>
+  <dt>Submitted for approval</dt>
+  <dd><%= HyTime.datetime_display(@document_fedora.submit_for_approval_time) %></dd>
 <% end %>
 
 <% if @document_fedora.is_published %>
-	<dt><%= to_bool(@document_fedora.requires_human_approval) ? "Approved" : "Published"%> on</dt>
-	<dd><%= HyTime.datetime_display(@document_fedora.publish_time) %></dd>
+  <dt><%= to_bool(@document_fedora.requires_human_approval) ? "Approved" : "Published"%> on</dt>
+  <dd><%= HyTime.datetime_display(@document_fedora.publish_time) %></dd>
 <% end %>

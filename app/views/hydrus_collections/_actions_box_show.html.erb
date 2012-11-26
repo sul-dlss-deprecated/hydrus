@@ -13,7 +13,7 @@
               close_collection_path(@document_fedora),
               :id    => 'hydrus_collection_close',
               :class => 'btn btn-small save-edits',
-							:disable_with => "Please wait..."	) %>
+              :disable_with => "Please wait..."  ) %>
       </p>
     <% elsif @document_fedora.is_openable %>
       <p>
@@ -22,7 +22,7 @@
               open_collection_path(@document_fedora),
               :id    => 'hydrus_collection_open',
               :class => 'btn btn-small save-edits',
-							:disable_with => "Please wait..."	) %>
+              :disable_with => "Please wait..."  ) %>
       </p>
     <% end %>
   <% end %>
@@ -56,13 +56,13 @@
 
   <!-- Delete. -->
   <% if can?(:edit, @document_fedora) && @document_fedora.is_destroyable %>
- 			<p style="display:none;" id="discard-item" class="discard-item">
+       <p style="display:none;" id="discard-item" class="discard-item">
         <i class="icon-trash"></i>
-				<%= link_to 'Discard this collection', @document_fedora, :method=>:delete, :confirm => 'Are you sure you want to delete this collection? This action cannot be undone.'%>
+        <%= link_to 'Discard this collection', @document_fedora, :method=>:delete, :confirm => 'Are you sure you want to delete this collection? This action cannot be undone.'%>
       </p>
-			<noscript>
-				<p class="discard-item"><i class="icon-trash"></i> <%=link_to 'Discard this collection', discard_item_confirmation_path(@document_fedora)%></p>
-			</noscript>
+      <noscript>
+        <p class="discard-item"><i class="icon-trash"></i> <%=link_to 'Discard this collection', discard_item_confirmation_path(@document_fedora)%></p>
+      </noscript>
   <% end %>
 
 </div>

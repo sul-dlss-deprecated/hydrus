@@ -1,35 +1,35 @@
 <div class="collection-status box-header">
-	<span>Status</span> 
-	<% if @document_fedora.is_open %>
-		<span  id="status-label" class="label label-success status-label">Open for deposit</span>
+  <span>Status</span> 
+  <% if @document_fedora.is_open %>
+    <span  id="status-label" class="label label-success status-label">Open for deposit</span>
  <% else %>
- 		<span  id="status-label" class="label label-important status-label">Closed for deposit</span>
+    <span  id="status-label" class="label label-important status-label">Closed for deposit</span>
   <% end %>
 </div>
 <div class="box-body">
-		<%=check_box_tag 'required_fields_checkbox', true, @document_fedora.required_fields_completed?, :disabled=>true%> 
-		<label for="required_fields_checkbox">
-			<%= select_status_checkbox_icon(@document_fedora.required_fields_completed?) %>
-			Name, description, contact provided
-		</label>
+    <%=check_box_tag 'required_fields_checkbox', true, @document_fedora.required_fields_completed?, :disabled=>true%> 
+    <label for="required_fields_checkbox">
+      <%= select_status_checkbox_icon(@document_fedora.required_fields_completed?) %>
+      Name, description, contact provided
+    </label>
 
-		<%=check_box_tag 'embargo_details_checkbox', true, @document_fedora.embargo_details_provided?, :disabled=>true%>
-		<label for="embargo_details_checkbox">
-			<%= select_status_checkbox_icon(@document_fedora.embargo_details_provided?) %>
-			Release and visibility details provided
-		</label>
+    <%=check_box_tag 'embargo_details_checkbox', true, @document_fedora.embargo_details_provided?, :disabled=>true%>
+    <label for="embargo_details_checkbox">
+      <%= select_status_checkbox_icon(@document_fedora.embargo_details_provided?) %>
+      Release and visibility details provided
+    </label>
 
-		<%=check_box_tag 'license_details_checkbox', true, @document_fedora.license_details_provided?, :disabled=>true%>
-		<label for="license_details_checkbox">
-			<%= select_status_checkbox_icon(@document_fedora.license_details_provided?) %>
-			License details provided
-		</label>
-		
-	 <% unless @document_fedora.is_open %>
-		<%=check_box_tag 'collection_opened_checkbox', true, @document_fedora.is_openable, :disabled=>true%>
-		<label for="collection_opened_checkbox">
-			<%= select_status_checkbox_icon(@document_fedora.is_openable) %>
-			Collection can be opened for deposit
-		</label>
-	<% end %>
+    <%=check_box_tag 'license_details_checkbox', true, @document_fedora.license_details_provided?, :disabled=>true%>
+    <label for="license_details_checkbox">
+      <%= select_status_checkbox_icon(@document_fedora.license_details_provided?) %>
+      License details provided
+    </label>
+    
+   <% unless @document_fedora.is_open %>
+    <%=check_box_tag 'collection_opened_checkbox', true, @document_fedora.is_openable, :disabled=>true%>
+    <label for="collection_opened_checkbox">
+      <%= select_status_checkbox_icon(@document_fedora.is_openable) %>
+      Collection can be opened for deposit
+    </label>
+  <% end %>
 </div>

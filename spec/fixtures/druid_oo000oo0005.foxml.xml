@@ -147,7 +147,7 @@
                 <name>Archivist, Three</name>
              </person>
           </role>
-	      </roleMetadata>
+        </roleMetadata>
       </foxml:xmlContent>
     </foxml:datastreamVersion>
   </foxml:datastream>
@@ -156,7 +156,7 @@
     <foxml:datastreamVersion ID="contentMetadata.0" LABEL="Content Metadata"
       CREATED="2012-05-02T23:10:37.034Z" MIMETYPE="text/xml" SIZE="928">
       <foxml:xmlContent>
-	      <contentMetadata>
+        <contentMetadata>
         </contentMetadata>
       </foxml:xmlContent>
     </foxml:datastreamVersion>
@@ -169,21 +169,21 @@
         <rightsMetadata objectId="druid:oo000oo0005">
           <access type="discover">
             <machine>
-            	<world/>
+              <world/>
             </machine>
           </access>
           <access type="read">
             <machine>
-							<group>stanford</group>
+              <group>stanford</group>
             </machine>
           </access>
           <access type="edit">
             <machine/>
           </access>
-				  <use>
-				    <human type="creativeCommons">CC BY Attribution</human>
-				    <machine type="creativeCommons">cc-by</machine>
-				  </use>
+          <use>
+            <human type="creativeCommons">CC BY Attribution</human>
+            <machine type="creativeCommons">cc-by</machine>
+          </use>
         </rightsMetadata>
       </foxml:xmlContent>
     </foxml:datastreamVersion>
@@ -194,7 +194,7 @@
       CREATED="2011-07-05T20:49:25.801Z" MIMETYPE="text/xml" SIZE="345">
       <foxml:xmlContent>
         <hydrusProperties>
-          <reviewedReleaseSettings>true</reviewedReleaseSettings>		
+          <reviewedReleaseSettings>true</reviewedReleaseSettings>    
           <acceptedTermsOfDeposit>true</acceptedTermsOfDeposit>  
           <objectStatus>draft</objectStatus>
         </hydrusProperties>

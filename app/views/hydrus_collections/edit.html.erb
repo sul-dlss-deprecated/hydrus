@@ -5,19 +5,19 @@
 
 <%- sidebar_items << capture do -%>
 
-	<div class="well actions-box" id="collection-actions">
-	
-			<div id="status-box"><%=render :partial=>'status_box' %></div>
-	
-		 <div id="actions-box"><%= render :partial => "actions_box_edit", :locals => {:f=>f, :id=>"js"}%></div>
+  <div class="well actions-box" id="collection-actions">
+  
+      <div id="status-box"><%=render :partial=>'status_box' %></div>
+  
+     <div id="actions-box"><%= render :partial => "actions_box_edit", :locals => {:f=>f, :id=>"js"}%></div>
 
-	</div>
+  </div>
 
 <%- end -%>
 
 <div class="row">
   <div class="span9">
-		<%=render :partial=>'navigation' %>
+    <%=render :partial=>'navigation' %>
   </div>
 </div>
 <div id="object-content-wrapper">
@@ -157,16 +157,16 @@
     <div id="role-management">
       <p>Provide a SUNet ID (NOT email address) for each person who can view, add, or review items in this
          collection, or who can manage the collection. Separate multiple IDs with a comma.</p>
-  			  <div class="row field-group">
-  				 <%= hydrus_form_label do %>
-  				  	<%= f.label :'apo_person_roles[hydrus-collection-depositor]', 'Owner' %>
-  				  <%- end %>
-  				<%= hydrus_form_value do %>
-  						<%= f.text_field :'apo_person_roles[hydrus-collection-depositor]', :value=>@document_fedora.apo_persons_with_role('hydrus-collection-depositor').first, :readonly=>true%>
-  						<p class="help">This is the owner of the collection, and cannot be changed</p>
-    				
+          <div class="row field-group">
+           <%= hydrus_form_label do %>
+              <%= f.label :'apo_person_roles[hydrus-collection-depositor]', 'Owner' %>
+            <%- end %>
+          <%= hydrus_form_value do %>
+              <%= f.text_field :'apo_person_roles[hydrus-collection-depositor]', :value=>@document_fedora.apo_persons_with_role('hydrus-collection-depositor').first, :readonly=>true%>
+              <p class="help">This is the owner of the collection, and cannot be changed</p>
+            
   <%- end %>
-   			</div>
+         </div>
 
       <% Hydrus::Responsible.role_labels(:collection_level).each do |role, h| %>
         <% 
@@ -175,24 +175,24 @@
           next if role == 'hydrus-collection-depositor'
           k = :"apo_person_roles[#{role}]"
         %>
-  	      <div class="row field-group">
-  	        <%= hydrus_form_label do %>
-  	          <%= f.label k, role_label.pluralize %>
-  	        <%- end %>
-  	        <%- pwr = @document_fedora.apo_persons_with_role(role) %>
-  	        <%= hydrus_form_value do %>
-  	          <%= f.text_field k, :value => pwr.to_a.join(', ') %>
-  						<p class="help"><%=help_text%></p>
-  	        <%- end %>
-  	      </div>
+          <div class="row field-group">
+            <%= hydrus_form_label do %>
+              <%= f.label k, role_label.pluralize %>
+            <%- end %>
+            <%- pwr = @document_fedora.apo_persons_with_role(role) %>
+            <%= hydrus_form_value do %>
+              <%= f.text_field k, :value => pwr.to_a.join(', ') %>
+              <p class="help"><%=help_text%></p>
+            <%- end %>
+          </div>
       <% end %>
      </div>
 
 
     <noscript>
-  		<div class="well actions-box" id="collection-actions">
-    		<%= render :partial => "actions_box_edit", :locals => {:id=>"nojs"}%>
-  		</div>
+      <div class="well actions-box" id="collection-actions">
+        <%= render :partial => "actions_box_edit", :locals => {:id=>"nojs"}%>
+      </div>
     </noscript>
 
   <% end %>

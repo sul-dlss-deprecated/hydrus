@@ -61,8 +61,8 @@
         <defaultObjectRights objectId="druid:oo000oo0002">
           <access type="discover">
             <machine>
-            	<world/>
-						</machine>
+              <world/>
+            </machine>
           </access>
           <access type="read">
             <machine>
@@ -72,10 +72,10 @@
           <access type="edit">
             <machine/>
           </access>
-				  <use>
-				    <human type="creativeCommons">CC BY Attribution</human>
-				    <machine type="creativeCommons">cc-by</machine>
-				  </use>
+          <use>
+            <human type="creativeCommons">CC BY Attribution</human>
+            <machine type="creativeCommons">cc-by</machine>
+          </use>
         </defaultObjectRights>
       </foxml:xmlContent>
     </foxml:datastreamVersion>
