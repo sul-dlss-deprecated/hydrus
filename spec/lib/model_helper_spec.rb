@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Hydrus::AccessControlsEnforcement do
-  
+
   include Hydrus::ModelHelper
 
   it "to_bool() should convert true-like things to true" do

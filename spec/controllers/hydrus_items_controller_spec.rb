@@ -7,18 +7,18 @@ describe HydrusItemsController do
 
     it "should map items show correctly" do
       { :get => "/items/abc" }.should route_to(
-        :controller => 'hydrus_items', 
-        :action     => 'show', 
+        :controller => 'hydrus_items',
+        :action     => 'show',
         :id         => 'abc')
     end
-    
+
     it "should map items destroy_value action correctly" do
       { :get => "/items/abc/destroy_value" }.should route_to(
-        :controller => 'hydrus_items', 
+        :controller => 'hydrus_items',
         :action     => 'destroy_value',
         :id         => 'abc')
     end
-    
+
     it "should have the destroy_hydrus_item_value convenience url" do
       destroy_hydrus_item_value_path("123").should match(/items\/123\/destroy_value/)
     end
@@ -37,7 +37,7 @@ describe HydrusItemsController do
     end
 
   end
-  
+
   describe "New Action", :integration => true do
 
     it "should restrict access to non authed user" do

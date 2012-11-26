@@ -5,7 +5,7 @@ describe ApplicationController do
   it "should have the correct layout name" do
     controller.layout_name.should == 'sul_chrome/application'
   end
-  
+
   it "is_production? should behave as expected" do
     tests = [
       # expected  Rails.production?  request.env['HTTP_HOST']
@@ -52,5 +52,5 @@ describe ApplicationController do
     controller.send(:try_to_save, obj, 'blah').should == false
     flash[:error].should == msg
   end
-  
+
 end

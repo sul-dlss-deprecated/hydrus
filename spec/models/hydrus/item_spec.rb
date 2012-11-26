@@ -274,7 +274,7 @@ describe Hydrus::Item do
       @hi.rightsMetadata.ng_xml.should  be_equivalent_to(@xml[:rm_initial])
       @hi.embargoMetadata.ng_xml.should be_equivalent_to(@xml[:em_initial])
     end
-    
+
     it "can exercise all combinations of is_embargoed and visibility to get expected XML" do
       tests = [
         # All permutations of is_embargoed = true|false and visibility = world|stanford,
@@ -296,13 +296,13 @@ describe Hydrus::Item do
         @hi.embargoMetadata.ng_xml.should be_equivalent_to(@xml[exp_em])
       end
     end
-      
+
   end
 
   describe "embargo" do
 
     describe "embargo_date() and embargo_date=()" do
-      
+
       it "getter should return value from embargoMetadata" do
         exp = 'foo release date'
         @hi.stub_chain(:embargoMetadata, :release_date).and_return(exp)
@@ -489,7 +489,7 @@ describe Hydrus::Item do
           @hi.errors.clear
         end
       end
-      
+
     end
 
     it "fully populated Item should be valid" do
@@ -498,7 +498,7 @@ describe Hydrus::Item do
       @hi.stub(:accepted_terms_of_deposit).and_return(true)
       @hi.stub(:reviewed_release_settings).and_return(true)
       @exp.each { |e| @hi.stub(e).and_return(dru) unless e==:contact }
-      @hi.stub(:contact).and_return('test@test.com') # we need a valid email address 
+      @hi.stub(:contact).and_return('test@test.com') # we need a valid email address
       @hi.stub_chain([:collection, :embargo_option]).and_return("varies")
       @hi.valid?.should == true
     end

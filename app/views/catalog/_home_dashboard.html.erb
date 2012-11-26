@@ -33,7 +33,7 @@
           <td>
             <%= c.item_counts_with_labels.map { |n, lab| "#{n} #{lab}" }.join('; ') %>
           </td>
-        </tr> 
+        </tr>
         <% end %>
       </tbody>
     </table>
@@ -41,9 +41,9 @@
   <form class="form-horizontal">
     <% if can?(:create_collections, Hydrus::Collection) %>
       <%= link_to(
-            "Create a new collection", 
+            "Create a new collection",
             new_polymorphic_path(Hydrus::Collection),
-            :class => 'btn', 
+            :class => 'btn',
             :"disable-after-click"=>'true')  %>
     <% end %>
   </form>

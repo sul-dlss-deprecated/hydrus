@@ -14,7 +14,7 @@ set :deploy_via, :remote_cache
 require 'capistrano/ext/multistage'
 
 set :shared_children, %w(
-  log 
+  log
   config/certs
   config/database.yml
   config/solr.yml
@@ -25,7 +25,7 @@ set :shared_children, %w(
   config/ssl_certs.yml
 )
 
-set :user, "lyberadmin" 
+set :user, "lyberadmin"
 set :runner, "lyberadmin"
 set :ssh_options, {
   :auth_methods  => %w(gssapi-with-mic publickey hostbased),
@@ -57,7 +57,7 @@ namespace :app do
 end
 
 namespace :jetty do
-  task :start do 
+  task :start do
     run "cd #{deploy_to}/current && rake hydra:jetty:config && rake jetty:start"
   end
   task :stop do
@@ -83,9 +83,9 @@ end
 namespace :files do
   task :refresh_fixtures do
     run "cd #{deploy_to}/current && rake hydrus:refresh_upload_files"
-  end  
+  end
   task :create_upload_symlink do
-   run "ln -s /data/hydrus-files #{deploy_to}/current/public/uploads" 
+   run "ln -s /data/hydrus-files #{deploy_to}/current/public/uploads"
   end
 end
 

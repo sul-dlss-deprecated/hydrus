@@ -4,13 +4,13 @@ module ApplicationHelper
   def application_name
     'Stanford Digital Repository'
   end
-  
+
   def license_image(license_code)
     if Hydrus::GenericObject.license_type(license_code) == 'creativeCommons'
       image_tag "licenses/" + license_code.downcase.gsub('-','_') + ".png"
     end
   end
-  
+
   def license_link(license_code)
     license_name=Hydrus::GenericObject.license_human(license_code)
     license_type=Hydrus::GenericObject.license_type(license_code)
@@ -18,11 +18,11 @@ module ApplicationHelper
       link_to license_name,'http://creativecommons.org/licenses/'
     elsif license_type == 'openDataCommons'
       link_to license_name,'http://opendatacommons.org/licenses/'
-    else 
+    else
       license_code
     end
   end
-  
+
   def button_color(status)
     case status.downcase
       when "published"
@@ -52,7 +52,7 @@ module ApplicationHelper
   def hydrus_signin_link
     link_to("Sign in", new_signin_path(:referrer => request.fullpath), :class=>'signin_link', :"data-url" => new_signin_path(:referrer => request.fullpath))
   end
-  
+
   def terms_of_deposit_path(pid)
     url_for(:controller=>'hydrus_items',:action=>'terms_of_deposit',:pid=>pid)
   end
@@ -60,7 +60,7 @@ module ApplicationHelper
   def terms_of_deposit_agree_path(pid)
     url_for(:controller=>'hydrus_items',:action=>'agree_to_terms_of_deposit',:pid=>pid)
   end
-    
+
   def hydrus_strip(value)
     value.nil? ? "" : value.strip
   end
@@ -70,16 +70,16 @@ module ApplicationHelper
   def show_item_edit(item)
     can?(:edit,item) && (!item.is_published || ["development","test"].include?(Rails.env))
   end
-  
+
   def edit_item_text(item)
     "Edit Draft"
   end
-  
+
   # text to show on item view tab
   def view_item_text(item)
     item.is_published ? "Published Version" : "View Draft"
   end
-  
+
   def hydrus_object_setting_value(obj)
     hydrus_is_empty?(obj) ? content_tag(:span, "to be entered", :class => "unspecified") : obj
   end
@@ -87,27 +87,27 @@ module ApplicationHelper
   def title_text(obj)
     obj.title.blank? ? "Untitled" : obj.title
   end
-  
+
   # a helper to create links to items that may or may not have titles yet
   def title_link(obj)
     return link_to(title_text(obj), polymorphic_path(obj))
   end
-    
-  # this checks to see if the object passed in is "empty", which could be nil, a blank string, an array of strings with all elements that are blank, 
+
+  # this checks to see if the object passed in is "empty", which could be nil, a blank string, an array of strings with all elements that are blank,
   # an arbitrary object whose attributes are all blank, or an array of arbitrary objects whose attributes are all blank
   def hydrus_is_empty?(obj)
     if obj.nil? # nil case
       is_blank=true
-    elsif obj.class == Array # arrays      
+    elsif obj.class == Array # arrays
       is_blank=obj.all? {|element| hydrus_is_empty?(element)}
     elsif obj.class == String # strings
       is_blank=obj.blank?
     else # case of abitrary object
-      is_blank=hydrus_is_object_empty?(obj) 
+      is_blank=hydrus_is_object_empty?(obj)
     end
     return is_blank
    end
-  
+
   # this checks to see if the object passed in has attributes that are all blank
   def hydrus_is_object_empty?(obj)
     !get_attributes(obj).collect{|attribute| obj.send(attribute).blank?}.include?(false)
@@ -121,7 +121,7 @@ module ApplicationHelper
   def render_contextual_navigation(model)
     render :partial=>"#{view_path_from_model(model)}/navigation"
   end
-  
+
   def view_path_from_model(model)
     model.class.to_s.pluralize.parameterize("_")
   end

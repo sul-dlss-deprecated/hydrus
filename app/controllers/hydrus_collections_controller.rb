@@ -41,8 +41,8 @@ class HydrusCollectionsController < ApplicationController
       render 'shared/discard_confirmation'
     else
       flash[:warning]="You do not have permissions to delete this collection."
-      redirect_to root_url 
-    end   
+      redirect_to root_url
+    end
   end
 
   def new
@@ -54,9 +54,9 @@ class HydrusCollectionsController < ApplicationController
   def update
 
     notice = []
-    
+
     depositors_before_update = @document_fedora.apo.persons_with_role("hydrus-collection-item-depositor")
-    
+
     ####
     # Update attributes without saving.
     ####
@@ -64,7 +64,7 @@ class HydrusCollectionsController < ApplicationController
     if params.has_key?("hydrus_collection")
       @document_fedora.attributes = params["hydrus_collection"]
     end
-    
+
     if @document_fedora.is_open
       depositors_after_update = @document_fedora.apo.persons_with_role("hydrus-collection-item-depositor")
       new_depositors = (depositors_after_update - depositors_before_update).to_a.join(", ")

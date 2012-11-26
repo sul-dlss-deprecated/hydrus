@@ -1,6 +1,6 @@
 DEFAULT_OPTS = [
-  '--color', 
-  '--format progress', 
+  '--color',
+  '--format progress',
   '--order random',
   '--require ./spec/spec_helper.rb',
 ]

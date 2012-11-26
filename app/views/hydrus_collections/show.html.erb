@@ -3,7 +3,7 @@
 <%- sidebar_items << capture do -%>
 
 <div class="well actions-box collection-settings">
-  
+
       <div id="status-box"><%=render :partial=>'status_box' %></div>
 
        <div id="actions-box"><%=render :partial=>'actions_box_show' %></div>
@@ -26,7 +26,7 @@
 
     <% unless hydrus_is_empty?(@document_fedora.related_items) %>
      <div class="collection-items">
-         <h4>Links to related information</h4>      
+         <h4>Links to related information</h4>
           <%- @document_fedora.related_items.each_with_index do |related_item, index| -%>
             <dd>&raquo; <%= related_item.url.blank? ? hydrus_object_setting_value(related_item.url) : link_to(related_item.title, related_item.url) %></dd>
           <%- end -%>
@@ -49,14 +49,14 @@
           from time of deposit to <%=@document_fedora.embargo_terms%> after deposit.</strong>
       <% end %>
       </p>
-      
+
       <p>
       <%if @document_fedora.embargo_option == 'none' %>
         Upon release
       <% else %>
         After its release date,
       <% end %>
-      content in this collection can be discovered and downloaded by 
+      content in this collection can be discovered and downloaded by
         <% if @document_fedora.visibility == 'stanford' %>
           <strong>the Stanford community -- all items will be visible only to Stanford-authenticated users.</strong>
         <% elsif @document_fedora.visibility == 'everyone' %>
@@ -79,7 +79,7 @@
           After its release date,
         <% end %>
         items in this collection are covered by the following license terms:</p>
-        
+
         <p>
         <% if @document_fedora.license_option == 'none' %>
           No license
@@ -106,7 +106,7 @@
           </dl>
     </div>
 
-  </div> <!-- object-content-wrapper -->  
+  </div> <!-- object-content-wrapper -->
     <div id="druid-footer"><%= @document_fedora.pid %></div>
 </div>
 

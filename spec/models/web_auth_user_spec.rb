@@ -10,7 +10,7 @@ describe WebAuthUser do
     end
     it "should respond to sunetid w/ the user ID" do
       @user.sunetid.should == "jdoe"
-    end    
+    end
     it "should respond to email w/ the user ID + @stanford.edu" do
       @user.email.should == "jdoe@stanford.edu"
     end
@@ -18,7 +18,7 @@ describe WebAuthUser do
       @user.is_webauth?.should be_true
     end
   end
-  
+
   describe "w/o enviornment variable set" do
     it "should raise an error" do
       expect{WebAuthUser.new("")}.to raise_error

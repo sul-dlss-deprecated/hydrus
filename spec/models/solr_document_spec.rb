@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe SolrDocument do
-  
+
   it "route_key() should behave as expected" do
     tests = [
       [ 'info:fedora/afmodel:Dor_Collection', 'hydrus_collection'],

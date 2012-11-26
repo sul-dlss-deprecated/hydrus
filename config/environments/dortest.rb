@@ -63,7 +63,7 @@ Hydrus::Application.configure do
 
   # this is the path from the root of the public folder into which file uploads will be stored
   config.file_upload_path = 'uploads'
-    
+
   # Log the query plan for queries taking more than this (works
   # with SQLite, MySQL, and PostgreSQL)
   # config.active_record.auto_explain_threshold_in_seconds = 0.5
@@ -73,8 +73,8 @@ Dor::Config.configure do
 
   purl do
     base_url 'http://purl-test.stanford.edu/'
-  end  
-  
+  end
+
   hydrus do
     exception_error_page   true                                       # if true, a generic error page will be shown with no exception messages; if false, standard Rails exceptions are shown directly to the user
     exception_error_panel  true                                       # if true and exception_error_page is also set to true, a collapsible exception error panel is shown on the friendly error page

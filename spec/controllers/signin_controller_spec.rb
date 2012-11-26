@@ -1,27 +1,27 @@
 require 'spec_helper'
 
 describe SigninController do
-  
+
   describe "routes" do
     it "should properly define login" do
       webauth_login_path.should == "/users/auth/webauth"
-      assert_routing({ :path => "users/auth/webauth", :method => :get }, 
+      assert_routing({ :path => "users/auth/webauth", :method => :get },
         { :controller => "signin", :action => "login" })
     end
     it "should properly define logout" do
       webauth_logout_path.should == "/users/auth/webauth/logout"
-      assert_routing({ :path => "users/auth/webauth/logout", :method => :get }, 
+      assert_routing({ :path => "users/auth/webauth/logout", :method => :get },
         { :controller => "signin", :action => "logout" })
     end
   end
-  
+
   describe "login" do
     it "should redirect to the referrer passed in the URL" do
       get :login, :referrer => "/somepath"
       response.should redirect_to("/somepath")
     end
   end
-  
+
   describe "logout" do
     before(:each) do
       request.env["HTTP_REFERER"] = "/somepath"
@@ -42,5 +42,5 @@ describe SigninController do
       response.should redirect_to("/")
     end
   end
-  
+
 end

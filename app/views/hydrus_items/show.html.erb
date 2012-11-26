@@ -55,7 +55,7 @@
           </table>
         </div>
         <% end %>
-    
+
        <div class="collection-items">
            <h4>Abstract and keywords</h4>
               <dt>Abstract</dt>
@@ -65,7 +65,7 @@
                 <dd>
                   <%= @document_fedora.keywords.map {|topic| link_to(topic, "#")}.join(", ").html_safe %>
                 </dd>
-              <% end %>            
+              <% end %>
       </div>
 
        <% unless hydrus_is_empty?(@document_fedora.preferred_citation) && hydrus_is_empty?(@document_fedora.related_citation) && hydrus_is_empty?(@document_fedora.related_items) %>
@@ -75,14 +75,14 @@
              <dt>Cite this item as</dt>
              <dd><%= @document_fedora.preferred_citation %></dd>
            <% end %>
-     
+
            <% unless hydrus_is_empty?(@document_fedora.related_citation) %>
              <% @document_fedora.related_citation.each_with_index do |related_citation, index| %>
                <dt class="<%= 'hidden-label' if index > 0 %>">Related published work</dt>
                <dd><%= related_citation %></dd>
              <% end %>
            <% end %>
-     
+
            <% unless hydrus_is_empty?(@document_fedora.related_items) %>
              <% @document_fedora.related_items.each_with_index do |related_item, index| %>
                <dt class="<%= 'hidden-label' if index > 0 %>">Related links</dt>
@@ -91,7 +91,7 @@
            <% end %>
          </div>
      <% end %>
-    
+
      <div class="collection-items">
        <h4>Release, Visibility and License</h4>
       <dt>Visibility</dt>
@@ -108,15 +108,15 @@
       <dd>
         <% case @document_fedora.collection.embargo_option %>
         <% when 'none' %>
-          This item will be released for discovery and download 
+          This item will be released for discovery and download
           <span class="highlight-value">
             as soon as it is published.
           </span>
         <% when 'varies' %>
-          This item will be released for discovery and download 
+          This item will be released for discovery and download
           <%= @document_fedora.embargo_date.blank? ? 'immediately' : "on #{@document_fedora.embargo_date}"%>.
         <% when 'fixed' %>
-          This item will be released for discovery and download 
+          This item will be released for discovery and download
           <span class="highlight-value">
             <%= @document_fedora.collection.embargo %>
             after deposit.
@@ -129,12 +129,12 @@
     <% when 'none' %>
       No license will be applied to this item. All rights reserved by content creator.
     <% when 'varies' %>
-      This item will be licensed under 
+      This item will be licensed under
       <span class="highlight-value">
         <%= Hydrus::Collection.license_human(@document_fedora.license) %>.
       </span>
     <% when 'fixed' %>
-      This work will be licensed under 
+      This work will be licensed under
       <span class="highlight-value">
         <%= Hydrus::Collection.license_human(@document_fedora.collection.license) %>.
       </span>
@@ -142,7 +142,7 @@
     </dd>
       </div>
 
-    
-  </div> <!-- object-content-wrapper --> 
+
+  </div> <!-- object-content-wrapper -->
     <div id="druid-footer"><%= @document_fedora.pid %></div>
 </div>

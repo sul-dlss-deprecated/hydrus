@@ -9,7 +9,7 @@
     <% if isopen %>
       <p>
         <%= button_to(
-              "Close Collection", 
+              "Close Collection",
               close_collection_path(@document_fedora),
               :id    => 'hydrus_collection_close',
               :class => 'btn btn-small save-edits',
@@ -18,7 +18,7 @@
     <% elsif @document_fedora.is_openable %>
       <p>
         <%= button_to(
-              "Open Collection", 
+              "Open Collection",
               open_collection_path(@document_fedora),
               :id    => 'hydrus_collection_open',
               :class => 'btn btn-small save-edits',
@@ -32,7 +32,7 @@
     <% message = @document_fedora.is_openable ?
                  "To add items, you must open the collection." :
                  "To add items, you must fill in all required fields and open the collection."
-    %> 
+    %>
     <div class="btn-group add-content-dropdown" <%=raw "data-placement=\"bottom\" rel=\"tooltip\" data-original-title=\"#{message}\"" unless isopen%> style="display:none;" >
       <button class="<%="disabled" unless isopen%> btn btn-small">Add new &hellip;</button>
       <button class="<%="disabled" unless isopen%> btn btn-small dropdown-toggle" data-toggle="dropdown">
@@ -44,7 +44,7 @@
     <noscript>
       <%= form_tag(new_hydrus_item_path, :method=>"GET", :class=>"add-content-options") do %>
         <%= select_tag(
-              "collection", 
+              "collection",
               options_for_select([["item", @document_fedora.pid]]),
               :class=>"add-content-options"
             )

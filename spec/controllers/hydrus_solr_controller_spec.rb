@@ -21,7 +21,7 @@ describe HydrusSolrController do
       response.status.should == 200
       response.body.should include("skipped")
     end
-    
+
   end
 
 end

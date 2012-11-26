@@ -59,16 +59,16 @@
               <title></title>
             </titleInfo>
             <location>
-              <url>http://data.stanford.edu/</url>        
-            </location>            
+              <url>http://data.stanford.edu/</url>
+            </location>
           </relatedItem>
           <relatedItem type="references">
             <titleInfo>
               <title>About the SSDS</title>
             </titleInfo>
             <location>
-              <url>http://ssds.stanford.edu/</url>        
-            </location>            
+              <url>http://ssds.stanford.edu/</url>
+            </location>
           </relatedItem>
           <note type="contact">archivist1@example.com</note>
         </mods>
@@ -131,7 +131,7 @@
           <embargoOption>varies</embargoOption>
           <embargoTerms>1 year</embargoTerms>
           <licenseOption>fixed</licenseOption>
-          <visibilityOption>fixed</visibilityOption>  
+          <visibilityOption>fixed</visibilityOption>
           <requiresHumanApproval>no</requiresHumanApproval>
           <usersAcceptedTermsOfDeposit>
                 <user dateAccepted="2011-09-02T09:02:32Z">archivist1</user>

@@ -15,7 +15,7 @@ namespace :hydrus do
     'druid:oo000oo0011',
     'druid:oo000oo0012',
     'druid:oo000oo0013',
-    'druid:oo000oo0099',    
+    'druid:oo000oo0099',
   ]
 
   desc "hydrus fixture info"
@@ -41,18 +41,18 @@ namespace :hydrus do
       Rake::Task['repo:load'].reenable
       Rake::Task['repo:load'].invoke
     }
-    
+
     # index the workflow objects
     Rake::Task['hydrus:reindex_workflow_objects'].invoke
-    
-    if !["test","development"].include?(Rails.env) 
+
+    if !["test","development"].include?(Rails.env)
       puts "****NOTE: For security reasons, you might want to change passwords for default users after this task using \"RAILS_ENV=#{ENV['RAILS_ENV']}rake hydrus:update_passwords['newpassword']\"*****"
     end
   end
 
   # call with rake hydrus:reindex pid=druid:oo000oo0099
   desc "reindex specified pid"
-  task :reindex => :environment do 
+  task :reindex => :environment do
     require File.expand_path('config/environment')
     pid=ENV["pid"]
     obj = Dor.load_instance pid
@@ -67,7 +67,7 @@ namespace :hydrus do
 
   # call with rake hydrus:reindex_workflow_objects
   desc "reindex all workflow objects for the given environment"
-  task :reindex_workflow_objects => :environment do 
+  task :reindex_workflow_objects => :environment do
     require File.expand_path('config/environment')
     pids=Dor::Config.hydrus.workflow_object_druids
     pids.each do |pid|
@@ -76,7 +76,7 @@ namespace :hydrus do
       Rake::Task['hydrus:reindex'].invoke
     end
   end
-  
+
   # call with rake hydrus:delete_objects pid=druid:oo000oo0003
   desc "delete a given hydrus collection object and all associated items and APOs"
   task :delete_objects => :environment do
@@ -94,7 +94,7 @@ namespace :hydrus do
       end
     end
   end
-  
+
   # call with hydrus:update_passwords['newpassword']
   desc "update all fixture user passwords"
   task :update_passwords, :new_password do |t,args|
@@ -102,7 +102,7 @@ namespace :hydrus do
     new_password=args[:new_password]
     users = YAML.load(File.read 'test/fixtures/users.yml')
     users.each do |user,values|
-      puts "Updating password for #{values['email']}" 
+      puts "Updating password for #{values['email']}"
       u=User.find_by_email(values['email'])
       u.password=new_password
       u.password_confirmation=new_password
@@ -155,7 +155,7 @@ namespace :hydrus do
     #   source: spec/fixtures/files/DRUID/*
     #   dest:   public/uploads/DRUID...TREE/content/*
     puts "refreshing upload files"
-    require File.expand_path('config/environment')    
+    require File.expand_path('config/environment')
     app_base = File.expand_path('../../../', __FILE__)
     src_base = File.join(app_base, 'spec/fixtures/files')
     dst_base = File.join(app_base, 'public',Hydrus::Application.config.file_upload_path)
@@ -174,7 +174,7 @@ namespace :hydrus do
   desc "clear uploaded files [public/upload] directory"
   task :clear_upload_files do
     puts "clearing upload files directory"
-    require File.expand_path('config/environment')    
+    require File.expand_path('config/environment')
     app_base = File.expand_path('../../../', __FILE__)
     dst_base = File.join(app_base, 'public',Hydrus::Application.config.file_upload_path)
     puts "Removing all folders in #{dst_base}"
@@ -217,13 +217,13 @@ namespace :hydrus do
   end
 
   desc "delete all existing objects in solr without nuking jetty (objects will remain in fedora)"
-  task :solr_nuke => :environment do 
+  task :solr_nuke => :environment do
     require File.expand_path('config/environment')
     url1="curl #{Dor::Config.solrizer.url}/update --data '<delete><query>*:*</query></delete>' -H 'Content-type:text/xml; charset=utf-8'"
     url2="curl #{Dor::Config.solrizer.url}/update --data '<commit/>' -H 'Content-type:text/xml; charset=utf-8'"
     puts "Delete all objects at SOLR URL #{Dor::Config.solrizer.url} in Rails environment '#{Rails.env}'? (type yes to proceed)"
     confirm = $stdin.gets.chomp
-    if confirm == "yes"      
+    if confirm == "yes"
       puts "Nuking solr"
       `#{url1}`
       `#{url2}`

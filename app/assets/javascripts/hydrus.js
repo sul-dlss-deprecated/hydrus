@@ -1,16 +1,16 @@
 // this is loaded on each page
 $(document).ready(function(){
-  
+
   if ($('#hydrus_collections-edit').length == 1 || $('#hydrus_collections-update').length == 1) {collection_edit_init();}
   if ($('#hydrus_items-edit').length == 1 || $('#hydrus_items-update').length == 1) {item_edit_init();}
   if ($('#itemsTable').length == 1) {$("#itemsTable").tablesorter();}
   setup_links_that_disable();
   setup_action_links();
-  
+
   $(".abstract").truncate({max_length: 350});
 
   $("[rel=tooltip]").tooltip();
-    
+
   // Modal sign in
   $(".signin_link").each(function(){
     $(this).click(function(){
@@ -18,7 +18,7 @@ $(document).ready(function(){
       return false;
     });
   });
-  
+
   // Open terms of deposit modal window for ajax users
   $(".tod_link").each(function(){
     $(this).click(function(){
@@ -26,12 +26,12 @@ $(document).ready(function(){
       return false;
     });
   });
-    
+
   // Show all dropdown menus.  This only happens on HydrusCollections#show and HydrusItems#indexc currently.
   $(".add-content-dropdown").each(function(){
     $(this).toggle();
   });
-  
+
 });
 
 // Manage groups of radio buttons that have related fields that need to be disabled.
@@ -74,11 +74,11 @@ function activate_edit_controls() {
     });
     return false;
   });
-  
+
   // javascript form submission
   $("#item-actions, #collection-actions").toggle();
   $("#item-actions button[type=submit], #collection-actions button[type=submit]").click(function(){
-    $("form.step").append("<input type='hidden' value='" + $(this).attr('value') + "' name='" + $(this).attr('name') + "' />");  
+    $("form.step").append("<input type='hidden' value='" + $(this).attr('value') + "' name='" + $(this).attr('name') + "' />");
     $(this).attr("disabled","disabled");
     $(this).text("Please wait...");
     $("form.step").submit();
@@ -104,7 +104,7 @@ function activate_edit_controls() {
       }
     });
     return false;
-  });  
+  });
 }
 
 function validate_hydrus_item() {
@@ -149,7 +149,7 @@ function setup_action_links() {
   });
   $("#copy-purl-link").click(function() {
     $('#copy-purl-link').select();
-  });  
+  });
 }
 // href links with the disable-after-click=true attribute will be automatically disabled after clicking to prevent double clicks
 function setup_links_that_disable() {
@@ -174,7 +174,7 @@ function setup_form_state_change_tracking() {
 }
 
 function ajax_loading_indicator(element) {
-  $("body").css("cursor", "progress");  
+  $("body").css("cursor", "progress");
   if (!!element) {
     element.animate({opacity:0.25});
     element.attr("disabled","disabled");
@@ -182,7 +182,7 @@ function ajax_loading_indicator(element) {
 }
 
 function ajax_loading_done(element) {
-  $("body").css("cursor", "auto");  
+  $("body").css("cursor", "auto");
   if (!!element) {
     element.animate({opacity:1.0});
     element.removeAttr("disabled");
@@ -195,21 +195,21 @@ function check_tracked_form_state_change() {
     if($("input[type='hidden'][name='save']", $(this)).length < 1){
       if(!state_changed && ($(this).serialize() != $(this).data("serialized")) ){
         state_changed = true;
-      }  
+      }
     }
   });
   return state_changed;
 }
 
 function collection_edit_init(){
-  
+
   // this method is called when the collection edit page is fully loaded
   validate_hydrus_collection();
   activate_edit_controls();
   $("form input, form textarea").live("blur", function(){
       validate_hydrus_collection();
-  });  
-  
+  });
+
   // Manage state of select dropdowns when the select should be enabled only when its associated radio button is selected
   $('div.radio-select-group input:radio').click(function() { // when a radio button in the group is clicked
     $('div.radio-select-group select').prop('disabled', true); // disable all the selects
@@ -217,12 +217,12 @@ function collection_edit_init(){
       .prop('disabled', false); // re-enable the select that is associated with the selected radio button
   });
   // On page load, execute the code block above to disable appropriate select dropdowns
-  $('div.radio-select-group input:radio:checked').trigger('click');  
+  $('div.radio-select-group input:radio:checked').trigger('click');
   setup_form_state_change_tracking();
 }
 
 function item_edit_init(){
-  
+
   // this method is called when the item edit page is fully loaded
   validate_hydrus_item();
   activate_edit_controls();
@@ -243,6 +243,6 @@ function item_edit_init(){
 $(window).on('beforeunload', function() {
   state_changed = check_tracked_form_state_change();
   if(state_changed){
-    return "You have unsaved changes.";  
+    return "You have unsaved changes.";
   }
 });

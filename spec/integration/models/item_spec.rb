@@ -15,7 +15,7 @@ describe(Hydrus::Item, :integration => true) do
     it "should be able to generate content metadata, returning and setting correct cm when files exist" do
       item = Hydrus::Item.find('druid:oo000oo0001')
       item.files.size.should == 4
-      item.datastreams['contentMetadata'].content.should be_equivalent_to "<contentMetadata></contentMetadata>" 
+      item.datastreams['contentMetadata'].content.should be_equivalent_to "<contentMetadata></contentMetadata>"
       item.update_content_metadata
       item.datastreams['contentMetadata'].content.should be_equivalent_to <<-EOF
       <contentMetadata objectId="oo000oo0001" type="file">

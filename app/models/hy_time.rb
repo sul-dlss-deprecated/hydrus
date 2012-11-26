@@ -24,7 +24,7 @@ module HyTime
   DT_FORMATS = {
     # Back-end datetime formats for XML storage are based on iso8601.
     # For example: "2012-11-16T23:40:11Z".
-    # Note that the :datetime format string produces the same string 
+    # Note that the :datetime format string produces the same string
     # as calling iso8601() on a DateTime object.
     :date             => '%F',
     :time             => '%TZ',

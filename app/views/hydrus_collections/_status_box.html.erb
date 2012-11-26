@@ -1,5 +1,5 @@
 <div class="collection-status box-header">
-  <span>Status</span> 
+  <span>Status</span>
   <% if @document_fedora.is_open %>
     <span  id="status-label" class="label label-success status-label">Open for deposit</span>
  <% else %>
@@ -7,7 +7,7 @@
   <% end %>
 </div>
 <div class="box-body">
-    <%=check_box_tag 'required_fields_checkbox', true, @document_fedora.required_fields_completed?, :disabled=>true%> 
+    <%=check_box_tag 'required_fields_checkbox', true, @document_fedora.required_fields_completed?, :disabled=>true%>
     <label for="required_fields_checkbox">
       <%= select_status_checkbox_icon(@document_fedora.required_fields_completed?) %>
       Name, description, contact provided
@@ -24,7 +24,7 @@
       <%= select_status_checkbox_icon(@document_fedora.license_details_provided?) %>
       License details provided
     </label>
-    
+
    <% unless @document_fedora.is_open %>
     <%=check_box_tag 'collection_opened_checkbox', true, @document_fedora.is_openable, :disabled=>true%>
     <label for="collection_opened_checkbox">

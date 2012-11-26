@@ -8,7 +8,7 @@
       <!-- Approve. -->
       <p>
         <%= button_to(
-              "Approve Item", 
+              "Approve Item",
               approve_item_path(@document_fedora),
               :id    => 'hydrus_item_approve',
               :class => 'btn btn-small save-edits',
@@ -19,14 +19,14 @@
       <%= form_tag(disapprove_item_path(@document_fedora)) do -%>
         <p>
           <%= button_tag(
-                "Return Item", 
+                "Return Item",
                 :id    => 'hydrus_item_disapprove',
                 :class => 'btn btn-small save-edits',
                 :disable_with => "Please wait..."  ) %>
         </p>
         <p>
           <%= label_tag("hydrus_item_disapproval_reason",
-                        "Reason for return", 
+                        "Reason for return",
                         :class => "return-item") %>
           <%= text_field_tag("hydrus_item_disapproval_reason",
                              @document_fedora.disapproval_reason,
@@ -43,10 +43,10 @@
       </p>
       <p>
         <%= button_to(
-              "Resubmit for Approval", 
+              "Resubmit for Approval",
               resubmit_item_path(@document_fedora),
               :id    => 'hydrus_item_resubmit',
-              :class => 'btn btn-small save-edits', 
+              :class => 'btn btn-small save-edits',
               :disable_with => "Please wait..."  ) %>
       </p>
 
@@ -54,7 +54,7 @@
     <% elsif @document_fedora.is_submittable_for_approval && can?(:edit, @document_fedora)%>
       <p>
         <%= button_to(
-              "Submit for Approval", 
+              "Submit for Approval",
               submit_for_approval_item_path(@document_fedora),
               :id    => 'hydrus_item_submit_for_approval',
               :class => 'btn btn-small save-edits',
@@ -65,7 +65,7 @@
     <% elsif @document_fedora.is_publishable && can?(:edit, @document_fedora) %>
       <p>
         <%= button_to(
-              "Publish", 
+              "Publish",
               publish_directly_item_path(@document_fedora),
               :id    => 'hydrus_item_publish_directly',
               :class => 'btn btn-small save-edits',
@@ -79,12 +79,12 @@
       <i class="icon-share"></i>
       <% tod_path = terms_of_deposit_path(@document_fedora) %>
       <%= link_to(
-            @document_fedora.terms_of_deposit_accepted? ? 
-              "View Terms of Deposit" : 
-              "View and agree with Terms of Deposit", 
-            tod_path, 
-            :target     => '_blank', 
-            :class      => 'tod_link', 
+            @document_fedora.terms_of_deposit_accepted? ?
+              "View Terms of Deposit" :
+              "View and agree with Terms of Deposit",
+            tod_path,
+            :target     => '_blank',
+            :class      => 'tod_link',
             :"data-url" => "#{tod_path}&from=#{controller.action_name}"
           )
       %>
@@ -102,7 +102,7 @@
         </p>
     </div>
     </p>
-    
+
     <!-- Delete link  -->
     <% if can?(:edit, @document_fedora) && @document_fedora.is_destroyable %>
         <p style="display:none;" id="discard-item" class="discard-item">

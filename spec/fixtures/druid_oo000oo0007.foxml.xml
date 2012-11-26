@@ -95,8 +95,8 @@
             <topic>hair</topic>
           </subject>
           <note type="preferred citation">Fubblicious Dataset Title. http://purl.stanford.edu/oo000oo0007</note>
-          <note type="citation/reference">Abu-Nader, R., and Terrell, C.L. (2002). Mycobacterium bovis vertebral osteomyelitis as a complication of intravesical BCG use. Mayo Clin Proc 77, 393-397.</note> 
-          <note type="citation/reference">Marzocchetti, A., Di Giambenedetto, S., Cingolani, A., Ammassari, A., Cauda, R., and De Luca, A. (2005). Reduced rate of diagnostic positive detection of JC virus DNA in cerebrospinal fluid in cases of suspected progressive multifocal leukoencephalopathy in the era of potent antiretroviral therapy. J Clin Microbiol 43, 4175-4177.</note> 
+          <note type="citation/reference">Abu-Nader, R., and Terrell, C.L. (2002). Mycobacterium bovis vertebral osteomyelitis as a complication of intravesical BCG use. Mayo Clin Proc 77, 393-397.</note>
+          <note type="citation/reference">Marzocchetti, A., Di Giambenedetto, S., Cingolani, A., Ammassari, A., Cauda, R., and De Luca, A. (2005). Reduced rate of diagnostic positive detection of JC virus DNA in cerebrospinal fluid in cases of suspected progressive multifocal leukoencephalopathy in the era of potent antiretroviral therapy. J Clin Microbiol 43, 4175-4177.</note>
           <note type="contact">archivist1@example.com</note>
           <relatedItem type="references">
             <titleInfo>
@@ -178,7 +178,7 @@
         <hydrusProperties>
           <publishTime>2012-11-01T00:00:00Z</publishTime>
           <lastModifyTime>2012-11-01T00:00:22Z</lastModifyTime>
-          <reviewedReleaseSettings>true</reviewedReleaseSettings>      
+          <reviewedReleaseSettings>true</reviewedReleaseSettings>
           <acceptedTermsOfDeposit>true</acceptedTermsOfDeposit>
           <objectStatus>published</objectStatus>
         </hydrusProperties>

@@ -8,13 +8,13 @@ class Hydrus::GenericObject < Dor::Item
   include Hydrus::EmbargoMetadataDsExtension
 
   attr_accessor :files_were_changed
-    
+
   REQUIRED_FIELDS=[:title,:abstract,:contact]
   REQUIRED_FIELDS.each {|field| validates field, :not_empty => true, :if => :should_validate}
 
   validates :pid, :is_druid => true
-  validates :contact, :email_format => {:message => 'is not a valid email address'}, :if => :should_validate 
-  
+  validates :contact, :email_format => {:message => 'is not a valid email address'}, :if => :should_validate
+
   has_metadata(
     :name => "rightsMetadata",
     :type => Hydrus::RightsMetadataDS,
@@ -32,7 +32,7 @@ class Hydrus::GenericObject < Dor::Item
     :type => Hydrus::HydrusPropertiesDS,
     :label => 'Hydrus Properties',
     :control_group => 'M')
-    
+
   setup_delegations(
     # [:METHOD_NAME,              :uniq, :at... ]
     "descMetadata" => [
@@ -48,20 +48,20 @@ class Hydrus::GenericObject < Dor::Item
       [:publish_time,             true   ],
       [:submit_for_approval_time, true   ],
       [:last_modify_time,         true   ],
-      [:item_type,                true   ],      
+      [:item_type,                true   ],
     ],
     "rightsMetadata" => [
       [:rmd_embargo_release_date, true,  :read_access, :machine, :embargo_release_date],
     ],
   )
-  
+
   # delete the file upload directory and then call the super method
   def delete
     parent_object_directory=File.join(self.base_file_directory,'..')
     FileUtils.rm_rf(parent_object_directory) if File.directory?(parent_object_directory)
     super
   end
-  
+
   def is_item?
     self.class == Hydrus::Item
   end
@@ -74,7 +74,7 @@ class Hydrus::GenericObject < Dor::Item
   def dru
     pid.gsub('druid:','')
   end
-  
+
   # Returns true if all required fields are filled in.
   def required_fields_completed?
     # If validations are true, returns true.
@@ -125,7 +125,7 @@ class Hydrus::GenericObject < Dor::Item
   def get_fedora_item(pid)
     return ActiveFedora::Base.find(pid, :cast => true)
   end
-  
+
   # confirm that related items start with a known protocol, if not, just add http://
   def check_related_item_urls
     self.related_item_url = self.related_item_url.collect do |url|
@@ -136,7 +136,7 @@ class Hydrus::GenericObject < Dor::Item
       end
     end
   end
-  
+
   def discover_access
     return rightsMetadata.discover_access.first
   end
@@ -271,7 +271,7 @@ class Hydrus::GenericObject < Dor::Item
     f = File.join(Rails.root, "public", Hydrus::Application.config.file_upload_path)
     DruidTools::Druid.new(pid, f).path
   end
-  
+
   def content_directory
     File.join(base_file_directory, "content")
   end
@@ -305,7 +305,7 @@ class Hydrus::GenericObject < Dor::Item
       :file_attributes  => Hydrus::Application.config.cm_file_attributes,
       :include_root_xml => false)
   end
-  
+
   # If the app is configured to start the common assembly workflow, calls will
   # be made to the workflow service to begin that process. In addition,
   # contentMetadata is generated for Items.

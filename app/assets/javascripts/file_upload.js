@@ -26,14 +26,14 @@ function dragOver(evt) {
 function drop(evt) {
   evt.stopPropagation();
   evt.preventDefault();
-  
+
   var files = evt.dataTransfer.files;
   for(i = 0;  i < files.length; i++) {
     var file = files[i];
     var reader = new FileReader();
     reader.readAsDataURL(file);
     reader.original_filename = file.name;
-    
+
     // We can do something like a progress bar below.
     //reader.onprogress = function(){ console.log(evt) };
     reader.onloadend = function(evt){

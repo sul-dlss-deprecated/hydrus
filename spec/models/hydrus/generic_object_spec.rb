@@ -17,7 +17,7 @@ describe Hydrus::GenericObject do
     @go.stub(:pid).and_return('druid:oo000oo0003')
     @go.dru.should == 'oo000oo0003'
   end
-  
+
   it "apo() should return fedora object if the apo_pid is defined" do
     mfo = double('mock_fedora_object')
     @go.instance_variable_set('@apo_pid', @apo_pid)

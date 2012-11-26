@@ -1,5 +1,5 @@
 module HydrusFormHelper
-  
+
   def hydrus_form_label(opts={}, &block)
     html = ""
     html << "<div class='span#{opts.has_key?(:columns) ? opts[:columns] : "1"} form-label #{opts[:class] if opts.has_key?(:class)}'>"
@@ -7,7 +7,7 @@ module HydrusFormHelper
     html << "</div>"
     html.html_safe
   end
-  
+
   def hydrus_form_value(opts={}, &block)
     html = ""
     html << "<div class='span#{opts.has_key?(:columns) ? opts[:columns] : "8"} #{opts[:class] if opts.has_key?(:class)}'>"
@@ -15,7 +15,7 @@ module HydrusFormHelper
     html << "</div>"
     html.html_safe
   end
-  
+
   def hydrus_form_header(opts={}, &block)
     html = ""
     html << "<div class='row section-header#{' first-header' if opts.has_key?(:first)}'>"

@@ -2,7 +2,7 @@ require 'spec_helper'
 require 'stringio'
 
 describe "ap_dump()" do
-  
+
   it "should write some stuff to the given file handle" do
     message     = 'blah blah'
     data        = [1111, 2222]

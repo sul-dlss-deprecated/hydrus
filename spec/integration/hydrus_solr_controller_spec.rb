@@ -9,7 +9,7 @@ describe(HydrusSolrController, :integration => true) do
   def get_solr_docs
     obj = MockHydrusObject.new
     h = {
-      :rows => 9999, 
+      :rows => 9999,
       :q    => '*',
       :fl   => 'identityMetadata_objectId_t',
     }
@@ -47,5 +47,5 @@ describe(HydrusSolrController, :integration => true) do
     n.should == n_initial
     pids.all? { |p| druids.include?(p) }.should == true
   end
-  
+
 end

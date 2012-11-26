@@ -95,7 +95,7 @@
             <dateOther type="released">TO DO</dateOther>
           </originInfo>
           <abstract>This project seeks to identify sources of ethnic and racial conflict and protest in urban America from 1954 through 1992. The data on collective events are coded using the New York Times. Detailed coding rules produced a chronological data set that allows researchers to:
-            
+
             1. Analyze the location and timing of both conflicts (confrontations between two or more ethnic populations) and protests (marches, mass meetings, demonstrations on behalf of one ethnic group, expressing grievances related to discrimination or racial policy).
             2. Specifically analyze a type of protest (e.g., Civil Rights Movement activity, or urban race riots) and the potential dynamic relationship of different types of protests and conflicts.
             3. Identify any ethnic, nationality, or racial characteristics of participants who were the targets and/or instigators of each protest and conflict.
@@ -114,7 +114,7 @@
             <topic>urban areas</topic>
           </subject>
           <note type="preferred citation">Olzak, Susan, and Elizabeth West. 1995. Ethnic Collective Action in Contemporary Urban U.S. from 1954 to 1992. Stanford, CA: Department of Sociology, Stanford University. http://purl.stanford.edu/oo000oo0005</note>
-          <note type="citation/reference">Clarke, A., Skelton, J., and Fraser, R.S. (1991). Fungal tracheobronchitis. Report of 9 cases and review of the literature. Medicine (Baltimore) 70, 1-14.</note> 
+          <note type="citation/reference">Clarke, A., Skelton, J., and Fraser, R.S. (1991). Fungal tracheobronchitis. Report of 9 cases and review of the literature. Medicine (Baltimore) 70, 1-14.</note>
           <note type="contact">archivist1@example.com</note>
           <relatedItem type="references">
             <titleInfo>
@@ -194,8 +194,8 @@
       CREATED="2011-07-05T20:49:25.801Z" MIMETYPE="text/xml" SIZE="345">
       <foxml:xmlContent>
         <hydrusProperties>
-          <reviewedReleaseSettings>true</reviewedReleaseSettings>    
-          <acceptedTermsOfDeposit>true</acceptedTermsOfDeposit>  
+          <reviewedReleaseSettings>true</reviewedReleaseSettings>
+          <acceptedTermsOfDeposit>true</acceptedTermsOfDeposit>
           <objectStatus>draft</objectStatus>
         </hydrusProperties>
       </foxml:xmlContent>

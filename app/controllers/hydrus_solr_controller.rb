@@ -93,5 +93,5 @@ class HydrusSolrController < ApplicationController
   end
 
   private(:is_hydrus_object, :solr, :index_logger)
-  
+
 end

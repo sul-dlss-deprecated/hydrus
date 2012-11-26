@@ -16,7 +16,7 @@ describe Hydrus::HydrusPropertiesDS do
         <embargoTerms>1 year</embargoTerms>
         <embargoOption>varies</embargoOption>
         <licenseOption>fixed</licenseOption>
-        <visibilityOption>fixed</visibilityOption>        
+        <visibilityOption>fixed</visibilityOption>
         <requiresHumanApproval>no</requiresHumanApproval>
         <acceptedTermsOfDeposit>false</acceptedTermsOfDeposit>
         <itemType>dataset</itemType>
@@ -24,12 +24,12 @@ describe Hydrus::HydrusPropertiesDS do
         <disapprovalReason>Idiota</disapprovalReason>
         <publishTime>2011-09-03T00:00:00Z</publishTime>
         <submitForApprovalTime>2011-08-03T00:00:00Z</submitForApprovalTime>
-        <lastModifyTime>2011-09-02T00:00:00Z</lastModifyTime>        
+        <lastModifyTime>2011-09-02T00:00:00Z</lastModifyTime>
       #{@ds_end}
     EOF
     @dsdoc = Hydrus::HydrusPropertiesDS.from_xml(xml)
   end
-  
+
   it "should get expected values from OM terminology" do
     exp_dts = [
       "2011-09-02T01:10:32Z",
@@ -79,5 +79,5 @@ describe Hydrus::HydrusPropertiesDS do
      @dsdoc.insert_user_accepting_terms_of_deposit('foo','10-02-2012 00:00:00')
      @dsdoc.ng_xml.should be_equivalent_to @exp_xml
   end
-  
+
 end

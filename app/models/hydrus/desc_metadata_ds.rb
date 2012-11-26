@@ -8,7 +8,7 @@ class Hydrus::DescMetadataDS < ActiveFedora::NokogiriDatastream
   MODS_NS = 'http://www.loc.gov/mods/v3'
   MODS_SCHEMA = 'http://www.loc.gov/standards/mods/v3/mods-3-3.xsd'
   MODS_PARAMS = {
-    "version"            => "3.3", 
+    "version"            => "3.3",
     "xmlns:xlink"        => "http://www.w3.org/1999/xlink",
     "xmlns:xsi"          => "http://www.w3.org/2001/XMLSchema-instance",
     "xmlns"              => MODS_NS,
@@ -120,7 +120,7 @@ class Hydrus::DescMetadataDS < ActiveFedora::NokogiriDatastream
   def insert_person
     add_hydrus_child_node(ng_xml.root, :name)
   end
-  
+
   def insert_related_item
     add_hydrus_child_node(ng_xml.root, :relatedItem)
   end
@@ -132,5 +132,5 @@ class Hydrus::DescMetadataDS < ActiveFedora::NokogiriDatastream
   def insert_topic(topic)
     add_hydrus_child_node(ng_xml.root, :topic, topic)
   end
-  
+
 end

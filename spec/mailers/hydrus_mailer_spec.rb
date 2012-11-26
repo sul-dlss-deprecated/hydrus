@@ -1,14 +1,14 @@
 require 'spec_helper'
 
 describe HydrusMailer do
-  
+
   before(:each) do
     @document_fedora = Hydrus::Collection.new
     @document_fedora.title='Collection Title'
     @document_fedora.stub('owner').and_return('jdoe')
-    @document_fedora.stub('object_type').and_return('collection')    
+    @document_fedora.stub('object_type').and_return('collection')
   end
-  
+
   describe "open notification" do
     before(:each) do
       @document_fedora.stub('recipients_for_collection_update_emails').and_return('jdoe1, jdoe2')
@@ -27,10 +27,10 @@ describe HydrusMailer do
       body.should have_content("jdoe has opened the Collection Title collection for deposit")
     end
   end
-  
+
   describe "close notification" do
     before(:each) do
-      @document_fedora.stub('recipients_for_collection_update_emails').and_return('jdoe1, jdoe2')      
+      @document_fedora.stub('recipients_for_collection_update_emails').and_return('jdoe1, jdoe2')
       @mail = HydrusMailer.close_notification(:object => @document_fedora)
     end
     it "should have the correct subject" do
@@ -46,7 +46,7 @@ describe HydrusMailer do
       body.should have_content("jdoe has closed the Collection Title collection")
     end
   end
-  
+
   describe "invitation" do
     before(:each) do
       @mail = HydrusMailer.invitation(:to => "jdoe1, jdoe2", :object => @document_fedora)
@@ -83,7 +83,7 @@ describe HydrusMailer do
       body.should have_content("archivist1 has returned the collection Collection Title in the Stanford Digital Repository.")
     end
   end
-  
+
   describe "private methods" do
 
     describe "process user list" do
@@ -94,7 +94,7 @@ describe HydrusMailer do
         HydrusMailer.process_user_list("jdoe1, archivist1@example.com,jdoe2").should == ["jdoe1@stanford.edu", "archivist1@example.com", "jdoe2@stanford.edu"]
       end
     end
-    
+
   end
-  
+
 end

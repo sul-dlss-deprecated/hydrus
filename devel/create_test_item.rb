@@ -58,7 +58,7 @@ def create_test_batch(*args)
   # methods to create new collections or items -- publishing, approving,
   # or disapproving them accordingly.
   args = %w(
-    c 
+    c
     cp i ip ip ia ia ia id
     cp i ip ip ia ia ia id i ip ip ia ia ia id
   ) unless args.size > 0

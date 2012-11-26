@@ -12,14 +12,14 @@ class ApplicationController < ActionController::Base
   def layout_name
    'sul_chrome/application'
   end
-    
+
   def exception_on_website(exception)
-    
+
     @exception=exception
-    
-    HydrusMailer.error_notification(:exception=>@exception,:current_user=>current_user).deliver unless Dor::Config.hydrus.exception_recipients.blank? 
-    
-    if Dor::Config.hydrus.exception_error_page 
+
+    HydrusMailer.error_notification(:exception=>@exception,:current_user=>current_user).deliver unless Dor::Config.hydrus.exception_recipients.blank?
+
+    if Dor::Config.hydrus.exception_error_page
         logger.error(@exception.message)
         logger.error(@exception.backtrace.join("\n"))
         render 'signin/error'
@@ -69,7 +69,7 @@ class ApplicationController < ActionController::Base
   end
 
   # Take a Collection or Item.
-  # Using the objection's validation errors, builds an HTML-ready 
+  # Using the objection's validation errors, builds an HTML-ready
   # string for display in a flash message.
   def errors_for_display(obj)
     es = obj.errors.messages.map { |field, error|

@@ -116,8 +116,8 @@ describe Hydrus::Responsible do
       </roleMetadata>
     EOF
     @obj.person_roles= {
-      "hydrus-collection-manager"        => "archivist1,ZZZ", 
-      "hydrus-collection-reviewer"       => "archivist3,ZZZ", 
+      "hydrus-collection-manager"        => "archivist1,ZZZ",
+      "hydrus-collection-reviewer"       => "archivist3,ZZZ",
       "hydrus-collection-item-depositor" => "foo,bar,ZZZ",
     }
     @obj.roleMetadata.ng_xml.should be_equivalent_to(exp)
@@ -167,5 +167,5 @@ describe Hydrus::Responsible do
     h[k1].should  =~ /original depositor/
     h[k2].should  =~ /can review/
   end
-  
+
 end

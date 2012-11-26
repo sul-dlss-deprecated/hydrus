@@ -52,7 +52,7 @@ class HydrusItemsController < ApplicationController
      redirect_to polymorphic_path([@document_fedora.collection,:items])
     end
   end
-  
+
   def new
     coll_pid = params[:collection]
     item = Hydrus::Item.create(coll_pid, current_user)
@@ -183,19 +183,19 @@ class HydrusItemsController < ApplicationController
       format.js
     end
   end
-  
+
   def send_purl_email
     @pid=params[:pid]
     @from=params[:from]
     @document_fedora=Hydrus::Item.find(@pid)
     @recipients=params[:recipients]
-    HydrusMailer.send_purl(:recipients=>@recipients,:current_user=>current_user,:object=>@document_fedora).deliver unless @recipients.blank? 
+    HydrusMailer.send_purl(:recipients=>@recipients,:current_user=>current_user,:object=>@document_fedora).deliver unless @recipients.blank?
     respond_to do |format|
       format.html
       format.js
     end
   end
-  
+
   def destroy_value
     @document_fedora.descMetadata.remove_node(params[:term], params[:term_index])
     @document_fedora.save

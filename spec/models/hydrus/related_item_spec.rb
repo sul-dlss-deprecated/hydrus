@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Hydrus::RelatedItem do
-  
+
   describe "new_from_node()" do
 
     before(:all) do
@@ -30,7 +30,7 @@ describe Hydrus::RelatedItem do
       END
       @ri_nodes = noko_doc(xml).xpath('//relatedItem')
     end
-   
+
     it "should get title and url as expected" do
       ri = Hydrus::RelatedItem.new_from_node(@ri_nodes[0])
       ri.title.should == 'TITLE1'
@@ -64,7 +64,7 @@ describe Hydrus::RelatedItem do
     end
 
     describe ".new_from_node" do
-     
+
       subject { Hydrus::RelatedItem.new_from_node(related_item_node) }
       context "Complete record" do
         let(:related_item_node) { Nokogiri::XML <<-eos

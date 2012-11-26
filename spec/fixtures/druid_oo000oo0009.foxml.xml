@@ -127,7 +127,7 @@
                 <identifier type="sunetid">archivist4</identifier>
                 <name>Archivist, Four</name>
              </person>
-          </role>          
+          </role>
           <role type="hydrus-collection-reviewer">
              <person>
                 <identifier type="sunetid">archivist2</identifier>

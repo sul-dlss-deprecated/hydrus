@@ -12,10 +12,10 @@ describe("Item view", :type => :request, :integration => true) do
     logout
     visit polymorphic_url(@hi)
     current_path.should == new_signin_path
-    fill_in "Email", :with => 'archivist1@example.com' 
+    fill_in "Email", :with => 'archivist1@example.com'
     fill_in "Password", :with => login_pw
     click_button "Sign in"
-    current_path.should == polymorphic_path(@hi)    
+    current_path.should == polymorphic_path(@hi)
   end
 
   it "Breadcrumbs should be displayed with home link, linked trucated collection name, and unlinked item name with state" do
@@ -30,7 +30,7 @@ describe("Item view", :type => :request, :integration => true) do
     @bad_url = "/collections/#{@druid}" # this is actually an item druid
     login_as('archivist1')
     visit @bad_url
-    current_path.should == polymorphic_path(@hi)    
+    current_path.should == polymorphic_path(@hi)
   end
 
   it "Some of the expected info is displayed, and disappers if blank" do
@@ -41,7 +41,7 @@ describe("Item view", :type => :request, :integration => true) do
       @druid,
       'Contributing Author', # label for actor
       'Frisbee, Hanna', # actor
-      'Sponsor', # label for actor 
+      'Sponsor', # label for actor
       'US National Science Foundation, award SES-0751613', # actor
       'wooden boys', # keyword
       'Keywords', # keywords label
@@ -53,12 +53,12 @@ describe("Item view", :type => :request, :integration => true) do
     exp_content.each do |exp|
       page.should have_content(exp)
     end
-    
+
     # now let's delete the related items and the keywords, and go back to the
     # view page and make sure those fields don't show up or are listed
     should_visit_edit_page(@hi)
     click_link "remove_relatedItem_0" # remove both related items
-    click_link "remove_relatedItem_0"        
+    click_link "remove_relatedItem_0"
     fill_in "hydrus_item_keywords", :with => " "
     click_button "Save"
     should_visit_view_page(@hi)
