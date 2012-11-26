@@ -7,16 +7,17 @@
 #
 #   When datetimes are returned as formatted strings, they are in
 #   UTC on the backend (the XML) and Pacific on the front-end.
-#   The latter occurs for the formats using the _display suffix.
+#   The formats using the _display suffix are assumed to be wanted
+#   for the front-end and are returned as Pacific.
 #
-#   HyTime.now      >> returns a DateTime for now, in UTC.
+#   HyTime.now      >> returns a now() DateTime, in UTC.
 #
 #   HyTime.now_FMT  >> Ditto, but as a String in the requested format.
 #
 #   HyTime.FMT(DT)  >> Returns a String in the requested format.
 #                      The string is built using the DT object given,
 #                      which can be a String or a DateTime. See the
-#                      method for other options.
+#                      formatted() method for other options.
 
 module HyTime
 
@@ -47,7 +48,11 @@ module HyTime
   # Takes a String or DateTime-ish object, along with an options hash.
   # Return a string in the requested format (see DT_FORMATS).
   # If the requested format is a display format, the time is
-  # converted to LOCAL_TIMEZONE.
+  # converted to LOCAL_TIMEZONE. If the :from_localzone option is
+  # true, the code assume the provided datetime (most likely a String)
+  # is expressed in the local timezone.
+  # Note that this method is not likely to be called directly; rather
+  # it does the work of various generated methods, described above.
   def self.formatted(dt, opts = {})
     # If given nil or empty string, just return empty string.
     return '' if dt.blank?
@@ -59,9 +64,9 @@ module HyTime
     else
       dt = dt.to_datetime
     end
-    # If the DateTime is coming from user-entered input (ie, localtime)
-    # adjust it to UTC.
-    dt = dt - DateTime.local_offset if opts[:from_localtime]
+    # If the DateTime is coming from user-entered input in their local time
+    # zone, adjust it to UTC.
+    dt = dt - DateTime.local_offset if opts[:from_localzone]
     # Return string in the requested format, after adjusting to
     # the local timezone if caller requested a display format.
     f = opts[:format] || :datetime
@@ -69,7 +74,9 @@ module HyTime
     return dt.strftime(DT_FORMATS[f])
   end
 
-  # For each Hydrus datetime format, generate two HyTime methods:
+  # For each Hydrus datetime format, generate two HyTime methods, which
+  # behave as follows:
+  #
   #   HyTime.FMT      >> HyTime.formatted(dt,         :format => :FMT).
   #   HyTime.now_FMT  >> HyTime.formatted(HyTime.now, :format => :FMT).
   DT_FORMATS.keys.each do |f|

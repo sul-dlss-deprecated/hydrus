@@ -60,6 +60,17 @@ describe HyTime do
       HyTime.formatted('').should  == ''
     end
     
+    it "should convert to UTC if :from_localzone is true" do
+      dt = '2000-01-02'
+      tests = {
+        false => '2000-01-02T00:00:00Z',
+        true  => '2000-01-02T0[78]:00:00Z',  # 7 or 8, so test passes during DST.
+      }
+      tests.each do |fltz, exp|
+        HyTime.formatted(dt, :from_localzone => fltz).should =~ /\A#{exp}\z/
+      end
+    end
+    
   end
 
 end

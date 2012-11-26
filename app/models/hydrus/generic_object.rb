@@ -465,8 +465,9 @@ class Hydrus::GenericObject < Dor::Item
   end
 
   # Sets the embargo date in both embargoMetadata and rightsMetadata.
+  # The new value is assumed to be expressed in the local time zone.
   def embargo_date= val
-    ed = HyTime.datetime(val, :from_localtime => true)
+    ed = HyTime.datetime(val, :from_localzone => true)
     embargoMetadata.release_date = ed
     if ed.blank?
       rightsMetadata.remove_embargo_date
