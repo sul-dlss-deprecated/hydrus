@@ -13,10 +13,6 @@ class SigninController < ApplicationController
   def login
     redirect_to params[:referrer] || root_url
   end
-
-  def error
-    
-  end
   
   def logout
     flash[:notice] = "You have successfully logged out of WebAuth." unless request.env["WEBAUTH_USER"]

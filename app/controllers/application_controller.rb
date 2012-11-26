@@ -22,7 +22,7 @@ class ApplicationController < ActionController::Base
     if Dor::Config.hydrus.exception_error_page 
         logger.error(@exception.message)
         logger.error(@exception.backtrace.join("\n"))
-        render 'signin/error'
+        render 'error', :status=>500
       else
         raise(@exception)
      end
