@@ -8,7 +8,7 @@ def create_test_collection(*args)
   hc                         = Hydrus::Collection.create(user)
   hc.title                   = "Title for: #{hc.pid}"
   hc.abstract                = 'abstract'
-  hc.contact                 = 'contact'
+  hc.contact                 = 'foo@bar.com'
   hc.embargo_option          = 'varies'
   hc.embargo_terms           = '2 years'
   hc.license_option          = 'varies'
