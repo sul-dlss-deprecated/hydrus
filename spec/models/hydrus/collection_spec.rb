@@ -411,6 +411,29 @@ describe Hydrus::Collection do
 
     end
 
+    describe "visibility getter and setter" do
+
+      it "getter should return ['world'] if item is world visible" do
+        @hc.stub_chain(:rightsMetadata, :has_world_read_node).and_return(true)
+        @hc.visibility.should == ['world']
+      end
+
+      it "getter should return groups names if item is not world visible" do
+        exp_groups = %w(foo bar)
+        mock_nodes = exp_groups.map { |g| double('', :text => g) }
+        @hc.stub_chain(:rightsMetadata, :has_world_read_node).and_return(false)
+        @hc.stub_chain(:rightsMetadata, :group_read_nodes).and_return(mock_nodes)
+        @hc.visibility.should == exp_groups
+      end
+
+      it "the setter should call the expected setters" do
+        @hc.should_receive('visibility_option=').with('fixed')
+        @hc.should_receive('visibility=').with('world')
+        @hc.visibility_option_value = 'everyone'
+      end
+
+    end
+
   end
 
   describe "dashboard stats and related methods" do
