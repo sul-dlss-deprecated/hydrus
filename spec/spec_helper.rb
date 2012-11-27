@@ -136,12 +136,14 @@ def confirm_rights(obj, params)
   di = '//access[@type="discover"]/machine'
   rd = '//access[@type="read"]/machine'
 
+  is_future = (obj.class == Hydrus::Item and obj.embargo == 'future')
+
   # All should be world discoverable.
   obj.rightsMetadata.ng_xml.xpath("#{di}/world").size.should == 1
-  obj.embargoMetadata.ng_xml.xpath("#{di}/world").size.should == 1 if obj.embargo == 'future'
+  obj.embargoMetadata.ng_xml.xpath("#{di}/world").size.should == 1 if is_future
 
   # Visibility.
-  datastream = (obj.embargo == 'future' ? obj.embargoMetadata : obj.rightsMetadata)
+  datastream = (is_future ? obj.embargoMetadata : obj.rightsMetadata)
   g = datastream.ng_xml.xpath("#{rd}/group")
   w = datastream.ng_xml.xpath("#{rd}/world")
   if params[:visibility] == "stanford"

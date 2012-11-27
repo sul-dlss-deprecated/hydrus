@@ -145,7 +145,6 @@ describe("Collection edit", :type => :request, :integration => true) do
     visit polymorphic_path(@hc)
     @hc = Hydrus::Collection.find @druid
     params={:visibility=>'stanford',:license_code=>'odc-odbl',:embargo_date=>''}
-    pending "Rework after removing embargoMetadata from Collection"
     confirm_rights(@hc,params)
     confirm_rights_metadata_in_apo(@hc)
   end
@@ -163,7 +162,6 @@ describe("Collection edit", :type => :request, :integration => true) do
     no_embargo_check_field    = "hydrus_collection_embargo_option_#{no_embargo_option}"
     params={:visibility=>'stanford',:license_code=>'cc-by',:embargo_date=>''}
     confirm_rights(@hc,params)
-    @hc.embargo.should == 'future'
     login_as('archivist1')
     # Visit edit page, and confirm content.
     should_visit_edit_page(@hc)
@@ -194,8 +192,7 @@ describe("Collection edit", :type => :request, :integration => true) do
     current_path.should == polymorphic_path(@hc)
     find("div.collection-settings").should_not have_content(orig_embargo)
     # verify embargo is now 'none' and terms are not set
-    @hc             = Hydrus::Collection.find @druid
-    @hc.embargo.should == 'immediate'
+    @hc = Hydrus::Collection.find @druid
     @hc.embargo_option.should == 'none'
     @hc.embargo_terms.should == ''
     confirm_rights_metadata_in_apo(@hc)

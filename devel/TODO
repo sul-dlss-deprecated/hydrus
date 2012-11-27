@@ -35,41 +35,6 @@ the app on hydrus-prod.]
 Embargo-visibility refactor
 ------------------
 
-
-  1) Collection edit can edit license content
-     Failure/Error: confirm_rights(@hc,params)
-       expected: 1
-            got: 0 (using ==)
-     # ./spec/integration/collection_edit_spec.rb:148:in `block (2 levels) in <top (required)>'
-
-Collections should not have the embargoMetadata datastream.
-
-  Collection
-
-    # new method
-    def visibility=(val)
-      rightsMetadata.update_access_blocks(val)
-
-    # In create()
-    self.embargo_terms = ''
-
-    # delete these methods
-    embargo
-    is_embargoed
-
-    # what is this doing?
-    remove_values_for_associated_attribute_with_value_none
-
-    # change tracked_fields
-    on right side, replace embaro with embargo_terms
-
-  GenericObject
-
-    # remove
-    include Hydrus::EmbargoMetadataDsExtension
-
-    # move visibility and embargo_date getters and setters to Item.
-    
 Items should not have the embargoMetadata datastream (at all) unless the user
 has set an embargo date. Currently, items have the datastream and it merely
 toggles state depending on whether there is an embargo date.
@@ -101,6 +66,9 @@ our web form.
       # </access>
 
 Change immediate|future to better terms, probably no|yes.
+
+Tests:
+  - Collection: visibility getter and setter.
 
 --------
 Protect actions at the model level

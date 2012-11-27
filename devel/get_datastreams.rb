@@ -4,7 +4,15 @@ def main(args)
   abort "Usage:\n  #{$PROGRAM_NAME} DATASTREAM DATASTREAM ... PID" unless args.size >= 2
   pid = args.pop.sub /^(druid:)?/, 'druid:'
   obj = ActiveFedora::Base.find(pid)
-  args.each { |ds| puts obj.send(ds).content }
+  if args == ['LIST']
+    obj.datastreams.keys.sort.each { |k| puts k }
+    return
+  end
+  args = obj.datastreams.keys.sort if args == ['ALL']
+  args.each { |ds|
+    puts
+    puts obj.send(ds).content
+  }
 end
 
 main(ARGV)

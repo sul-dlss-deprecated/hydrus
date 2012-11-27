@@ -60,6 +60,7 @@ class Hydrus::Collection < Hydrus::GenericObject
     # Set defaults for visability, embargo, etc.
     coll.visibility_option_value = 'everyone'
     coll.embargo_option          = 'none'
+    coll.embargo_terms           = ''
     coll.requires_human_approval = 'no'
     coll.license_option          = 'none'
     # Set object status.
@@ -77,14 +78,6 @@ class Hydrus::Collection < Hydrus::GenericObject
     v2 = apo.valid?
     errors.messages.merge!(apo.errors.messages)
     return v1 && v2
-  end
-
-  def embargo
-    embargo_terms.blank? ? 'immediate' : 'future'
-  end
-
-  def is_embargoed
-    return not(embargo_date.blank?)
   end
 
   # method used to build sidebar
@@ -260,7 +253,7 @@ class Hydrus::Collection < Hydrus::GenericObject
 
   def remove_values_for_associated_attribute_with_value_none
     self.embargo_terms = nil if embargo_option == "none"
-    self.license = nil if license_option == "none"
+    self.license       = nil if license_option == "none"
   end
 
   def roles_of_person(user)
@@ -349,14 +342,24 @@ class Hydrus::Collection < Hydrus::GenericObject
 
   def visibility_option_value *args
     opt = visibility_option # fixed or varies
-    vis = visibility.first        # world or stanford
+    vis = visibility.first  # world or stanford
     return vov_lookup["#{opt}_#{vis}"]
   end
 
   def visibility_option_value= val
-    opt, vis              = vov_lookup[val].split('_')
-    self.visibility_option= opt # fixed or varies
-    self.visibility= vis # world or stanford
+    opt, vis               = vov_lookup[val].split('_')
+    self.visibility_option = opt # fixed or varies
+    self.visibility= vis         # world or stanford
+  end
+
+  def visibility=(val)
+    rightsMetadata.update_access_blocks(val)
+  end
+
+  def visibility
+    ds = rightsMetadata
+    return ["world"] if ds.has_world_read_node
+    return ds.group_read_nodes.map { |n| n.text }
   end
 
   ####
@@ -376,7 +379,7 @@ class Hydrus::Collection < Hydrus::GenericObject
     return {
       :title       => [:title],
       :description => [:abstract],
-      :embargo     => [:embargo_option, :embargo],
+      :embargo     => [:embargo_option, :embargo_terms],
       :visibility  => [:visibility_option, :visibility],
       :license     => [:license_option, :license],
       :roles       => [:apo_person_roles],

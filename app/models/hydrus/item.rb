@@ -339,6 +339,52 @@ class Hydrus::Item < Hydrus::GenericObject
     end
   end
 
+  # Returns visibility as an array -- typically either ['world'] or ['stanford'].
+  # Embargo status determines which datastream is used to obtain the information.
+  def visibility
+    ds = is_embargoed ? embargoMetadata : rightsMetadata
+    return ["world"] if ds.has_world_read_node
+    return ds.group_read_nodes.map { |n| n.text }
+  end
+
+  # Takes a visibility -- typically 'world' or 'stanford'.
+  # Modifies the embargoMetadata and rightsMetadata based on that visibility
+  # values, along with the embargo status.
+  def visibility= val
+    if is_embargoed
+      # If embargoed, we set access info in embargoMetadata.
+      embargoMetadata.initialize_release_access_node(:generic)
+      embargoMetadata.update_access_blocks(val)
+      # And we clear our read access in rightsMetadata.
+      rightsMetadata.remove_world_read_access
+      rightsMetadata.remove_group_read_nodes
+    else
+      # Otherwise, we clear out embargoMetadata.
+      embargoMetadata.initialize_release_access_node()
+      # And set access info in rightsMetadata.
+      rightsMetadata.remove_embargo_date
+      rightsMetadata.update_access_blocks(val)
+    end
+  end
+
+  # Returns the embargo date from the embargoMetadata, not the rightsMetadata.
+  # The latter is a convenience copy used by the PURL app.
+  def embargo_date
+    return embargoMetadata.release_date
+  end
+
+  # Sets the embargo date in both embargoMetadata and rightsMetadata.
+  # The new value is assumed to be expressed in the local time zone.
+  def embargo_date= val
+    ed = HyTime.datetime(val, :from_localzone => true)
+    embargoMetadata.release_date = ed
+    if ed.blank?
+      rightsMetadata.remove_embargo_date
+    else
+      self.rmd_embargo_release_date = ed
+    end
+  end
+
   def files
     Hydrus::ObjectFile.find_all_by_pid(pid,:order=>'weight')
   end
