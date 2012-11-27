@@ -1,17 +1,18 @@
 class Hydrus::Item < Hydrus::GenericObject
 
   include Hydrus::Responsible
+  include Hydrus::EmbargoMetadataDsExtension
   extend  Hydrus::Delegatable
 
   after_validation :strip_whitespace
 
-  validate  :enforce_collection_is_open, :on => :create
-  validates :actors, :at_least_one=>true, :if => :should_validate
-  validates :files, :at_least_one=>true, :if => :should_validate
-  validate  :must_accept_terms_of_deposit, :if => :should_validate
-  validate  :must_review_release_settings, :if => :should_validate
+  validate  :enforce_collection_is_open,     :on => :create
+  validates :actors, :at_least_one => true,  :if => :should_validate
+  validates :files,  :at_least_one => true,  :if => :should_validate
+  validate  :must_accept_terms_of_deposit,   :if => :should_validate
+  validate  :must_review_release_settings,   :if => :should_validate
   validate  :embargo_date_is_correct_format, :if => :should_validate
-  validate  :embargo_date_in_range, :if => :should_validate
+  validate  :embargo_date_in_range,          :if => :should_validate
 
   setup_delegations(
     # [:METHOD_NAME,               :uniq, :at... ]
