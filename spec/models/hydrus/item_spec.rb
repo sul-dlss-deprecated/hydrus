@@ -315,6 +315,7 @@ describe Hydrus::Item do
         @hi.embargo_date = rd
         @hi.embargo_date.should == rd_dt
         @hi.rmd_embargo_release_date.should == rd_dt
+        @hi.embargoMetadata.status.should == 'embargoed'
       end
 
       it "setter should delete embargoMetadata datastream if value is blank" do

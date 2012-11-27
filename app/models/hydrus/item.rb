@@ -324,14 +324,16 @@ class Hydrus::Item < Hydrus::GenericObject
 
   # Sets the embargo date in both embargoMetadata and rightsMetadata.
   # The new value is assumed to be expressed in the local time zone.
+  # If the new date is blank or nil, the embargoMetadata datastream is deleted.
   def embargo_date= val
     ed = HyTime.datetime(val, :from_localzone => true)
     if ed.blank?
-      embargoMetadata.delete
       rightsMetadata.remove_embargo_date
+      embargoMetadata.delete
     else
-      embargoMetadata.release_date  = ed
       self.rmd_embargo_release_date = ed
+      embargoMetadata.release_date  = ed
+      embargoMetadata.status        = 'embargoed'
     end
   end
 

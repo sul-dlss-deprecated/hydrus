@@ -35,12 +35,6 @@ the app on hydrus-prod.]
 Embargo-visibility refactor
 ------------------
 
-Items should not have the embargoMetadata datastream (at all) unless the user
-has set an embargo date.
-
-If an Item is embargoed, we need to set embargoMetadata.status. This is not
-being done.
-
 Embargo date and visibility (world|stanford) cannot be set independently,
 because their logic is necessarily intertwined. Currently, the app works
 correctly only because embargo_date=() is called first, due to the layout of
