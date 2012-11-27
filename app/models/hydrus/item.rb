@@ -316,6 +316,24 @@ class Hydrus::Item < Hydrus::GenericObject
     self.embargo_date = '' if val == 'immediate'
   end
 
+  # Returns the embargo date from the embargoMetadata, not the rightsMetadata.
+  # The latter is a convenience copy used by the PURL app.
+  def embargo_date
+    return embargoMetadata.release_date
+  end
+
+  # Sets the embargo date in both embargoMetadata and rightsMetadata.
+  # The new value is assumed to be expressed in the local time zone.
+  def embargo_date= val
+    ed = HyTime.datetime(val, :from_localzone => true)
+    embargoMetadata.release_date = ed
+    if ed.blank?
+      rightsMetadata.remove_embargo_date
+    else
+      self.rmd_embargo_release_date = ed
+    end
+  end
+
   def is_embargoed
     return not(embargo_date.blank?)
   end
@@ -365,24 +383,6 @@ class Hydrus::Item < Hydrus::GenericObject
       # And set access info in rightsMetadata.
       rightsMetadata.remove_embargo_date
       rightsMetadata.update_access_blocks(val)
-    end
-  end
-
-  # Returns the embargo date from the embargoMetadata, not the rightsMetadata.
-  # The latter is a convenience copy used by the PURL app.
-  def embargo_date
-    return embargoMetadata.release_date
-  end
-
-  # Sets the embargo date in both embargoMetadata and rightsMetadata.
-  # The new value is assumed to be expressed in the local time zone.
-  def embargo_date= val
-    ed = HyTime.datetime(val, :from_localzone => true)
-    embargoMetadata.release_date = ed
-    if ed.blank?
-      rightsMetadata.remove_embargo_date
-    else
-      self.rmd_embargo_release_date = ed
     end
   end
 
