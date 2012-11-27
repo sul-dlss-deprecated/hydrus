@@ -340,26 +340,37 @@ class Hydrus::Collection < Hydrus::GenericObject
     return apo.persons_with_role(role)
   end
 
+  # Visibility getters and setters.
+  #
+  #   visibility_option_value   Used by the Collection views and controllers.
+  #                             These methods then call the other getters/setters.
+  #
+  #   visibility                Defined below. 
+  #                             Reads/modifies rightsMetadata.
+  #                             Not sure why the getter returns and Array.
+  #
+  #   visibility_option         Defined via delegation.
+  #                             Reads/modifies hydrusProperties.
+
   def visibility_option_value *args
-    opt = visibility_option # fixed or varies
-    vis = visibility.first  # world or stanford
+    opt = visibility_option     # fixed or varies
+    vis = visibility.first      # world or stanford
     return vov_lookup["#{opt}_#{vis}"]
   end
 
   def visibility_option_value= val
     opt, vis               = vov_lookup[val].split('_')
-    self.visibility_option = opt # fixed or varies
-    self.visibility= vis         # world or stanford
-  end
-
-  def visibility=(val)
-    rightsMetadata.update_access_blocks(val)
+    self.visibility_option = opt     # fixed or varies
+    self.visibility        = vis     # world or stanford
   end
 
   def visibility
-    ds = rightsMetadata
-    return ["world"] if ds.has_world_read_node
-    return ds.group_read_nodes.map { |n| n.text }
+    return ["world"] if rightsMetadata.has_world_read_node
+    return rightsMetadata.group_read_nodes.map { |n| n.text }
+  end
+
+  def visibility=(val)  # val = world or stanford
+    rightsMetadata.update_access_blocks(val)
   end
 
   ####
