@@ -84,7 +84,7 @@ class Hydrus::Collection < Hydrus::GenericObject
   end
 
   def is_embargoed
-    return not(embargo_terms.blank?)
+    return not(embargo_date.blank?)
   end
 
   # method used to build sidebar
@@ -365,10 +365,11 @@ class Hydrus::Collection < Hydrus::GenericObject
 
   def vov_lookup
     lookup = {
-      'everyone'       => 'fixed_world',
-      'varies'         => 'varies_world',
-      'stanford'       => 'fixed_stanford'  }
-      return lookup.merge(lookup.invert)
+      'everyone' => 'fixed_world',
+      'varies'   => 'varies_world',
+      'stanford' => 'fixed_stanford',
+    }
+    return lookup.merge(lookup.invert)
   end
 
   def tracked_fields

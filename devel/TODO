@@ -4,6 +4,10 @@ Development Tasks - 14 November 2012
 
 System integration work. Details in separate section below. [waiting]
 
+APO RELS-EXT datastream needs to add a child node to <rdf:Description>:
+<hydra:referencesAgreement rdf:resource="info:fedora/druid:mc322hh4254"/>.
+Hannah and Lynn will create object mc322hh4254. [Monty]
+
 Embargo-visibility refactor. Details in a separate section below. [Monty]
 
 Protect actions at the model level. This is mostly done, but a few actions remain.
@@ -34,8 +38,8 @@ Embargo-visibility refactor
 Collections should not have the embargoMetadata datastream.
 
 Items should not have the embargoMetadata datastream (at all) unless the user
-has set an embargo date. Currently we have the datastream and it toggles state
-depending on whether there is an embargo date.
+has set an embargo date. Currently, items have the datastream and it merely
+toggles state depending on whether there is an embargo date.
 
 If an Item is embargoed, we need to set embargoMetadata.status. This is not
 being done.
@@ -143,8 +147,6 @@ the "fake" PID, so that we don't run into random test failures. Step 1:
 identify methods that advance the workflow (publish and its cousins). Step 2:
 identify tests that invoke those methods in a non-druid-minting context.
 
-rightsMD: Refactor to take better advantage of OM and generic_ds.rb.
-
 Consider moving the actual collection-depositor roleMD info from the APO to the
 Collection, for two reasons: (1) it parallels the roleMD stored in the Item;
 (2) without it, we don't have access to the collection depositor during search
@@ -169,11 +171,6 @@ Item: related citations; and links to related items.
 Consider moving Hydrus::Responsible into RoleMDDS. Not sure that we need the
 module. Also, there is currently some duplication between Hydrus::Responsible
 and the to_solr() method in RoleMDDS.
-
-APO RELS-EXT datastream needs to add a child node to <rdf:Description>:
-<hydra:referencesAgreement rdf:resource="info:fedora/druid:XXX"/>, where XXX is
-the PID of the global Hydrus Agreement object. [The Hydrus agreement object
-needs to be created -- need more details].
 
 Collection create: APO.roleMetadata: set the value of <name> for the
 collection-manager [waiting on LDAP].

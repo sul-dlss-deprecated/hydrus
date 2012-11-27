@@ -13,8 +13,7 @@ def create_test_collection(*args)
   hc.embargo_terms           = '2 years'
   hc.license_option          = 'varies'
   hc.license                 = 'cc-by-nc'
-  hc.visibility_option       = 'varies'
-  hc.visibility              = 'world'
+  hc.visibility_option_value = 'varies'
   hc.requires_human_approval = 'yes'
   # Publish, save, and return a refreshed object.
   hc.publish('true') if args.delete('--publish')
