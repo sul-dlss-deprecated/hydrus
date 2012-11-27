@@ -36,8 +36,7 @@ Embargo-visibility refactor
 ------------------
 
 Items should not have the embargoMetadata datastream (at all) unless the user
-has set an embargo date. Currently, items have the datastream and it merely
-toggles state depending on whether there is an embargo date.
+has set an embargo date.
 
 If an Item is embargoed, we need to set embargoMetadata.status. This is not
 being done.
@@ -57,18 +56,15 @@ our web form.
     save() will invoke. That will allow unit tests and IRB code to check XML
     without really saving.
 
-  - Write a good explanation for how visibility and embargo interact:
+Change immediate|future to better terms, probably no|yes.
+
+Write a good explanation for how visibility and embargo interact:
       # rightsMetadata
       # <access type="read">                                embargo        visibility
       #   <machine> <world></world>         </machine>    # immediate|no   world
       #   <machine> <group>stanford</group> </machine>    # immediate|no   stanford
       #   <machine> <embargoReleaseDate>... </machine>    # future   |yes  --
       # </access>
-
-Change immediate|future to better terms, probably no|yes.
-
-Tests:
-  - Collection: visibility getter and setter.
 
 --------
 Protect actions at the model level

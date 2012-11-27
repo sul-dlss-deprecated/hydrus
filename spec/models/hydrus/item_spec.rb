@@ -317,6 +317,12 @@ describe Hydrus::Item do
         @hi.rmd_embargo_release_date.should == rd_dt
       end
 
+      it "setter should delete embargoMetadata datastream if value is blank" do
+        @hi.embargoMetadata.should_receive(:delete)
+        @hi.embargo_date = ''
+        @hi.rightsMetadata.ng_xml.at_xpath("//embargoReleaseDate").should == nil
+      end
+
     end
 
     describe "beginning_of_embargo_range()" do

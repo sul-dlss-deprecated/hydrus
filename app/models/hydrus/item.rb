@@ -319,17 +319,18 @@ class Hydrus::Item < Hydrus::GenericObject
   # Returns the embargo date from the embargoMetadata, not the rightsMetadata.
   # The latter is a convenience copy used by the PURL app.
   def embargo_date
-    return embargoMetadata.release_date
+    return embargoMetadata ? embargoMetadata.release_date : nil
   end
 
   # Sets the embargo date in both embargoMetadata and rightsMetadata.
   # The new value is assumed to be expressed in the local time zone.
   def embargo_date= val
     ed = HyTime.datetime(val, :from_localzone => true)
-    embargoMetadata.release_date = ed
     if ed.blank?
+      embargoMetadata.delete
       rightsMetadata.remove_embargo_date
     else
+      embargoMetadata.release_date  = ed
       self.rmd_embargo_release_date = ed
     end
   end
