@@ -292,6 +292,25 @@ class Hydrus::Collection < Hydrus::GenericObject
     apo.collection_depositor= val
   end
 
+  def person_id *args
+    apo.person_id *args
+  end
+
+  def apo_person_roles
+    return apo.person_roles
+  end
+
+  def apo_person_roles= val
+    apo.person_roles= val
+  end
+
+  def apo_persons_with_role(role)
+    return apo.persons_with_role(role)
+  end
+
+  # Embargo and license getters and setters to support the complex
+  # forms in the UI.
+
   def embargo_fixed
     embargo_option == "fixed" ? embargo_terms : ""
   end
@@ -322,22 +341,6 @@ class Hydrus::Collection < Hydrus::GenericObject
 
   def license_varies= val
     self.license= val if license_option == "varies"
-  end
-
-  def person_id *args
-    apo.person_id *args
-  end
-
-  def apo_person_roles
-    return apo.person_roles
-  end
-
-  def apo_person_roles= val
-    apo.person_roles= val
-  end
-
-  def apo_persons_with_role(role)
-    return apo.persons_with_role(role)
   end
 
   # Visibility getters and setters.

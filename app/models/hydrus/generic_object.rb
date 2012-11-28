@@ -193,6 +193,7 @@ class Hydrus::GenericObject < Dor::Item
         return lic.first if code == lic.last
       end
     end
+    return nil
   end
 
   def self.license_commons

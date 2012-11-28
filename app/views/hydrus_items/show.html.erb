@@ -129,14 +129,13 @@
     <% when 'none' %>
       No license will be applied to this item. All rights reserved by content creator.
     <% when 'varies' %>
-      This item will be licensed under
       <span class="highlight-value">
-        <%= Hydrus::Collection.license_human(@document_fedora.license) %>.
+        <%  v = Hydrus::Collection.license_human(@document_fedora.license) %>
+        <%= hydrus_object_setting_value(v) %>
       </span>
     <% when 'fixed' %>
-      This work will be licensed under
       <span class="highlight-value">
-        <%= Hydrus::Collection.license_human(@document_fedora.collection.license) %>.
+        <%= Hydrus::Collection.license_human(@document_fedora.collection.license) %>
       </span>
     <% end %>
     </dd>

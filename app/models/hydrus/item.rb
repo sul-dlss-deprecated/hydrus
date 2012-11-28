@@ -13,6 +13,7 @@ class Hydrus::Item < Hydrus::GenericObject
   validate  :must_review_release_settings,   :if => :should_validate
   validate  :embargo_date_is_correct_format, :if => :should_validate
   validate  :embargo_date_in_range,          :if => :should_validate
+  validates :license, :presence => true,     :if => :should_validate
 
   setup_delegations(
     # [:METHOD_NAME,               :uniq, :at... ]
@@ -65,12 +66,9 @@ class Hydrus::Item < Hydrus::GenericObject
         item.visibility='stanford'
     end
     # Set default license
-    case item.collection.license_option
-      when 'none'
-        item.license='none'
-      when 'fixed'
-        item.license=item.collection.license
-    end
+    clo = item.collection.license_option
+    item.license = clo == 'none'  ? clo :
+                   clo == 'fixed' ? item.collection.license : nil
     # Set object status.
     item.object_status = 'draft'
     # Add event.
@@ -282,6 +280,10 @@ class Hydrus::Item < Hydrus::GenericObject
     self.accepted_terms_of_deposit="true"
     self.collection.accept_terms_of_deposit(user,HyTime.now_datetime)
     events.add_event('hydrus', user, 'Terms of deposit accepted')
+  end
+
+  def licenses_can_vary
+    return collection.license_option == 'varies'
   end
 
   # Returns the publish_time or now, as a datetime string.

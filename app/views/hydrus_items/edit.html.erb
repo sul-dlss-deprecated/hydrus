@@ -184,7 +184,7 @@
   </span>
   </div></div>
 
- <%= hydrus_form_header{"License"} %>
+<%= hydrus_form_header(:required => @document_fedora.licenses_can_vary) {"License"} %>
   <div class="row field-group">
     <div class="span9">
     <% case @document_fedora.collection.license_option %>

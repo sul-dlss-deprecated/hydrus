@@ -75,8 +75,8 @@ describe ApplicationHelper do
   end
 
   it "should return a correct license link" do
-    license_link('cc_by').should == "<a href=\"http://creativecommons.org/licenses/\">{&quot;Creative Commons Licenses&quot;=&gt;[[&quot;CC BY Attribution&quot;, &quot;cc-by&quot;], [&quot;CC BY-SA Attribution Share Alike&quot;, &quot;cc-by-sa&quot;], [&quot;CC BY-ND Attribution-NoDerivs&quot;, &quot;cc-by-nd&quot;], [&quot;CC BY-NC Attribution-NonCommercial&quot;, &quot;cc-by-nc&quot;], [&quot;CC BY-NC-SA Attribution-NonCommercial-ShareAlike&quot;, &quot;cc-by-nc-sa&quot;], [&quot;CC BY-NC-ND Attribution-NonCommercial-NoDerivs&quot;, &quot;cc-by-nc-nd&quot;]], &quot;Open Data Commons Licenses&quot;=&gt;[[&quot;PDDL Public Domain Dedication and License&quot;, &quot;pddl&quot;], [&quot;ODC-By Attribution License&quot;, &quot;odc-by&quot;], [&quot;ODC-ODbl Open Database License&quot;, &quot;odc-odbl&quot;]]}</a>"
-    license_link('pddl').should == "<a href=\"http://opendatacommons.org/licenses/\">PDDL Public Domain Dedication and License</a>"
+    license_link('cc_by').should == '<a href="http://creativecommons.org/licenses/">http://creativecommons.org/licenses/</a>'
+    license_link('pddl').should  == '<a href="http://opendatacommons.org/licenses/">PDDL Public Domain Dedication and License</a>'
     license_link('junkola').should == "junkola"
   end
 

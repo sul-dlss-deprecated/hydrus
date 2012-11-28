@@ -23,6 +23,15 @@
         Release and visibility settings reviewed
       </label>
 
+      <% if @document_fedora.licenses_can_vary %>
+        <% v = not(@document_fedora.license.blank?) %>
+        <%=check_box_tag 'license_selected', true, v, :disabled=>true%>
+        <label for="license_selected">
+          <%= select_status_checkbox_icon(v) %>
+          License selected
+        </label>
+      <% end %>
+
       <%=check_box_tag 'depositor_agreement_checkbox', true, @document_fedora.terms_of_deposit_accepted?, :disabled=>true%>
       <label for="depositor_agreement_checkbox">
         <%= select_status_checkbox_icon(@document_fedora.terms_of_deposit_accepted?) %>
