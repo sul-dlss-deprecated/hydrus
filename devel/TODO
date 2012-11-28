@@ -2,19 +2,21 @@
 Development Tasks - 14 November 2012
 ------------------
 
-Embargo-visibility refactor. Details in a separate section below. [Monty]
+Embargo-visibility refactor. Details in a separate section below.
+
+System integration work. Details in separate section below.
+    - bundle update dor-services: get 3.16.11
+    - see if that fixes problems
 
 Abstracts with internal newlines are preserved correctly and appear on the
 edit form, but they don't render correctly on view pages.
 
-System integration work. Details in separate section below. [waiting]
-
 APO RELS-EXT datastream needs to add a child node to <rdf:Description>:
 <hydra:referencesAgreement rdf:resource="info:fedora/druid:mc322hh4254"/>.
-Hannah and Lynn will create object mc322hh4254. [Monty]
+Hannah and Lynn will create object mc322hh4254.
 
 Protect actions at the model level. This is mostly done, but a few actions remain.
-Details in a separate section below. [Monty]
+Details in a separate section below.
 
 Keywords: require at least one.
 
@@ -25,6 +27,12 @@ Terms of Deposit: create PDF and tie to save action in popup window.
 --------
 System integration
 --------
+
+Publish robot: when the DC XML is generated for the public XML, the
+<dc:relation type="collection"> element incorrectly contains the Item title
+rather than the Collection title. Run this from console: puts
+hi.generate_dublin_core. [Waiting on new dor-services gem, which might fix
+this problem.]
 
 Hydrus objects end up with 2 values for submitted_dt and published_dt, because
 two WFs are using the those lifecycles. [Waiting on new dor-services gem.]
@@ -184,4 +192,3 @@ Write a good explanation for how visibility and embargo interact:
       #   <machine> <group>stanford</group> </machine>    # immediate|no   stanford
       #   <machine> <embargoReleaseDate>... </machine>    # future   |yes  --
       # </access>
-
