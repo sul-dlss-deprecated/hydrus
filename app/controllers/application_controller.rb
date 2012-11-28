@@ -42,11 +42,11 @@ class ApplicationController < ActionController::Base
   # When on an item/collection page, check druid against object type
   # and redirect to correct controller if needed.
   def redirect_if_not_correct_object_type
-    return unless @document_fedora
-    if !self.controller_name.include?(@document_fedora.object_type) && @document_fedora.object_type!='adminPolicy'
-      redirect_url=Rails.application.routes.url_helpers.send("hydrus_#{@document_fedora.object_type}_path",@document_fedora.pid)
+    return unless @fobj
+    if !self.controller_name.include?(@fobj.object_type) && @fobj.object_type!='adminPolicy'
+      redirect_url=Rails.application.routes.url_helpers.send("hydrus_#{@fobj.object_type}_path",@fobj.pid)
       redirect_to redirect_url
-    elsif @document_fedora.object_type=='adminPolicy'
+    elsif @fobj.object_type=='adminPolicy'
       msg  = "You do not have sufficient privileges to view the requested item."
       flash[:error] = msg
       redirect_to root_url

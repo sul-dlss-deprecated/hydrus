@@ -15,8 +15,8 @@ class HydrusCollectionsController < ApplicationController
   end
 
   def setup_attributes
-    @document_fedora = Hydrus::Collection.find(params[:id])
-    @document_fedora.current_user = current_user
+    @fobj = Hydrus::Collection.find(params[:id])
+    @fobj.current_user = current_user
   end
 
   def show
@@ -26,8 +26,8 @@ class HydrusCollectionsController < ApplicationController
   end
 
   def destroy
-    if @document_fedora.is_destroyable && can?(:edit, @document_fedora)
-       @document_fedora.delete
+    if @fobj.is_destroyable && can?(:edit, @fobj)
+       @fobj.delete
        flash[:notice]="The collection was deleted."
     else
       flash[:warning]="You do not have permissions to delete this collection."
@@ -36,7 +36,7 @@ class HydrusCollectionsController < ApplicationController
   end
 
   def discard_confirmation
-    if @document_fedora.is_destroyable && can?(:edit, @document_fedora)
+    if @fobj.is_destroyable && can?(:edit, @fobj)
       @id=params[:id]
       render 'shared/discard_confirmation'
     else
@@ -55,20 +55,20 @@ class HydrusCollectionsController < ApplicationController
 
     notice = []
 
-    depositors_before_update = @document_fedora.apo.persons_with_role("hydrus-collection-item-depositor")
+    depositors_before_update = @fobj.apo.persons_with_role("hydrus-collection-item-depositor")
 
     ####
     # Update attributes without saving.
     ####
 
     if params.has_key?("hydrus_collection")
-      @document_fedora.attributes = params["hydrus_collection"]
+      @fobj.attributes = params["hydrus_collection"]
     end
 
-    if @document_fedora.is_open
-      depositors_after_update = @document_fedora.apo.persons_with_role("hydrus-collection-item-depositor")
+    if @fobj.is_open
+      depositors_after_update = @fobj.apo.persons_with_role("hydrus-collection-item-depositor")
       new_depositors = (depositors_after_update - depositors_before_update).to_a.join(", ")
-      @document_fedora.send_invitation_email_notification(new_depositors)
+      @fobj.send_invitation_email_notification(new_depositors)
     end
 
     ####
@@ -81,7 +81,7 @@ class HydrusCollectionsController < ApplicationController
 
     if has_mvf
       if params.has_key?(:add_link)
-        @document_fedora.descMetadata.insert_related_item
+        @fobj.descMetadata.insert_related_item
       end
     end
 
@@ -89,8 +89,8 @@ class HydrusCollectionsController < ApplicationController
     # Try to save(), and handle failure.
     ####
 
-    unless @document_fedora.save
-      errors = @document_fedora.errors.messages.map { |field, error|
+    unless @fobj.save
+      errors = @fobj.errors.messages.map { |field, error|
         "#{field.to_s.humanize.capitalize} #{error.join(', ')}"
       }
       flash[:error] = errors.join("<br/>").html_safe
@@ -108,14 +108,14 @@ class HydrusCollectionsController < ApplicationController
     respond_to do |want|
       want.html {
         if has_mvf
-          redirect_to [:edit, @document_fedora]
+          redirect_to [:edit, @fobj]
         else
-          redirect_to @document_fedora
+          redirect_to @fobj
         end
       }
       want.js {
         if params.has_key?(:add_link)
-          render "add_link", :locals=>{:index=>@document_fedora.related_item_title.length-1}
+          render "add_link", :locals=>{:index=>@fobj.related_item_title.length-1}
         else
           render :json => tidy_response_from_update(@response)
         end
@@ -125,8 +125,8 @@ class HydrusCollectionsController < ApplicationController
   end
 
   def destroy_value
-    @document_fedora.descMetadata.remove_node(params[:term], params[:term_index])
-    @document_fedora.save
+    @fobj.descMetadata.remove_node(params[:term], params[:term_index])
+    @fobj.save
     respond_to do |want|
       want.html {redirect_to :back}
       want.js
@@ -134,16 +134,16 @@ class HydrusCollectionsController < ApplicationController
   end
 
   def open
-    @document_fedora.cannot_do(:open) unless can?(:edit, @document_fedora)
-    @document_fedora.open
-    try_to_save(@document_fedora, "Collection opened")
+    @fobj.cannot_do(:open) unless can?(:edit, @fobj)
+    @fobj.open
+    try_to_save(@fobj, "Collection opened")
     redirect_to(hydrus_collection_path)
   end
 
   def close
-    @document_fedora.cannot_do(:close) unless can?(:edit, @document_fedora)
-    @document_fedora.close
-    try_to_save(@document_fedora, "Collection closed")
+    @fobj.cannot_do(:close) unless can?(:edit, @fobj)
+    @fobj.close
+    try_to_save(@fobj, "Collection closed")
     redirect_to(hydrus_collection_path)
   end
 

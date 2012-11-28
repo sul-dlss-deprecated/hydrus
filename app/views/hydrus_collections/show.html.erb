@@ -17,17 +17,17 @@
   </span>
 
   <div id="object-content-wrapper">
-    <h3><%= title_text(@document_fedora) %></h3>
+    <h3><%= title_text(@fobj) %></h3>
     <h4 class="muted">Collection Details</h4>
     <dl class="dl-horizontal collection-view">
       <%= render "hydrus_collections/basic_collection_metadata" %>
 
     </dl>
 
-    <% unless hydrus_is_empty?(@document_fedora.related_items) %>
+    <% unless hydrus_is_empty?(@fobj.related_items) %>
      <div class="collection-items">
          <h4>Links to related information</h4>
-          <%- @document_fedora.related_items.each_with_index do |related_item, index| -%>
+          <%- @fobj.related_items.each_with_index do |related_item, index| -%>
             <dd>&raquo; <%= related_item.url.blank? ? hydrus_object_setting_value(related_item.url) : link_to(related_item.title, related_item.url) %></dd>
           <%- end -%>
     </div>
@@ -36,36 +36,36 @@
     <div class="collection-items">
          <h4>Release and visibility of content</h4>
       <p>
-        <%if @document_fedora.embargo_option == 'none' %>
+        <%if @fobj.embargo_option == 'none' %>
         There is <strong>no delay</strong> before content in this collection is released for public or Stanford-only discovery and download.
       <% else %>
         The delay before content in this collection is released for public or Stanford-only discovery and download
           <strong>
-          <% if @document_fedora.embargo_option == 'varies' %>
+          <% if @fobj.embargo_option == 'varies' %>
             varies per item
           <% else %>
             is fixed
           <% end %>
-          from time of deposit to <%=@document_fedora.embargo_terms%> after deposit.</strong>
+          from time of deposit to <%=@fobj.embargo_terms%> after deposit.</strong>
       <% end %>
       </p>
 
       <p>
-      <%if @document_fedora.embargo_option == 'none' %>
+      <%if @fobj.embargo_option == 'none' %>
         Upon release
       <% else %>
         After its release date,
       <% end %>
       content in this collection can be discovered and downloaded by
-        <% if @document_fedora.visibility == 'stanford' %>
+        <% if @fobj.visibility == 'stanford' %>
           <strong>the Stanford community -- all items will be visible only to Stanford-authenticated users.</strong>
-        <% elsif @document_fedora.visibility == 'everyone' %>
+        <% elsif @fobj.visibility == 'everyone' %>
           <strong>anyone -- all items will be visible to everybody, including non-Stanford users.</strong>
         <% else %>
           <strong>anyone -- but individual items may restrict visibility to members of the Stanford community.</strong>
         <% end %>
       </p>
-      <% if to_bool(@document_fedora.requires_human_approval) %>
+      <% if to_bool(@fobj.requires_human_approval) %>
         <p>Before being released, content in this collection <strong>must be</strong> approved by the collection manager or a reviewer.</p>
       <% end %>
     </div>
@@ -73,7 +73,7 @@
     <div class="collection-items">
          <h4>License</h4>
        <p>
-        <%if @document_fedora.embargo_option == 'none' %>
+        <%if @fobj.embargo_option == 'none' %>
           Upon release
         <% else %>
           After its release date,
@@ -81,16 +81,16 @@
         items in this collection are covered by the following license terms:</p>
 
         <p>
-        <% if @document_fedora.license_option == 'none' %>
+        <% if @fobj.license_option == 'none' %>
           No license
         <% else %>
-          <% if @document_fedora.license_option == 'varies' %>
+          <% if @fobj.license_option == 'varies' %>
             A default license -- the license below applies to items in this collection by default, but can be changed for each item.
           <% else %>
             A required license -- the license below applies to all items in the collection.
           <% end %>
         </p>
-          <p><%=license_image(@document_fedora.license)%> <%=license_link(@document_fedora.license)%></p>
+          <p><%=license_image(@fobj.license)%> <%=license_link(@fobj.license)%></p>
         <% end %>
     </div>
 
@@ -99,7 +99,7 @@
           <dl class="dl-horizontal collection-view">
             <% Hydrus::Responsible.role_labels(:only_labels,:collection_level).each do |role, role_label| %>
              <tr class="document <%= cycle("even","odd") %>">
-              <% people = @document_fedora.apo.persons_with_role(role) %>
+              <% people = @fobj.apo.persons_with_role(role) %>
               <dt><%= role_label.pluralize(people.size) %></dt>
               <dd><%= people.size == 0 ? "none" : people.to_a.join(', ') %></dd>
             <% end %>
@@ -107,6 +107,6 @@
     </div>
 
   </div> <!-- object-content-wrapper -->
-    <div id="druid-footer"><%= @document_fedora.pid %></div>
+    <div id="druid-footer"><%= @fobj.pid %></div>
 </div>
 

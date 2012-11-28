@@ -9,7 +9,7 @@ describe EventsController do
     response.should redirect_to(root_path)
   end
 
-  it "should assign the given object for the given ID as the document_fedora instance variable" do
+  it "should assign the given object for the given ID as the fobj instance variable" do
     controller.stub(:current_user).and_return(mock_authed_user)
     mock_coll = mock("HydrusCollection", :hydrus_class_to_s => 'Collection')
     mock_coll.should_receive(:"current_user=").and_return("")
@@ -17,7 +17,7 @@ describe EventsController do
     controller.stub(:'can?').and_return(true)
     get :index, :hydrus_collection_id=>"1234"
     response.should be_success
-    assigns(:document_fedora).should == mock_coll
+    assigns(:fobj).should == mock_coll
   end
 
 end

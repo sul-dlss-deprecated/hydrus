@@ -3,16 +3,16 @@ require 'spec_helper'
 describe HydrusMailer do
 
   before(:each) do
-    @document_fedora = Hydrus::Collection.new
-    @document_fedora.title='Collection Title'
-    @document_fedora.stub('owner').and_return('jdoe')
-    @document_fedora.stub('object_type').and_return('collection')
+    @fobj = Hydrus::Collection.new
+    @fobj.title='Collection Title'
+    @fobj.stub('owner').and_return('jdoe')
+    @fobj.stub('object_type').and_return('collection')
   end
 
   describe "open notification" do
     before(:each) do
-      @document_fedora.stub('recipients_for_collection_update_emails').and_return('jdoe1, jdoe2')
-      @mail = HydrusMailer.open_notification(:object => @document_fedora)
+      @fobj.stub('recipients_for_collection_update_emails').and_return('jdoe1, jdoe2')
+      @mail = HydrusMailer.open_notification(:object => @fobj)
     end
     it "should have the correct subject" do
       @mail.subject.should == "Collection opened for deposit in the Stanford Digital Repository"
@@ -30,8 +30,8 @@ describe HydrusMailer do
 
   describe "close notification" do
     before(:each) do
-      @document_fedora.stub('recipients_for_collection_update_emails').and_return('jdoe1, jdoe2')
-      @mail = HydrusMailer.close_notification(:object => @document_fedora)
+      @fobj.stub('recipients_for_collection_update_emails').and_return('jdoe1, jdoe2')
+      @mail = HydrusMailer.close_notification(:object => @fobj)
     end
     it "should have the correct subject" do
       @mail.subject.should == "Collection closed for deposit in the Stanford Digital Repository"
@@ -49,7 +49,7 @@ describe HydrusMailer do
 
   describe "invitation" do
     before(:each) do
-      @mail = HydrusMailer.invitation(:to => "jdoe1, jdoe2", :object => @document_fedora)
+      @mail = HydrusMailer.invitation(:to => "jdoe1, jdoe2", :object => @fobj)
     end
     it "should have the correct subject" do
       @mail.subject.should == "Invitation to deposit in the Stanford Digital Repository"
@@ -67,8 +67,8 @@ describe HydrusMailer do
 
   describe "object_returned" do
     before(:each) do
-      @document_fedora.stub('recipients_for_object_returned_email').and_return('jdoe1, jdoe2')
-      @mail = HydrusMailer.object_returned(:object => @document_fedora, :returned_by=>'archivist1')
+      @fobj.stub('recipients_for_object_returned_email').and_return('jdoe1, jdoe2')
+      @mail = HydrusMailer.object_returned(:object => @fobj, :returned_by=>'archivist1')
     end
     it "should have the correct subject" do
       @mail.subject.should == "Collection returned in the Stanford Digital Repository"

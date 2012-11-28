@@ -6,8 +6,8 @@ class EventsController < ApplicationController
   def index
     contextual_id = params.select{|k,v| k.to_s =~ /^hydrus_.*_id/}.each_value.first
     unless contextual_id.blank?
-      @document_fedora = ActiveFedora::Base.find(contextual_id, :cast=>true)
-      @document_fedora.current_user = current_user
+      @fobj = ActiveFedora::Base.find(contextual_id, :cast=>true)
+      @fobj.current_user = current_user
     end
   end
 

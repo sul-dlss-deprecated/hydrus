@@ -15,7 +15,7 @@
   </div>
 
   <div id="object-content-wrapper">
-    <h3><%= title_text(@document_fedora) %></h3>
+    <h3><%= title_text(@fobj) %></h3>
     <h4 class="muted">Item Details</h4>
     <dl class="dl-horizontal item-view clearfix">
 
@@ -23,17 +23,17 @@
 
        <div class="collection-items">
            <h4>Contributors</h4>
-          <% if hydrus_is_empty?(@document_fedora.actors) %>
-              <dt>Author</dt><dd><%= hydrus_object_setting_value(@document_fedora.actors)%></dd>
+          <% if hydrus_is_empty?(@fobj.actors) %>
+              <dt>Author</dt><dd><%= hydrus_object_setting_value(@fobj.actors)%></dd>
           <% else %>
-            <% @document_fedora.actors.each do |actor| %>
+            <% @fobj.actors.each do |actor| %>
               <dt><%= actor.role %></dt>
               <dd><%= actor.name %></dd>
             <% end %>
           <% end %>
       </div>
 
-      <% unless @document_fedora.files.size == 0 %>
+      <% unless @fobj.files.size == 0 %>
         <div class="item-files collection-items">
            <h4>Files associated with this item</h4>
 
@@ -44,7 +44,7 @@
             </thead>
             <tbody>
               <%
-                @document_fedora.files.each do |file|
+                @fobj.files.each do |file|
               %>
                   <tr class="document <%= cycle("even","odd") %>">
                     <td><%= link_to(file.filename, file.url) %></td>
@@ -59,32 +59,32 @@
        <div class="collection-items">
            <h4>Abstract and keywords</h4>
               <dt>Abstract</dt>
-              <dd class="abstract"><%= hydrus_object_setting_value(@document_fedora.abstract) %></dd>
-              <% unless hydrus_is_empty?(@document_fedora.keywords) %>
+              <dd class="abstract"><%= hydrus_object_setting_value(@fobj.abstract) %></dd>
+              <% unless hydrus_is_empty?(@fobj.keywords) %>
                 <dt>Keywords</dt>
                 <dd>
-                  <%= @document_fedora.keywords.map {|topic| link_to(topic, "#")}.join(", ").html_safe %>
+                  <%= @fobj.keywords.map {|topic| link_to(topic, "#")}.join(", ").html_safe %>
                 </dd>
               <% end %>
       </div>
 
-       <% unless hydrus_is_empty?(@document_fedora.preferred_citation) && hydrus_is_empty?(@document_fedora.related_citation) && hydrus_is_empty?(@document_fedora.related_items) %>
+       <% unless hydrus_is_empty?(@fobj.preferred_citation) && hydrus_is_empty?(@fobj.related_citation) && hydrus_is_empty?(@fobj.related_items) %>
          <div class="collection-items">
              <h4>Related Links and Citations</h4>
-           <% unless hydrus_is_empty?(@document_fedora.preferred_citation) %>
+           <% unless hydrus_is_empty?(@fobj.preferred_citation) %>
              <dt>Cite this item as</dt>
-             <dd><%= @document_fedora.preferred_citation %></dd>
+             <dd><%= @fobj.preferred_citation %></dd>
            <% end %>
 
-           <% unless hydrus_is_empty?(@document_fedora.related_citation) %>
-             <% @document_fedora.related_citation.each_with_index do |related_citation, index| %>
+           <% unless hydrus_is_empty?(@fobj.related_citation) %>
+             <% @fobj.related_citation.each_with_index do |related_citation, index| %>
                <dt class="<%= 'hidden-label' if index > 0 %>">Related published work</dt>
                <dd><%= related_citation %></dd>
              <% end %>
            <% end %>
 
-           <% unless hydrus_is_empty?(@document_fedora.related_items) %>
-             <% @document_fedora.related_items.each_with_index do |related_item, index| %>
+           <% unless hydrus_is_empty?(@fobj.related_items) %>
+             <% @fobj.related_items.each_with_index do |related_item, index| %>
                <dt class="<%= 'hidden-label' if index > 0 %>">Related links</dt>
                <dd><%= related_item.url.blank? ? hydrus_object_setting_value(related_item.url) : link_to(related_item.title, related_item.url) %></dd>
              <% end %>
@@ -97,16 +97,16 @@
       <dt>Visibility</dt>
       <dd>
         After its release, this item can be discovered and downloaded by <span class="highlight-value">
-        <%if @document_fedora.visibility.blank? %>
-          <%= @document_fedora.collection.visibility == 'world' ? 'anyone' : 'the Stanford community'%>.
+        <%if @fobj.visibility.blank? %>
+          <%= @fobj.collection.visibility == 'world' ? 'anyone' : 'the Stanford community'%>.
         <% else %>
-          <%= @document_fedora.visibility == ['world'] ? 'anyone' : 'the Stanford community'%>.
+          <%= @fobj.visibility == ['world'] ? 'anyone' : 'the Stanford community'%>.
         <% end %>
         </span>
       </dd>
       <dt>Release</dt>
       <dd>
-        <% case @document_fedora.collection.embargo_option %>
+        <% case @fobj.collection.embargo_option %>
         <% when 'none' %>
           This item will be released for discovery and download
           <span class="highlight-value">
@@ -114,28 +114,28 @@
           </span>
         <% when 'varies' %>
           This item will be released for discovery and download
-          <%= @document_fedora.embargo_date.blank? ? 'immediately' : "on #{@document_fedora.embargo_date}"%>.
+          <%= @fobj.embargo_date.blank? ? 'immediately' : "on #{@fobj.embargo_date}"%>.
         <% when 'fixed' %>
           This item will be released for discovery and download
           <span class="highlight-value">
-            <%= @document_fedora.collection.embargo %>
+            <%= @fobj.collection.embargo %>
             after deposit.
           </span>
         <% end %>
     </dd>
     <dt>License</dt>
     <dd>
-    <% case @document_fedora.collection.license_option %>
+    <% case @fobj.collection.license_option %>
     <% when 'none' %>
       No license will be applied to this item. All rights reserved by content creator.
     <% when 'varies' %>
       <span class="highlight-value">
-        <%  v = Hydrus::Collection.license_human(@document_fedora.license) %>
+        <%  v = Hydrus::Collection.license_human(@fobj.license) %>
         <%= hydrus_object_setting_value(v) %>
       </span>
     <% when 'fixed' %>
       <span class="highlight-value">
-        <%= Hydrus::Collection.license_human(@document_fedora.collection.license) %>
+        <%= Hydrus::Collection.license_human(@fobj.collection.license) %>
       </span>
     <% end %>
     </dd>
@@ -143,5 +143,5 @@
 
 
   </div> <!-- object-content-wrapper -->
-    <div id="druid-footer"><%= @document_fedora.pid %></div>
+    <div id="druid-footer"><%= @fobj.pid %></div>
 </div>

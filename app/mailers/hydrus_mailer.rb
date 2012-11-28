@@ -2,32 +2,32 @@ class HydrusMailer < ActionMailer::Base
   default from: "no-reply@hydrus.stanford.edu"
 
   def invitation(opts={})
-    @document_fedora = opts[:object]
-    @collection_url = polymorphic_url(@document_fedora, :host => host)
-    mail(:to=>HydrusMailer.process_user_list(opts[:to]), :subject=>"Invitation to deposit in the Stanford Digital Repository") unless ignore?(@document_fedora.pid)
+    @fobj = opts[:object]
+    @collection_url = polymorphic_url(@fobj, :host => host)
+    mail(:to=>HydrusMailer.process_user_list(opts[:to]), :subject=>"Invitation to deposit in the Stanford Digital Repository") unless ignore?(@fobj.pid)
   end
 
   def object_returned(opts={})
-    @document_fedora = opts[:object]
+    @fobj = opts[:object]
     @returned_by = opts[:returned_by]
-    @item_url = opts[:item_url] || polymorphic_url(@document_fedora, :host => host)
-    mail(:to=>HydrusMailer.process_user_list(@document_fedora.recipients_for_object_returned_email), :subject=>"#{@document_fedora.object_type.capitalize} returned in the Stanford Digital Repository") unless ignore?(@document_fedora.pid)
+    @item_url = opts[:item_url] || polymorphic_url(@fobj, :host => host)
+    mail(:to=>HydrusMailer.process_user_list(@fobj.recipients_for_object_returned_email), :subject=>"#{@fobj.object_type.capitalize} returned in the Stanford Digital Repository") unless ignore?(@fobj.pid)
   end
 
   def open_notification(opts={})
-    @document_fedora = opts[:object]
-    @collection_url = polymorphic_url(@document_fedora, :host => host)
-    mail(:to=>HydrusMailer.process_user_list(@document_fedora.recipients_for_collection_update_emails), :subject=>"Collection opened for deposit in the Stanford Digital Repository")  unless ignore?(@document_fedora.pid)
+    @fobj = opts[:object]
+    @collection_url = polymorphic_url(@fobj, :host => host)
+    mail(:to=>HydrusMailer.process_user_list(@fobj.recipients_for_collection_update_emails), :subject=>"Collection opened for deposit in the Stanford Digital Repository")  unless ignore?(@fobj.pid)
   end
 
   def close_notification(opts={})
-    @document_fedora = opts[:object]
-    mail(:to=>HydrusMailer.process_user_list(@document_fedora.recipients_for_collection_update_emails), :subject=>"Collection closed for deposit in the Stanford Digital Repository") unless ignore?(@document_fedora.pid)
+    @fobj = opts[:object]
+    mail(:to=>HydrusMailer.process_user_list(@fobj.recipients_for_collection_update_emails), :subject=>"Collection closed for deposit in the Stanford Digital Repository") unless ignore?(@fobj.pid)
   end
 
   def send_purl(opts={})
     @current_user=opts[:current_user]
-    @document_fedora = opts[:object]
+    @fobj = opts[:object]
     mail(:to=>opts[:recipients], :subject=>"PURL page shared from the Stanford Digital Repository")
   end
 

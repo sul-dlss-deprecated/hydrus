@@ -4,9 +4,9 @@
     <meta charset="utf-8" />
   </head>
   <body>
-    <p><%= @current_user %> has shared this permanent URL (PURL) for <%=@document_fedora.object_type%> <%= @document_fedora.title %> in the Stanford Digital Repository:</p>
-    <p><%= link_to(@document_fedora.purl_url, @document_fedora.purl_url) %>
-      <% unless @document_fedora.purl_page_ready? %>
+    <p><%= @current_user %> has shared this permanent URL (PURL) for <%=@fobj.object_type%> <%= @fobj.title %> in the Stanford Digital Repository:</p>
+    <p><%= link_to(@fobj.purl_url, @fobj.purl_url) %>
+      <% unless @fobj.purl_page_ready? %>
           Please note that the link may not work until the item is published.
       <% end %>
     </p>

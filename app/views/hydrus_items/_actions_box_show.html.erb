@@ -3,20 +3,20 @@
   <div class="box-body">
 
     <!-- Approve/disapprove. -->
-    <% if @document_fedora.is_awaiting_approval && can?(:review, @document_fedora) %>
+    <% if @fobj.is_awaiting_approval && can?(:review, @fobj) %>
 
       <!-- Approve. -->
       <p>
         <%= button_to(
               "Approve Item",
-              approve_item_path(@document_fedora),
+              approve_item_path(@fobj),
               :id    => 'hydrus_item_approve',
               :class => 'btn btn-small save-edits',
               :disable_with => "Please wait..."  ) %>
       </p>
 
       <!-- Disapprove. -->
-      <%= form_tag(disapprove_item_path(@document_fedora)) do -%>
+      <%= form_tag(disapprove_item_path(@fobj)) do -%>
         <p>
           <%= button_tag(
                 "Return Item",
@@ -29,44 +29,44 @@
                         "Reason for return",
                         :class => "return-item") %>
           <%= text_field_tag("hydrus_item_disapproval_reason",
-                             @document_fedora.disapproval_reason,
+                             @fobj.disapproval_reason,
                              :class => "return-item", :autofocus => true) -%><br />
           <span class="help">Item depositor will be notified by email</span>
         </p>
       <% end -%>
 
     <!-- Resubmit. -->
-    <% elsif @document_fedora.is_returned && can?(:edit, @document_fedora) %>
+    <% elsif @fobj.is_returned && can?(:edit, @fobj) %>
       <p>
         <strong>Return reason:</strong>
-        <%= @document_fedora.disapproval_reason %>
+        <%= @fobj.disapproval_reason %>
       </p>
       <p>
         <%= button_to(
               "Resubmit for Approval",
-              resubmit_item_path(@document_fedora),
+              resubmit_item_path(@fobj),
               :id    => 'hydrus_item_resubmit',
               :class => 'btn btn-small save-edits',
               :disable_with => "Please wait..."  ) %>
       </p>
 
     <!-- Submit for Approval. -->
-    <% elsif @document_fedora.is_submittable_for_approval && can?(:edit, @document_fedora)%>
+    <% elsif @fobj.is_submittable_for_approval && can?(:edit, @fobj)%>
       <p>
         <%= button_to(
               "Submit for Approval",
-              submit_for_approval_item_path(@document_fedora),
+              submit_for_approval_item_path(@fobj),
               :id    => 'hydrus_item_submit_for_approval',
               :class => 'btn btn-small save-edits',
               :disable_with => "Please wait..."  ) %>
       </p>
 
     <!-- Publish directly (applies only to items not requiring approval by reviewer). -->
-    <% elsif @document_fedora.is_publishable && can?(:edit, @document_fedora) %>
+    <% elsif @fobj.is_publishable && can?(:edit, @fobj) %>
       <p>
         <%= button_to(
               "Publish",
-              publish_directly_item_path(@document_fedora),
+              publish_directly_item_path(@fobj),
               :id    => 'hydrus_item_publish_directly',
               :class => 'btn btn-small save-edits',
               :disable_with => "Please wait..."  ) %>
@@ -77,9 +77,9 @@
     <!-- Terms of deposit. -->
     <p class="popup-link">
       <i class="icon-share"></i>
-      <% tod_path = terms_of_deposit_path(@document_fedora) %>
+      <% tod_path = terms_of_deposit_path(@fobj) %>
       <%= link_to(
-            @document_fedora.terms_of_deposit_accepted? ?
+            @fobj.terms_of_deposit_accepted? ?
               "View Terms of Deposit" :
               "View and agree with Terms of Deposit",
             tod_path,
@@ -94,9 +94,9 @@
     <p class="popup-link"><span style="display:none" id="share-purl"><i class="icon-envelope"></i> <a href="#" id="share-purl-link">Share link to this item</a></span>
     <div id="copy-purl-link-area">
       <%= form_tag(send_purl_email_path, :remote => true,  :target => '_new' ) %>
-      <p>Copy item link:   <%= text_field_tag "copy-purl-link", @document_fedora.purl_url, :readonly=>true %></p>
+      <p>Copy item link:   <%= text_field_tag "copy-purl-link", @fobj.purl_url, :readonly=>true %></p>
       <p>Email item link to:
-        <%= hidden_field_tag "pid", @document_fedora.pid %>
+        <%= hidden_field_tag "pid", @fobj.pid %>
         <%= text_field_tag "recipients" %>
         <%= submit_tag("Send Email",:class => 'btn btn-small', :id => 'hydrus_item_send_purl_email') %>
         </p>
@@ -104,13 +104,13 @@
     </p>
 
     <!-- Delete link  -->
-    <% if can?(:edit, @document_fedora) && @document_fedora.is_destroyable %>
+    <% if can?(:edit, @fobj) && @fobj.is_destroyable %>
         <p style="display:none;" id="discard-item" class="discard-item">
           <i class="icon-trash"></i>
-          <%= link_to 'Discard this item', @document_fedora, :method=>:delete, :confirm => 'Are you sure you want to delete this item? This action cannot be undone.'%>
+          <%= link_to 'Discard this item', @fobj, :method=>:delete, :confirm => 'Are you sure you want to delete this item? This action cannot be undone.'%>
         </p>
         <noscript>
-          <p class="discard-item"><i class="icon-trash"></i> <%=link_to 'Discard this item', discard_item_confirmation_path(@document_fedora)%></p>
+          <p class="discard-item"><i class="icon-trash"></i> <%=link_to 'Discard this item', discard_item_confirmation_path(@fobj)%></p>
         </noscript>
     <% end %>
 

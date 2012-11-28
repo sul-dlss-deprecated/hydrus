@@ -1,8 +1,8 @@
 <dt>Owned by</dt>
-<dd><%= @document_fedora.owner%></dd>
+<dd><%= @fobj.owner%></dd>
 
 <dt>Contact at</dt>
-<dd><%= hydrus_object_setting_value(@document_fedora.contact) %></dd>
+<dd><%= hydrus_object_setting_value(@fobj.contact) %></dd>
 
 <dt>Described as</dt>
-<dd><%= hydrus_object_setting_value(@document_fedora.abstract) %></dd>
+<dd><%= hydrus_object_setting_value(@fobj.abstract) %></dd>

@@ -96,8 +96,6 @@ accessibility issues.
 
 Update search results page; UI redesign degraded formatting of it.
 
-Views and controllers: rename @document_fedora to something more compact.
-
 Update SUL-chrome gem to latest Bootstrap (needed to be able to use the
 unchecked checkbox icon, which is not available in our current SUL-chrome gem).
 When this is done, change "icon-minus" to "icon-check-empty" in the
