@@ -8,13 +8,12 @@ def create_test_collection(*args)
   hc                         = Hydrus::Collection.create(user)
   hc.title                   = "Title for: #{hc.pid}"
   hc.abstract                = 'abstract'
-  hc.contact                 = 'contact'
+  hc.contact                 = 'foo@bar.com'
   hc.embargo_option          = 'varies'
   hc.embargo_terms           = '2 years'
   hc.license_option          = 'varies'
   hc.license                 = 'cc-by-nc'
-  hc.visibility_option       = 'varies'
-  hc.visibility              = 'world'
+  hc.visibility_option_value = 'varies'
   hc.requires_human_approval = 'yes'
   # Publish, save, and return a refreshed object.
   hc.publish('true') if args.delete('--publish')
@@ -58,7 +57,7 @@ def create_test_batch(*args)
   # methods to create new collections or items -- publishing, approving,
   # or disapproving them accordingly.
   args = %w(
-    c 
+    c
     cp i ip ip ia ia ia id
     cp i ip ip ia ia ia id i ip ip ia ia ia id
   ) unless args.size > 0

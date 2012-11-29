@@ -110,7 +110,7 @@
             <topic>hair</topic>
           </subject>
           <note type="preferred citation">FooBar Dataset Title. http://purl.stanford.edu/oo000oo0006</note>
-          <note type="citation/reference">Abu-Nader, R., and Terrell, C.L. (2002). Mycobacterium bovis vertebral osteomyelitis as a complication of intravesical BCG use. Mayo Clin Proc 77, 393-397.</note> 
+          <note type="citation/reference">Abu-Nader, R., and Terrell, C.L. (2002). Mycobacterium bovis vertebral osteomyelitis as a complication of intravesical BCG use. Mayo Clin Proc 77, 393-397.</note>
           <note type="contact">archivist1@example.com</note>
           <relatedItem type="references">
             <titleInfo>
@@ -175,7 +175,7 @@
                 <name>Archivist, Five</name>
              </person>
           </role>
-	      </roleMetadata>
+        </roleMetadata>
       </foxml:xmlContent>
     </foxml:datastreamVersion>
   </foxml:datastream>
@@ -184,7 +184,7 @@
     <foxml:datastreamVersion ID="contentMetadata.0" LABEL="Content Metadata"
       CREATED="2012-05-02T23:10:37.034Z" MIMETYPE="text/xml" SIZE="928">
       <foxml:xmlContent>
-	      <contentMetadata>
+        <contentMetadata>
         </contentMetadata>
       </foxml:xmlContent>
     </foxml:datastreamVersion>
@@ -197,21 +197,21 @@
         <rightsMetadata objectId="druid:oo000oo0006">
           <access type="discover">
             <machine>
-            	<world/>
+              <world/>
             </machine>
           </access>
           <access type="read">
             <machine>
-            	<world/>
+              <world/>
             </machine>
           </access>
           <access type="edit">
             <machine/>
           </access>
-				  <use>
-				    <human type="creativeCommons">CC BY Attribution</human>
-				    <machine type="creativeCommons">cc-by</machine>
-				  </use>
+          <use>
+            <human type="creativeCommons">CC BY Attribution</human>
+            <machine type="creativeCommons">cc-by</machine>
+          </use>
         </rightsMetadata>
       </foxml:xmlContent>
     </foxml:datastreamVersion>
@@ -222,8 +222,8 @@
       CREATED="2011-07-05T20:49:25.801Z" MIMETYPE="text/xml" SIZE="345">
       <foxml:xmlContent>
         <hydrusProperties>
-					<publishTime>11/01/2012</publishTime>
-					<lastModifyTime>11/01/2012 00:00:10</lastModifyTime>
+          <publishTime>2012-11-01T00:00:00Z</publishTime>
+          <lastModifyTime>2012-11-01T00:00:22Z</lastModifyTime>
           <reviewedReleaseSettings>true</reviewedReleaseSettings>
           <acceptedTermsOfDeposit>true</acceptedTermsOfDeposit>
           <objectStatus>published</objectStatus>
@@ -241,8 +241,8 @@
       CREATED="2011-07-05T20:46:24.337Z" MIMETYPE="text/xml" SIZE="293">
       <foxml:xmlContent>
         <events>
-          <event type="hydrus" when="2012-08-15T10:12:31-07:00" who="archivist1">Item created</event>
-          <event type="hydrus" when="2012-08-15T10:12:32-07:00" who="archivist1">Item modified: title, abstract, files</event>
+          <event type="hydrus" when="2012-08-15T18:12:31Z" who="archivist1">Item created</event>
+          <event type="hydrus" when="2012-08-15T18:12:32Z" who="archivist1">Item modified: title, abstract, files</event>
         </events>
       </foxml:xmlContent>
     </foxml:datastreamVersion>

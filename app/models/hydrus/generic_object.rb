@@ -5,16 +5,15 @@ class Hydrus::GenericObject < Dor::Item
   include Hydrus::WorkflowDsExtension
   extend  Hydrus::Delegatable
   include ActiveModel::Validations
-  include Hydrus::EmbargoMetadataDsExtension
 
   attr_accessor :files_were_changed
-    
+
   REQUIRED_FIELDS=[:title,:abstract,:contact]
   REQUIRED_FIELDS.each {|field| validates field, :not_empty => true, :if => :should_validate}
 
   validates :pid, :is_druid => true
-  validates :contact, :email_format => {:message => 'is not a valid email address'}, :if => :should_validate 
-  
+  validates :contact, :email_format => {:message => 'is not a valid email address'}, :if => :should_validate
+
   has_metadata(
     :name => "rightsMetadata",
     :type => Hydrus::RightsMetadataDS,
@@ -32,7 +31,7 @@ class Hydrus::GenericObject < Dor::Item
     :type => Hydrus::HydrusPropertiesDS,
     :label => 'Hydrus Properties',
     :control_group => 'M')
-    
+
   setup_delegations(
     # [:METHOD_NAME,              :uniq, :at... ]
     "descMetadata" => [
@@ -48,20 +47,20 @@ class Hydrus::GenericObject < Dor::Item
       [:publish_time,             true   ],
       [:submit_for_approval_time, true   ],
       [:last_modify_time,         true   ],
-      [:item_type,                true   ],      
+      [:item_type,                true   ],
     ],
     "rightsMetadata" => [
       [:rmd_embargo_release_date, true,  :read_access, :machine, :embargo_release_date],
     ],
   )
-  
+
   # delete the file upload directory and then call the super method
   def delete
     parent_object_directory=File.join(self.base_file_directory,'..')
     FileUtils.rm_rf(parent_object_directory) if File.directory?(parent_object_directory)
     super
   end
-  
+
   def is_item?
     self.class == Hydrus::Item
   end
@@ -74,7 +73,7 @@ class Hydrus::GenericObject < Dor::Item
   def dru
     pid.gsub('druid:','')
   end
-  
+
   # Returns true if all required fields are filled in.
   def required_fields_completed?
     # If validations are true, returns true.
@@ -125,7 +124,7 @@ class Hydrus::GenericObject < Dor::Item
   def get_fedora_item(pid)
     return ActiveFedora::Base.find(pid, :cast => true)
   end
-  
+
   # confirm that related items start with a known protocol, if not, just add http://
   def check_related_item_urls
     self.related_item_url = self.related_item_url.collect do |url|
@@ -136,7 +135,7 @@ class Hydrus::GenericObject < Dor::Item
       end
     end
   end
-  
+
   def discover_access
     return rightsMetadata.discover_access.first
   end
@@ -194,6 +193,7 @@ class Hydrus::GenericObject < Dor::Item
         return lic.first if code == lic.last
       end
     end
+    return "No license. All rights reserved by content creator."
   end
 
   def self.license_commons
@@ -271,7 +271,7 @@ class Hydrus::GenericObject < Dor::Item
     f = File.join(Rails.root, "public", Hydrus::Application.config.file_upload_path)
     DruidTools::Druid.new(pid, f).path
   end
-  
+
   def content_directory
     File.join(base_file_directory, "content")
   end
@@ -305,7 +305,7 @@ class Hydrus::GenericObject < Dor::Item
       :file_attributes  => Hydrus::Application.config.cm_file_attributes,
       :include_root_xml => false)
   end
-  
+
   # If the app is configured to start the common assembly workflow, calls will
   # be made to the workflow service to begin that process. In addition,
   # contentMetadata is generated for Items.
@@ -427,51 +427,6 @@ class Hydrus::GenericObject < Dor::Item
           rightsMetadata.use.human = license.first
         end
       end
-    end
-  end
-
-  # Returns visibility as an array -- typically either ['world'] or ['stanford'].
-  # Embargo status determines which datastream is used to obtain the information.
-  def visibility
-    ds = is_embargoed ? embargoMetadata : rightsMetadata
-    return ["world"] if ds.has_world_read_node
-    return ds.group_read_nodes.map { |n| n.text }
-  end
-
-  # Takes a visibility -- typically 'world' or 'stanford'.
-  # Modifies the embargoMetadata and rightsMetadata based on that visibility
-  # values, along with the embargo status.
-  def visibility= val
-    if is_embargoed
-      # If embargoed, we set access info in embargoMetadata.
-      embargoMetadata.initialize_release_access_node(:generic)
-      embargoMetadata.update_access_blocks(val)
-      # And we clear our read access in rightsMetadata.
-      rightsMetadata.remove_world_read_access
-      rightsMetadata.remove_group_read_nodes
-    else
-      # Otherwise, we clear out embargoMetadata.
-      embargoMetadata.initialize_release_access_node()
-      # And set access info in rightsMetadata.
-      rightsMetadata.remove_embargo_date
-      rightsMetadata.update_access_blocks(val)
-    end
-  end
-
-  # Returns the embargo date from the embargoMetadata, not the rightsMetadata.
-  # The latter is a convenience copy used by the PURL app.
-  def embargo_date
-    return embargoMetadata.release_date
-  end
-
-  # Sets the embargo date in both embargoMetadata and rightsMetadata.
-  def embargo_date= val
-    ed = HyTime.datetime(val, :from_localtime => true)
-    embargoMetadata.release_date = ed
-    if ed.blank?
-      rightsMetadata.remove_embargo_date
-    else
-      self.rmd_embargo_release_date = ed
     end
   end
 

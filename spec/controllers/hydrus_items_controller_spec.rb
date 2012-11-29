@@ -7,18 +7,18 @@ describe HydrusItemsController do
 
     it "should map items show correctly" do
       { :get => "/items/abc" }.should route_to(
-        :controller => 'hydrus_items', 
-        :action     => 'show', 
+        :controller => 'hydrus_items',
+        :action     => 'show',
         :id         => 'abc')
     end
-    
+
     it "should map items destroy_value action correctly" do
       { :get => "/items/abc/destroy_value" }.should route_to(
-        :controller => 'hydrus_items', 
+        :controller => 'hydrus_items',
         :action     => 'destroy_value',
         :id         => 'abc')
     end
-    
+
     it "should have the destroy_hydrus_item_value convenience url" do
       destroy_hydrus_item_value_path("123").should match(/items\/123\/destroy_value/)
     end
@@ -32,12 +32,12 @@ describe HydrusItemsController do
       @pid = 'druid:oo000oo0001'
       controller.stub(:current_user).and_return(mock_user)
       get(:show, :id => @pid)
-      assigns[:document_fedora].should be_nil
+      assigns[:fobj].should be_nil
       response.should redirect_to root_path
     end
 
   end
-  
+
   describe "New Action", :integration => true do
 
     it "should restrict access to non authed user" do
@@ -88,7 +88,7 @@ describe HydrusItemsController do
 
     describe "as a nested resource of a collection" do
 
-      it "should return the collection requested via the hydrus_collection_id parameter and assign it to the document_fedora instance variable" do
+      it "should return the collection requested via the hydrus_collection_id parameter and assign it to the fobj instance variable" do
         controller.stub(:current_user).and_return(mock_authed_user)
         mock_coll = mock("HydrusCollection")
         mock_coll.should_receive(:"current_user=").and_return("")
@@ -96,7 +96,7 @@ describe HydrusItemsController do
         controller.stub(:'can?').and_return(true)
         get :index, :hydrus_collection_id=>"1234"
         response.should be_success
-        assigns(:document_fedora).should == mock_coll
+        assigns(:fobj).should == mock_coll
       end
 
       it "should restrict access to non authenticated users" do

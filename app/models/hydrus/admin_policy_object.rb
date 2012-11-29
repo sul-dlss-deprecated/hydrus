@@ -5,7 +5,7 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
   include Hydrus::Responsible
   include Hydrus::Validatable
   extend  Hydrus::Delegatable
-  
+
   # has_relationship('governed_objects', :is_governed_by, :inbound => true)
 
   has_metadata(
@@ -31,7 +31,7 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
     :type => Hydrus::RightsMetadataDS,
     :label => 'Default Object Rights',
     :control_group => 'M')
-      
+
   # Note: all other APO validation occurs in the Collection class.
   validates :pid, :is_druid => true
 
@@ -46,10 +46,10 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
     ],
     "hydrusProperties" => [
       [:reviewed_release_settings, true   ],
-      [:accepted_terms_of_deposit, true   ],      
+      [:accepted_terms_of_deposit, true   ],
     ]
   )
-      
+
   def initialize(*args)
     super
   end
@@ -73,7 +73,7 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
     apo.roleMetadata.add_person_with_role(user, 'hydrus-collection-manager')
     apo.roleMetadata.add_person_with_role(user, 'hydrus-collection-depositor')
     # create defaultObjectRights datastream
-    apo.defaultObjectRights.ng_xml  
+    apo.defaultObjectRights.ng_xml
     # Save and return.
     apo.save
     return apo
@@ -82,7 +82,7 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
   def hydrus_class_to_s
     "apo"
   end
-  
+
   # Returns a hash of info needed for licenses in the APO.
   # Keys correspond to the license_option in the OM terminology.
   # Values are displayed in the web form.

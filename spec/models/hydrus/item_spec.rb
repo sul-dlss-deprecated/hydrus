@@ -222,12 +222,12 @@ describe Hydrus::Item do
       end
     end
 
-    it "should return ['world'] if item is world visible" do
+    it "should return array of groups if item is visible to specific groups" do
       tests = {
         true  => :embargoMetadata,
         false => :rightsMetadata,
       }
-      exp_groups = %w(foo bar)
+      exp_groups = %w(foo bar)  # Typically, just ['stanford']
       mock_nodes = exp_groups.map { |g| double('', :text => g) }
       tests.each do |is_emb, ds|
         @hi.stub(:is_embargoed).and_return(is_emb)
@@ -239,20 +239,23 @@ describe Hydrus::Item do
 
   end
 
-  describe "visibility=()" do
+  describe "embarg_visib=()" do
 
     before(:each) do
+      @edate = '2012-02-28T08:00:00Z'
       # XML snippets for various <access> nodes.
+      ed       = "<embargoReleaseDate>#{@edate}</embargoReleaseDate>"
       mw       = '<machine><world/></machine>'
       ms       = '<machine><group>stanford</group></machine>'
+      me       = "<machine>#{ed}</machine>"
       rd_world = %Q[<access type="read">#{mw}</access>]
       rd_stanf = %Q[<access type="read">#{ms}</access>]
-      rd_blank = %Q[<access type="read"><machine/></access>]
+      rd_emb   = %Q[<access type="read">#{me}</access>]
       di_world = %Q[<access type="discover">#{mw}</access>]
       # XML snippets for embargoMetadata.
-      em_start = %Q[<embargoMetadata><status/><releaseDate/>]
+      em_date  = %Q[<releaseDate>#{@edate}</releaseDate>]
+      em_start = %Q[<embargoMetadata><status>embargoed</status>#{em_date}]
       em_end   = %Q[</embargoMetadata>]
-      em_blank = %Q[<releaseAccess/>]
       em_world = %Q[<releaseAccess>#{di_world}#{rd_world}</releaseAccess>]
       em_stanf = %Q[<releaseAccess>#{di_world}#{rd_stanf}</releaseAccess>]
       # XML snippets for rightsMetadata.
@@ -261,48 +264,56 @@ describe Hydrus::Item do
                  '<use><human/><machine/></use></rightsMetadata>'
       # Assemble expected Nokogiri XML for embargoMetadata and rightsMetadata.
       @xml = {
-        :em_initial => noko_doc([em_start, em_blank, em_end].join),
         :em_world   => noko_doc([em_start, em_world, em_end].join),
         :em_stanf   => noko_doc([em_start, em_stanf, em_end].join),
-        :rm_initial => noko_doc([rm_start, di_world, rd_blank, rm_end].join),
+        :rm_emb     => noko_doc([rm_start, di_world, rd_emb,   rm_end].join),
         :rm_world   => noko_doc([rm_start, di_world, rd_world, rm_end].join),
         :rm_stanf   => noko_doc([rm_start, di_world, rd_stanf, rm_end].join),
       }
     end
 
-    it "initial XML should be correct" do
-      @hi.rightsMetadata.ng_xml.should  be_equivalent_to(@xml[:rm_initial])
-      @hi.embargoMetadata.ng_xml.should be_equivalent_to(@xml[:em_initial])
-    end
-    
     it "can exercise all combinations of is_embargoed and visibility to get expected XML" do
+      # All permutations of embargoed = yes|no and visibility = world|stanford,
+      # along with the expected rightsMetadata and embargoMetadata XML keys.
       tests = [
-        # All permutations of is_embargoed = true|false and visibility = world|stanford,
-        # along with the expected rightsMetadata and embargoMetadata XML keys.
-        [true,  'world',    :rm_initial, :em_world],
-        [true,  'stanford', :rm_initial, :em_stanf],
-        [false, 'world',    :rm_world,   :em_initial],
-        [false, 'stanford', :rm_stanf,   :em_initial],
-        # Ditto, but in a different order.
-        [false, 'stanford', :rm_stanf,   :em_initial],
-        [true,  'stanford', :rm_initial, :em_stanf],
-        [true,  'world',    :rm_initial, :em_world],
-        [false, 'world',    :rm_world,   :em_initial],
+        [true,  'world',    :rm_emb,   :em_world],
+        [true,  'stanford', :rm_emb,   :em_stanf],
+        [false, 'world',    :rm_world, nil],
+        [false, 'stanford', :rm_stanf, nil],
       ]
-      tests.each do |is_emb, vis, exp_rm, exp_em|
-        @hi.stub(:is_embargoed).and_return(is_emb)
-        @hi.visibility = vis
+      dt = HyTime.date_display(@edate)
+      tests.each do |emb, vis, exp_rm, exp_em|
+        h = {
+          'embargoed'  => emb ? 'yes' : 'no',
+          'date'       => emb ? dt    : '',
+          'visibility' => vis,
+        }
+        @hi = Hydrus::Item.new
+        @hi.embargoMetadata.should_receive(:delete) unless emb
+        @hi.embarg_visib = h
         @hi.rightsMetadata.ng_xml.should  be_equivalent_to(@xml[exp_rm])
-        @hi.embargoMetadata.ng_xml.should be_equivalent_to(@xml[exp_em])
+        @hi.embargoMetadata.ng_xml.should be_equivalent_to(@xml[exp_em]) if emb
       end
     end
-      
+
   end
 
   describe "embargo" do
 
+    it "is_embargoed should return true if the Item has a non-blank embargo date" do
+      tests = {
+        ''                     => false,
+        nil                    => false,
+        '2012-08-30T08:00:00Z' => true,
+      }
+      tests.each do |dt, exp|
+        @hi.stub(:embargo_date).and_return(dt)
+        @hi.is_embargoed.should == exp
+      end
+    end
+
     describe "embargo_date() and embargo_date=()" do
-      
+
       it "getter should return value from embargoMetadata" do
         exp = 'foo release date'
         @hi.stub_chain(:embargoMetadata, :release_date).and_return(exp)
@@ -315,6 +326,14 @@ describe Hydrus::Item do
         @hi.embargo_date = rd
         @hi.embargo_date.should == rd_dt
         @hi.rmd_embargo_release_date.should == rd_dt
+        @hi.embargoMetadata.status.should == 'embargoed'
+      end
+
+      it "setter should delete embargoMetadata datastream if value is blank" do
+        @hi.embargoMetadata.should_receive(:delete)
+        dt = rand() < 0.5 ? '' : nil
+        @hi.embargo_date = dt
+        @hi.rightsMetadata.ng_xml.at_xpath("//embargoReleaseDate").should == nil
       end
 
     end
@@ -428,6 +447,7 @@ describe Hydrus::Item do
         :contact,
         :terms_of_deposit,
         :release_settings,
+        :license,
         :actors
       ]
       @hi.instance_variable_set('@should_validate', true)
@@ -448,37 +468,32 @@ describe Hydrus::Item do
 
       it "should not perform validation unless preconditions are met" do
         @hi.should_not_receive(:beginning_of_embargo_range)
-        # Not under embargo.
-        @hi.stub('under_embargo?').and_return(false)
-        @hi.embargo_date_in_range
-        # Not under embargo.
-        @hi.stub('under_embargo?').and_return(true)
-        @hi.stub(:embargo_date).and_return(nil)
+        @hi.stub(:is_embargoed).and_return(false)
         @hi.embargo_date_in_range
       end
 
       it "should add a validation error when embargo_date falls outside the embargo range" do
         # Set up beginning/end of embargo range.
-        b   = '2012-02-01'
-        e   = '2012-03-01'
-        bdt = HyTime.datetime(b, :from_localtime => true)
-        edt = HyTime.datetime(e, :from_localtime => true)
+        b   = '2012-02-01T08:00:00Z'
+        e   = '2012-03-01T08:00:00Z'
+        bdt = HyTime.datetime(b)
+        edt = HyTime.datetime(e)
         @hi.stub(:beginning_of_embargo_range).and_return(bdt)
         @hi.stub(:end_of_embargo_range).and_return(edt)
-        exp_msg = "must be in the range #{b} - #{e}"
+        exp_msg = "must be in the range #{b[0..9]} - #{e[0..9]}"
         # Some embargo dates to validate.
         dts = {
-          '2012-01-31' => false,
-          '2012-02-01' => true,
-          '2012-02-25' => true,
-          '2012-03-01' => true,
-          '2012-03-02' => false,
+          '2012-01-31T08:00:00Z' => false,
+          '2012-02-01T08:00:00Z' => true,
+          '2012-02-25T08:00:00Z' => true,
+          '2012-03-01T08:00:00Z' => true,
+          '2012-03-02T08:00:00Z' => false,
         }
         # Validate those dates.
-        @hi.stub('under_embargo?').and_return(true)
+        @hi.stub(:is_embargoed).and_return(true)
         k = :embargo_date
         dts.each do |dt, is_ok|
-          @hi.stub(k).and_return(HyTime.datetime(dt, :from_localtime => true))
+          @hi.stub(k).and_return(HyTime.datetime(dt))
           @hi.embargo_date_in_range
           if is_ok
             @hi.errors.should_not have_key(k)
@@ -489,7 +504,7 @@ describe Hydrus::Item do
           @hi.errors.clear
         end
       end
-      
+
     end
 
     it "fully populated Item should be valid" do
@@ -498,7 +513,7 @@ describe Hydrus::Item do
       @hi.stub(:accepted_terms_of_deposit).and_return(true)
       @hi.stub(:reviewed_release_settings).and_return(true)
       @exp.each { |e| @hi.stub(e).and_return(dru) unless e==:contact }
-      @hi.stub(:contact).and_return('test@test.com') # we need a valid email address 
+      @hi.stub(:contact).and_return('test@test.com') # we need a valid email address
       @hi.stub_chain([:collection, :embargo_option]).and_return("varies")
       @hi.valid?.should == true
     end
@@ -864,7 +879,7 @@ describe Hydrus::Item do
 
     it "should treat both datepicker and back-end datetimes as valid" do
       k = :embargo_date
-      @hi.stub(:under_embargo?).and_return(true)
+      @hi.stub(:is_embargoed).and_return(true)
       valid_dates = [
         '2012-12-31',           # Format from datepicker.
         '2012-12-31T08:00:00Z', # Format stored in XML.
@@ -878,7 +893,7 @@ describe Hydrus::Item do
 
     it "should add validation errors if the date has an invalid format" do
       k = :embargo_date
-      @hi.stub(:under_embargo?).and_return(true)
+      @hi.stub(:is_embargoed).and_return(true)
       invalid_dates = [
         '12-31-2012',  # Don't allow mm-dd-yyyy.
         'blah!!',
@@ -893,7 +908,7 @@ describe Hydrus::Item do
 
     it "should not perform validation unless object is under embargo" do
       k = :embargo_date
-      @hi.stub(:under_embargo?).and_return(false)
+      @hi.stub(:is_embargoed).and_return(false)
       @hi.stub(k).and_return('blah!!!')
       @hi.embargo_date_is_correct_format
       @hi.errors.messages.should_not include(k)

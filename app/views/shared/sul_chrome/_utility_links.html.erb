@@ -1,6 +1,6 @@
 <% unless is_production? %>
   <a rel="tooltip" data-placement='bottom' title="This website is in development and any data you add will be deleted."><span class="label label-warning">Test Site</span></a> |
-  <%= render(:partial => 'shared/beta_dialog')  unless seen_beta_dialog?%>  
+  <%= render(:partial => 'shared/beta_dialog')  unless seen_beta_dialog?%>
 <% end %>
 <%- if current_user -%>
   Welcome <%= current_user %>! | <%= link_to("Sign out", current_user.is_a?(WebAuthUser) ? webauth_logout_path : destroy_user_session_path) %>

@@ -31,7 +31,7 @@ describe Hydrus::AccessControlsEnforcement do
       @mc.stub('request').and_return(OpenStruct.new(:full_path=>'some/fake/path'))
       @mc.stub('new_signin_path').and_return('/users/signin')
     end
-    
+
     it "should do nothing if the user can read the object" do
       @mc.stub('can?').and_return(true)
       @mc.should_not_receive(:redirect_to)
@@ -62,7 +62,7 @@ describe Hydrus::AccessControlsEnforcement do
 
     it "should do nothing if the user can edit the object" do
       @mc.stub('can?').and_return(true)
-      @mc.stub('current_user').and_return(nil)      
+      @mc.stub('current_user').and_return(nil)
       @mc.should_not_receive(:redirect_to)
       @mc.enforce_edit_permissions
       @mc.flash.should == {}
@@ -85,15 +85,15 @@ describe Hydrus::AccessControlsEnforcement do
   end
 
   describe "enforce_create_permissions: create items in collections" do
-    
+
     before(:each) do
       @mc = MockController.new(:id => @dru)
-      @mc.stub('current_user').and_return(OpenStruct.new)      
+      @mc.stub('current_user').and_return(OpenStruct.new)
       @mc.stub('session').and_return({})
       @mc.stub('request').and_return(OpenStruct.new(:full_path=>'some/fake/path'))
       @mc.stub('new_signin_path').and_return('/users/signin')
     end
-    
+
     it "should do nothing if the user can do it" do
       @mc.stub('can?').and_return(true)
       @mc.should_not_receive(:redirect_to)
@@ -104,7 +104,7 @@ describe Hydrus::AccessControlsEnforcement do
     it "should redirect to collection view if user cannot do it" do
       @mc.stub('can?').and_return(false)
       @mc.stub(:root_url).and_return('/')
-      @mc.stub('params').and_return({:collection=>'druid:oo000oo0003'})      
+      @mc.stub('params').and_return({:collection=>'druid:oo000oo0003'})
       @mc.stub(:polymorphic_path).and_return(@exp_pp)
       @mc.should_receive(:redirect_to).with(@exp_pp)
       Hydrus::Collection.stub(:find)
@@ -176,7 +176,7 @@ describe Hydrus::AccessControlsEnforcement do
       @mc.apply_gated_discovery(solr_params, {})
       solr_params.should == exp
     end
-    
+
     it "hash should include a non-existent model if user is not logged in" do
       @mc = MockController.new()
       @mc.stub(:current_user).and_return(nil)
@@ -189,7 +189,7 @@ describe Hydrus::AccessControlsEnforcement do
       @mc.apply_gated_discovery(solr_params, {})
       solr_params.should == exp
     end
-    
+
   end
 
 end

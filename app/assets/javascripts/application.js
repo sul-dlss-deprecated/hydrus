@@ -25,4 +25,4 @@
 
 
 /* Eliminate JavaScript functionality provided by Blacklight */
-//Blacklight.do_search_context_behavior = function(){};  
+//Blacklight.do_search_context_behavior = function(){};

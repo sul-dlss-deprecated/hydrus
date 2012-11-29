@@ -6,7 +6,7 @@ module Hydrus
     def object_type
       return identityMetadata.objectType.first || self.class.to_s.demodulize.downcase
     end
-    
+
     # Takes an array of OM terms.
     # Removes leading and trailing whitespace from the values referenced
     # by those terms.

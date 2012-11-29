@@ -46,7 +46,7 @@
           <otherId name="uuid">cea858c0-9ff1-11e1-baef-02231e89cef4</otherId>
           <tag>Project : Hydrus</tag>
           <tag>Hydrus : student thesis</tag>
-          <tag>Project : Physics Honors Theses</tag>          
+          <tag>Project : Physics Honors Theses</tag>
         </identityMetadata>
       </foxml:xmlContent>
     </foxml:datastreamVersion>
@@ -57,8 +57,8 @@
       CREATED="2011-07-05T20:49:25.801Z" MIMETYPE="text/xml" SIZE="345">
       <foxml:xmlContent>
         <hydrusProperties>
-					<publishTime>11/01/2012</publishTime>
-					<lastModifyTime>11/01/2012 00:00:10</lastModifyTime>
+          <publishTime>2012-11-01T00:00:00Z</publishTime>
+          <lastModifyTime>2012-11-01T00:00:22Z</lastModifyTime>
           <reviewedReleaseSettings>true</reviewedReleaseSettings>
           <acceptedTermsOfDeposit>true</acceptedTermsOfDeposit>
           <objectStatus>published</objectStatus>
@@ -180,21 +180,21 @@ The calculated Fermi surface of RbCu4S3 reveals one three-dimensional pocket and
         <rightsMetadata objectId="druid:oo000oo0012">
           <access type="discover">
             <machine>
-            	<world/>
+              <world/>
             </machine>
           </access>
           <access type="read">
             <machine>
-            	<world/>
+              <world/>
             </machine>
           </access>
           <access type="edit">
             <machine/>
           </access>
-				  <use>
-				    <human type="creativeCommons">CC BY Attribution</human>
-				    <machine type="creativeCommons">cc-by</machine>
-				  </use>
+          <use>
+            <human type="creativeCommons">CC BY Attribution</human>
+            <machine type="creativeCommons">cc-by</machine>
+          </use>
         </rightsMetadata>
       </foxml:xmlContent>
     </foxml:datastreamVersion>
@@ -209,8 +209,8 @@ The calculated Fermi surface of RbCu4S3 reveals one three-dimensional pocket and
       CREATED="2011-07-05T20:46:24.337Z" MIMETYPE="text/xml" SIZE="293">
       <foxml:xmlContent>
         <events>
-          <event type="hydrus" when="2012-08-15T10:12:31-07:00" who="student2">Item created</event>
-          <event type="hydrus" when="2012-08-15T10:12:32-07:00" who="student2">Item modified: title, abstract, files</event>
+          <event type="hydrus" when="2012-08-15T18:12:31Z" who="student2">Item created</event>
+          <event type="hydrus" when="2012-08-15T18:12:32Z" who="student2">Item modified: title, abstract, files</event>
         </events>
       </foxml:xmlContent>
     </foxml:datastreamVersion>

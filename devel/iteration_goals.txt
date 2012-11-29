@@ -3,12 +3,12 @@ November 2012
 -------------
 
 * File Level Restrictions
-- Support for file level licenses - entered as a description for now, need to 
+- Support for file level licenses - entered as a description for now, need to
   adjust DOR data model later.
 - Support hiding of files, which means setting preserve=true, publish=false, shelve=false.
 - Add an option to simply hide all the files.
 
-* Items 
+* Items
 - Allow user to enter custom terms of use by collection or item.
 
 * Collections

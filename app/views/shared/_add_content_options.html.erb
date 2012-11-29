@@ -1,7 +1,7 @@
 <ul class="dropdown-menu">
   <li <%=raw "class='disabled'" unless parent.is_open%>>
-		<%= link_to 'item',new_hydrus_item_path(:collection => parent.pid), :"disable-after-click"=>'true'%>
-	</li>
+    <%= link_to 'item',new_hydrus_item_path(:collection => parent.pid), :"disable-after-click"=>'true'%>
+  </li>
   <li class="divider"></li>
   <li class="disabled"><a href="#">article</a></li>
   <li class="disabled"><a href="#">dataset</a></li>

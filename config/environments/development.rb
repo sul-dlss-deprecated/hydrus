@@ -34,8 +34,8 @@ Hydrus::Application.configure do
 
   # Expands the lines which load the assets
   config.assets.debug = true
-  
-  
+
+
 end
 
 Dor::Config.configure do
@@ -43,7 +43,7 @@ Dor::Config.configure do
   purl do
     base_url 'http://purl.stanford.edu/'
   end
-  
+
   hydrus do
     exception_error_page  false                   # if true, a generic error page will be shown with no exception messages; if false, standard Rails exceptions are shown directly to the user
     exception_error_panel false                   # if true and exception_error_page is also set to true, a collapsible exception error panel is shown on the friendly error page

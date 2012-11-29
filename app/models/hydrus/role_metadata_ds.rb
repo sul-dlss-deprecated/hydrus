@@ -2,7 +2,7 @@ class Hydrus::RoleMetadataDS < ActiveFedora::NokogiriDatastream
 
   include SolrDocHelper
   include Hydrus::GenericDS
-  
+
   set_terminology do |t|
 
     t.root :path => 'roleMetadata'
@@ -16,7 +16,7 @@ class Hydrus::RoleMetadataDS < ActiveFedora::NokogiriDatastream
         t.name
       end
     end
-    
+
     t.person_id :proxy => [:role, :person, :identifier]
 
     t.collection_creator        :ref => [:role], :attributes => {:type => 'hydrus-collection-creator'}
@@ -25,7 +25,7 @@ class Hydrus::RoleMetadataDS < ActiveFedora::NokogiriDatastream
     t.collection_item_depositor :ref => [:role], :attributes => {:type => 'hydrus-collection-item-depositor'}
     t.collection_reviewer       :ref => [:role], :attributes => {:type => 'hydrus-collection-reviewer'}
     t.collection_viewer         :ref => [:role], :attributes => {:type => 'hydrus-collection-viewer'}
-    # item object roles         
+    # item object roles
     t.item_manager              :ref => [:role], :attributes => {:type => 'hydrus-item-manager'}
     t.item_depositor            :ref => [:role], :attributes => {:type => 'hydrus-item-depositor'}
 
@@ -46,11 +46,11 @@ class Hydrus::RoleMetadataDS < ActiveFedora::NokogiriDatastream
     else
       return insert_person(role_node, id)
     end
-  end  
+  end
 
   def add_empty_person_to_role(role_type)
     add_person_with_role("", role_type)
-  end  
+  end
 
   def insert_role(role_type)
     add_hydrus_child_node(ng_xml.root, :role, role_type)

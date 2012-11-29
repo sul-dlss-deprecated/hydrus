@@ -1,51 +1,51 @@
-<% isopen = @document_fedora.is_open %>
+<% isopen = @fobj.is_open %>
 
 <div class="collection-actions box-header">Actions</div>
 
 <div class="box-body">
 
   <!-- Open/close. -->
-  <% if can? :edit, @document_fedora %>
+  <% if can? :edit, @fobj %>
     <% if isopen %>
       <p>
         <%= button_to(
-              "Close Collection", 
-              close_collection_path(@document_fedora),
+              "Close Collection",
+              close_collection_path(@fobj),
               :id    => 'hydrus_collection_close',
               :class => 'btn btn-small save-edits',
-							:disable_with => "Please wait..."	) %>
+              :disable_with => "Please wait..."  ) %>
       </p>
-    <% elsif @document_fedora.is_openable %>
+    <% elsif @fobj.is_openable %>
       <p>
         <%= button_to(
-              "Open Collection", 
-              open_collection_path(@document_fedora),
+              "Open Collection",
+              open_collection_path(@fobj),
               :id    => 'hydrus_collection_open',
               :class => 'btn btn-small save-edits',
-							:disable_with => "Please wait..."	) %>
+              :disable_with => "Please wait..."  ) %>
       </p>
     <% end %>
   <% end %>
 
   <!-- Create item. -->
-  <% if can? :create_items_in, @document_fedora %>
-    <% message = @document_fedora.is_openable ?
+  <% if can? :create_items_in, @fobj %>
+    <% message = @fobj.is_openable ?
                  "To add items, you must open the collection." :
                  "To add items, you must fill in all required fields and open the collection."
-    %> 
+    %>
     <div class="btn-group add-content-dropdown" <%=raw "data-placement=\"bottom\" rel=\"tooltip\" data-original-title=\"#{message}\"" unless isopen%> style="display:none;" >
       <button class="<%="disabled" unless isopen%> btn btn-small">Add new &hellip;</button>
       <button class="<%="disabled" unless isopen%> btn btn-small dropdown-toggle" data-toggle="dropdown">
         <span class="caret"></span>
       </button>
       <%= render :partial => "shared/add_content_options",
-                 :locals => {:parent => @document_fedora} %>
+                 :locals => {:parent => @fobj} %>
     </div>
     <noscript>
       <%= form_tag(new_hydrus_item_path, :method=>"GET", :class=>"add-content-options") do %>
         <%= select_tag(
-              "collection", 
-              options_for_select([["item", @document_fedora.pid]]),
+              "collection",
+              options_for_select([["item", @fobj.pid]]),
               :class=>"add-content-options"
             )
         %>
@@ -55,14 +55,14 @@
   <% end %>
 
   <!-- Delete. -->
-  <% if can?(:edit, @document_fedora) && @document_fedora.is_destroyable %>
- 			<p style="display:none;" id="discard-item" class="discard-item">
+  <% if can?(:edit, @fobj) && @fobj.is_destroyable %>
+       <p style="display:none;" id="discard-item" class="discard-item">
         <i class="icon-trash"></i>
-				<%= link_to 'Discard this collection', @document_fedora, :method=>:delete, :confirm => 'Are you sure you want to delete this collection? This action cannot be undone.'%>
+        <%= link_to 'Discard this collection', @fobj, :method=>:delete, :confirm => 'Are you sure you want to delete this collection? This action cannot be undone.'%>
       </p>
-			<noscript>
-				<p class="discard-item"><i class="icon-trash"></i> <%=link_to 'Discard this collection', discard_item_confirmation_path(@document_fedora)%></p>
-			</noscript>
+      <noscript>
+        <p class="discard-item"><i class="icon-trash"></i> <%=link_to 'Discard this collection', discard_item_confirmation_path(@fobj)%></p>
+      </noscript>
   <% end %>
 
 </div>

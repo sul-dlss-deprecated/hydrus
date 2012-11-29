@@ -2,33 +2,42 @@
 Development Tasks - 14 November 2012
 ------------------
 
+System integration work. Details in separate section below.
+
+APO RELS-EXT datastream needs to add a child node to <rdf:Description>:
+<hydra:referencesAgreement rdf:resource="info:fedora/druid:mc322hh4254"/>.
+
+Embargo, visbility, and license: assess integration tests. If needed write some
+good integration test scenarios for these attributes.
+
+Protect actions at the model level. This is mostly done, but a few actions remain.
+Details in a separate section below.
+
+Abstracts with internal newlines are preserved correctly and appear on the
+edit form, but they don't render correctly on view pages.
+
+Keywords: require at least one.
+
 Support delete of a file in an unpublished item.
 
 Terms of Deposit: create PDF and tie to save action in popup window.
 
-Keywords: require at least one.
-
-System integration work. Details in separate section below.
-
-Dates and times: rationalize and centralize time logic in a module. Use iso8601
-(UTC) for back-end storage, and Pacific zone for UI display. [Monty]
-  - Check spec/fixtures for datetime string formats.
-  - Evaluate from_localtime. Is it needed? Should this behavior reside in the
-    controller? If retained, write tests for its behavior.
-
-Embargo-visibility refactor. Details in a separate section below. [Monty]
-
-Protect actions at the model level. This is mostly done, but a few actions remain.
-Details in a separate section below. [Monty]
+Assess the app's deprecation warnings and fix if needed.
 
 --------
 System integration
 --------
 
-In hydrus-prod, the app should not show the "Test site" warnings and images.
+Collection title on PURL page: it shows the Item title rather than Collection
+title. This is a bug in dor-services. [Jon D. will fix. Get latest dor-services
+gem and then deploy.]
 
 Hydrus objects end up with 2 values for submitted_dt and published_dt, because
-two WFs are using the those lifecycles. [Waiting on new dor-services gem.]
+two WFs are using the those lifecycles. [Problem might be fixed. Deploy and
+check on hydrus-test.]
+
+Create object mc322hh4254 (hydra:referencesAgreement) on hydrus-dev,
+hydrus-test, and hydrus-prod.  [Hannah/Lynn]
 
 Try to use hydrus-prod. [Waiting on new dor-services gem in production.]
 
@@ -53,50 +62,17 @@ accept_terms_of_deposit()
 # These guarded by Tomcat rules in our Puppet manifest.
 Tighten up the restrictions: replace su_admin_nets with $foz_all_nets.
 
-------------------
-Embargo-visibility refactor
-------------------
-
-Collections should not have the embargoMetadata datastream.
-
-Items should not have the embargoMetadata datastream (at all) unless the user
-has set an embargo date. Currently we have the datastream and it toggles state
-depending on whether there is an embargo date.
-
-If an Item is embargoed, we need to set embargoMetadata.status. This is not
-being done.
-
-Embargo date and visibility (world|stanford) cannot be set independently,
-because their logic is necessarily intertwined. Currently, the app works
-correctly only because embargo_date=() is called first, due to the layout of
-our web form.
-
-  - Option 1: a single setter that handles both.
-
-  - Option 2: the discrete setters could store values as instance variables,
-    and the datastream logic could be postponed until save() is called.
-
-  - The latter retains a bit more simplicity at the view level. If that
-    approach is taken, put it in a separate method like write_xml(), which
-    save() will invoke. That will allow unit tests and IRB code to check XML
-    without really saving.
-
-  - Write a good explanation for how visibility and embargo interact:
-      # rightsMetadata
-      # <access type="read">                                embargo        visibility
-      #   <machine> <world></world>         </machine>    # immediate|no   world
-      #   <machine> <group>stanford</group> </machine>    # immediate|no   stanford
-      #   <machine> <embargoReleaseDate>... </machine>    # future   |yes  --
-      # </access>
-
-Change immediate|future to better terms, probably no|yes.
-
 --------
 Other
 --------
 
-Check Hydrus::PropertiesSettable. Why is this code in a separate module? It
-appears to be used only in GenericObject.
+Embargo, visibility, and license for draft Items under scenarios when the
+collection's policies are changed from varies to fixed. Current app behavior:
+if the collection allows "varies", the edit UI offers widgets; otherwise, the
+Item view/edit pages display the current value for the Item. The problem
+scenario: if Collection changes from varies to fixed, its unpublished items
+will be "stuck" at their current value -- which might or might not agree with
+the new fixed value set by the collection manager.
 
 Rake task to list all Hydrus pids, along with their has_model_s value.
 
@@ -107,7 +83,7 @@ Move Terms of Deposit acceptance pop-up so it shows (if needed) when an item is
 created.
 
 Desc metadata: remove emtpy stuff and improve formatting. [Waiting on details
-from Hannah]
+from Hannah.]
 
 Assess allowing collections to be opened without being published. In effect,
 this would be an open, draft Collection.
@@ -130,8 +106,6 @@ accessibility issues.
 
 Update search results page; UI redesign degraded formatting of it.
 
-Views and controllers: rename @document_fedora to something more compact.
-
 Update SUL-chrome gem to latest Bootstrap (needed to be able to use the
 unchecked checkbox icon, which is not available in our current SUL-chrome gem).
 When this is done, change "icon-minus" to "icon-check-empty" in the
@@ -153,8 +127,6 @@ Stub out workflow calls in unit and integration tests that create objects with
 the "fake" PID, so that we don't run into random test failures. Step 1:
 identify methods that advance the workflow (publish and its cousins). Step 2:
 identify tests that invoke those methods in a non-druid-minting context.
-
-rightsMD: Refactor to take better advantage of OM and generic_ds.rb.
 
 Consider moving the actual collection-depositor roleMD info from the APO to the
 Collection, for two reasons: (1) it parallels the roleMD stored in the Item;
@@ -180,11 +152,6 @@ Item: related citations; and links to related items.
 Consider moving Hydrus::Responsible into RoleMDDS. Not sure that we need the
 module. Also, there is currently some duplication between Hydrus::Responsible
 and the to_solr() method in RoleMDDS.
-
-APO RELS-EXT datastream needs to add a child node to <rdf:Description>:
-<hydra:referencesAgreement rdf:resource="info:fedora/druid:XXX"/>, where XXX is
-the PID of the global Hydrus Agreement object. [The Hydrus agreement object
-needs to be created -- need more details].
 
 Collection create: APO.roleMetadata: set the value of <name> for the
 collection-manager [waiting on LDAP].

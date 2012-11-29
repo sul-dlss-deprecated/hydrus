@@ -1,5 +1,5 @@
 class ObjectFilesController < ApplicationController
-  
+
   def create
     # Binary Base64 files from drag-and-drop.
     if params.has_key?("binary_data")
@@ -12,9 +12,9 @@ class ObjectFilesController < ApplicationController
       new_file.file = temp_file
       new_file.save
       @file = new_file
-    end    
+    end
   end
-  
+
   def destroy
     object_file=Hydrus::ObjectFile.find(params[:id]).destroy  # this will also delete the underlying file from the local Hydrus file system upload location
     @id=object_file.id
@@ -30,5 +30,5 @@ class ObjectFilesController < ApplicationController
      end
 
   end
-  
+
 end

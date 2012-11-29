@@ -33,7 +33,7 @@ describe Hydrus::Collection do
       apo = Hydrus::AdminPolicyObject.new(:pid => apo_druid)
       @hc.stub(:apo).and_return(apo)
     end
-    
+
     it "open() should set object_status, add event, call approve" do
       hc_title      = 'blah blah blah'
       apo_title     = "APO for #{hc_title}"
@@ -54,7 +54,7 @@ describe Hydrus::Collection do
       @hc.apo.label.should                        == apo_title
       @hc.publish_time.should_not be_blank
     end
-    
+
     it "close() should set object_status and add an event" do
       @hc.get_hydrus_events.size.should == 0
       @hc.should_not_receive(:approve)
@@ -74,7 +74,7 @@ describe Hydrus::Collection do
         expect { @hc.send(meth) }.to raise_error
       end
     end
-    
+
   end
 
   describe "valid?()" do
@@ -84,7 +84,7 @@ describe Hydrus::Collection do
       @hc.stub(:apo).and_return(@apo)
       @hc.stub(:should_validate).and_return(true)
       @exp_errs = [
-        :title, 
+        :title,
         :abstract,
         :contact,
         :embargo,
@@ -117,7 +117,7 @@ describe Hydrus::Collection do
 
     it "should return true when both Collection and APO are valid" do
       @exp_errs.each { |e| @hc.stub(e).and_return(@dru) unless e==:contact }
-      @hc.stub(:contact).and_return('test@test.com') # we need a valid email address       
+      @hc.stub(:contact).and_return('test@test.com') # we need a valid email address
       @hc.stub(:embargo_terms).and_return(@dru)
       @hc.stub(:pid).and_return(@dru)
       @apo.stub(:'valid?').and_return(true)
@@ -146,7 +146,7 @@ describe Hydrus::Collection do
     @hc.stub(:hydrus_items).and_return([0, 11, 22])
     @hc.has_items.should == true
   end
-  
+
   it "is_open() should return true if the collection is open for deposit" do
     tests = {
       'published_open' => true,
@@ -159,9 +159,9 @@ describe Hydrus::Collection do
       @hc.is_open.should == exp
     end
   end
-  
+
   describe "is_openable()" do
-    
+
     it "collection already open: should return false no matter what" do
       @hc.stub('validate!').and_return(true)
       @hc.stub(:object_status).and_return('published_open')
@@ -177,7 +177,7 @@ describe Hydrus::Collection do
     end
 
   end
-    
+
   it "is_closeable() should return the value of is_open()" do
     [true, false, true].each do |exp|
       @hc.stub(:is_open).and_return(exp)
@@ -225,15 +225,15 @@ describe Hydrus::Collection do
       @hc.stub(:recipients_for_collection_update_emails).and_return('jdoe')
       mail = @hc.send_publish_email_notification(false)
       mail.to.should == ["jdoe@stanford.edu"]
-      mail.subject.should =~ /Collection closed for deposit in the Stanford Digital Repository/      
+      mail.subject.should =~ /Collection closed for deposit in the Stanford Digital Repository/
     end
     it "should return nil when no recipients are set" do
-      @hc.stub(:recipients_for_collection_update_emails).and_return('')      
+      @hc.stub(:recipients_for_collection_update_emails).and_return('')
       @hc.send_publish_email_notification(true).should be_nil
       @hc.send_publish_email_notification(false).should be_nil
-    end    
+    end
   end
-  
+
   context "APO roleMetadataDS delegation-y methods" do
     before(:each) do
       apo = Hydrus::AdminPolicyObject.new
@@ -250,11 +250,11 @@ describe Hydrus::Collection do
       EOF
       @rmdoc = Hydrus::RoleMetadataDS.from_xml(role_xml)
       apo.stub(:roleMetadata).and_return(@rmdoc)
-      
+
       @hc = Hydrus::Collection.new
       @hc.stub(:apo).and_return(apo)
     end
-    
+
     it "add_empty_person_to_role should work" do
       @hc.add_empty_person_to_role('hydrus-collection-manager')
       @rmdoc.ng_xml.should be_equivalent_to <<-EOF
@@ -291,7 +291,7 @@ describe Hydrus::Collection do
       @hc.apo_person_roles = {
         'hydrus-collection-manager' => 'archivist4, archivist5',
         'hydrus-collection-item-depositor'     => 'archivist6',
-      } 
+      }
       @rmdoc.ng_xml.should be_equivalent_to <<-EOF
         <roleMetadata>
           <role type="hydrus-collection-manager">
@@ -304,7 +304,7 @@ describe Hydrus::Collection do
         </roleMetadata>
       EOF
     end
-    
+
     it "apo_person_roles should forward to apo.person_roles" do
       apo = Hydrus::AdminPolicyObject.new
       @hc.stub(:apo).and_return(apo)
@@ -340,7 +340,7 @@ describe Hydrus::Collection do
   end
 
   describe "getters and setters" do
-    
+
     before(:each) do
       @arg = 'foobar'
     end
@@ -373,7 +373,7 @@ describe Hydrus::Collection do
           @hc.send(m).should == exp
         end
       end
-      
+
       it "setters should not call FOO= because FOO_option() does not return VAL" do
         @combos.each do |typ, val, att|
           m = "#{typ}="
@@ -382,7 +382,7 @@ describe Hydrus::Collection do
           @hc.send("#{typ}_#{val}=", 'new_val')
         end
       end
-      
+
       it "setters should call FOO= because FOO_option() does return VAL" do
         @combos.each do |typ, val, att|
           m   = "#{att}="
@@ -392,15 +392,38 @@ describe Hydrus::Collection do
           @hc.send("#{typ}_#{val}=", exp)
         end
       end
-      
+
     end
 
     describe "visibility_option_value getter and setter" do
-      
+
       it "can exercise the getter" do
         @hc.stub(:visibility_option).and_return('fixed')
         @hc.stub(:visibility).and_return(['world'])
         @hc.visibility_option_value.should == 'everyone'
+      end
+
+      it "the setter should call the expected setters" do
+        @hc.should_receive('visibility_option=').with('fixed')
+        @hc.should_receive('visibility=').with('world')
+        @hc.visibility_option_value = 'everyone'
+      end
+
+    end
+
+    describe "visibility getter and setter" do
+
+      it "getter should return ['world'] if item is world visible" do
+        @hc.stub_chain(:rightsMetadata, :has_world_read_node).and_return(true)
+        @hc.visibility.should == ['world']
+      end
+
+      it "getter should return groups names if item is not world visible" do
+        exp_groups = %w(foo bar)
+        mock_nodes = exp_groups.map { |g| double('', :text => g) }
+        @hc.stub_chain(:rightsMetadata, :has_world_read_node).and_return(false)
+        @hc.stub_chain(:rightsMetadata, :group_read_nodes).and_return(mock_nodes)
+        @hc.visibility.should == exp_groups
       end
 
       it "the setter should call the expected setters" do
@@ -459,7 +482,7 @@ describe Hydrus::Collection do
       @HC.apos_involving_user(@user_foo).should == exp
       @HC.collections_of_apos([1,2,3,4]).should == exp
     end
-    
+
     it "can exercise get_druids_from_response()" do
       k    = 'identityMetadata_objectId_t'
       exp  = [12, 34, 56]
@@ -484,9 +507,9 @@ describe Hydrus::Collection do
       }
       @hc.stub(:item_counts).and_return(cs)
       exp = [
-        [1, "draft"], 
-        [2, "waiting for approval"], 
-        [3, "item returned"], 
+        [1, "draft"],
+        [2, "waiting for approval"],
+        [3, "item returned"],
         [4, "published"],
       ]
       @hc.item_counts_with_labels.should == exp

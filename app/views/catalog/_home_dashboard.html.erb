@@ -23,17 +23,17 @@
               Hydrus::Responsible.roles_for_ui(rs).join(', ').downcase
             %>
           </td>
-					<td>
-						<% if c.hydrus_items.size == 0 %>
-						 	no items yet
-						<% else %>
-							<%= link_to pluralize(c.hydrus_items.size, 'item'), polymorphic_path([c, :items])%>
-          	<% end %>
-					</td>
+          <td>
+            <% if c.hydrus_items.size == 0 %>
+               no items yet
+            <% else %>
+              <%= link_to pluralize(c.hydrus_items.size, 'item'), polymorphic_path([c, :items])%>
+            <% end %>
+          </td>
           <td>
             <%= c.item_counts_with_labels.map { |n, lab| "#{n} #{lab}" }.join('; ') %>
           </td>
-        </tr> 
+        </tr>
         <% end %>
       </tbody>
     </table>
@@ -41,10 +41,10 @@
   <form class="form-horizontal">
     <% if can?(:create_collections, Hydrus::Collection) %>
       <%= link_to(
-            "Create a new collection", 
+            "Create a new collection",
             new_polymorphic_path(Hydrus::Collection),
-            :class => 'btn', 
-						:"disable-after-click"=>'true')  %>
+            :class => 'btn',
+            :"disable-after-click"=>'true')  %>
     <% end %>
   </form>
 </div>

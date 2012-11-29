@@ -16,29 +16,29 @@ describe Hydrus::ObjectFile, :integration=>true do
     files[1].filename.should == %q{pinocchio characters tc in file name.pdf}
     files[1].size.should > 0
   end
-  
+
   it "should delete a file from the file system and disassociate from item when called" do
 
     pid = 'druid:oo000oo0001'
     @hi=Hydrus::Item.find(pid)
-    
+
     files = @hi.files
     files.size.should == 4
-    
+
     filename = files[0].filename
     file_url = files[0].url
     full_file_path = "#{Rails.root}/public#{file_url}"
     File.exists?(full_file_path).should == true
-    
+
     files[0].destroy
-    
+
     @hi=Hydrus::Item.find(pid)
     @hi.files.size.should == 3
     File.exists?(full_file_path).should == false
-    
+
     # restore original file and stream from fixtures
     source_file_path="#{Rails.root}/spec/fixtures/files/#{pid.gsub('druid:','')}/#{filename}"
-    system "cp #{source_file_path} #{full_file_path}"    
+    system "cp #{source_file_path} #{full_file_path}"
     File.exists?(full_file_path).should == true
   end
 

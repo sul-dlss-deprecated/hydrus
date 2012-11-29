@@ -69,7 +69,7 @@ describe Hydrus::Authorizable do
   end
 
   describe "can_read_collection()" do
-   
+
     it "should return true directly if the user has power to create collections" do
       @hc.should_not_receive(:roles_of_person)
       @auth.stub(:can_create_collections).and_return(true)
@@ -89,7 +89,7 @@ describe Hydrus::Authorizable do
   end
 
   describe "can_read_item()" do
-   
+
     it "should return true directly if the user has power to create collections" do
       @hi.should_not_receive(:roles_of_person)
       @auth.stub(:can_create_collections).and_return(true)
@@ -115,7 +115,7 @@ describe Hydrus::Authorizable do
   end
 
   describe "can_create_items_in()" do
-   
+
     it "should return true directly if the user is an administrator" do
       @hi.should_not_receive(:roles_of_person)
       @auth.stub(:is_administrator).and_return(true)
@@ -136,7 +136,7 @@ describe Hydrus::Authorizable do
   end
 
   describe "can_edit_collection()" do
-   
+
     it "should return true directly if the user is an administrator" do
       @hc.should_not_receive(:roles_of_person)
       @auth.stub(:is_administrator).and_return(true)
@@ -157,7 +157,7 @@ describe Hydrus::Authorizable do
   end
 
   describe "can_edit_item()" do
-   
+
     it "should return true directly if the user is an administrator" do
       @hi.should_not_receive(:roles_of_person)
       @auth.stub(:is_administrator).and_return(true)
@@ -184,7 +184,7 @@ describe Hydrus::Authorizable do
   end
 
   describe "can_review_item()" do
-   
+
     it "should return true directly if the user can edit the item's collection" do
       @hi.should_not_receive(:apo)
       @hi.stub(:collection)

@@ -1,27 +1,27 @@
 <%=render :partial=>'shared/set_page_title', :locals=>{:action=>"Editing"} %>
 
-<%- object_type = @document_fedora.object_type -%>
-<%= form_for(@document_fedora, :method => 'PUT', :html => {:class => "step", :"data-track-state-change"=>"true", :novalidate=>""}) do |f| -%>
+<%- object_type = @fobj.object_type -%>
+<%= form_for(@fobj, :method => 'PUT', :html => {:class => "step", :"data-track-state-change"=>"true", :novalidate=>""}) do |f| -%>
 
 <%- sidebar_items << capture do -%>
 
-	<div class="well actions-box" id="collection-actions">
-	
-			<div id="status-box"><%=render :partial=>'status_box' %></div>
-	
-		 <div id="actions-box"><%= render :partial => "actions_box_edit", :locals => {:f=>f, :id=>"js"}%></div>
+  <div class="well actions-box" id="collection-actions">
 
-	</div>
+      <div id="status-box"><%=render :partial=>'status_box' %></div>
+
+     <div id="actions-box"><%= render :partial => "actions_box_edit", :locals => {:f=>f, :id=>"js"}%></div>
+
+  </div>
 
 <%- end -%>
 
 <div class="row">
   <div class="span9">
-		<%=render :partial=>'navigation' %>
+    <%=render :partial=>'navigation' %>
   </div>
 </div>
 <div id="object-content-wrapper">
-  <h3><%= title_text(@document_fedora) %></h3>
+  <h3><%= title_text(@fobj) %></h3>
   <h4 class="muted">Collection Details</h4>
 
     <%= hydrus_form_header(:required=>true, :first=>true) {"Name, description, contact"} %>
@@ -30,7 +30,7 @@
         <%= f.label :title, "Collection name" %>
       <%- end -%>
       <%= hydrus_form_value do %>
-        <%= f.text_field :title, :value => (@document_fedora.title || ""), :size=>60, :required => true %>
+        <%= f.text_field :title, :value => (@fobj.title || ""), :size=>60, :required => true %>
       <%- end -%>
     </div>
     <div class="row field-group">
@@ -38,7 +38,7 @@
         <%= f.label :abstract, "Description" %>
       <%- end -%>
       <%= hydrus_form_value(:class=>"short-textarea") do %>
-        <%= f.text_area :abstract, :value => (@document_fedora.abstract || ""),:cols=>60, :required => true %>
+        <%= f.text_area :abstract, :value => (@fobj.abstract || ""),:cols=>60, :required => true %>
       <%- end -%>
     </div>
     <div class="row field-group">
@@ -46,7 +46,7 @@
         Contact email
       <%- end -%>
       <%= hydrus_form_value do %>
-        <%= f.text_field :contact, :value => (@document_fedora.contact || ""), :size=>60,:required => true%>
+        <%= f.text_field :contact, :value => (@fobj.contact || ""), :size=>60,:required => true%>
       <%- end -%>
     </div>
 
@@ -56,7 +56,7 @@
     </div>
     <div class="row field-group">
       <div class="span8 offset1">
-        <%= button_tag("Add another link", :name=>"add_link", :"data-attribute" => "add_link", :id=>"add_link", :class=>"btn", :value=>@document_fedora.related_items.length) %>
+        <%= button_tag("Add another link", :name=>"add_link", :"data-attribute" => "add_link", :id=>"add_link", :class=>"btn", :value=>@fobj.related_items.length) %>
       </div>
     </div>
 
@@ -77,7 +77,7 @@
                 <%= f.label        'embargo_option', emb_text, :value => emb_opt %>
                 <%# Don't include embargo period select if embargo type is 'none' %>
                 <% unless emb_opt == 'none' %>
-                  <%= f.select "embargo_#{emb_opt}".to_sym, options_for_select(Hydrus::AdminPolicyObject.embargo_terms, @document_fedora.send("embargo_#{emb_opt}")), {:prompt => 'Select embargo'}, {:class => 'inline-select right', :id => "embargo_option_#{emb_opt}" } %>
+                  <%= f.select "embargo_#{emb_opt}".to_sym, options_for_select(Hydrus::AdminPolicyObject.embargo_terms, @fobj.send("embargo_#{emb_opt}")), {:prompt => 'Select embargo'}, {:class => 'inline-select right', :id => "embargo_option_#{emb_opt}" } %>
                 <% end %>
               </div>
             </div>
@@ -138,7 +138,7 @@
                         "license_#{lic_opt}".to_sym,
                         grouped_options_for_select(
                           Hydrus::Collection.licenses,
-                          @document_fedora.send("license_#{lic_opt}")
+                          @fobj.send("license_#{lic_opt}")
                         ),
                         {:prompt => 'Select license'},
                         {:class => 'inline-select right', :id => "license_option_#{lic_opt}" }
@@ -157,44 +157,44 @@
     <div id="role-management">
       <p>Provide a SUNet ID (NOT email address) for each person who can view, add, or review items in this
          collection, or who can manage the collection. Separate multiple IDs with a comma.</p>
-  			  <div class="row field-group">
-  				 <%= hydrus_form_label do %>
-  				  	<%= f.label :'apo_person_roles[hydrus-collection-depositor]', 'Owner' %>
-  				  <%- end %>
-  				<%= hydrus_form_value do %>
-  						<%= f.text_field :'apo_person_roles[hydrus-collection-depositor]', :value=>@document_fedora.apo_persons_with_role('hydrus-collection-depositor').first, :readonly=>true%>
-  						<p class="help">This is the owner of the collection, and cannot be changed</p>
-    				
+          <div class="row field-group">
+           <%= hydrus_form_label do %>
+              <%= f.label :'apo_person_roles[hydrus-collection-depositor]', 'Owner' %>
+            <%- end %>
+          <%= hydrus_form_value do %>
+              <%= f.text_field :'apo_person_roles[hydrus-collection-depositor]', :value=>@fobj.apo_persons_with_role('hydrus-collection-depositor').first, :readonly=>true%>
+              <p class="help">This is the owner of the collection, and cannot be changed</p>
+
   <%- end %>
-   			</div>
+         </div>
 
       <% Hydrus::Responsible.role_labels(:collection_level).each do |role, h| %>
-        <% 
+        <%
           role_label = h[:label]
           help_text  = h[:help]
           next if role == 'hydrus-collection-depositor'
           k = :"apo_person_roles[#{role}]"
         %>
-  	      <div class="row field-group">
-  	        <%= hydrus_form_label do %>
-  	          <%= f.label k, role_label.pluralize %>
-  	        <%- end %>
-  	        <%- pwr = @document_fedora.apo_persons_with_role(role) %>
-  	        <%= hydrus_form_value do %>
-  	          <%= f.text_field k, :value => pwr.to_a.join(', ') %>
-  						<p class="help"><%=help_text%></p>
-  	        <%- end %>
-  	      </div>
+          <div class="row field-group">
+            <%= hydrus_form_label do %>
+              <%= f.label k, role_label.pluralize %>
+            <%- end %>
+            <%- pwr = @fobj.apo_persons_with_role(role) %>
+            <%= hydrus_form_value do %>
+              <%= f.text_field k, :value => pwr.to_a.join(', ') %>
+              <p class="help"><%=help_text%></p>
+            <%- end %>
+          </div>
       <% end %>
      </div>
 
 
     <noscript>
-  		<div class="well actions-box" id="collection-actions">
-    		<%= render :partial => "actions_box_edit", :locals => {:id=>"nojs"}%>
-  		</div>
+      <div class="well actions-box" id="collection-actions">
+        <%= render :partial => "actions_box_edit", :locals => {:id=>"nojs"}%>
+      </div>
     </noscript>
 
   <% end %>
-</div> <!-- object-content-wrapper --> 
-<div id="druid-footer"><%= @document_fedora.pid %></div>
+</div> <!-- object-content-wrapper -->
+<div id="druid-footer"><%= @fobj.pid %></div>

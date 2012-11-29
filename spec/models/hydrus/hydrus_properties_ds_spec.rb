@@ -8,32 +8,38 @@ describe Hydrus::HydrusPropertiesDS do
     xml = <<-EOF
       #{@ds_start}
         <usersAcceptedTermsOfDeposit>
-  	    	<user dateAccepted="2011-09-02 01:02:32 -0700">cardinal</user>
-        	<user dateAccepted="2012-05-02 12:02:44 -0700">crimson</user>
-        	<user dateAccepted="2011-10-02 02:05:31 -0700">cornellian</user>
-        	<user dateAccepted="2011-10-02 02:05:31 -0700">mhamster</user>
+          <user dateAccepted="2011-09-02T01:10:32Z">cardinal</user>
+          <user dateAccepted="2012-05-02T12:10:44Z">crimson</user>
+          <user dateAccepted="2011-10-02T02:13:31Z">cornellian</user>
+          <user dateAccepted="2011-10-02T02:13:31Z">mhamster</user>
         </usersAcceptedTermsOfDeposit>
         <embargoTerms>1 year</embargoTerms>
         <embargoOption>varies</embargoOption>
         <licenseOption>fixed</licenseOption>
-        <visibilityOption>fixed</visibilityOption>        
+        <visibilityOption>fixed</visibilityOption>
         <requiresHumanApproval>no</requiresHumanApproval>
         <acceptedTermsOfDeposit>false</acceptedTermsOfDeposit>
         <itemType>dataset</itemType>
         <objectStatus>draft</objectStatus>
         <disapprovalReason>Idiota</disapprovalReason>
-        <publishTime>2011-09-03</publishTime>
-        <submitForApprovalTime>2011-08-03</submitForApprovalTime>
-        <lastModifyTime>2011-09-02</lastModifyTime>        
+        <publishTime>2011-09-03T00:00:00Z</publishTime>
+        <submitForApprovalTime>2011-08-03T00:00:00Z</submitForApprovalTime>
+        <lastModifyTime>2011-09-02T00:00:00Z</lastModifyTime>
       #{@ds_end}
     EOF
     @dsdoc = Hydrus::HydrusPropertiesDS.from_xml(xml)
   end
-  
+
   it "should get expected values from OM terminology" do
+    exp_dts = [
+      "2011-09-02T01:10:32Z",
+      "2012-05-02T12:10:44Z",
+      "2011-10-02T02:13:31Z",
+      "2011-10-02T02:13:31Z",
+    ]
     tests = [
       [[:users_accepted_terms_of_deposit,:user],%w{cardinal crimson cornellian mhamster}],
-      [[:users_accepted_terms_of_deposit,:user,:date_accepted],["2011-09-02 01:02:32 -0700","2012-05-02 12:02:44 -0700","2011-10-02 02:05:31 -0700","2011-10-02 02:05:31 -0700"]],
+      [[:users_accepted_terms_of_deposit,:user,:date_accepted], exp_dts],
       [:embargo_terms, ["1 year"]],
       [:embargo_option, ["varies"]],
       [:license_option, ["fixed"]],
@@ -43,9 +49,9 @@ describe Hydrus::HydrusPropertiesDS do
       [:item_type, ["dataset"]],
       [:object_status, ["draft"]],
       [:disapproval_reason, ["Idiota"]],
-      [:publish_time,  ["2011-09-03"]],
-      [:submit_for_approval_time,  ["2011-08-03"]],
-      [:last_modify_time,  ["2011-09-02"]],
+      [:publish_time,  ["2011-09-03T00:00:00Z"]],
+      [:submit_for_approval_time,  ["2011-08-03T00:00:00Z"]],
+      [:last_modify_time,  ["2011-09-02T00:00:00Z"]],
     ]
     tests.each do |terms, exp|
       @dsdoc.term_values(*terms).should == exp
@@ -73,5 +79,5 @@ describe Hydrus::HydrusPropertiesDS do
      @dsdoc.insert_user_accepting_terms_of_deposit('foo','10-02-2012 00:00:00')
      @dsdoc.ng_xml.should be_equivalent_to @exp_xml
   end
-  
+
 end

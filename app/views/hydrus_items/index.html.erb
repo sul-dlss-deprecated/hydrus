@@ -2,20 +2,20 @@
 
 <%- sidebar_items << capture do -%>
   <div class="well actions-box collection-settings">
-  	<%=render :partial=>'hydrus_collections/status_box' %>
-		<%=render :partial=>'hydrus_collections/actions_box_show' %>
+    <%=render :partial=>'hydrus_collections/status_box' %>
+    <%=render :partial=>'hydrus_collections/actions_box_show' %>
   </div>
 <%- end -%>
 
 <div class="row">
   <div class="span9">
-		<%= render_contextual_navigation(@document_fedora) %>
+    <%= render_contextual_navigation(@fobj) %>
   </div>
 </div>
 <div id="object-content-wrapper">
-  <h3><%= hydrus_object_setting_value(@document_fedora.title) %></h3>
-  <h4 class="muted"><%=@document_fedora.hydrus_items.size%> Items in This Collection</h4>
-  <%- unless @document_fedora.hydrus_items.blank? -%>
+  <h3><%= hydrus_object_setting_value(@fobj.title) %></h3>
+  <h4 class="muted"><%=@fobj.hydrus_items.size%> Items in This Collection</h4>
+  <%- unless @fobj.hydrus_items.blank? -%>
     <div id="items" class="collection-items">
       <table id="itemsTable" class="tablesorter hydrus-striped-table table-striped table-condensed">
         <thead>
@@ -31,7 +31,7 @@
         <tbody>
           <!-- iterate through collection items  -->
           <!-- Can use Hydrus::Item.milestones.last to get status. Speak with Lynn. -->
-          <% @document_fedora.hydrus_items.sort_by{|i|i.create_date}.reverse.each do |item| %>
+          <% @fobj.hydrus_items.sort_by{|i|i.create_date}.reverse.each do |item| %>
             <tr class="document <%= cycle("even","odd") %>">
               <td><%= title_link(item) %></td>
               <td><%= item.item_depositor_id %></td>
@@ -47,4 +47,4 @@
   <%- else -%>
     No items have been added to this collection.
   <%- end -%>
-</div> <!-- object-content-wrapper --> 
+</div> <!-- object-content-wrapper -->

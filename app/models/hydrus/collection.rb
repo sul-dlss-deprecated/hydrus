@@ -35,13 +35,13 @@ class Hydrus::Collection < Hydrus::GenericObject
       [:embargo_option,          true,  ],
       [:embargo_terms,           true,  ],
       [:license_option,          true,  ],
-      [:visibility_option,       true,  ],      
+      [:visibility_option,       true,  ],
     ],
   )
 
   has_relationship 'hydrus_items', :is_member_of_collection, :inbound => true
 
-  # Creates a new Collection, sets up various defaults, saves and 
+  # Creates a new Collection, sets up various defaults, saves and
   # returns the object.
   def self.create(user)
     # Create the object, with the correct model.
@@ -60,6 +60,7 @@ class Hydrus::Collection < Hydrus::GenericObject
     # Set defaults for visability, embargo, etc.
     coll.visibility_option_value = 'everyone'
     coll.embargo_option          = 'none'
+    coll.embargo_terms           = ''
     coll.requires_human_approval = 'no'
     coll.license_option          = 'none'
     # Set object status.
@@ -77,14 +78,6 @@ class Hydrus::Collection < Hydrus::GenericObject
     v2 = apo.valid?
     errors.messages.merge!(apo.errors.messages)
     return v1 && v2
-  end
-
-  def embargo
-    embargo_terms.blank? ? 'immediate' : 'future' 
-  end
-    
-  def is_embargoed
-    return not(embargo_terms.blank?)
   end
 
   # method used to build sidebar
@@ -133,8 +126,8 @@ class Hydrus::Collection < Hydrus::GenericObject
   # the users who will receive email notifications when a collection is opened or closed
   def recipients_for_collection_update_emails
     (
-      apo.persons_with_role("hydrus-collection-item-depositor") + 
-      apo.persons_with_role("hydrus-collection-manager") + 
+      apo.persons_with_role("hydrus-collection-item-depositor") +
+      apo.persons_with_role("hydrus-collection-manager") +
       apo.persons_with_role("hydrus-collection-depositor")
     ).to_a.join(', ')
   end
@@ -182,7 +175,7 @@ class Hydrus::Collection < Hydrus::GenericObject
   def refresh_default_object_rights
     apo.defaultObjectRights.content = self.rightsMetadata.to_xml
   end
-  
+
   # update various apo titles and collection titles from value set by user
   def refresh_titles
     apo_title = "APO for #{title}"
@@ -190,22 +183,22 @@ class Hydrus::Collection < Hydrus::GenericObject
     apo.title                        = apo_title
     identityMetadata.objectLabel     = title
     self.label                       = title
-    apo.label                        = apo_title  
+    apo.label                        = apo_title
   end
-  
+
   def send_invitation_email_notification(new_depositors)
     return if new_depositors.blank?
     email=HydrusMailer.invitation(:to =>  new_depositors, :object =>  self)
     email.deliver unless email.to.blank?
   end
-  
+
   def send_publish_email_notification(value)
     return if recipients_for_collection_update_emails.blank?
     meth = value ? 'open' : 'close'
-    email = HydrusMailer.send("#{meth}_notification", :object => self) 
+    email = HydrusMailer.send("#{meth}_notification", :object => self)
     email.deliver unless email.to.blank?
   end
-  
+
   # returns a hash of depositors for this collection that have accepted the terms of deposit for an item in that collection
   def users_accepted_terms_of_deposit
     result={}
@@ -214,7 +207,7 @@ class Hydrus::Collection < Hydrus::GenericObject
     end
     return result
   end
-  
+
   # Takes a user and a datetime string.
   # A user accepts the terms of deposit: either update the time (if
   # user has done this before) or add a new node.
@@ -228,7 +221,7 @@ class Hydrus::Collection < Hydrus::GenericObject
     end
     save
   end
-  
+
   def strip_whitespace
      strip_whitespace_from_fields [:title,:abstract,:contact]
   end
@@ -237,7 +230,7 @@ class Hydrus::Collection < Hydrus::GenericObject
   def cleanup_usernames
     self.apo_person_roles = cleaned_usernames
   end
-  
+
   # Processes the APO.person_roles hash.
   # Converts all users names that are email addresses into SUNET IDs
   # by removing text following the @ sign. In addition, the
@@ -260,7 +253,7 @@ class Hydrus::Collection < Hydrus::GenericObject
 
   def remove_values_for_associated_attribute_with_value_none
     self.embargo_terms = nil if embargo_option == "none"
-    self.license = nil if license_option == "none"
+    self.license       = nil if license_option == "none"
   end
 
   def roles_of_person(user)
@@ -270,22 +263,22 @@ class Hydrus::Collection < Hydrus::GenericObject
   def roles_of_person_for_ui(user)
     roles_of_person(user).collect {|role| Hydrus::AdminPolicyObject.roles[role]}
   end
-  
+
   def add_empty_person_to_role *args
     apo.roleMetadata.add_empty_person_to_role *args
   end
 
   ####
-  # Simple getters and settings 
+  # Simple getters and settings
   #
   # These are needed because ActiveFedora's delegate()
   # does not work when we need to delegate through to the APO.
   #
-  # The conditional embargo and license methods allow us to set a 
-  # single value for the embargo period and license from two separate 
+  # The conditional embargo and license methods allow us to set a
+  # single value for the embargo period and license from two separate
   # HTML select controls, based on the value of a radio button.
   ####
-  
+
   def owner
     depositors=apo.persons_with_role('hydrus-collection-depositor')
     depositors.size == 1 ? depositors.first : ''
@@ -298,6 +291,25 @@ class Hydrus::Collection < Hydrus::GenericObject
   def collection_depositor= val
     apo.collection_depositor= val
   end
+
+  def person_id *args
+    apo.person_id *args
+  end
+
+  def apo_person_roles
+    return apo.person_roles
+  end
+
+  def apo_person_roles= val
+    apo.person_roles= val
+  end
+
+  def apo_persons_with_role(role)
+    return apo.persons_with_role(role)
+  end
+
+  # Embargo and license getters and setters to support the complex
+  # forms in the UI.
 
   def embargo_fixed
     embargo_option == "fixed" ? embargo_terms : ""
@@ -331,32 +343,37 @@ class Hydrus::Collection < Hydrus::GenericObject
     self.license= val if license_option == "varies"
   end
 
-  def person_id *args
-    apo.person_id *args
-  end
-
-  def apo_person_roles
-    return apo.person_roles
-  end
-
-  def apo_person_roles= val
-    apo.person_roles= val
-  end
-
-  def apo_persons_with_role(role)
-    return apo.persons_with_role(role)
-  end
+  # Visibility getters and setters.
+  #
+  #   visibility_option_value   Used by the Collection views and controllers.
+  #                             These methods then call the other getters/setters.
+  #
+  #   visibility                Defined below. 
+  #                             Reads/modifies rightsMetadata.
+  #                             Not sure why the getter returns and Array.
+  #
+  #   visibility_option         Defined via delegation.
+  #                             Reads/modifies hydrusProperties.
 
   def visibility_option_value *args
-    opt = visibility_option # fixed or varies
-    vis = visibility.first        # world or stanford
+    opt = visibility_option     # fixed or varies
+    vis = visibility.first      # world or stanford
     return vov_lookup["#{opt}_#{vis}"]
   end
 
   def visibility_option_value= val
-    opt, vis              = vov_lookup[val].split('_')
-    self.visibility_option= opt # fixed or varies
-    self.visibility= vis # world or stanford
+    opt, vis               = vov_lookup[val].split('_')
+    self.visibility_option = opt     # fixed or varies
+    self.visibility        = vis     # world or stanford
+  end
+
+  def visibility
+    return ["world"] if rightsMetadata.has_world_read_node
+    return rightsMetadata.group_read_nodes.map { |n| n.text }
+  end
+
+  def visibility=(val)  # val = world or stanford
+    rightsMetadata.update_access_blocks(val)
   end
 
   ####
@@ -365,17 +382,18 @@ class Hydrus::Collection < Hydrus::GenericObject
 
   def vov_lookup
     lookup = {
-      'everyone'       => 'fixed_world',
-      'varies'         => 'varies_world',
-      'stanford'       => 'fixed_stanford'  }
-      return lookup.merge(lookup.invert)
+      'everyone' => 'fixed_world',
+      'varies'   => 'varies_world',
+      'stanford' => 'fixed_stanford',
+    }
+    return lookup.merge(lookup.invert)
   end
 
   def tracked_fields
     return {
       :title       => [:title],
       :description => [:abstract],
-      :embargo     => [:embargo_option, :embargo],
+      :embargo     => [:embargo_option, :embargo_terms],
       :visibility  => [:visibility_option, :visibility],
       :license     => [:license_option, :license],
       :roles       => [:apo_person_roles],
@@ -389,7 +407,7 @@ class Hydrus::Collection < Hydrus::GenericObject
   ####
 
   # Takes a user name.
-  # Returns a hash of item counts (broken down by object status) for 
+  # Returns a hash of item counts (broken down by object status) for
   # collections in which the USER plays a role.
   def self.dashboard_stats(user)
     # Get PIDs of the APOs in which USER plays a role.

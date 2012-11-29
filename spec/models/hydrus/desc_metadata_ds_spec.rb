@@ -48,7 +48,7 @@ describe Hydrus::DescMetadataDS do
       EOF
       @dsdoc = Hydrus::DescMetadataDS.from_xml(dsxml)
     end
-    
+
     it "should get correct values from OM terminology" do
       tests = [
         [[:originInfo, :dateOther],          ['Nov 7']],
@@ -69,7 +69,7 @@ describe Hydrus::DescMetadataDS do
     end
 
   end
-    
+
   context "Inserting new nodes" do
 
     it "Should be able to insert new XML nodes" do

@@ -1,5 +1,5 @@
 module Hydrus::GenericDS
-  
+
   # TODO: Considering putting these methods in OM or ActiveFedora.
 
   def add_hydrus_child_node(*args)

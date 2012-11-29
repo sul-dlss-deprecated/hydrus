@@ -47,19 +47,30 @@ describe HyTime do
         HyTime.formatted(dt2, :format => f).should == e
       end
     end
-    
+
     it "should use :datetime as the default output format" do
       dt = '2000-01-02T03:04:05Z'
       HyTime.formatted(dt).should == dt
       HyTime.formatted(dt, :format => :time_display).should  == '19:04:05'
       HyTime.formatted('2000-01-02', :parse => :date).should == '2000-01-02T00:00:00Z'
     end
-    
+
     it "should return empty string if given a blank value" do
       HyTime.formatted(nil).should == ''
       HyTime.formatted('').should  == ''
     end
-    
+
+    it "should convert to UTC if :from_localzone is true" do
+      dt = '2000-01-02'
+      tests = {
+        false => '2000-01-02T00:00:00Z',
+        true  => '2000-01-02T0[78]:00:00Z',  # 7 or 8, so test passes during DST.
+      }
+      tests.each do |fltz, exp|
+        HyTime.formatted(dt, :from_localzone => fltz).should =~ /\A#{exp}\z/
+      end
+    end
+
   end
 
 end

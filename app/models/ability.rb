@@ -4,7 +4,7 @@ class Ability
   include Hydra::Ability
 
   AUTH = Hydrus::Authorizable
-  
+
   def hydra_default_permissions(user, session, *args)
 
     # Read.

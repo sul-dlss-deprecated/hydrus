@@ -17,7 +17,7 @@ describe Hydrus::GenericObject do
     @go.stub(:pid).and_return('druid:oo000oo0003')
     @go.dru.should == 'oo000oo0003'
   end
-  
+
   it "apo() should return fedora object if the apo_pid is defined" do
     mfo = double('mock_fedora_object')
     @go.instance_variable_set('@apo_pid', @apo_pid)
@@ -89,9 +89,11 @@ describe Hydrus::GenericObject do
   end
 
   describe "class methods" do
+
     it "should define a licenses hash" do
       Hydrus::GenericObject.licenses.should be_a Hash
     end
+
     describe "license_commons" do
       it "should define be a hash" do
         Hydrus::GenericObject.license_commons.should be_a Hash
@@ -100,11 +102,15 @@ describe Hydrus::GenericObject do
         Hydrus::GenericObject.license_commons.keys.should == Hydrus::GenericObject.licenses.keys
       end
     end
+
     it "should have a license_human method that will return a human readible value for a license code" do
-      Hydrus::GenericObject.license_human("cc-by").should == "CC BY Attribution"
-      Hydrus::GenericObject.license_human("cc-by-nc-sa").should == "CC BY-NC-SA Attribution-NonCommercial-ShareAlike"
-      Hydrus::GenericObject.license_human("odc-odbl").should == "ODC-ODbl Open Database License"
+      hgo = Hydrus::GenericObject
+      hgo.license_human("cc-by").should == "CC BY Attribution"
+      hgo.license_human("cc-by-nc-sa").should == "CC BY-NC-SA Attribution-NonCommercial-ShareAlike"
+      hgo.license_human("odc-odbl").should == "ODC-ODbl Open Database License"
+      hgo.license_human('blah!!').should =~ /no license/i
     end
+
   end
 
   it "augment_identity_metadata() should add correct tags" do

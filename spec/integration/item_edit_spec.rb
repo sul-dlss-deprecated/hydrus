@@ -333,10 +333,10 @@ describe("Item edit", :type => :request, :integration => true) do
     # Select a different license, and save.
     select(new_item_license, :from => item_licenses)
     click_button "Save"
-    @hi = Hydrus::Item.find @druid
     page.should have_content(@notice)
 
     # Item has expected rights.
+    @hi = Hydrus::Item.find @druid
     params = {:embargo_date => '', :visibility => 'world', :license_code => 'pddl'}
     confirm_rights(@hi,params)
 

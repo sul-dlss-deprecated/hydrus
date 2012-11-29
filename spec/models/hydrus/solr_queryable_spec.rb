@@ -15,7 +15,7 @@ describe Hydrus::SolrQueryable do
   end
 
   describe "add_involved_user_filter() modifies the SOLR :fq parameters" do
-    
+
     it "should do nothing if there is no user" do
       h = {}
       @hsq.add_involved_user_filter(h, nil)
@@ -40,7 +40,7 @@ describe Hydrus::SolrQueryable do
   end
 
   describe "add_governed_by_filter() modifies the SOLR :fq parameters" do
-    
+
     it "should do nothing if no druids are supplied" do
       h = {}
       @hsq.add_governed_by_filter(h, [])
@@ -64,7 +64,7 @@ describe Hydrus::SolrQueryable do
   end
 
   describe "add_model_filter() modifies the SOLR :fq parameters" do
-    
+
     it "should do nothing if no models are supplied" do
       h = {}
       @hsq.add_model_filter(h)

@@ -125,10 +125,10 @@ describe("Collection edit", :type => :request, :integration => true) do
     new_license         = 'odc-odbl'
     new_license_label   = 'ODC-ODbl Open Database License'
     new_license_option  = 'varies'
-    new_check_field     = "hydrus_collection_license_option_#{new_license_option}"    
+    new_check_field     = "hydrus_collection_license_option_#{new_license_option}"
     params={:visibility=>'stanford',:license_code=>'cc-by',:embargo_date=>''}
     confirm_rights(@hc,params)
-    
+
     login_as('archivist1')
     # Visit edit page, and confirm content.
     should_visit_edit_page(@hc)
@@ -143,7 +143,7 @@ describe("Collection edit", :type => :request, :integration => true) do
     current_path.should == polymorphic_path(@hc)
     # Visit view page, and confirm that changes occured.
     visit polymorphic_path(@hc)
-    @hc             = Hydrus::Collection.find @druid
+    @hc = Hydrus::Collection.find @druid
     params={:visibility=>'stanford',:license_code=>'odc-odbl',:embargo_date=>''}
     confirm_rights(@hc,params)
     confirm_rights_metadata_in_apo(@hc)
@@ -161,8 +161,7 @@ describe("Collection edit", :type => :request, :integration => true) do
     no_embargo          = ''
     no_embargo_check_field    = "hydrus_collection_embargo_option_#{no_embargo_option}"
     params={:visibility=>'stanford',:license_code=>'cc-by',:embargo_date=>''}
-    confirm_rights(@hc,params)    
-    @hc.embargo.should == 'future'
+    confirm_rights(@hc,params)
     login_as('archivist1')
     # Visit edit page, and confirm content.
     should_visit_edit_page(@hc)
@@ -193,8 +192,7 @@ describe("Collection edit", :type => :request, :integration => true) do
     current_path.should == polymorphic_path(@hc)
     find("div.collection-settings").should_not have_content(orig_embargo)
     # verify embargo is now 'none' and terms are not set
-    @hc             = Hydrus::Collection.find @druid
-    @hc.embargo.should == 'immediate'
+    @hc = Hydrus::Collection.find @druid
     @hc.embargo_option.should == 'none'
     @hc.embargo_terms.should == ''
     confirm_rights_metadata_in_apo(@hc)
@@ -283,7 +281,7 @@ describe("Collection edit", :type => :request, :integration => true) do
       @hc.apo_person_roles.should == role_info_stripped
       confirm_rights_metadata_in_apo(@hc)
     end
-    
+
   end
 
   describe "emails" do

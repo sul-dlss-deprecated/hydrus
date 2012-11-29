@@ -28,7 +28,7 @@ describe Hydrus::Validatable do
   end
 
   describe "validate!" do
-    
+
     it "should return the value of valid?, including when @should_validate is false" do
       obj = MockValidatable.new
       [false, true, false, true].each do |exp|
@@ -44,7 +44,7 @@ describe Hydrus::Validatable do
       obj.validate!
       obj.instance_variable_get('@should_validate').should == exp
     end
-      
+
   end
 
 end

@@ -1,5 +1,5 @@
 <%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
-  <div class="modal-body">    
+  <div class="modal-body">
     <div class="signin-form">
       <div class="signin-fields">
         <fieldset>
@@ -7,7 +7,7 @@
           <%= f.email_field :email, :autofocus => true, :tabindex => '1' %>
         </fieldset>
         <fieldset>
-          <%= f.label :password do %> Password 
+          <%= f.label :password do %> Password
             <%- if devise_mapping.recoverable? %>
             <span>
               <%= link_to "Forgot?", new_password_path(resource_name) %>

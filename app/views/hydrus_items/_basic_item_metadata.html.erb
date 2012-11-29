@@ -1,34 +1,34 @@
-<%- c = @document_fedora.collection -%>
+<%- c = @fobj.collection -%>
 <dt>Online at</dt>
 <dd>
-	<% if @document_fedora.purl_page_ready? %>
-		<%= link_to(@document_fedora.purl_url, @document_fedora.purl_url) %>
-	<% else %>
-		<span class="muted"><%= @document_fedora.purl_url %></span>
-	<% end %>
+  <% if @fobj.purl_page_ready? %>
+    <%= link_to(@fobj.purl_url, @fobj.purl_url) %>
+  <% else %>
+    <span class="muted"><%= @fobj.purl_url %></span>
+  <% end %>
 </dd>
 
 <dt>In collection</dt>
 <dd><%= link_to(c.title, polymorphic_path(c)) %></dd>
 
 <dt>Deposited by</dt>
-<dd><%= @document_fedora.item_depositor_id %></dd>
+<dd><%= @fobj.item_depositor_id %></dd>
 
 <dt>Contact at</dt>
-<dd><%= @document_fedora.contact.blank? ? hydrus_object_setting_value(@document_fedora.contact) : mail_to(@document_fedora.contact) %></dd>
+<dd><%= @fobj.contact.blank? ? hydrus_object_setting_value(@fobj.contact) : mail_to(@fobj.contact) %></dd>
 
 <dt>Created on</dt>
-<dd><%= HyTime.datetime_display(@document_fedora.create_date) %></dd>
+<dd><%= HyTime.datetime_display(@fobj.create_date) %></dd>
 
 <dt>Last saved on</dt>
-<dd><%= HyTime.datetime_display(@document_fedora.last_modify_time) %></dd>
+<dd><%= HyTime.datetime_display(@fobj.last_modify_time) %></dd>
 
-<% if to_bool(@document_fedora.requires_human_approval) %>
-	<dt>Submitted for approval</dt>
-	<dd><%= HyTime.datetime_display(@document_fedora.submit_for_approval_time) %></dd>
+<% if to_bool(@fobj.requires_human_approval) %>
+  <dt>Submitted for approval</dt>
+  <dd><%= HyTime.datetime_display(@fobj.submit_for_approval_time) %></dd>
 <% end %>
 
-<% if @document_fedora.is_published %>
-	<dt><%= to_bool(@document_fedora.requires_human_approval) ? "Approved" : "Published"%> on</dt>
-	<dd><%= HyTime.datetime_display(@document_fedora.publish_time) %></dd>
+<% if @fobj.is_published %>
+  <dt><%= to_bool(@fobj.requires_human_approval) ? "Approved" : "Published"%> on</dt>
+  <dd><%= HyTime.datetime_display(@fobj.publish_time) %></dd>
 <% end %>

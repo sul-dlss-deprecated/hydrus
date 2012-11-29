@@ -28,7 +28,7 @@ class Hydrus::AdministrativeMetadataDS < ActiveFedora::NokogiriDatastream
     end
 
   end
- 
+
   def insert_workflow(wf_name)
     add_hydrus_child_node(ng_xml.root, wf_name)
   end
@@ -51,5 +51,5 @@ class Hydrus::AdministrativeMetadataDS < ActiveFedora::NokogiriDatastream
       }
     end.doc
   end
-      
+
 end

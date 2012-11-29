@@ -68,8 +68,8 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
            <otherId name="uuid">188e57b0-1715-11e2-892e-0800200c9a66</otherId>
            <objectId>druid:oo000oo0099</objectId>
            <objectCreator>DOR</objectCreator>
-				  <agreementId>druid:oo000oo0000</agreementId>
- 				  <tag>Project : DOR</tag>
+          <agreementId>druid:oo000oo0000</agreementId>
+           <tag>Project : DOR</tag>
       </identityMetadata>
 </foxml:xmlContent>
 </foxml:datastreamVersion>

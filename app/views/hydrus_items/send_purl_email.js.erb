@@ -1,6 +1,6 @@
 <% if @recipients.blank? %>
-	window.alert("Please enter an email address.");
+  window.alert("Please enter an email address.");
 <% else %>
-	window.alert("An email with the link was sent to <%=@recipients%>");
+  window.alert("An email with the link was sent to <%=@recipients%>");
 <% end %>
 $('#recipients').attr('value','');

@@ -68,7 +68,7 @@ describe Hydrus::Accessible do
   it "group_read_nodes()" do
     obj = MockAccessible.new(@xml[:em_stanf], @xml[:rm_stanf])
     [obj.embargoMetadata, obj.rightsMetadata].each do |ds|
-      ns = ds.group_read_nodes 
+      ns = ds.group_read_nodes
       ns.size.should == 1
       ns.first.content.should == 'stanford'
     end

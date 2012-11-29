@@ -12,14 +12,14 @@ class ApplicationController < ActionController::Base
   def layout_name
    'sul_chrome/application'
   end
-    
+
   def exception_on_website(exception)
-    
+
     @exception=exception
-    
-    HydrusMailer.error_notification(:exception=>@exception,:current_user=>current_user).deliver unless Dor::Config.hydrus.exception_recipients.blank? 
-    
-    if Dor::Config.hydrus.exception_error_page 
+
+    HydrusMailer.error_notification(:exception=>@exception,:current_user=>current_user).deliver unless Dor::Config.hydrus.exception_recipients.blank?
+
+    if Dor::Config.hydrus.exception_error_page
         logger.error(@exception.message)
         logger.error(@exception.backtrace.join("\n"))
         render 'error', :status=>500
@@ -42,11 +42,11 @@ class ApplicationController < ActionController::Base
   # When on an item/collection page, check druid against object type
   # and redirect to correct controller if needed.
   def redirect_if_not_correct_object_type
-    return unless @document_fedora
-    if !self.controller_name.include?(@document_fedora.object_type) && @document_fedora.object_type!='adminPolicy'
-      redirect_url=Rails.application.routes.url_helpers.send("hydrus_#{@document_fedora.object_type}_path",@document_fedora.pid)
+    return unless @fobj
+    if !self.controller_name.include?(@fobj.object_type) && @fobj.object_type!='adminPolicy'
+      redirect_url=Rails.application.routes.url_helpers.send("hydrus_#{@fobj.object_type}_path",@fobj.pid)
       redirect_to redirect_url
-    elsif @document_fedora.object_type=='adminPolicy'
+    elsif @fobj.object_type=='adminPolicy'
       msg  = "You do not have sufficient privileges to view the requested item."
       flash[:error] = msg
       redirect_to root_url
@@ -69,7 +69,7 @@ class ApplicationController < ActionController::Base
   end
 
   # Take a Collection or Item.
-  # Using the objection's validation errors, builds an HTML-ready 
+  # Using the objection's validation errors, builds an HTML-ready
   # string for display in a flash message.
   def errors_for_display(obj)
     es = obj.errors.messages.map { |field, error|

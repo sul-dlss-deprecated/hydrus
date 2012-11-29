@@ -25,7 +25,7 @@ describe Ability do
   end
 
   describe "hydra_default_permissions" do
-    
+
     before(:each) do
       @ab.stub(:get_fedora_object)
     end

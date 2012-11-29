@@ -61,7 +61,7 @@
         <defaultObjectRights objectId="druid:oo000oo0009">
           <access type="discover">
             <machine>
-            	<world/>
+              <world/>
             </machine>
           </access>
           <access type="read">
@@ -72,10 +72,10 @@
           <access type="edit">
             <machine/>
           </access>
-				  <use>
-				    <human type="creativeCommons">CC BY Attribution</human>
-				    <machine type="creativeCommons">cc-by</machine>
-				  </use>
+          <use>
+            <human type="creativeCommons">CC BY Attribution</human>
+            <machine type="creativeCommons">cc-by</machine>
+          </use>
         </defaultObjectRights>
       </foxml:xmlContent>
     </foxml:datastreamVersion>
@@ -127,7 +127,7 @@
                 <identifier type="sunetid">archivist4</identifier>
                 <name>Archivist, Four</name>
              </person>
-          </role>          
+          </role>
           <role type="hydrus-collection-reviewer">
              <person>
                 <identifier type="sunetid">archivist2</identifier>

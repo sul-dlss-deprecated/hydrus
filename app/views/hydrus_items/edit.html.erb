@@ -1,8 +1,8 @@
 <%=render :partial=>'shared/set_page_title', :locals=>{:action=>"Editing"} %>
 
-<%- object_type = @document_fedora.object_type -%>
+<%- object_type = @fobj.object_type -%>
 <% sidebar_items << capture do %>
-	<div id="status-box"><%= render :partial => "status_box"%></div>
+  <div id="status-box"><%= render :partial => "status_box"%></div>
 
   <div id="actions-box"><%= render :partial => "actions_box_edit", :locals => {:id=>"js"}%></div>
 <%- end -%>
@@ -10,33 +10,39 @@
 
 <div class="row">
   <div class="span9">
-		<%=render :partial=>'navigation' %>
+    <%=render :partial=>'navigation' %>
   </div>
 </div>
 <div id="object-content-wrapper">
-  <h3><%= title_text(@document_fedora) %></h3>
+  <h3><%= title_text(@fobj) %></h3>
   <h4 class="muted">Item Details</h4>
-<%= form_for(@document_fedora, :method => 'PUT', :html => {:class=>"step", :multipart=>true, :"data-track-state-change"=>"true", :novalidate=>""}) do |f| -%>
+
+<%= form_for(@fobj, :method => 'PUT', :html => {:class=>"step", :multipart=>true, :"data-track-state-change"=>"true", :novalidate=>""}) do |f| -%>
+
   <%= hidden_field_tag("object_id", params[:id]) -%>
+
   <%= hydrus_form_header(:required=>true, :first=>true) {"Title and contact"} %>
+
   <div class="row field-group">
     <%= hydrus_form_label do %>
       <%= f.label :title, "Title of #{object_type}" %>
     <%- end -%>
     <%= hydrus_form_value(:class=>"short-textarea") do %>
-      <%= f.text_area :title, :value=>(@document_fedora.title || ""), :required => true %>
+      <%= f.text_area :title, :value=>(@fobj.title || ""), :required => true %>
     <%- end -%>
   </div>
+
   <div class="row field-group">
     <%= hydrus_form_label do %>
       Contact email
     <%- end -%>
     <%= hydrus_form_value(:class=>"short-textarea") do %>
-      <%= text_field_tag :"hydrus_item[contact]", (@document_fedora.contact || ""), :required => true %>
+      <%= text_field_tag :"hydrus_item[contact]", (@fobj.contact || ""), :required => true %>
     <%- end -%>
   </div>
 
   <%= hydrus_form_header(:required=>true) {"Contributors"} -%>
+
   <div class="row field-group">
     <!-- <%= hydrus_form_label do %> -->
       <!-- <%= f.label :person_0, "People" -%> -->
@@ -49,12 +55,13 @@
   </div>
 
   <%= hydrus_form_header(:required=>true) {"Upload file(s)"} -%>
+
   <div class="row field-group">
     <div class="span9" id="file-upload">
       <div id="uploaded-files">
-				<p>Choose files or drag and drop them here. Then enter a short description for each file.</p>
-        <%- unless @document_fedora.files.blank? -%>
-          <%- @document_fedora.files.each do |file| -%>
+        <p>Choose files or drag and drop them here. Then enter a short description for each file.</p>
+        <%- unless @fobj.files.blank? -%>
+          <%- @fobj.files.each do |file| -%>
             <%= render :partial => "object_files/object_file", :locals => {:file => file} %>
           <%- end -%>
         <%- end -%>
@@ -62,18 +69,19 @@
       <div class="row">
         <div class="span9">
           <%= file_field_tag "files[]", :multiple=>true %>
-        </div>    
+        </div>
       </div>
     </div>
   </div>
 
   <%= hydrus_form_header(:required=>true) {"Abstract and keywords"} -%>
+
   <div class="row field-group">
     <%= hydrus_form_label do %>
       <%= f.label :abstract %>
     <%- end -%>
     <%= hydrus_form_value do  -%>
-      <%= f.text_area :abstract, :value=>(@document_fedora.abstract || ""), :required=>true %>
+      <%= f.text_area :abstract, :value=>(@fobj.abstract || ""), :required=>true %>
     <%- end -%>
   </div>
   <div class="row field-group">
@@ -81,21 +89,23 @@
       <%= label_tag("hydrus_item_keywords", "Keywords") %>
     <%- end -%>
     <%= hydrus_form_value do  -%>
-      <%= text_field_tag("hydrus_item[keywords]", @document_fedora.keywords.join(", ")) -%>
+      <%= text_field_tag("hydrus_item[keywords]", @fobj.keywords.join(", ")) -%>
       <div class="help">separate keywords with commas</div>
-    <%- end -%>    
+    <%- end -%>
   </div>
 
   <%= hydrus_form_header {"Citations"} -%>
+
   <div class="row field-group">
     <%= hydrus_form_label do %>
       <%= f.label :preferred_citation, "Preferred citation for this #{object_type}", :class => "hidden-tablet" %>
       <%= f.label :preferred_citation, "Cite this #{object_type}", :class => "visible-tablet" %>
     <%- end -%>
     <%= hydrus_form_value(:class=>"short-textarea") do  -%>
-      <%= f.text_area :preferred_citation, :value=>hydrus_strip(@document_fedora.preferred_citation) %>
+      <%= f.text_area :preferred_citation, :value=>hydrus_strip(@fobj.preferred_citation) %>
     <%- end -%>
   </div>
+
   <div class="row field-group">
     <%= hydrus_form_label do %>
       <%= f.label :"related_citation_0", "Related published work" %>
@@ -106,105 +116,123 @@
       </div>
     <%- end -%>
   </div>
+
   <div class="row field-group">
     <div class="span8 offset1">
-      <%= button_tag("Add another related work", :name=>"add_related_citation", :"data-attribute" => "add_related_citation", :id=>"add_related_citation", :class=>"btn", :value=>@document_fedora.related_citation.length) %>
+      <%= button_tag("Add another related work", :name=>"add_related_citation", :"data-attribute" => "add_related_citation", :id=>"add_related_citation", :class=>"btn", :value=>@fobj.related_citation.length) %>
     </div>
   </div>
 
 
   <%= hydrus_form_header {"Links to related content"} -%>
+
   <div id="related-items" class="destroy-group">
     <%= render "related_items" %>
   </div>
   <div class="row field-group">
     <div class="span8 offset1">
-      <%= button_tag("Add another link", :name=>"add_link", :"data-attribute" => "add_link", :id=>"add_link", :class=>"btn", :value=>@document_fedora.related_items.length) %>
+      <%= button_tag("Add another link", :name=>"add_link", :"data-attribute" => "add_link", :id=>"add_link", :class=>"btn", :value=>@fobj.related_items.length) %>
     </div>
   </div>
 
-<%= hydrus_form_header{"Release and visibility of content"} %>
+  <%= hydrus_form_header{"Release and visibility of content"} %>
+
   <!-- Embargo -->
   <div class="row embargo field-group">
     <div class="span9 sub-section">
-    <% case @document_fedora.collection.embargo_option %>
-    <% when 'none' %>
-      This item will be released for discovery and download 
-      <span class="highlight-value">
-        as soon as it is published.
-      </span>
-    <% when 'varies' %>
-      This item will be released for discovery and download 
-      <div data-behavior="radio-disable-group" class="embargo-section">
-        <%= f.radio_button :embargo, "immediate", :checked => @document_fedora.embargo_date.blank?, :"data-control-element" => "#hydrus_item_embargo_date", :"data-control-disable" => "true" %> <%= f.label :embargo_immediate, "immediately" %>
-        <%= f.radio_button :embargo, "future", :checked => !@document_fedora.embargo_date.blank?, :"data-control-element" => "#hydrus_item_embargo_date", :"data-control-disable" => "false" %> <%= f.label :embargo_future, "on this date" %>
-        <%= f.text_field(
-              :embargo_date,
-              :"data-behavior"    => "datepicker",
-              :"data-date-format" => HyTime::DATE_PICKER_FORMAT,
-              :value              => HyTime.date_display(@document_fedora.embargo_date),
-              :"data-start-date"  => HyTime.date_display(@document_fedora.beginning_of_embargo_range),
-              :"data-end-date"    => HyTime.date_display(@document_fedora.end_of_embargo_range),
-              :class              => "datepicker") %>
-      </div>
-    <% when 'fixed' %>
-      This item will be released for discovery and download 
-      <span class="highlight-value">
-        <%= @document_fedora.collection.embargo %>
-        after deposit.
-      </span>
-    <% end %>
-</div>
+      <% if @fobj.embargoes_can_vary %>
+        This item will be released for discovery and download
+        <div data-behavior="radio-disable-group" class="embargo-section">
+          <%= radio_button_tag 'hydrus_item[embarg_visib][embargoed]',
+                               "no",
+                               !@fobj.is_embargoed, 
+                               :"data-control-element" => "#hydrus_item_embarg_visib_date",
+                               :"data-control-disable" => "true" %> 
+          <%= f.label :embargo_immediate, "immediately" %>
+          <%= radio_button_tag 'hydrus_item[embarg_visib][embargoed]',
+                               "yes",
+                               @fobj.is_embargoed,
+                               :"data-control-element" => "#hydrus_item_embarg_visib_date", 
+                               :"data-control-disable" => "false" %>
+          <%= f.label :embargo_future, "on this date" %>
+          <%= text_field_tag(
+                'hydrus_item[embarg_visib][date]',
+                HyTime.date_display(@fobj.embargo_date),
+                :"data-behavior"    => "datepicker",
+                :"data-date-format" => HyTime::DATE_PICKER_FORMAT,
+                :"data-start-date"  => HyTime.date_display(@fobj.beginning_of_embargo_range),
+                :"data-end-date"    => HyTime.date_display(@fobj.end_of_embargo_range),
+                :class              => "datepicker") %>
+        </div>
+      <% elsif @fobj.is_embargoed %>
+        This item will be released for discovery and download
+        <span class="highlight-value">
+          <%= HyTime.datetime_display(@fobj.embargo_date) + '.' %>
+        </span>
+      <% else %>
+        This item will be released for discovery and download
+        <span class="highlight-value">
+          as soon as it is published.
+        </span>
+      <% end %>
+    </div>
   </div>
+
   <!-- Visiblity -->
   <div class="row field-group">
     <div class="span9">
-    <% case @document_fedora.collection.visibility_option_value %>
-    <% when 'everyone' %>
-      After its release, this item can be downloaded and discovered by 
-      <span class="highlight-value">
-        everyone.
-      </span>
-    <% when 'varies' %>
-      After its release, this item can be downloaded and discovered by 
-      <%= f.select :visibility, options_for_select(Hydrus::Item.discovery_roles.to_a, @document_fedora.visibility) %>
-    <% when 'stanford' %>
-      After its release, this item can be downloaded and discovered by 
-      <span class="highlight-value">
-        the Stanford community.
-      </span>
-    <% end %>
+      After its release, this item can be downloaded and discovered by
+      <% if @fobj.visibilities_can_vary %>
+        <%= select_tag 'hydrus_item[embarg_visib][visibility]', options_for_select(Hydrus::Item.discovery_roles.to_a, @fobj.visibility) %>
+      <% else %>
+        <span class="highlight-value">
+          <%= @fobj.visibility == ['world'] ? 'anyone' : 'the Stanford community'%>
+        </span>
+      <% end %>
     </div>
   </div>
+
+  <!-- Review release settings -->
   <div class="row field-group">
     <div class="span9 sub-section">
-  <span>
-	  <br />
-    <input type="checkbox" <%="checked disabled" if to_bool(@document_fedora.reviewed_release_settings)%> name="hydrus_item[reviewed_release_settings]" value="true" id="release_settings" /> I have reviewed the release and visibility settings above.
-  </span>
-  </div></div>
+      <span>
+        <br />
+        <input type="checkbox"
+               <%="checked disabled" if to_bool(@fobj.reviewed_release_settings)%> 
+               name="hydrus_item[reviewed_release_settings]" 
+               value="true" id="release_settings" />
+        I have reviewed the release and visibility settings above.
+      </span>
+    </div>
+  </div>
 
- <%= hydrus_form_header{"License"} %>
+  <!-- License -->
+
+  <%= hydrus_form_header(:required => @fobj.licenses_can_vary) {"License"} %>
+
   <div class="row field-group">
     <div class="span9">
-    <% case @document_fedora.collection.license_option %>
-    <% when 'none' %>
-      No license will be applied to this item. All rights reserved by content creator.
-    <% when 'varies' %>
-      This item will be licensed under 
-      <%= f.select :license, grouped_options_for_select(Hydrus::Collection.licenses, @document_fedora.license), {:prompt => 'Select license'}, {:class => 'inline-select right' } %>
-    <% when 'fixed' %>
-      This work will be licensed under a 
-      <span class="highlight-value">
-        <%= Hydrus::Collection.license_human(@document_fedora.collection.license) %>
-      </span>
-    <% end %>
+      <% if @fobj.licenses_can_vary %>
+        This item will be licensed under
+        <%= f.select :license,
+                     grouped_options_for_select(Hydrus::Collection.licenses, @fobj.license), 
+                     {:prompt => 'Select license'}, 
+                     {:class => 'inline-select right' } %>
+      <% else %>
+        <span class="highlight-value">
+          <% lic = Hydrus::Collection.license_human(@fobj.license) %>
+          <%= hydrus_object_setting_value(lic) %>
+        </span>
+      <% end %>
     </div>
   </div>
 
   <noscript>
     <%= render :partial => "actions_box_edit", :locals => {:id=>"nojs"}%>
   </noscript>
+
 <%- end -%>
-</div> <!-- object-content-wrapper --> 
-<div id="druid-footer"><%= @document_fedora.pid %></div>
+
+</div> <!-- object-content-wrapper -->
+
+<div id="druid-footer"><%= @fobj.pid %></div>

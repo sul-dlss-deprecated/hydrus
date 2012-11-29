@@ -58,7 +58,7 @@ module Hydrus::SolrQueryable
   # response and an array of SolrDocuments.
   def issue_solr_query(h)
     solr_response = Blacklight.solr.find(h)
-    document_list = solr_response.docs.map {|doc| SolrDocument.new(doc, solr_response)}  
+    document_list = solr_response.docs.map {|doc| SolrDocument.new(doc, solr_response)}
     return [solr_response, document_list]
   end
 

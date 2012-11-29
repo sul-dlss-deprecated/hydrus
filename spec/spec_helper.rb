@@ -133,15 +133,16 @@ def confirm_rights_metadata_in_apo(obj)
 end
 
 def confirm_rights(obj, params)
-  di = '//access[@type="discover"]/machine'
-  rd = '//access[@type="read"]/machine'
+  di     = '//access[@type="discover"]/machine'
+  rd     = '//access[@type="read"]/machine'
+  is_emb = (obj.class == Hydrus::Item and obj.is_embargoed)
 
   # All should be world discoverable.
   obj.rightsMetadata.ng_xml.xpath("#{di}/world").size.should == 1
-  obj.embargoMetadata.ng_xml.xpath("#{di}/world").size.should == 1 if obj.embargo == 'future'
+  obj.embargoMetadata.ng_xml.xpath("#{di}/world").size.should == 1 if is_emb
 
   # Visibility.
-  datastream = (obj.embargo == 'future' ? obj.embargoMetadata : obj.rightsMetadata)
+  datastream = (is_emb ? obj.embargoMetadata : obj.rightsMetadata)
   g = datastream.ng_xml.xpath("#{rd}/group")
   w = datastream.ng_xml.xpath("#{rd}/world")
   if params[:visibility] == "stanford"
@@ -153,7 +154,7 @@ def confirm_rights(obj, params)
     w.size.should == 1
   end
 
-  # Embargo release date node.
+  # Embargo release date node in rightsMetadata.
   rel_date_node = obj.rightsMetadata.ng_xml.xpath("#{rd}/embargoReleaseDate")
   if params[:embargo_date] == ""
     rel_date_node.size.should == 0
@@ -161,7 +162,7 @@ def confirm_rights(obj, params)
     rel_date_node.first.content.should == params[:embargo_date]
   end
 
-  # The <use> node.
+  # The <use> node in rightsMetadata.
   u = obj.rightsMetadata.ng_xml.at_xpath('//use/machine')
   u.content.should == params[:license_code]
 end

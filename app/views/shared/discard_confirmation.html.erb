@@ -1,3 +1,3 @@
-<p>Are you sure you want to discard the <%=@document_fedora.object_type%> '<%=title_text(@document_fedora)%>'?  This action cannot be undone.</p>  
-<%= button_to 'Cancel', @document_fedora, :method => :get %>
-<%= button_to 'Discard', @document_fedora, :method => :delete %>
+<p>Are you sure you want to discard the <%=@fobj.object_type%> '<%=title_text(@fobj)%>'?  This action cannot be undone.</p>
+<%= button_to 'Cancel', @fobj, :method => :get %>
+<%= button_to 'Discard', @fobj, :method => :delete %>
