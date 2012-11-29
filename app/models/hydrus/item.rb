@@ -58,15 +58,14 @@ class Hydrus::Item < Hydrus::GenericObject
     item.augment_identity_metadata(itype)
     # Add roleMetadata with current user as hydrus-item-depositor.
     item.roleMetadata.add_person_with_role(user, 'hydrus-item-depositor')
-    # Set default object visibility
-    case item.collection.visibility_option_value
-      when 'everyone'
-        item.visibility='world'
-      when 'stanford'
-        item.visibility='stanford'
+    # Set default embargo and visibility.
+    if coll.embargo_option == 'fixed'
+      item.embargo_date = HyTime.date_display(item.end_of_embargo_range)
     end
+    vov = coll.visibility_option_value
+    item.visibility = vov == 'stanford' ? vov : 'world'
     # Set default license
-    clo = item.collection.license_option
+    clo = coll.license_option
     item.license = clo == 'none'  ? clo :
                    clo == 'fixed' ? item.collection.license : nil
     # Set object status.
@@ -282,8 +281,88 @@ class Hydrus::Item < Hydrus::GenericObject
     events.add_event('hydrus', user, 'Terms of deposit accepted')
   end
 
+  # Return's true if the Item belongs to a collection that allows
+  # Items to set their own embargoes.
+  def embargoes_can_vary
+    return collection.embargo_option == 'varies'
+  end
+
+  # Return's true if the Item belongs to a collection that allows
+  # Items to set their own licenses.
+  def visibilities_can_vary
+    return collection.visibility_option == 'varies'
+  end
+
+  # Return's true if the Item belongs to a collection that allows
+  # Items to set their own licenses.
   def licenses_can_vary
     return collection.license_option == 'varies'
+  end
+
+  # Takes a hash with the following keys and possible values:
+  #
+  #     'embargoed'  => 'yes'
+  #                     'no'
+  #                     nil            # Form did not offer embargo choice.
+  #
+  #     'date'       => 'YYYY-MM-DD'
+  #                     nil            # Form did not offer embargo choice.
+  #
+  #     'visibility' => 'world'
+  #                     'stanford'
+  #                     nil            # Form did not offer visibility choice.
+  #
+  # Given that hash, we call the embargo_date and visibility
+  # setters. The UI invovkes this combined setter (not the individual
+  # setters), because we want to ensure that the individual setters 
+  # are called in the desired order. This is necessary because the
+  # visibility setter needs to know the Item's embargo status.
+  def embarg_visib=(opts)
+    e  = opts['embargoed']
+    d  = opts['date']
+    v  = opts['visibility']
+    dt = to_bool(e) ? d : ''
+    self.embargo_date = dt unless e.nil?
+    self.visibility   = v  unless v.nil?
+  end
+
+  # Returns true if the Item is embargoed.
+  def is_embargoed
+    return not(embargo_date.blank?)
+  end
+
+  # Returns the embargo date from the embargoMetadata, not the rightsMetadata.
+  # We don't use the latter because it is a convenience copy used by the PURL app.
+  def embargo_date
+    return embargoMetadata ? embargoMetadata.release_date : nil
+  end
+
+  # Sets the embargo date in both embargoMetadata and rightsMetadata.
+  # The new value is assumed to be expressed in the local time zone.
+  # If the new date is blank or nil, the embargoMetadata datastream is deleted.
+  # Do not call this directly from the UI. Instead, use embarg_visib=().
+  def embargo_date= val
+    ed = HyTime.datetime(val, :from_localzone => true)
+    if ed.blank?
+      rightsMetadata.remove_embargo_date
+      embargoMetadata.delete
+    else
+      self.rmd_embargo_release_date = ed
+      embargoMetadata.release_date  = ed
+      embargoMetadata.status        = 'embargoed'
+    end
+  end
+
+  def embargo_date_in_range
+    return unless is_embargoed
+    b  = beginning_of_embargo_range.to_datetime
+    e  = end_of_embargo_range.to_datetime
+    dt = embargo_date.to_datetime
+    unless (b <= dt and dt <= e)
+      b = HyTime.date_display(b)
+      e = HyTime.date_display(e)
+      errors.add(:embargo_date, "must be in the range #{b} - #{e}")
+    end
   end
 
   # Returns the publish_time or now, as a datetime string.
@@ -301,65 +380,12 @@ class Hydrus::Item < Hydrus::GenericObject
   end
 
   def embargo_date_is_correct_format
-    return unless under_embargo?
+    return unless is_embargoed
     begin
      embargo_date.to_datetime
     rescue ArgumentError
      msg = "must be a valid date (#{HyTime::DATE_PICKER_FORMAT})"
      errors.add(:embargo_date, msg)
-    end
-  end
-
-  def embargo
-    self.embargo_date.blank? ? 'immediate' : 'future'
-  end
-
-  def embargo=(val)
-    self.embargo_date = '' if val == 'immediate'
-  end
-
-  # Returns the embargo date from the embargoMetadata, not the rightsMetadata.
-  # The latter is a convenience copy used by the PURL app.
-  def embargo_date
-    return embargoMetadata ? embargoMetadata.release_date : nil
-  end
-
-  # Sets the embargo date in both embargoMetadata and rightsMetadata.
-  # The new value is assumed to be expressed in the local time zone.
-  # If the new date is blank or nil, the embargoMetadata datastream is deleted.
-  def embargo_date= val
-    ed = HyTime.datetime(val, :from_localzone => true)
-    if ed.blank?
-      rightsMetadata.remove_embargo_date
-      embargoMetadata.delete
-    else
-      self.rmd_embargo_release_date = ed
-      embargoMetadata.release_date  = ed
-      embargoMetadata.status        = 'embargoed'
-    end
-  end
-
-  def is_embargoed
-    return not(embargo_date.blank?)
-  end
-
-  # Returns true if the Item is under embargo.
-  def under_embargo?
-    return false unless embargo == 'future'
-    return false unless collection
-    return collection.embargo_option == "varies"
-  end
-
-  def embargo_date_in_range
-    return unless under_embargo?
-    return if embargo_date.blank?
-    b  = beginning_of_embargo_range.to_datetime
-    e  = end_of_embargo_range.to_datetime
-    dt = embargo_date.to_datetime
-    unless (b <= dt and dt <= e)
-      b = HyTime.date_display(b)
-      e = HyTime.date_display(e)
-      errors.add(:embargo_date, "must be in the range #{b} - #{e}")
     end
   end
 
@@ -374,6 +400,7 @@ class Hydrus::Item < Hydrus::GenericObject
   # Takes a visibility -- typically 'world' or 'stanford'.
   # Modifies the embargoMetadata and rightsMetadata based on that visibility
   # values, along with the embargo status.
+  # Do not call this directly from the UI. Instead, use embarg_visib=().
   def visibility= val
     if is_embargoed
       # If embargoed, we set access info in embargoMetadata.
@@ -383,10 +410,8 @@ class Hydrus::Item < Hydrus::GenericObject
       rightsMetadata.remove_world_read_access
       rightsMetadata.remove_group_read_nodes
     else
-      # Otherwise, we clear out embargoMetadata.
-      embargoMetadata.initialize_release_access_node()
-      # And set access info in rightsMetadata.
-      rightsMetadata.remove_embargo_date
+      # Otherwise, just set access info in rightsMetadata.
+      # The embargoMetadata should not exist at this point.
       rightsMetadata.update_access_blocks(val)
     end
   end

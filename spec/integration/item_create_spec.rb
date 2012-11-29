@@ -282,8 +282,7 @@ describe("Item create", :type => :request, :integration => true) do
     item.is_destroyable.should == false
     item.valid?.should == true
     item.disapproval_reason.should == nil
-    item.embargo.should == 'immediate'
-    item.embargo_date.should == ''
+    item.is_embargoed.should == false
     item.publish_time.should_not be_blank
     item.visibility.should == ["stanford"]
     params={:visibility=>'stanford',:license_code=>'cc-by',:embargo_date=>''}
@@ -330,7 +329,7 @@ describe("Item create", :type => :request, :integration => true) do
     click_button(@buttons[:add_person])
     fill_in "hydrus_item_person_0", :with => ni.person
     fill_in "Title of item", :with => ni.title
-    select "everyone", :from=>"hydrus_item_visibility"
+    select "everyone", :from => "hydrus_item_embarg_visib_visibility"
     select "CC BY-ND Attribution-NoDerivs", :from=>"hydrus_item_license"
     click_button(@buttons[:save])
     find(@div_alert).should have_content(@notices[:save])
@@ -411,7 +410,6 @@ describe("Item create", :type => :request, :integration => true) do
     # Check events.
     exp = [
       /\AItem created/,
-      /\AItem modified/,
       /\AItem modified/,
       /\AItem modified/,
       /\ATerms of deposit accepted/,

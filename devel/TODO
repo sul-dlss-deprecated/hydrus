@@ -2,21 +2,22 @@
 Development Tasks - 14 November 2012
 ------------------
 
-Embargo-visibility refactor. Details in a separate section below.
-
 System integration work. Details in separate section below.
-    - bundle update dor-services: get 3.16.11
-    - see if that fixes problems
-
-Abstracts with internal newlines are preserved correctly and appear on the
-edit form, but they don't render correctly on view pages.
+  - bundle update dor-services: get 3.16.11
+  - see if that fixes problems
 
 APO RELS-EXT datastream needs to add a child node to <rdf:Description>:
 <hydra:referencesAgreement rdf:resource="info:fedora/druid:mc322hh4254"/>.
 Hannah and Lynn will create object mc322hh4254.
 
+Embargo, visbility, and license: assess integration tests. If needed write some
+good integration test scenarios for these attributes.
+
 Protect actions at the model level. This is mostly done, but a few actions remain.
 Details in a separate section below.
+
+Abstracts with internal newlines are preserved correctly and appear on the
+edit form, but they don't render correctly on view pages.
 
 Keywords: require at least one.
 
@@ -63,6 +64,14 @@ Tighten up the restrictions: replace su_admin_nets with $foz_all_nets.
 --------
 Other
 --------
+
+Embargo, visibility, and license for draft Items under scenarios when the
+collection's policies are changed from varies to fixed. Current app behavior:
+if the collection allows "varies", the edit UI offers widgets; otherwise, the
+Item view/edit pages display the current value for the Item. The problem
+scenario: if Collection changes from varies to fixed, its unpublished items
+will be "stuck" at their current value -- which might or might not agree with
+the new fixed value set by the collection manager.
 
 Rake task to list all Hydrus pids, along with their has_model_s value.
 
@@ -154,27 +163,3 @@ during the super() call in index() of catalog_controller.rb, which invokes a
 Blacklight method that logs the entire SOLR response. A bug has been filed; in
 the meantime, you can use the `rake server` task, which filters out most of the
 noise.
-
-------------------
-Embargo-visibility refactor
-------------------
-
-Embargo date and visibility (world|stanford) cannot be set independently,
-because their logic is necessarily intertwined. Currently, the app works
-correctly only because embargo_date=() is called first, due to the layout of
-our web form.
-
-      hydrus_item[embarg_visib][embargoed]  = 'no'
-      hydrus_item[embarg_visib][embargoed]  = 'yes'
-      hydrus_item[embarg_visib][date]       = ''       | '2012-12-30'
-      hydrus_item[embarg_visib][visibility] = 'world'  | 'stanford'
-
-Also change immediate|future to no|yes.
-
-Write a good explanation for how visibility and embargo interact:
-      # rightsMetadata
-      # <access type="read">                                embargo        visibility
-      #   <machine> <world></world>         </machine>    # immediate|no   world
-      #   <machine> <group>stanford</group> </machine>    # immediate|no   stanford
-      #   <machine> <embargoReleaseDate>... </machine>    # future   |yes  --
-      # </access>

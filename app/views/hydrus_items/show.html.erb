@@ -68,7 +68,7 @@
               <% end %>
       </div>
 
-       <% unless hydrus_is_empty?(@fobj.preferred_citation) && hydrus_is_empty?(@fobj.related_citation) && hydrus_is_empty?(@fobj.related_items) %>
+      <% unless hydrus_is_empty?(@fobj.preferred_citation) && hydrus_is_empty?(@fobj.related_citation) && hydrus_is_empty?(@fobj.related_items) %>
          <div class="collection-items">
              <h4>Related Links and Citations</h4>
            <% unless hydrus_is_empty?(@fobj.preferred_citation) %>
@@ -90,58 +90,43 @@
              <% end %>
            <% end %>
          </div>
-     <% end %>
+      <% end %>
 
-     <div class="collection-items">
-       <h4>Release, Visibility and License</h4>
-      <dt>Visibility</dt>
-      <dd>
-        After its release, this item can be discovered and downloaded by <span class="highlight-value">
-        <%if @fobj.visibility.blank? %>
-          <%= @fobj.collection.visibility == 'world' ? 'anyone' : 'the Stanford community'%>.
-        <% else %>
-          <%= @fobj.visibility == ['world'] ? 'anyone' : 'the Stanford community'%>.
-        <% end %>
-        </span>
-      </dd>
-      <dt>Release</dt>
-      <dd>
-        <% case @fobj.collection.embargo_option %>
-        <% when 'none' %>
+      <div class="collection-items">
+
+        <h4>Release, Visibility and License</h4>
+
+        <dt>Release</dt>
+        <dd>
           This item will be released for discovery and download
           <span class="highlight-value">
-            as soon as it is published.
-          </span>
-        <% when 'varies' %>
-          This item will be released for discovery and download
-          <%= @fobj.embargo_date.blank? ? 'immediately' : "on #{@fobj.embargo_date}"%>.
-        <% when 'fixed' %>
-          This item will be released for discovery and download
+            <%= @fobj.is_embargoed ?
+                    HyTime.datetime_display(@fobj.embargo_date) :
+                    'as soon as it is published'
+            %>
+          </span>.
+        </dd>
+
+        <dt>Visibility</dt>
+        <dd>
+          After its release, this item can be discovered and downloaded by
           <span class="highlight-value">
-            <%= @fobj.collection.embargo %>
-            after deposit.
-          </span>
-        <% end %>
-    </dd>
-    <dt>License</dt>
-    <dd>
-    <% case @fobj.collection.license_option %>
-    <% when 'none' %>
-      No license will be applied to this item. All rights reserved by content creator.
-    <% when 'varies' %>
-      <span class="highlight-value">
-        <%  v = Hydrus::Collection.license_human(@fobj.license) %>
-        <%= hydrus_object_setting_value(v) %>
-      </span>
-    <% when 'fixed' %>
-      <span class="highlight-value">
-        <%= Hydrus::Collection.license_human(@fobj.collection.license) %>
-      </span>
-    <% end %>
-    </dd>
+            <%= @fobj.visibility == ['world'] ? 'anyone' : 'the Stanford community'%>
+          </span>.
+        </dd>
+
+        <dt>License</dt>
+          <dd>
+            <span class="highlight-value">
+              <% lic = Hydrus::Collection.license_human(@fobj.license) %>
+              <%= hydrus_object_setting_value(lic) %>
+            </span>
+          </dd>
+ 
       </div>
 
-
   </div> <!-- object-content-wrapper -->
-    <div id="druid-footer"><%= @fobj.pid %></div>
+
+  <div id="druid-footer"><%= @fobj.pid %></div>
+
 </div>

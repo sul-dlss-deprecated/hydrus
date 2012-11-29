@@ -75,7 +75,7 @@ describe ApplicationHelper do
   end
 
   it "should return a correct license link" do
-    license_link('cc_by').should == '<a href="http://creativecommons.org/licenses/">http://creativecommons.org/licenses/</a>'
+    license_link('cc-by').should == '<a href="http://creativecommons.org/licenses/">CC BY Attribution</a>'
     license_link('pddl').should  == '<a href="http://opendatacommons.org/licenses/">PDDL Public Domain Dedication and License</a>'
     license_link('junkola').should == "junkola"
   end

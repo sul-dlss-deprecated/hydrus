@@ -193,7 +193,7 @@ class Hydrus::GenericObject < Dor::Item
         return lic.first if code == lic.last
       end
     end
-    return nil
+    return "No license. All rights reserved by content creator."
   end
 
   def self.license_commons

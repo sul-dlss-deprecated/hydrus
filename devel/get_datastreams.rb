@@ -10,6 +10,7 @@ def main(args)
   end
   args = obj.datastreams.keys.sort if args == ['ALL']
   args.each { |ds|
+    next unless obj.datastreams.include?(ds)
     puts
     puts obj.send(ds).content
   }
