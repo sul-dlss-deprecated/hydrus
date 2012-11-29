@@ -3,12 +3,9 @@ Development Tasks - 14 November 2012
 ------------------
 
 System integration work. Details in separate section below.
-  - bundle update dor-services: get 3.16.11
-  - see if that fixes problems
 
 APO RELS-EXT datastream needs to add a child node to <rdf:Description>:
 <hydra:referencesAgreement rdf:resource="info:fedora/druid:mc322hh4254"/>.
-Hannah and Lynn will create object mc322hh4254.
 
 Embargo, visbility, and license: assess integration tests. If needed write some
 good integration test scenarios for these attributes.
@@ -25,18 +22,22 @@ Support delete of a file in an unpublished item.
 
 Terms of Deposit: create PDF and tie to save action in popup window.
 
+Assess the app's deprecation warnings and fix if needed.
+
 --------
 System integration
 --------
 
-Publish robot: when the DC XML is generated for the public XML, the
-<dc:relation type="collection"> element incorrectly contains the Item title
-rather than the Collection title. Run this from console: puts
-hi.generate_dublin_core. [Waiting on new dor-services gem, which might fix
-this problem.]
+Collection title on PURL page: it shows the Item title rather than Collection
+title. This is a bug in dor-services. [Jon D. will fix. Get latest dor-services
+gem and then deploy.]
 
 Hydrus objects end up with 2 values for submitted_dt and published_dt, because
-two WFs are using the those lifecycles. [Waiting on new dor-services gem.]
+two WFs are using the those lifecycles. [Problem might be fixed. Deploy and
+check on hydrus-test.]
+
+Create object mc322hh4254 (hydra:referencesAgreement) on hydrus-dev,
+hydrus-test, and hydrus-prod.  [Hannah/Lynn]
 
 Try to use hydrus-prod. [Waiting on new dor-services gem in production.]
 
