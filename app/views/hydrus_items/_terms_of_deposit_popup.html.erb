@@ -1,13 +1,13 @@
 <div class="modal hide fade" id="terms-of-deposit">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal">×</button>
-    <h3 id="myModalLabel">Stanford Digital Repository  - Self-Service Terms of Deposit - DRAFT</h3>
+    <h3 id="myModalLabel">Stanford Digital Repository<br />Self-Service Terms of Deposit</h3>
   </div>
   <div class="modal-body">
     <%= render :partial=>"terms_of_deposit_text" %>
   </div>
   <div class="modal-footer">
-    <a href="/terms_of_deposit_text.txt"><button class="btn">Save</button></a>
+    <a href="/SDRSelfDepositTerms.pdf"><button class="btn">Save</button></a>
     <% if @fobj.terms_of_deposit_accepted?%>
       <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Close</button>
     <% else %>

@@ -1,8 +1,9 @@
-<h3>Stanford Digital Repository  - Self-Service Terms of Deposit - DRAFT</h3>
+<h3>Stanford Digital Repository</h3>
+<h3>Self-Service Terms of Deposit</h3>
 
 <%= render :partial=>'terms_of_deposit_text' %>
 
-<a href="/terms_of_deposit_text.txt"><button class="btn">Save</button></a>
+<a href="/SDRSelfDepositTerms.pdf"><button class="btn">Save</button></a>
 
 <% unless @fobj.terms_of_deposit_accepted?%>
   <a href="<%=terms_of_deposit_agree_path(@pid)%>"><button class="btn btn-primary">I agree to these terms</button></a>

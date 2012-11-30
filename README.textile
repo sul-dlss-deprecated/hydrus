@@ -152,6 +152,14 @@ objects from Fedora (when in staging for example).  To do this, issue the follow
 
 RAILS_ENV=dortest rake hydrus:solr_nuke
 
+h2. Self Service Terms Document
+
+The Self Service Terms of Deposit Text is in THREE spots.  If you update the text, you should do it:
+
+a. There is a word document that is not provided to users in doc/SDRSelfDepositTerms.doc.  This Word document is saved as a PDF and placed in public/SDRSelfDepositTerms.pdf, which is provided
+to users when they ask to save the terms from the pop up window.  You should update both documents.
+
+b. There is an HTML version of the terms that is shown in the popup window.  This version is in app/views/hydrus_items/_terms_of_deposit_text.html.erb
 
 h2. Useful commands
 
