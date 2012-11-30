@@ -2,13 +2,13 @@
 Development Tasks - 14 November 2012
 ------------------
 
-System integration work. Details in separate section below.
-
 APO RELS-EXT datastream needs to add a child node to <rdf:Description>:
 <hydra:referencesAgreement rdf:resource="info:fedora/druid:mc322hh4254"/>.
 
 Abstracts with internal newlines are preserved correctly and appear on the
 edit form, but they don't render correctly on view pages.
+
+System integration: deploy to hydrus-test [Details below.]
 
 Embargo, visbility, and license: assess integration tests. If needed write some
 good integration test scenarios for these attributes.
@@ -23,19 +23,15 @@ Details in a separate section below.
 Assess the app's deprecation warnings and fix if needed.
 
 Assess the app's slow performance. For example, this command seems too slow:
-`rails runner devel/create_test_item.rb batch`.
+`rails runner devel/create_test_item.rb batch`. [Ask Jon D about Ruby profiler.]
 
 --------
 System integration
 --------
 
-Collection title on PURL page: it shows the Item title rather than Collection
-title. This is a bug in dor-services. [Jon D. will fix. Get latest dor-services
-gem and then deploy.]
-
 Hydrus objects end up with 2 values for submitted_dt and published_dt, because
-two WFs are using the those lifecycles. [Problem might be fixed. Deploy and
-check on hydrus-test.]
+two WFs are using the those lifecycles. [Problem might be fixed. Check after
+next deployment to hydrus-test.]
 
 Create object mc322hh4254 (hydra:referencesAgreement) on hydrus-dev,
 hydrus-test, and hydrus-prod.  [Hannah/Lynn]
