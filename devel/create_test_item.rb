@@ -15,8 +15,8 @@ def create_test_collection(*args)
   hc.license                 = 'cc-by-nc'
   hc.visibility_option_value = 'varies'
   hc.requires_human_approval = 'yes'
-  # Publish, save, and return a refreshed object.
-  hc.publish('true') if args.delete('--publish')
+  # Open, save, and return a refreshed object.
+  hc.open if args.delete('--open')
   hc.save
   puts "Created collection: user=#{user} pid=#{hc.pid}"
   return Hydrus::Collection.find(hc.pid)
@@ -31,7 +31,8 @@ def create_test_item(*args)
   hi             = Hydrus::Item.create(hc_pid, user)
   hi.title       = "Title for: #{hi.pid}"
   hi.abstract    = 'abstract'
-  hi.contact     = 'contact'
+  hi.contact     = 'foo@bar.com'
+  hi.license     = 'cc-by-nc'
   hi.person      = { "0" => "Nugent, Ted" }
   hi.person_role = { "0" => "Author" }
   hi.accepted_terms_of_deposit = 'yes'
@@ -41,12 +42,12 @@ def create_test_item(*args)
   f.pid   = hi.pid
   f.label = 'file'
   f.file  = File.open(__FILE__)
-  # Publish and approve or disapprove.
-  hi.publish()             if args.delete('--publish')
-  hi.do_disapprove('blah') if args.delete('--disapprove')
-  hi.do_approve()          if args.delete('--approve')
-  # Save and return a refreshed object.
   f.save
+  # Submit for approval and approve/disapprove.
+  hi.submit_for_approval() if args.delete('--submit_for_approval')
+  hi.disapprove('blah')    if args.delete('--disapprove')
+  hi.approve()             if args.delete('--approve')
+  # Save and return a refreshed object.
   hi.save
   puts "Created item: user=#{user} pid=#{hi.pid}"
   return Hydrus::Item.find(hi.pid)
@@ -54,24 +55,24 @@ end
 
 def create_test_batch(*args)
   # Takes args (or uses the default defined below) and invokes
-  # methods to create new collections or items -- publishing, approving,
+  # methods to create new collections or items -- submitting, approving,
   # or disapproving them accordingly.
   args = %w(
     c
-    cp i ip ip ia ia ia id
-    cp i ip ip ia ia ia id i ip ip ia ia ia id
+    co i is is ia ia ia id
+    co i is is ia ia ia id i is is ia ia ia id
   ) unless args.size > 0
   hc = nil
   hi = nil
   args.each do |arg|
     opts = parse_batch_opts(arg)
     if opts.shift == 'c'
-      hc = create_test_collection(*opts)
+      hc = create_test_collection('archivist1', *opts)
     else
-      if hc && hc.is_published
-        hi = create_test_item(hc.pid, *opts)
+      if hc && hc.is_open
+        hi = create_test_item(hc.pid, 'archivist1', *opts)
       else
-        help("Cannot create item without creating a published collection first")
+        help("Cannot create item without opening collection first")
       end
     end
   end
@@ -82,11 +83,11 @@ def parse_batch_opts(arg)
   # that will be passed to one of the create_*() methods.
   opts = {
     :c  => %w(c),
-    :cp => %w(c --publish),
+    :co => %w(c --open),
     :i  => %w(i),
-    :ip => %w(i --publish),
-    :ia => %w(i --publish --approve),
-    :id => %w(i --publish --disapprove),
+    :is => %w(i --submit_for_approval),
+    :ia => %w(i --submit_for_approval --approve),
+    :id => %w(i --submit_for_approval --disapprove),
   }
   opts = opts[arg.to_sym]
   return opts if opts
@@ -99,9 +100,9 @@ def help(msg = nil)
   rrf = "rails runner #{__FILE__}"
   puts <<-EOS.gsub(/^ {4}/, '')
     Usage:
-        #{rrf} collection [USER] [--publish]
-        #{rrf} item COLL_PID [USER] [--publish] [--approve | --disapprove]
-        #{rrf} batch [c|cp|i|ip|ia|id]...
+        #{rrf} collection    [USER] [--open]
+        #{rrf} item COLL_PID [USER] [--submit_for_approval] [--approve | --disapprove]
+        #{rrf} batch [c|co|i|is|ia|id]...
         #{rrf} batch # Uses defaults.
         #{rrf} help
   EOS

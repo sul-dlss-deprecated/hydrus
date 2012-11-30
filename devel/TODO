@@ -7,20 +7,23 @@ System integration work. Details in separate section below.
 APO RELS-EXT datastream needs to add a child node to <rdf:Description>:
 <hydra:referencesAgreement rdf:resource="info:fedora/druid:mc322hh4254"/>.
 
-Embargo, visbility, and license: assess integration tests. If needed write some
-good integration test scenarios for these attributes.
-
-Protect actions at the model level. This is mostly done, but a few actions remain.
-Details in a separate section below.
-
 Abstracts with internal newlines are preserved correctly and appear on the
 edit form, but they don't render correctly on view pages.
+
+Embargo, visbility, and license: assess integration tests. If needed write some
+good integration test scenarios for these attributes.
 
 Keywords: require at least one.
 
 Support delete of a file in an unpublished item.
 
+Protect actions at the model level. This is mostly done, but a few actions remain.
+Details in a separate section below.
+
 Assess the app's deprecation warnings and fix if needed.
+
+Assess the app's slow performance. For example, this command seems too slow:
+`rails runner devel/create_test_item.rb batch`.
 
 --------
 System integration
