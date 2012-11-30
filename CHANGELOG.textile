@@ -1,3 +1,7 @@
+== 2012.11.29
+
+* Finished overhaul of embargo-visibility-license.
+
 == 2012.11.14
 
-* First deployment to production server.
+* Experimental deployment to production server.
