@@ -133,5 +133,24 @@ describe ApplicationHelper do
 
   end
 
+  it "show_line_breaks()" do
+    br = '<br/>'
+    txt = [
+      'hello',
+      "\r\n", "\r\n", "\n",       # Various newline styles.
+      '<script>DANGER</script>',  # Injected JavaScript.
+      "\r",   "\r",   "\r\n",     # More newlines.
+      'world',
+    ].join
+    exp = [
+      'hello',
+      br, br, br,
+      '&lt;script&gt;DANGER&lt;/script&gt;',  # Safely escaped.
+      br, br, br,
+      'world',
+    ].join
+    show_line_breaks(txt).should == exp
+  end
+
 end
 

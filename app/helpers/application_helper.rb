@@ -84,6 +84,13 @@ module ApplicationHelper
     hydrus_is_empty?(obj) ? content_tag(:span, "to be entered", :class => "unspecified") : obj
   end
 
+  # Takes a string. Escapes any HTML characters, converts
+  # newlines to <br> tags, and then declars the string to be
+  # safe for direct display as HTML.
+  def show_line_breaks(txt)
+    return html_escape(txt).gsub(/\r\n?|\n/, '<br/>').html_safe
+  end
+
   def title_text(obj)
     obj.title.blank? ? "Untitled" : obj.title
   end

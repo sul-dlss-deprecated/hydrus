@@ -59,7 +59,9 @@
        <div class="collection-items">
            <h4>Abstract and keywords</h4>
               <dt>Abstract</dt>
-              <dd class="abstract"><%= hydrus_object_setting_value(@fobj.abstract) %></dd>
+              <dd class="abstract">
+                <%= show_line_breaks(hydrus_object_setting_value(@fobj.abstract)) %>
+              </dd>
               <% unless hydrus_is_empty?(@fobj.keywords) %>
                 <dt>Keywords</dt>
                 <dd>

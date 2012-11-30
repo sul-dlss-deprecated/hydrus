@@ -5,9 +5,6 @@ Development Tasks - 14 November 2012
 APO RELS-EXT datastream needs to add a child node to <rdf:Description>:
 <hydra:referencesAgreement rdf:resource="info:fedora/druid:mc322hh4254"/>.
 
-Abstracts with internal newlines are preserved correctly and appear on the
-edit form, but they don't render correctly on view pages.
-
 System integration: deploy to hydrus-test [Details below.]
 
 Embargo, visbility, and license: assess integration tests. If needed write some
@@ -62,6 +59,10 @@ Tighten up the restrictions: replace su_admin_nets with $foz_all_nets.
 --------
 Other
 --------
+
+Asses Hydrus::AdministrativeMetadataDS. Most of the workflow-related code is
+probably unneeded now that we are using reified WF. If that's removed perhaps
+the class can disappear, and we can rely on dor-services for this datastream.
 
 Embargo, visibility, and license for draft Items under scenarios when the
 collection's policies are changed from varies to fixed. Current app behavior:
