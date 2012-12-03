@@ -6,11 +6,25 @@
 #   rails runner script/experiment.rb
 
 hi   = Hydrus::Item.find('druid:oo000oo0001')
+
 dmd  = hi.descMetadata
 cmd  = hi.contentMetadata
 rm   = hi.rightsMetadata
 coll = hi.collection
 wf   = hi.workflows
+
+__END__
+
+# ns = "http://projecthydra.org/ns/relations#"
+# ActiveFedora::Predicates.predicate_mappings[ns][:references_agreement] = 'referencesAgreement'
+
+# Add this to dor-services
+# :references_agreement: referencesAgreement
+
+apo = hi.apo
+uri = "info:fedora/druid:mc322hh4254"
+apo.add_relationship(:references_agreement, uri)
+puts apo.rels_ext.to_rels_ext
 
 __END__
 

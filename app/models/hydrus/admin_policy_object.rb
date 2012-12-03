@@ -6,7 +6,9 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
   include Hydrus::Validatable
   extend  Hydrus::Delegatable
 
-  # has_relationship('governed_objects', :is_governed_by, :inbound => true)
+  # Temporary hack until dor-services gem adds this predicate to
+  # its predicate_mappings.yml file.
+  ActiveFedora::Predicates.predicate_mappings["http://projecthydra.org/ns/relations#"][:references_agreement] = 'referencesAgreement'
 
   has_metadata(
     :name => "descMetadata",
@@ -74,6 +76,8 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
     apo.roleMetadata.add_person_with_role(user, 'hydrus-collection-depositor')
     # create defaultObjectRights datastream
     apo.defaultObjectRights.ng_xml
+    # Add the references agreement to the APO's RELS-EXT.
+    apo.add_relationship(:references_agreement, "info:fedora/druid:mc322hh4254")
     # Save and return.
     apo.save
     return apo

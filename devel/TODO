@@ -2,9 +2,6 @@
 Development Tasks - 14 November 2012
 ------------------
 
-APO RELS-EXT datastream needs to add a child node to <rdf:Description>:
-<hydra:referencesAgreement rdf:resource="info:fedora/druid:mc322hh4254"/>.
-
 System integration: deploy to hydrus-test [Details below.]
 
 Embargo, visbility, and license: assess integration tests. If needed write some
@@ -21,6 +18,9 @@ Assess the app's deprecation warnings and fix if needed.
 
 Assess the app's slow performance. For example, this command seems too slow:
 `rails runner devel/create_test_item.rb batch`. [Ask Jon D about Ruby profiler.]
+
+Remove predicate mapping hack from admin_policy_object.rb. [Waiting on edit
+to dor-services gem.]
 
 --------
 System integration

@@ -29,6 +29,8 @@ describe Hydrus::AdminPolicyObject do
     role_nodes.size.should == 2
     role_nodes[0]['type'].should == 'hydrus-collection-manager'
     role_nodes[1]['type'].should == 'hydrus-collection-depositor'
+    ra_regex = /<hydra:referencesAgreement[^>]+druid:mc322hh4254"\/>/x
+    @apo.rels_ext.to_rels_ext.should =~ ra_regex
   end
 
   describe "class methods" do
