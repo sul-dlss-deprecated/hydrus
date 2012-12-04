@@ -76,10 +76,15 @@ class Hydrus::GenericObject < Dor::Item
 
   # Returns true if all required fields are filled in.
   def required_fields_completed?
-    # If validations are true, returns true.
-    # Otherwise, run an intersection of invalid fields with required fields
-    # and indicates if this is blank.
-    validate! ? true : (errors.keys & REQUIRED_FIELDS).size == 0
+    # Validate, and return true if all is OK.
+    return true if validate!
+    # Get keys in the errors hash that have non-blank values.
+    # The presence of a key does not indicate an error; you have to check the value.
+    es = errors.reject { |k,v| v.blank? }
+    # If the intersection of those keys and the required fields
+    # is empty, the required fields are complete and the validation errors
+    # are coming from other problems.
+    return (es & REQUIRED_FIELDS).size == 0
   end
 
   # We override save() so we can control whether editing events are logged.
