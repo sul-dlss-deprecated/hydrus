@@ -1,10 +1,8 @@
 ------------------
-Development Tasks - 14 November 2012
+Development Tasks - December
 ------------------
 
 System integration. [Waiting: details below.]
-
-Support delete of a file in an unpublished item.
 
 Embargo, visbility, and license: assess integration tests. If needed write some
 good integration test scenarios for these attributes.
@@ -61,9 +59,20 @@ Tighten up the restrictions: replace su_admin_nets with $foz_all_nets.
 Other
 --------
 
+Update to Rubydora 0.6.0, which might speed up integration tests. [We are
+blocked by active-fedora gem restriction to to 0.5.x series. Chris might be
+looking into this.]
+
 Asses Hydrus::AdministrativeMetadataDS. Most of the workflow-related code is
 probably unneeded now that we are using reified WF. If that's removed perhaps
 the class can disappear, and we can rely on dor-services for this datastream.
+
+Remove all code that puts WF into the APO. Search for workflow_steps.
+
+Rake task to list all Hydrus pids, along with their has_model_s value.
+
+Create a view for hydrus admin users to list all collections, regardless of
+roleMD.
 
 Embargo, visibility, and license for draft Items under scenarios when the
 collection's policies are changed from varies to fixed. Current app behavior:
@@ -72,11 +81,6 @@ Item view/edit pages display the current value for the Item. The problem
 scenario: if Collection changes from varies to fixed, its unpublished items
 will be "stuck" at their current value -- which might or might not agree with
 the new fixed value set by the collection manager.
-
-Rake task to list all Hydrus pids, along with their has_model_s value.
-
-Create a view for hydrus admin users to list all collections, regardless of
-roleMD.
 
 Move Terms of Deposit acceptance pop-up so it shows (if needed) when an item is
 created.
@@ -92,13 +96,7 @@ push it through the accessioning pipeline again?
 
 Gryphondor for Hydrus objects.
 
-Update to Rubydora 0.6.0, which might speed up integration tests. [We are
-blocked by dor-services gem restriction, which seems too strict. Speak with Jon
-D.]
-
 Should submit_for_approval() and resubmit() send email messages?
-
-Remove all code that puts WF into the APO. Search for workflow_steps.
 
 After finishing more thorough UI rework, look at: responsiveness issues;
 accessibility issues.

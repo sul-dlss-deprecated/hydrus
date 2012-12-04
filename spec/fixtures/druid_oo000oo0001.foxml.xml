@@ -148,10 +148,10 @@
           <subject>
             <topic>wooden boys</topic>
           </subject>
-          <note type="preferred citation">Rosenfeld, Michael J., and Reuben J. Thomas. 2011. How Couples Meet and Stay Together, Waves 1, 2, and 3: Public version 3.04 [Computer file]. Stanford, CA: Stanford University Libraries. http://purl.stanford.edu/oo000oo0001</note>
-          <note type="citation/reference">Nolan, K., Ward, L., Conroy, T. &amp; Welch, L. (2011). "Are the Brainwaves of Race Car Drivers Different?" Journal of Physiological Psychology, 54(1), pp. 235-249.</note>
-          <note type="citation/reference">Nolan, K. (2010). "Brainwave Measurement of Race Car Drivers" Proceedings of the Annual Meeting of Cognitive Psychologists, pp. 822-828.</note>
-          <note type="contact">archivist1@example.com</note>
+          <note type="preferred citation" displayLabel="Preferred Citation">Rosenfeld, Michael J., and Reuben J. Thomas. 2011. How Couples Meet and Stay Together, Waves 1, 2, and 3: Public version 3.04 [Computer file]. Stanford, CA: Stanford University Libraries. http://purl.stanford.edu/oo000oo0001</note>
+          <note type="citation/reference" displayLabel="Related Publication">Nolan, K., Ward, L., Conroy, T. &amp; Welch, L. (2011). "Are the Brainwaves of Race Car Drivers Different?" Journal of Physiological Psychology, 54(1), pp. 235-249.</note>
+          <note type="citation/reference" displayLabel="Related Publication">Nolan, K. (2010). "Brainwave Measurement of Race Car Drivers" Proceedings of the Annual Meeting of Cognitive Psychologists, pp. 822-828.</note>
+          <note type="contact" displayLabel="Contact">archivist1@example.com</note>
           <relatedItem type="references">
             <titleInfo>
               <title>NPR, "Computers are Becoming Cupid's Best Weapon," story by Jennifer Ludden August 16, 2010</title>

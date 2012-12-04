@@ -126,9 +126,9 @@
           <subject>
             <topic>Ophthalmology</topic>
           </subject>
-          <note type="preferred citation">Brown, Jefferson. 2010. Thermodynamic Optimization of Retinal Photocoagulation Surgery. Stanford, CA: Department of Physics, Stanford University. http://purl.stanford.edu/oo000oo0013</note>
-          <note type="citation/reference">None</note>
-          <note type="contact">archivist1@example.com</note>
+          <note type="preferred citation" displayLabel="Preferred Citation">Brown, Jefferson. 2010. Thermodynamic Optimization of Retinal Photocoagulation Surgery. Stanford, CA: Department of Physics, Stanford University. http://purl.stanford.edu/oo000oo0013</note>
+          <note type="citation/reference" displayLabel="Related Publication">None</note>
+          <note type="contact" displayLabel="Contact">archivist1@example.com</note>
           <relatedItem type="references">
             <titleInfo>
               <title>a related link on from Google search</title>

@@ -127,9 +127,9 @@ In the second part of this thesis, I will describe an ongoing experiment whose f
           <subject>
             <topic>thin film</topic>
           </subject>
-          <note type="preferred citation">Gallagher, Patrick. 2010. Electronic transport in graphene nanoribbons and topological insulators. Stanford, CA: Department of Physics, Stanford University. http://purl.stanford.edu/oo000oo0011</note>
-          <note type="citation/reference">None</note>
-          <note type="contact">archivist1@example.com</note>
+          <note type="preferred citation" displayLabel="Preferred Citation">Gallagher, Patrick. 2010. Electronic transport in graphene nanoribbons and topological insulators. Stanford, CA: Department of Physics, Stanford University. http://purl.stanford.edu/oo000oo0011</note>
+          <note type="citation/reference" displayLabel="Related Publication">None</note>
+          <note type="contact" displayLabel="Contact">archivist1@example.com</note>
           <relatedItem type="references">
             <titleInfo>
               <title>a related Google hit</title>

@@ -110,9 +110,9 @@ class Hydrus::DescMetadataDS < ActiveFedora::NokogiriDatastream
         xml.subject {
           xml.topic
         }
-        xml.note(:type => "preferred citation")
-        xml.note(:type => "citation/reference")
-        xml.note(:type => "contact")
+        xml.note(:type => "preferred citation", :displayLabel => 'Preferred Citation')
+        xml.note(:type => "citation/reference", :displayLabel => 'Related Publication')
+        xml.note(:type => "contact",            :displayLabel => 'Contact')
       }
     end.doc
   end

@@ -40,10 +40,10 @@ describe Hydrus::DescMetadataDS do
           </relatedItem>
           <subject><topic>divorce</topic></subject>
           <subject><topic>marriage</topic></subject>
-          <note type="preferred citation">pref_cite outer</note>
-          <note type="citation/reference">related_cite outer</note>
-          <note type="contact">foo@bar.com</note>
-          <note type="contact">blah@bar.com</note>
+          <note type="preferred citation" displayLabel="Preferred Citation">pref_cite outer</note>
+          <note type="citation/reference" displayLabel="Related Publication">related_cite outer</note>
+          <note type="contact" displayLabel="Contact">foo@bar.com</note>
+          <note type="contact" displayLabel="Contact">blah@bar.com</note>
         </mods>
       EOF
       @dsdoc = Hydrus::DescMetadataDS.from_xml(dsxml)
@@ -123,9 +123,9 @@ describe Hydrus::DescMetadataDS do
           <subject>
             <topic/>
           </subject>
-          <note type="preferred citation"/>
-          <note type="citation/reference"/>
-          <note type="contact"/>
+          <note type="preferred citation" displayLabel="Preferred Citation"/>
+          <note type="citation/reference" displayLabel="Related Publication"/>
+          <note type="contact" displayLabel="Contact"/>
         </mods>
       )
       exp_xml = noko_doc(exp_xml)
