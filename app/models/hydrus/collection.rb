@@ -5,6 +5,9 @@ class Hydrus::Collection < Hydrus::GenericObject
 
   before_save :save_apo
 
+  REQUIRED_FIELDS = [:title, :abstract, :contact]
+  REQUIRED_FIELDS.each {|field| validates field, :not_empty => true, :if => :should_validate}
+
   before_validation :remove_values_for_associated_attribute_with_value_none
   after_validation :cleanup_usernames
   after_validation :strip_whitespace

@@ -4,6 +4,9 @@ class Hydrus::Item < Hydrus::GenericObject
   include Hydrus::EmbargoMetadataDsExtension
   extend  Hydrus::Delegatable
 
+  REQUIRED_FIELDS = [:title, :abstract, :contact, :keywords]
+  REQUIRED_FIELDS.each {|field| validates field, :not_empty => true, :if => :should_validate}
+
   after_validation :strip_whitespace
 
   validate  :enforce_collection_is_open,     :on => :create

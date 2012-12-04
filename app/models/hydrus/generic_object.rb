@@ -8,9 +8,6 @@ class Hydrus::GenericObject < Dor::Item
 
   attr_accessor :files_were_changed
 
-  REQUIRED_FIELDS=[:title,:abstract,:contact]
-  REQUIRED_FIELDS.each {|field| validates field, :not_empty => true, :if => :should_validate}
-
   validates :pid, :is_druid => true
   validates :contact, :email_format => {:message => 'is not a valid email address'}, :if => :should_validate
 
@@ -80,11 +77,11 @@ class Hydrus::GenericObject < Dor::Item
     return true if validate!
     # Get keys in the errors hash that have non-blank values.
     # The presence of a key does not indicate an error; you have to check the value.
-    es = errors.reject { |k,v| v.blank? }
+    es = errors.reject { |k,v| v.blank? }.map { |k,v| k }.uniq
     # If the intersection of those keys and the required fields
     # is empty, the required fields are complete and the validation errors
     # are coming from other problems.
-    return (es & REQUIRED_FIELDS).size == 0
+    return (es & self.class::REQUIRED_FIELDS).size == 0
   end
 
   # We override save() so we can control whether editing events are logged.

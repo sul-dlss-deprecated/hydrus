@@ -2,7 +2,7 @@
 Development Tasks - 14 November 2012
 ------------------
 
-Keywords: require at least one.
+System integration. [Waiting: details below.]
 
 Support delete of a file in an unpublished item.
 
@@ -18,15 +18,15 @@ Assess the app's slow performance. For example, this command seems too slow:
 `rails runner devel/create_test_item.rb batch`. [Ask Jon D about Ruby
 profiler.]
 
-System integration. [Waiting: details below.]
-
 --------
 System integration
 --------
 
-Hydrus objects end up with 2 values for submitted_dt and published_dt, because
-two WFs are using the those lifecycles. [Probably is fixed. Check these objects
-after the go through accessionWF: bf398rg3493, zt788zg9203.]
+Hydrus objects end up with 2 values for submitted_dt and published_dt in their
+SOLR documents, because two WFs are using the those lifecycles. [Still not
+fixed as of 12/4. For example, these objects have two published lifecycles,
+because the disseminationWF if still using the published lifecycle and should
+not: bf398rg3493, zt788zg9203.]
 
 Create object mc322hh4254 (hydra:referencesAgreement) on hydrus-dev,
 hydrus-test, and hydrus-prod. [Hannah/Lynn]

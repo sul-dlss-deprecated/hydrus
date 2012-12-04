@@ -232,6 +232,7 @@ def create_new_item(opts = {})
     :abstract                => 'abstract_foo',
     :person                  => 'foo_person',
     :contact                 => 'foo@bar.com',
+    :keywords                => 'topicA,topicB',
     :requires_human_approval => 'yes',
   }
   opts = hash2struct(default_opts.merge opts)
@@ -253,6 +254,7 @@ def create_new_item(opts = {})
   fill_in "Title of item",        :with => opts.title
   fill_in "hydrus_item_abstract", :with => opts.abstract
   fill_in "hydrus_item_contact",  :with => opts.contact
+  fill_in "hydrus_item_keywords", :with => opts.keywords
   check "release_settings"
   # Add a file.
   f      = Hydrus::ObjectFile.new

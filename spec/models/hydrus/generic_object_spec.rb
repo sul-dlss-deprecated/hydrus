@@ -220,7 +220,7 @@ describe Hydrus::GenericObject do
   describe "validations" do
 
     before(:each) do
-      @exp = [:pid, :title, :abstract, :contact]
+      @exp = [:pid, :contact]
       @go.instance_variable_set('@should_validate', true)
     end
 

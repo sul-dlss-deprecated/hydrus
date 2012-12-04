@@ -54,17 +54,15 @@ describe("Item view", :type => :request, :integration => true) do
       page.should have_content(exp)
     end
 
-    # now let's delete the related items and the keywords, and go back to the
-    # view page and make sure those fields don't show up or are listed
+    # Now let's delete the related items and go back to the
+    # view page and make sure those fields don't show up.
     should_visit_edit_page(@hi)
     click_link "remove_relatedItem_0" # remove both related items
     click_link "remove_relatedItem_0"
-    fill_in "hydrus_item_keywords", :with => " "
     click_button "Save"
     should_visit_view_page(@hi)
     page.should_not have_content('Related links')
-    page.should_not have_content('Keywords')
-    page.should_not have_content('story by Jennifer Ludden August 16, 2010') # relatedItem
+    page.should_not have_content('story by Jennifer Ludden August 16, 2010')
   end
 
 

@@ -110,6 +110,7 @@ describe("Item create", :type => :request, :integration => true) do
       :contact  => 'ozzy@hell.com',
       :reason   => 'Idiota',
       :person   => 'person_foo',
+      :keywords => 'aaa,bbb',
     )
 
     # Force Items to receive human approval.
@@ -153,6 +154,7 @@ describe("Item create", :type => :request, :integration => true) do
     check "release_settings"
     fill_in "hydrus_item_abstract", :with => ni.abstract
     fill_in "hydrus_item_contact",  :with => ni.contact
+    fill_in "hydrus_item_keywords", :with => ni.keywords
     f = Hydrus::ObjectFile.new
     f.pid = druid
     f.file = Tempfile.new('mock_HydrusObjectFile_')
@@ -311,6 +313,7 @@ describe("Item create", :type => :request, :integration => true) do
       :contact  => 'ozzy@hell.com',
       :reason   => 'Idiota',
       :person   => 'person_foo',
+      :keywords => 'aaa,bbb',
     )
     # Force Items to not receive human approval and have varied visiblity and licenses
     coll = Hydrus::Collection.find(@hc_druid)
@@ -352,6 +355,7 @@ describe("Item create", :type => :request, :integration => true) do
     check "release_settings"
     fill_in "hydrus_item_abstract", :with => ni.abstract
     fill_in "hydrus_item_contact",  :with => ni.contact
+    fill_in "hydrus_item_keywords", :with => ni.keywords
     f = Hydrus::ObjectFile.new
     f.pid = druid
     f.file = Tempfile.new('mock_HydrusObjectFile_')
