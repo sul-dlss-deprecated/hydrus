@@ -1,22 +1,28 @@
 # A script used to generate new collections and items
 # on a developer's machine.
 
+def parse_do_opts(args, *ks)
+  opts = ks.map { |k| args.delete("--#{k}") }
+  return Hash[ ks.zip(opts) ]
+end
+
 def create_test_collection(*args)
   # Create a new Collection and set all required values.
-  user                       = args.shift || 'archivist1'
-  user                       = User.new(:email => "#{user}@example.com")
-  hc                         = Hydrus::Collection.create(user)
-  hc.title                   = "Title for: #{hc.pid}"
-  hc.abstract                = 'abstract'
-  hc.contact                 = 'foo@bar.com'
-  hc.embargo_option          = 'varies'
-  hc.embargo_terms           = '2 years'
-  hc.license_option          = 'varies'
-  hc.license                 = 'cc-by-nc'
+  do_opts           = parse_do_opts(args, :open)
+  user              = args.shift || 'archivist1'
+  user              = User.new(:email => "#{user}@example.com")
+  hc                = Hydrus::Collection.create(user)
+  hc.title          = "Title for: #{hc.pid}"
+  hc.abstract       = 'abstract'
+  hc.contact        = 'foo@bar.com'
+  hc.embargo_option = 'varies'
+  hc.embargo_terms  = '2 years'
+  hc.license_option = 'varies'
+  hc.license        = 'cc-by-nc'
   hc.visibility_option_value = 'varies'
   hc.requires_human_approval = 'yes'
   # Open, save, and return a refreshed object.
-  hc.open if args.delete('--open')
+  hc.open if do_opts[:open]
   hc.save
   puts "Created collection: user=#{user} pid=#{hc.pid}"
   return Hydrus::Collection.find(hc.pid)
@@ -24,6 +30,7 @@ end
 
 def create_test_item(*args)
   # Create a new Item and set all required values.
+  do_opts        = parse_do_opts(args, :submit_for_approval, :disapprove, :approve)
   hc_pid         = args.shift
   user           = args.shift || 'archivist1'
   user           = User.new(:email => "#{user}@example.com")
@@ -44,9 +51,9 @@ def create_test_item(*args)
   f.file  = File.open(__FILE__)
   f.save
   # Submit for approval and approve/disapprove.
-  hi.submit_for_approval() if args.delete('--submit_for_approval')
-  hi.disapprove('blah')    if args.delete('--disapprove')
-  hi.approve()             if args.delete('--approve')
+  hi.submit_for_approval() if do_opts[:submit_for_approval]
+  hi.disapprove('blah')    if do_opts[:disapprove]
+  hi.approve()             if do_opts[:approve]
   # Save and return a refreshed object.
   hi.save
   puts "Created item: user=#{user} pid=#{hi.pid}"
