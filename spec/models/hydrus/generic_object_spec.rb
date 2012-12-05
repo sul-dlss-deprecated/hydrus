@@ -412,6 +412,10 @@ describe Hydrus::GenericObject do
 
   describe "save()" do
 
+    before(:each) do
+      @go.stub(:beautify_datastream)
+    end
+
     it "should invoke log_editing_events() usually" do
       @go.should_receive(:log_editing_events).once
       @go.save(:no_super => true)
@@ -459,5 +463,38 @@ describe Hydrus::GenericObject do
   it "cannot_do() should raise an exception" do
     expect { @go.cannot_do(:foo) }.to raise_error(/^Cannot perform action.+=foo/)
   end
+
+  describe "XML beautification" do
+    
+    before(:each) do
+      @orig_xml = '
+        <foo>
+              <bar>Blah</bar>    <quux>Hello</quux>
+          <quux>World</quux></foo>
+      '
+      @exp = [
+        '<?xml version="1.0"?>',
+        '<foo>',
+        '  <bar>Blah</bar>',
+        '  <quux>Hello</quux>',
+        '  <quux>World</quux>',
+        '</foo>',
+        '',
+      ].join("\n")
+    end
+
+    it "beautified_xml()" do
+      @go.beautified_xml(@orig_xml).should == @exp
+    end
+
+    it "beautify_datastream()" do
+      @go.descMetadata.content = @orig_xml
+      @go.descMetadata.content.should == @orig_xml
+      @go.beautify_datastream(:descMetadata)
+      @go.descMetadata.content.should == @exp
+    end
+
+  end
+
 
 end

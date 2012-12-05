@@ -73,18 +73,13 @@ roleMD.
 rightsMD: <access> blocks should include <none/> to indicate no access.
 
 XML formatting issues: (1) MODS elements should be in the default order of the
-MODS spec. (2) Rationalize whitespace: to see an illustration of the problem,
-create an Item, editing it several times, and notice how the descMetadata XML
-evolves. (3) No useless empty elements. This set of issues requires discussion
-before we can make useful progress. The existing hydra-OM stack does not make
-it easy to address all of the concerns. Also worth considering: if the goal to
-display the XML in pretty-printed format, perhaps that should be handled by the
-display oriented applications -- ARGO, PURL, etc. That's probably very easy to
-achieve. If the goal is to store the XML in Fedora according to certain
-whitespace guidelines, we need to specify those guidelines: indent size, line
-width, etc. Another issue is to decide the most practical place to implement
-such behavior -- in every application (probably hard, given the current stack),
-or in a single XML-cleanup robot.
+MODS spec. (2) Save the XML in some consistent pretty-print form. (3) No
+useless empty elements. Some improvement to descMetadata was made using the
+beautify_datastream() method. Further progress probably requires some
+planning/discussion. The existing hydra-OM stack does not make it easy to
+address all of the concerns. We should to decide the most practical place to
+implement such behavior -- in every application or in a single XML-cleanup gem
+that all applications could invoke.
 
 Embargo, visibility, and license for draft Items under scenarios when the
 collection's policies are changed from varies to fixed. Current app behavior:

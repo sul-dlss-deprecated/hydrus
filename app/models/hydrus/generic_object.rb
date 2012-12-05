@@ -88,9 +88,26 @@ class Hydrus::GenericObject < Dor::Item
   # Note: the no_super option exists purely for unit tests.
   def save(opts = {})
     check_related_item_urls
+    beautify_datastream(:descMetadata)
     self.last_modify_time = HyTime.now_datetime
     log_editing_events() unless opts[:no_edit_logging]
     super() unless opts[:no_super]
+  end
+
+  # Takes a datastream name, such as :descMetadata or 'rightsMetadata'.
+  # Replaces that datastream's XML content with a beautified version of the XML.
+  def beautify_datastream(dsid)
+    dsid = dsid.to_s
+    datastreams[dsid].content = beautified_xml(datastreams[dsid].content)
+  end
+
+  # Takes some XML as a String.
+  # Creates a Nokogiri document based on that XML, minus whitespace-only nodes.
+  # Returns a new XML string, using Nokogiri's default indentation rules to
+  # produce nice looking XML.
+  def beautified_xml(orig_xml)
+    nd = Nokogiri::XML(orig_xml, &:noblanks)
+    return nd.to_xml
   end
 
   # Lazy initializers for instance variables.
