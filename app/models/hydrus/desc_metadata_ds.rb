@@ -32,9 +32,6 @@ class Hydrus::DescMetadataDS < ActiveFedora::NokogiriDatastream
         t.roleTerm IA
       end
     end
-    t.originInfo IANS do
-      t.dateOther IA
-    end
     t.abstract IA
     t.preferred_citation :path => 'note',  :attributes => { :type => "preferred citation" }
     t.related_citation   :path => 'note',  :attributes => { :type => "citation/reference" }
@@ -95,9 +92,6 @@ class Hydrus::DescMetadataDS < ActiveFedora::NokogiriDatastream
       xml.mods(MODS_PARAMS) {
         xml.titleInfo {
           xml.title
-        }
-        xml.originInfo {
-          xml.dateOther
         }
         xml.abstract
         xml.note(:type => "preferred citation", :displayLabel => 'Preferred Citation')

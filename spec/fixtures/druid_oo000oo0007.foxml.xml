@@ -84,9 +84,6 @@
             </role>
           </name>
           <typeOfResource>Data</typeOfResource>
-          <originInfo>
-            <dateOther type="released">TO DO</dateOther>
-          </originInfo>
           <abstract>Blort, blort, blort.</abstract>
           <note type="preferred citation" displayLabel="Preferred Citation">Fubblicious Dataset Title. http://purl.stanford.edu/oo000oo0007</note>
           <note type="citation/reference" displayLabel="Related Publication">Abu-Nader, R., and Terrell, C.L. (2002). Mycobacterium bovis vertebral osteomyelitis as a complication of intravesical BCG use. Mayo Clin Proc 77, 393-397.</note>

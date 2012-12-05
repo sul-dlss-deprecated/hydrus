@@ -112,9 +112,6 @@
             </role>
           </name>
           <typeOfResource>Text</typeOfResource>
-          <originInfo>
-            <dateOther type="released">TO DO</dateOther>
-          </originInfo>
           <abstract>Graphene is an atomically thin sheet of carbon atoms arranged in a honeycomb lattice. Low-energy electronic excitations in graphene behave like massless Dirac fermions, and are expected to exhibit exotic phenomena such as relativistic Klein tunneling.
 
 While the band structure of graphene sheets is gapless, experiments have observed gap-like behavior in graphene nanoribbons, strips of graphene tens of nanometers wide. In one part of this thesis, I will present annealing experiments and electronic transport measurements on nanoribbons of varying lengths and a standardized 30 nm width. The data support a model in which quantum dots form in series along the ribbon due to charged impurities, giving rise to the observed gap-like behavior.

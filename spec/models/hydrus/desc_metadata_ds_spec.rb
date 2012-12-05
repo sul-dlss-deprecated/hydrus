@@ -17,9 +17,6 @@ describe Hydrus::DescMetadataDS do
     before(:each) do
       dsxml = <<-EOF
         #{@mods_start}
-          <originInfo>
-            <dateOther>Nov 7</dateIssued>
-          </originInfo>
           <abstract>abstract content</abstract>
           <titleInfo>
             <title>Learn VB in 21 Days</title>
@@ -51,7 +48,6 @@ describe Hydrus::DescMetadataDS do
 
     it "should get correct values from OM terminology" do
       tests = [
-        [[:originInfo, :dateOther],          ['Nov 7']],
         [[:abstract],                        ['abstract content']],
         [[:main_title],                      ['Learn VB in 21 Days']],
         [[:name, :namePart],                 ['Angus']],
@@ -105,9 +101,6 @@ describe Hydrus::DescMetadataDS do
     it "should match our expectations" do
       exp_xml = %Q(
         #{@mods_start}
-          <originInfo>
-            <dateOther/>
-          </originInfo>
           <abstract/>
           <titleInfo>
             <title/>

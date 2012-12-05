@@ -112,9 +112,6 @@
             </role>
           </name>
           <typeOfResource>Text</typeOfResource>
-          <originInfo>
-            <dateOther type="released">TO DO</dateOther>
-          </originInfo>
           <abstract>In this thesis I describe the synthesis and physical properties of a novel ternary compound RbCu4S3. The material is a bilayer variant of the familiar ThCr2Si2 structure (adopted, for instance, by several members of the iron-pnictide family of superconductors, including BaFe2As2 [HYDRANGEA:1]). Interest in this quasi-low-dimensional compound revolves around its potential to harbor an electronic instability, for example a charge density wave. After establishing a suitable procedure to grow high quality single crystals, my ongoing experiments have probed the nature of the RbCu4S3 ground state via a combination of transport and thermodynamic measurements. The results of these experiments have been compared with band structure calculations performed using the WIEN2K software package. Additional x-ray diffraction and transmission electron microscopy (TEM) structural characterization has been performed by collaborators.
 
 The calculated Fermi surface of RbCu4S3 reveals one three-dimensional pocket and two quasi-two-dimensional pockets with considerable potential for nesting. However, neither single crystal x-ray diffraction refinements nor high resolution TEM measurements indicate the presence of a lattice modulation in this material. The electrical resistivity is that of a good metal, with a very low residual resistivity and a correspondingly high residual resistance ratio (RRRtypical = (300K) 0 600). Such high quality samples permit the observation of quantum oscillatory effects in high magnetic fields, providing a direct probe of the Fermi surface morphology and the quasiparticle effective mass
