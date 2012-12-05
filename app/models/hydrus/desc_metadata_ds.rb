@@ -113,7 +113,7 @@ class Hydrus::DescMetadataDS < ActiveFedora::NokogiriDatastream
   end
 
   def insert_person
-    add_hydrus_child_node(ng_xml.root, :name)
+    add_hydrus_next_sibling_node(:name, :name)
   end
 
   def insert_related_item
@@ -121,11 +121,11 @@ class Hydrus::DescMetadataDS < ActiveFedora::NokogiriDatastream
   end
 
   def insert_related_citation
-    add_hydrus_child_node(ng_xml.root, :related_citation)
+    add_hydrus_next_sibling_node(:related_citation, :related_citation)
   end
 
   def insert_topic(topic)
-    add_hydrus_child_node(ng_xml.root, :topic, topic)
+    add_hydrus_next_sibling_node(:subject, :topic, topic)
   end
 
 end

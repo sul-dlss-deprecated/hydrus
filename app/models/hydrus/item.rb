@@ -85,7 +85,7 @@ class Hydrus::Item < Hydrus::GenericObject
       item.accepted_terms_of_deposit="false"
     end
     # Save and return.
-    item.save(:no_edit_logging => true)
+    item.save(:no_edit_logging => true, :no_beautify => true)
     return item
   end
 

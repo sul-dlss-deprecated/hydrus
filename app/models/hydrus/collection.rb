@@ -68,8 +68,9 @@ class Hydrus::Collection < Hydrus::GenericObject
     coll.license_option          = 'none'
     # Set object status.
     coll.object_status = 'draft'
+    coll.title = ''
     # Save and return.
-    coll.save(:no_edit_logging => true)
+    coll.save(:no_edit_logging => true, :no_beautify => true)
     return coll
   end
 

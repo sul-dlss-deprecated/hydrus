@@ -132,4 +132,33 @@ describe Hydrus::GenericDS do
 
   end
 
+  describe "adding nodes" do
+
+    it "add_hydrus_child_node()" do
+      n = @rmdoc.find_by_terms(:role).size
+      @rmdoc.add_hydrus_child_node(@rmdoc.ng_xml.root, :role, 'blah')
+      roles = @rmdoc.find_by_terms(:role)
+      roles.size.should == n + 1
+      roles.last['type'].should == 'blah'
+    end
+
+    it "add_hydrus_next_sibling_node(): siblings already exist" do
+      n = @rmdoc.find_by_terms(:role).size
+      @rmdoc.add_hydrus_next_sibling_node(:role, :role, 'blah')
+      roles = @rmdoc.find_by_terms(:role)
+      roles.size.should == n + 1
+      roles.last['type'].should == 'blah'
+    end
+
+    it "add_hydrus_next_sibling_node(): siblings do not exist" do
+      @rmdoc.remove_nodes(:role)
+      @rmdoc.find_by_terms(:role).size.should == 0
+      @rmdoc.add_hydrus_next_sibling_node(:role, :role, 'blah')
+      roles = @rmdoc.find_by_terms(:role)
+      roles.size.should == 1
+      roles.last['type'].should == 'blah'
+    end
+    
+  end
+
 end

@@ -85,10 +85,12 @@ class Hydrus::GenericObject < Dor::Item
   end
 
   # We override save() so we can control whether editing events are logged.
-  # Note: the no_super option exists purely for unit tests.
+  # Notes on options:
+  #   :no_super     To prevent the super() call during unit tests
+  #   :no_beautify  To prevent a strange error that we haven't doped out yet.
   def save(opts = {})
     check_related_item_urls
-    beautify_datastream(:descMetadata)
+    # beautify_datastream(:descMetadata) unless opts[:no_beautify]
     self.last_modify_time = HyTime.now_datetime
     log_editing_events() unless opts[:no_edit_logging]
     super() unless opts[:no_super]
@@ -97,8 +99,9 @@ class Hydrus::GenericObject < Dor::Item
   # Takes a datastream name, such as :descMetadata or 'rightsMetadata'.
   # Replaces that datastream's XML content with a beautified version of the XML.
   def beautify_datastream(dsid)
-    dsid = dsid.to_s
-    datastreams[dsid].content = beautified_xml(datastreams[dsid].content)
+    ds         = datastreams[dsid.to_s]
+    ds.content = beautified_xml(ds.content)
+    ds.content_will_change!
   end
 
   # Takes some XML as a String.

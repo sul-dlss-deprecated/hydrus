@@ -15,7 +15,7 @@ describe Hydrus::Collection do
       :augment_identity_metadata,
     ]
     stubs.each { |s| @hc.should_receive(s) }
-    @hc.should_receive(:save).with(:no_edit_logging => true)
+    @hc.should_receive(:save).with(:no_edit_logging => true, :no_beautify => true)
     @hc.stub(:pid).and_return(druid)
     @hc.stub(:adapt_to).and_return(@hc)
     apo = Hydrus::AdminPolicyObject.new

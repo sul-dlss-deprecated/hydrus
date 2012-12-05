@@ -31,7 +31,7 @@ describe Hydrus::Item do
       :augment_identity_metadata,
     ]
     stubs.each { |s| @hi.should_receive(s) }
-    @hi.should_receive(:save).with(:no_edit_logging => true)
+    @hi.should_receive(:save).with(:no_edit_logging => true, :no_beautify => true)
     @hi.stub(:pid).and_return(druid)
     @hi.stub(:adapt_to).and_return(@hi)
     hc = Hydrus::Collection.new
@@ -52,7 +52,7 @@ describe Hydrus::Item do
       :augment_identity_metadata,
     ]
     stubs.each { |s| @hi.should_receive(s) }
-    @hi.should_receive(:save).with(:no_edit_logging => true)
+    @hi.should_receive(:save).with(:no_edit_logging => true, :no_beautify => true)
     @hi.stub(:pid).and_return(druid)
     @hi.stub(:adapt_to).and_return(@hi)
     @hi.stub(:requires_terms_acceptance).and_return(false)

@@ -8,6 +8,14 @@ module Hydrus::GenericDS
     return node
   end
 
+  def add_hydrus_next_sibling_node(sib_term, *args)
+    sibling = find_by_terms(sib_term).last
+    node = sibling ? add_next_sibling_node(sibling, *args) :
+                     add_child_node(ng_xml.root, *args)
+    content_will_change!
+    return node
+  end
+
   def remove_node(term, index)
     node = find_by_terms(term.to_sym => index.to_i).first
     unless node.nil?

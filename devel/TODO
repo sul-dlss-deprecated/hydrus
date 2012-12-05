@@ -4,6 +4,12 @@ Development Tasks - December
 
 System integration. [Waiting: details below.]
 
+Adding related item links is misbehaving: the new title and url are appending
+to the existing <relatedItem> node, and the added <relatedItem> node just sits
+there empty. When that is fixed, also switch to sibling approach.
+
+Determine why beautify_datastream() is causing problems.
+
 Embargo, visbility, and license: assess integration tests. If needed write some
 good integration test scenarios for these attributes.
 
