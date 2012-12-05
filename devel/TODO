@@ -63,16 +63,28 @@ Update to Rubydora 0.6.0, which might speed up integration tests. [We are
 blocked by active-fedora gem restriction to to 0.5.x series. Chris might be
 looking into this.]
 
-Asses Hydrus::AdministrativeMetadataDS. Most of the workflow-related code is
-probably unneeded now that we are using reified WF. If that's removed perhaps
-the class can disappear, and we can rely on dor-services for this datastream.
-
 Remove all code that puts WF into the APO. Search for workflow_steps.
 
 Rake task to list all Hydrus pids, along with their has_model_s value.
 
 Create a view for hydrus admin users to list all collections, regardless of
 roleMD.
+
+rightsMD: <access> blocks should include <none/> to indicate no access.
+
+XML formatting issues: (1) MODS elements should be in the default order of the
+MODS spec. (2) Rationalize whitespace: to see an illustration of the problem,
+create an Item, editing it several times, and notice how the descMetadata XML
+evolves. (3) No useless empty elements. This set of issues requires discussion
+before we can make useful progress. The existing hydra-OM stack does not make
+it easy to address all of the concerns. Also worth considering: if the goal to
+display the XML in pretty-printed format, perhaps that should be handled by the
+display oriented applications -- ARGO, PURL, etc. That's probably very easy to
+achieve. If the goal is to store the XML in Fedora according to certain
+whitespace guidelines, we need to specify those guidelines: indent size, line
+width, etc. Another issue is to decide the most practical place to implement
+such behavior -- in every application (probably hard, given the current stack),
+or in a single XML-cleanup robot.
 
 Embargo, visibility, and license for draft Items under scenarios when the
 collection's policies are changed from varies to fixed. Current app behavior:
@@ -84,9 +96,6 @@ the new fixed value set by the collection manager.
 
 Move Terms of Deposit acceptance pop-up so it shows (if needed) when an item is
 created.
-
-Desc metadata: remove emtpy stuff and improve formatting. [Waiting on details
-from Hannah.]
 
 Assess allowing collections to be opened without being published. In effect,
 this would be an open, draft Collection.

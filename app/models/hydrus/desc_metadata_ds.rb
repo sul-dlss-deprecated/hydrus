@@ -22,22 +22,25 @@ class Hydrus::DescMetadataDS < ActiveFedora::NokogiriDatastream
   IANS    = { :index_as => [:not_searchable] }
   set_terminology do |t|
     t.root :path => 'mods', :xmlns => MODS_NS, :index_as => [:not_searchable]
-    t.originInfo IANS do
-      t.dateOther IA
-    end
-    t.abstract IA
+
     t.titleInfo IANS do
       t.title IA
     end
-    t.main_title(
-      :proxy => [:mods, :titleInfo, :title],
-      :index_as => [:searchable, :displayable]
-    )
     t.name IANS do
       t.namePart IAF
       t.role IANS do
         t.roleTerm IA
       end
+    end
+    t.originInfo IANS do
+      t.dateOther IA
+    end
+    t.abstract IA
+    t.preferred_citation :path => 'note',  :attributes => { :type => "preferred citation" }
+    t.related_citation   :path => 'note',  :attributes => { :type => "citation/reference" }
+    t.contact            :path => 'note',  :attributes => { :type => "contact" }
+    t.subject IANS do
+      t.topic IAF
     end
     t.relatedItem IANS do
       t.titleInfo IANS do
@@ -47,57 +50,61 @@ class Hydrus::DescMetadataDS < ActiveFedora::NokogiriDatastream
         t.url IA
       end
     end
-    t.subject IANS do
-      t.topic IAF
-    end
 
-    t.preferred_citation :path => 'note',  :attributes => { :type => "preferred citation" }
-    t.related_citation   :path => 'note',  :attributes => { :type => "citation/reference" }
-    t.contact            :path => 'note',  :attributes => { :type => "contact" }
+    t.main_title(
+      :proxy => [:mods, :titleInfo, :title],
+      :index_as => [:searchable, :displayable]
+    )
 
   end
 
   # Blocks to pass into Nokogiri::XML::Builder.new()
 
   define_template :name do |xml|
-      xml.name {
-        xml.namePart
-        xml.role {
-          xml.roleTerm(:authority => "marcrelator", :type => "text")
-        }
+    xml.name {
+      xml.namePart
+      xml.role {
+        xml.roleTerm(:authority => "marcrelator", :type => "text")
       }
+    }
   end
 
   define_template :relatedItem do |xml|
-      xml.relatedItem {
-        xml.titleInfo {
-          xml.title
-        }
-        xml.location {
-          xml.url
-        }
+    xml.relatedItem {
+      xml.titleInfo {
+        xml.title
       }
+      xml.location {
+        xml.url
+      }
+    }
   end
 
   define_template :related_citation do |xml|
-      xml.note(:type => "citation/reference")
+    xml.note(:type => "citation/reference")
   end
 
   define_template :topic do |xml, topic|
-      xml.subject {
-        xml.topic(topic)
-      }
+    xml.subject {
+      xml.topic(topic)
+    }
   end
 
   def self.xml_template
     Nokogiri::XML::Builder.new do |xml|
       xml.mods(MODS_PARAMS) {
+        xml.titleInfo {
+          xml.title
+        }
         xml.originInfo {
           xml.dateOther
         }
         xml.abstract
-        xml.titleInfo {
-          xml.title
+        xml.note(:type => "preferred citation", :displayLabel => 'Preferred Citation')
+        xml.note(:type => "citation/reference", :displayLabel => 'Related Publication')
+        xml.note(:type => "contact",            :displayLabel => 'Contact')
+        xml.subject {
+          xml.topic
         }
         xml.relatedItem {
           xml.titleInfo {
@@ -107,12 +114,6 @@ class Hydrus::DescMetadataDS < ActiveFedora::NokogiriDatastream
             xml.url
           }
         }
-        xml.subject {
-          xml.topic
-        }
-        xml.note(:type => "preferred citation", :displayLabel => 'Preferred Citation')
-        xml.note(:type => "citation/reference", :displayLabel => 'Related Publication')
-        xml.note(:type => "contact",            :displayLabel => 'Contact')
       }
     end.doc
   end

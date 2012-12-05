@@ -55,6 +55,7 @@
           </titleInfo>
           <typeOfResource collection="yes" />
           <abstract>A collection of works by the top undergraduate students in Stanford's Department of Physics dating from 2010 to the present.</abstract>
+          <note type="contact">Physics Librarian, Stanford University Engineering Library</note>
           <relatedItem type="references">
             <titleInfo>
               <title></title>
@@ -63,7 +64,6 @@
               <url>http://www.stanford.edu/dept/physics/index.shtml/</url>
             </location>
           </relatedItem>
-          <note type="contact">Physics Librarian, Stanford University Engineering Library</note>
         </mods>
       </foxml:xmlContent>
     </foxml:datastreamVersion>

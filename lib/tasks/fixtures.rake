@@ -44,7 +44,9 @@ namespace :hydrus do
   task :loadfix do
     Rake::Task['db:fixtures:load'].invoke
     FIXTURE_PIDS.each { |pid|
-      ENV["pid"] = pid
+      d    = pid.sub(/:/, '_')
+      finp = "spec/fixtures/#{d}.foxml.xml"
+      ENV["foxml"] = finp
       Rake::Task['repo:load'].reenable
       Rake::Task['repo:load'].invoke
     }

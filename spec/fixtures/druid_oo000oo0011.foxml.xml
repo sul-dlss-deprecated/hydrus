@@ -121,15 +121,15 @@ While the band structure of graphene sheets is gapless, experiments have observe
 
 In the second part of this thesis, I will describe an ongoing experiment whose first goals are to produce thin films of bismuth selenide, a material predicted to be a topological insulator, and to tune the Fermi level throughout the bulk band gap with an electrostatic gate. Films as thin as 4 nm can be produced, and show a peak in resistance as the Fermi level is moved by a gate, perhaps corresponding to the Fermi level crossing the "Dirac point" of the surface states
 </abstract>
+          <note type="preferred citation" displayLabel="Preferred Citation">Gallagher, Patrick. 2010. Electronic transport in graphene nanoribbons and topological insulators. Stanford, CA: Department of Physics, Stanford University. http://purl.stanford.edu/oo000oo0011</note>
+          <note type="citation/reference" displayLabel="Related Publication">None</note>
+          <note type="contact" displayLabel="Contact">archivist1@example.com</note>
           <subject>
             <topic>topological insulator</topic>
           </subject>
           <subject>
             <topic>thin film</topic>
           </subject>
-          <note type="preferred citation" displayLabel="Preferred Citation">Gallagher, Patrick. 2010. Electronic transport in graphene nanoribbons and topological insulators. Stanford, CA: Department of Physics, Stanford University. http://purl.stanford.edu/oo000oo0011</note>
-          <note type="citation/reference" displayLabel="Related Publication">None</note>
-          <note type="contact" displayLabel="Contact">archivist1@example.com</note>
           <relatedItem type="references">
             <titleInfo>
               <title>a related Google hit</title>
