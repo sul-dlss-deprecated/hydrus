@@ -4,9 +4,6 @@ Development Tasks - December
 
 System integration. [Waiting: details below.]
 
-The cleanup work in check_related_item_urls should be done in related_item_url=(),
-not in a method called by save().
-
 Determine why beautify_datastream() is causing problems.
 
 Embargo, visbility, and license: assess integration tests. If needed write some

@@ -35,7 +35,6 @@ class Hydrus::GenericObject < Dor::Item
       [:title,                    true,  :main_title ],
       [:abstract,                 true   ],
       [:related_item_title,       false, :relatedItem, :titleInfo, :title],
-      [:related_item_url,         false, :relatedItem, :location, :url],
       [:contact,                  true   ],
     ],
     "hydrusProperties" => [
@@ -89,7 +88,6 @@ class Hydrus::GenericObject < Dor::Item
   #   :no_super     To prevent the super() call during unit tests
   #   :no_beautify  To prevent a strange error that we haven't doped out yet.
   def save(opts = {})
-    check_related_item_urls
     # beautify_datastream(:descMetadata) unless opts[:no_beautify]
     self.last_modify_time = HyTime.now_datetime
     log_editing_events() unless opts[:no_edit_logging]
@@ -147,15 +145,32 @@ class Hydrus::GenericObject < Dor::Item
     return ActiveFedora::Base.find(pid, :cast => true)
   end
 
-  # confirm that related items start with a known protocol, if not, just add http://
-  def check_related_item_urls
-    self.related_item_url = self.related_item_url.collect do |url|
-      if url.blank? || ['http://','https://','ftp://','sftp://'].any? {|protocol| url.include? protocol }
-        url
-      else
-        "http://" + url
-      end
+  # Since we need a custom setter, let's define the getter too
+  # (rather than using delegation).
+  def related_item_url
+    return descMetadata.relatedItem.location.url
+  end
+
+  # Takes an argument, typically an OM-ready hash. For example:
+  #   {'0' => 'url_foo', '1' => 'url_bar'}
+  # Modifies the URL values so that they all begin with a protocol.
+  # Then assigns the entire thing to relatedItem.location.url.
+  def related_item_url=(h)
+    if h.kind_of?(Hash)
+      h.keys.each { |k| h[k] = with_protocol(h[k]) }
+    else
+      h = with_protocol(h)
     end
+    descMetadata.relatedItem.location.url = h
+  end
+
+  # Takes a string that is supposed to be a URI.
+  # Returns the same string if it begins with a known protocol.
+  # Otherwise, returns the string as an http URI.
+  def with_protocol(uri)
+    return uri if uri.blank?
+    return uri if uri =~ /\A (http|https|ftp|sftp):\/\/ /x
+    return "http://" + uri
   end
 
   def discover_access

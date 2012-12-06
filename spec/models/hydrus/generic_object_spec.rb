@@ -496,5 +496,31 @@ describe Hydrus::GenericObject do
 
   end
 
+  it "related_item_url=()" do
+    @go.related_item_url.should == ['']
+    @go.related_item_url = 'foo'
+    @go.related_item_url.should == ['http://foo']
+    @go.descMetadata.insert_related_item
+    @go.descMetadata.insert_related_item
+    @go.related_item_url = {'0' => 'foo', '1' => 'bar', '2' => 'ftp://quux'}
+    @go.related_item_url.should == ['http://foo', 'http://bar', 'ftp://quux']
+  end
+
+  it "with_protocol()" do
+    f = 'http://foo'
+    b = 'http://bar'
+    q = 'ftp://quux'
+    tests = {
+      'foo' => f,
+      b     => b,
+      q     => q,
+      ''    => '',
+      nil   => nil,
+    }
+    tests.each do |uri, exp|
+      @go.with_protocol(uri).should == exp
+    end
+    
+  end
 
 end
