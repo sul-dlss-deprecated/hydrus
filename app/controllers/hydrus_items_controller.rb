@@ -149,11 +149,15 @@ class HydrusItemsController < ApplicationController
       }
       want.js {
         if params.has_key?(:add_person)
-          render "add_person", :locals=>{:index=>@fobj.person.length-1}
+          i = @fobj.person.length - 1
+          render "add_person", :locals => { :index => i }
         elsif params.has_key?(:add_link)
-          render "add_link", :locals=>{:index=>@fobj.related_item_title.length-1}
+          # i = @fobj.related_item_title.length - 1
+          i = @fobj.n_hydrus_related_items - 1
+          render "add_link", :locals => { :index => i }
         elsif params.has_key?(:add_related_citation)
-          render "add_related_citation", :locals=>{:index=>@fobj.related_citation.length-1}
+          i = @fobj.related_citation.length - 1
+          render "add_related_citation", :locals => { :index => i }
         else
           render :json => tidy_response_from_update(@response)
         end

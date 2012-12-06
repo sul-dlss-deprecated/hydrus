@@ -452,4 +452,10 @@ class Hydrus::GenericObject < Dor::Item
     end
   end
 
+  # A temporary hack until dor-services fixes a bug in describable.rb.
+  def n_hydrus_related_items
+    nodes = descMetadata.find_by_terms(:relatedItem).select { |n| n['type'].nil? }
+    return nodes.size
+  end
+
 end

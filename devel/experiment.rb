@@ -5,13 +5,23 @@
 #
 #   rails runner script/experiment.rb
 
-hi   = Hydrus::Item.find('druid:oo000oo0001')
+dru = 'druid:pv444kf7230'
+hi  = Hydrus::Item.find(dru)
 
 dmd  = hi.descMetadata
 cmd  = hi.contentMetadata
 rm   = hi.rightsMetadata
 coll = hi.collection
 wf   = hi.workflows
+
+__END__
+
+dmd.insert_related_item
+
+hi.related_item_title = {"0"=>"aaaa", "1"=>"bbbb"}
+hi.related_item_url   = {"0"=>"aaaa", "1"=>"bbbb"}
+
+puts dmd.ng_xml
 
 __END__
 

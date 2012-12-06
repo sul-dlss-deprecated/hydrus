@@ -117,7 +117,7 @@ class Hydrus::DescMetadataDS < ActiveFedora::NokogiriDatastream
   end
 
   def insert_related_item
-    add_hydrus_child_node(ng_xml.root, :relatedItem)
+    add_hydrus_next_sibling_node(:relatedItem, :relatedItem)
   end
 
   def insert_related_citation

@@ -4,14 +4,16 @@ Development Tasks - December
 
 System integration. [Waiting: details below.]
 
-Adding related item links is misbehaving: the new title and url are appending
-to the existing <relatedItem> node, and the added <relatedItem> node just sits
-there empty. When that is fixed, also switch to sibling approach.
+The cleanup work in check_related_item_urls should be done in related_item_url=(),
+not in a method called by save().
 
 Determine why beautify_datastream() is causing problems.
 
 Embargo, visbility, and license: assess integration tests. If needed write some
 good integration test scenarios for these attributes.
+
+Related Item integration tests. Assess current tests. Make sure we check the
+descMetadata XML at least once after adding a new related Item.
 
 Protect actions at the model level. This is mostly done, but a few actions
 remain.  Details in a separate section below.
@@ -25,6 +27,8 @@ profiler.]
 --------
 System integration
 --------
+
+Remove n_hydrus_related_items after dor-services gem fixes bug in describable.rb.
 
 Hydrus objects end up with 2 values for submitted_dt and published_dt in their
 SOLR documents, because two WFs are using the those lifecycles. [Still not
