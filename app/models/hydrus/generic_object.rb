@@ -96,6 +96,8 @@ class Hydrus::GenericObject < Dor::Item
 
   # Takes a datastream name, such as :descMetadata or 'rightsMetadata'.
   # Replaces that datastream's XML content with a beautified version of the XML.
+  # NOTE: not being used currently, because strange problems occurred
+  #       when this method was invoked in save().
   def beautify_datastream(dsid)
     ds         = datastreams[dsid.to_s]
     ds.content = beautified_xml(ds.content)
@@ -106,6 +108,8 @@ class Hydrus::GenericObject < Dor::Item
   # Creates a Nokogiri document based on that XML, minus whitespace-only nodes.
   # Returns a new XML string, using Nokogiri's default indentation rules to
   # produce nice looking XML.
+  # NOTE: not being used currently, because strange problems occurred
+  #       when this method was invoked via save().
   def beautified_xml(orig_xml)
     nd = Nokogiri::XML(orig_xml, &:noblanks)
     return nd.to_xml

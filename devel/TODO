@@ -4,8 +4,6 @@ Development Tasks - December
 
 System integration. [Waiting: details below.]
 
-Determine why beautify_datastream() is causing problems.
-
 Embargo, visbility, and license: assess integration tests. If needed write some
 good integration test scenarios for these attributes.
 
@@ -81,12 +79,14 @@ rightsMD: <access> blocks should include <none/> to indicate no access.
 
 XML formatting issues: (1) MODS elements should be in the default order of the
 MODS spec. (2) Save the XML in some consistent pretty-print form. (3) No
-useless empty elements. Some improvement to descMetadata was made using the
-beautify_datastream() method. Further progress probably requires some
-planning/discussion. The existing hydra-OM stack does not make it easy to
-address all of the concerns. We should to decide the most practical place to
-implement such behavior -- in every application or in a single XML-cleanup gem
-that all applications could invoke.
+useless empty elements. We attempted to make some improvement to descMetadata
+using the beautify_datastream() and add_hydrus_next_sibling_node() methods;
+however, the former method led to some strange behavior (for example, note the
+failure of `rails runner devel/create_test_item.rb batch co i`). Further
+progress probably requires some planning/discussion. The existing hydra-OM
+stack does not make it easy to address all of the concerns. We should to decide
+the most practical place to implement such behavior -- in every application or
+in a single XML-cleanup gem that all applications could invoke.
 
 Embargo, visibility, and license for draft Items under scenarios when the
 collection's policies are changed from varies to fixed. Current app behavior:
