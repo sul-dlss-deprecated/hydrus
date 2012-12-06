@@ -173,44 +173,50 @@ describe("Item edit", :type => :request, :integration => true) do
 
 
   it "Related Content adding and deleting" do
-    new_label         = "hydrus_item_related_item_title_2"
-    new_url           = "hydrus_item_related_item_url_2"
-    new_delete_button = "remove_relatedItem_2"
-    url               = "http://library.stanford.edu"
-    label             = "Library Website"
-
+    i             = @hi.related_item_title.size
+    css_new_title = "hydrus_item_related_item_title_#{i}"
+    css_new_url   = "hydrus_item_related_item_url_#{i}"
+    css_delete    = "remove_relatedItem_#{i}"
+    url           = "http://library.stanford.edu"
+    title         = "Library Website"
+    # Got to edit page.
     login_as('archivist1')
     should_visit_edit_page(@hi)
-
-    page.should have_css("input#hydrus_item_related_item_title_0")
-    page.should have_css("input#hydrus_item_related_item_url_0")
-    page.should_not have_css("##{new_label}")
-    page.should_not have_css("##{new_url}")
-
+    # Check for the related item input fields.
+    (0...i).each do |j|
+      page.should have_css("input#hydrus_item_related_item_title_#{j}")
+      page.should have_css("input#hydrus_item_related_item_url_#{j}")
+      page.should have_css("#remove_relatedItem_#{j}")
+    end
+    page.should_not have_css("##{css_new_title}")
+    page.should_not have_css("##{css_new_url}")
+    page.should_not have_css("##{css_delete}")
+    # Add a new related item
     click_button "add_link"
-    page.should have_css("##{new_label}")
-    page.should have_css("##{new_url}")
-    page.should have_css("##{new_delete_button}")
-
-    fill_in(new_label, :with => label)
-    fill_in(new_url, :with => url)
-
+    page.should have_css("##{css_new_title}")
+    page.should have_css("##{css_new_url}")
+    page.should have_css("##{css_delete}")
+    fill_in(css_new_title, :with => title)
+    fill_in(css_new_url, :with => url)
+    # Save.
     click_button "Save"
     page.should have_content(@notice)
-
+    # Make sure the descMetadata has the expected N of relatedItem nodes.
+    # At one point we had a bug where the new title and url were added
+    # to the first node rather than the new empty node.
+    @hi = Hydrus::Item.find(@hi.pid)
+    @hi.descMetadata.find_by_terms(:relatedItem).size.should == i + 1
+    # Revisit edit page and check for the values we just added.
     should_visit_edit_page(@hi)
-
-    page.should have_css("##{new_delete_button}")
-    find_field(new_label).value.should == label
-    find_field(new_url).value.should == url
-
-    # delete
-    click_link new_delete_button
-
+    page.should have_css("##{css_delete}")
+    find_field(css_new_title).value.should == title
+    find_field(css_new_url).value.should == url
+    # Delete the item we added.
+    click_link css_delete
     current_path.should == edit_polymorphic_path(@hi)
-    page.should_not have_css("##{new_label}")
-    page.should_not have_css("##{new_url}")
-    page.should_not have_css("##{new_delete_button}")
+    page.should_not have_css("##{css_new_title}")
+    page.should_not have_css("##{css_new_url}")
+    page.should_not have_css("##{css_delete}")
   end
 
   it "editing related content w/o titles" do
