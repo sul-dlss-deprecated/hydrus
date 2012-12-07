@@ -2,6 +2,7 @@ class Hydrus::Collection < Hydrus::GenericObject
 
   extend Hydrus::Delegatable
   extend Hydrus::SolrQueryable
+  extend Hydrus::Cant
 
   before_save :save_apo
 
@@ -47,6 +48,8 @@ class Hydrus::Collection < Hydrus::GenericObject
   # Creates a new Collection, sets up various defaults, saves and
   # returns the object.
   def self.create(user)
+    # Make sure user can create collections.
+    cannot_do(:create) unless Hydrus::Authorizable.can_create_collections(user)
     # Create the object, with the correct model.
     apo     = Hydrus::AdminPolicyObject.create(user)
     dor_obj = Hydrus::GenericObject.register_dor_object(user, 'collection', apo.pid)
@@ -212,11 +215,15 @@ class Hydrus::Collection < Hydrus::GenericObject
     return result
   end
 
-  # Takes a user and a datetime string.
+  # Takes a user, a datetime string, and an Item.
   # A user accepts the terms of deposit: either update the time (if
-  # user has done this before) or add a new node.
-  # This XML logic probably belongs in the hydrusProperties datastream class.
-  def accept_terms_of_deposit(user, datetime_accepted)
+  # user has done this before) or add a new node. This method is called
+  # from an Item instance, but the information is stored at the Collection level.
+  # TODO: move the XML logic to the hydrusProperties datastream; reconsider
+  # whether passing the item to the method is the best approach. Without the
+  # item, I could not think of an appropriate criterion for cannot_do().
+  def accept_terms_of_deposit(user, datetime_accepted, item)
+    cannot_do(:accept_terms_of_deposit) unless Hydrus::Authorizable.can_edit_item(user, item)
     existing_user = hydrusProperties.ng_xml.xpath("//user[text()='#{user}']")
     if existing_user.size == 0
       hydrusProperties.insert_user_accepting_terms_of_deposit(user, datetime_accepted)

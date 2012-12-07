@@ -36,10 +36,12 @@ describe Hydrus::Item do
     @hi.stub(:adapt_to).and_return(@hi)
     hc = Hydrus::Collection.new
     hc.stub(:visibility_option_value).and_return('varies')
+    hc.stub(:is_open).and_return(true)
     Hydrus::Collection.stub(:find).and_return(hc)
     @hi.stub(:collection).and_return(hc)
     Hydrus::GenericObject.stub(:register_dor_object).and_return(@hi)
-    Hydrus::Item.create(hc.pid, 'USERFOO').pid.should == druid
+    Hydrus::Authorizable.stub(:can_create_items_in).and_return(true)
+    Hydrus::Item.create(hc.pid, mock_user).pid.should == druid
   end
 
   it "can exercise a stubbed version of create when terms have already been accepted on another item" do
@@ -58,10 +60,12 @@ describe Hydrus::Item do
     @hi.stub(:requires_terms_acceptance).and_return(false)
     hc = Hydrus::Collection.new
     hc.stub(:visibility_option_value).and_return('varies')
+    hc.stub(:is_open).and_return(true)
     Hydrus::Collection.stub(:find).and_return(hc)
     Hydrus::GenericObject.stub(:register_dor_object).and_return(@hi)
     @hi.stub(:collection).and_return(hc)
-    new_item=Hydrus::Item.create(hc.pid, 'USERFOO')
+    Hydrus::Authorizable.stub(:can_create_items_in).and_return(true)
+    new_item=Hydrus::Item.create(hc.pid, mock_user)
     new_item.pid.should == druid
     new_item.terms_of_deposit_accepted?.should be true
   end
@@ -867,6 +871,7 @@ describe Hydrus::Item do
 
   it "should accept the terms of deposit for a user" do
     @coll=Hydrus::Collection.new
+    Hydrus::Authorizable.stub(:can_edit_item).and_return(true)
     @coll.stub(:accept_terms_of_deposit)
     @hi.stub(:collection).and_return(@coll)
     @hi.terms_of_deposit_accepted?.should == false

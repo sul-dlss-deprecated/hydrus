@@ -85,10 +85,11 @@ def mock_user
   return mock_user
 end
 
-def mock_authed_user
+def mock_authed_user(u = 'archivist1')
   mock_user =  mock("user")
-  mock_user.stub!(:email).and_return("archivist1@example.com")
-  mock_user.stub!(:sunetid).and_return("archivist1")
+  mock_user.stub!(:to_s).and_return(u)
+  mock_user.stub!(:sunetid).and_return(u)
+  mock_user.stub!(:email).and_return("#{u}@example.com")
   mock_user.stub!(:persisted?).and_return(true)
   mock_user.stub!(:new_record?).and_return(false)
   mock_user.stub!(:is_being_superuser?).and_return(false)
@@ -227,7 +228,7 @@ def create_new_item(opts = {})
   # Setup options.
   default_opts = {
     :collection_pid          => 'druid:oo000oo0003',
-    :user                    => 'archivist1',
+    :user                    => mock_authed_user,
     :title                   => 'title_foo',
     :abstract                => 'abstract_foo',
     :person                  => 'foo_person',
@@ -241,7 +242,7 @@ def create_new_item(opts = {})
   hc.requires_human_approval = opts.requires_human_approval
   hc.save
   # Login and create new item.
-  login_as(opts.user)
+  login_as(opts.user.to_s)
   visit new_hydrus_item_path(:collection => hc.pid)
   # Extract the druid from the URL.
   r = Regexp.new('/items/(druid:\w{11})/edit')

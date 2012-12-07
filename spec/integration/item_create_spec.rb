@@ -169,7 +169,8 @@ describe("Item create", :type => :request, :integration => true) do
     # Accept terms of deposit (hard to do via the UI since a pop-up window is
     # involved, so let's exercise the method directly)
     item = Hydrus::Item.find(druid)
-    item.accept_terms_of_deposit('archivist6')
+    item.accept_terms_of_deposit(mock_authed_user('archivist6'))
+    mock_authed_user
     item.save
 
     # The view page should now offer the Submit for approval button since we
@@ -367,7 +368,7 @@ describe("Item create", :type => :request, :integration => true) do
 
     # accept terms of deposit (hard to do via the UI since a pop-up window is involved, so let's exercise the method directly)
     item = Hydrus::Item.find(druid)
-    item.accept_terms_of_deposit('archivist1')
+    item.accept_terms_of_deposit(mock_authed_user('archivist1'))
     item.save
 
     visit hydrus_item_path(:id=>item.pid)
@@ -449,46 +450,50 @@ describe("Item create", :type => :request, :integration => true) do
     subject { Hydrus::Collection.find('druid:oo000oo0003') }
 
     it "should indicate that a new item in a collection requires terms acceptance, if the user has already accepted another item in this collection but it was more than 1 year ago" do
-      user='archivist1' # this user accepted more than 1 year ago
-      subject.users_accepted_terms_of_deposit.keys.include?(user).should == true
-      ni=Hydrus::Item.create(subject.pid,user)
-      ni.requires_terms_acceptance(user,subject).should == true
+      u ='archivist1' # this user accepted more than 1 year ago
+      subject.users_accepted_terms_of_deposit.keys.include?(u).should == true
+      ni=Hydrus::Item.create(subject.pid, mock_authed_user(u))
+      ni.requires_terms_acceptance(u,subject).should == true
       ni.accepted_terms_of_deposit.should == "false"
       ni.terms_of_deposit_accepted?.should == false
     end
 
     it "should indicate that a new item in a collection does not require terms acceptance, if the user has already accepted another item in this collection less than 1 year ago" do
-      user='archivist3'
+      u='archivist3'
       dt = HyTime.now - 1.month # User accepted 1 month ago.
-      subject.users_accepted_terms_of_deposit.keys.include?(user).should == true
-      subject.users_accepted_terms_of_deposit[user] = HyTime.datetime(dt)
+      subject.users_accepted_terms_of_deposit.keys.include?(u).should == true
+      subject.users_accepted_terms_of_deposit[u] = HyTime.datetime(dt)
       subject.save
-      ni=Hydrus::Item.create(subject.pid,user)
-      ni.requires_terms_acceptance(user,subject).should == false
+      ni=Hydrus::Item.create(subject.pid, mock_authed_user(u))
+      ni.requires_terms_acceptance(u,subject).should == false
       ni.accepted_terms_of_deposit.should == "true"
       ni.terms_of_deposit_accepted?.should == true
     end
 
     it "should indicate that a new item in a collection requires terms acceptance, when the user has not already accepted another item in this collection" do
-      user='archivist5'
-      ni=Hydrus::Item.create(subject.pid,user)
-      ni.requires_terms_acceptance(user,subject).should == true
+      u='archivist5'
+      Hydrus::Authorizable.stub(:can_create_items_in).and_return(true)
+      ni=Hydrus::Item.create(subject.pid,mock_authed_user(u))
+      ni.requires_terms_acceptance(u,subject).should == true
       ni.accepted_terms_of_deposit.should == "false"
       ni.terms_of_deposit_accepted?.should == false
     end
 
     it "should accept the terms for an item, updating the appropriate hydrusProperties metadata in item and collection" do
-      user='archivist5'
-      ni=Hydrus::Item.create(subject.pid,user)
-      ni.requires_terms_acceptance(user,subject).should == true
+      u    = 'archivist5'
+      user = mock_authed_user(u)
+      Hydrus::Authorizable.stub(:can_create_items_in).and_return(true)
+      Hydrus::Authorizable.stub(:can_edit_item).and_return(true)
+      ni=Hydrus::Item.create(subject.pid, user)
+      ni.requires_terms_acceptance(u,subject).should == true
       ni.accepted_terms_of_deposit.should == "false"
-      subject.users_accepted_terms_of_deposit.keys.include?(user).should == false
+      subject.users_accepted_terms_of_deposit.keys.include?(u).should == false
       ni.accept_terms_of_deposit(user)
       ni.accepted_terms_of_deposit.should == "true"
       ni.terms_of_deposit_accepted?.should == true
       coll=Hydrus::Collection.find('druid:oo000oo0003')
-      coll.users_accepted_terms_of_deposit.keys.include?(user).should == true
-      coll.users_accepted_terms_of_deposit[user].nil?.should == false
+      coll.users_accepted_terms_of_deposit.keys.include?(u).should == true
+      coll.users_accepted_terms_of_deposit[u].nil?.should == false
     end
 
   end

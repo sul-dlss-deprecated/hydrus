@@ -54,7 +54,7 @@ describe(Hydrus::Item, :integration => true) do
     it "should modify workflows as expected" do
       # Setup.
       druid = 'druid:oo000oo0003'
-      hi    = Hydrus::Item.create(druid, 'user_foo')
+      hi    = Hydrus::Item.create(druid, mock_authed_user)
       wf    = Dor::Config.hydrus.app_workflow
       steps = Dor::Config.hydrus.workflow_steps[wf].map { |s| s[:name] }
       exp   = Hash[ steps.map { |s| [s, 'waiting'] } ]

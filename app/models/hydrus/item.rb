@@ -3,6 +3,7 @@ class Hydrus::Item < Hydrus::GenericObject
   include Hydrus::Responsible
   include Hydrus::EmbargoMetadataDsExtension
   extend  Hydrus::Delegatable
+  extend  Hydrus::Cant
 
   REQUIRED_FIELDS = [:title, :abstract, :contact, :keywords]
   REQUIRED_FIELDS.each {|field| validates field, :not_empty => true, :if => :should_validate}
@@ -46,8 +47,11 @@ class Hydrus::Item < Hydrus::GenericObject
   # Note: currently all items of of type :dataset. In the future,
   # the calling code can pass in the needed value.
   def self.create(collection_pid, user, itype = :dataset)
+    # Make sure user can create items in the parent collection.
+    coll = Hydrus::Collection.find(collection_pid)
+    cannot_do(:create) unless coll.is_open()
+    cannot_do(:create) unless Hydrus::Authorizable.can_create_items_in(user, coll)
     # Create the object, with the correct model.
-    coll     = Hydrus::Collection.find(collection_pid)
     dor_item = Hydrus::GenericObject.register_dor_object(user, 'item', coll.apo_pid)
     item     = dor_item.adapt_to(Hydrus::Item)
     item.remove_relationship :has_model, 'info:fedora/afmodel:Dor_Item'
@@ -279,8 +283,9 @@ class Hydrus::Item < Hydrus::GenericObject
 
   # accepts terms of deposit for the given user
   def accept_terms_of_deposit(user)
-    self.accepted_terms_of_deposit="true"
-    self.collection.accept_terms_of_deposit(user,HyTime.now_datetime)
+    cannot_do(:accept_terms_of_deposit) unless Hydrus::Authorizable.can_edit_item(user, self)
+    self.accepted_terms_of_deposit = "true"
+    collection.accept_terms_of_deposit(user, HyTime.now_datetime, self)
     events.add_event('hydrus', user, 'Terms of deposit accepted')
   end
 

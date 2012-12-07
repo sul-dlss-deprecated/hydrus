@@ -25,8 +25,7 @@ describe(Hydrus::Collection, :integration => true) do
   end
 
   it "should be able to create a Collection object, with an APO" do
-    user = 'foo@bar.com'
-    coll  = Hydrus::Collection.create(user)
+    coll  = Hydrus::Collection.create(mock_authed_user)
     coll.should be_instance_of Hydrus::Collection
     coll.admin_policy_object_ids.should == [coll.apo.pid]
   end

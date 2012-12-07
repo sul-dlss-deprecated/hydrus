@@ -21,6 +21,7 @@ describe Hydrus::Collection do
     apo = Hydrus::AdminPolicyObject.new
     Hydrus::AdminPolicyObject.stub(:create).and_return(apo)
     Hydrus::GenericObject.stub(:register_dor_object).and_return(@hc)
+    Hydrus::Authorizable.stub(:can_create_collections).and_return(true)
     Hydrus::Collection.create('USERFOO').pid.should == druid
   end
 

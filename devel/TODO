@@ -7,13 +7,10 @@ System integration. [Waiting: details below.]
 Embargo, visbility, and license: assess integration tests. If needed write some
 good integration test scenarios for these attributes.
 
-Protect actions at the model level. This is mostly done, but a few actions
-remain.  Details in a separate section below.
+Tighten access restrictions to the HydrusSolrController. These guarded by
+Tomcat rules in our Puppet manifest: replace su_admin_nets with $foz_all_nets.
 
 Assess the app's deprecation warnings and fix if needed.
-
-Assess the app's slow performance. For example, this command seems too slow:
-`rails runner devel/create_test_item.rb batch`.
 
 --------
 System integration
@@ -39,26 +36,15 @@ Set up Camel to send messages to hydrus-prod. [Waiting until we start running
 the app on hydrus-prod.]
 
 --------
-Protect actions at the model level
---------
-
-# Collection.create
-# Will need to make cannot_do() callable by Collection class.
-cannot_do(:create) unless Hydrus::Authorizable.can_create_collections(user)
-
-# Item.create
-coll.cannot_do(:create_item_in) unless coll.is_open()
-
-# Item:
-accept_terms_of_deposit()
-
-# HydrusSolrController
-# These guarded by Tomcat rules in our Puppet manifest.
-Tighten up the restrictions: replace su_admin_nets with $foz_all_nets.
-
---------
 Other
 --------
+
+Refactor Collection.accept_terms_of_deposit to move XML logic down to the
+datastream [see notes in method].
+
+Assess the app's slow performance. For example, this command seems too slow,
+since it involves no UI or Rubydora transactions: `rails runner
+devel/create_test_item.rb batch`.
 
 Update to Rubydora 0.6.0, which might speed up integration tests. [We are
 blocked by active-fedora gem restriction to to 0.5.x series. Chris might be
