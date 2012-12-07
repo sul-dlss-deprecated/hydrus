@@ -10,8 +10,6 @@ good integration test scenarios for these attributes.
 Tighten access restrictions to the HydrusSolrController. These guarded by
 Tomcat rules in our Puppet manifest: replace su_admin_nets with $foz_all_nets.
 
-Assess the app's deprecation warnings and fix if needed.
-
 --------
 System integration
 --------
@@ -154,3 +152,6 @@ during the super() call in index() of catalog_controller.rb, which invokes a
 Blacklight method that logs the entire SOLR response. A bug has been filed; in
 the meantime, you can use the `rake server` task, which filters out most of the
 noise.
+
+Deprecation warning: "Hydra::FileAssetsHelper has been moved". We will need
+to deal with this before we move to hydra-head v5x.
