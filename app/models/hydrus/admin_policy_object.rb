@@ -6,10 +6,6 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
   include Hydrus::Validatable
   extend  Hydrus::Delegatable
 
-  # Temporary hack until dor-services gem adds this predicate to
-  # its predicate_mappings.yml file.
-  ActiveFedora::Predicates.predicate_mappings["http://projecthydra.org/ns/relations#"][:references_agreement] = 'referencesAgreement'
-
   has_metadata(
     :name => "descMetadata",
     :type => Hydrus::DescMetadataDS,

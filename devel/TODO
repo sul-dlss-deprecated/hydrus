@@ -14,8 +14,6 @@ Tomcat rules in our Puppet manifest: replace su_admin_nets with $foz_all_nets.
 System integration
 --------
 
-Remove n_hydrus_related_items after dor-services gem fixes bug in describable.rb.
-
 Hydrus objects end up with 2 values for submitted_dt and published_dt in their
 SOLR documents, because two WFs are using the those lifecycles. [Still not
 fixed as of 12/4. For example, these objects have two published lifecycles,
@@ -24,9 +22,6 @@ not: bf398rg3493, zt788zg9203.]
 
 Create object mc322hh4254 (hydra:referencesAgreement) on hydrus-dev,
 hydrus-test, and hydrus-prod. [Hannah/Lynn]
-
-Remove predicate mapping hack from admin_policy_object.rb. [Waiting on edit to
-dor-services gem.]
 
 Try to use hydrus-prod. [Waiting on new dor-services gem in production.]
 
