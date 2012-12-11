@@ -37,6 +37,14 @@ class Ability
       AUTH.can_review_item(user, get_fedora_object(obj))
     end
 
+    # View datastreams.
+
+    can(:view_datastreams, [String, ActiveFedora::Base]) do |obj|
+      AUTH.can_view_object_datastreams(user, get_fedora_object(obj))
+    end
+
+    cannot(:view_datastreams, SolrDocument)
+
     # Destroy.
 
     cannot(:destroy, String)

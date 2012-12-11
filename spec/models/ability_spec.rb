@@ -85,6 +85,14 @@ describe Ability do
       @ab.can?(:destroy, @sd).should  == false
     end
 
+    it ":view_datastreams should be based on can_view_object_datastreams()" do
+      [true, false].each do |exp|
+        @auth.stub(:can_view_object_datastreams).and_return(exp)
+        @ab.can?(:view_datastreams, @dru).should == exp
+        @ab.can?(:view_datastreams, @af).should  == exp
+      end
+    end
+
   end
 
 end

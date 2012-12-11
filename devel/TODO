@@ -2,10 +2,17 @@
 Development Tasks - December
 ------------------
 
-System integration. [Waiting: details below.]
-
 Embargo, visbility, and license: assess integration tests. If needed write some
 good integration test scenarios for these attributes.
+
+  visibility =    world       stanford
+  embargoed
+
+    no            x
+
+    yes
+
+System integration. [Waiting: details below.]
 
 Tighten access restrictions to the HydrusSolrController. These guarded by
 Tomcat rules in our Puppet manifest: replace su_admin_nets with $foz_all_nets.
@@ -31,6 +38,8 @@ the app on hydrus-prod.]
 --------
 Other
 --------
+
+Implement the ability for an admin to become some other user.
 
 Refactor Collection.accept_terms_of_deposit to move XML logic down to the
 datastream [see notes in method].
@@ -70,6 +79,8 @@ Item view/edit pages display the current value for the Item. The problem
 scenario: if Collection changes from varies to fixed, its unpublished items
 will be "stuck" at their current value -- which might or might not agree with
 the new fixed value set by the collection manager.
+
+Events controller: refactor along the lines of datastreams controller.
 
 Move Terms of Deposit acceptance pop-up so it shows (if needed) when an item is
 created.

@@ -14,7 +14,7 @@
 </div>
 <div id="object-content-wrapper">
   <h3><%= hydrus_object_setting_value(@fobj.title) %></h3>
-  <h4 class="muted">Event History for This <%= @fobj.class.to_s.gsub("Hydrus::", "") %></h4>
+  <h4 class="muted">Event History for this <%= @fobj.hydrus_class_to_s %></h4>
 
   <%#= render "#{view_path_from_model(@fobj)}/events_metadata" %>
 

@@ -206,4 +206,27 @@ describe Hydrus::Authorizable do
 
   end
 
+  describe "can_view_object_datastreams()" do
+
+    it "administrators: should return true" do
+      Rails.stub(:env).and_return('production')
+      @auth.stub(:is_administrator).and_return(true)
+      @auth.can_view_object_datastreams(@ua, @hi).should == true
+    end
+
+    it "for non-administrators: should return true only in development mode" do
+      @auth.stub(:is_administrator).and_return(false)
+      tests = {
+        'production'  => false,
+        'test'        => false,
+        'development' => true,
+      }
+      tests.each do |env, exp|
+        Rails.stub(:env).and_return(env)
+        @auth.can_view_object_datastreams(@ua, @hi).should == exp
+      end
+    end
+
+  end
+
 end

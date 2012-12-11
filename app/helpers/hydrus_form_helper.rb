@@ -29,4 +29,9 @@ module HydrusFormHelper
     html.html_safe
   end
 
+  def syntax_highlighted_datastream(obj, dsid)
+    xml = Nokogiri.XML(obj.send(dsid).content, &:noblanks)
+    return CodeRay::Duo[:xml, :div].highlight(xml).html_safe
+  end
+
 end

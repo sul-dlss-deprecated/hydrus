@@ -10,9 +10,12 @@ def main(args)
   end
   args = obj.datastreams.keys.sort if args == ['ALL']
   args.each { |ds|
-    next unless obj.datastreams.include?(ds)
     puts
-    puts obj.send(ds).content
+    if obj.datastreams.include?(ds)
+      puts Nokogiri.XML(obj.send(ds).content, &:noblanks)
+    else
+      puts "#{ds}: not available"
+    end
   }
 end
 

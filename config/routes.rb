@@ -11,11 +11,13 @@ Hydrus::Application.routes.draw do
 
   resources :collections, :controller => 'hydrus_collections', :as => 'hydrus_collections' do
     resources :events, :only=>:index
+    resources :datastreams, :only=>:index
     resources :items, :only=>:index, :controller=>"hydrus_items"
   end
 
   resources :items, :controller => 'hydrus_items', :as => 'hydrus_items' do
     resources :events, :only=>:index
+    resources :datastreams, :only=>:index
     get 'terms_of_deposit', :as =>'terms_of_deposit', :on=>:collection
     get 'agree_to_terms_of_deposit', :as =>'agree_to_terms_of_deposit', :on=>:collection
   end

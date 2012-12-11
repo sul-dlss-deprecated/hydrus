@@ -1,0 +1,35 @@
+<%- @page_title = "#{@fobj.title} - #{application_name}" -%>
+
+<%- sidebar_items << capture do -%>
+  <div class="well actions-box collection-settings">
+    <%=render :partial=>"#{view_path_from_model(@fobj)}/status_box" %>
+    <%=render :partial=>"#{view_path_from_model(@fobj)}/actions_box_show" %>
+  </div>
+<%- end -%>
+
+<div class="row">
+  <div class="span9">
+    <%= render_contextual_navigation(@fobj) %>
+  </div>
+</div>
+<div id="object-content-wrapper">
+
+  <h3><%= hydrus_object_setting_value(@fobj.title) %></h3>
+
+  <h4 class="muted">Datastreams for this <%= @fobj.hydrus_class_to_s %></h4>
+
+  <div class="datastreams">
+
+    <% @fobj.datastreams.keys.map(&:to_s).sort_by(&:downcase).each do |dsid| %>
+
+      <h4><%= dsid %></h4>
+
+      <div class='datastream-xml'>
+        <%= syntax_highlighted_datastream(@fobj, dsid) %>
+      </div>
+
+    <% end %>
+
+  </div>
+
+</div>

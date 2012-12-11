@@ -139,4 +139,11 @@ module Hydrus::Authorizable
     return does_intersect(user_roles, item_reviewer_roles)
   end
 
+  # Returns true if the given user can view an object's XML datastreams.
+  # This ability is intended only for development mode and Hydrus administrators.
+  def self.can_view_object_datastreams(user, obj)
+    return true if is_administrator(user)
+    return Rails.env == 'development'
+  end
+
 end
