@@ -47,11 +47,15 @@ end
 
 group :development, :test do
   gem 'jettywrapper'
-  gem 'awesome_print'
-  gem 'looksee'
-  gem 'debugger'
   gem 'sqlite3'
+  gem 'awesome_print'
   gem 'launchy'
+  gem 'ruby-prof'
+  gem 'debugger'
+end
+
+group :development do
+  gem 'looksee'
 end
 
 group :production do

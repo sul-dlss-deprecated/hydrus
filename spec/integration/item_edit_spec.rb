@@ -446,7 +446,7 @@ describe("Item edit", :type => :request, :integration => true) do
   end
 
   describe "embargo and visibility" do
-    
+
     it "setting/removing embargo date modifies embargoMD and rightsMD as expected" do
       css = {
         :emb_yes  => 'hydrus_item_embarg_visib_embargoed_yes',

@@ -5,4 +5,23 @@ module Hydrus
     file_handle.puts(d, caller[0], arg.ai(:plain => true), d)
   end
 
+  def self.profile(opts = {})
+    # Setup options.
+    opts[:output_dir]  ||= "#{Rails.root}/tmp/profiling"
+    opts[:output_name] ||= "profile"
+    opts[:min_percent] ||= 0
+
+    # Run the code being profiled.
+    RubyProf.start
+    yield
+    profile_results = RubyProf.stop
+
+    # Generate HTML report.
+    fname = "#{opts[:output_dir]}/#{opts[:output_name]}-graph.html"
+    File.open(fname, 'w') do |f|
+      p = RubyProf::GraphHtmlPrinter.new(profile_results)
+      p.print(f, :min_percent => opts[:min_percent])
+    end
+  end
+
 end
