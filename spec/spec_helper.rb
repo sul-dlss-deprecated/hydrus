@@ -134,19 +134,44 @@ def confirm_rights_metadata_in_apo(obj)
 end
 
 def check_emb_vis_lic(obj, opts)
+  # This method takes an Item or Collection and checks various values
+  # in its embargoMetadata and rightsMetadata. The expectations are passed in
+  # as a hash of options.
+  #
+  # An object's embargo status affects both the embargoMetadata
+  # and rightsMetadata, as summarized here:
+  #
+  # is_embargoed = true
+  #   embargoMetadata
+  #     releaseAccess read node should = world|stanford
+  #     status = embargoed
+  #     releaseDate = DATETIME
+  #   rightsMetadata
+  #     read access = NONE
+  #     embargoReleaseDate = DATETIME
+  #
+  # is_embargoed = false
+  #   embargoMetadata
+  #     datastream should be empty
+  #   rightsMetadata
+  #     read access should = world|stanford
+  #     should be no embargoReleaseDate node
+
+  # Some convenience variables.
   di     = '//access[@type="discover"]/machine'
   rd     = '//access[@type="read"]/machine'
-  is_emb = (obj.class == Hydrus::Item and obj.is_embargoed)
   rm     = obj.rightsMetadata
   em     = obj.embargoMetadata
+  is_emb = (obj.class == Hydrus::Item and obj.is_embargoed)
 
   # Consistency between is_embargoed() and testing expectations.
   opts[:embargo_date].blank?.should == not(is_emb)
 
-  # All should be world discoverable.
+  # All objects should be world discoverable.
   obj.rightsMetadata.ng_xml.xpath("#{di}/world").size.should == 1
   obj.embargoMetadata.ng_xml.xpath("#{di}/world").size.should == 1 if is_emb
 
+  # Some checks based on embargo status.
   if is_emb
     # embargoMetadata
     em.ng_xml.at_xpath('//status').content.should == 'embargoed'
@@ -162,7 +187,7 @@ def check_emb_vis_lic(obj, opts)
     rm.ng_xml.xpath("#{rd}/embargoReleaseDate").size.should == 0
   end
 
-  # Visibility: stored in either embargoMetadata or rightsMetadata.
+  # Check visibility: (world|stanford) stored in either embargoMetadata or rightsMetadata.
   datastream = (is_emb ? em : rm)
   g = datastream.ng_xml.xpath("#{rd}/group")
   w = datastream.ng_xml.xpath("#{rd}/world")
@@ -175,7 +200,7 @@ def check_emb_vis_lic(obj, opts)
     w.size.should == 1
   end
 
-  # License in rightsMetadata.
+  # Check the license in rightsMetadata.
   u = obj.rightsMetadata.ng_xml.at_xpath('//use/machine')
   u.content.should == opts[:license_code]
 end

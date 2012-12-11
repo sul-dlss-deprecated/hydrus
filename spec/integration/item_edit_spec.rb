@@ -315,8 +315,8 @@ describe("Item edit", :type => :request, :integration => true) do
     new_item_license       = "PDDL Public Domain Dedication and License"
 
     # Item has expected rights.
-    params = {:embargo_date=>'', :visibility=>'world', :license_code=>'cc-by'}
-    check_emb_vis_lic(@hi,params)
+    ps = {:embargo_date=>'', :visibility=>'world', :license_code=>'cc-by'}
+    check_emb_vis_lic(@hi,ps)
 
     # Modify the collection to allow varying license.
     login_as('archivist1')
@@ -343,8 +343,8 @@ describe("Item edit", :type => :request, :integration => true) do
 
     # Item has expected rights.
     @hi = Hydrus::Item.find @druid
-    params = {:embargo_date => '', :visibility => 'world', :license_code => 'pddl'}
-    check_emb_vis_lic(@hi,params)
+    ps = {:embargo_date => '', :visibility => 'world', :license_code => 'pddl'}
+    check_emb_vis_lic(@hi,ps)
 
     # Verify that the selected license is set.
     should_visit_edit_page(@hi)
@@ -447,26 +447,73 @@ describe("Item edit", :type => :request, :integration => true) do
 
   describe "embargo and visibility" do
     
-    # An object's embargo status affects both the embargoMetadata
-    # and rightsMetadata, as summarized here:
-    #
-    # embargoed = no
-    #   embargoMetadata
-    #     datastream should be empty
-    #   rightsMetadata
-    #     read access should = world|stanford
-    #     should be no embargoReleaseDate node
-    #
-    # embargoed = yes
-    #   embargoMetadata
-    #     releaseAccess read node should = world|stanford
-    #     status = embargoed
-    #     releaseDate = DATE
-    #   rightsMetadata
-    #     read access = NONE
-    #     embargoReleaseDate = DATE
+    it "setting/removing embargo date modifies embargoMD and rightsMD as expected" do
+      css = {
+        :emb_yes  => 'hydrus_item_embarg_visib_embargoed_yes',
+        :emb_no   => 'hydrus_item_embarg_visib_embargoed_no',
+        :visib    => 'hydrus_item_embarg_visib_visibility',
+        :emb_date => 'hydrus_item_embarg_visib_date',
+      }
+      lic = 'cc-by'
 
-    it "xxx" do
+      # Change collection to allow for variable visibility for its items.
+      hc = @hi.collection
+      hc.visibility_option_value = 'varies'
+      hc.save
+
+      # Reset the Item's publish_time, so this test won't fail a year from now.
+      today            = HyTime.now.beginning_of_day
+      later            = today + 10.days
+      later_dt         = HyTime.datetime(later, :from_localzone => true)
+      later_d          = HyTime.date(later, :from_localzone => true)
+      @hi.publish_time = HyTime.datetime(today, :from_localzone => true)
+      @hi.save
+
+      # Check embargoMD and rightsMD: initial.
+      check_emb_vis_lic(@hi,
+        :embargo_date => '',
+        :visibility   => 'world',
+        :license_code => lic,
+      )
+
+      # Login.
+      login_as('archivist1')
+
+      # Visit edit page: set an embargo date and change visibility.
+      should_visit_edit_page(@hi)
+      choose(css[:emb_yes])
+      fill_in(css[:emb_date], :with => later_d)
+      select('Stanford only', :from => css[:visib])
+
+      # Save and confirm.
+      click_button "Save"
+      current_path.should == polymorphic_path(@hi)
+      page.should have_content(@notice)
+
+      # Check embargoMD and rightsMD: after setting an embargo date.
+      @hi = Hydrus::Item.find(@hi.pid)
+      check_emb_vis_lic(@hi,
+        :embargo_date => later_dt,
+        :visibility   => 'stanford',
+        :license_code => lic,
+      )
+
+      # Visit edit page: remove embargo.
+      should_visit_edit_page(@hi)
+      choose(css[:emb_no])
+
+      # Save and confirm.
+      click_button "Save"
+      current_path.should == polymorphic_path(@hi)
+      page.should have_content(@notice)
+
+      # Check embargoMD and rightsMD: after removing embargo.
+      @hi = Hydrus::Item.find(@hi.pid)
+      check_emb_vis_lic(@hi,
+        :embargo_date => '',
+        :visibility   => 'stanford',
+        :license_code => lic,
+      )
     end
 
   end
