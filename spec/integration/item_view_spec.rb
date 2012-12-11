@@ -69,7 +69,7 @@ describe("Item view", :type => :request, :integration => true) do
   it "should show the events in a history tab" do
     exp_content = [
       "How Couples Meet and Stay Together",
-      'Event History for This Item',
+      'Event History for this Item',
       'Item created'
     ]
     login_as('archivist1')

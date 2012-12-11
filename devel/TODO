@@ -2,15 +2,7 @@
 Development Tasks - December
 ------------------
 
-Embargo, visbility, and license: assess integration tests. If needed write some
-good integration test scenarios for these attributes.
-
-  visibility =    world       stanford
-  embargoed
-
-    no            x
-
-    yes
+Embargo, visbility, and license: integration tests.
 
 System integration. [Waiting: details below.]
 
@@ -38,6 +30,9 @@ the app on hydrus-prod.]
 --------
 Other
 --------
+
+Upgrade to hydra-head 5.0, active-fedora 5.2, OM 1.8, Solrizer 2.0, and
+Blacklight 4.0. See github.com/projecthydra/hydra-head/wiki/Migrating-to-5.0.
 
 Implement the ability for an admin to become some other user.
 

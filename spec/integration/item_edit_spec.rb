@@ -316,7 +316,7 @@ describe("Item edit", :type => :request, :integration => true) do
 
     # Item has expected rights.
     params = {:embargo_date=>'', :visibility=>'world', :license_code=>'cc-by'}
-    confirm_rights(@hi,params)
+    check_emb_vis_lic(@hi,params)
 
     # Modify the collection to allow varying license.
     login_as('archivist1')
@@ -344,7 +344,7 @@ describe("Item edit", :type => :request, :integration => true) do
     # Item has expected rights.
     @hi = Hydrus::Item.find @druid
     params = {:embargo_date => '', :visibility => 'world', :license_code => 'pddl'}
-    confirm_rights(@hi,params)
+    check_emb_vis_lic(@hi,params)
 
     # Verify that the selected license is set.
     should_visit_edit_page(@hi)
@@ -441,6 +441,32 @@ describe("Item edit", :type => :request, :integration => true) do
       should_visit_view_page(hi)
       click_button(b)
 
+    end
+
+  end
+
+  describe "embargo and visibility" do
+    
+    # An object's embargo status affects both the embargoMetadata
+    # and rightsMetadata, as summarized here:
+    #
+    # embargoed = no
+    #   embargoMetadata
+    #     datastream should be empty
+    #   rightsMetadata
+    #     read access should = world|stanford
+    #     should be no embargoReleaseDate node
+    #
+    # embargoed = yes
+    #   embargoMetadata
+    #     releaseAccess read node should = world|stanford
+    #     status = embargoed
+    #     releaseDate = DATE
+    #   rightsMetadata
+    #     read access = NONE
+    #     embargoReleaseDate = DATE
+
+    it "xxx" do
     end
 
   end

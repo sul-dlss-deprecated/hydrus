@@ -133,20 +133,40 @@ def confirm_rights_metadata_in_apo(obj)
   obj.apo.defaultObjectRights.ng_xml.should be_equivalent_to obj.rightsMetadata.ng_xml # collection rights metadata should be equal to apo default object rights
 end
 
-def confirm_rights(obj, params)
+def check_emb_vis_lic(obj, opts)
   di     = '//access[@type="discover"]/machine'
   rd     = '//access[@type="read"]/machine'
   is_emb = (obj.class == Hydrus::Item and obj.is_embargoed)
+  rm     = obj.rightsMetadata
+  em     = obj.embargoMetadata
+
+  # Consistency between is_embargoed() and testing expectations.
+  opts[:embargo_date].blank?.should == not(is_emb)
 
   # All should be world discoverable.
   obj.rightsMetadata.ng_xml.xpath("#{di}/world").size.should == 1
   obj.embargoMetadata.ng_xml.xpath("#{di}/world").size.should == 1 if is_emb
 
-  # Visibility.
-  datastream = (is_emb ? obj.embargoMetadata : obj.rightsMetadata)
+  if is_emb
+    # embargoMetadata
+    em.ng_xml.at_xpath('//status').content.should == 'embargoed'
+    em.ng_xml.at_xpath('//releaseDate').content.should == opts[:embargo_date]
+    # rightsMetadata
+    rm.has_world_read_node.should == false
+    rm.group_read_nodes.size.should == 0
+    rm.ng_xml.at_xpath("#{rd}/embargoReleaseDate").content.should == opts[:embargo_date]
+  else
+    # embargoMetadata: should be empty
+    em.ng_xml.content.should == ''
+    # rightsMetadata: should not have an embargoReleaseDate.
+    rm.ng_xml.xpath("#{rd}/embargoReleaseDate").size.should == 0
+  end
+
+  # Visibility: stored in either embargoMetadata or rightsMetadata.
+  datastream = (is_emb ? em : rm)
   g = datastream.ng_xml.xpath("#{rd}/group")
   w = datastream.ng_xml.xpath("#{rd}/world")
-  if params[:visibility] == "stanford"
+  if opts[:visibility] == "stanford"
     g.size.should == 1
     g.first.content.should == 'stanford'
     w.size.should == 0
@@ -155,17 +175,9 @@ def confirm_rights(obj, params)
     w.size.should == 1
   end
 
-  # Embargo release date node in rightsMetadata.
-  rel_date_node = obj.rightsMetadata.ng_xml.xpath("#{rd}/embargoReleaseDate")
-  if params[:embargo_date] == ""
-    rel_date_node.size.should == 0
-  else
-    rel_date_node.first.content.should == params[:embargo_date]
-  end
-
-  # The <use> node in rightsMetadata.
+  # License in rightsMetadata.
   u = obj.rightsMetadata.ng_xml.at_xpath('//use/machine')
-  u.content.should == params[:license_code]
+  u.content.should == opts[:license_code]
 end
 
 # Some integration tests requires the minting of a valid druid in

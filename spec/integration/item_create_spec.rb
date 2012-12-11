@@ -289,7 +289,7 @@ describe("Item create", :type => :request, :integration => true) do
     item.publish_time.should_not be_blank
     item.visibility.should == ["stanford"]
     params={:visibility=>'stanford',:license_code=>'cc-by',:embargo_date=>''}
-    confirm_rights(item,params)
+    check_emb_vis_lic(item,params)
 
     # Check events.
     exp = [
@@ -399,7 +399,7 @@ describe("Item create", :type => :request, :integration => true) do
     item.is_destroyable.should == false
     item.valid?.should == true
     params={:visibility=>'world',:license_code=>'cc-by-nd',:embargo_date=>''}
-    confirm_rights(item,params)
+    check_emb_vis_lic(item,params)
 
     # Return to edit page, and try to save Item with an empty title.
     click_link "Edit Draft"
