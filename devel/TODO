@@ -4,9 +4,6 @@ Development Tasks - December
 
 System integration. [Waiting: details below.]
 
-Tighten access restrictions to the HydrusSolrController. These guarded by
-Tomcat rules in our Puppet manifest: replace su_admin_nets with $foz_all_nets.
-
 --------
 System integration
 --------
@@ -26,24 +23,20 @@ Set up Camel to send messages to hydrus-prod. [Waiting until we start running
 the app on hydrus-prod.]
 
 --------
-Other
+Other: short-term candidates
 --------
 
-Upgrade to hydra-head 5.0, active-fedora 5.2, OM 1.8, Solrizer 2.0, and
-Blacklight 4.0. See github.com/projecthydra/hydra-head/wiki/Migrating-to-5.0.
-
-Implement the ability for an admin to become some other user.
-
-Refactor Collection.accept_terms_of_deposit to move XML logic down to the
-datastream [see notes in method].
+Tighten access restrictions to the HydrusSolrController. These guarded by
+Tomcat rules in our Puppet manifest: replace su_admin_nets with $foz_all_nets.
 
 Assess the app's slow performance. For example, this command seems too slow,
 since it involves no UI or Rubydora transactions: `rails runner
 devel/create_test_item.rb batch`.
 
-Update to Rubydora 0.6.0, which might speed up integration tests. [We are
-blocked by active-fedora gem restriction to to 0.5.x series. Chris might be
-looking into this.]
+Implement the ability for an admin to become some other user.
+
+Refactor Collection.accept_terms_of_deposit to move XML logic down to the
+datastream [see notes in method].
 
 Remove all code that puts WF into the APO. Search for workflow_steps.
 
@@ -51,6 +44,22 @@ Rake task to list all Hydrus pids, along with their has_model_s value.
 
 Create a view for hydrus admin users to list all collections, regardless of
 roleMD.
+
+Events controller: refactor along the lines of datastreams controller.
+
+--------
+Other
+--------
+
+Upgrade to hydra-head 5.0, active-fedora 5.2, OM 1.8, Solrizer 2.0, and
+Blacklight 4.0. See github.com/projecthydra/hydra-head/wiki/Migrating-to-5.0.
+
+Update to Rubydora 0.6.0, which might speed up integration tests. [We are
+blocked by active-fedora gem restriction to to 0.5.x series. Chris might be
+looking into this.]
+
+Deprecation warning: "Hydra::FileAssetsHelper has been moved". We will need
+to deal with this before we move to hydra-head v5x.
 
 rightsMD: <access> blocks should include <none/> to indicate no access.
 
@@ -73,8 +82,6 @@ scenario: if Collection changes from varies to fixed, its unpublished items
 will be "stuck" at their current value -- which might or might not agree with
 the new fixed value set by the collection manager.
 
-Events controller: refactor along the lines of datastreams controller.
-
 Move Terms of Deposit acceptance pop-up so it shows (if needed) when an item is
 created.
 
@@ -88,9 +95,6 @@ Gryphondor for Hydrus objects.
 
 Should submit_for_approval() and resubmit() send email messages?
 
-After finishing more thorough UI rework, look at: responsiveness issues;
-accessibility issues.
-
 Update search results page; UI redesign degraded formatting of it.
 
 Update SUL-chrome gem to latest Bootstrap (needed to be able to use the
@@ -100,9 +104,6 @@ select_status_checkbox_icon helper method (application_helper.rb).
 
 Refactor and write tests for redirect_if_not_correct_object_type: seems more
 complex than it needs to be.
-
-Disable edit tab for published items. NOTE: this already happens automatically
-when not in development mode.
 
 Refactor purl_page_ready() to use workflow_ds_extension. We could ask the PURL
 app directly: it returns a 404 (according to Chris J) if you ask for an object
@@ -151,6 +152,3 @@ during the super() call in index() of catalog_controller.rb, which invokes a
 Blacklight method that logs the entire SOLR response. A bug has been filed; in
 the meantime, you can use the `rake server` task, which filters out most of the
 noise.
-
-Deprecation warning: "Hydra::FileAssetsHelper has been moved". We will need
-to deal with this before we move to hydra-head v5x.
