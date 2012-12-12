@@ -1,0 +1,23 @@
+<div>
+
+  <%  @all_collections.each do |coll| %>
+
+    <p>
+      <%= link_to(coll.pid.split(':').last, polymorphic_path(coll)) %>:
+      <%= coll.title %>
+
+      <ul>
+        <%  coll.hydrus_items.sort_by(&:pid).each do |item| %>
+          <li>
+            <%= link_to(item.pid.split(':').last, polymorphic_path(item)) %>:
+            <%= item.title %>
+          </li>
+        <%  end %>
+      </ul>
+
+    </p>
+
+  <%  end %>
+
+</div>
+

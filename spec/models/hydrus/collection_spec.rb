@@ -479,9 +479,10 @@ describe Hydrus::Collection do
       resp = double('mock_response')
       exp  = 12345
       @HC.stub(:issue_solr_query).and_return([resp, nil])
-      @HC.should_receive(:get_druids_from_response).with(resp).twice.and_return(exp)
+      @HC.should_receive(:get_druids_from_response).with(resp).exactly(3).and_return(exp)
       @HC.apos_involving_user(@user_foo).should == exp
       @HC.collections_of_apos([1,2,3,4]).should == exp
+      @HC.all_hydrus_collections.should == exp
     end
 
     it "can exercise get_druids_from_response()" do

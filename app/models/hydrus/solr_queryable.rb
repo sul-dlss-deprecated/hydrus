@@ -49,6 +49,15 @@ module Hydrus::SolrQueryable
     h[:fq] << %Q<has_model_s:(#{hms})>
   end
 
+  # Returns a default hash of query params, used by a few methods.
+  def self.default_query_params
+    return {
+      :rows => 9999,
+      :fl   => 'identityMetadata_objectId_t',
+      :q    => '*',
+    }
+  end
+
   ####
   # Instance methods to issue SOLR queries or generate SOLR query hashes.
   ####
@@ -62,15 +71,19 @@ module Hydrus::SolrQueryable
     return [solr_response, document_list]
   end
 
+  # Returns a hash of SOLR query parameters.
+  # The query: get all Hydrus Collections.
+  def squery_all_hydrus_collections
+    h = HSQ.default_query_params()
+    HSQ.add_model_filter(h, 'Hydrus_Collection')
+    return h
+  end
+
   # Takes a string -- a user's SUNET ID.
   # Returns a hash of SOLR query parameters.
   # The query: get the APOs for which USER has a role.
   def squery_apos_involving_user(user)
-    h = {
-      :rows => 9999,
-      :fl   => 'identityMetadata_objectId_t',
-      :q    => '*',
-    }
+    h = HSQ.default_query_params()
     HSQ.add_model_filter(h, 'Hydrus_AdminPolicyObject')
     HSQ.add_involved_user_filter(h, user)
     return h
@@ -80,11 +93,7 @@ module Hydrus::SolrQueryable
   # Returns a hash of SOLR query parameters.
   # The query: get the Collections governed by the APOs.
   def squery_collections_of_apos(druids)
-    h = {
-      :rows => 9999,
-      :fl   => 'identityMetadata_objectId_t',
-      :q    => '*',
-    }
+    h = HSQ.default_query_params()
     HSQ.add_model_filter(h, 'Hydrus_Collection')
     HSQ.add_governed_by_filter(h, druids)
     return h

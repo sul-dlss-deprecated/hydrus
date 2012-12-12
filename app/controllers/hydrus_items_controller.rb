@@ -38,7 +38,7 @@ class HydrusItemsController < ApplicationController
        @fobj.delete
        flash[:notice]="The item was deleted."
     else
-       flash[:warning]="You do not have permissions to delete this item."
+       flash[:error]="You do not have permissions to delete this item."
      end
     redirect_to polymorphic_path([collection,:items])
   end
@@ -48,7 +48,7 @@ class HydrusItemsController < ApplicationController
       @id=params[:id]
       render 'shared/discard_confirmation'
     else
-     flash[:warning]="You do not have permissions to delete this item."
+     flash[:error]="You do not have permissions to delete this item."
      redirect_to polymorphic_path([@fobj.collection,:items])
     end
   end

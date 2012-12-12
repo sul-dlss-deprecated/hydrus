@@ -4,6 +4,8 @@ Development Tasks - December
 
 System integration. [Waiting: details below.]
 
+Rake task to list all Hydrus pids, along with their has_model_s value.
+
 --------
 System integration
 --------
@@ -29,21 +31,12 @@ Other: short-term candidates
 Tighten access restrictions to the HydrusSolrController. These guarded by
 Tomcat rules in our Puppet manifest: replace su_admin_nets with $foz_all_nets.
 
-Assess the app's slow performance. For example, this command seems too slow,
-since it involves no UI or Rubydora transactions: `rails runner
-devel/create_test_item.rb batch`.
-
 Implement the ability for an admin to become some other user.
 
 Refactor Collection.accept_terms_of_deposit to move XML logic down to the
 datastream [see notes in method].
 
 Remove all code that puts WF into the APO. Search for workflow_steps.
-
-Rake task to list all Hydrus pids, along with their has_model_s value.
-
-Create a view for hydrus admin users to list all collections, regardless of
-roleMD.
 
 Events controller: refactor along the lines of datastreams controller.
 

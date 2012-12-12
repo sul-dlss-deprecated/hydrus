@@ -96,6 +96,8 @@ describe Hydrus::SolrQueryable do
     Set.new(h.keys).should == Set.new([:rows, :fl, :q, :fq])
     h = @msq.squery_item_counts_of_collections(['c', 'd'])
     Set.new(h.keys).should == Set.new([:rows, :fl, :q, :facet, :'facet.pivot', :fq])
+    h = @msq.squery_all_hydrus_collections()
+    Set.new(h.keys).should == Set.new([:rows, :fl, :q, :fq])
   end
 
 end

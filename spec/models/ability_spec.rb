@@ -10,6 +10,7 @@ describe Ability do
   before(:each) do
     @auth = Hydrus::Authorizable
     @auth.stub(:can_create_collections).and_return(false)
+    @auth.stub(:is_administrator).and_return(false)
     @obj  = Object.new
     @ab   = Ability.new(@obj)
     @dru  = 'some_pid'
@@ -91,6 +92,21 @@ describe Ability do
         @ab.can?(:view_datastreams, @dru).should == exp
         @ab.can?(:view_datastreams, @af).should  == exp
       end
+    end
+
+    it ":list_all_collections should be based on is_administrator() or Rails.env" do
+      # In test environment, is_administrator() should determine outcome.
+      Rails.env.should == 'test'
+      [true, false].each do |exp|
+        @auth.stub(:is_administrator).and_return(exp)
+        @ab = Ability.new(@obj)
+        @ab.can?(:list_all_collections, nil).should == exp
+      end
+      # In development environment, should return true even for non-admins.
+      Rails.stub(:env).and_return('development')
+      @auth.stub(:is_administrator).and_return(false)
+      @ab = Ability.new(@obj)
+      @ab.can?(:list_all_collections, nil).should == true
     end
 
   end

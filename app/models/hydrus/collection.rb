@@ -433,6 +433,13 @@ class Hydrus::Collection < Hydrus::GenericObject
     return item_counts_of_collections(coll_pids)
   end
 
+  # Returns an array druids for the APOs in which USER plays a role.
+  def self.all_hydrus_collections
+    h           = squery_all_hydrus_collections()
+    resp, sdocs = issue_solr_query(h)
+    return get_druids_from_response(resp)
+  end
+
   # Takes a user name.
   # Returns an array druids for the APOs in which USER plays a role.
   def self.apos_involving_user(user)

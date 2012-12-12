@@ -42,6 +42,12 @@ describe HydrusCollectionsController do
       destroy_hydrus_collection_value_path("123").should match(/collections\/123\/destroy_value/)
     end
 
+    it "should route collections/list_all correctly" do
+      { :get => "/collections/list_all" }.should route_to(
+        :controller => 'hydrus_collections',
+        :action     => 'list_all')
+    end
+
   end
 
   describe "Show Action", :integration => true do
@@ -81,6 +87,30 @@ describe HydrusCollectionsController do
         e = expect { post(action, :id => pid) }
         e.to raise_exception(err_msg)
       end
+    end
+
+  end
+
+  describe "list_all", :integration => true do
+
+    it "should redirect to root url for non-admins when not in development mode" do
+      controller.stub(:current_user).and_return(mock_authed_user)
+      get(:list_all)
+      flash[:error].should =~ /do not have permissions to list all/
+      response.should redirect_to(root_path)
+    end
+
+    it "should redirect to root path when not logged in" do
+      controller.stub(:current_user).and_return(mock_user)
+      get(:list_all)
+      response.should redirect_to(root_path)
+    end
+
+    it "should render the page for users with sufficient powers" do
+      controller.stub('can?').and_return(true)
+      get(:list_all)
+      assigns[:all_collections].should_not == nil
+      response.should render_template(:list_all)
     end
 
   end

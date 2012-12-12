@@ -45,6 +45,13 @@ class Ability
 
     cannot(:view_datastreams, SolrDocument)
 
+    # List all collections.
+
+    can(:list_all_collections, :all) if (
+      AUTH.is_administrator(user) or 
+      Rails.env == 'development'
+    )
+
     # Destroy.
 
     cannot(:destroy, String)

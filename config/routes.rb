@@ -9,6 +9,21 @@ Hydrus::Application.routes.draw do
 
   devise_for :users
 
+  # Actions to advance Collections through the Hydrus process.
+  post "collections/open/:id"  => "hydrus_collections#open",     :as => 'open_collection'
+  post "collections/close/:id" => "hydrus_collections#close",    :as => 'close_collection'
+  get  "collections/list_all"  => "hydrus_collections#list_all", :as => 'list_all'
+
+  # Actions to advance Items through the Hydrus process.
+  post "items/publish_directly/:id"    => "hydrus_items#publish_directly",    :as => 'publish_directly_item'
+  post "items/submit_for_approval/:id" => "hydrus_items#submit_for_approval", :as => 'submit_for_approval_item'
+  post "items/approve/:id"             => "hydrus_items#approve",             :as => 'approve_item'
+  post "items/disapprove/:id"          => "hydrus_items#disapprove",          :as => 'disapprove_item'
+  post "items/resubmit/:id"            => "hydrus_items#resubmit",            :as => 'resubmit_item'
+  post "items/send_purl_email"         => "hydrus_items#send_purl_email",     :as => 'send_purl_email'
+  get  "items/discard_confirmation/:id"       => "hydrus_items#discard_confirmation",       :as => 'discard_item_confirmation'
+  get  "collections/discard_confirmation/:id" => "hydrus_collections#discard_confirmation", :as => 'discard_collection_confirmation'
+
   resources :collections, :controller => 'hydrus_collections', :as => 'hydrus_collections' do
     resources :events, :only=>:index
     resources :datastreams, :only=>:index
@@ -31,20 +46,6 @@ Hydrus::Application.routes.draw do
 
   resources :object_files
   resources :signin
-
-  # Actions to advance Collections through the Hydrus process.
-  post "collections/open/:id"  => "hydrus_collections#open",  :as => 'open_collection'
-  post "collections/close/:id" => "hydrus_collections#close", :as => 'close_collection'
-
-  # Actions to advance Items through the Hydrus process.
-  post "items/publish_directly/:id"    => "hydrus_items#publish_directly",    :as => 'publish_directly_item'
-  post "items/submit_for_approval/:id" => "hydrus_items#submit_for_approval", :as => 'submit_for_approval_item'
-  post "items/approve/:id"             => "hydrus_items#approve",             :as => 'approve_item'
-  post "items/disapprove/:id"          => "hydrus_items#disapprove",          :as => 'disapprove_item'
-  post "items/resubmit/:id"            => "hydrus_items#resubmit",            :as => 'resubmit_item'
-  post "items/send_purl_email"         => "hydrus_items#send_purl_email",     :as => 'send_purl_email'
-  get  "items/discard_confirmation/:id"       => "hydrus_items#discard_confirmation",       :as => 'discard_item_confirmation'
-  get  "collections/discard_confirmation/:id" => "hydrus_collections#discard_confirmation", :as => 'discard_collection_confirmation'
 
   # Actions for the HydrusSolrController.
   match "hydrus_solr/reindex/:id"           => "hydrus_solr#reindex",           :as => 'reindex'

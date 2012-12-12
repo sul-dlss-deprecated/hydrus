@@ -6,8 +6,8 @@ class HydrusCollectionsController < ApplicationController
   include Hydrus::AccessControlsEnforcement
 
   before_filter :enforce_access_controls
-  before_filter :setup_attributes, :except => [:index,:new]
-  before_filter :redirect_if_not_correct_object_type, :only => [:edit,:show,:update]
+  before_filter :setup_attributes, :except => [:index, :new, :list_all]
+  before_filter :redirect_if_not_correct_object_type, :only => [:edit, :show, :update]
 
   def index
     flash[:warning]="You need to log in."
@@ -30,7 +30,7 @@ class HydrusCollectionsController < ApplicationController
        @fobj.delete
        flash[:notice]="The collection was deleted."
     else
-      flash[:warning]="You do not have permissions to delete this collection."
+      flash[:error]="You do not have permissions to delete this collection."
     end
     redirect_to root_url
   end
@@ -40,7 +40,7 @@ class HydrusCollectionsController < ApplicationController
       @id=params[:id]
       render 'shared/discard_confirmation'
     else
-      flash[:warning]="You do not have permissions to delete this collection."
+      flash[:error]="You do not have permissions to delete this collection."
       redirect_to root_url
     end
   end
@@ -145,6 +145,15 @@ class HydrusCollectionsController < ApplicationController
     @fobj.close
     try_to_save(@fobj, "Collection closed")
     redirect_to(hydrus_collection_path)
+  end
+
+  def list_all
+    unless can?(:list_all_collections, nil)
+      flash[:error] = "You do not have permissions to list all collections."
+      redirect_to root_url
+    end
+    @all_collections = Hydrus::Collection.all_hydrus_collections.
+                       sort.map { |p| Hydrus::Collection.find(p) }
   end
 
 end
