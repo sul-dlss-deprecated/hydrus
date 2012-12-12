@@ -4,10 +4,6 @@ On deck
 
 System integration. [Waiting: details below.]
 
----
-
-Rake task to list all Hydrus pids, along with their has_model_s value.
-
 Tighten access restrictions to the HydrusSolrController. These guarded by
 Tomcat rules in our Puppet manifest: replace su_admin_nets with $foz_all_nets.
 
