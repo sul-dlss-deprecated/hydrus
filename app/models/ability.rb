@@ -37,20 +37,12 @@ class Ability
       AUTH.can_review_item(user, get_fedora_object(obj))
     end
 
-    # View datastreams.
+    # Admin actions:
+    #   - View datastreams.
+    #   - List all collections.
 
-    can(:view_datastreams, [String, ActiveFedora::Base]) do |obj|
-      AUTH.can_view_object_datastreams(user, get_fedora_object(obj))
-    end
-
-    cannot(:view_datastreams, SolrDocument)
-
-    # List all collections.
-
-    can(:list_all_collections, :all) if (
-      AUTH.is_administrator(user) or 
-      Rails.env == 'development'
-    )
+    can(:view_datastreams,     :all) if AUTH.can_act_as_administrator(user)
+    can(:list_all_collections, :all) if AUTH.can_act_as_administrator(user)
 
     # Destroy.
 

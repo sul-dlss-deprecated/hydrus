@@ -86,27 +86,14 @@ describe Ability do
       @ab.can?(:destroy, @sd).should  == false
     end
 
-    it ":view_datastreams should be based on can_view_object_datastreams()" do
+    it "admin abilities should be based on can_act_as_administrator()" do
       [true, false].each do |exp|
-        @auth.stub(:can_view_object_datastreams).and_return(exp)
+        @auth.stub(:can_act_as_administrator).and_return(exp)
+        @ab = Ability.new(@obj)
+        @ab.can?(:list_all_collections, nil).should == exp
         @ab.can?(:view_datastreams, @dru).should == exp
         @ab.can?(:view_datastreams, @af).should  == exp
       end
-    end
-
-    it ":list_all_collections should be based on is_administrator() or Rails.env" do
-      # In test environment, is_administrator() should determine outcome.
-      Rails.env.should == 'test'
-      [true, false].each do |exp|
-        @auth.stub(:is_administrator).and_return(exp)
-        @ab = Ability.new(@obj)
-        @ab.can?(:list_all_collections, nil).should == exp
-      end
-      # In development environment, should return true even for non-admins.
-      Rails.stub(:env).and_return('development')
-      @auth.stub(:is_administrator).and_return(false)
-      @ab = Ability.new(@obj)
-      @ab.can?(:list_all_collections, nil).should == true
     end
 
   end

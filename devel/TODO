@@ -1,10 +1,17 @@
 ------------------
-Development Tasks - December
+On deck
 ------------------
 
 System integration. [Waiting: details below.]
 
+---
+
 Rake task to list all Hydrus pids, along with their has_model_s value.
+
+Tighten access restrictions to the HydrusSolrController. These guarded by
+Tomcat rules in our Puppet manifest: replace su_admin_nets with $foz_all_nets.
+
+Remove all code that puts WF into the APO. Search for workflow_steps.
 
 --------
 System integration
@@ -25,24 +32,13 @@ Set up Camel to send messages to hydrus-prod. [Waiting until we start running
 the app on hydrus-prod.]
 
 --------
-Other: short-term candidates
+Other
 --------
-
-Tighten access restrictions to the HydrusSolrController. These guarded by
-Tomcat rules in our Puppet manifest: replace su_admin_nets with $foz_all_nets.
 
 Implement the ability for an admin to become some other user.
 
 Refactor Collection.accept_terms_of_deposit to move XML logic down to the
 datastream [see notes in method].
-
-Remove all code that puts WF into the APO. Search for workflow_steps.
-
-Events controller: refactor along the lines of datastreams controller.
-
---------
-Other
---------
 
 Upgrade to hydra-head 5.0, active-fedora 5.2, OM 1.8, Solrizer 2.0, and
 Blacklight 4.0. See github.com/projecthydra/hydra-head/wiki/Migrating-to-5.0.
@@ -51,8 +47,8 @@ Update to Rubydora 0.6.0, which might speed up integration tests. [We are
 blocked by active-fedora gem restriction to to 0.5.x series. Chris might be
 looking into this.]
 
-Deprecation warning: "Hydra::FileAssetsHelper has been moved". We will need
-to deal with this before we move to hydra-head v5x.
+Deprecation warning: "Hydra::FileAssetsHelper has been moved". We will need to
+deal with this before we move to hydra-head v5x.
 
 rightsMD: <access> blocks should include <none/> to indicate no access.
 
@@ -137,8 +133,8 @@ and the to_solr() method in RoleMDDS.
 Collection create: APO.roleMetadata: set the value of <name> for the
 collection-manager [waiting on LDAP].
 
-Item view page: the actions box div is called "div.collection-actions". Is
-this a problem?
+Item view page: the actions box div is called "div.collection-actions". Is this
+a problem?
 
 The home page is producing explosive volumes of SOLR logging. This occurs
 during the super() call in index() of catalog_controller.rb, which invokes a

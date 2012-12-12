@@ -72,6 +72,12 @@ module Hydrus::Authorizable
     return administrators.include?(user.sunetid)
   end
 
+  # Returns true if the given user can act as a Hydrus administrator,
+  # either by being one or because we're running in development mode.
+  def self.can_act_as_administrator(user)
+    return (is_administrator(user) or Rails.env == 'development')
+  end
+
   # Returns true if the given user can create new Hydrus Collections.
   def self.can_create_collections(user)
     return collection_creators.include?(user.sunetid)
@@ -137,13 +143,6 @@ module Hydrus::Authorizable
     return true if can_edit_collection(user, item.collection)
     user_roles = item.apo.roles_of_person(user.sunetid)
     return does_intersect(user_roles, item_reviewer_roles)
-  end
-
-  # Returns true if the given user can view an object's XML datastreams.
-  # This ability is intended only for development mode and Hydrus administrators.
-  def self.can_view_object_datastreams(user, obj)
-    return true if is_administrator(user)
-    return Rails.env == 'development'
   end
 
 end

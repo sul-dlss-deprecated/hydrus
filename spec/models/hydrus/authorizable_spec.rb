@@ -35,10 +35,27 @@ describe Hydrus::Authorizable do
     @auth.does_intersect(@s1, @s3).should == true
   end
 
-  it "is_administrator() should work as expected" do
-    @auth.stub(:administrators).and_return(@s1)
-    @auth.is_administrator(@ua).should == true
-    @auth.is_administrator(@uf).should == false
+  describe "administrators" do
+    
+    it "is_administrator() should work as expected" do
+      @auth.stub(:administrators).and_return(@s1)
+      @auth.is_administrator(@ua).should == true
+      @auth.is_administrator(@uf).should == false
+    end
+
+    it "can_act_as_administrator() should be like is_administrator(), except in dev" do
+      # In test environment, is_administrator() should determine outcome.
+      Rails.env.should == 'test'
+      [true, false].each do |exp|
+        @auth.stub(:is_administrator).and_return(exp)
+        @auth.can_act_as_administrator(nil).should == exp
+      end
+      # In development environment, should return true even for non-admins.
+      Rails.stub(:env).and_return('development')
+      @auth.stub(:is_administrator).and_return(false)
+      @auth.can_act_as_administrator(nil).should == true
+    end
+
   end
 
   it "can_create_collections() should work as expected" do
@@ -202,29 +219,6 @@ describe Hydrus::Authorizable do
       # No.
       @hi.stub_chain(:apo, :roles_of_person).and_return(@s2)
       @auth.can_review_item(@ua, @hi).should == false
-    end
-
-  end
-
-  describe "can_view_object_datastreams()" do
-
-    it "administrators: should return true" do
-      Rails.stub(:env).and_return('production')
-      @auth.stub(:is_administrator).and_return(true)
-      @auth.can_view_object_datastreams(@ua, @hi).should == true
-    end
-
-    it "for non-administrators: should return true only in development mode" do
-      @auth.stub(:is_administrator).and_return(false)
-      tests = {
-        'production'  => false,
-        'test'        => false,
-        'development' => true,
-      }
-      tests.each do |env, exp|
-        Rails.stub(:env).and_return(env)
-        @auth.can_view_object_datastreams(@ua, @hi).should == exp
-      end
     end
 
   end
