@@ -4,11 +4,6 @@ On deck
 
 System integration. [Waiting: details below.]
 
-Tighten access restrictions to the HydrusSolrController. These guarded by
-Tomcat rules in our Puppet manifest: replace su_admin_nets with $foz_all_nets.
-
-Remove all code that puts WF into the APO. Search for workflow_steps.
-
 --------
 System integration
 --------
@@ -31,33 +26,34 @@ the app on hydrus-prod.]
 Other
 --------
 
-Implement the ability for an admin to become some other user.
+Remove all code that puts WF into the APO. Search for workflow_steps.
 
 Refactor Collection.accept_terms_of_deposit to move XML logic down to the
 datastream [see notes in method].
 
-Upgrade to hydra-head 5.0, active-fedora 5.2, OM 1.8, Solrizer 2.0, and
-Blacklight 4.0. See github.com/projecthydra/hydra-head/wiki/Migrating-to-5.0.
-
-Update to Rubydora 0.6.0, which might speed up integration tests. [We are
-blocked by active-fedora gem restriction to to 0.5.x series. Chris might be
-looking into this.]
-
-Deprecation warning: "Hydra::FileAssetsHelper has been moved". We will need to
-deal with this before we move to hydra-head v5x.
-
 rightsMD: <access> blocks should include <none/> to indicate no access.
 
-XML formatting issues: (1) MODS elements should be in the default order of the
-MODS spec. (2) Save the XML in some consistent pretty-print form. (3) No
-useless empty elements. We attempted to make some improvement to descMetadata
-using the beautify_datastream() and add_hydrus_next_sibling_node() methods;
-however, the former method led to some strange behavior (for example, note the
-failure of `rails runner devel/create_test_item.rb batch co i`). Further
-progress probably requires some planning/discussion. The existing hydra-OM
-stack does not make it easy to address all of the concerns. We should to decide
-the most practical place to implement such behavior -- in every application or
-in a single XML-cleanup gem that all applications could invoke.
+Refactor and write tests for redirect_if_not_correct_object_type: seems more
+complex than it needs to be.
+
+Refactor purl_page_ready() to use workflow_ds_extension. We could ask the PURL
+app directly: it returns a 404 (according to Chris J) if you ask for an object
+that is not known it its document cache.
+
+Move tests for workflow_ds_extension out of gen_obj_spec and into its own spec.
+
+Stub out workflow calls in unit and integration tests that create objects with
+the "fake" PID, so that we don't run into random test failures. Step 1:
+identify methods that advance the workflow (publish and its cousins). Step 2:
+identify tests that invoke those methods in a non-druid-minting context.
+
+Consider moving Hydrus::Responsible into RoleMDDS. Not sure that we need the
+module. Also, there is currently some duplication between Hydrus::Responsible
+and the to_solr() method in RoleMDDS.
+
+----
+
+Implement the ability for an admin to become some other user.
 
 Embargo, visibility, and license for draft Items under scenarios when the
 collection's policies are changed from varies to fixed. Current app behavior:
@@ -82,25 +78,6 @@ Should submit_for_approval() and resubmit() send email messages?
 
 Update search results page; UI redesign degraded formatting of it.
 
-Update SUL-chrome gem to latest Bootstrap (needed to be able to use the
-unchecked checkbox icon, which is not available in our current SUL-chrome gem).
-When this is done, change "icon-minus" to "icon-check-empty" in the
-select_status_checkbox_icon helper method (application_helper.rb).
-
-Refactor and write tests for redirect_if_not_correct_object_type: seems more
-complex than it needs to be.
-
-Refactor purl_page_ready() to use workflow_ds_extension. We could ask the PURL
-app directly: it returns a 404 (according to Chris J) if you ask for an object
-that is not known it its document cache.
-
-Move tests for workflow_ds_extension out of gen_obj_spec and into its own spec.
-
-Stub out workflow calls in unit and integration tests that create objects with
-the "fake" PID, so that we don't run into random test failures. Step 1:
-identify methods that advance the workflow (publish and its cousins). Step 2:
-identify tests that invoke those methods in a non-druid-minting context.
-
 Consider moving the actual collection-depositor roleMD info from the APO to the
 Collection, for two reasons: (1) it parallels the roleMD stored in the Item;
 (2) without it, we don't have access to the collection depositor during search
@@ -122,18 +99,40 @@ text boxes, use the approach we have adopted elsewhere for non-required items:
 have the user click "Add" button first. Collection: links to related items.
 Item: related citations; and links to related items.
 
-Consider moving Hydrus::Responsible into RoleMDDS. Not sure that we need the
-module. Also, there is currently some duplication between Hydrus::Responsible
-and the to_solr() method in RoleMDDS.
-
 Collection create: APO.roleMetadata: set the value of <name> for the
 collection-manager [waiting on LDAP].
 
 Item view page: the actions box div is called "div.collection-actions". Is this
 a problem?
 
+Update SUL-chrome gem to latest Bootstrap (needed to be able to use the
+unchecked checkbox icon, which is not available in our current SUL-chrome gem).
+When this is done, change "icon-minus" to "icon-check-empty" in the
+select_status_checkbox_icon helper method (application_helper.rb).
+
+Upgrade to hydra-head 5.0, active-fedora 5.2, OM 1.8, Solrizer 2.0, and
+Blacklight 4.0. See github.com/projecthydra/hydra-head/wiki/Migrating-to-5.0.
+
+Update to Rubydora 0.6.0, which might speed up integration tests. [We are
+blocked by active-fedora gem restriction to to 0.5.x series. Chris might be
+looking into this.]
+
+Deprecation warning: "Hydra::FileAssetsHelper has been moved". We will need to
+deal with this before we move to hydra-head v5x.
+
 The home page is producing explosive volumes of SOLR logging. This occurs
 during the super() call in index() of catalog_controller.rb, which invokes a
 Blacklight method that logs the entire SOLR response. A bug has been filed; in
 the meantime, you can use the `rake server` task, which filters out most of the
 noise.
+
+XML formatting issues: (1) MODS elements should be in the default order of the
+MODS spec. (2) Save the XML in some consistent pretty-print form. (3) No
+useless empty elements. We attempted to make some improvement to descMetadata
+using the beautify_datastream() and add_hydrus_next_sibling_node() methods;
+however, the former method led to some strange behavior (for example, note the
+failure of `rails runner devel/create_test_item.rb batch co i`). Further
+progress probably requires some planning/discussion. The existing hydra-OM
+stack does not make it easy to address all of the concerns. We should to decide
+the most practical place to implement such behavior -- in every application or
+in a single XML-cleanup gem that all applications could invoke.
