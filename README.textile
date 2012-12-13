@@ -36,7 +36,7 @@ h2. Getting your environment setup:
     rake db:migrate RAILS_ENV=test
 
     rake hydrus:refreshfix
-    rake hydrus:refreshfix RAILS_ENV=test 
+    rake hydrus:refreshfix RAILS_ENV=test
     rake hydrus:refresh_upload_files
 
 h2. Starting the app
@@ -330,3 +330,22 @@ h2. Updating hydra-jetty submodule.
     cd /jenkins/jobs/Hydrus/workspace/jetty
     git reset --hard HEAD
     git clean -dfx
+
+h2. Deployment.
+
+    # Commit your work, merge into develop|master, and push.
+    # Make sure to modify CHANGELOG and VERSION as needed.
+    git commit -am 'blah blah'
+    git checkout develop && git merge working && git push origin develop
+    git checkout master  && git merge develop && git push origin master
+    git checkout working
+
+    # Create a tag.
+    VERSION=`cat VERSION`
+    git tag -a $VERSION -m $VERSION
+    git push origin --tags
+
+    # Deploy to dortest|production.
+    DEPLOY_TO='dortest'
+    kinit && aklog
+    cd deploy && cap $DEPLOY_TO deploy && cd -
