@@ -26,6 +26,11 @@ the app on hydrus-prod.]
 Other
 --------
 
+Upgrade to a different branch of hydra-jetty. Currently using the solr4.0-beta
+branch, which was deleted once already.
+
+Try to rebuild hydrus project on a dev box using the README.
+
 Remove all code that puts WF into the APO. Search for workflow_steps.
 
 Refactor Collection.accept_terms_of_deposit to move XML logic down to the
