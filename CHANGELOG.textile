@@ -1,13 +1,21 @@
+== 2012.12.13
+
+* Updated to a proper SOLR 4.0 branch of hydra-jetty.
+* Rake task to list all Hydrus objects.
+* Added view for hydrus admins to list all collections.
+* Added Hydrus.profile() method.
+* New feature for dev-mode and admins: datastreams tab.
+* Updated to dor-services 3.17.6.
+* Added cannot_do() protection to create() and accept_terms_of_deposit().
+* Refactor relatedItem adding and related code.
+* Refactor methods that create and augment descMetadata.
+* Improved create_test_item.rb.
+* Item validation: at least one keywords is required.
+* Fixed glitch in required_fields_completed?().
+
 == 2012.12.03
 
 * Overhaul of embargo-visibility-license.
-** General refactoring and simplification.
-** Removed embargoMetadata datastream from Collections.
-** Item: remove embargoDS when embargo_date is set to blank.
-** When Item is embargoed, embargoMetadata.status is set.
-** Item.license when licenses can vary: handle correctly in view and add validations.
-** Make license and embargo selections when required and check for valid values.
-** Force user to select a license and embargo period on collections when required.
 * HyTime module to rationalize handling of dates and times.
 * Render newlines as <br/> tags in Item and Collection abstracts.
 * Upgraded dor-services to 3.17.2: fixes bug in public XML (DC).

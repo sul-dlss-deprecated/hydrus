@@ -16,44 +16,44 @@ h2. Getting your environment setup:
     brew install exiftool
 
     git clone git@github.com:sul-dlss/hydrus.git
-    
+
     cp hydrus/.rvmrc{.example,}
     cp hydrus/deploy/.rvmrc{.example,}
-    
+
     cd hydrus
-    
-    bundle install
 
     git submodule init
     git submodule update
 
+    bundle install
+
     rake hydra:jetty:config
+    rake hydrus:config
     rake jetty:start
 
     rake db:migrate
     rake db:test:prepare
     rake db:migrate RAILS_ENV=test
 
-    rake hydrus:loadfix
-    rake hydrus:loadfix RAILS_ENV=test 
-    
+    rake hydrus:refreshfix
+    rake hydrus:refreshfix RAILS_ENV=test 
     rake hydrus:refresh_upload_files
-    
+
 h2. Starting the app
 
     rake jetty:start
     rails server
-    
+
 Or for a quieter output on the console:
-    
+
     rake server
 
     Go to http://localhost:3000
-    
+
     More info about the app:
-    
+
     http://localhost:3000/about
-    
+
     You can look at the about page in any environment to see what Rails
     environment you are running in, other app info, as well as the app version
     number (as defined in the VERSION file).  When deployed via capistrano, a
@@ -67,7 +67,7 @@ fixtures.  Login with the following default user:
 
     username: archivist1@example.com
     password: beatcal
-    
+
 Collection manager SUNETids hardcoded into app/models/hydrus/authorizable.rb
 
 h2. Developing
@@ -83,7 +83,7 @@ Recommended workflow:
     git checkout working
 
     -- make changes --
-    
+
     git add -A
     git commit -m 'i did lots of cool stuff'
 
@@ -105,20 +105,20 @@ If you get a conflict on the push to origin (last line), you'll need to rebase
 your local changes on top of the remote branch:
 
     git rebase origin/develop
-    
+
 And then repush:
 
     git push origin develop
-    
+
 Skip step 3b and go to 4
-    
+
 3b. If from step 2 the git fetch didn't pull any updates from the server, then:
 
  git merge working
  git push origin develop
 
 You can use "gitx --all" at any time to see the history of each branch.
-    
+
 4. When you're ready to develop more code, go back to step 1.    You can use
 multiple working branches if you are developing multiple features at once that
 you don't want to mix together.  Just create a different local branch and
@@ -136,7 +136,7 @@ h2. Deploying
   cap dev deploy # for http://hydrus-dev.stanford.edu
   cap dortest deploy # for http://hydrus-test.stanford.edu
 
-Note that if you want to blanket change all passwords for default fixture users 
+Note that if you want to blanket change all passwords for default fixture users
 (useful for public facing websites), you can use a rake command for that environment.
 
 RAILS_ENV=dortest rake hydrus:update_passwords['NEW_PASSWORD_HERE']
@@ -164,13 +164,13 @@ h2. Useful commands
 h3. Using Rails console:
 
     rails console
-    
+
     rails console production # for production mode
-    
+
 h3. Dropping databases entirely:
 
     rake db:drop:all
-    
+
 Most of the rake commands are environment specific, so they can be run in test
 environment by adding 'RAILS_ENV=test' to the end.
 
@@ -184,11 +184,11 @@ h3. Fixtures:
     rake hydrus:jetty_nuke   # kill jetty and reload it, will delete all objects (requires refreshfix when you are done)
     rake hydrus:refreshfix   # deletes and then reloads fixtures (most common)
     rake hydrus:loadfix      # loads fixtures (will fail if they exist)
-    rake hydrus:deletefix    # deletes fixtures 
+    rake hydrus:deletefix    # deletes fixtures
     rake hydrus:refresh_upload_files  # copy uploaded files associated with fixtures back into the public/uploads directory
 
 h3. Tests:
-    
+
     rake local_ci       # run all tests and generates full coverage report (will shut down jetty, runs 'rake ci' task and then restart jetty)
     rake unit_tests  # just run rspec unit tests with coverage report for only those tests
     rake integration_tests # just run rspec integration test with coverage report for only those tests (this will take a while)
@@ -199,7 +199,7 @@ h3. Tests:
 h3. App URLs:
 
     http://localhost:3000
-    
+
 Local services provided by jetty, assuming it's running (most will have both a development and a test instance):
 
     http://localhost:8983/    # lists all services
@@ -318,9 +318,15 @@ h2. Updating hydra-jetty submodule.
     rake hydrus:jetty_nuke
     etc.
 
-    # Probably need to reset jetty directory on jenkinsqa.stanford.edu,
-    # but not certain about the details.
-
     # If you do this work on the develop branch, you need to merge
     # to master. Otherwise, you won't be able to set up the code on
-    # a new box.
+    # a new box, and tests won't run correctly on the master branch.
+
+    # Reset jetty directory on jenkinsqa.stanford.edu.
+    ssh jenkinsqa@jenkinsqa.stanford.edu
+    cd /jenkins/jobs/Hydrus-develop/workspace/jetty
+    git reset --hard HEAD
+    git clean -dfx
+    cd /jenkins/jobs/Hydrus/workspace/jetty
+    git reset --hard HEAD
+    git clean -dfx

@@ -2,36 +2,28 @@
 On deck
 ------------------
 
-Wrap up hydra-jetty work
-  - Try to rebuild hydrus project from scratch, updating README as needed
+Deploy to hydrus-test and check for problems.
+  - Keep track of deployment steps.
+  - Create collection with item, and publish them.
+  - Check object workflows, make sure submitted and published lifecycles are not duplicated.
 
-System integration. [Waiting: details below.]
-  - Hydrus objects end up with 2 values for submitted_dt and published_dt in
-    their SOLR documents, because two WFs are using the those lifecycles.
-    [Still not fixed as of 12/4. For example, these objects have two published
-    lifecycles, because the disseminationWF if still using the published
-    lifecycle and should not: bf398rg3493, zt788zg9203. Should be fixed now.]
-  - update changelog
-  - bump version
-  - deploy
-  - create collection and item and publish them
-  - check workflows when finished
+Deploy to hydrus-test and check for problems. [Waiting on hydrus-test deploy.]
 
---------
-System integration
---------
+Set up Camel to send messages to hydrus-prod. [Waiting on hydrus-prod deploy.]
 
 Create object mc322hh4254 (hydra:referencesAgreement) on hydrus-dev,
 hydrus-test, and hydrus-prod. [Hannah/Lynn]
 
-Try to use hydrus-prod. [Waiting on new dor-services gem in production.]
-
-Set up Camel to send messages to hydrus-prod. [Waiting until we start running
-the app on hydrus-prod.]
-
 --------
 Other
 --------
+
+Config: refactor hydrus:config Rake task, and compare my configs against
+example configs (in Git) and server configs.
+
+Automate deployment steps.
+
+New developer setup: package up the setup rake tasks into a single task.
 
 Change textile documents to something simpler, and fix formattting problems.
 
@@ -59,8 +51,6 @@ identify tests that invoke those methods in a non-druid-minting context.
 Consider moving Hydrus::Responsible into RoleMDDS. Not sure that we need the
 module. Also, there is currently some duplication between Hydrus::Responsible
 and the to_solr() method in RoleMDDS.
-
-----
 
 Implement the ability for an admin to become some other user.
 
