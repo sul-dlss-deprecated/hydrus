@@ -2,17 +2,27 @@
 On deck
 ------------------
 
+Wrap up hydra-jetty work
+  - make sure tests pass
+  - push changes
+  - Try to rebuild hydrus project from scratch, updating README as needed
+  - remove old remote branch on github
+
 System integration. [Waiting: details below.]
+  - Hydrus objects end up with 2 values for submitted_dt and published_dt in
+    their SOLR documents, because two WFs are using the those lifecycles.
+    [Still not fixed as of 12/4. For example, these objects have two published
+    lifecycles, because the disseminationWF if still using the published
+    lifecycle and should not: bf398rg3493, zt788zg9203. Should be fixed now.]
+  - update changelog
+  - bump version
+  - deploy
+  - create collection and item and publish them
+  - check workflows when finished
 
 --------
 System integration
 --------
-
-Hydrus objects end up with 2 values for submitted_dt and published_dt in their
-SOLR documents, because two WFs are using the those lifecycles. [Still not
-fixed as of 12/4. For example, these objects have two published lifecycles,
-because the disseminationWF if still using the published lifecycle and should
-not: bf398rg3493, zt788zg9203. Willy is fixing: 12/11.]
 
 Create object mc322hh4254 (hydra:referencesAgreement) on hydrus-dev,
 hydrus-test, and hydrus-prod. [Hannah/Lynn]
@@ -25,8 +35,6 @@ the app on hydrus-prod.]
 --------
 Other
 --------
-
-Try to rebuild hydrus project on a dev box using the README.
 
 Remove all code that puts WF into the APO. Search for workflow_steps.
 
