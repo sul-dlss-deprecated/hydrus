@@ -4,62 +4,60 @@ A Hydra application enabling deposit of digital objects into the Stanford
 Digital Repository for preservation and access.
 
 This code has dependencies on non-public code:
-<ul>
-<li>Stanford's dor-services gem</li>
-<li>Stanford's sul-chrome gem </li>
-</ul>
+
+* Stanford's dor-services gem
+* Stanford's sul-chrome gem
+
 
 h2. Getting your environment setup:
 
-	rvm install 1.9.3
+    rvm install 1.9.3
 
-  brew install exiftool
+    brew install exiftool
 
-	git clone git@github.com:sul-dlss/hydrus.git
-	cd hydrus
-	
-	cp .rvmrc.example .rvmrc
-	cp deploy/.rvmrc.example deploy/.rvmrc
-	
-	cd ..
-	cd hydrus
-	
-	bundle install
+    git clone git@github.com:sul-dlss/hydrus.git
+    
+    cp hydrus/.rvmrc{.example,}
+    cp hydrus/deploy/.rvmrc{.example,}
+    
+    cd hydrus
+    
+    bundle install
 
-	git submodule init
-	git submodule update
+    git submodule init
+    git submodule update
 
-	rake hydra:jetty:config
+    rake hydra:jetty:config
+    rake jetty:start
 
-	rake jetty:start
+    rake db:migrate
+    rake db:test:prepare
+    rake db:migrate RAILS_ENV=test
 
-	rake db:migrate
-	rake db:test:prepare
-	rake db:migrate RAILS_ENV=test
-
-	rake hydrus:loadfix
-	rake hydrus:loadfix RAILS_ENV=test 
-	
-	rake hydrus:refresh_upload_files
-	
+    rake hydrus:loadfix
+    rake hydrus:loadfix RAILS_ENV=test 
+    
+    rake hydrus:refresh_upload_files
+    
 h2. Starting the app
 
-	rake jetty:start
-	rails server
-	
+    rake jetty:start
+    rails server
+    
 Or for a quieter output on the console:
-	
-	rake server
+    
+    rake server
 
-	Go to http://localhost:3000
-	
-	More info about the app:
-	
-	http://localhost:3000/about
-	
-	You can look at the about page in any environment to see what Rails environment you are running in, other app info,
-	 as well as the app version number (as defined in the VERSION file).  When deployed via capistrano, a timestamp 
-	is added to the version number so you know when it was deployed.
+    Go to http://localhost:3000
+    
+    More info about the app:
+    
+    http://localhost:3000/about
+    
+    You can look at the about page in any environment to see what Rails
+    environment you are running in, other app info, as well as the app version
+    number (as defined in the VERSION file).  When deployed via capistrano, a
+    timestamp is added to the version number so you know when it was deployed.
 
 h2. Default user
 
@@ -67,9 +65,9 @@ Note that you will need to be logged in to see any objects, since there is an
 authentication and permissions system preventing read access to the default
 fixtures.  Login with the following default user:
 
-username: archivist1@example.com
-password: beatcal
-	
+    username: archivist1@example.com
+    password: beatcal
+    
 Collection manager SUNETids hardcoded into app/models/hydrus/authorizable.rb
 
 h2. Developing
@@ -82,12 +80,12 @@ Recommended workflow:
 
 1. Go to your local working branch
 
-	git checkout working
+    git checkout working
 
-	-- make changes --
-	
-	git add -A
-	git commit -m 'i did lots of cool stuff'
+    -- make changes --
+    
+    git add -A
+    git commit -m 'i did lots of cool stuff'
 
 2. Get updates from remote server and switch back to the develop branch
 
@@ -106,22 +104,22 @@ Recommended workflow:
 If you get a conflict on the push to origin (last line), you'll need to rebase
 your local changes on top of the remote branch:
 
-	git rebase origin/develop
-	
+    git rebase origin/develop
+    
 And then repush:
 
-	git push origin develop
-	
+    git push origin develop
+    
 Skip step 3b and go to 4
-	
+    
 3b. If from step 2 the git fetch didn't pull any updates from the server, then:
 
  git merge working
  git push origin develop
 
 You can use "gitx --all" at any time to see the history of each branch.
-	
-4. When you're ready to develop more code, go back to step 1.	You can use
+    
+4. When you're ready to develop more code, go back to step 1.    You can use
 multiple working branches if you are developing multiple features at once that
 you don't want to mix together.  Just create a different local branch and
 replace "working" above with your local branch name.
@@ -130,7 +128,7 @@ h2. Creating test items
 
 You can create test collections and items quickly using a developer script.  For help using the script:
 
-	rails runner devel/create_test_item.rb help
+    rails runner devel/create_test_item.rb help
 
 h2. Deploying
 
@@ -165,50 +163,50 @@ h2. Useful commands
 
 h3. Using Rails console:
 
-	rails console
-	
-	rails console production # for production mode
-	
+    rails console
+    
+    rails console production # for production mode
+    
 h3. Dropping databases entirely:
 
-	rake db:drop:all
-	
+    rake db:drop:all
+    
 Most of the rake commands are environment specific, so they can be run in test
 environment by adding 'RAILS_ENV=test' to the end.
 
 h3. Migrating databases to the latest version (which will also set them up if
 they don't exist, assuming you are using sqllite):
 
-	rake db:migrate
+    rake db:migrate
 
 h3. Fixtures:
 
-	rake hydrus:jetty_nuke   # kill jetty and reload it, will delete all objects (requires refreshfix when you are done)
-	rake hydrus:refreshfix   # deletes and then reloads fixtures (most common)
-	rake hydrus:loadfix      # loads fixtures (will fail if they exist)
-	rake hydrus:deletefix    # deletes fixtures 
-	rake hydrus:refresh_upload_files  # copy uploaded files associated with fixtures back into the public/uploads directory
+    rake hydrus:jetty_nuke   # kill jetty and reload it, will delete all objects (requires refreshfix when you are done)
+    rake hydrus:refreshfix   # deletes and then reloads fixtures (most common)
+    rake hydrus:loadfix      # loads fixtures (will fail if they exist)
+    rake hydrus:deletefix    # deletes fixtures 
+    rake hydrus:refresh_upload_files  # copy uploaded files associated with fixtures back into the public/uploads directory
 
 h3. Tests:
-	
-	rake local_ci	   # run all tests and generates full coverage report (will shut down jetty, runs 'rake ci' task and then restart jetty)
-	rake unit_tests  # just run rspec unit tests with coverage report for only those tests
-	rake integration_tests # just run rspec integration test with coverage report for only those tests (this will take a while)
+    
+    rake local_ci       # run all tests and generates full coverage report (will shut down jetty, runs 'rake ci' task and then restart jetty)
+    rake unit_tests  # just run rspec unit tests with coverage report for only those tests
+    rake integration_tests # just run rspec integration test with coverage report for only those tests (this will take a while)
 
-	open coverage/rcov/index.html  # check your test coverage (won't exist until tests run at least once)
+    open coverage/rcov/index.html  # check your test coverage (won't exist until tests run at least once)
 
 
 h3. App URLs:
 
-	http://localhost:3000
-	
+    http://localhost:3000
+    
 Local services provided by jetty, assuming it's running (most will have both a development and a test instance):
 
-	http://localhost:8983/    # lists all services
-	http://localhost:8983/fedora/admin/   # fedora admin   (username and password are "fedoraAdmin")
-	http://localhost:8983/fedora/objects  # find fedora objects
-	http://localhost:8983/solr/   # solr
-	http://localhost:8983/solr/development/select/   # show all solr index information
+    http://localhost:8983/    # lists all services
+    http://localhost:8983/fedora/admin/   # fedora admin   (username and password are "fedoraAdmin")
+    http://localhost:8983/fedora/objects  # find fedora objects
+    http://localhost:8983/solr/   # solr
+    http://localhost:8983/solr/development/select/   # show all solr index information
 
 Starting Jetty on the hydrus-dev or -test servers:
 
@@ -239,83 +237,90 @@ General points:
 
 Relationship between object_status and workflow steps for collections:
 
-      object_status              workflow steps
-      ----------------------------------------------------
-      draft                      start-deposit
+    object_status              workflow steps
+    ----------------------------------------------------
+    draft                      start-deposit
 
-      published_open             submit --> approve --> start-assembly
+    published_open             submit --> approve --> start-assembly
 
-      published_closed           approve OR start-assembly
-      ----------------------------------------------------
+    published_closed           approve OR start-assembly
+    ----------------------------------------------------
 
-      Notes:
+    Notes:
 
-      - The first time a collection is opened, it automatically advances
-        through a few workflow steps.
+    - The first time a collection is opened, it automatically advances
+    through a few workflow steps.
 
-      - Whether the collection advances all the way to start-assembly or just
-        to approve is controlled by configuration.
+    - Whether the collection advances all the way to start-assembly or just
+    to approve is controlled by configuration.
 
-      - After that, the collection manager can toggle the collection between
-        open and closed states, but the collection cannot be unpublished
-        and the workflow steps do not move backward.
+    - After that, the collection manager can toggle the collection between
+    open and closed states, but the collection cannot be unpublished
+    and the workflow steps do not move backward.
 
 Relationship between object_status and workflow steps for items:
 
-      object_status              workflow steps
-      ----------------------------------------------------
-      draft                      start-deposit
-      published                  submit --> approve --> start-assembly
-      ----------------------------------------------------
+    object_status              workflow steps
+    ----------------------------------------------------
+    draft                      start-deposit
+    published                  submit --> approve --> start-assembly
+    ----------------------------------------------------
 
-      Notes:
+    Notes:
 
-      - For collections that do not require review of items, the object
-        goes directly from draft to published status and advances through
-        several workflow steps.
+    - For collections that do not require review of items, the object
+    goes directly from draft to published status and advances through
+    several workflow steps.
 
-      object_status              workflow steps
-      ----------------------------------------------------
-      draft                      start-deposit
-      awaiting_approval          submit
-      returned                   submit
-      published                  approve --> start-assembly
-      ----------------------------------------------------
+    object_status              workflow steps
+    ----------------------------------------------------
+    draft                      start-deposit
+    awaiting_approval          submit
+    returned                   submit
+    published                  approve --> start-assembly
+    ----------------------------------------------------
 
-      Notes:
+    Notes:
 
-      - Items can toggle back and forth between awaiting_approval and returned
-        during the edit-and-review process. During that time, the workflow
-        remains at the submit step.
+    - Items can toggle back and forth between awaiting_approval and returned
+    during the edit-and-review process. During that time, the workflow
+    remains at the submit step.
 
 h2. Updating hydra-jetty submodule.
 
-  # Make sure your git status is clean.
-  git status
+    # Make sure your git status is clean.
+    git status
 
-  # Make a backup of the hydrus dir. Include the trailing slash.
-  mkdir       ../backup_hydrus
-  rsync -a ./ ../backup_hydrus
+    # Make a backup of the hydrus dir. Include the trailing slash.
+    mkdir       ../backup_hydrus
+    rsync -a ./ ../backup_hydrus
 
-  # Restore jetty directory to its initial state.
-  cd jetty
-  git reset --hard HEAD
-  git clean -dfx
-  git status
+    # Restore jetty directory to its initial state.
+    cd jetty
+    git reset --hard HEAD
+    git clean -dfx
+    git status
 
-  # Checkout the commit you want to use.
-  git fetch
-  git checkout SHA1
+    # Checkout the commit you want to use.
+    git fetch
+    git checkout SHA1
 
-  # Back in the main hydrus projet, commit the submodule change.
-  cd ..
-  git status                           # Indicates jetty has changed.
-  git commit -am 'Updated hydra-jetty'
+    # Back in the main hydrus projet, commit the submodule change.
+    cd ..
+    git status                           # Indicates jetty has changed.
+    git commit -am 'Updated hydra-jetty'
 
-  # Confirm that everything looks good.
-  git status
-  git submodule status
+    # Confirm that everything looks good.
+    git status
+    git submodule status
 
-  # Initialize the contents of jetty, etc.
-  rake hydrus:jetty_nuke
-  etc.
+    # Initialize the contents of jetty, etc.
+    rake hydrus:jetty_nuke
+    etc.
+
+    # Probably need to reset jetty directory on jenkinsqa.stanford.edu,
+    # but not certain about the details.
+
+    # If you do this work on the develop branch, you need to merge
+    # to master. Otherwise, you won't be able to set up the code on
+    # a new box.

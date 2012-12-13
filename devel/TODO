@@ -3,10 +3,7 @@ On deck
 ------------------
 
 Wrap up hydra-jetty work
-  - make sure tests pass
-  - push changes
   - Try to rebuild hydrus project from scratch, updating README as needed
-  - remove old remote branch on github
 
 System integration. [Waiting: details below.]
   - Hydrus objects end up with 2 values for submitted_dt and published_dt in
@@ -35,6 +32,8 @@ the app on hydrus-prod.]
 --------
 Other
 --------
+
+Change textile documents to something simpler, and fix formattting problems.
 
 Remove all code that puts WF into the APO. Search for workflow_steps.
 
