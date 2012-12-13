@@ -179,7 +179,7 @@ class HydrusItemsController < ApplicationController
     @pid=params[:pid]
     @from=params[:from]
     @fobj=Hydrus::Item.find(@pid)
-    @fobj.accept_terms_of_deposit(current_user.to_s)
+    @fobj.accept_terms_of_deposit(current_user)
     @fobj.save
     respond_to do |format|
       format.html

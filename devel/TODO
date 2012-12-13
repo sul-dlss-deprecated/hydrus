@@ -2,9 +2,10 @@
 On deck
 ------------------
 
+Related Link 2+ does not show correctly on Item view page.
+
 Deploy to hydrus-test and check for problems.
-  - Keep track of deployment steps.
-  - Create collection with item, and publish them.
+  - Publish item.
   - Check object workflows, make sure submitted and published lifecycles are not duplicated.
 
 Deploy to hydrus-test and check for problems. [Waiting on hydrus-test deploy.]
@@ -51,6 +52,11 @@ identify tests that invoke those methods in a non-druid-minting context.
 Consider moving Hydrus::Responsible into RoleMDDS. Not sure that we need the
 module. Also, there is currently some duplication between Hydrus::Responsible
 and the to_solr() method in RoleMDDS.
+
+Search results page should provide a link back to home page.
+
+The default license set at collection level does not appear to affect the Item
+UI.
 
 Implement the ability for an admin to become some other user.
 
