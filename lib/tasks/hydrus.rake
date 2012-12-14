@@ -26,6 +26,7 @@ namespace :hydrus do
         - The tag has not been used already.
         - You have updated the CHANGELOG.
         - Your Kerberos authentication is fresh.
+        - Use are using RVM gemsets.
     ".rstrip
     usage = "
       Usage:
@@ -56,15 +57,11 @@ namespace :hydrus do
     print "\nEnter 'yes' to confirm: "
     abort("\nDid not deploy.") unless STDIN.gets.strip == 'yes'
     # Deploy.
-    cmds = [
-      "git tag -a #{vers} -m #{vers}",
-      "git push origin --tags",
-      "cd deploy",
-      "sleep 1",
-      "cap #{env} deploy",
-      "cd -",
-    ]
-    system cmds.join(" && ")
+    system("git tag -a #{vers} -m #{vers}") or abort("\nTag creation failed.")
+    system("git push origin --tags")        or abort("\nTag push failed.")
+    deploy_script = 'tmp/run_deploy.sh'
+    File.open(deploy_script, 'w') { |f| f.puts "cd deploy && cap #{env} deploy" }
+    exec "bash #{deploy_script}"
   end
 
 end
