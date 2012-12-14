@@ -78,7 +78,7 @@ class Hydrus::DescMetadataDS < ActiveFedora::NokogiriDatastream
   end
 
   define_template :related_citation do |xml|
-    xml.note(:type => "citation/reference")
+    xml.note(:type => "citation/reference", :displayLabel => 'Related Publication')
   end
 
   define_template :topic do |xml, topic|

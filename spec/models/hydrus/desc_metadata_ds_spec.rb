@@ -71,7 +71,7 @@ describe Hydrus::DescMetadataDS do
     it "Should be able to insert new XML nodes" do
       nm = '<name><namePart/><role><roleTerm authority="marcrelator" type="text"/></role></name>'
       ri = '<relatedItem><titleInfo><title/></titleInfo><location><url/></location></relatedItem>'
-      rc = '<note type="citation/reference"></note>'
+      rc = '<note type="citation/reference" displayLabel="Related Publication"></note>'
       to = '<subject><topic>foo</topic></subject>'
       @exp_xml = noko_doc([
         @mods_start,
