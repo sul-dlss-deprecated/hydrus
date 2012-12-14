@@ -1,8 +1,7 @@
 # A script used to deploy Hydrus.
 #
 # Could not get this to work as a Rake task -- specifically
-# running the final cap command in a different directory under
-# a different Ruby and gemset.
+# running the cap command under a different Ruby and gemset.
 #
 # Run the script without arguments for usage and instructions.
 
@@ -19,15 +18,15 @@ prereqs = "
     - The tag has not been used already.
     - You have updated the CHANGELOG.
     - Your Kerberos authentication is fresh.
-    - Use are using RVM gemsets.
 ".strip
 
 usage = deindent("
   Usage:
 
-    ruby #{$PROGRAM_NAME} DEPLOY_ENV [--debug]
+    ruby #{$PROGRAM_NAME} DEPLOY_ENV [--notag] [--debug]
 
     DEPLOY_ENV   Environment to deploy to: dortest, production, etc.
+    --notag      If given, Git tag is not created.
     --debug      If given, commands are printed, not run.
 
   What the task does:
@@ -38,9 +37,10 @@ usage = deindent("
 ")
 
 # Get environment and version. The latter will serve as the tag.
-debug = ARGV.delete('--debug')
+debug = !! ARGV.delete('--debug')
+notag = !! ARGV.delete('--notag')
 env   = ARGV.shift
-vers  = IO.read('VERSION').strip
+tag   = IO.read('VERSION').strip
 abort(usage) unless env
 
 # Get user confirmation.
@@ -48,8 +48,10 @@ puts deindent("
   #{prereqs}
 
   Deployment:
-    To:  #{env}
-    Tag: #{vers}
+    To:          #{env}
+    Tag:         #{tag}
+    Debug mode:  #{debug}
+    No-tag mode: #{notag}
 ")
 print "\nEnter 'yes' to confirm: "
 abort("\nDid not deploy.") unless STDIN.gets.strip == 'yes'
@@ -57,12 +59,13 @@ puts
 
 # Run commands.
 cmds = [
-  "git tag -a #{vers} -m #{vers}",
+  "git tag -a #{tag} -m #{tag}",
   "git push origin --tags",
-  "bash -i -c 'cd deploy && cap cap #{env} deploy'",
+  "bash -i -c 'cd deploy && cap #{env} deploy'",
 ]
 
 cmds.each do |c|
   c = "echo #{c}" if debug
+  next if notag && c =~ /git/
   system(c) or abort("\nCommand failed: #{c.inspect}")
 end
