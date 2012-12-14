@@ -17,19 +17,44 @@ namespace :hydrus do
     end
   end
 
-  # A task to create a tag, push it, and deploy Hydrus.
-  # Example usage if deploying to production.
-  #
-  #   rake hydrus:deploy DENV=production
   desc "Deploy Hydrus"
   task :deploy do
+    prereqs = "Prerequisites:
+        - The commit to be deployed is currently active in your local Git repo.
+        - You have pushed that commit.
+        - The VERSION file contains the name of the tag.
+        - The tag has not been used already.
+        - You have updated the CHANGELOG.
+        - Your Kerberos authentication is fresh.
+    ".rstrip
+    usage = "
+      Usage:
+
+        rake hydrus:deploy DENV=xxx
+
+        Where xxx is the environment to deploy to: dortest, production, etc.
+
+      What this task does:
+        - Creates a Git tag and pushes it.
+        - Deploys the commit linked to that tag to the environment specified.
+
+      #{prereqs}
+    ".gsub(/\n {6}/, "\n").rstrip
     # Get environment and version. The latter will serve as the tag.
     env =  ENV['DENV']
     vers = IO.read("#{Rails.root}/VERSION").strip
-    abort "Specify a deployment environment: rake hydrus:deploy DENV=foo" unless env
+    abort(usage) unless env
     # Get user confirmation.
-    print "Enter 'yes' to deploy to #{env} using tag #{vers}: "
-    abort "Did not deploy." unless STDIN.gets.strip == 'yes'
+    confirm = "
+      #{prereqs}
+
+      Deployment:
+        To:  #{env}
+        Tag: #{vers}
+    ".gsub(/\n {6}/, "\n").rstrip
+    puts confirm
+    print "\nEnter 'yes' to confirm: "
+    abort("\nDid not deploy.") unless STDIN.gets.strip == 'yes'
     # Deploy.
     cmds = [
       "git tag -a #{vers} -m #{vers}",

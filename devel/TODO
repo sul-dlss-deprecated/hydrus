@@ -3,7 +3,6 @@ On deck
 ------------------
 
 Deploy to hydrus-test and check for problems.
-  - deploy if tests pass
   - Check object workflows: submitted/published lifecycles duplicated?
     sp632pp1299 vf775nz4561
 
