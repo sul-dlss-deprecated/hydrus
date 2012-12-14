@@ -15,15 +15,15 @@ hydrus-test, and hydrus-prod. [Hannah/Lynn]
 Other
 --------
 
-Config: compare my configs against example configs (in Git) and server configs.
-
 Run Hydrus.profile() on a slow integration test and a slow controller method.
+
+Remove all code that puts WF into the APO. Search for workflow_steps.
+
+Config: compare my configs against example configs (in Git) and server configs.
 
 New developer setup: package up the setup rake tasks into a single task.
 
 Change textile documents to something simpler, and fix formattting problems.
-
-Remove all code that puts WF into the APO. Search for workflow_steps.
 
 Refactor Collection.accept_terms_of_deposit to move XML logic down to the
 datastream [see notes in method].
@@ -133,6 +133,8 @@ using the beautify_datastream() and add_hydrus_next_sibling_node() methods;
 however, the former method led to some strange behavior (for example, note the
 failure of `rails runner devel/create_test_item.rb batch co i`). Further
 progress probably requires some planning/discussion. The existing hydra-OM
-stack does not make it easy to address all of the concerns. We should to decide
-the most practical place to implement such behavior -- in every application or
-in a single XML-cleanup gem that all applications could invoke.
+stack does not make it easy to address all of the concerns, and several DLSS
+developers expressed skepticism about the wisdom of the endeavor. If this is
+truly a requirement, we should to decide the most practical place to implement
+such behavior -- in every application or in a single XML-cleanup gem that all
+applications could invoke.
