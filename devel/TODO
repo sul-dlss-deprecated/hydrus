@@ -2,13 +2,9 @@
 On deck
 ------------------
 
-Related Link 2+ does not show correctly on Item view page.
-
 Deploy to hydrus-test and check for problems.
   - Publish item.
-  - Check object workflows, make sure submitted and published lifecycles are not duplicated.
-
-Deploy to hydrus-test and check for problems. [Waiting on hydrus-test deploy.]
+  - Check object workflows: submitted/published lifecycles duplicated?
 
 Set up Camel to send messages to hydrus-prod. [Waiting on hydrus-prod deploy.]
 
@@ -23,6 +19,8 @@ Config: refactor hydrus:config Rake task, and compare my configs against
 example configs (in Git) and server configs.
 
 Automate deployment steps.
+
+Run Hydrus.profile() on a slow integration test and a slow controller method.
 
 New developer setup: package up the setup rake tasks into a single task.
 
