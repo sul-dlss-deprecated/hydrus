@@ -15,8 +15,7 @@ hydrus-test, and hydrus-prod. [Hannah/Lynn]
 Other
 --------
 
-Config: refactor hydrus:config Rake task, and compare my configs against
-example configs (in Git) and server configs.
+Config: compare my configs against example configs (in Git) and server configs.
 
 Automate deployment steps.
 
