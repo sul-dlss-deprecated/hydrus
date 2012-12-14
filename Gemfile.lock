@@ -100,7 +100,6 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.3.3)
-    columnize (0.3.6)
     compass (0.12.2)
       chunky_png (~> 1.2)
       fssm (>= 0.2.7)
@@ -123,13 +122,6 @@ GEM
       nokogiri (>= 1.5.0)
     daemons (1.1.9)
     database_cleaner (0.8.0)
-    debugger (1.2.0)
-      columnize (>= 0.3.1)
-      debugger-linecache (~> 1.1.1)
-      debugger-ruby_core_source (~> 1.1.3)
-    debugger-linecache (1.1.2)
-      debugger-ruby_core_source (>= 1.1.1)
-    debugger-ruby_core_source (1.1.3)
     deprecation (0.0.5)
       activesupport
     devise (2.1.2)
@@ -321,7 +313,6 @@ GEM
       rspec (~> 2.11.0)
     ruby-cache (0.3.0)
     ruby-graphviz (1.0.8)
-    ruby-prof (0.11.2)
     rubydora (0.5.13)
       activemodel
       activesupport
@@ -421,7 +412,6 @@ DEPENDENCIES
   compass_twitter_bootstrap
   cucumber-rails
   database_cleaner
-  debugger
   devise
   dor-services
   druid-tools (>= 0.2.0)
@@ -437,7 +427,6 @@ DEPENDENCIES
   rails (= 3.2.3)
   rsolr-client-cert (>= 0.5.2)
   rspec-rails (>= 2.9.0)
-  ruby-prof
   rubydora (~> 0.5.11)
   sass-rails (~> 3.2.3)
   simplecov

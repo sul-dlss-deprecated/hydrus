@@ -50,8 +50,8 @@ group :development, :test do
   gem 'sqlite3'
   gem 'awesome_print'
   gem 'launchy'
-  gem 'ruby-prof'
-  gem 'debugger'
+  # gem 'ruby-prof'
+  # gem 'debugger'
 end
 
 group :development do
