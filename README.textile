@@ -333,6 +333,5 @@ h2. Updating hydra-jetty submodule.
 
 h2. Deployment.
 
-    # Run this task.
-    # Without arguments it just prints the instructions.
-    rake hydrus:deploy
+    # Run this script without arguments to view instructions.
+    ruby devel/deploy_hydus.rb

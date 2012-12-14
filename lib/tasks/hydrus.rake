@@ -17,53 +17,6 @@ namespace :hydrus do
     end
   end
 
-  desc "Deploy Hydrus"
-  task :deploy do
-    prereqs = "Prerequisites:
-        - The commit to be deployed is currently active in your local Git repo.
-        - You have pushed that commit.
-        - The VERSION file contains the name of the tag.
-        - The tag has not been used already.
-        - You have updated the CHANGELOG.
-        - Your Kerberos authentication is fresh.
-        - Use are using RVM gemsets.
-    ".rstrip
-    usage = "
-      Usage:
-
-        rake hydrus:deploy DENV=xxx
-
-        Where xxx is the environment to deploy to: dortest, production, etc.
-
-      What this task does:
-        - Creates a Git tag and pushes it.
-        - Deploys the commit linked to that tag to the environment specified.
-
-      #{prereqs}
-    ".gsub(/\n {6}/, "\n").rstrip
-    # Get environment and version. The latter will serve as the tag.
-    env =  ENV['DENV']
-    vers = IO.read("#{Rails.root}/VERSION").strip
-    abort(usage) unless env
-    # Get user confirmation.
-    confirm = "
-      #{prereqs}
-
-      Deployment:
-        To:  #{env}
-        Tag: #{vers}
-    ".gsub(/\n {6}/, "\n").rstrip
-    puts confirm
-    print "\nEnter 'yes' to confirm: "
-    abort("\nDid not deploy.") unless STDIN.gets.strip == 'yes'
-    # Deploy.
-    system("git tag -a #{vers} -m #{vers}") or abort("\nTag creation failed.")
-    system("git push origin --tags")        or abort("\nTag push failed.")
-    deploy_script = 'tmp/run_deploy.sh'
-    File.open(deploy_script, 'w') { |f| f.puts "cd deploy && cap #{env} deploy" }
-    exec "bash #{deploy_script}"
-  end
-
 end
 
 desc "rails server with suppressed output"

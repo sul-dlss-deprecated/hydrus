@@ -2,8 +2,6 @@ set :rails_env, "development"
 set :deployment_host, "hydrus-dev.stanford.edu"
 set :bundle_without, [:deployment]
 
-DEFAULT_TAG='develop'
-
 role :web, deployment_host
 role :app, deployment_host
 role :db,  deployment_host, :primary => true
