@@ -44,8 +44,9 @@ set :keep_releases, 2
 set :deploy_to, "#{destination}/#{application}"
 
 set :branch do
-  # DEFAULT_TAG = `git tag`.split("\n").last
-  tag = Capistrano::CLI.ui.ask "Tag or branch to deploy (make sure to push the tag or branch first): [#{DEFAULT_TAG}] "
+  DEFAULT_TAG = `git describe --abbrev=0`.strip
+  msg = "Tag or branch to deploy (be sure to push it first): [#{DEFAULT_TAG}] "
+  tag = Capistrano::CLI.ui.ask(msg)
   tag = DEFAULT_TAG if tag.empty?
   tag
 end

@@ -3,8 +3,10 @@ On deck
 ------------------
 
 Deploy to hydrus-test and check for problems.
-  - Publish item.
+  - Bug: additional related citations are not receiving the
+    displayLabel="Related Publication" attribute.
   - Check object workflows: submitted/published lifecycles duplicated?
+    sp632pp1299 vf775nz4561
 
 Set up Camel to send messages to hydrus-prod. [Waiting on hydrus-prod deploy.]
 

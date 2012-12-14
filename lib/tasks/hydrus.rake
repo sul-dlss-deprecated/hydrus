@@ -35,6 +35,7 @@ namespace :hydrus do
       "git tag -a #{vers} -m #{vers}",
       "git push origin --tags",
       "cd deploy",
+      "sleep 1",
       "cap #{env} deploy",
       "cd -",
     ]
