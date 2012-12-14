@@ -333,19 +333,17 @@ h2. Updating hydra-jetty submodule.
 
 h2. Deployment.
 
-    # Commit your work, merge into develop|master, and push.
-    # Make sure to modify CHANGELOG and VERSION as needed.
+    # Commit your work. Modify CHANGELOG and VERSION as needed.
     git commit -am 'blah blah'
+
+    # Merge into develop|master, and push.
     git checkout develop && git merge working && git push origin develop
     git checkout master  && git merge develop && git push origin master
     git checkout working
 
-    # Create a tag.
-    VERSION=`cat VERSION`
-    git tag -a $VERSION -m $VERSION
-    git push origin --tags
-
-    # Deploy to dortest|production.
-    DEPLOY_TO='dortest'
+    # Refresh your authenticate to Kerberos (seems to help).
     kinit && aklog
-    cd deploy && cap $DEPLOY_TO deploy && cd -
+
+    # For a default deployment, where 'foo' is the deployment environment.
+    # For a manual deployment, run the commands defined in that task.
+    rake hydrus:deploy DENV=foo

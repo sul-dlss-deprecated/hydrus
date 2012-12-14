@@ -1,4 +1,5 @@
 namespace :hydrus do
+
   desc "Hydrus Configurations"
   task :config do
     files = %w(
@@ -15,6 +16,31 @@ namespace :hydrus do
       cp("#{f}.example", f) unless File.exists?(f)
     end
   end
+
+  # A task to create a tag, push it, and deploy Hydrus.
+  # Example usage if deploying to production.
+  #
+  #   rake hydrus:deploy DENV=production
+  desc "Deploy Hydrus"
+  task :deploy do
+    # Get environment and version. The latter will serve as the tag.
+    env =  ENV['DENV']
+    vers = IO.read("#{Rails.root}/VERSION").strip
+    abort "Specify a deployment environment: rake hydrus:deploy DENV=foo" unless env
+    # Get user confirmation.
+    print "Enter 'yes' to deploy to #{env} using tag #{vers}: "
+    abort "Did not deploy." unless STDIN.gets.strip == 'yes'
+    # Deploy.
+    cmds = [
+      "git tag -a #{vers} -m #{vers}",
+      "git push origin --tags",
+      "cd deploy",
+      "cap #{env} deploy",
+      "cd -",
+    ]
+    system cmds.join(" && ")
+  end
+
 end
 
 desc "rails server with suppressed output"

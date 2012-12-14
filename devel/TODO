@@ -17,8 +17,6 @@ Other
 
 Config: compare my configs against example configs (in Git) and server configs.
 
-Automate deployment steps.
-
 Run Hydrus.profile() on a slow integration test and a slow controller method.
 
 New developer setup: package up the setup rake tasks into a single task.
