@@ -1,3 +1,10 @@
+== 2012.12.14a
+
+* Bug fix: add related cites now get displayLabel attribute.
+* Improved test for related_item getters/setters.
+* Deployment automation.
+* Deployed to hydrus-test.
+
 == 2012.12.13b
 
 * Rake task to deploy Hydrus.
