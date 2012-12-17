@@ -2,9 +2,7 @@
 On deck
 ------------------
 
-Deploy to hydrus-test and check for problems.
-  - sp632pp1299 vf775nz4561: failing on accessioning-initiate.
-  - Check object workflows: submitted/published lifecycles duplicated?
+Check hydrus-test objects for problems: gb045hv3517, ns463dv2213, pc438ms0053.
 
 Set up Camel to send messages to hydrus-prod. [Waiting on hydrus-prod deploy.]
 
