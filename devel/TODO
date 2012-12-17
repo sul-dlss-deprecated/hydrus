@@ -3,8 +3,8 @@ On deck
 ------------------
 
 Deploy to hydrus-test and check for problems.
+  - sp632pp1299 vf775nz4561: failing on accessioning-initiate.
   - Check object workflows: submitted/published lifecycles duplicated?
-    sp632pp1299 vf775nz4561
 
 Set up Camel to send messages to hydrus-prod. [Waiting on hydrus-prod deploy.]
 
@@ -16,6 +16,9 @@ Other
 --------
 
 Run Hydrus.profile() on a slow integration test and a slow controller method.
+
+Speak with Chris B. about fixture restore vs. transaction rollback. Decide
+how to handle to-do items in spec_helper.rb.
 
 Remove all code that puts WF into the APO. Search for workflow_steps.
 

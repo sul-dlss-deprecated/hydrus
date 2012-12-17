@@ -60,15 +60,43 @@ RSpec.configure do |config|
   # rspec-rails.
   config.infer_base_class_for_anonymous_controllers = false
 
+  # Restore prior state of Fedora repository.
   config.around(:each) do |example|
     ActiveFedora::Base.connection_for_pid(0).transaction do |t|
       example.call
-      t.rollback
+      # TODO: modify based decisions below.
+      if ENV['USE_ROLLBACK']
+        t.rollback
+      else
+        restore_fixtures(t)
+      end
     end
   end
+
 end
 
 Dor::Config.configure.suri.mint_ids = false
+
+# TODO: incorporate this into Rubydora?
+class Rubydora::Transaction
+  def all_pids
+    pids = repository.transactions_log.map { |x| x.last[:pid] }
+    return pids.uniq
+  end
+end
+
+# TODO: process pids starting with APOs/Collections, as we do in Rake tasks.
+# TODO: put this functionality in AF or Rubydora?
+def restore_fixtures(t)
+  affl = ActiveFedora::FixtureLoader
+  t.all_pids.each do |pid|
+    filename = "#{Rails.root}/spec/fixtures/#{pid}.foxml.xml".gsub(/:/, '_')
+    is_fixture = File.file?(filename)
+    affl.delete(pid)
+    affl.import_to_fedora(filename) if is_fixture
+    affl.index(pid) if is_fixture
+  end
+end
 
 # Create a Nokogiri document from an XML source, with some whitespace configuration.
 def noko_doc(x)

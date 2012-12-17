@@ -313,6 +313,7 @@ GEM
       rspec (~> 2.11.0)
     ruby-cache (0.3.0)
     ruby-graphviz (1.0.8)
+    ruby-prof (0.11.2)
     rubydora (0.5.13)
       activemodel
       activesupport
@@ -427,6 +428,7 @@ DEPENDENCIES
   rails (= 3.2.3)
   rsolr-client-cert (>= 0.5.2)
   rspec-rails (>= 2.9.0)
+  ruby-prof
   rubydora (~> 0.5.11)
   sass-rails (~> 3.2.3)
   simplecov
