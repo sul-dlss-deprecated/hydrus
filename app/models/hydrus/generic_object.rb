@@ -28,7 +28,7 @@ class Hydrus::GenericObject < Dor::Item
     :name => "hydrusProperties",
     :type => Hydrus::HydrusPropertiesDS,
     :label => 'Hydrus Properties',
-    :control_group => 'M')
+    :control_group => 'X')
 
   setup_delegations(
     # [:METHOD_NAME,              :uniq, :at... ]

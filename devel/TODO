@@ -2,10 +2,6 @@
 On deck
 ------------------
 
-Check hydrus-test objects for problems: gb045hv3517, ns463dv2213, pc438ms0053.
-
-Set up Camel to send messages to hydrus-prod. [Waiting on hydrus-prod deploy.]
-
 Create object mc322hh4254 (hydra:referencesAgreement) on hydrus-dev,
 hydrus-test, and hydrus-prod. [Hannah/Lynn]
 
