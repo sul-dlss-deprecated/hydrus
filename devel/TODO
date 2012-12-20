@@ -9,11 +9,6 @@ hydrus-test, and hydrus-prod. [Hannah/Lynn]
 Other
 --------
 
-Run Hydrus.profile() on a slow integration test and a slow controller method.
-
-Speak with Chris B. about fixture restore vs. transaction rollback. Decide
-how to handle to-do items in spec_helper.rb.
-
 Remove all code that puts WF into the APO. Search for workflow_steps.
 
 Config: compare my configs against example configs (in Git) and server configs.
@@ -110,9 +105,12 @@ select_status_checkbox_icon helper method (application_helper.rb).
 Upgrade to hydra-head 5.0, active-fedora 5.2, OM 1.8, Solrizer 2.0, and
 Blacklight 4.0. See github.com/projecthydra/hydra-head/wiki/Migrating-to-5.0.
 
-Update to Rubydora 0.6.0, which might speed up integration tests. [We are
-blocked by active-fedora gem restriction to to 0.5.x series. Chris might be
-looking into this.]
+When we upgrade to Nokogiri 1.5.6 we might encounter some namespace gotchas
+when trying to access attributes. [See email from Jon Deering.]
+
+Update Rubydora and incorporate rollback_fixtures() into it. See
+spec_helper.rb. [We are blocked by active-fedora gem restriction to to 0.5.x
+series.]
 
 Deprecation warning: "Hydra::FileAssetsHelper has been moved". We will need to
 deal with this before we move to hydra-head v5x.

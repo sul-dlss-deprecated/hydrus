@@ -14,8 +14,8 @@ prereqs = "
   Prerequisites:
     - The commit to be deployed is currently active in your local Git repo.
     - You have pushed that commit.
-    - The VERSION file contains the name of the tag.
-    - The tag has not been used already.
+    - The VERSION file contains the name of the tag to be deployed.
+    - The tag has not been used already (unless --notag is used).
     - You have updated the CHANGELOG.
     - Your Kerberos authentication is fresh.
 ".strip
@@ -30,7 +30,7 @@ usage = deindent("
     --debug      If given, commands are printed, not run.
 
   What the task does:
-    - Creates a Git tag and pushes it.
+    - Creates a Git tag and pushes it (unless --notag is used).
     - Deploys the commit linked to that tag to the environment specified.
 
   #{prereqs}
@@ -50,8 +50,8 @@ puts deindent("
   Deployment:
     To:          #{env}
     Tag:         #{tag}
-    Debug mode:  #{debug}
     No-tag mode: #{notag}
+    Debug mode:  #{debug}
 ")
 print "\nEnter 'yes' to confirm: "
 abort("\nDid not deploy.") unless STDIN.gets.strip == 'yes'

@@ -1,29 +1,8 @@
 namespace :hydrus do
 
-  # All of our fixture PIDs, in order: APOs, then Collections, then Items.
-  # Items can't be loaded until their APOs and Collections are in Fedora;
-  # otherwise the dor-services indexing code will blow up.
-  FIXTURE_PIDS = [
-    # Ur-APO and the hydrusAssembly workflow object.
-    'druid:oo000oo0000',
-    'druid:oo000oo0099',
-    # APOs.
-    'druid:oo000oo0002',
-    'druid:oo000oo0008',
-    'druid:oo000oo0009',
-    # Collections.
-    'druid:oo000oo0003',
-    'druid:oo000oo0004',
-    'druid:oo000oo0010',
-    # Items.
-    'druid:oo000oo0001',
-    'druid:oo000oo0005',
-    'druid:oo000oo0006',
-    'druid:oo000oo0007',
-    'druid:oo000oo0011',
-    'druid:oo000oo0012',
-    'druid:oo000oo0013',
-  ]
+  # See lib/hydrus.rb for fixture PIDs.
+  require 'hydrus'
+  FIXTURE_PIDS = Hydrus.fixture_pids
 
   desc "hydrus fixture info"
   task :helpfix do

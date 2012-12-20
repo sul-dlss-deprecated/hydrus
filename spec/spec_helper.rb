@@ -64,11 +64,11 @@ RSpec.configure do |config|
   config.around(:each) do |example|
     ActiveFedora::Base.connection_for_pid(0).transaction do |t|
       example.call
-      # TODO: modify based decisions below.
-      if ENV['USE_ROLLBACK']
+      # TODO: simplify if rollback_fixtures() is incorporated into Rubydora.
+      if ENV['USE_OLD_ROLLBACK']
         t.rollback
       else
-        restore_fixtures(t)
+        t.rollback_fixtures(FIXTURE_FOXML)
       end
     end
   end
@@ -77,25 +77,53 @@ end
 
 Dor::Config.configure.suri.mint_ids = false
 
-# TODO: incorporate this into Rubydora?
-class Rubydora::Transaction
-  def all_pids
-    pids = repository.transactions_log.map { |x| x.last[:pid] }
-    return pids.uniq
-  end
-end
+FIXTURE_FOXML = Hydrus.fixture_foxml()
 
-# TODO: process pids starting with APOs/Collections, as we do in Rake tasks.
-# TODO: put this functionality in AF or Rubydora?
-def restore_fixtures(t)
-  affl = ActiveFedora::FixtureLoader
-  t.all_pids.each do |pid|
-    filename = "#{Rails.root}/spec/fixtures/#{pid}.foxml.xml".gsub(/:/, '_')
-    is_fixture = File.file?(filename)
-    affl.delete(pid)
-    affl.import_to_fedora(filename) if is_fixture
-    affl.index(pid) if is_fixture
-  end
+# TODO: incorporate this into Rubydora.
+# Relative to rollback() it Rubydora v0.5.0, it reduced
+# test suite runtime from 32 minutes down to than 8 min.
+class Rubydora::Transaction
+
+    # Roll-back transactions by restoring the repository to its
+    # original state, based on fixtures that are passed in as a
+    # hash, with PIDs and keys and foxml as values.
+    def rollback_fixtures(fixtures)
+      # Two sets of PIDs:
+      #   - everything that was modified
+      #   - fixtures that were modified
+      aps = Set.new(all_pids)
+      fps = Set.new(fixtures.keys) & aps
+      # Rollback.
+      # Just swallow any exceptions.
+      without_transactions do
+        # First, purge everything that was modified.
+        aps.each do |p|
+          begin
+            repository.purge_object(:pid => p)
+            run_hook(:after_rollback, :pid => p, :method => :ingest)
+          rescue
+          end
+        end
+        # Then restore the fixtures to their original state.
+        fixtures.each do |p, foxml|
+          next unless fps.include?(p)
+          begin
+            repository.ingest(:pid => p, :file => foxml)
+            run_hook(:after_rollback, :pid => p, :method => :purge_object)
+          rescue
+          end
+        end
+      end
+      # Wrap up.
+      repository.transactions_log.clear
+      return true
+    end
+
+    # Returns the pids of all objects modified in any way during the transaction.
+    def all_pids
+      repository.transactions_log.map { |entry| entry.last[:pid] }.uniq
+    end
+
 end
 
 # Create a Nokogiri document from an XML source, with some whitespace configuration.
