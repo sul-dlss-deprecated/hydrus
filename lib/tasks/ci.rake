@@ -39,7 +39,7 @@ task :integration_tests do
   Rake::Task['rspec_with_integration'].invoke
 end
 
-desc "Stop jetty, run `rake ci`, db:migrate, start jetty."
+desc "Stop jetty, db:migrate, run all Hydrus tests, start jetty."
 task :local_ci do
   ENV['RAILS_ENV'] = 'test'
   Rails.env = 'test'

@@ -1,0 +1,255 @@
+= Hydrus
+
+== Overview
+
+A Hydra application enabling deposit of digital objects into the Stanford
+Digital Repository for preservation and access.
+
+
+== Dependencies on non-public code
+
+* Stanford's dor-services gem.
+* Stanford's sul-chrome gem.
+
+
+== Setting up your environment
+
+  rvm install 1.9.3
+
+  brew install exiftool
+
+  git clone git@github.com:sul-dlss/hydrus.git
+
+  cp hydrus/.rvmrc{.example,}
+  cp hydrus/deploy/.rvmrc{.example,}
+
+  cd hydrus
+
+  git submodule init
+  git submodule update
+
+  bundle install
+
+  rake hydra:jetty:config
+  rake hydrus:config
+  rake jetty:start
+
+  rake db:migrate
+  rake db:test:prepare
+  rake db:migrate RAILS_ENV=test
+
+  rake hydrus:refreshfix
+  rake hydrus:refreshfix RAILS_ENV=test
+  rake hydrus:refresh_upload_files
+
+
+== Running the application
+
+Start the Jetty server:
+
+  rake jetty:start
+
+Run the Hydrus application in either of these ways:
+
+  rails server
+  rake  server   # Filters some of the logging noise.
+
+
+== Useful URLs during development
+
+  # Hydrus.
+  http://localhost:3000
+  http://localhost:3000/about
+
+  # Jetty server, Fedora, and SOLR.
+  http://localhost:8983/
+  http://localhost:8983/fedora/admin/
+  http://localhost:8983/fedora/objects
+  http://localhost:8983/solr/
+
+
+== User accounts used during development
+
+Default user:
+
+  username: archivist1@example.com
+  password: beatcal
+
+Federa admin user:
+
+  username: fedoraAdmin
+  password: fedoraAdmin
+
+Also see:
+
+  app/models/hydrus/authorizable.rb
+  test/fixtures/users.yml
+
+
+== Running tests:
+
+  # Run unit tests, integration tests, or everything.
+  rake unit_tests
+  rake integration_tests
+  rake local_ci
+
+  # Run test suite using a different Jetty port, so you can keep working.
+  rake ci_alt
+
+  # Coverage reports -- two flavors.
+  open coverage/rcov/index.html
+  open coverage/index.html
+
+
+== Deployment.
+
+    # Run this script without arguments to view instructions.
+    ruby devel/deploy_hydus.rb
+
+
+== Useful commands
+
+  # List the Hydrus rake tasks.
+  rake -T hydrus
+
+  # Some handy scripts during development.
+  rails runner devel/create_test_item.rb help
+  rails runner script/experiment.rb
+  rails runner devel/get_datastreams.rb
+  rails runner devel/list_all_hydrus_objects.rb
+
+
+== Starting Jetty on deployment servers
+
+  # Run this from the jetty directory.
+  # Note that dortest and production don't rely on Jetty.
+  nohup java -Djetty.port=8983 \
+             -Dsolr.solr.home=/home/lyberadmin/hydrus/shared/jetty/solr \
+             -XX:MaxPermSize=128m -Xmx256m -jar start.jar \
+             > logs/`date +%Y_%m_%d`.request.log 2>&1 <&- &
+
+
+== Terms of deposit text
+
+If you update the text, you should change the following:
+
+  app/views/hydrus_items/_terms_of_deposit_text.html.erb
+  doc/SDRSelfDepositTerms.doc
+  public/SDRSelfDepositTerms.pdf
+
+
+== Workflow steps and object_status
+
+General points:
+
+- The Hydrus application advances an object through the steps of the hydrusAssemblyWF.
+  However, the application does not consult the hydrusAssemblyWF for information. The
+  only exception is when checking whether the PURL page is ready.
+
+- Instead, the application consults hydrusProperty for all information related to
+  the status of an object and its flow through the steps in the Hydrus deposit
+  process.
+
+- Because they have somewhat different purposes, the hydrusAssemblyWF steps and
+  the Hydrus object_status values do not have a one-to-one correspondence.
+
+- Whereas a workflow is designed to move only in the forward direction as various
+  steps are accomplished, Hydrus object_status can toggle back and forth between
+  various states during the edit-and-review and collection-open-and-close processes.
+
+Relationship between object_status and workflow steps for collections:
+
+  object_status              workflow steps
+  ----------------------------------------------------
+  draft                      start-deposit
+
+  published_open             submit --> approve ?--> start-assembly
+
+  published_closed           approve OR start-assembly
+  ----------------------------------------------------
+
+  Notes:
+
+  - The first time a collection is opened, it automatically advances
+  through a few workflow steps.
+
+  - Whether the collection advances all the way to start-assembly or just
+  to approve is controlled by configuration.
+
+  - After that, the collection manager can toggle the collection between
+  open and closed states, but the collection cannot be unpublished
+  and the workflow steps do not move backward.
+
+Relationship between object_status and workflow steps for items:
+
+  object_status              workflow steps
+  ----------------------------------------------------
+  draft                      start-deposit
+  published                  submit --> approve --> start-assembly
+  ----------------------------------------------------
+
+  Notes:
+
+  - For collections that do not require review of items, the object
+  goes directly from draft to published status and advances through
+  several workflow steps.
+
+  object_status              workflow steps
+  ----------------------------------------------------
+  draft                      start-deposit
+  awaiting_approval          submit
+  returned                   submit
+  published                  approve --> start-assembly
+  ----------------------------------------------------
+
+  Notes:
+
+  - Items can toggle back and forth between awaiting_approval and returned
+  during the edit-and-review process. During that time, the workflow
+  remains at the submit step.
+
+
+== Updating hydra-jetty submodule to a different version
+
+  # Make sure your git status is clean.
+  git status
+
+  # Make a backup of the hydrus dir. Include the trailing slash.
+  mkdir       ../backup_hydrus
+  rsync -a ./ ../backup_hydrus
+
+  # Restore jetty directory to its initial state.
+  cd jetty
+  git reset --hard HEAD
+  git clean -dfx
+  git status
+
+  # Checkout the commit you want to use.
+  git fetch
+  git checkout SHA1
+
+  # Back in the main hydrus projet, commit the submodule change.
+  cd ..
+  git status                           # Indicates jetty has changed.
+  git commit -am 'Updated hydra-jetty'
+
+  # Confirm that everything looks good.
+  git status
+  git submodule status
+
+  # Initialize the contents of jetty, etc.
+  rake hydrus:jetty_nuke
+  etc.
+
+  # If you do this work on the develop branch, you need to merge
+  # to master. Otherwise, you won't be able to set up the code on
+  # a new box, and tests won't run correctly on the master branch.
+
+  # Reset jetty directory on jenkinsqa.stanford.edu.
+  ssh jenkinsqa@jenkinsqa.stanford.edu
+  cd /jenkins/jobs/Hydrus-develop/workspace/jetty
+  git reset --hard HEAD
+  git clean -dfx
+  cd /jenkins/jobs/Hydrus/workspace/jetty
+  git reset --hard HEAD
+  git clean -dfx

@@ -26,10 +26,10 @@ Consider moving Hydrus::Responsible into RoleMDDS. Not sure that we need the
 module. Also, there is currently some duplication between Hydrus::Responsible
 and the to_solr() method in RoleMDDS.
 
-Change textile documents to something simpler, and fix formattting problems.
-
 Item edit page: at least one person is required, so the initial edit form
 should provide blank UI elements, rather than forcing user to click "Add".
+
+Put the test-running rake tasks under the Hydrus namespace.
 
 --------
 Other: blocked, requires discussion, uncertain need, etc.
