@@ -2,20 +2,14 @@
 On deck
 ------------------
 
-Create object mc322hh4254 (hydra:referencesAgreement) on hydrus-dev,
-hydrus-test, and hydrus-prod. [Hannah/Lynn]
-
 --------
 Other
 --------
 
+Create object mc322hh4254 (hydra:referencesAgreement) on hydrus-dev,
+hydrus-test, and hydrus-prod. [Hannah/Lynn]
+
 Remove all code that puts WF into the APO. Search for workflow_steps.
-
-Config: compare my configs against example configs (in Git) and server configs.
-
-New developer setup: package up the setup rake tasks into a single task.
-
-Change textile documents to something simpler, and fix formattting problems.
 
 Refactor Collection.accept_terms_of_deposit to move XML logic down to the
 datastream [see notes in method].
@@ -120,6 +114,8 @@ during the super() call in index() of catalog_controller.rb, which invokes a
 Blacklight method that logs the entire SOLR response. A bug has been filed; in
 the meantime, you can use the `rake server` task, which filters out most of the
 noise.
+
+Change textile documents to something simpler, and fix formattting problems.
 
 XML formatting issues: (1) MODS elements should be in the default order of the
 MODS spec. (2) Save the XML in some consistent pretty-print form. (3) No

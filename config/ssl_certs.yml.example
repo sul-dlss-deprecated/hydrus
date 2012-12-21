@@ -1,19 +1,19 @@
 development:
-  cert_file: 
-  key_file: 
-  key_pass: 
-
-dortest:
-  cert_file: dlss-dev-test.crt
-  key_file: dlss-dev-test.key
-  key_pass: 
+  cert_file: ~
+  key_file: ~
+  key_pass: ~
 
 test:
-  cert_file: 
-  key_file: 
-  key_pass: 
+  cert_file: ~
+  key_file: ~
+  key_pass: ~
+
+dortest:
+  cert_file: ''
+  key_file:  ''
+  key_pass:  ''
 
 production:
-  cert_file: 
-  key_file: 
-  key_pass: 
+  cert_file: ''
+  key_file:  ''
+  key_pass:  ''

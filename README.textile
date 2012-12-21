@@ -9,7 +9,7 @@ This code has dependencies on non-public code:
 * Stanford's sul-chrome gem
 
 
-h2. Getting your environment setup:
+h2. Setting up your environment:
 
     rvm install 1.9.3
 

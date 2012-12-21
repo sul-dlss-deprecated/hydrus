@@ -1,11 +1,11 @@
 development:
-  url: http://lyberservices-dev.stanford.edu/workflow/
+  url: http://sul-lyberservices-dev.stanford.edu/workflow/
+
+test:
+  url: http://sul-lyberservices-dev.stanford.edu/workflow/
 
 dortest:
   url: https://sul-lyberservices-test.stanford.edu/workflow/
 
-test:
-  url: http://lyberservices-dev.stanford.edu/workflow/
-
 production:
-  url: http://your.production.server:8080/workflow
+  url: https://sul-lyberservices-prod.stanford.edu/workflow/

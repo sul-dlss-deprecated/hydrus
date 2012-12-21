@@ -3,17 +3,17 @@ development:
   password: fedoraAdmin
   url: http://127.0.0.1:8983/fedora
 
-dortest:
-  user: fedoraAdmin
-  password: fedoraAdmin
-  url: https://fedoratestURL
-
 test:
   user: fedoraAdmin
   password: fedoraAdmin
   url: http://127.0.0.1:8983/fedora-test
 
+dortest:
+  user: ~
+  password: ~
+  url: https://sul-dor-test.stanford.edu/fedora
+
 production:
-  user: fedoraAdmin
-  password: fedoraAdmin
-  url: http://your.production.server:8080/fedora
+  user: ~
+  password: ~
+  url: https://sul-dor-prod.stanford.edu/fedora
