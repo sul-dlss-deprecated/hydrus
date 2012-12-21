@@ -54,7 +54,7 @@ describe("Collection create", :type => :request, :integration => true) do
     # Check workflow of Collection.
     wf_nodes = coll.workflows.find_by_terms(:workflow)
     wf_nodes.size.should == 1
-    wf_nodes.first[:id].should == Dor::Config.hydrus.workflow_steps.keys.first.to_s
+    wf_nodes.first[:id].should == Dor::Config.hydrus.app_workflow.to_s
     # Check identityMetadata of Collection.
     coll.identityMetadata.tag.should include("Hydrus : collection", "Project : Hydrus")
     coll.identityMetadata.objectType.should include('collection', 'set')

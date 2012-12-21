@@ -9,8 +9,6 @@ Other
 Create object mc322hh4254 (hydra:referencesAgreement) on hydrus-dev,
 hydrus-test, and hydrus-prod. [Hannah/Lynn]
 
-Remove all code that puts WF into the APO. Search for workflow_steps.
-
 Refactor Collection.accept_terms_of_deposit to move XML logic down to the
 datastream [see notes in method].
 
@@ -80,16 +78,19 @@ Should the hydrus app be logging more systematically?
 Dashboard: implement hyperlinks to items-by-status. For example, "3 published"
 should be a hyperlink to the 3 published items for the applicable collection.
 
+Change textile documents to something simpler, and fix formattting problems.
+
 Collection/Item create. Rather than starting a new Item/Collection with blank
 text boxes, use the approach we have adopted elsewhere for non-required items:
 have the user click "Add" button first. Collection: links to related items.
 Item: related citations; and links to related items.
 
+--------
+Other: blocked, requires discussion, not sure feature is needed, etc.
+--------
+
 Collection create: APO.roleMetadata: set the value of <name> for the
 collection-manager [waiting on LDAP].
-
-Item view page: the actions box div is called "div.collection-actions". Is this
-a problem?
 
 Update SUL-chrome gem to latest Bootstrap (needed to be able to use the
 unchecked checkbox icon, which is not available in our current SUL-chrome gem).
@@ -113,9 +114,7 @@ The home page is producing explosive volumes of SOLR logging. This occurs
 during the super() call in index() of catalog_controller.rb, which invokes a
 Blacklight method that logs the entire SOLR response. A bug has been filed; in
 the meantime, you can use the `rake server` task, which filters out most of the
-noise.
-
-Change textile documents to something simpler, and fix formattting problems.
+noise. [Might be fixed when we upgrade to newer version of the hydra stack.]
 
 XML formatting issues: (1) MODS elements should be in the default order of the
 MODS spec. (2) Save the XML in some consistent pretty-print form. (3) No

@@ -75,7 +75,7 @@ describe("Item create", :type => :request, :integration => true) do
     # Check workflow of Item.
     wf_nodes = item.workflows.find_by_terms(:workflow)
     wf_nodes.size.should == 1
-    wf_nodes.first[:id].should == 'hydrusAssemblyWF'
+    wf_nodes.first[:id].should == Dor::Config.hydrus.app_workflow.to_s
     # Check identityMetadata of Item.
     item.identityMetadata.tag.should include("Hydrus : dataset", "Project : Hydrus")
     # Check person roles of the Item.

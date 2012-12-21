@@ -58,9 +58,6 @@ Dor::Config.configure do
     key_pass yaml['key_pass']
   end
 
-  yaml = load_yaml_config.call('ur_apo_druid.yml')
-  ur_apo_druid yaml['druid']
-
   yaml = load_yaml_config.call('workflow.yml')
   workflow.url yaml['url']
 
@@ -70,35 +67,7 @@ Dor::Config.configure do
   hydrus do
     initial_apo_title('Intial Hydrus APO title')
     app_workflow(:hydrusAssemblyWF)
-
-    workflow_steps({
-      :hydrusAssemblyWF => [
-        { :name => "start-deposit",   :status => "completed", :lifecycle => "registered" },
-        { :name => "submit",          :status => "waiting" },
-        { :name => "approve",         :status => "waiting" },
-        { :name => "start-assembly",  :status => "waiting" },
-      ],
-      :assemblyWF => [
-        { :name => "start-assembly",        :status => "completed", :lifecycle => "inprocess" },
-        { :name => "jp2-create",            :status => "completed", },
-        { :name => "checksum-compute",      :status => "waiting" },
-        { :name => "exif-collect",          :status => "waiting" },
-        { :name => "accessioning-initiate", :status => "waiting" },
-      ],
-      :accessionWF => [
-        { :name => "start-accession",      :status => "completed", :lifecycle => "submitted" },
-        { :name => "content-metadata",     :status => "waiting" },
-        { :name => "descriptive-metadata", :status => "waiting",   :lifecycle => "described" },
-        { :name => "rights-metadata",      :status => "waiting" },
-        { :name => "technical-metadata",   :status => "waiting" },
-        { :name => "provenance-metadata",  :status => "waiting" },
-        { :name => "remediate-object",     :status => "waiting" },
-        { :name => "shelve",               :status => "waiting" },
-        { :name => "publish",              :status => "waiting",   :lifecycle => "published" },
-        { :name => "sdr-ingest-transfer",  :status => "waiting" },
-        { :name => "cleanup",              :status => "waiting",   :lifecycle => "accessioned" },
-      ],
-    })
+    ur_apo_druid(load_yaml_config.call('ur_apo_druid.yml')['druid'])
   end
 
 end

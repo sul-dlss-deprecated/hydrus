@@ -8,10 +8,7 @@ describe(Hydrus::AdminPolicyObject, :integration => true) do
     apo  = Hydrus::AdminPolicyObject.create(user)
     # Should be an APO whose APO is the ur-APO.
     apo.should be_instance_of Hydrus::AdminPolicyObject
-    apo.admin_policy_object_ids.should == [Dor::Config.ur_apo_druid]
-    # Should have some hydrusAssemblyWF steps.
-    steps = apo.administrativeMetadata.hydrusAssembly.workflow.process.name
-    steps.size.should > 0
+    apo.admin_policy_object_ids.should == [Dor::Config.hydrus.ur_apo_druid]
   end
 
 end

@@ -24,7 +24,7 @@ def create_test_collection(*args)
   # Open, save, and return a refreshed object.
   hc.open if do_opts[:open]
   hc.save
-  puts "Created collection: user=#{user} pid=#{hc.pid}"
+  puts "Created collection: user=#{user} pid=#{hc.pid} apo_pid=#{hc.apo.pid}"
   return Hydrus::Collection.find(hc.pid)
 end
 

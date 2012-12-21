@@ -18,12 +18,9 @@ describe Hydrus::AdminPolicyObject do
     @apo.stub(:pid).and_return(druid)
     @apo.stub(:adapt_to).and_return(@apo)
     Hydrus::GenericObject.stub(:register_dor_object).and_return(@apo)
-    @apo.administrativeMetadata.find_by_xpath('//workflow').size.should == 0
     @apo.title.should == ''
     @apo.roleMetadata.find_by_xpath('//role').size.should == 0
     Hydrus::AdminPolicyObject.create('USERFOO').pid.should == druid
-    exp_size = Dor::Config.hydrus.workflow_steps.keys.size
-    @apo.administrativeMetadata.find_by_xpath('//workflow').size.should == exp_size
     @apo.title.should == Dor::Config.hydrus.initial_apo_title
     role_nodes = @apo.roleMetadata.find_by_xpath('//role')
     role_nodes.size.should == 2

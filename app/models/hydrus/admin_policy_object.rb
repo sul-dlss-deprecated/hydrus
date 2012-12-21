@@ -13,12 +13,6 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
     :control_group => 'M')
 
   has_metadata(
-    :name => "administrativeMetadata",
-    :type => Hydrus::AdministrativeMetadataDS,
-    :label => 'Administrative Metadata',
-    :control_group => 'M')
-
-  has_metadata(
     :name => "roleMetadata",
     :type => Hydrus::RoleMetadataDS,
     :label => 'Role Metadata',
@@ -54,18 +48,14 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
 
   def self.create(user)
     # Create the object, with the correct model.
-    dconf = Dor::Config
+    dconf = Dor::Config.hydrus
     args = [user, 'adminPolicy', dconf.ur_apo_druid]
     apo  = Hydrus::GenericObject.register_dor_object(*args)
     apo  = apo.adapt_to(Hydrus::AdminPolicyObject)
     apo.remove_relationship :has_model, 'info:fedora/afmodel:Dor_AdminPolicyObject'
     apo.assert_content_model
-    # Add the default workflows.
-    dconf.hydrus.workflow_steps.keys.each do |wf_name|
-      apo.administrativeMetadata.insert_workflow(wf_name)
-    end
     # Add minimal descMetadata with a title.
-    apo.title = dconf.hydrus.initial_apo_title
+    apo.title = dconf.initial_apo_title
     apo.label = apo.title
     # Add roleMetadata with current user as hydrus-collection-manager.
     apo.roleMetadata.add_person_with_role(user, 'hydrus-collection-manager')
