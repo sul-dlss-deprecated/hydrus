@@ -241,7 +241,7 @@ Relationship between object_status and workflow steps for collections:
     ----------------------------------------------------
     draft                      start-deposit
 
-    published_open             submit --> approve --> start-assembly
+    published_open             submit --> approve ?--> start-assembly
 
     published_closed           approve OR start-assembly
     ----------------------------------------------------
