@@ -114,7 +114,7 @@ Also see:
 
   # Some handy scripts during development.
   rails runner devel/create_test_item.rb help
-  rails runner script/experiment.rb
+  rails runner script/experiment.rb         # See comments in script.
   rails runner devel/get_datastreams.rb
   rails runner devel/list_all_hydrus_objects.rb
 

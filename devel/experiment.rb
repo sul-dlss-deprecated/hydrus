@@ -1,18 +1,36 @@
 #!/usr/bin/env ruby
 
 # A script for IRB-style experimentation, using a script.
-# Run it like this:
+#
+# To run as an ordinary script:
 #
 #   rails runner script/experiment.rb
+#
+# To launch IRB, using the context of the script:
+#
+#   rails runner devel/experiment.rb --irb
+#   >> cb $MB        # Set the binding.
+#   >> puts hi.pid
 
-dru = 'druid:pv444kf7230'
+USE_IRB = ARGV.delete '--irb'
+
+dru = 'druid:oo000oo0001'
 hi  = Hydrus::Item.find(dru)
 
-dmd  = hi.descMetadata
-cmd  = hi.contentMetadata
-rm   = hi.rightsMetadata
-coll = hi.collection
-wf   = hi.workflows
+dmd = hi.descMetadata
+cmd = hi.contentMetadata
+rm  = hi.rightsMetadata
+hp  = hi.hydrusProperties
+wf  = hi.workflows
+hc  = hi.collection
+apo = hc.apo
+
+if USE_IRB
+  require 'irb'
+  $MB = binding
+  IRB.start(__FILE__)
+end
+
 
 __END__
 
