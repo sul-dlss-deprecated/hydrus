@@ -78,8 +78,8 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
   # Values are displayed in the web form.
   def self.license_types
     {'none'   => 'no license -- content creator retains exclusive rights',
-     'varies' => 'varies -- select a default below; contributor may change it for each item',
-     'fixed'  => 'required license -- apply the selected license to all items in the collection'}
+     'varies' => 'varies -- contributor may select a license for each item',
+     'fixed'  => 'required license -- applies to all items in the collection'}
   end
 
   # WARNING - the keys of this hash (which appear in the radio buttons in the

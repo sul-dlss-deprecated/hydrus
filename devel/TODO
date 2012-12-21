@@ -6,9 +6,6 @@ On deck
 Other
 --------
 
-Create object mc322hh4254 (hydra:referencesAgreement) on hydrus-dev,
-hydrus-test, and hydrus-prod. [Hannah/Lynn]
-
 Refactor Collection.accept_terms_of_deposit to move XML logic down to the
 datastream [see notes in method].
 
@@ -34,11 +31,6 @@ and the to_solr() method in RoleMDDS.
 
 Search results page should provide a link back to home page.
 
-The default license set at collection level does not appear to affect the Item
-UI.
-
-Implement the ability for an admin to become some other user.
-
 Embargo, visibility, and license for draft Items under scenarios when the
 collection's policies are changed from varies to fixed. Current app behavior:
 if the collection allows "varies", the edit UI offers widgets; otherwise, the
@@ -49,16 +41,6 @@ the new fixed value set by the collection manager.
 
 Move Terms of Deposit acceptance pop-up so it shows (if needed) when an item is
 created.
-
-Assess allowing collections to be opened without being published. In effect,
-this would be an open, draft Collection.
-
-After a collection has been published, is it editable? If so, do we need to
-push it through the accessioning pipeline again?
-
-Gryphondor for Hydrus objects.
-
-Should submit_for_approval() and resubmit() send email messages?
 
 Update search results page; UI redesign degraded formatting of it.
 
@@ -73,8 +55,6 @@ we distinguish between different item types.
 Work with Willy to switch local dev environment to use a local workflow service
 rather than the workflow service on sul-lyberservices-dev.
 
-Should the hydrus app be logging more systematically?
-
 Dashboard: implement hyperlinks to items-by-status. For example, "3 published"
 should be a hyperlink to the 3 published items for the applicable collection.
 
@@ -86,8 +66,25 @@ have the user click "Add" button first. Collection: links to related items.
 Item: related citations; and links to related items.
 
 --------
-Other: blocked, requires discussion, not sure feature is needed, etc.
+Other: blocked, requires discussion, uncertain need, etc.
 --------
+
+Assess allowing collections to be opened without being published. In effect,
+this would be an open, draft Collection.
+
+After a collection has been published, is it editable? If so, do we need to
+push it through the accessioning pipeline again?
+
+Should submit_for_approval() and resubmit() send email messages?
+
+Should the hydrus app be logging more systematically?
+
+Implement the ability for an admin to become some other user.
+
+Gryphondor for Hydrus, so that Hydrus objects appear in SearchWorks.
+
+Create object mc322hh4254 (hydra:referencesAgreement) on hydrus-dev,
+hydrus-test, and hydrus-prod. [Hannah/Lynn]
 
 Collection create: APO.roleMetadata: set the value of <name> for the
 collection-manager [waiting on LDAP].
