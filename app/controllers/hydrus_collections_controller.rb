@@ -7,7 +7,7 @@ class HydrusCollectionsController < ApplicationController
 
   before_filter :enforce_access_controls
   before_filter :setup_attributes, :except => [:index, :new, :list_all]
-  before_filter :redirect_if_not_correct_object_type, :only => [:edit, :show, :update]
+  before_filter :redirect_if_not_correct_object_type, :only => [:edit, :show]
 
   def index
     flash[:warning]="You need to log in."

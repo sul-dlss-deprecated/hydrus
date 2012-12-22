@@ -14,9 +14,6 @@ datastream [see notes in method].
 
 rightsMD: <access> blocks should include <none/> to indicate no access.
 
-Refactor and write tests for redirect_if_not_correct_object_type: seems more
-complex than it needs to be.
-
 At a minimum, refactor purl_page_ready() to use workflow_ds_extension. Even
 better, ask the PURL app directly: it returns a 404 if you ask for an object
 not in its document cache. In addition to being more accurate, this approach

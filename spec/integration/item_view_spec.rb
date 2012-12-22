@@ -79,4 +79,15 @@ describe("Item view", :type => :request, :integration => true) do
       page.should have_content(exp)
     end
   end
+
+  it "redirect_if_not_correct_object_type()" do
+    login_as('archivist1')
+    # View item URL with a collection PID.
+    visit '/items/druid:oo000oo0003'
+    current_path.should == '/collections/druid:oo000oo0003'
+    # Edit collection URL with an item PID.
+    visit '/collections/druid:oo000oo0001/edit'
+    current_path.should == '/items/druid:oo000oo0001/edit'
+  end
+
 end

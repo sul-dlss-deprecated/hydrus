@@ -43,11 +43,16 @@ class ApplicationController < ActionController::Base
   # and redirect to correct controller if needed.
   def redirect_if_not_correct_object_type
     return unless @fobj
-    if !self.controller_name.include?(@fobj.object_type) && @fobj.object_type!='adminPolicy'
-      redirect_url=Rails.application.routes.url_helpers.send("hydrus_#{@fobj.object_type}_path",@fobj.pid)
-      redirect_to redirect_url
-    elsif @fobj.object_type=='adminPolicy'
-      msg  = "You do not have sufficient privileges to view the requested item."
+    ot = @fobj.object_type
+    if %w(item collection).include?(ot)
+      return if self.controller_name == "hydrus_#{ot}s"
+      p = request.fullpath            # Eg: /items/druid:oo000oo0003/edit
+      p = p.sub(/\A\/\w+/, "/#{ot}s") # Change 'item' to 'collection'.
+      redirect_to(p)
+    else
+      # Don't think this will ever be reached.
+      # Currently, exceptions occur if the PID is not a Hydrus Item or Collection.
+      msg = "You do not have sufficient privileges to view the requested item."
       flash[:error] = msg
       redirect_to root_url
     end

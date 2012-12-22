@@ -9,7 +9,7 @@ class HydrusItemsController < ApplicationController
   before_filter :enforce_access_controls
   before_filter :setup_attributes, :except => [:new, :index, :send_purl_email, :terms_of_deposit, :agree_to_terms_of_deposit]
   before_filter :check_for_collection, :only => :new
-  before_filter :redirect_if_not_correct_object_type, :only => [:edit,:show,:update]
+  before_filter :redirect_if_not_correct_object_type, :only => [:edit,:show]
 
   def index
     if params.has_key?(:hydrus_collection_id)
