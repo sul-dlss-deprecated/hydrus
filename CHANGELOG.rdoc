@@ -1,5 +1,16 @@
 = Hydrus change log
 
+== 2012.12.21a
+
+* Refactored redirect_if_not_correct_object_type().
+* Tweaked view of error page.
+* Tweaked format of date appened to VERSION during deployment.
+* Editing pass over the README.
+* Modified license descriptions to agree with app behavior.
+* Remove code that puts worflows into the APO.
+* Deployed to hydrus-test.
+* Deployed to hydrus-prod.
+
 == 2012.12.20a
 
 * Configuration housekeeping.
