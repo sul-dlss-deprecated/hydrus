@@ -2,6 +2,8 @@ require File.expand_path('../boot', __FILE__)
 
 require 'rails/all'
 
+# Get unbuffered STDOUT (even when redirecting) in development mode.
+STDOUT.sync = true if Rails.env == 'development'
 
 if defined?(Bundler)
   # If you precompile assets before deploying to production, use this line
