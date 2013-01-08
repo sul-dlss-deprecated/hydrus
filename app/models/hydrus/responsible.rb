@@ -24,9 +24,17 @@ module Hydrus::Responsible
   #     'hydrus-collection-item-depositor' => <'hindman', 'cbeer'>,
   #     etc.
   #   }
+  #
+  # The implementation occurs in the module method, because we also
+  # need to invoke the same logic from roleMetadataDS. Probably
+  # could use some class/module redesign here.
   def person_roles
+    return Hydrus::Responsible.person_roles(roleMetadata)
+  end
+
+  def self.person_roles(ds)
     h = {}
-    roleMetadata.find_by_terms(:role, :person, :identifier).each do |n|
+    ds.find_by_terms(:role, :person, :identifier).each do |n|
       id   = n.text
       role = n.parent.parent[:type]
       h[role] ||= Set.new

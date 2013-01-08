@@ -6,13 +6,12 @@ On deck
 Other
 --------
 
+APOs: list on all-Hydrus objects page, and provide a view page showing
+datastreams.
+
 rightsMD: <access> blocks should include <none/> to indicate no access.
 
 Move tests for workflow_ds_extension out of gen_obj_spec and into its own spec.
-
-Consider moving Hydrus::Responsible into RoleMDDS. Not sure that we need the
-module. Also, there is currently some duplication between Hydrus::Responsible
-and the to_solr() method in RoleMDDS.
 
 --------
 Other: blocked, requires discussion, uncertain need, etc.
