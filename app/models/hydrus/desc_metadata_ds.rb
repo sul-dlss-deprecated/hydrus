@@ -93,6 +93,12 @@ class Hydrus::DescMetadataDS < ActiveFedora::NokogiriDatastream
         xml.titleInfo {
           xml.title
         }
+        xml.name {
+          xml.namePart
+          xml.role {
+            xml.roleTerm(:authority => "marcrelator", :type => "text")
+          }
+        }
         xml.abstract
         xml.note(:type => "preferred citation", :displayLabel => 'Preferred Citation')
         xml.note(:type => "citation/reference", :displayLabel => 'Related Publication')

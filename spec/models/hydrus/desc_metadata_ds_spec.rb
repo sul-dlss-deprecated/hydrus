@@ -105,6 +105,12 @@ describe Hydrus::DescMetadataDS do
           <titleInfo>
             <title/>
           </titleInfo>
+          <name>
+            <namePart/>
+            <role>
+              <roleTerm authority="marcrelator" type="text"/>
+            </role>
+          </name>
           <relatedItem>
             <titleInfo>
               <title/>

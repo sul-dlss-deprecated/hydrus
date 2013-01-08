@@ -58,7 +58,6 @@ describe("Item create", :type => :request, :integration => true) do
     current_path.should =~ @edit_path_regex
     druid = @edit_path_regex.match(current_path)[1]
     # Fill in form and save.
-    click_button(@buttons[:add_person])
     fill_in "Title of item", :with => 'title_foo'
     fill_in "hydrus_item_person_0", :with => 'person_foo'
     fill_in "Abstract", :with => 'abstract_foo'
@@ -127,7 +126,6 @@ describe("Item create", :type => :request, :integration => true) do
     druid = @edit_path_regex.match(current_path)[1]
 
     # Fill in form and save.
-    click_button(@buttons[:add_person])
     fill_in "hydrus_item_person_0", :with => ni.person
     fill_in "Title of item", :with => ni.title
     click_button(@buttons[:save])
@@ -330,7 +328,6 @@ describe("Item create", :type => :request, :integration => true) do
     current_path.should =~ @edit_path_regex
     druid = @edit_path_regex.match(current_path)[1]
     # Fill in form and save.
-    click_button(@buttons[:add_person])
     fill_in "hydrus_item_person_0", :with => ni.person
     fill_in "Title of item", :with => ni.title
     select "everyone", :from => "hydrus_item_embarg_visib_visibility"
