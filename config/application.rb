@@ -5,6 +5,10 @@ require 'rails/all'
 # Get unbuffered STDOUT (even when redirecting) in development mode.
 STDOUT.sync = true if Rails.env == 'development'
 
+# Deal with parameter parsing vulnerability in Rails.
+# See https://groups.google.com/forum/#!topic/rubyonrails-security/61bkgvnSGTQ/discussion.
+ActionDispatch::ParamsParser::DEFAULT_PARSERS.delete(Mime::XML)
+
 if defined?(Bundler)
   # If you precompile assets before deploying to production, use this line
   Bundler.require(*Rails.groups(:assets => %w(development test)))
