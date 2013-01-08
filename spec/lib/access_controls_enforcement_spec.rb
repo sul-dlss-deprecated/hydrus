@@ -19,7 +19,6 @@ describe Hydrus::AccessControlsEnforcement do
     @mc     = MockController.new
     @dru    = 'druid:oo000oo9999'
     @exp_rp = @mc.root_path
-    @exp_pp = 'polymorphic/path'
   end
 
   describe "enforce_show_permissions" do
@@ -72,10 +71,8 @@ describe Hydrus::AccessControlsEnforcement do
       @mc.stub('can?').and_return(false)
       @mc.stub(:root_url).and_return('/')
       @mc.stub('current_user').and_return(OpenStruct.new)
-      @mc.stub(:polymorphic_path).and_return(@exp_pp)
-      @mc.should_receive(:redirect_to).with(@exp_pp)
-      mock_coll = double('mock_coll', :hydrus_class_to_s => 'Collection')
-      ActiveFedora::Base.stub(:find).and_return(mock_coll)
+      @mc.stub(:root_path).and_return(@exp_rp)
+      @mc.should_receive(:redirect_to).with(@exp_rp)
       @mc.enforce_edit_permissions
       f = @mc.flash
       f.should include(:error)
@@ -101,13 +98,12 @@ describe Hydrus::AccessControlsEnforcement do
       @mc.flash.should == {}
     end
 
-    it "should redirect to collection view if user cannot do it" do
+    it "should redirect to home page if user cannot do it" do
       @mc.stub('can?').and_return(false)
       @mc.stub(:root_url).and_return('/')
       @mc.stub('params').and_return({:collection=>'druid:oo000oo0003'})
-      @mc.stub(:polymorphic_path).and_return(@exp_pp)
-      @mc.should_receive(:redirect_to).with(@exp_pp)
-      Hydrus::Collection.stub(:find)
+      @mc.stub(:root_path).and_return(@exp_rp)
+      @mc.should_receive(:redirect_to).with(@exp_rp)
       @mc.enforce_create_permissions
       f = @mc.flash
       f.should include(:error)

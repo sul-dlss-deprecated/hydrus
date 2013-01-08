@@ -6,9 +6,6 @@ On deck
 Other
 --------
 
-If URL contains a PID that is not a Hydrus Item or Collection, the application
-throws an exception. Better would be no exception, and a redirect to home page.
-
 Refactor Collection.accept_terms_of_deposit to move XML logic down to the
 datastream [see notes in method].
 

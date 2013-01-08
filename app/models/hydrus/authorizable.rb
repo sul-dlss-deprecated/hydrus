@@ -1,3 +1,6 @@
+# See get_fedora_object() in ability.rb for discussion
+# of the nil checks in this module.
+
 module Hydrus::Authorizable
 
   ####
@@ -86,6 +89,7 @@ module Hydrus::Authorizable
   # Takes a verb (read or edit), user, and object.
   # Dispatches to the appropriate can_* method.
   def self.can_do_it(verb, user, obj)
+    return false if obj.nil?
     c = obj.hydrus_class_to_s.downcase # 'collection' or 'item'
     return send("can_#{verb}_#{c}", user, obj)
   end
@@ -112,6 +116,7 @@ module Hydrus::Authorizable
   # Returns true if the given user can create new Items
   # in the given Collection.
   def self.can_create_items_in(user, coll)
+    return false if coll.nil?
     return true if is_administrator(user)
     user_roles = coll.roles_of_person(user.sunetid)
     return does_intersect(user_roles, item_creator_roles)

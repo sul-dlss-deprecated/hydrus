@@ -7,7 +7,7 @@ module Hydrus::AccessControlsEnforcement
     pid = params[:id]
     return if can?(:read, pid)
     # Otherwise, redirect to the home page.
-    msg  = "You do not have sufficient privileges to view the requested item."
+    msg  = "You do not have sufficient privileges to view the requested item: '#{pid}'."
     flash[:error] = msg
     redirect_to_correct_page(root_path)
   end
@@ -25,17 +25,15 @@ module Hydrus::AccessControlsEnforcement
     # Just return if the user can edit the object.
     pid = params[:id]
     return if can?(:edit, pid)
-    # Otherwise, redirect to the object's view page.
-    obj  = ActiveFedora::Base.find(pid, :cast => true)
-    c    = obj.hydrus_class_to_s.downcase
-    msg  = "You do not have sufficient privileges to edit this #{c}."
+    # Otherwise, redirect to the home page.
+    msg  = "You do not have sufficient privileges to edit the requested item: '#{pid}'."
     flash[:error] = msg
-    redirect_to_correct_page(polymorphic_path(obj))
+    redirect_to_correct_page(root_path)
   end
 
   # Handles two cases:
   # (1) Create new Item in a given Collection.
-  #     Redirects to the Collection view page with a flash error
+  #     Redirects to the home page with a flash error
   #     if user lacks authorization to create Items in the Collection.
   # (2) Create new Collections.
   #     Redirects to the home page with a flash error if the user
@@ -45,16 +43,14 @@ module Hydrus::AccessControlsEnforcement
     if coll_pid
       # User wants to create an Item in a Collection.
       return if can?(:create_items_in, coll_pid)
-      msg = "You do not have sufficient privileges to create items in this collection."
-      path = polymorphic_path(Hydrus::Collection.find(coll_pid))
+      msg = "to create items in this collection: '#{coll_pid}'"
     else
       # User wants to create a Collection.
       return if can?(:create_collections, Hydrus::Collection)
-      msg = "You do not have sufficient privileges to create new collections."
-      path = root_path
+      msg = "to create new collections"
     end
-    flash[:error] = msg
-    redirect_to_correct_page(path)
+    flash[:error] = "You do not have sufficient privileges #{msg}."
+    redirect_to_correct_page(root_path)
   end
 
   # Adds some :fq paramenters to a set of SOLR search parameters
