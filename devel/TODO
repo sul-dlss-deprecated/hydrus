@@ -6,13 +6,11 @@ On deck
 Other
 --------
 
-rightsMD: <access> blocks should include <none/> to indicate no access.
+Upgrade to Rails 2.3.11+. If we upgrade to Rails 3.2.11 or higher, delete the
+workaround added to the config/application.rb file to deal with a param parsing
+vulnerability.
 
-At a minimum, refactor purl_page_ready() to use workflow_ds_extension. Even
-better, ask the PURL app directly: it returns a 404 if you ask for an object
-not in its document cache. In addition to being more accurate, this approach
-would maintain consistency with our policy of never asking the workflow service
-for state information.
+rightsMD: <access> blocks should include <none/> to indicate no access.
 
 Move tests for workflow_ds_extension out of gen_obj_spec and into its own spec.
 

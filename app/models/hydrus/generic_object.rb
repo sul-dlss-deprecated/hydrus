@@ -434,11 +434,7 @@ class Hydrus::GenericObject < Dor::Item
   end
 
   def purl_page_ready?
-    begin
-      Dor::WorkflowService.get_workflow_status('dor', pid, 'accessionWF', 'publish') == 'completed'
-    rescue
-      false
-    end
+    return RestClient.get(purl_url) { |resp, req, res| resp }.code == 200
   end
 
   def license *args
