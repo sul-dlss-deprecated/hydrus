@@ -6,9 +6,6 @@ On deck
 Other
 --------
 
-Refactor Collection.accept_terms_of_deposit to move XML logic down to the
-datastream [see notes in method].
-
 rightsMD: <access> blocks should include <none/> to indicate no access.
 
 At a minimum, refactor purl_page_ready() to use workflow_ds_extension. Even

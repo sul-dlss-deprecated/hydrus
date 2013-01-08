@@ -29,8 +29,8 @@ class Hydrus::HydrusPropertiesDS < ActiveFedora::NokogiriDatastream
 
   end
 
-  define_template :user do |xml,username,date_accepted|
-    xml.user(username,:dateAccepted => date_accepted)
+  define_template :user do |xml, username, datetime_accepted|
+    xml.user(username,:dateAccepted => datetime_accepted)
   end
 
   define_template :users_accepted_terms_of_deposit do |xml|
@@ -44,12 +44,29 @@ class Hydrus::HydrusPropertiesDS < ActiveFedora::NokogiriDatastream
     end.doc
   end
 
-  def insert_user_accepting_terms_of_deposit(user,date_accepted)
-    root_node=find_by_terms(:users_accepted_terms_of_deposit).first
-    if root_node.nil?
-      root_node=add_hydrus_child_node(ng_xml.root,:users_accepted_terms_of_deposit)
+  # Takes a User object and a datetime String.
+  # Adds info to the datastream indicating that the user accepted the terms of
+  # deposit: either update the time (if user has done this before) or add a new
+  # node. Note that this is done in the hydrusProperties of Collection objects,
+  # not Items.
+  def accept_terms_of_deposit(user, datetime_accepted)
+    existing_user = ng_xml.at_xpath("//user[text()='#{user}']")
+    if existing_user.nil?
+      insert_user_accepting_terms_of_deposit(user, datetime_accepted)
+    else
+      existing_user['dateAccepted'] = datetime_accepted
     end
-    add_hydrus_child_node(root_node, :user, user, date_accepted)
+  end
+
+  # Takes a User object and a datetime String.
+  # Adds a node to the datastream indicating when the user accepted
+  # the terms of deposit. Note that this is done in the hydrusProperties
+  # of Collection objects, not Items.
+  def insert_user_accepting_terms_of_deposit(user, datetime_accepted)
+    k = :users_accepted_terms_of_deposit
+    parent = find_by_terms(k).first
+    parent = add_hydrus_child_node(ng_xml.root, k) if parent.nil?
+    add_hydrus_child_node(parent, :user, user, datetime_accepted)
   end
 
 end
