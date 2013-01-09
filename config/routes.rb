@@ -37,6 +37,10 @@ Hydrus::Application.routes.draw do
     get 'agree_to_terms_of_deposit', :as =>'agree_to_terms_of_deposit', :on=>:collection
   end
 
+  resources :admin_policy_objects, :controller => 'hydrus_admin_policy_objects', :as => 'hydrus_admin_policy_objects' do
+    resources :datastreams, :only=>:index
+  end
+
   match "items/:id/destroy_value" => "hydrus_items#destroy_value", :as => 'destroy_hydrus_item_value', :via => "get"
   match "collections/:id/destroy_value" => "hydrus_collections#destroy_value", :as => 'destroy_hydrus_collection_value', :via => "get"
   match "collections/:id/destroy_actor" => "hydrus_collections#destroy_actor", :as => 'destroy_hydrus_collection_actor', :via => "get"

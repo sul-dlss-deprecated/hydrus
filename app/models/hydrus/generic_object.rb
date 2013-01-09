@@ -66,6 +66,10 @@ class Hydrus::GenericObject < Dor::Item
     self.class == Hydrus::Collection
   end
 
+  def is_apo?
+    false
+  end
+
   # the pid without the druid: prefix
   def dru
     pid.gsub('druid:','')

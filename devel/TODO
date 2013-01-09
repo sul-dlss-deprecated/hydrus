@@ -6,16 +6,14 @@ On deck
 Other
 --------
 
-APOs: list on all-Hydrus objects page, and provide a view page showing
-datastreams.
-
-rightsMD: <access> blocks should include <none/> to indicate no access.
-
 Move tests for workflow_ds_extension out of gen_obj_spec and into its own spec.
 
 --------
 Other: blocked, requires discussion, uncertain need, etc.
 --------
+
+rightsMD: <access> blocks should include <none/> to indicate no access. This is
+sort of a pain: how important is it?
 
 Dashboard: implement hyperlinks to items-by-status. For example, "3 published"
 should be a hyperlink to the 3 published items for the applicable collection.

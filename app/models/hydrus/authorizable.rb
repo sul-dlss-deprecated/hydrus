@@ -90,12 +90,17 @@ module Hydrus::Authorizable
   # Dispatches to the appropriate can_* method.
   def self.can_do_it(verb, user, obj)
     return false if obj.nil?
-    c = obj.hydrus_class_to_s.downcase # 'collection' or 'item'
+    c = obj.hydrus_class_to_s.downcase # 'collection' or 'item' or 'apo'
     return send("can_#{verb}_#{c}", user, obj)
   end
 
   def self.can_read_object(user, obj)
     return can_do_it('read', user, obj)
+  end
+
+  # Returns true if the given user can view the given APO.
+  def self.can_read_apo(user, apo)
+    return can_act_as_administrator(user)
   end
 
   # Returns true if the given user can view the given Collection.

@@ -5,6 +5,10 @@
     <p>
       <%= link_to(coll.pid.split(':').last, polymorphic_path(coll)) %>:
       <%= coll.title %>
+      <br/>
+      <%  apo = coll.apo %>
+      <%= link_to(apo.pid.split(':').last, hydrus_admin_policy_object_datastreams_path(apo)) %>:
+      <%= apo.title %>
 
       <ul>
         <%  coll.hydrus_items.sort_by(&:pid).each do |item| %>
