@@ -43,7 +43,7 @@ describe HydrusItemsController do
     it "should restrict access to non authed user" do
       controller.stub(:current_user).and_return(mock_user)
       get(:new, :collection => "druid:oo000oo0003")
-      response.should redirect_to hydrus_collection_path("druid:oo000oo0003")
+      response.should redirect_to(root_path)
       flash[:error].should =~ /do not have sufficient privileges to create items in/
     end
 

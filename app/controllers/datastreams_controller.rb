@@ -19,7 +19,9 @@ class DatastreamsController < ApplicationController
   end
 
   def obj_pid
-    pid = params['hydrus_item_id'] || params['hydrus_collection_id']
+    pid = params['hydrus_item_id'] ||
+          params['hydrus_collection_id'] ||
+          params['hydrus_admin_policy_object_id']
     return pid
   end
 

@@ -16,7 +16,7 @@ gem 'rubydora',   '~> 0.5.11'
 
 gem 'devise'
 gem 'carrierwave'
-gem 'rails', '3.2.3'
+gem 'rails', '3.2.11'
 gem 'jquery-rails'
 gem 'dynamic_form'
 gem 'bootstrap-datepicker-rails'

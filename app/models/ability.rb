@@ -53,10 +53,21 @@ class Ability
   end
 
   # Takes a String (presumably a pid) or an ActiveFedora object.
-  # Returns the corresponding ActiveFedora object.
+  # Returns the corresponding ActiveFedora object, if it exists; nil otherwise.
+  # 
+  # Note: We catch the exception below to handle the scenario of a user manually
+  # typing a URL with an invalid druid. In that case, this method will
+  # return nil, and our methods in authorizable.rb need to return false
+  # when the given a nil item/collection.
   def get_fedora_object(obj)
-    return obj.kind_of?(String) ?
-           ActiveFedora::Base.find(obj, :cast => true) : obj
+    # If already an ActiveFedora object, just return it.
+    return obj unless obj.kind_of?(String)
+    # Use the PID to find the object.
+    begin
+      return ActiveFedora::Base.find(obj, :cast => true)
+    rescue ActiveFedora::ObjectNotFoundError
+      return nil
+    end
   end
 
 end

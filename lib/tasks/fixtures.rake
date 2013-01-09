@@ -33,7 +33,7 @@ namespace :hydrus do
     # index the workflow objects
     Rake::Task['hydrus:reindex_workflow_objects'].invoke
 
-    if !["test","development"].include?(Rails.env)
+    unless ["test","development"].include?(Rails.env)
       puts "****NOTE: For security reasons, you might want to change passwords for default users after this task using \"RAILS_ENV=#{ENV['RAILS_ENV']}rake hydrus:update_passwords['newpassword']\"*****"
     end
   end
@@ -130,12 +130,19 @@ namespace :hydrus do
   end
 
   desc "refresh hydrus fixtures"
-  task :refreshfix => [
-    :deletefix,
-    :loadfix,
-    :refresh_workflows,
-    :refresh_upload_files,
-  ]
+  task :refreshfix do
+    ts = [
+      'hydrus:deletefix',
+      'hydrus:loadfix',
+      'hydrus:refresh_workflows',
+      'hydrus:refresh_upload_files',
+      'hydrus:reindex_workflow_objects',
+    ]
+    ts.each do |t|
+      Rake::Task[t].reenable
+      Rake::Task[t].invoke
+    end
+  end
 
   desc "reload test uploaded files to public/upload directory"
   task :refresh_upload_files do

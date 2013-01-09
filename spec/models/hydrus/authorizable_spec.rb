@@ -64,17 +64,25 @@ describe Hydrus::Authorizable do
     @auth.can_create_collections(@uf).should == false
   end
 
-  it "can_do_it() should dispatch to the correct method" do
-    actions   = %w(read edit)
-    obj_types = %w(collection item)
-    obj_types.each do |typ|
-      @obj.stub(:hydrus_class_to_s).and_return(typ)
-      actions.each do |act|
-        meth = "can_#{act}_#{typ}"
-        @auth.should_receive(:send).with(meth, @ua, @obj).once
-        @auth.can_do_it(act, @ua, @obj)
+  describe "can_do_it()" do
+    
+    it "should return false if given nil object" do
+      @auth.can_do_it('foo', 'bar', nil).should == false
+    end
+
+    it "should dispatch to the correct method" do
+      actions   = %w(read edit)
+      obj_types = %w(collection item)
+      obj_types.each do |typ|
+        @obj.stub(:hydrus_class_to_s).and_return(typ)
+        actions.each do |act|
+          meth = "can_#{act}_#{typ}"
+          @auth.should_receive(:send).with(meth, @ua, @obj).once
+          @auth.can_do_it(act, @ua, @obj)
+        end
       end
     end
+
   end
 
   it "can_*_object() should return whatever can_do_it() returns" do
@@ -132,6 +140,11 @@ describe Hydrus::Authorizable do
   end
 
   describe "can_create_items_in()" do
+
+    it "should return false if given a nil object" do
+      @hi.should_not_receive(:is_administrator)
+      @auth.can_create_items_in(@ua, nil).should == false
+    end
 
     it "should return true directly if the user is an administrator" do
       @hi.should_not_receive(:roles_of_person)

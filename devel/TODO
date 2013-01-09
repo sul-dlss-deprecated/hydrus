@@ -6,32 +6,12 @@ On deck
 Other
 --------
 
-If URL contains a PID that is not a Hydrus Item or Collection, the application
-throws an exception. Better would be no exception, and a redirect to home page.
-
-Refactor Collection.accept_terms_of_deposit to move XML logic down to the
-datastream [see notes in method].
-
-rightsMD: <access> blocks should include <none/> to indicate no access.
-
-At a minimum, refactor purl_page_ready() to use workflow_ds_extension. Even
-better, ask the PURL app directly: it returns a 404 if you ask for an object
-not in its document cache. In addition to being more accurate, this approach
-would maintain consistency with our policy of never asking the workflow service
-for state information.
-
-Move tests for workflow_ds_extension out of gen_obj_spec and into its own spec.
-
-Consider moving Hydrus::Responsible into RoleMDDS. Not sure that we need the
-module. Also, there is currently some duplication between Hydrus::Responsible
-and the to_solr() method in RoleMDDS.
-
-Item edit page: at least one person is required, so the initial edit form
-should provide blank UI elements, rather than forcing user to click "Add".
-
 --------
 Other: blocked, requires discussion, uncertain need, etc.
 --------
+
+rightsMD: <access> blocks should include <none/> to indicate no access. This is
+sort of a pain: how important is it?
 
 Dashboard: implement hyperlinks to items-by-status. For example, "3 published"
 should be a hyperlink to the 3 published items for the applicable collection.
@@ -69,6 +49,7 @@ Should the hydrus app be logging more systematically?
 Implement the ability for an admin to become some other user.
 
 Gryphondor for Hydrus, so that Hydrus objects appear in SearchWorks.
+[Gryphondor might be ready to add Hydrus as a project in February.]
 
 Create object mc322hh4254 (hydra:referencesAgreement) on hydrus-dev,
 hydrus-test, and hydrus-prod. [Hannah/Lynn]
@@ -89,7 +70,7 @@ when trying to access attributes. [See email from Jon Deering.]
 
 Update Rubydora and incorporate rollback_fixtures() into it. See
 spec_helper.rb. [We are blocked by active-fedora gem restriction to to 0.5.x
-series.]
+series. When we ugrade active-fedora, that restriction will disappear.]
 
 Deprecation warning: "Hydra::FileAssetsHelper has been moved". We will need to
 deal with this before we move to hydra-head v5x.

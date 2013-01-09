@@ -71,7 +71,7 @@ describe HydrusCollectionsController do
     it "should not allow a user to update an object if you do not have edit permissions" do
       controller.stub(:current_user).and_return(mock_user)
       put :update, :id => @pid
-      response.should redirect_to hydrus_collection_path(@pid)
+      response.should redirect_to(root_path)
       flash[:error].should =~ /You do not have sufficient privileges to edit/
     end
 

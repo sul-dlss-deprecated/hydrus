@@ -1,11 +1,11 @@
 <ul class="breadcrumb">
   <li><%= link_to 'Home', root_path%></li>
   <% if @fobj %>
-    <% if @fobj.is_collection? %>
-      <li><span class="divider">/</span> <%= truncate(title_text(@fobj)) %></li>
-    <% else %>
+    <% if @fobj.is_item? %>
       <li><span class="divider">/</span> <%= link_to truncate(title_text(@fobj.collection)), hydrus_collection_path(@fobj.collection)%> </li>
       <li><span class="divider">/</span> <%= "#{truncate(title_text(@fobj))} (#{@fobj.status_label})"%></li>
+    <% else %>
+      <li><span class="divider">/</span> <%= truncate(title_text(@fobj)) %></li>
     <% end %>
   <% end %>
 </ul>

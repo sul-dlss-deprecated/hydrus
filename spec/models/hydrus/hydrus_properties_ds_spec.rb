@@ -68,16 +68,20 @@ describe Hydrus::HydrusPropertiesDS do
     dsdoc.ng_xml.should be_equivalent_to exp_xml
   end
 
-  it "should be able to add a user who accepted the terms of deposit to the collection" do
-      user_node = '<usersAcceptedTermsOfDeposit><user dateAccepted="10-02-2012 00:00:00">foo</user></usersAcceptedTermsOfDeposit>'
-      @exp_xml = noko_doc([
-        @ds_start,
-        user_node,
-        @ds_end,
-      ].join '')
-      @dsdoc   = Hydrus::HydrusPropertiesDS.from_xml("#{@ds_start}#{@ds_end}")
-     @dsdoc.insert_user_accepting_terms_of_deposit('foo','10-02-2012 00:00:00')
-     @dsdoc.ng_xml.should be_equivalent_to @exp_xml
+  it "accept_terms_of_deposit() should add new user nodes or modify date, as appropriate" do
+    k = 'usersAcceptedTermsOfDeposit'
+    u1 = '<user dateAccepted="10-02-2012 00:00:33">foo</user>'
+    u2 = '<user dateAccepted="10-02-2012 00:00:44">bar</user>'
+    @exp_xml = noko_doc([
+      @ds_start,
+      "<#{k}>#{u1}#{u2}</#{k}>",
+      @ds_end,
+    ].join '')
+    @dsdoc = Hydrus::HydrusPropertiesDS.from_xml("#{@ds_start}#{@ds_end}")
+    @dsdoc.accept_terms_of_deposit('foo','10-02-2012 00:00:00') # First user.
+    @dsdoc.accept_terms_of_deposit('bar','10-02-2012 00:00:44') # Second user.
+    @dsdoc.accept_terms_of_deposit('foo','10-02-2012 00:00:33') # First user, new date.
+    @dsdoc.ng_xml.should be_equivalent_to @exp_xml
   end
 
 end

@@ -1,5 +1,17 @@
 = Hydrus change log
 
+== 2013.01.09a
+
+* Item edit form now provides blank person field, since it is a required element.
+* Upgraded to Rails v2.3.11 to address param parsing vulnerability.
+* If view/edit URL contains bad PID, redirects to home page rather than throwing exception.
+* APOs: included on list-all page, and can view datastreams.
+* Refactored to remove duplication between Hydrus::Responsible and RoleMetadataDS.
+* Refactored purl_page_ready? to query the Purl app directly.
+* Modified refreshfix task, hoping to solve intial_workflow problem.
+* Refactored Collection.accept_terms_of_deposit to move XML logic to the datastream.
+* Improved the `rake server` task to unbuffer properly.
+
 == 2012.12.21a
 
 * Refactored redirect_if_not_correct_object_type().

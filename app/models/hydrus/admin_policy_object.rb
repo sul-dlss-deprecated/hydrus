@@ -69,6 +69,18 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
     return apo
   end
 
+  # Lazy initializers for instance variables.
+  # We cannot set these value within a constructor, because
+  # some Items and Collections are obtained in ways that won't call
+  # our constructor code -- for example, Hydrus::Item.find().
+  def current_user
+    return (@current_user ||= '')
+  end
+
+  def current_user=(val)
+    @current_user = val
+  end
+
   def hydrus_class_to_s
     "apo"
   end

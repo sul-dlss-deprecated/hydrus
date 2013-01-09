@@ -216,21 +216,14 @@ class Hydrus::Collection < Hydrus::GenericObject
   end
 
   # Takes a user, a datetime string, and an Item.
-  # A user accepts the terms of deposit: either update the time (if
-  # user has done this before) or add a new node. This method is called
-  # from an Item instance, but the information is stored at the Collection level.
-  # TODO: move the XML logic to the hydrusProperties datastream; reconsider
-  # whether passing the item to the method is the best approach. Without the
-  # item, I could not think of an appropriate criterion for cannot_do().
+  # Adds info to hydrusProperties indicating that the user accepted
+  # the terms of deposit for an item in the collection, and then saves the collection.
+  # Note that this process is initiated from the Item controller and an Item object,
+  # but the date information is ultimately stored here at the Collection level.
   def accept_terms_of_deposit(user, datetime_accepted, item)
     cannot_do(:accept_terms_of_deposit) unless Hydrus::Authorizable.can_edit_item(user, item)
-    existing_user = hydrusProperties.ng_xml.xpath("//user[text()='#{user}']")
-    if existing_user.size == 0
-      hydrusProperties.insert_user_accepting_terms_of_deposit(user, datetime_accepted)
-    else
-      existing_user[0]['dateAccepted'] = datetime_accepted
-    end
-    save
+    hydrusProperties.accept_terms_of_deposit(user, datetime_accepted)
+    save()
   end
 
   def strip_whitespace

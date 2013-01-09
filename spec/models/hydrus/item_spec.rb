@@ -452,7 +452,6 @@ describe Hydrus::Item do
         :terms_of_deposit,
         :release_settings,
         :license,
-        :actors
       ]
       @hi.instance_variable_set('@should_validate', true)
     end

@@ -16,13 +16,23 @@ describe Ability do
     @dru  = 'some_pid'
   end
 
-  it "get_fedora_object() should work as expected" do
-    # If not a string, just return the object itself.
-    obj = 1234
-    @ab.get_fedora_object(obj).should == obj
-    # If string, get object from fedora.
-    ActiveFedora::Base.stub(:find).and_return(@af)
-    @ab.get_fedora_object(@dru).should == @af
+  describe "get_fedora_object()" do
+    
+    it "if given non-String, just return it" do
+      obj = 1234
+      @ab.get_fedora_object(obj).should == obj
+    end
+
+    it "if given String that is a valid pid, should return fedora object" do
+      ActiveFedora::Base.stub(:find).and_return(@af)
+      @ab.get_fedora_object(@dru).should == @af
+    end
+
+    it "if given String that is not valid pid, should return nil" do
+      ActiveFedora::Base.stub(:find) { raise ActiveFedora::ObjectNotFoundError }
+      @ab.get_fedora_object(@dru).should == nil
+    end
+
   end
 
   describe "hydra_default_permissions" do

@@ -281,7 +281,9 @@ class Hydrus::Item < Hydrus::GenericObject
     end
   end
 
-  # accepts terms of deposit for the given user
+  # Accepts terms of deposit for the given user.
+  # At the item level we store true/false.
+  # At the colleciton level we store user name and datetime.
   def accept_terms_of_deposit(user)
     cannot_do(:accept_terms_of_deposit) unless Hydrus::Authorizable.can_edit_item(user, self)
     self.accepted_terms_of_deposit = "true"

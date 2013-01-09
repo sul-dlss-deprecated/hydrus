@@ -66,6 +66,10 @@ class Hydrus::GenericObject < Dor::Item
     self.class == Hydrus::Collection
   end
 
+  def is_apo?
+    false
+  end
+
   # the pid without the druid: prefix
   def dru
     pid.gsub('druid:','')
@@ -434,11 +438,7 @@ class Hydrus::GenericObject < Dor::Item
   end
 
   def purl_page_ready?
-    begin
-      Dor::WorkflowService.get_workflow_status('dor', pid, 'accessionWF', 'publish') == 'completed'
-    rescue
-      false
-    end
+    return RestClient.get(purl_url) { |resp, req, res| resp }.code == 200
   end
 
   def license *args

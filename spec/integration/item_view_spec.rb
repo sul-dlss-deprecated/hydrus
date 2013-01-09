@@ -90,4 +90,12 @@ describe("Item view", :type => :request, :integration => true) do
     current_path.should == '/items/druid:oo000oo0001/edit'
   end
 
+  it "can exercise purl_page_ready?" do
+    # Our fixture object is not on PURL.
+    @hi.purl_page_ready?.should == false
+    # But this pid does exist on purl-test.
+    @hi.stub(:purl_url).and_return('http://purl-test.stanford.edu/pf182cd5962.xml')
+    @hi.purl_page_ready?.should == true
+  end
+
 end
