@@ -3,6 +3,8 @@ end
 
 class Dor::WorkflowDs
 
+  # Note: unit tests are in generic_object_spec.rb.
+
   # Returns the hydrusAssemblyWF node from the object's workflows.
   def get_workflow_node
     wf = Dor::Config.hydrus.app_workflow
