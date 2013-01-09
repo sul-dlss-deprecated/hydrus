@@ -49,6 +49,7 @@ Should the hydrus app be logging more systematically?
 Implement the ability for an admin to become some other user.
 
 Gryphondor for Hydrus, so that Hydrus objects appear in SearchWorks.
+[Gryphondor might be ready to add Hydrus as a project in February.]
 
 Create object mc322hh4254 (hydra:referencesAgreement) on hydrus-dev,
 hydrus-test, and hydrus-prod. [Hannah/Lynn]
@@ -69,7 +70,7 @@ when trying to access attributes. [See email from Jon Deering.]
 
 Update Rubydora and incorporate rollback_fixtures() into it. See
 spec_helper.rb. [We are blocked by active-fedora gem restriction to to 0.5.x
-series.]
+series. When we ugrade active-fedora, that restriction will disappear.]
 
 Deprecation warning: "Hydra::FileAssetsHelper has been moved". We will need to
 deal with this before we move to hydra-head v5x.
