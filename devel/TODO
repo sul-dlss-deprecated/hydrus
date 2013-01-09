@@ -2,6 +2,35 @@
 On deck
 ------------------
 
+Support user's ability to hide specific files, which has the effect of setting
+publish and shelve to false in the content metadata. Offer a "Hide" checkbox
+(default unchecked) next to each uploaded file. Also include an info icon with
+some help text.
+
+Support versioning for Items. Basic flow: user opens a new version; user makes
+various edits; user clicks Publish. Then go to a page allowing user to describe
+the version and select major/minor (default = major). See the mockups
+generally, but for now we will not show the "Published Version" tab.
+
+Support versioning for Collections. After a collection has been published, if
+the user makes an edit of any kind, open a new version, save it, and push it
+through the accessioning pipeline again. Hydrus users won't perceive the new
+version, other than via the Events log.
+
+Add version info to Event logging.
+
+Notes:
+
+    user opens new version...
+    open_new_version()
+    user edits...
+    user clicks publish...
+    close_version(:description => 'blah blah', :significance => :major|:minor)
+
+    current_version()
+    new_version_open?()
+    versionMetadata.current_tag()
+
 --------
 Other
 --------
@@ -38,9 +67,6 @@ page does not provide a link back to the home page.
 
 Assess allowing collections to be opened without being published. In effect,
 this would be an open, draft Collection.
-
-After a collection has been published, is it editable? If so, do we need to
-push it through the accessioning pipeline again?
 
 Should submit_for_approval() and resubmit() send email messages?
 
