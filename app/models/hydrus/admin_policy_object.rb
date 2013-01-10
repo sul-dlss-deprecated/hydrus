@@ -1,6 +1,5 @@
 class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
 
-  include Dor::Processable  # TODO: needed until dor-services gem includes in its APOs.
   include Hydrus::ModelHelper
   include Hydrus::Responsible
   include Hydrus::Validatable
