@@ -13,23 +13,64 @@ the version and select major/minor (default = major). See the mockups
 generally, but for now we will not show the "Published Version" tab.
 
 Support versioning for Collections. After a collection has been published, if
-the user makes an edit of any kind, open a new version, save it, and push it
-through the accessioning pipeline again. Hydrus users won't perceive the new
-version, other than via the Events log.
+the user makes an edit of any kind, open a new version (in fact, we don't need
+to do this, because collections are not versioned in dor-services), save it,
+and push it through the accessioning pipeline again. Hydrus users won't
+perceive the new version, other than via the Events log.
 
 Add version info to Event logging.
 
-Notes:
+Set up dor_services.yml for other environments.
 
-    user opens new version...
-    open_new_version()
-    user edits...
-    user clicks publish...
-    close_version(:description => 'blah blah', :significance => :major|:minor)
+Issues:
 
-    current_version()
-    new_version_open?()
-    versionMetadata.current_tag()
+  The workflow service and local development:
+
+    - The main problem: the new versioning-aware workflow service code looks
+      for objects in fedora in the -dev environment, but during local development
+      the objects exist only on a developer's laptop.
+  
+    - The Dor::WorkflowService.archive_workflow() method (which runs when you
+      try to close a version) does not succeed. It's not clear how to fix this.
+      Will meet with Willy.
+
+    - The open_new_version() method fails when it tries to initialize the
+      versioningWF. This step is not really necessary, so we could add an
+      option to that method (:create_wf => false) to override the behavior.
+
+
+  Assembly, accessioning, and local development:
+
+    - You can't open a new version unless an object has been accessioned.
+      But this requirement is unworkable during local development. One
+      solution is to add a :force option to open_new_version().
+
+    - The close_version() method initiates the accessionWF. Hydrus
+      needs the ability to initiate assemblyWF (in a deployed context)
+      or nothing (during local development). This can be addressed by
+      another option to close_version(:initialize_workflow => nil|'assemblyWF').
+
+    - Before closing a version, Hydrus needs to prepare the object so that
+      it will run through assemblyWF successfully. Two steps are needed:
+      (1) prune the upload directory of all derivatives (those not in the
+      DB table); and (2) regenerate content metadata.
+
+    - The assemblyWF should not create derivatives for Hydrus objects.
+
+Notes on the flow:
+
+  user opens new version...
+
+  open_new_version(:force => mode == development)
+  reset the hydrusAssemblyWF back to draft?
+
+  user edits...
+  user clicks publish...
+
+  prune the upload dir
+  generate contentMD
+  wf = assemblyWF | nil  # the latter if in devel mode
+  close_version(:description => 'blah blah', :significance => :major|:minor, :workflow => wf)
 
 --------
 Other

@@ -17,6 +17,7 @@ tmtags
 # config files
 config/suri.yml
 config/database.yml
+config/dor_services.yml
 config/fedora.yml
 config/solr.yml
 config/ur_apo_druid.yml

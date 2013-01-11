@@ -25,12 +25,22 @@ wf  = hi.workflows
 hc  = hi.collection
 apo = hc.apo
 
+dru = 'druid:' + ARGV.shift
+hi  = Hydrus::Item.find(dru)
+
+hi.open_new_version(:force => true, :create_wf => false)
+hi.title = hi.title + '.'
+hi.save
+hi.close_version(
+  :description => 'test version',
+  :significance => :minor,
+  :initialize_workflow => nil)
+
 if USE_IRB
   require 'irb'
   $MB = binding
   IRB.start(__FILE__)
 end
-
 
 __END__
 

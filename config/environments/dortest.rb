@@ -76,12 +76,19 @@ Dor::Config.configure do
   end
 
   hydrus do
-    exception_error_page   true                                       # if true, a generic error page will be shown with no exception messages; if false, standard Rails exceptions are shown directly to the user
-    exception_error_panel  true                                       # if true and exception_error_page is also set to true, a collapsible exception error panel is shown on the friendly error page
-    exception_recipients  ''                                          # list of email addresses, comma separated, that will be notified when an exception occurs - leave blank for no emails
-    workflow_object_druids ['druid:oo000oo0099','druid:rs056hz6024']# complete list of all workflow objects defined in this environment
-    host 'hydrus-test.stanford.edu'                                 # server host, used in emails
-    start_common_assembly(true)                                     # determines if assembly workflow is started when publishing
+    exception_error_page   true     # if true, a generic error page will be shown with no exception messages; if false, standard Rails exceptions are shown directly to the user
+    exception_error_panel  true     # if true and exception_error_page is also set to true, a collapsible exception error panel is shown on the friendly error page
+    exception_recipients  ''        # list of email addresses, comma separated, that will be notified when an exception occurs - leave blank for no emails
+    host 'hydrus-test.stanford.edu' # server host, used in emails
+    start_common_assembly(true)     # determines if assembly workflow is started when publishing
+
+    # complete list of all workflow objects defined in this environment
+    workflow_object_druids [
+      'druid:oo000oo0099',  # hydrusAssemblyWF
+      'druid:rs056hz6024',  # assemblyWF
+      'druid:yp220bx1022',  # versioningWF
+    ]
+
   end
 
 end

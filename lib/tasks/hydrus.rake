@@ -4,6 +4,7 @@ namespace :hydrus do
   task :config do
     files = %w(
       database.yml
+      dor_services.yml
       fedora.yml
       solr.yml
       ssl_certs.yml

@@ -58,11 +58,9 @@ Dor::Config.configure do
     key_pass yaml['key_pass']
   end
 
-  yaml = load_yaml_config.call('workflow.yml')
-  workflow.url yaml['url']
-
-  yaml = load_yaml_config.call('solr.yml')
-  solrizer.url yaml['url']
+  workflow.url     load_yaml_config.call('workflow.yml')['url']
+  dor_services.url load_yaml_config.call('dor_services.yml')['url']
+  solrizer.url     load_yaml_config.call('solr.yml')['url']
 
   hydrus do
     initial_apo_title('Intial Hydrus APO title')

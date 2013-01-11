@@ -17,6 +17,7 @@ set :shared_children, %w(
   log
   config/certs
   config/database.yml
+  config/dor_services.yml
   config/solr.yml
   config/fedora.yml
   config/suri.yml

@@ -40,6 +40,7 @@ def create_test_item(*args)
   hi.abstract    = 'abstract'
   hi.contact     = 'foo@bar.com'
   hi.license     = 'cc-by-nc'
+  hi.keywords    = "foo,bar"
   hi.person      = { "0" => "Nugent, Ted" }
   hi.person_role = { "0" => "Author" }
   hi.accepted_terms_of_deposit = 'yes'
