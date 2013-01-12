@@ -143,8 +143,7 @@ If you update the text, you should change the following:
 General points:
 
 - The Hydrus application advances an object through the steps of the hydrusAssemblyWF.
-  However, the application does not consult the hydrusAssemblyWF for information. The
-  only exception is when checking whether the PURL page is ready.
+  However, the application does not consult the hydrusAssemblyWF for information.
 
 - Instead, the application consults hydrusProperty for all information related to
   the status of an object and its flow through the steps in the Hydrus deposit
@@ -163,24 +162,27 @@ Relationship between object_status and workflow steps for collections:
   ----------------------------------------------------
   draft                      start-deposit
 
-  published_open             submit --> approve ?--> start-assembly
+  published_open             submit --> approve --> start-assembly
 
-  published_closed           approve OR start-assembly
+  published_closed           start-assembly
   ----------------------------------------------------
 
   Notes:
 
-  - The first time a collection is opened, it automatically advances
-  through a few workflow steps.
+  - The first time a collection is opened, it automatically advances through a
+    few workflow steps.
 
-  - Whether the collection advances all the way to start-assembly or just
-  to approve is controlled by configuration.
+  - After that, the collection manager can toggle the collection between open
+    and closed states, but the collection cannot be unpublished and the
+    workflow steps do not move backward.
 
-  - After that, the collection manager can toggle the collection between
-  open and closed states, but the collection cannot be unpublished
-  and the workflow steps do not move backward.
+  - Typically the application is configured not to start assembly in local
+    development mode. Thus the object remains as the "approve' workflow step
+    rather than "start-assembly".
 
 Relationship between object_status and workflow steps for items:
+
+  Items not requiring human approval:
 
   object_status              workflow steps
   ----------------------------------------------------
@@ -188,11 +190,7 @@ Relationship between object_status and workflow steps for items:
   published                  submit --> approve --> start-assembly
   ----------------------------------------------------
 
-  Notes:
-
-  - For collections that do not require review of items, the object
-  goes directly from draft to published status and advances through
-  several workflow steps.
+  Items requiring human approval:
 
   object_status              workflow steps
   ----------------------------------------------------
@@ -205,8 +203,8 @@ Relationship between object_status and workflow steps for items:
   Notes:
 
   - Items can toggle back and forth between awaiting_approval and returned
-  during the edit-and-review process. During that time, the workflow
-  remains at the submit step.
+    during the edit-and-review process. During that time, the workflow remains
+    at the submit step.
 
 
 == Updating hydra-jetty submodule to a different version

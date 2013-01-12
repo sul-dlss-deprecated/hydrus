@@ -59,18 +59,36 @@ Issues:
 
 Notes on the flow:
 
+  When items are created, store version info in hydrusProperties:
+    version = "Initial version"
+    initial_vesion = 'true'
+
+    def is_initial_version
+      return to_bool(hydrusProperties.initial_version)
+
+  On the Item view page, provide the version
+
+  if is_accessioned is true, we offer "Create a new version" button.
+
+    def is_accessioned
+      return false unless is_published
+      return true if Rails.env == development
+      return purl_page_ready?
+
   user opens new version...
 
   open_new_version(:force => mode == development)
-  reset the hydrusAssemblyWF back to draft?
+    reset the hydrusAssemblyWF back to draft
+    set the version in hydrusProperties: "Revision of PRIOR_VERSION"
 
   user edits...
   user clicks publish...
 
-  prune the upload dir
-  generate contentMD
+  prune the upload dir (not needed)
+  generate contentMD (overwrite)
   wf = assemblyWF | nil  # the latter if in devel mode
   close_version(:description => 'blah blah', :significance => :major|:minor, :workflow => wf)
+  set version in hydrusProperties to the new version tag
 
 --------
 Other
