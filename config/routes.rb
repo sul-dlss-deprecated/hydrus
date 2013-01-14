@@ -19,6 +19,7 @@ Hydrus::Application.routes.draw do
   post "items/submit_for_approval/:id" => "hydrus_items#submit_for_approval", :as => 'submit_for_approval_item'
   post "items/approve/:id"             => "hydrus_items#approve",             :as => 'approve_item'
   post "items/disapprove/:id"          => "hydrus_items#disapprove",          :as => 'disapprove_item'
+  post "items/open_new_version/:id"    => "hydrus_items#open_new_version",    :as => 'open_new_version_item'
   post "items/resubmit/:id"            => "hydrus_items#resubmit",            :as => 'resubmit_item'
   post "items/send_purl_email"         => "hydrus_items#send_purl_email",     :as => 'send_purl_email'
   get  "items/discard_confirmation/:id"       => "hydrus_items#discard_confirmation",       :as => 'discard_item_confirmation'

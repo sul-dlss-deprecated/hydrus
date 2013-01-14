@@ -221,6 +221,7 @@
         <hydrusProperties>
           <publishTime>2012-11-01T00:00:00Z</publishTime>
           <lastModifyTime>2012-11-01T00:00:22Z</lastModifyTime>
+          <versionStartedTime>2012-11-01T00:00:22Z</versionStartedTime>
           <reviewedReleaseSettings>true</reviewedReleaseSettings>
           <acceptedTermsOfDeposit>true</acceptedTermsOfDeposit>
           <objectStatus>published</objectStatus>
@@ -241,6 +242,18 @@
           <event type="hydrus" when="2012-08-15T18:12:31Z" who="archivist1">Item created</event>
           <event type="hydrus" when="2012-08-15T18:12:32Z" who="archivist1">Item modified: title, abstract, files</event>
         </events>
+      </foxml:xmlContent>
+    </foxml:datastreamVersion>
+  </foxml:datastream>
+  <foxml:datastream ID="versionMetadata" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
+    <foxml:datastreamVersion ID="versionMetadata.1" LABEL="Version Metadata" CREATED="2012-12-21T16:58:42.002Z" MIMETYPE="text/xml" SIZE="201">
+      <foxml:xmlContent>
+        <versionMetadata objectId="druid:oo000oo0006">
+          <version tag="1.0.0" versionId="1">
+            <description>Initial Version</description>
+          </version>
+          <version versionId="2"></version>
+        </versionMetadata>
       </foxml:xmlContent>
     </foxml:datastreamVersion>
   </foxml:datastream>

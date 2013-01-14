@@ -34,6 +34,7 @@ class Hydrus::Item < Hydrus::GenericObject
     "hydrusProperties" => [
       [:reviewed_release_settings, true   ],
       [:accepted_terms_of_deposit, true   ],
+      [:version_started_time,      true   ],
     ]
   )
 
@@ -77,8 +78,12 @@ class Hydrus::Item < Hydrus::GenericObject
                    clo == 'fixed' ? item.collection.license : nil
     # Set object status.
     item.object_status = 'draft'
+    # Set version info.
+    # The call to content_will_change! forces the instantiation of the versionMetadata XML.
+    item.version_started_time = HyTime.now_datetime
+    item.versionMetadata.content_will_change!
     # Add event.
-    item.events.add_event('hydrus', user, 'Item created')
+    item.events.add_event('hydrus', user, "Item created: #{item.version_tag}")
     # Check to see if this user needs to agree again for this new item, if not,
     # indicate agreement has already occured automatically
     if item.requires_terms_acceptance(user.to_s,coll) == false
@@ -148,6 +153,19 @@ class Hydrus::Item < Hydrus::GenericObject
     self.object_status = 'awaiting_approval'
     hydrusProperties.remove_nodes(:disapproval_reason)
     events.add_event('hydrus', @current_user, "Item resubmitted for approval")
+  end
+
+  # ...
+  def open_new_version
+    cannot_do(:open_new_version) unless is_accessioned()
+    # super(:force => Rails.env.development?, :create_wf => false)
+    versionMetadata.update_current_version(:description => '', :significance => :major)
+    self.object_status = 'draft'
+
+    # self.submit_for_approval_time   = HyTime.now_datetime
+    # self.object_status = 'awaiting_approval'
+    # hydrusProperties.remove_nodes(:disapproval_reason)
+    events.add_event('hydrus', @current_user, "New version opened: v99.99.99")
   end
 
   # indicates if this item has an accepted terms of deposit, or if the supplied
@@ -324,7 +342,7 @@ class Hydrus::Item < Hydrus::GenericObject
   #
   # Given that hash, we call the embargo_date and visibility
   # setters. The UI invovkes this combined setter (not the individual
-  # setters), because we want to ensure that the individual setters 
+  # setters), because we want to ensure that the individual setters
   # are called in the desired order. This is necessary because the
   # visibility setter needs to know the Item's embargo status.
   def embarg_visib=(opts)
@@ -500,7 +518,26 @@ class Hydrus::Item < Hydrus::GenericObject
       :visibility => [:visibility],
       :license    => [:license],
     }
+  end
 
+  # Returns the Item's current version number, 1..N.
+  def version_id
+    return current_version
+  end
+
+  # Returns the Item's current version tag, eg v2.2.0.
+  def version_tag
+    return 'v' + versionMetadata.current_tag
+  end
+
+  # Returns the description of the current version.
+  def version_description
+    return versionMetadata.description_for_version(current_version)
+  end
+
+  # Returns true if the current version is the initial version.
+  def is_initial_version
+    return self.current_version == '1'
   end
 
 end

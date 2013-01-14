@@ -72,6 +72,17 @@
               :disable_with => "Please wait..."  ) %>
       </p>
 
+    <!-- Open new version. -->
+    <% elsif @fobj.is_accessioned && can?(:edit, @fobj) %>
+      <p>
+        <%= button_to(
+              "Open new version",
+              open_new_version_item_path(@fobj),
+              :id    => 'hydrus_item_open_new_version',
+              :class => 'btn btn-small save-edits',
+              :disable_with => "Please wait..."  ) %>
+      </p>
+
     <% end %>
 
     <!-- Terms of deposit. -->

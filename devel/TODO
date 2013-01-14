@@ -1,26 +1,22 @@
 ------------------
-On deck
+Versioning for Items
 ------------------
 
-Support user's ability to hide specific files, which has the effect of setting
-publish and shelve to false in the content metadata. Offer a "Hide" checkbox
-(default unchecked) next to each uploaded file. Also include an info icon with
-some help text.
+Notes on the flow:
 
-Support versioning for Items. Basic flow: user opens a new version; user makes
-various edits; user clicks Publish. Then go to a page allowing user to describe
-the version and select major/minor (default = major). See the mockups
-generally, but for now we will not show the "Published Version" tab.
+  user clicks publish...
+    ask user for version metadata: description and major/minor
 
-Support versioning for Collections. After a collection has been published, if
-the user makes an edit of any kind, open a new version (in fact, we don't need
-to do this, because collections are not versioned in dor-services), save it,
-and push it through the accessioning pipeline again. Hydrus users won't
-perceive the new version, other than via the Events log.
+    versionMetadata.update_current_version(:description => '', :significance => :major)
+    re-generate contentMD (overwrite)
+    wf = Rails.env == 'development' ? nil : assemblyWF
+    close_version(
+      :description         => 'blah blah',
+      :significance        => :major|:minor,
+      :initialize_workflow => wf)
 
-Add version info to Event logging.
+Tests:
 
-Set up dor_services.yml for other environments.
 
 Issues:
 
@@ -37,7 +33,6 @@ Issues:
     - The open_new_version() method fails when it tries to initialize the
       versioningWF. This step is not really necessary, so we could add an
       option to that method (:create_wf => false) to override the behavior.
-
 
   Assembly, accessioning, and local development:
 
@@ -57,42 +52,57 @@ Issues:
 
     - The assemblyWF should not create derivatives for Hydrus objects.
 
-Notes on the flow:
+Notes on problem related to archive_workflow()
 
-  When items are created, store version info in hydrusProperties:
-    version = "Initial version"
-    initial_vesion = 'true'
+  versionable.rb
 
-    def is_initial_version
-      return to_bool(hydrusProperties.initial_version)
+    close_version()
+      Dor::WorkflowService.archive_workflow 'dor', pid, 'versioningWF'
 
-  On the Item view page, provide the version
+  workflow_service.rb
 
-  if is_accessioned is true, we offer "Create a new version" button.
+    archive_workflow(repo, druid, wf_name)
+      posts to the dor services app with this url
+        "/objects/#{druid}/workflows/#{wf_name}/archive"
 
-    def is_accessioned
-      return false unless is_published
-      return true if Rails.env == development
-      return purl_page_ready?
+  dor_services_app.rb
 
-  user opens new version...
+    # Here's the problem for Hydrus: the app tries to load the object from Fedora.
+    # The code that does the archiving work uses that object for two bits of info:
+    #   pid              # Could get that from params[:id]
+    #   current_version  # No obvious solution, given current code.
+    before { load_item }
 
-  open_new_version(:force => mode == development)
-    reset the hydrusAssemblyWF back to draft
-    set the version in hydrusProperties: "Revision of PRIOR_VERSION"
+    resource '/workflows/:wf_name/archive' do
+      # I don't think the archiver uses the entire Fedora object, so if
+      # we can get this far without loading the Fedora object we would be OK.
+      archiver.archive_one_datastream 'dor', @item.pid, params[:wf_name], @item.current_version
 
-  user edits...
-  user clicks publish...
+  Ideas:
 
-  prune the upload dir (not needed)
-  generate contentMD (overwrite)
-  wf = assemblyWF | nil  # the latter if in devel mode
-  close_version(:description => 'blah blah', :significance => :major|:minor, :workflow => wf)
-  set version in hydrusProperties to the new version tag
+    - Modify close_version() to invoke the archiver directly, bypassing the
+      workflow service and the dor services app.
+
+    - Modify archive_workflow() to take an additional parameter (current_version)
+      and modify the dor services app to take that version as a parameter.
+      The call to close_version() would pass that info, and the dor services app
+      wouldn't need to call load_item().
 
 --------
-Other
+Other: on deck
 --------
+
+Support user's ability to hide specific files, which has the effect of setting
+publish and shelve to false in the content metadata. Offer a "Hide" checkbox
+(default unchecked) next to each uploaded file. Also include an info icon with
+some help text.
+
+Support editing of published Collections. After a collection has been
+published, if the user makes an edit of any kind, push it through the
+accessioning pipeline again. Hydrus users won't perceive the new version, other
+than via the Events log.
+
+Set up dor_services.yml for other environments.
 
 --------
 Other: blocked, requires discussion, uncertain need, etc.

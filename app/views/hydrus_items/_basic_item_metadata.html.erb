@@ -1,15 +1,21 @@
-<%- c = @fobj.collection -%>
-<dt>Online at</dt>
+<%- coll = @fobj.collection -%>
+
 <dd>
   <% if @fobj.purl_page_ready? %>
-    <%= link_to(@fobj.purl_url, @fobj.purl_url) %>
+    <dt>Online at</dt>
+    <dd>
+      <%= link_to(@fobj.purl_url, @fobj.purl_url) %>
+    </dd>
   <% else %>
-    <span class="muted"><%= @fobj.purl_url %></span>
+    <dt>Will be online at</dt>
+    <dd>
+      <span class="muted"><%= @fobj.purl_url %></span>
+    </dd>
   <% end %>
 </dd>
 
 <dt>In collection</dt>
-<dd><%= link_to(c.title, polymorphic_path(c)) %></dd>
+<dd><%= link_to(coll.title, polymorphic_path(coll)) %></dd>
 
 <dt>Deposited by</dt>
 <dd><%= @fobj.item_depositor_id %></dd>
@@ -17,10 +23,16 @@
 <dt>Contact at</dt>
 <dd><%= @fobj.contact.blank? ? hydrus_object_setting_value(@fobj.contact) : mail_to(@fobj.contact) %></dd>
 
-<dt>Created on</dt>
+<dt>Version</dt>
+<dd><%= "#{@fobj.version_tag}" %></dd>
+
+<dt>Item created</dt>
 <dd><%= HyTime.datetime_display(@fobj.create_date) %></dd>
 
-<dt>Last saved on</dt>
+<dt>Version started</dt>
+<dd><%= HyTime.datetime_display(@fobj.version_started_time) %></dd>
+
+<dt>Last saved</dt>
 <dd><%= HyTime.datetime_display(@fobj.last_modify_time) %></dd>
 
 <% if to_bool(@fobj.requires_human_approval) %>

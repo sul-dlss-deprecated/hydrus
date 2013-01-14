@@ -142,6 +142,14 @@ class Hydrus::GenericObject < Dor::Item
     return object_status[0..8] == 'published'
   end
 
+  # Returns true if the object has been accessioned.
+  # During local development we treat published objects as though they are accessioned.
+  def is_accessioned
+    return false unless is_published
+    return true if Rails.env.development?
+    return purl_page_ready?
+  end
+
   def apo
     @apo ||= (apo_pid ? get_fedora_item(apo_pid) : Hydrus::AdminPolicyObject.new)
   end

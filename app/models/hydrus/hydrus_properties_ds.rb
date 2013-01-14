@@ -22,6 +22,7 @@ class Hydrus::HydrusPropertiesDS < ActiveFedora::NokogiriDatastream
     t.publish_time              :path => 'publishTime'
     t.submit_for_approval_time  :path => 'submitForApprovalTime'
     t.last_modify_time          :path => 'lastModifyTime'
+    t.version_started_time      :path => 'versionStartedTime'
     t.embargo_option            :path => 'embargoOption'
     t.embargo_terms             :path => 'embargoTerms'
     t.visibility_option         :path => 'visibilityOption'

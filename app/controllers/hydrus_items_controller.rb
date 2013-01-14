@@ -243,6 +243,13 @@ class HydrusItemsController < ApplicationController
     redirect_to(hydrus_item_path)
   end
 
+  def open_new_version
+    @fobj.cannot_do(:open_new_version) unless can?(:edit, @fobj)
+    @fobj.open_new_version
+    try_to_save(@fobj, "New version opened: #{@fobj.version_tag}.")
+    redirect_to(hydrus_item_path)
+  end
+
   protected
 
   def enforce_index_permissions
