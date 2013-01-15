@@ -227,6 +227,48 @@
     </div>
   </div>
 
+  <!-- Version information -->
+
+  <% unless @fobj.is_initial_version %>
+
+    <%= hydrus_form_header(:required => true) {"Information about new version"} %>
+
+    <div class="row field-group">
+      <%= hydrus_form_label do %>
+        <%= f.label 'Description' %>
+      <%- end -%>
+      <%= hydrus_form_value do  -%>
+        <%= f.text_area(:version_description,
+                        :value => @fobj.version_description,
+                        :required => true, :rows => 3) %>
+      <%- end -%>
+    </div>
+
+    <div class="row field-group">
+      <%= hydrus_form_label do %>
+        <%= f.label 'Scope of change' %>
+      <%- end -%>
+      <%= hydrus_form_value do %>
+        <% %w(major minor).each do |opt| %>
+          <div class="row">
+            <div class="span1 radio-input">
+              <%= f.radio_button 'version_significance', opt %>
+            </div>
+            <div class="span7 radio-label">
+              <%= f.label 'version_significance', opt.capitalize, :value => opt %>
+              <% if opt == "minor" %>
+                <span class="help">
+                  <%= "(for example, small text edits)" %>
+                </span>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+
+  <% end %>
+
   <noscript>
     <%= render :partial => "actions_box_edit", :locals => {:id=>"nojs"}%>
   </noscript>

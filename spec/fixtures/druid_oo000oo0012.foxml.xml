@@ -220,7 +220,6 @@ The calculated Fermi surface of RbCu4S3 reveals one three-dimensional pocket and
           <version tag="1.0.0" versionId="1">
             <description>Initial Version</description>
           </version>
-          <version versionId="2"></version>
         </versionMetadata>
       </foxml:xmlContent>
     </foxml:datastreamVersion>

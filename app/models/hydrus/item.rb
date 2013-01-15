@@ -109,11 +109,12 @@ class Hydrus::Item < Hydrus::GenericObject
   # Called by publish_directly() and approve(), not by the controller.
   def do_publish
     t = title()
-    self.publish_time   = HyTime.now_datetime
+    self.publish_time = HyTime.now_datetime
     identityMetadata.objectLabel = t
-    self.label                   = t
+    self.label = t
     self.object_status = 'published'
     complete_workflow_step('approve')
+    close_version() unless is_initial_version()
     events.add_event('hydrus', @current_user, "Item published")
     start_common_assembly()
   end
@@ -155,17 +156,25 @@ class Hydrus::Item < Hydrus::GenericObject
     events.add_event('hydrus', @current_user, "Item resubmitted for approval")
   end
 
-  # ...
+  # Opens a new version of the Item.
+  # After an Item is published, in order to make further edits, the
+  # user must open a new version.
   def open_new_version
     cannot_do(:open_new_version) unless is_accessioned()
+    # TODO: Make the super() call and delete call to increment_version().
     # super(:force => Rails.env.development?, :create_wf => false)
+    versionMetadata.increment_version()
     versionMetadata.update_current_version(:description => '', :significance => :major)
+    self.version_started_time = HyTime.now_datetime
     self.object_status = 'draft'
+    uncomplete_workflow_steps()
+    events.add_event('hydrus', @current_user, "New version opened: #{version_tag()}")
+  end
 
-    # self.submit_for_approval_time   = HyTime.now_datetime
-    # self.object_status = 'awaiting_approval'
-    # hydrusProperties.remove_nodes(:disapproval_reason)
-    events.add_event('hydrus', @current_user, "New version opened: v99.99.99")
+  def close_version
+    cannot_do(:close_version) if is_initial_version()
+    # TODO: uncomment the super() call.
+    # super(:version_num => version_id, :start_accession => false)
   end
 
   # indicates if this item has an accepted terms of deposit, or if the supplied
@@ -540,8 +549,29 @@ class Hydrus::Item < Hydrus::GenericObject
     return self.current_version == '1'
   end
 
+  # Sets the description of the current version.
+  def version_description=(val)
+    versionMetadata.update_current_version(:description => val)
+  end
+
+  # Sets the significance (major or minor) of the current version.
+  def version_significance=(val)
+    versionMetadata.update_current_version(:significance => val.to_sym)
+  end
+
+  # Returns the significance (major or minor) of the current version.
+  # TODO: add to dor-services gem.
+  def version_significance
+    tags = versionMetadata.find_by_terms(:version, :tag).
+           map{ |t| Dor::VersionTag.parse(t.value) }.sort
+    return :major if tags.size < 2
+    prev = tags[-2]
+    curr = tags[-1]
+    return prev.major != curr.major ? :major :
+           prev.minor != curr.minor ? :minor : :admin
+  end
+
 end
 
 class Hydrus::ItemWithoutCollectionError < StandardError
 end
-
