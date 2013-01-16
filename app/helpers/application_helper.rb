@@ -65,10 +65,12 @@ module ApplicationHelper
     value.nil? ? "" : value.strip
   end
 
-  # indicates if we should show the item edit tab for a given item
-  # only if its not published yet, unless we are in development mode (to make development easier)
+  # Returns true if the Edit tab should be shown for the Collection or Item.
+  #   - User can edit the object.
+  #   - Object is not published.
   def show_item_edit(item)
-    can?(:edit,item) && (!item.is_published || ["development","test"].include?(Rails.env))
+    return false unless can?(:edit, item)
+    return ! item.is_published
   end
 
   def edit_item_text(item)

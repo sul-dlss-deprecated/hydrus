@@ -2,13 +2,16 @@
 Versioning for Items
 ------------------
 
-Disable Edit tab when object is published, even in local development mode.
-
 Validate presence of version_description.
 
 The assemblyWF should not create derivatives for Hydrus objects.
   Replace this: initiate_apo_workflow('assemblyWF')
   With this:    Dor::WorkflowService.create_workflow('dor', pid, 'assemblyWF', WORKFLOW_XML)
+
+The 'active' class is not rendering correctly in the Collection and Item
+navigation partials.
+
+Upgrade dor-services gem to get latest from Willy.
 
 Make needed changes to open_new_version() in dor-services gem: add the force
 and create_wf options.
@@ -16,7 +19,7 @@ and create_wf options.
 Uncomment the super() calls in open_new_version() and close_version(). [Waiting
 on new releases of dor-services, dor-services-app, and workflow-service.]
 
-Tests:
+Unit and integration tests:
   ...
 
 --------

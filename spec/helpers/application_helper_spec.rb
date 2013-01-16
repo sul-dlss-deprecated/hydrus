@@ -39,19 +39,10 @@ describe ApplicationHelper do
   end
 
   it "should show the item edit tab appropriately" do
-    item=mock(Hydrus::Item)
-
-    Rails.stub(:env).and_return('development')
-    item.stub(:is_published).and_return(true)
-    show_item_edit(item).should be true
-    item.stub(:is_published).and_return(false)
-    show_item_edit(item).should be true
-
-    Rails.stub(:env).and_return('production')
-    item.stub(:is_published).and_return(true)
-    show_item_edit(item).should be false
-    item.stub(:is_published).and_return(false)
-    show_item_edit(item).should be true
+    [false, true].each do |exp|
+      item = mock(Hydrus::Item, :is_published => !exp)
+      show_item_edit(item).should == exp
+    end
   end
 
   it "should render the correct contextual layout" do

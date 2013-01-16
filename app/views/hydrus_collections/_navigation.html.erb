@@ -4,7 +4,7 @@
     <%= link_to("View Collection", polymorphic_path(@fobj)) %>
   </li>
 
-  <% if can?(:edit,@fobj) %>
+  <% if can?(:edit, @fobj) %>
     <li<%= " class='active'" if ["edit", "update"].include?(params[:action]) %>>
       <%= link_to("Edit Collection", edit_polymorphic_path(@fobj)) %>
     </li>

@@ -399,7 +399,7 @@ describe("Item create", :type => :request, :integration => true) do
     check_emb_vis_lic(item,ps)
 
     # Return to edit page, and try to save Item with an empty title.
-    click_link "Edit Draft"
+    should_visit_edit_page(item)
     fill_in "hydrus_item_title", :with => ''
     click_button(@buttons[:save])
     find(@div_alert).should_not have_content(@notices[:save])
