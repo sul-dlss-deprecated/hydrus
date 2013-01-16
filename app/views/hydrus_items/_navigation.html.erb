@@ -1,21 +1,21 @@
 <ul class="nav nav-pills">
 
-  <li<%= " class='active'" if params[:action] == "show" %>>
+  <li<%= " class='active'".html_safe if params[:action] == "show" %>>
     <%= link_to(view_item_text(@fobj), polymorphic_path(@fobj)) %>
   </li>
 
   <% if show_item_edit(@fobj) %>
-    <li<%= " class='active'" if ["edit", "update"].include?(params[:action]) %>>
+    <li<%= " class='active'".html_safe if ["edit", "update"].include?(params[:action]) %>>
       <%= link_to(edit_item_text(@fobj), edit_polymorphic_path(@fobj)) %>
     </li>
   <% end %>
 
-  <li<%= " class='active'" if params[:controller] == "events" %>>
+  <li<%= " class='active'".html_safe if params[:controller] == "events" %>>
     <%= link_to("History", polymorphic_path([@fobj, :events])) %>
   </li>
 
   <% if can?(:view_datastreams, @fobj) %>
-    <li<%= " class='active'" if params[:controller] == "datastreams" %>>
+    <li<%= " class='active'".html_safe if params[:controller] == "datastreams" %>>
       <%= link_to("Datastreams", polymorphic_path([@fobj, :datastreams])) %>
     </li>
   <% end %>
