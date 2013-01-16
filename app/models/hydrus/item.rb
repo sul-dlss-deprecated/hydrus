@@ -83,7 +83,7 @@ class Hydrus::Item < Hydrus::GenericObject
     item.version_started_time = HyTime.now_datetime
     item.versionMetadata.content_will_change!
     # Add event.
-    item.events.add_event('hydrus', user, "Item created: #{item.version_tag}")
+    item.events.add_event('hydrus', user, "Item created")
     # Check to see if this user needs to agree again for this new item, if not,
     # indicate agreement has already occured automatically
     if item.requires_terms_acceptance(user.to_s,coll) == false
@@ -115,7 +115,7 @@ class Hydrus::Item < Hydrus::GenericObject
     self.object_status = 'published'
     complete_workflow_step('approve')
     close_version() unless is_initial_version()
-    events.add_event('hydrus', @current_user, "Item published")
+    events.add_event('hydrus', @current_user, "Item published: #{version_tag()}")
     start_common_assembly()
   end
 
@@ -161,20 +161,25 @@ class Hydrus::Item < Hydrus::GenericObject
   # user must open a new version.
   def open_new_version
     cannot_do(:open_new_version) unless is_accessioned()
-    # TODO: Make the super() call and delete call to increment_version().
-    # super(:force => Rails.env.development?, :create_wf => false)
-    versionMetadata.increment_version()
+    # Call the dor-services method, with a couple of Hydrus-specific options.
+    super(:assume_accessioned => Rails.env.development?, :create_workflows_ds => false)
+    # Set some version metadata that the Hydrus app uses.
     versionMetadata.update_current_version(:description => '', :significance => :major)
     self.version_started_time = HyTime.now_datetime
+    # Put the object back in the draft state.
     self.object_status = 'draft'
     uncomplete_workflow_steps()
-    events.add_event('hydrus', @current_user, "New version opened: #{version_tag()}")
+    # Log the event.
+    events.add_event('hydrus', @current_user, "New version opened")
   end
 
+  # Closes the current version of the Item.
+  # This occurs when an Item is published, unless it was the initial version.
+  # See do_publish(), where all of the Hydrus-specific work is done; here
+  # we simply invoke the dor-services method.
   def close_version
     cannot_do(:close_version) if is_initial_version()
-    # TODO: uncomment the super() call.
-    # super(:version_num => version_id, :start_accession => false)
+    super(:version_num => version_id, :start_accession => false)
   end
 
   # indicates if this item has an accepted terms of deposit, or if the supplied

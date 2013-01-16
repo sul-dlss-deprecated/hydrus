@@ -10,7 +10,7 @@ module Dor
 
     # Increments the version number and initializes versioningWF for the object
     # @raise [Dor::Exception] if the object hasn't been accessioned, or if a version is already opened
-    def open_new_version(opts={})
+    def open_new_version
       raise Dor::Exception, 'Object net yet accessioned' unless(Dor::WorkflowService.get_lifecycle('dor', pid, 'accessioned'))
       if(new_version_open?)
         if(Dor::WorkflowService.get_active_lifecycle('dor', pid, 'submitted'))
@@ -36,6 +36,8 @@ module Dor
     # @option opts [String] :description describes the version change
     # @option opts [Symbol] :significance which part of the version tag to increment
     #  :major, :minor, :admin (see Dor::VersionTag#increment)
+    # @option opts [String] :version_num version number to archive rows with. Otherwise, current version is used
+    # @option opts [Boolean] :start_accesion set to true if you want accessioning to start (default), false otherwise
     # @raise [Dor::Exception] if the object hasn't been opened for versioning, or if accessionWF has
     #   already been instantiated or the current version is missing a tag or description
     def close_version(opts={})
@@ -51,8 +53,8 @@ module Dor
       # TODO setting start-accession to completed could happen later if we have a universal robot to kick of accessioning across workflows,
       # or if there's a review step after versioning is closed
       Dor::WorkflowService.update_workflow_status 'dor', pid, 'versioningWF', 'start-accession', 'completed'
-      Dor::WorkflowService.archive_workflow 'dor', pid, 'versioningWF'
-      initialize_workflow 'accessionWF'
+      Dor::WorkflowService.archive_workflow 'dor', pid, 'versioningWF', opts[:version_num]
+      initialize_workflow 'accessionWF' if(opts[:start_accession].nil? || opts[:start_accession])
     end
 
     # @return [Boolean] true if 'opened' lifecycle is active, false otherwise

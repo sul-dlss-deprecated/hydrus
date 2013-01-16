@@ -8,14 +8,6 @@ The assemblyWF should not create derivatives for Hydrus objects.
   Replace this: initiate_apo_workflow('assemblyWF')
   With this:    Dor::WorkflowService.create_workflow('dor', pid, 'assemblyWF', WORKFLOW_XML)
 
-Upgrade dor-services gem to get latest from Willy.
-
-Make needed changes to open_new_version() in dor-services gem: add the force
-and create_wf options.
-
-Uncomment the super() calls in open_new_version() and close_version(). [Waiting
-on new releases of dor-services, dor-services-app, and workflow-service.]
-
 Unit and integration tests:
   ...
 
@@ -23,17 +15,24 @@ Unit and integration tests:
 Other: on deck for January
 --------
 
-Support user's ability to hide specific files, which has the effect of setting
-publish and shelve to false in the content metadata. Offer a "Hide" checkbox
-(default unchecked) next to each uploaded file. Also include an info icon with
-some help text.
+Set up dor_services.yml for other environments.
 
 Support editing of published Collections. After a collection has been
 published, if the user makes an edit of any kind, push it through the
 accessioning pipeline again. Hydrus users won't perceive the new version, other
 than via the Events log.
 
-Set up dor_services.yml for other environments.
+Support user's ability to hide specific files, which has the effect of setting
+publish and shelve to false in the content metadata. Offer a "Hide" checkbox
+(default unchecked) next to each uploaded file. Also include an info icon with
+some help text.
+
+HYDRUS-50. Add new roles to the Contributor drop-down: Advisor, Primary advisor.
+
+HYDRUS-51. Add support for "corporate" and "conference" Contributor name types.
+[See ticket for details.]
+
+HYDRUS-52. Item license selection. [Questions emailed to Hannah.]
 
 --------
 Other: blocked, requires discussion, uncertain need, etc.

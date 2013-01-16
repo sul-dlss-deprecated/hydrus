@@ -225,7 +225,7 @@ class HydrusItemsController < ApplicationController
   def approve
     @fobj.cannot_do(:approve) unless can?(:review, @fobj)
     @fobj.approve
-    try_to_save(@fobj, "Item approved and published.")
+    try_to_save(@fobj, "Item approved and published: #{@fobj.version_tag()}.")
     redirect_to(hydrus_item_path)
   end
 
@@ -246,7 +246,7 @@ class HydrusItemsController < ApplicationController
   def open_new_version
     @fobj.cannot_do(:open_new_version) unless can?(:edit, @fobj)
     @fobj.open_new_version
-    try_to_save(@fobj, "New version opened: #{@fobj.version_tag}.")
+    try_to_save(@fobj, "New version opened.")
     redirect_to(hydrus_item_path)
   end
 
