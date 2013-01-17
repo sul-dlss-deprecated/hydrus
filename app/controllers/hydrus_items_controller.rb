@@ -211,7 +211,7 @@ class HydrusItemsController < ApplicationController
   def publish_directly
     @fobj.cannot_do(:publish_directly) unless can?(:edit, @fobj)
     @fobj.publish_directly
-    try_to_save(@fobj, "Item published.")
+    try_to_save(@fobj, "Item published: #{@fobj.version_tag()}.")
     redirect_to(hydrus_item_path)
   end
 

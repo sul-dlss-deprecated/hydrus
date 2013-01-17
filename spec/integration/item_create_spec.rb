@@ -8,9 +8,9 @@ describe("Item create", :type => :request, :integration => true) do
     @div_actions = "div.collection-actions"
     @notices = {
       :save                => "Your changes have been saved.",
-      :publish_directly    => "Item published.",
+      :publish_directly    => "Item published: v",
       :submit_for_approval => "Item submitted for approval.",
-      :approve             => "Item approved and published.",
+      :approve             => "Item approved and published: v",
       :disapprove          => "Item returned.",
       :resubmit            => "Item resubmitted for approval.",
     }

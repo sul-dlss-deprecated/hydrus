@@ -2,11 +2,56 @@
 Versioning for Items
 ------------------
 
+Add a start lifecycle to the assemblyWF. [Ask Lynn.]
+
+Support editing of published Collections. After a collection has been
+published, if the user makes an edit of any kind, push it through the
+accessioning pipeline again. Hydrus users won't perceive the new version, other
+than via the Events log. [Discuss robot-confusion problem with Willy and Lynn.]
+
+The is_accessioned method is incorrect: relying on the Purl page will return
+false positives for versions 2+. I need to check the object's workflow, using
+lifecycle queries:
+
+    # Cases to handle:
+    #
+    # Initial version:
+    #     a   assembly start             submittedAssembly
+    #     b   assembly end
+    #     c   accession start            submitted
+    #     d   accession end      TRUE    accessioned
+    #     e   wf-archived        TRUE    # Lifecycles moved out of active table.
+    #
+    # Subsequent versions:
+    #     f   assembly start             submittedAssembly
+    #     g   assembly end
+    #     h   accession start            submitted
+    #     i   accession end      TRUE    accessioned
+    #     j   wf-archived        TRUE    # Lifecycles moved out of active table.
+
+    wfs = Dor::WorkflowService
+    p   = pid()
+
+    # Never accessioned: cases a-c.
+    return false unless wfs.get_lifecycle('dor', p, 'accessioned')
+
+    # Accessioned and not yet wf-archived: cases d, i.
+    return true if wfs.get_active_lifecycle('dor', p, 'accessioned')
+
+    # Actively in the middle of assemblyWF or accessionWF: cases f-h.
+    return false if wfs.get_active_lifecycle('dor', p, 'submittedAssembly')
+    return false if wfs.get_active_lifecycle('dor', p, 'submitted')
+
+    # Accessioned and wf-archived: cases e, j.
+    return true
+
 Validate presence of version_description.
 
 The assemblyWF should not create derivatives for Hydrus objects.
   Replace this: initiate_apo_workflow('assemblyWF')
   With this:    Dor::WorkflowService.create_workflow('dor', pid, 'assemblyWF', WORKFLOW_XML)
+
+Set up dor_services.yml for other environments.
 
 Unit and integration tests:
   ...
@@ -14,13 +59,6 @@ Unit and integration tests:
 --------
 Other: on deck for January
 --------
-
-Set up dor_services.yml for other environments.
-
-Support editing of published Collections. After a collection has been
-published, if the user makes an edit of any kind, push it through the
-accessioning pipeline again. Hydrus users won't perceive the new version, other
-than via the Events log.
 
 Support user's ability to hide specific files, which has the effect of setting
 publish and shelve to false in the content metadata. Offer a "Hide" checkbox
