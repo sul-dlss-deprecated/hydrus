@@ -7,11 +7,14 @@ class Hydrus::Collection < Hydrus::GenericObject
   before_save :save_apo
 
   REQUIRED_FIELDS = [:title, :abstract, :contact]
-  REQUIRED_FIELDS.each {|field| validates field, :not_empty => true, :if => :should_validate}
 
   before_validation :remove_values_for_associated_attribute_with_value_none
   after_validation :cleanup_usernames
   after_validation :strip_whitespace
+
+  validates :title,    :not_empty => true, :if => :should_validate
+  validates :abstract, :not_empty => true, :if => :should_validate
+  validates :contact,  :not_empty => true, :if => :should_validate
 
   validates :embargo_option, :presence => true, :if => :should_validate
   validates :license_option, :presence => true, :if => :should_validate
@@ -352,7 +355,7 @@ class Hydrus::Collection < Hydrus::GenericObject
   #   visibility_option_value   Used by the Collection views and controllers.
   #                             These methods then call the other getters/setters.
   #
-  #   visibility                Defined below. 
+  #   visibility                Defined below.
   #                             Reads/modifies rightsMetadata.
   #                             Not sure why the getter returns and Array.
   #

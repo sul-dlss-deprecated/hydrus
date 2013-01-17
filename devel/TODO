@@ -2,16 +2,22 @@
 Versioning for Items
 ------------------
 
-Validate presence of version_description.
-
 Set up dor_services.yml for other environments.
 
 Support editing of published Collections. (1) Initial version: push collection
 through pipeline. (2) Subsequent edits: don't push through pipeline (a cron job
 will do that); instead, call publish_metdata() directly.
 
+Push APOs through the accession pipeline during the initial open(), just like
+the corresponding collection.
+
+Modify purl_page_ready() to indicate if the page is for the prior version -- in
+effect, "ready but stale".
+
 Unit and integration tests:
     - is_accessioned() should return true during automated testing.
+
+Deploy and roadtest on hydrus-test.
 
 --------
 Other: on deck for January
@@ -30,8 +36,6 @@ HYDRUS-51. Add support for "corporate" and "conference" Contributor name types.
 HYDRUS-52. Item license selection. [Questions emailed to Hannah.]
 
 Get hydrus-dev.stanford.edu work as dordev environment.
-
-Should APOs go through the accession pipeline.
 
 --------
 Other: blocked, requires discussion, uncertain need, etc.

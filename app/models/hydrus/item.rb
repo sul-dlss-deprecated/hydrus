@@ -5,10 +5,17 @@ class Hydrus::Item < Hydrus::GenericObject
   extend  Hydrus::Delegatable
   extend  Hydrus::Cant
 
-  REQUIRED_FIELDS = [:title, :abstract, :contact, :keywords]
-  REQUIRED_FIELDS.each {|field| validates field, :not_empty => true, :if => :should_validate}
+  REQUIRED_FIELDS = [:title, :abstract, :contact, :keywords, :version_description]
 
   after_validation :strip_whitespace
+
+  validates :title,               :not_empty => true, :if => :should_validate
+  validates :abstract,            :not_empty => true, :if => :should_validate
+  validates :contact,             :not_empty => true, :if => :should_validate
+  validates :keywords,            :not_empty => true, :if => :should_validate
+  validates :version_description, :not_empty => true, :if => lambda {
+    should_validate() && ! is_initial_version()
+  }
 
   validate  :enforce_collection_is_open,     :on => :create
   validates :actors, :at_least_one => true,  :if => :should_validate
