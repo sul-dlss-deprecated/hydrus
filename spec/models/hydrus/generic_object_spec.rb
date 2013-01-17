@@ -298,7 +298,6 @@ describe Hydrus::GenericObject do
       @go.stub(:should_start_common_assembly).and_return(false)
       @go.should_not_receive(:update_content_metadata)
       @go.should_not_receive(:complete_workflow_step)
-      @go.should_not_receive(:initiate_apo_workflow)
       @go.start_common_assembly
     end
 
@@ -314,7 +313,7 @@ describe Hydrus::GenericObject do
       @go.stub('is_item?').and_return(true)
       @go.should_receive(:update_content_metadata).once
       @go.should_receive(:complete_workflow_step).once
-      @go.should_receive(:initiate_apo_workflow).once
+      Dor::WorkflowService.should_receive(:create_workflow).once
       @go.start_common_assembly
     end
 
@@ -465,7 +464,7 @@ describe Hydrus::GenericObject do
   end
 
   describe "XML beautification" do
-    
+
     before(:each) do
       @orig_xml = '
         <foo>
@@ -538,7 +537,7 @@ describe Hydrus::GenericObject do
     tests.each do |uri, exp|
       @go.with_protocol(uri).should == exp
     end
-    
+
   end
 
 end

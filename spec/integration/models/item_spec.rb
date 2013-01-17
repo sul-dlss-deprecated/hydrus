@@ -75,7 +75,7 @@ describe(Hydrus::Item, :integration => true) do
       # After running do_publish, with start_common_assembly=true.
       hi.stub(:should_start_common_assembly).and_return(true)
       hi.stub(:is_assemblable).and_return(true)
-      hi.should_receive(:initiate_apo_workflow).once
+      Dor::WorkflowService.should_receive(:create_workflow).once
       hi.do_publish()
       exp['start-assembly'] = 'completed'
       check_statuses.call()

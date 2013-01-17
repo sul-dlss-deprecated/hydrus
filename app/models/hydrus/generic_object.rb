@@ -366,9 +366,13 @@ class Hydrus::GenericObject < Dor::Item
   def start_common_assembly
     return unless should_start_common_assembly
     cannot_do(:start_common_assembly) unless is_assemblable()
+    # Wrap up the hydrusAssemblyWF.
     update_content_metadata
     complete_workflow_step('start-assembly')
-    initiate_apo_workflow('assemblyWF')
+    # Kick off a Hydrus-specific variant of assemblyWF -- one that skips
+    # the creation of derivative files (JP2s, etc).
+    xml = Dor::Config.hydrus.assembly_wf_xml
+    Dor::WorkflowService.create_workflow('dor', pid, 'assemblyWF', xml)
   end
 
   # Returns value of Dor::Config.hydrus.start_common_assembly.

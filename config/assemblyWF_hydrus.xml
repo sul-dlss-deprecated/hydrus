@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<workflow>
+  <process name="start-assembly"        status="completed" lifecycle="pipelined"/>
+  <process name="jp2-create"            status="skipped"/>
+  <process name="checksum-compute"      status="waiting"/>
+  <process name="exif-collect"          status="waiting"/>
+  <process name="accessioning-initiate" status="waiting"/>
+</workflow>
