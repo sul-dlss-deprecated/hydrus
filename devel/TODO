@@ -2,59 +2,16 @@
 Versioning for Items
 ------------------
 
-Hydrus needs to skip a step in assemblyWF. Currently the only way to do that is
-to bypass the reified workflow system and push custom XML into the WF service.
-[Discsuss with Lynn.]
-
-Add a start lifecycle to the assemblyWF: currently called pipelined. [Ask Lynn.]
-
-Support editing of published Collections. After a collection has been
-published, if the user makes an edit of any kind, push it through the
-accessioning pipeline again. Hydrus users won't perceive the new version, other
-than via the Events log. [Discuss robot-confusion problem with Willy and Lynn.]
-
-The is_accessioned method is incorrect: relying on the Purl page will return
-false positives for versions 2+. I need to check the object's workflow, using
-lifecycle queries:
-
-    # Cases to handle:
-    #
-    # Initial version:
-    #     a   assembly start             submittedAssembly
-    #     b   assembly end
-    #     c   accession start            submitted
-    #     d   accession end      TRUE    accessioned
-    #     e   wf-archived        TRUE    # Lifecycles moved out of active table.
-    #
-    # Subsequent versions:
-    #     f   assembly start             submittedAssembly
-    #     g   assembly end
-    #     h   accession start            submitted
-    #     i   accession end      TRUE    accessioned
-    #     j   wf-archived        TRUE    # Lifecycles moved out of active table.
-
-    wfs = Dor::WorkflowService
-    p   = pid()
-
-    # Never accessioned: cases a-c.
-    return false unless wfs.get_lifecycle('dor', p, 'accessioned')
-
-    # Accessioned and not yet wf-archived: cases d, i.
-    return true if wfs.get_active_lifecycle('dor', p, 'accessioned')
-
-    # Actively in the middle of assemblyWF or accessionWF: cases f-h.
-    return false if wfs.get_active_lifecycle('dor', p, 'pipelined')
-    return false if wfs.get_active_lifecycle('dor', p, 'submitted')
-
-    # Accessioned and wf-archived: cases e, j.
-    return true
-
 Validate presence of version_description.
 
 Set up dor_services.yml for other environments.
 
+Support editing of published Collections. (1) Initial version: push collection
+through pipeline. (2) Subsequent edits: don't push through pipeline (a cron job
+will do that); instead, call publish_metdata() directly.
+
 Unit and integration tests:
-  ...
+    - is_accessioned() should return true during automated testing.
 
 --------
 Other: on deck for January
@@ -73,6 +30,8 @@ HYDRUS-51. Add support for "corporate" and "conference" Contributor name types.
 HYDRUS-52. Item license selection. [Questions emailed to Hannah.]
 
 Get hydrus-dev.stanford.edu work as dordev environment.
+
+Should APOs go through the accession pipeline.
 
 --------
 Other: blocked, requires discussion, uncertain need, etc.
@@ -164,3 +123,9 @@ Collection, for two reasons: (1) it parallels the roleMD stored in the Item;
 (2) without it, we don't have access to the collection depositor during search
 results (at least not without mucking with the to_solr method, which we have
 done in the roleMD class).
+
+Hydrus needs to skip a step in assemblyWF. Currently we achieve this by
+bypassing the reified workflow system and pushing custom XML directly into the
+WF service (see start_common_assembly). A better approach would be to have
+dor-services and workflow service accept an options hash allowing the caller to
+request that particular steps in the workflow be marked as skipped.

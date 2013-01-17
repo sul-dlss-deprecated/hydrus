@@ -156,6 +156,10 @@ General points:
   steps are accomplished, Hydrus object_status can toggle back and forth between
   various states during the edit-and-review and collection-open-and-close processes.
 
+- Hydrus does consult the workflow service when it needs information about the
+  status of an object in assemblyWF and accessionWF. The primary (and still only)
+  example is in the is_accessioned() method.
+
 Relationship between object_status and workflow steps for collections:
 
   object_status              workflow steps

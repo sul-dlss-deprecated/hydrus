@@ -142,12 +142,47 @@ class Hydrus::GenericObject < Dor::Item
     return object_status[0..8] == 'published'
   end
 
-  # Returns true if the object has been accessioned.
-  # During local development we treat published objects as though they are accessioned.
+  # Returns true if the most recent version of the object has been accessioned.
   def is_accessioned
+    # Basic tests:
+    #   - Must be published before it can be accessioned.
+    #   - For local development, treat published as equivalent to accessioned.
     return false unless is_published
     return true if Rails.env.development?
-    return purl_page_ready?
+
+    # During the assembly-accessioning process, an object is assembled, then
+    # the object is accessioned, and finally (during a nightly cron job) the
+    # workflow-archiver moves the object's workflow lifecycle rows from the
+    # active table to the archive table.
+    #
+    # We need to handle the following 6 cases. Shown with each case
+    # is the active lifecycles associated with the object at the particular
+    # step. This method should return true as indicated.
+    #
+    #             Initial version:
+    #   1.           assembly start      pipelined
+    #   2.  true     accession end       accessioned
+    #   3.  true     archived            none
+    #
+    #             Subsequent versions:
+    #   4.          assembly start       pipelined
+    #   5.  true    accession end        accessioned
+    #   6.  true    archived             none
+    wfs = Dor::WorkflowService
+    p   = pid()
+
+    # Never accessioned: case 1.
+    # This query check both active and archived rows.
+    return false unless wfs.get_lifecycle('dor', p, 'accessioned')
+
+    # Accessioned but not archived: cases 2 and 5.
+    return true if wfs.get_active_lifecycle('dor', p, 'accessioned')
+
+    # Actively in the middle of assemblyWF or accessionWF: case 4.
+    return false if wfs.get_active_lifecycle('dor', p, 'pipelined')
+
+    # Accessioned and archived: cases 3 and 6.
+    return true
   end
 
   def apo
