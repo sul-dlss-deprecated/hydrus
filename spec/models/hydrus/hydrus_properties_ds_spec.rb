@@ -22,9 +22,10 @@ describe Hydrus::HydrusPropertiesDS do
         <itemType>dataset</itemType>
         <objectStatus>draft</objectStatus>
         <disapprovalReason>Idiota</disapprovalReason>
-        <publishTime>2011-09-03T00:00:00Z</publishTime>
-        <submitForApprovalTime>2011-08-03T00:00:00Z</submitForApprovalTime>
+        <versionStartedTime>2011-09-01T00:00:00Z</versionStartedTime>
         <lastModifyTime>2011-09-02T00:00:00Z</lastModifyTime>
+        <submitForApprovalTime>2011-08-03T00:00:00Z</submitForApprovalTime>
+        <publishTime>2011-09-03T00:00:00Z</publishTime>
       #{@ds_end}
     EOF
     @dsdoc = Hydrus::HydrusPropertiesDS.from_xml(xml)
@@ -52,6 +53,7 @@ describe Hydrus::HydrusPropertiesDS do
       [:publish_time,  ["2011-09-03T00:00:00Z"]],
       [:submit_for_approval_time,  ["2011-08-03T00:00:00Z"]],
       [:last_modify_time,  ["2011-09-02T00:00:00Z"]],
+      [:version_started_time,  ["2011-09-01T00:00:00Z"]],
     ]
     tests.each do |terms, exp|
       @dsdoc.term_values(*terms).should == exp
