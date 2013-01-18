@@ -4,23 +4,20 @@ Versioning for Items
 
 Unit and integration tests:
 
-    complete_workflow_step
-    uncomplete_workflow_step
-    update_workflow_status
-
     create() should set version info
 
-    - assemblyWF should contain pipelined lifecycle
+    assemblyWF should contain pipelined lifecycle
 
-    - added open_new_version() to Item controller
+    added open_new_version() to Item controller
 
-    - Item/Coll pages should have "active" class for the correct tab -- an <li> element
+    Item/Coll pages should have "active" class for the correct tab -- an <li> element
 
-    - integration tests for versioning
+    integration tests for versioning
         - can see version number on item view page: tag, started time
         - should not see version fields when editing initial version
         - editing cycle
             - open new version
+            - hydrusAssemblyWF steps should be in waiting status
             - edit, etc
             - make sure version info is required
             - close version

@@ -196,6 +196,11 @@ describe Hydrus::GenericObject do
 
     end
 
+    it "can exercise uncomplete_workflow_steps() stubbed" do
+      @go.should_receive(:update_workflow_status).exactly(3).times
+      @go.uncomplete_workflow_steps()
+    end
+
     it "can exercise workflows_content_is_stale, stubbed" do
       @go.workflows.should_receive(:instance_variable_set).twice
       @go.workflows_content_is_stale
