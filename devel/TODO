@@ -4,10 +4,6 @@ Versioning for Items
 
 Unit and integration tests:
 
-    create() should set version info
-
-    assemblyWF should contain pipelined lifecycle
-
     added open_new_version() to Item controller
 
     Item/Coll pages should have "active" class for the correct tab -- an <li> element
@@ -35,6 +31,7 @@ Unit and integration tests:
     close_version
 
 Deploy and roadtest on hydrus-test.
+    - assemblyWF should contain pipelined lifecycle
 
 Get hydrus-dev.stanford.edu work as dordev environment.
 

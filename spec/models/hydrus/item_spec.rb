@@ -42,6 +42,8 @@ describe Hydrus::Item do
     Hydrus::GenericObject.stub(:register_dor_object).and_return(@hi)
     Hydrus::Authorizable.stub(:can_create_items_in).and_return(true)
     Hydrus::Item.create(hc.pid, mock_user).pid.should == druid
+    @hi.version_started_time.should =~ /\A\d{4}/
+    puts @hi.version_tag.should == 'v1.0.0'
   end
 
   it "can exercise a stubbed version of create when terms have already been accepted on another item" do
