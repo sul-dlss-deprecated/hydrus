@@ -91,11 +91,11 @@ class Hydrus::GenericObject < Dor::Item
   # We override save() so we can control whether editing events are logged.
   # Notes on options:
   #   :no_super     To prevent the super() call during unit tests
-  #   :no_beautify  To prevent a strange error that we haven't doped out yet.
   def save(opts = {})
     # beautify_datastream(:descMetadata) unless opts[:no_beautify]
     self.last_modify_time = HyTime.now_datetime
     log_editing_events() unless opts[:no_edit_logging]
+    publish_metadata() if is_collection? && is_published
     super() unless opts[:no_super]
   end
 
@@ -408,6 +408,25 @@ class Hydrus::GenericObject < Dor::Item
     # the creation of derivative files (JP2s, etc).
     xml = Dor::Config.hydrus.assembly_wf_xml
     Dor::WorkflowService.create_workflow('dor', pid, 'assemblyWF', xml)
+  end
+
+  # After collections are published, further edits to the object are allowed
+  # but do not require the open_new_version() process used by Items.
+  # Instead, here's what happens:
+  #   - User open Collection for the first time.
+  #   - Hydrus kicks of the assemblyWF/accessionWF pipeline.
+  #   - Later, user edits Collection and clicks Save.
+  #   - The save() method in Hydrus invokes publish_metadata().
+  #   - Here we simply call super(), which delegates to the dor-services gem,
+  #     provided that we are running in an environment intended to use the
+  #     entire the assembly/accessioning/publishing pipeline.
+  #   - Later, a nightly cron job (not built yet) will patrol Fedora, looking
+  #     for modified Collections and APOs. If it finds any, it will open a new
+  #     version and run the object through the pipeline.
+  def publish_metadata
+    return unless should_start_common_assembly
+    cannot_do(:publish_metadata) unless is_assemblable()
+    super()
   end
 
   # Returns value of Dor::Config.hydrus.start_common_assembly.

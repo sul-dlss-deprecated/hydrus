@@ -411,18 +411,24 @@ describe Hydrus::GenericObject do
 
   describe "save()" do
 
-    before(:each) do
-      @go.stub(:beautify_datastream)
-    end
-
     it "should invoke log_editing_events() usually" do
       @go.should_receive(:log_editing_events).once
+      @go.should_not_receive(:publish_metadata)
       @go.save(:no_super => true)
     end
 
     it "should not invoke log_editing_events() if no_edit_logging is true" do
+      @go.should_not_receive(:publish_metadata)
       @go.should_not_receive(:log_editing_events)
       @go.save(:no_edit_logging => true, :no_super => true)
+    end
+
+    it "should not invoke log_editing_events() if no_edit_logging is true" do
+      @go.should_receive(:log_editing_events).once
+      @go.should_receive(:publish_metadata).once
+      @go.stub('is_collection?').and_return(true)
+      @go.stub(:is_published).and_return(true)
+      @go.save(:no_super => true)
     end
 
   end

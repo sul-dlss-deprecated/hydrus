@@ -2,26 +2,19 @@
 Versioning for Items
 ------------------
 
-Set up dor_services.yml for other environments.
-
-Support editing of published Collections. (1) Initial version: push collection
-through pipeline. (2) Subsequent edits: don't push through pipeline (a cron job
-will do that); instead, call publish_metdata() directly.
-
-Push APOs through the accession pipeline during the initial open(), just like
-the corresponding collection.
-
-Modify purl_page_ready() to indicate if the page is for the prior version -- in
-effect, "ready but stale".
-
 Unit and integration tests:
     - is_accessioned() should return true during automated testing.
 
 Deploy and roadtest on hydrus-test.
 
+Get hydrus-dev.stanford.edu work as dordev environment.
+
 --------
 Other: on deck for January
 --------
+
+Push APOs through the accession pipeline during the initial open(), just like
+the corresponding collection.
 
 Support user's ability to hide specific files, which has the effect of setting
 publish and shelve to false in the content metadata. Offer a "Hide" checkbox
@@ -33,9 +26,15 @@ HYDRUS-50. Add new roles to the Contributor drop-down: Advisor, Primary advisor.
 HYDRUS-51. Add support for "corporate" and "conference" Contributor name types.
 [See ticket for details.]
 
-HYDRUS-52. Item license selection. [Questions emailed to Hannah.]
+HYDRUS-52. Item license selection. See ticket for details. Also include "No
+license" as an option for the default value set at the collection level.
+[Questions emailed to Hannah; she will clarify the ticket.]
 
-Get hydrus-dev.stanford.edu work as dordev environment.
+HYDRUS-54. Implement restrictions governing what a user is allowed to change in
+subsequent versions.
+
+Modify purl_page_ready() to indicate if the page is for the prior version -- in
+effect, "ready but stale".
 
 --------
 Other: blocked, requires discussion, uncertain need, etc.
