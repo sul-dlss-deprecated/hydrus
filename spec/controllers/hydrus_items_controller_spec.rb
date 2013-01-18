@@ -19,11 +19,26 @@ describe HydrusItemsController do
         :id         => 'abc')
     end
 
+    it "custom post actions should route correctly" do
+      pid = 'abc123'
+      actions = %w(
+        publish_directly
+        submit_for_approval
+        approve
+        disapprove
+        open_new_version
+      )
+      actions.each do |a|
+        h = { :post => "/items/#{a}/#{pid}" }
+        h.should route_to(:controller => 'hydrus_items', :action => a, :id => pid)
+      end
+    end
+
     it "should have the destroy_hydrus_item_value convenience url" do
       destroy_hydrus_item_value_path("123").should match(/items\/123\/destroy_value/)
     end
 
-  end # routes and mapping
+  end
 
   # SHOW ACTION.
   describe "Show Action", :integration => true do

@@ -48,6 +48,15 @@ describe HydrusCollectionsController do
         :action     => 'list_all')
     end
 
+    it "custom post actions should route correctly" do
+      pid = 'abc123'
+      actions = %w(open close)
+      actions.each do |a|
+        h = { :post => "/collections/#{a}/#{pid}" }
+        h.should route_to(:controller => 'hydrus_collections', :action => a, :id => pid)
+      end
+    end
+
   end
 
   describe "Show Action", :integration => true do

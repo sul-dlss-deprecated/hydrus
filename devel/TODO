@@ -4,8 +4,6 @@ Versioning for Items
 
 Unit and integration tests:
 
-    added items/open_new_version/:id route
-
     complete_workflow_step
     uncomplete_workflow_step
     update_workflow_status
