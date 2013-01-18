@@ -928,4 +928,86 @@ describe Hydrus::Item do
     }
   end
 
+  describe "version getters and setters" do
+
+    before(:each) do
+      vs = [
+        '<version tag="1.0.0" versionId="1"><description>Blah 1.0.0</description></version>',
+        '<version tag="2.0.0" versionId="2"><description>Blah 2.0.0</description></version>',
+        '<version tag="2.1.0" versionId="3"><description>Blah 2.1.0</description></version>',
+        '<version tag="3.0.0" versionId="4"><description>Blah 3.0.0</description></version>',
+        '<version tag="3.0.1" versionId="5"><description>Blah 3.0.1</description></version>',
+      ]
+      @stub_vm = lambda { |v|
+        tags = %w(1.0.0 2.0.0 2.1.0 3.0.0 3.0.1)
+        n = tags.find_index(v)
+        xml = [
+          '<?xml version="1.0"?>',
+          '<versionMetadata objectId="druid:oo000oo0001">',
+          vs[0..n],
+          '</versionMetadata>',
+        ]
+        vm = Dor::VersionMetadataDS.from_xml(xml.flatten.join)
+        vm.stub(:pid).and_return('druid:oo000oo0001')
+        @hi.stub(:versionMetadata).and_return(vm)
+        @hi.datastreams['versionMetadata'] = vm
+      }
+    end
+
+    it "basic getters should return expected attributes of the current version" do
+      @stub_vm.call('1.0.0')
+      @hi.version_id.should == '1'
+      @hi.version_tag.should == 'v1.0.0'
+      @hi.version_description.should == 'Blah 1.0.0'
+      @stub_vm.call('2.1.0')
+      @hi.version_id.should == '3'
+      @hi.version_tag.should == 'v2.1.0'
+      @hi.version_description.should == 'Blah 2.1.0'
+    end
+
+    it "is_initial_version() should return true only for the first version" do
+      @stub_vm.call('1.0.0')
+      @hi.is_initial_version.should == true
+      @stub_vm.call('2.0.0')
+      @hi.is_initial_version.should == false
+      @stub_vm.call('2.1.0')
+      @hi.is_initial_version.should == false
+    end
+
+    it "version_significance() should return :major, :minor, or :admin" do
+      tests = {
+        '1.0.0' => :major,
+        '2.0.0' => :major,
+        '2.1.0' => :minor,
+        '3.0.0' => :major,
+        '3.0.1' => :admin,
+      }
+      tests.each do |v, exp|
+        @stub_vm.call(v)
+        @hi.version_significance.should == exp
+      end
+    end
+
+    it "version_significance=() should modify the version tag as expected" do
+      @stub_vm.call('2.1.0')
+      tests = {
+        'major' => 'v3.0.0',
+        'admin' => 'v2.0.1',
+        'minor' => 'v2.1.0',
+      }
+      tests.each do |sig, exp|
+        @hi.version_significance = sig
+        @hi.version_tag.should == exp
+      end
+    end
+
+    it "version_description=() modifies the description" do
+      @stub_vm.call('2.1.0')
+      @hi.version_description.should == 'Blah 2.1.0'
+      exp = 'blah blah blah!!'
+      @hi.version_description = exp
+      @hi.version_description.should == exp
+    end
+
+  end
 end

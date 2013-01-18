@@ -561,24 +561,26 @@ class Hydrus::Item < Hydrus::GenericObject
     return self.current_version == '1'
   end
 
+  # Takes a string.
   # Sets the description of the current version.
   def version_description=(val)
     versionMetadata.update_current_version(:description => val)
   end
 
-  # Sets the significance (major or minor) of the current version.
+  # Takes a string or symbol: major, minor, admin.
+  # Sets the significance of the current version.
   def version_significance=(val)
     versionMetadata.update_current_version(:significance => val.to_sym)
   end
 
-  # Returns the significance (major or minor) of the current version.
-  # TODO: add to dor-services gem.
+  # Returns the significance (major, minor, or admin) of the current version.
+  # This method probably belongs in dor-services gem.
   def version_significance
     tags = versionMetadata.find_by_terms(:version, :tag).
            map{ |t| Dor::VersionTag.parse(t.value) }.sort
     return :major if tags.size < 2
-    prev = tags[-2]
     curr = tags[-1]
+    prev = tags[-2]
     return prev.major != curr.major ? :major :
            prev.minor != curr.minor ? :minor : :admin
   end

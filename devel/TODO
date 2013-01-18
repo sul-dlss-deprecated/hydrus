@@ -3,7 +3,43 @@ Versioning for Items
 ------------------
 
 Unit and integration tests:
-    - is_accessioned() should return true during automated testing.
+
+    hydrusProperties: added <versionStartedTime>
+
+    added items/open_new_version/:id route
+
+    complete_workflow_step
+    uncomplete_workflow_step
+    update_workflow_status
+
+    create() should set version info
+
+    - assemblyWF should contain pipelined lifecycle
+
+    - added open_new_version() to Item controller
+
+    - Item/Coll pages should have "active" class for the correct tab -- an <li> element
+
+    - integration tests for versioning
+        - can see version number on item view page: tag, started time
+        - should not see version fields when editing initial version
+        - editing cycle
+            - open new version
+            - edit, etc
+            - make sure version info is required
+            - close version
+            - open new version again
+
+    is_accessioned
+        - also should return true during automated testing.
+
+    start_common_assembly
+    publish_metadata
+    do_publish
+        should close version on subsequent versions
+        should add version tag to event msg
+    open_new_version
+    close_version
 
 Deploy and roadtest on hydrus-test.
 
@@ -132,3 +168,5 @@ bypassing the reified workflow system and pushing custom XML directly into the
 WF service (see start_common_assembly). A better approach would be to have
 dor-services and workflow service accept an options hash allowing the caller to
 request that particular steps in the workflow be marked as skipped.
+
+Consider adding version_significance() to dor-services gem.

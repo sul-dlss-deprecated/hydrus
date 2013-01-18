@@ -16,11 +16,13 @@ USE_IRB = ARGV.delete '--irb'
 
 dru = 'druid:oo000oo0001'
 hi  = Hydrus::Item.find(dru)
+hc  = hi.collection
 
 dmd = hi.descMetadata
 cmd = hi.contentMetadata
 rm  = hi.rightsMetadata
 hp  = hi.hydrusProperties
+vm  = hi.versionMetadata
 wf  = hi.workflows
 hc  = hi.collection
 apo = hc.apo
