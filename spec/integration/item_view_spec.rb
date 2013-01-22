@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe("Item view", :type => :request, :integration => true) do
+
   fixtures :users
 
   before :each do
@@ -65,6 +66,19 @@ describe("Item view", :type => :request, :integration => true) do
     page.should_not have_content('story by Jennifer Ludden August 16, 2010')
   end
 
+  it "should apply the active class to the active tab" do
+    login_as('archivist1')
+    tests = {
+      "Published Version" => @hi,
+      "History"           => [@hi, :events],
+    }
+    tests.each do |exp, arg|
+      should_visit_view_page(arg)
+      es = all('ul.nav li.active')
+      es.size.should == 1
+      es.first.should have_content(exp)
+    end
+  end
 
   it "should show the events in a history tab" do
     exp_content = [
@@ -73,8 +87,7 @@ describe("Item view", :type => :request, :integration => true) do
       'Item created'
     ]
     login_as('archivist1')
-    visit polymorphic_path([@hi, :events])
-    current_path.should == polymorphic_path([@hi, :events])
+    should_visit_view_page([@hi, :events])
     exp_content.each do |exp|
       page.should have_content(exp)
     end

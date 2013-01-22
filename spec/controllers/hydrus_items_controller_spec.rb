@@ -126,16 +126,23 @@ describe HydrusItemsController do
 
   end
 
-  describe "publish_directly, submit_for_approval, approve, disapprove, resubmit", :integration => true do
+  describe "custom actions: publish_directly, et al", :integration => true do
 
     it "should raise exception if user lacks required permissions" do
       pid = "druid:oo000oo0001"
       err_msg = /\ACannot perform action:/
       controller.stub(:current_user).and_return(mock_user)
-      actions = [:publish_directly, :submit_for_approval, :approve, :disapprove, :resubmit]
+      actions = [
+        :publish_directly,
+        :submit_for_approval,
+        :approve,
+        :disapprove,
+        :resubmit,
+        :open_new_version,
+      ]
       actions.each do |action|
         e = expect { post(action, :id => pid) }
-        e.to raise_exception err_msg
+        e.to raise_exception(err_msg)
       end
     end
 
