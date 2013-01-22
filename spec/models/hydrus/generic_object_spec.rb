@@ -315,7 +315,6 @@ describe Hydrus::GenericObject do
     it "can exercise the method, stubbed" do
       @go.stub(:should_start_common_assembly).and_return(true)
       @go.stub(:is_assemblable).and_return(true)
-      @go.stub('is_item?').and_return(true)
       @go.should_receive(:update_content_metadata).once
       @go.should_receive(:complete_workflow_step).once
       Dor::WorkflowService.should_receive(:create_workflow).once
@@ -326,6 +325,12 @@ describe Hydrus::GenericObject do
 
   it "can exercise should_start_common_assembly()" do
     @go.should_start_common_assembly.should == Dor::Config.hydrus.start_common_assembly
+  end
+
+  it "publish_metadata() should do nothing if app is not configured to start common assembly" do
+    @go.stub(:should_start_common_assembly).and_return(false)
+    @go.should_not_receive(:is_assemblable)
+    @go.publish_metadata
   end
 
   describe "current_user" do

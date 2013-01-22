@@ -43,7 +43,7 @@ describe Hydrus::Item do
     Hydrus::Authorizable.stub(:can_create_items_in).and_return(true)
     Hydrus::Item.create(hc.pid, mock_user).pid.should == druid
     @hi.version_started_time.should =~ /\A\d{4}/
-    puts @hi.version_tag.should == 'v1.0.0'
+    @hi.version_tag.should == 'v1.0.0'
   end
 
   it "can exercise a stubbed version of create when terms have already been accepted on another item" do
@@ -740,16 +740,36 @@ describe Hydrus::Item do
 
   end
 
-  it "do_publish() should set labels/status and call expected methods and set publish_time" do
-    exp = 'foobar title'
-    @hi.stub(:title).and_return(exp)
-    @hi.should_receive(:complete_workflow_step).with('approve')
-    @hi.should_receive(:start_common_assembly)
-    @hi.publish_time.should be_blank
-    @hi.do_publish
-    @hi.label.should == exp
-    @hi.publish_time.should_not be_blank
-    @hi.object_status.should == 'published'
+  describe "do_publish()" do
+
+    it "should call expected methods and set labels, status, and events" do
+      # Set up object title.
+      exp = 'foobar title'
+      @hi.stub(:title).and_return(exp)
+      # Stub method calls.
+      @hi.should_receive(:complete_workflow_step).with('approve')
+      @hi.should_not_receive(:close_version)
+      @hi.should_receive(:start_common_assembly)
+      # Before-assertions.
+      @hi.is_initial_version.should == true
+      @hi.publish_time.should be_blank
+      @hi.get_hydrus_events.size.should == 0
+      # Run it, and make after-assertions.
+      @hi.do_publish
+      @hi.label.should == exp
+      @hi.publish_time.should_not be_blank
+      @hi.object_status.should == 'published'
+      @hi.get_hydrus_events.first.text.should =~ /\AItem published: v\d/
+    end
+
+    it "should close_version() if the object is not an initial version" do
+      @hi.stub(:complete_workflow_step)
+      @hi.stub(:start_common_assembly)
+      @hi.stub(:is_initial_version).and_return(false)
+      @hi.should_receive(:close_version)
+      @hi.do_publish
+    end
+
   end
 
   describe "submit_for_approval()" do
@@ -823,6 +843,31 @@ describe Hydrus::Item do
       @hi.resubmit
       @hi.disapproval_reason.should == nil
       @hi.object_status.should == 'awaiting_approval'
+    end
+
+  end
+
+  describe "open_new_version()" do
+
+    # More significant testing is done at the integration level.
+
+    it "should raise exception if item is initial version" do
+      @hi.stub(:is_accessioned).and_return(false)
+      expect { @hi.open_new_version }.to raise_exception(@cannot_do_regex)
+    end
+
+  end
+
+  describe "close_version()" do
+
+    it "should raise exception if item is initial version" do
+      @hi.stub(:is_initial_version).and_return(true)
+      expect { @hi.close_version }.to raise_exception(@cannot_do_regex)
+    end
+
+    it "should raise exception if item has not been opened for versioning" do
+      @hi.stub(:is_initial_version).and_return(false)
+      expect { @hi.close_version }.to raise_exception(Dor::Exception)
     end
 
   end

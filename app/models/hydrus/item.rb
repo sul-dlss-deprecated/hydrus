@@ -164,9 +164,12 @@ class Hydrus::Item < Hydrus::GenericObject
   end
 
   # Opens a new version of the Item.
-  # After an Item is published, in order to make further edits, the
-  # user must open a new version.
-  def open_new_version
+  # Notes:
+  #   - After an Item is published, in order to make further edits, the
+  #     user must open a new version.
+  #   - The :no_super option is used solely to prevent the super() call
+  #     during testing.
+  def open_new_version(opts = {})
     cannot_do(:open_new_version) unless is_accessioned()
     # Call the dor-services method, with a couple of Hydrus-specific options.
     super(:assume_accessioned => Rails.env.development?, :create_workflows_ds => false)

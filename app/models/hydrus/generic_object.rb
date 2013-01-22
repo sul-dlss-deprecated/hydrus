@@ -410,11 +410,12 @@ class Hydrus::GenericObject < Dor::Item
     Dor::WorkflowService.create_workflow('dor', pid, 'assemblyWF', xml)
   end
 
-  # After collections are published, further edits to the object are allowed
-  # but do not require the open_new_version() process used by Items.
-  # Instead, here's what happens:
+  # After collections are published, further edits to the object are allowed.
+  # This occurs without requiring the open_new_version() process used by Items.
+  #
+  # Here's an overview:
   #   - User open Collection for the first time.
-  #   - Hydrus kicks of the assemblyWF/accessionWF pipeline.
+  #   - Hydrus kicks off the assemblyWF/accessionWF pipeline.
   #   - Later, user edits Collection and clicks Save.
   #   - The save() method in Hydrus invokes publish_metadata().
   #   - Here we simply call super(), which delegates to the dor-services gem,

@@ -2,7 +2,7 @@
 Versioning for Items
 ------------------
 
-Unit and integration tests:
+Integration tests:
 
     integration tests for versioning
         - can see version number on item view page: tag, started time
@@ -17,14 +17,6 @@ Unit and integration tests:
 
     is_accessioned
         - also should return true during automated testing.
-
-    start_common_assembly
-    publish_metadata
-    do_publish
-        should close version on subsequent versions
-        should add version tag to event msg
-    open_new_version
-    close_version
 
 Deploy and roadtest on hydrus-test.
     - assemblyWF should contain pipelined lifecycle
