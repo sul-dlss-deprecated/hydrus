@@ -37,12 +37,22 @@ module Hydrus
 
   # Returns a hash of fixtures, with PIDs as keys and foxml as values.
   # Used to restore fixture after each Rspec test.
-  def self.fixture_foxml
-    fps   = fixture_pids()
-    foxml = fps.map { |p| p.sub /:/, '_' }.
-                map { |p| "spec/fixtures/#{p}.foxml.xml" }.
-                map { |p| IO.read(p) }
-    return Hash[ fps.zip(foxml) ]
+  def self.all_fixture_foxml
+    pids = fixture_pids()
+    xmls = pids.map { |p| fixture_foxml(p) }
+    return Hash[ pids.zip(xmls) ]
+  end
+
+  # Takes a PID for a Hydrus fixtures, and an optional hash with the :is_wf
+  # key. Reads the corresponding file from the fixture directory and returns
+  # the content. Used when restoring fixture objects in a Hydrus rake task
+  # and during testing.
+  def self.fixture_foxml(pid, opts = {})
+    p = pid.sub(/:/, '_')
+    w = opts[:is_wf] ? 'workflow_xml/' : ''
+    e = opts[:is_wf] ? ''              : '.foxml'
+    f = File.join('spec/fixtures', w, p + e + '.xml')
+    return IO.read(f)
   end
 
   # A pretty-printing method used during debugging.

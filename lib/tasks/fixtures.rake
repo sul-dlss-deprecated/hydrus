@@ -179,20 +179,29 @@ namespace :hydrus do
     end
   end
 
+  # This task restores the workflows datastream to initial conditions for
+  # our fixture objects.
+  #   - hydrusAssemblyWF: content is replaces (see spec/fixtures/workflow_xml).
+  #   - versioningWF:     content is removed
+  # An after() block in spec/integration/item_edit_spec.rb duplications
+  # some of this behavior.
   desc "refresh workflow datastreams"
   task :refresh_workflows do
     require File.expand_path('config/environment')
     repo    = 'dor'
-    wf_name = 'hydrusAssemblyWF'
+    hwf     = 'hydrusAssemblyWF'
+    vwf     = 'versioningWF'
     # Read files in workflow fixtures directory.
     Dir.glob("spec/fixtures/workflow_xml/druid_*.xml").each do |f|
       # Read XML from file and get druid from file name.
       xml   = File.read(f)
       druid = File.basename(f, '.xml').gsub(/_/, ':')
       # Push content up to the WF service.
-      resp = [druid, wf_name]
-      resp << Dor::WorkflowService.delete_workflow(repo, druid, wf_name)
-      resp << Dor::WorkflowService.create_workflow(repo, druid, wf_name, xml)
+      resp = [druid, hwf]
+      resp << Dor::WorkflowService.delete_workflow(repo, druid, hwf)
+      resp << Dor::WorkflowService.create_workflow(repo, druid, hwf, xml)
+      resp << vwf
+      resp << Dor::WorkflowService.delete_workflow(repo, druid, vwf)
       puts resp.inspect
     end
   end

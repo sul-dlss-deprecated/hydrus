@@ -77,11 +77,11 @@ end
 
 Dor::Config.configure.suri.mint_ids = false
 
-FIXTURE_FOXML = Hydrus.fixture_foxml()
+FIXTURE_FOXML = Hydrus.all_fixture_foxml()
 
 # TODO: incorporate this into Rubydora.
 # Relative to rollback() it Rubydora v0.5.0, it reduced
-# test suite runtime from 32 minutes down to than 8 min.
+# test suite runtime from 32 min down to about 8 min.
 class Rubydora::Transaction
 
     # Roll-back transactions by restoring the repository to its

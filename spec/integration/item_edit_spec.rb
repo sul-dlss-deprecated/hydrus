@@ -16,6 +16,7 @@ describe("Item edit", :type => :request, :integration => true) do
       :disapprove          => 'Return Item',
       :approve             => 'Approve Item',
       :publish_directly    => 'Publish',
+      :open_new_version    => 'Open new version',
     }
   end
 
@@ -51,7 +52,7 @@ describe("Item edit", :type => :request, :integration => true) do
     fill_in("Abstract", :with => "  #{ni.abstract}  ")
     fill_in("hydrus_item_contact", :with => "  #{ni.contact}  ")
     fill_in("Keywords", :with => "  #{ni.keywords.join(comma_join)}  ")
-    click_button "Save"
+    click_button(@buttons[:save])
     # Confirm new location and flash message.
     current_path.should == polymorphic_path(@hi)
     page.should have_content(@notice)
@@ -79,7 +80,7 @@ describe("Item edit", :type => :request, :integration => true) do
 
     fill_in(field_np, :with => new_name)
     select(new_role, :from => field_rt)
-    click_button "Save"
+    click_button(@buttons[:save])
     page.should have_content(@notice)
 
     current_path.should == polymorphic_path(@hi)
@@ -105,7 +106,7 @@ describe("Item edit", :type => :request, :integration => true) do
     page.should have_css("##{new_delete_button}")
 
     fill_in(new_field, :with => person)
-    click_button "Save"
+    click_button(@buttons[:save])
     page.should have_content(@notice)
 
     should_visit_edit_page(@hi)
@@ -137,7 +138,7 @@ describe("Item edit", :type => :request, :integration => true) do
 
     fill_in(field_link,  :with => new_link)
     fill_in(field_title, :with => new_title)
-    click_button "Save"
+    click_button(@buttons[:save])
     page.should have_content(@notice)
 
     # Confirm new content in fedora.
@@ -162,7 +163,7 @@ describe("Item edit", :type => :request, :integration => true) do
 
     fill_in(field_link,  :with => new_link)
     fill_in(field_title, :with => new_title)
-    click_button "Save"
+    click_button(@buttons[:save])
     page.should have_content(@notice)
 
     # Confirm new content in fedora.
@@ -199,7 +200,7 @@ describe("Item edit", :type => :request, :integration => true) do
     fill_in(css_new_title, :with => title)
     fill_in(css_new_url, :with => url)
     # Save.
-    click_button "Save"
+    click_button(@buttons[:save])
     page.should have_content(@notice)
     # Make sure the descMetadata has the expected N of relatedItem nodes.
     # At one point we had a bug where the new title and url were added
@@ -241,7 +242,7 @@ describe("Item edit", :type => :request, :integration => true) do
     # Submit some changes.
     fill_in ni.title_f, :with => ni.ri_title
     fill_in ni.url_f, :with => ni.ri_url
-    click_button "Save"
+    click_button(@buttons[:save])
     # Confirm new location and flash message.
     current_path.should == polymorphic_path(@hi)
     page.should have_content(@notice)
@@ -260,7 +261,7 @@ describe("Item edit", :type => :request, :integration => true) do
 
     find_field(citation_field).value.strip.should == orig_pref_cit
     fill_in citation_field, :with => new_pref_cit
-    click_button "Save"
+    click_button(@buttons[:save])
     page.should have_content(@notice)
 
     # Confirm new content in fedora.
@@ -291,7 +292,7 @@ describe("Item edit", :type => :request, :integration => true) do
 
     fill_in(new_citation, :with => new_citation_text)
 
-    click_button "Save"
+    click_button(@buttons[:save])
     page.should have_content(@notice)
 
     should_visit_edit_page(@hi)
@@ -323,7 +324,7 @@ describe("Item edit", :type => :request, :integration => true) do
     should_visit_edit_page(Hydrus::Collection.find("druid:oo000oo0003"))
     choose varies_radio
     select(new_collection_license, :from => collection_licenses)
-    click_button "Save"
+    click_button(@buttons[:save])
     page.should have_content(@notice)
 
     # Item edit page should offer ability to select a license.
@@ -338,7 +339,7 @@ describe("Item edit", :type => :request, :integration => true) do
 
     # Select a different license, and save.
     select(new_item_license, :from => item_licenses)
-    click_button "Save"
+    click_button(@buttons[:save])
     page.should have_content(@notice)
 
     # Item has expected rights.
@@ -486,7 +487,7 @@ describe("Item edit", :type => :request, :integration => true) do
       select('Stanford only', :from => css[:visib])
 
       # Save and confirm.
-      click_button "Save"
+      click_button(@buttons[:save])
       current_path.should == polymorphic_path(@hi)
       page.should have_content(@notice)
 
@@ -503,7 +504,7 @@ describe("Item edit", :type => :request, :integration => true) do
       choose(css[:emb_no])
 
       # Save and confirm.
-      click_button "Save"
+      click_button(@buttons[:save])
       current_path.should == polymorphic_path(@hi)
       page.should have_content(@notice)
 
@@ -514,6 +515,112 @@ describe("Item edit", :type => :request, :integration => true) do
         :visibility   => 'stanford',
         :license_code => lic,
       )
+    end
+
+  end
+
+  describe "versioning" do
+
+    # NOTE: We need this after() block because our typical approach of relying
+    # on Rubydora transactions does not restore the versioning status of the
+    # object back to initial conditions. Rubydora's rollback() affects Fedora,
+    # not the workflow service. The latter controls versioning. For most Hydrus
+    # operations, we don't care about workflows because we never read from
+    # there; we only advance workflow to the next step. In case case of
+    # versioning, we (especially dor-services gem) must read from workflows.
+    #
+    # The rake task :refresh_workflows duplicates some of this behavior.
+    after(:each) do
+      p      = @hi.pid
+      wf     = Dor::Config.hydrus.app_workflow
+      wf_xml = Hydrus.fixture_foxml(p, :is_wf => true)
+      Dor::WorkflowService.delete_workflow('dor', p, 'versioningWF')
+      Dor::WorkflowService.delete_workflow('dor', p, wf)
+      Dor::WorkflowService.create_workflow('dor', p, wf, wf_xml)
+    end
+
+    it "item view page should display version info" do
+      login_as('archivist1')
+      should_visit_view_page(@hi)
+      item_deets = find('dl.item-view')
+      item_deets.should have_content('Version')
+      item_deets.should have_content(@hi.version_tag)
+    end
+
+    it "if item is initial version, should not offer version info on the editing page" do
+      @hi.is_initial_version.should == true
+      login_as('archivist1')
+      should_visit_edit_page(@hi)
+      page.should_not have_css('textarea#hydrus_item_version_description')
+    end
+
+    it "should be able to open a new version" do
+      # Before-assertions.
+      @hi.is_initial_version.should == true
+      @hi.version_tag.should == 'v1.0.0'
+      @hi.version_significance.should == :major
+      @hi.version_description.should == 'Initial Version'
+      @hi.version_started_time.should == '2012-11-01T00:00:22Z'
+      @hi.object_status.should == 'published'
+      n_events = @hi.get_hydrus_events.size
+      wf_steps = %w(submit approve)
+      wf_steps.each { |s| @hi.workflows.workflow_step_is_done(s).should == true }
+
+      # Open new version.
+      login_as('archivist1')
+      should_visit_view_page(@hi)
+      click_button(@buttons[:open_new_version])
+
+      # Assertions after opening new version.
+      @hi = Hydrus::Item.find(@hi.pid)
+      @hi.is_initial_version.should == false
+      @hi.version_tag.should == 'v2.0.0'
+      @hi.version_significance.should == :major
+      @hi.version_description.should == ''
+      @hi.version_started_time[0..9].should == HyTime.now_date
+      @hi.object_status.should == 'draft'
+      es = @hi.get_hydrus_events
+      es.size.should == n_events + 1
+      es.last.text.should == 'New version opened'
+      wf_steps.each { |s| @hi.workflows.workflow_step_is_done(s).should == false }
+
+      # View page should not offer the Publish button, because the user
+      # needs to fill in a version description.
+      should_visit_view_page(@hi)
+      page.should_not have_button(@buttons[:publish_directly])
+
+      # Add the version info.
+      should_visit_edit_page(@hi)
+      fill_in("hydrus_item_version_description", :with => 'Blah blah')
+      choose("Minor")
+      click_button(@buttons[:save])
+
+      # Assertions after adding version description.
+      @hi = Hydrus::Item.find(@hi.pid)
+      @hi.is_initial_version.should == false
+      @hi.version_tag.should == 'v1.1.0'
+      @hi.version_significance.should == :minor
+      @hi.version_description.should == 'Blah blah'
+      @hi.version_started_time[0..9].should == HyTime.now_date
+      @hi.object_status.should == 'draft'
+
+      # Now we can click the the Publish button, which closes the version.
+      should_visit_view_page(@hi)
+      page.should have_button(@buttons[:publish_directly])
+      click_button(@buttons[:publish_directly])
+
+      # Assertions after adding version description.
+      @hi = Hydrus::Item.find(@hi.pid)
+      wf_steps.each { |s| @hi.workflows.workflow_step_is_done(s).should == true }
+      @hi.object_status.should == 'published'
+
+      # View page should offer open version button.
+      should_visit_view_page(@hi)
+      click_button(@buttons[:open_new_version])
+
+      # Assertions after opening new version.
+      @hi = Hydrus::Item.find(@hi.pid)
+      @hi.version_tag.should == 'v2.0.0'
     end
 
   end

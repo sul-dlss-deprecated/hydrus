@@ -2,29 +2,17 @@
 Versioning for Items
 ------------------
 
-Integration tests:
-
-    editing cycle
-      - open new version
-          - check model code for needed assertions
-      - hydrusAssemblyWF steps should be in waiting status
-      - edit, etc
-      - make sure version info is required
-      - close version
-          - check model code for needed assertions
-      - open new version again
-
 Deploy and roadtest on hydrus-test.
     - assemblyWF should contain pipelined lifecycle
 
 Get hydrus-dev.stanford.edu work as dordev environment.
 
+Push APOs through the accession pipeline during the initial open(), just like
+the corresponding collection.
+
 --------
 Other: on deck for January
 --------
-
-Push APOs through the accession pipeline during the initial open(), just like
-the corresponding collection.
 
 Support user's ability to hide specific files, which has the effect of setting
 publish and shelve to false in the content metadata. Offer a "Hide" checkbox

@@ -172,7 +172,7 @@ class Hydrus::Item < Hydrus::GenericObject
   def open_new_version(opts = {})
     cannot_do(:open_new_version) unless is_accessioned()
     # Call the dor-services method, with a couple of Hydrus-specific options.
-    super(:assume_accessioned => Rails.env.development?, :create_workflows_ds => false)
+    super(:assume_accessioned => should_treat_as_accessioned(), :create_workflows_ds => false)
     # Set some version metadata that the Hydrus app uses.
     versionMetadata.update_current_version(:description => '', :significance => :major)
     self.version_started_time = HyTime.now_datetime
