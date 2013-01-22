@@ -146,9 +146,11 @@ class Hydrus::GenericObject < Dor::Item
   def is_accessioned
     # Basic tests:
     #   - Must be published before it can be accessioned.
-    #   - For local development, treat published as equivalent to accessioned.
+    #   - For local development and automated testing, treat published as
+    #     equivalent to accessioned.
+
     return false unless is_published
-    return true if Rails.env.development?
+    return true if should_treat_as_accessioned
 
     # During the assembly-accessioning process, an object is assembled, then
     # the object is accessioned, and finally (during a nightly cron job) the
@@ -183,6 +185,12 @@ class Hydrus::GenericObject < Dor::Item
 
     # Accessioned and archived: cases 3 and 6.
     return true
+  end
+
+  # Returns true if we are running in development or test mode.
+  # In a method to facilitate unit testing of is_accessioned().
+  def should_treat_as_accessioned
+    return %w(development test).include?(Rails.env)
   end
 
   def apo

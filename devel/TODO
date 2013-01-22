@@ -4,19 +4,15 @@ Versioning for Items
 
 Integration tests:
 
-    integration tests for versioning
-        - can see version number on item view page: tag, started time
-        - should not see version fields when editing initial version
-        - editing cycle
-            - open new version
-            - hydrusAssemblyWF steps should be in waiting status
-            - edit, etc
-            - make sure version info is required
-            - close version
-            - open new version again
-
-    is_accessioned
-        - also should return true during automated testing.
+    editing cycle
+      - open new version
+          - check model code for needed assertions
+      - hydrusAssemblyWF steps should be in waiting status
+      - edit, etc
+      - make sure version info is required
+      - close version
+          - check model code for needed assertions
+      - open new version again
 
 Deploy and roadtest on hydrus-test.
     - assemblyWF should contain pipelined lifecycle

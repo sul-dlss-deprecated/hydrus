@@ -553,6 +553,35 @@ describe Hydrus::GenericObject do
     tests.each do |uri, exp|
       @go.with_protocol(uri).should == exp
     end
+  end
+
+  describe "is_accessioned()" do
+
+    it "can exercise all logic branches" do
+      # At each stage, we set a stub, call is_accessioned(), and then reverse the stub.
+      wfs = Dor::WorkflowService
+      # Not published: false.
+      @go.stub(:is_published).and_return(false)
+      @go.is_accessioned.should == false
+      @go.stub(:is_published).and_return(true)
+      # Running in development or test mode: true.
+      @go.stub(:should_treat_as_accessioned).and_return(true)
+      @go.is_accessioned.should == true
+      @go.stub(:should_treat_as_accessioned).and_return(false)
+      # Never accessioned: false.
+      wfs.stub(:get_lifecycle).and_return(false)
+      @go.is_accessioned.should == false
+      wfs.stub(:get_lifecycle).and_return(true)
+      # Accessioned but not archived: true.
+      wfs.stub(:get_active_lifecycle).and_return(true)
+      @go.is_accessioned.should == true
+      # Actively being accessioned: false.
+      wfs.stub(:get_active_lifecycle) { |*args| args.last == 'pipelined' }
+      @go.is_accessioned.should == false
+      wfs.stub(:get_active_lifecycle).and_return(false)
+      # Survived all tests: true.
+      @go.is_accessioned.should == true
+    end
 
   end
 
