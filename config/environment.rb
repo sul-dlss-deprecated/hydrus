@@ -69,6 +69,17 @@ Dor::Config.configure do
     assembly_wf_xml(File.read(File.join(current_path, "assemblyWF_hydrus.xml")))
   end
 
+  yaml = load_yaml_config.call('dor_services.yml')['stacks']
+  stacks do
+    document_cache_storage_root(yaml['document_cache_storage_root'])
+    document_cache_host(yaml['document_cache_host'])
+    document_cache_user(yaml['document_cache_user'])
+    local_workspace_root(yaml['local_workspace_root'])
+    storage_root(yaml['storage_root'])
+    host(yaml['host'])
+    user(yaml['user'])
+  end
+
 end
 
 # Initialize the rails application

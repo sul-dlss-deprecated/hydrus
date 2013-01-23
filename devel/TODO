@@ -2,12 +2,10 @@
 Versioning for Items
 ------------------
 
-Deploy and roadtest on hydrus-test.
+Check hydrus-test.
     - assemblyWF should contain pipelined lifecycle
 
-Get jenkins build to pass.
-
-Get hydrus-dev.stanford.edu work as dordev environment.
+Get hydrus-dev.stanford.edu working as dordev environment.
 
 Push APOs through the accession pipeline during the initial open(), just like
 the corresponding collection.
