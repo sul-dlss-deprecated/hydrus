@@ -1,5 +1,10 @@
 = Hydrus change log
 
+== 2013.01.23a
+
+* Added support for Item versioning.
+* Upgraded to current dor-services stack.
+
 == 2013.01.09a
 
 * Item edit form now provides blank person field, since it is a required element.
