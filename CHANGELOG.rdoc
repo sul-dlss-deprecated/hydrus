@@ -1,6 +1,6 @@
 = Hydrus change log
 
-== 2013.01.23b
+== 2013.01.24a
 
 * Added support for Item versioning.
 * Upgraded to current dor-services stack.
