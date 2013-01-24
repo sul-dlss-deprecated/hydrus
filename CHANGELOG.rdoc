@@ -4,6 +4,7 @@
 
 * Added support for Item versioning.
 * Upgraded to current dor-services stack.
+* Deployed to hydrus-test.
 
 == 2013.01.09a
 
@@ -16,6 +17,7 @@
 * Modified refreshfix task, hoping to solve intial_workflow problem.
 * Refactored Collection.accept_terms_of_deposit to move XML logic to the datastream.
 * Improved the `rake server` task to unbuffer properly.
+* Deployed to hydrus-test.
 
 == 2012.12.21a
 
