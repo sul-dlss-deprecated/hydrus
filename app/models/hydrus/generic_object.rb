@@ -1,11 +1,12 @@
 class Hydrus::GenericObject < Dor::Item
 
+  include ActiveModel::Validations
   include Hydrus::ModelHelper
   include Hydrus::Validatable
   include Hydrus::WorkflowDsExtension
-  extend  Hydrus::Delegatable
-  include ActiveModel::Validations
   include Hydrus::Cant
+  extend  Hydrus::Cant
+  extend  Hydrus::Delegatable
 
   attr_accessor :files_were_changed
 

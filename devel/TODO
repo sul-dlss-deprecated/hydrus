@@ -2,19 +2,29 @@
 Versioning for Items
 ------------------
 
-Check hydrus-test.
-  mw518rr3106
-  fk974pz7223  published 3:25 pm
-
-Get hydrus-dev.stanford.edu working as dordev environment.
-
 Push APOs through the accession pipeline during the initial open(), just like
 the corresponding collection.
 
-Object remediation.
+  # Defined.
+  app/models/hydrus/generic_object.rb
+    def start_common_assembly
+
+  # Invoked.
+  app/models/hydrus/collection.rb
+    def open
+  app/models/hydrus/item.rb
+    def do_publish
+
+  # Tested.
+  spec/integration/models/item_spec.rb
+  spec/models/hydrus/collection_spec.rb
+  spec/models/hydrus/generic_object_spec.rb
+  spec/models/hydrus/item_spec.rb
+
+Run another item through hydrus-test. [Waiting for SDR robots to be running on test.]
 
 --------
-Other: on deck for January
+Candidates for January
 --------
 
 Support user's ability to hide specific files, which has the effect of setting
@@ -33,6 +43,14 @@ license" as an option for the default value set at the collection level.
 
 HYDRUS-54. Implement restrictions governing what a user is allowed to change in
 subsequent versions.
+
+--------
+Candidates for February
+--------
+
+Get hydrus-dev.stanford.edu working as dordev environment.
+
+Object cleanup and remediation in deployed environments (test and prod).
 
 Modify purl_page_ready() to indicate if the page is for the prior version -- in
 effect, "ready but stale".

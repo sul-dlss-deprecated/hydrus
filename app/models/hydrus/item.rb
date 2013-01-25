@@ -2,8 +2,6 @@ class Hydrus::Item < Hydrus::GenericObject
 
   include Hydrus::Responsible
   include Hydrus::EmbargoMetadataDsExtension
-  extend  Hydrus::Delegatable
-  extend  Hydrus::Cant
 
   REQUIRED_FIELDS = [:title, :abstract, :contact, :keywords, :version_description]
 

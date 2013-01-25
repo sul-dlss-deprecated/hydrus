@@ -1,8 +1,6 @@
 class Hydrus::Collection < Hydrus::GenericObject
 
-  extend Hydrus::Delegatable
   extend Hydrus::SolrQueryable
-  extend Hydrus::Cant
 
   before_save :save_apo
 
