@@ -148,6 +148,11 @@ describe("Collection create", :type => :request, :integration => true) do
     coll.publish_time.should_not be_blank
     coll.valid?.should == true
     coll.is_open.should == true
+    # The workflow steps of both the collection and apo should be completed.
+    Dor::Config.hydrus.app_workflow_steps.each do |step|
+      coll.workflows.workflow_step_is_done(step).should == true
+      apo.workflows.workflow_step_is_done(step).should == true
+    end
     # Close the Collection.
     click_button(close_button)
     find(@alert).should have_content(@notice_close)

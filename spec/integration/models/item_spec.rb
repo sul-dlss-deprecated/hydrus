@@ -56,7 +56,7 @@ describe(Hydrus::Item, :integration => true) do
       druid = 'druid:oo000oo0003'
       hi    = Hydrus::Item.create(druid, mock_authed_user)
       wf    = Dor::Config.hydrus.app_workflow
-      steps = %w(start-deposit submit approve start-assembly)
+      steps = Dor::Config.hydrus.app_workflow_steps
       exp   = Hash[ steps.map { |s| [s, 'waiting'] } ]
       # Code to check workflow statuses.
       check_statuses = lambda {

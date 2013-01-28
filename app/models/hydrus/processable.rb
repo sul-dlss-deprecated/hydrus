@@ -9,10 +9,10 @@ module Hydrus::Processable
     update_workflow_status(step, 'completed')
   end
 
-  # Marks all steps in the hydrusAssemblyWF as waiting.
+  # Marks all steps in the hydrusAssemblyWF (except the first) as waiting.
   # This occurs when the user opens a new version of an Item.
   def uncomplete_workflow_steps
-    steps = %w(submit approve start-assembly)
+    steps = Dor::Config.hydrus.app_workflow_steps[1..-1]
     steps.each { |s| update_workflow_status(s, 'waiting') }
   end
 

@@ -2,14 +2,6 @@
 Versioning for Items
 ------------------
 
-Integration test to check APO hydrusAssemblyWF
-
-Move unit tests for methods in Hydrus::Processable.
-
-Move unit tests for methods in Hydrus::Contentable.
-
-Script to run robots from local box.
-
 Deploy and run item through the pipeline.
 
 Versioning mystery: this Item on hydrus-test was edited as v1.1 and send
@@ -19,11 +11,14 @@ example, which is set during do_publish), but the descMetadata is wrong. It
 was correct for a little while in the Hydrus app (a couple of page views), but
 when I returned later, the old title was back.
 
-----
-
 Hydrus objects are not accessible in Argo, because the hydrus apo for the
 object don't have the dlss:developers group in them. Should this be defined in
 the immediate APO or the ur-APO?
+  <group>dlss:developers</group>
+
+----
+
+Relocate unit tests for methods in Hydrus::Processable and Hydrus::Contentable.
 
 Remove Dor::Processable from APOs after Jon include the concern at the dor-services
 level [Expected by Monday.]
