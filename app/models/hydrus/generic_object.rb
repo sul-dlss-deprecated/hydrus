@@ -4,6 +4,7 @@ class Hydrus::GenericObject < Dor::Item
   include Hydrus::ModelHelper
   include Hydrus::Validatable
   include Hydrus::Processable
+  include Hydrus::Contentable
   include Hydrus::WorkflowDsExtension
   include Hydrus::Cant
   extend  Hydrus::Cant
@@ -314,45 +315,6 @@ class Hydrus::GenericObject < Dor::Item
     email.deliver unless email.blank?
   end
 
-  def base_file_directory
-    f = File.join(Rails.root, "public", Hydrus::Application.config.file_upload_path)
-    DruidTools::Druid.new(pid, f).path
-  end
-
-  def content_directory
-    File.join(base_file_directory, "content")
-  end
-
-  def metadata_directory
-    File.join(base_file_directory, "metadata")
-  end
-
-  def update_content_metadata
-    xml = create_content_metadata
-    if DruidTools::Druid.valid?(self.pid)
-      # write xml to a file
-      FileUtils.mkdir_p(metadata_directory) unless File.directory? metadata_directory
-      f = File.join(metadata_directory, 'contentMetadata.xml')
-      File.open(f, 'w') { |fh| fh.puts xml }
-    end
-    datastreams['contentMetadata'].content = xml
-  end
-
-  def create_content_metadata
-    if is_item?
-      objects = files.collect { |file| Assembly::ObjectFile.new(file.current_path, :label=>file.label)}
-    else
-      objects = []
-    end
-    return Assembly::ContentMetadata.create_content_metadata(
-      :druid            => pid,
-      :objects          => objects,
-      :add_file_attributes => true,
-      :style            => Hydrus::Application.config.cm_style,
-      :file_attributes  => Hydrus::Application.config.cm_file_attributes,
-      :include_root_xml => false)
-  end
-
   # After collections are published, further edits to the object are allowed.
   # This occurs without requiring the open_new_version() process used by Items.
   #
@@ -368,7 +330,7 @@ class Hydrus::GenericObject < Dor::Item
   #     for modified Collections and APOs. If it finds any, it will open a new
   #     version and run the object through the pipeline.
   def publish_metadata
-    return unless should_start_common_assembly
+    return unless should_start_assembly_wf
     cannot_do(:publish_metadata) unless is_assemblable()
     super()
   end

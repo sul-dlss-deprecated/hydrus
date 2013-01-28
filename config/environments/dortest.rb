@@ -80,7 +80,7 @@ Dor::Config.configure do
     exception_error_panel  true     # if true and exception_error_page is also set to true, a collapsible exception error panel is shown on the friendly error page
     exception_recipients  ''        # list of email addresses, comma separated, that will be notified when an exception occurs - leave blank for no emails
     host 'hydrus-test.stanford.edu' # server host, used in emails
-    start_common_assembly(true)     # determines if assembly workflow is started when publishing
+    start_assembly_wf(true)         # determines if assembly workflow is started when publishing
 
     # complete list of all workflow objects defined in this environment
     workflow_object_druids [

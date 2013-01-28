@@ -5,11 +5,11 @@ describe(Hydrus::Item, :integration => true) do
   describe("Content metadata generation") do
 
     it "should be able to generate content metadata, returning blank CM when no files exist and setting content metadata stream to a blank template" do
+      xml = "<contentMetadata objectId=\"__DO_NOT_USE__\" type=\"file\"/>"
       hi = Hydrus::Item.new
-      hi.create_content_metadata.should == "<contentMetadata objectId=\"__DO_NOT_USE__\" type=\"file\"/>"
       lambda{ hi.datastreams['contentMetadata'].content }.should raise_error
       hi.update_content_metadata
-      hi.datastreams['contentMetadata'].content.should be_equivalent_to "<contentMetadata objectId=\"__DO_NOT_USE__\" type=\"file\"/>"
+      hi.datastreams['contentMetadata'].content.should be_equivalent_to(xml)
     end
 
     it "should be able to generate content metadata, returning and setting correct cm when files exist" do
@@ -67,16 +67,12 @@ describe(Hydrus::Item, :integration => true) do
       # Initial statuses.
       exp['start-deposit'] = 'completed'
       check_statuses.call()
-      # After running do_publish, with start_common_assembly=false.
-      hi.stub(:should_start_common_assembly).and_return(false)
-      hi.do_publish()
-      exp['approve'] = 'completed'
-      check_statuses.call()
-      # After running do_publish, with start_common_assembly=true.
-      hi.stub(:should_start_common_assembly).and_return(true)
+      # After running do_publish, with start_assembly_wf=true.
+      hi.stub(:should_start_assembly_wf).and_return(true)
       hi.stub(:is_assemblable).and_return(true)
       Dor::WorkflowService.should_receive(:create_workflow).once
       hi.do_publish()
+      exp['approve'] = 'completed'
       exp['start-assembly'] = 'completed'
       check_statuses.call()
     end

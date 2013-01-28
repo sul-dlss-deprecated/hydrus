@@ -159,14 +159,15 @@ class Hydrus::Collection < Hydrus::GenericObject
 
     # If needed, advance the workflow to record that the object has been published.
     # At this time we can also approve the collection, because collections never
-    # require human approval, even when their items do.
+    # require human approval, even when their items do. Note that the workflow
+    # and assembly calls need to be executed both for the Collection and its APO.
     if first_time
       self.publish_time = HyTime.now_datetime
-      complete_workflow_step('submit')
-      complete_workflow_step('approve')
-      apo.complete_workflow_step('submit')
-      apo.complete_workflow_step('approve')
-      start_common_assembly()
+      [self, apo].each do |obj|
+        obj.complete_workflow_step('submit')
+        obj.complete_workflow_step('approve')
+        obj.start_common_assembly()
+      end
     end
 
     # Send email.

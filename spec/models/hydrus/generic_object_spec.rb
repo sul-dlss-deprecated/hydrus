@@ -299,36 +299,37 @@ describe Hydrus::GenericObject do
 
   describe "start_common_assembly()" do
 
-    it "should do nothing if the app is not configured to start common assembly" do
-      @go.stub(:should_start_common_assembly).and_return(false)
-      @go.should_not_receive(:update_content_metadata)
-      @go.should_not_receive(:complete_workflow_step)
-      @go.start_common_assembly
-    end
-
     it "should raise exception if the object is not assemblable" do
-      @go.stub(:should_start_common_assembly).and_return(true)
       @go.stub(:is_assemblable).and_return(false)
       expect { @go.start_common_assembly }.to raise_exception(@cannot_do_regex)
     end
 
     it "can exercise the method, stubbed" do
-      @go.stub(:should_start_common_assembly).and_return(true)
       @go.stub(:is_assemblable).and_return(true)
       @go.should_receive(:update_content_metadata).once
       @go.should_receive(:complete_workflow_step).once
-      Dor::WorkflowService.should_receive(:create_workflow).once
+      @go.should_receive(:start_assembly_wf).once
       @go.start_common_assembly
     end
 
   end
 
-  it "can exercise should_start_common_assembly()" do
-    @go.should_start_common_assembly.should == Dor::Config.hydrus.start_common_assembly
+  describe "start_assembly_wf()" do
+
+    it "should do nothing if the app is not configured to start assemblyWF" do
+      @go.stub(:should_start_assembly_wf).and_return(false)
+      Dor::WorkflowService.should_not_receive(:create_workflow)
+      @go.start_assembly_wf
+    end
+
+    it "can exercise should_start_assembly_wf()" do
+      @go.should_start_assembly_wf.should == Dor::Config.hydrus.start_assembly_wf
+    end
+
   end
 
   it "publish_metadata() should do nothing if app is not configured to start common assembly" do
-    @go.stub(:should_start_common_assembly).and_return(false)
+    @go.stub(:should_start_assembly_wf).and_return(false)
     @go.should_not_receive(:is_assemblable)
     @go.publish_metadata
   end

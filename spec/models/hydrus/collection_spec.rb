@@ -41,11 +41,13 @@ describe Hydrus::Collection do
       @hc.title     = hc_title
       @hc.apo.title = apo_title
       @hc.get_hydrus_events.size.should == 0
-      @hc.should_receive(:complete_workflow_step).twice
-      @hc.should_receive(:start_common_assembly).once
+      @hc.should_receive(:complete_workflow_step).exactly(3).times
+      @hc.apo.should_receive(:complete_workflow_step).exactly(3).times
+      @hc.should_receive(:start_assembly_wf).once
       @hc.should_receive(:send_publish_email_notification).once.with(true)
       @hc.stub(:is_openable).and_return(true)
       @hc.stub(:is_draft).and_return(true)
+      @hc.stub(:is_assemblable).and_return(true)
       @hc.open
       @hc.get_hydrus_events.size.should > 0
       @hc.apo.identityMetadata.objectLabel.should == [apo_title]

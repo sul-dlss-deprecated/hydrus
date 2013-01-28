@@ -33,28 +33,29 @@ module Hydrus::Processable
     %w(@content @ng_xml).each { |v| workflows.instance_variable_set(v, nil) }
   end
 
-  # If the app is configured to start the common assembly robots, calls will
-  # be made to the workflow service to begin that process. In addition,
-  # contentMetadata is generated for Items.
+  # Generates the object's contentMetadata, finalizes the hydrusAssemblyWF
+  # workflow, and then kicks off the assembly and accessioning pipeline.
   def start_common_assembly
-    return unless should_start_common_assembly
     cannot_do(:start_common_assembly) unless is_assemblable()
     update_content_metadata
     complete_workflow_step('start-assembly')
     start_assembly_wf
   end
 
-  # Returns value of Dor::Config.hydrus.start_common_assembly.
-  # Wrapped in method to simplify testing stubs.
-  def should_start_common_assembly
-    return Dor::Config.hydrus.start_common_assembly
-  end
-
-  # Kick off a Hydrus-specific variant of assemblyWF -- one that skips
-  # the creation of derivative files (JP2s, etc).
+  # Kicks off a Hydrus-specific variant of assemblyWF -- one that skips
+  # the creation of derivative files (JP2s, etc). This method is normally
+  # configured to be a no-op during local development and the running of
+  # automated tests.
   def start_assembly_wf
+    return unless should_start_assembly_wf
     xml = Dor::Config.hydrus.assembly_wf_xml
     Dor::WorkflowService.create_workflow('dor', pid, 'assemblyWF', xml)
+  end
+
+  # Returns value of Dor::Config.hydrus.start_assembly_wf.
+  # Wrapped in method to simplify testing stubs.
+  def should_start_assembly_wf
+    return Dor::Config.hydrus.start_assembly_wf
   end
 
   # Returns true if the most recent version of the object has been accessioned.

@@ -9,6 +9,7 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
   include Hydrus::Responsible
   include Hydrus::Validatable
   include Hydrus::Processable
+  include Hydrus::Contentable
   extend  Hydrus::Delegatable
 
   has_metadata(
@@ -27,6 +28,13 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
     :name => "defaultObjectRights",
     :type => Hydrus::RightsMetadataDS,
     :label => 'Default Object Rights',
+    :control_group => 'M')
+
+  # TODO: remove this.
+  has_metadata(
+    :name => "contentMetadata",
+    :type => Dor::ContentMetadataDS,
+    :label => 'Content Metadata',
     :control_group => 'M')
 
   # Note: all other APO validation occurs in the Collection class.
@@ -88,6 +96,14 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
 
   def hydrus_class_to_s
     "apo"
+  end
+
+  def is_apo?
+    true
+  end
+
+  def is_assemblable
+    true
   end
 
   # Returns a hash of info needed for licenses in the APO.
