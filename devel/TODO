@@ -4,17 +4,16 @@ Versioning for Items
 
 Deploy and run item through the pipeline.
 
-Versioning mystery: this Item on hydrus-test was edited as v1.1 and send
-through the pipeline (druid:fk974pz7223). But an edit to the title (even
-cheesier) was lost. The correct title exists in the FOXML (object label, for
-example, which is set during do_publish), but the descMetadata is wrong. It
-was correct for a little while in the Hydrus app (a couple of page views), but
-when I returned later, the old title was back.
+  - Versioning mystery: this Item on hydrus-test was edited as v1.1 and send
+    through the pipeline (druid:fk974pz7223). But an edit to the title (even
+    cheesier) was lost. The correct title exists in the FOXML (object label,
+    for example, which is set during do_publish), but the descMetadata is
+    wrong. It was correct for a little while in the Hydrus app (a couple of
+    page views), but when I returned later, the old title was back.
 
 Hydrus objects are not accessible in Argo, because the hydrus apo for the
 object don't have the dlss:developers group in them. Should this be defined in
 the immediate APO or the ur-APO?
-  <group>dlss:developers</group>
 
 ----
 
