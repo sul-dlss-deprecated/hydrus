@@ -2,30 +2,44 @@
 Versioning for Items
 ------------------
 
-Push APOs through the accession pipeline during the initial open(), just like
-the corresponding collection.
+Move unit tests for methods in Hydrus::Processable.
 
-  # Defined.
-  app/models/hydrus/generic_object.rb
-    def start_common_assembly
+Move the test for should_start_common_assembly() from start_common_assembly()
+to start_assembly_wf().
 
-  # Invoked.
-  app/models/hydrus/collection.rb
-    def open
-  app/models/hydrus/item.rb
-    def do_publish
+After an Item gets into its 2nd version, the start-assembly step in
+hydrusAssemblyWF is still marked as "waiting" -- no consequences, but
+incorrect. This might be true only on local dev; maybe not when deployed.
 
-  # Tested.
-  spec/integration/models/item_spec.rb
-  spec/models/hydrus/collection_spec.rb
-  spec/models/hydrus/generic_object_spec.rb
-  spec/models/hydrus/item_spec.rb
+Versioning mystery: this Item on hydrus-test was edited as v1.1 and send
+through the pipeline (druid:fk974pz7223). But an edit to the title (even
+cheesier) was lost. The correct title exists in the FOXML (object label, for
+example, which is set during do_publish), but the descMetadata is wrong. It
+was correct for a little while in the Hydrus app (a couple of page views), but
+when I returned later, the old title was back.
 
-Run another item through hydrus-test. [Waiting for SDR robots to be running on test.]
+Script to run robots from local box.
+  ROBOT_ENVIRONMENT=test ./bin/run_robot run accessionWF:shelve -d PID
+
+Deploy and run item through the pipeline.
+
+----
+
+Hydrus objects are not accessible in Argo, because the hydrus apo for the
+object don't have the dlss:developers group in them. Should this be defined in
+the immediate APO or the ur-APO?
+
+Remove Dor::Processable from APOs after Jon include the concern at the dor-services
+level [Expected by Monday.]
+
+HYDRUS-54. Implement restrictions governing what a user is allowed to change in
+subsequent versions.
 
 --------
-Candidates for January
+Candidates for February
 --------
+
+Convert all_fixture_foxml() to be a no-op if not running in test mode.
 
 Support user's ability to hide specific files, which has the effect of setting
 publish and shelve to false in the content metadata. Offer a "Hide" checkbox
@@ -40,13 +54,6 @@ HYDRUS-51. Add support for "corporate" and "conference" Contributor name types.
 HYDRUS-52. Item license selection. See ticket for details. Also include "No
 license" as an option for the default value set at the collection level.
 [Questions emailed to Hannah; she will clarify the ticket.]
-
-HYDRUS-54. Implement restrictions governing what a user is allowed to change in
-subsequent versions.
-
---------
-Candidates for February
---------
 
 Get hydrus-dev.stanford.edu working as dordev environment.
 

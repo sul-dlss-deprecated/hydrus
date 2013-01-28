@@ -164,6 +164,8 @@ class Hydrus::Collection < Hydrus::GenericObject
       self.publish_time = HyTime.now_datetime
       complete_workflow_step('submit')
       complete_workflow_step('approve')
+      apo.complete_workflow_step('submit')
+      apo.complete_workflow_step('approve')
       start_common_assembly()
     end
 

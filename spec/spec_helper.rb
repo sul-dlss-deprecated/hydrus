@@ -82,6 +82,8 @@ FIXTURE_FOXML = Hydrus.all_fixture_foxml()
 # TODO: incorporate this into Rubydora.
 # Relative to rollback() it Rubydora v0.5.0, it reduced
 # test suite runtime from 32 min down to about 8 min.
+# Not sure what the two run_hook() calls do or whether they are needed;
+# just copied the approach used in Rubydora's rollback().
 class Rubydora::Transaction
 
     # Roll-back transactions by restoring the repository to its

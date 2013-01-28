@@ -574,9 +574,6 @@ describe Hydrus::GenericObject do
       wfs.stub(:get_lifecycle).and_return(true)
       # Accessioned but not archived: true.
       wfs.stub(:get_active_lifecycle).and_return(true)
-      @go.is_accessioned.should == true
-      # Actively being accessioned: false.
-      wfs.stub(:get_active_lifecycle) { |*args| args.last == 'pipelined' }
       @go.is_accessioned.should == false
       wfs.stub(:get_active_lifecycle).and_return(false)
       # Survived all tests: true.

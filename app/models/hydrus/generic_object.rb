@@ -3,6 +3,7 @@ class Hydrus::GenericObject < Dor::Item
   include ActiveModel::Validations
   include Hydrus::ModelHelper
   include Hydrus::Validatable
+  include Hydrus::Processable
   include Hydrus::WorkflowDsExtension
   include Hydrus::Cant
   extend  Hydrus::Cant
@@ -141,57 +142,6 @@ class Hydrus::GenericObject < Dor::Item
   # Returns true if the object status is any flavor of published.
   def is_published
     return object_status[0..8] == 'published'
-  end
-
-  # Returns true if the most recent version of the object has been accessioned.
-  def is_accessioned
-    # Basic tests:
-    #   - Must be published before it can be accessioned.
-    #   - For local development and automated testing, treat published as
-    #     equivalent to accessioned.
-
-    return false unless is_published
-    return true if should_treat_as_accessioned
-
-    # During the assembly-accessioning process, an object is assembled, then
-    # the object is accessioned, and finally (during a nightly cron job) the
-    # workflow-archiver moves the object's workflow lifecycle rows from the
-    # active table to the archive table.
-    #
-    # We need to handle the following 6 cases. Shown with each case
-    # is the active lifecycles associated with the object at the particular
-    # step. This method should return true as indicated.
-    #
-    #             Initial version:
-    #   1.           assembly start      pipelined
-    #   2.  true     accession end       accessioned
-    #   3.  true     archived            none
-    #
-    #             Subsequent versions:
-    #   4.          assembly start       pipelined
-    #   5.  true    accession end        accessioned
-    #   6.  true    archived             none
-    wfs = Dor::WorkflowService
-    p   = pid()
-
-    # Never accessioned: case 1.
-    # This query check both active and archived rows.
-    return false unless wfs.get_lifecycle('dor', p, 'accessioned')
-
-    # Accessioned but not archived: cases 2 and 5.
-    return true if wfs.get_active_lifecycle('dor', p, 'accessioned')
-
-    # Actively in the middle of assemblyWF or accessionWF: case 4.
-    return false if wfs.get_active_lifecycle('dor', p, 'pipelined')
-
-    # Accessioned and archived: cases 3 and 6.
-    return true
-  end
-
-  # Returns true if we are running in development or test mode.
-  # In a method to facilitate unit testing of is_accessioned().
-  def should_treat_as_accessioned
-    return %w(development test).include?(Rails.env)
   end
 
   def apo
@@ -343,7 +293,6 @@ class Hydrus::GenericObject < Dor::Item
   # Returns a hash of info needed to register a Dor object.
   def self.dor_registration_params(user_string, obj_typ, apo_pid)
     proj = 'Hydrus'
-    wfs  = obj_typ == 'adminPolicy' ? [] : [Dor::Config.hydrus.app_workflow]
     tm   = HyTime.now_datetime_full
     return {
       :object_type       => obj_typ,
@@ -351,7 +300,7 @@ class Hydrus::GenericObject < Dor::Item
       :source_id         => { proj => "#{obj_typ}-#{user_string}-#{tm}" },
       :label             => proj,
       :tags              => ["Project : #{proj}"],
-      :initiate_workflow => wfs,
+      :initiate_workflow => [Dor::Config.hydrus.app_workflow],
     }
   end
 
@@ -404,21 +353,6 @@ class Hydrus::GenericObject < Dor::Item
       :include_root_xml => false)
   end
 
-  # If the app is configured to start the common assembly workflow, calls will
-  # be made to the workflow service to begin that process. In addition,
-  # contentMetadata is generated for Items.
-  def start_common_assembly
-    return unless should_start_common_assembly
-    cannot_do(:start_common_assembly) unless is_assemblable()
-    # Wrap up the hydrusAssemblyWF.
-    update_content_metadata
-    complete_workflow_step('start-assembly')
-    # Kick off a Hydrus-specific variant of assemblyWF -- one that skips
-    # the creation of derivative files (JP2s, etc).
-    xml = Dor::Config.hydrus.assembly_wf_xml
-    Dor::WorkflowService.create_workflow('dor', pid, 'assemblyWF', xml)
-  end
-
   # After collections are published, further edits to the object are allowed.
   # This occurs without requiring the open_new_version() process used by Items.
   #
@@ -439,47 +373,10 @@ class Hydrus::GenericObject < Dor::Item
     super()
   end
 
-  # Returns value of Dor::Config.hydrus.start_common_assembly.
-  # Wrapped in method to simplify testing stubs.
-  def should_start_common_assembly
-    return Dor::Config.hydrus.start_common_assembly
-  end
-
   # Returns string representation of the class, minus the Hydrus:: prefix.
   # For example: Hydrus::Collection -> 'Collection'.
   def hydrus_class_to_s
     return self.class.to_s.sub(/\AHydrus::/, '')
-  end
-
-  # Takes the name of a step in the Hydrus workflow.
-  # Calls the workflow service to mark that step as completed.
-  def complete_workflow_step(step)
-    return if workflows.workflow_step_is_done(step)
-    update_workflow_status(step, 'completed')
-  end
-
-  # Marks all steps in the hydrusAssemblyWF as waiting.
-  # This occurs when the user opens a new version of an Item.
-  def uncomplete_workflow_steps
-    steps = %w(submit approve start-assembly)
-    steps.each { |s| update_workflow_status(s, 'waiting') }
-  end
-
-  # Takes the name of a step in the Hydrus workflow.
-  # Calls the workflow service to mark that step as completed.
-  def update_workflow_status(step, status)
-    awf = Dor::Config.hydrus.app_workflow
-    Dor::WorkflowService.update_workflow_status('dor', pid, awf, step, status)
-    workflows_content_is_stale
-  end
-
-  # Resets two instance variables of the workflow datastream. By resorting to
-  # this encapsulation-violating hack, we ensure that our current Hydrus object
-  # will not rely on its cached copy of the workflow XML. Instead it will call
-  # to the workflow service to get the latest XML, particularly during the
-  # save() process, which is when our object will be resolarized.
-  def workflows_content_is_stale
-    %w(@content @ng_xml).each { |v| workflows.instance_variable_set(v, nil) }
   end
 
   def get_hydrus_events

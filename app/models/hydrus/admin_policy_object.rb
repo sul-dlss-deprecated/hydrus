@@ -1,8 +1,14 @@
+# TODO: remove this after it is included at the dor-services level.
+class Dor::AdminPolicyObject
+  include Dor::Processable
+end
+
 class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
 
   include Hydrus::ModelHelper
   include Hydrus::Responsible
   include Hydrus::Validatable
+  include Hydrus::Processable
   extend  Hydrus::Delegatable
 
   has_metadata(
