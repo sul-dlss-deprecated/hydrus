@@ -21,8 +21,6 @@ Hydrus objects are not accessible in Argo, because the hydrus apo for the
 object don't have the dlss:developers group in them. Should this be defined in
 the immediate APO or the ur-APO?
 
-Collection view: link to APO for admin users.
-
 ----
 
 Relocate unit tests for methods in Hydrus::Processable and Hydrus::Contentable.

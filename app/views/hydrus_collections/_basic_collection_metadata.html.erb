@@ -1,3 +1,11 @@
+<% if Hydrus::Authorizable.can_act_as_administrator(current_user) %>
+  <dt>APO</dt>
+  <dd>
+    <% apo = @fobj.apo %>
+    <%= link_to(apo.pid.split(':').last, hydrus_admin_policy_object_datastreams_path(apo)) %>
+  </dd>
+<% end %>
+
 <dt>Owned by</dt>
 <dd><%= @fobj.owner%></dd>
 
