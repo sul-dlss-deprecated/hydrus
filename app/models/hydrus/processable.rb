@@ -5,7 +5,6 @@ module Hydrus::Processable
   # Takes the name of a step in the Hydrus workflow.
   # Calls the workflow service to mark that step as completed.
   def complete_workflow_step(step)
-    return if workflows.workflow_step_is_done(step)
     update_workflow_status(step, 'completed')
   end
 

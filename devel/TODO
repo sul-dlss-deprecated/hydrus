@@ -7,25 +7,31 @@ subsequent versions.
 
 Deploy and run item through the pipeline.
 
-  - Versioning mystery: this Item on hydrus-test was edited as v1.1 and send
-    through the pipeline (druid:fk974pz7223). But an edit to the title (even
-    cheesier) was lost. The correct title exists in the FOXML (object label,
-    for example, which is set during do_publish), but the descMetadata is
-    wrong. It was correct for a little while in the Hydrus app (a couple of
-    page views), but when I returned later, the old title was back.
+  - Items in pipeline:
+    wfs  = %w(assemblyWf accessionWF)
+    pids = %w(zh431pw6231 dw277xb7761 nw312yv4331)  # apo, coll, item
+    wfs.product(pids).each { |wf, pid| Dor::WorkflowService.archive_workflow('dor', pid, wf) }
 
-    zh431pw6231  apo
-    dw277xb7761  coll
-    nw312yv4331  item
-
-    emailed Richard, who will run the SDR robots.
+  - Confirm that item has new info:
+      title has "even cheesier"
+      abstract has "Cheese slices!!!!"
+      version 2.0.0 description has "More slices"
 
 Hydrus objects are not accessible in Argo, because the hydrus apo for the
-object don't have the dlss:developers group in them. Should this be defined in
-the immediate APO or the ur-APO?
+object don't have the dlss:developers group in them. The Hydrs APOs need
+to end up having the following in their roleMetadata:
+
+  # APO
+  <role type="dor-apo-manager">
+    <group>
+      <identifier type="workgroup">dlss:developers</identifier>
 
 Remove Dor::Processable from APOs after Jon include the concern at the dor-services
 level [Expected by Monday.]
+
+After do_publish() runs on a subsequent version the start-assembly step in the
+hydrusAssemblyWF is still marked as waiting. [Might be fixed: deploy, run new
+object through pipeline.]
 
 --------
 Candidates for February
