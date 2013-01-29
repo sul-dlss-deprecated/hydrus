@@ -702,28 +702,6 @@ describe Hydrus::Item do
 
   end
 
-  it "content_directory()" do
-    dru = 'oo000oo9999'
-    @hi.stub(:pid).and_return("druid:#{dru}")
-    @hi.content_directory.should == File.join(
-      File.expand_path('public/uploads'),
-      'oo/000/oo/9999',
-      dru,
-      'content'
-    )
-  end
-
-  it "metadata_directory()" do
-    dru = 'oo000oo9999'
-    @hi.stub(:pid).and_return("druid:#{dru}")
-    @hi.metadata_directory.should == File.join(
-      File.expand_path('public/uploads'),
-      'oo/000/oo/9999',
-      dru,
-      'metadata'
-    )
-  end
-
   describe "publish_directly()" do
 
     it "item is not publishable: should raise exception" do

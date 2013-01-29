@@ -2,8 +2,6 @@
 Versioning for Items
 ------------------
 
-Relocate unit tests for methods in Hydrus::Processable and Hydrus::Contentable.
-
 HYDRUS-54. Implement restrictions governing what a user is allowed to change in
 subsequent versions.
 
