@@ -1,43 +1,52 @@
 ------------------
-Versioning
+Priorities for February
 ------------------
 
-HYDRUS-54. Implement restrictions governing what a user is allowed to change in
-subsequent versions.
+Edits made to subsequent versions of Hydrus objects are lost during
+accessionWF, due to an interaction between accessionWF and sdr robots. [Modify
+dor-services to pick the newer: file or datastream. Also, Richard will modify
+sdr-ingest-transfer to avoid polluting workarea.]
 
 Hydrus objects are not accessible in Argo, because the hydrus apo for the
-object don't have the dlss:developers group in them. The Hydrs APOs need
+object don't have the dlss:developers group in them. The Hydrus APOs need
 to end up having the following in their roleMetadata:
 
   # APO
   <role type="dor-apo-manager">
     <group>
       <identifier type="workgroup">dlss:developers</identifier>
+      <identifier type="workgroup">dlss:pmag-staff</identifier>
+
+Object cleanup and remediation in deployed environments. Prod: delete the stray
+item (kr880mc3948); remediate the rest. Test: can delete all objects.
+
+HYDRUS-54. Implement restrictions governing what a user is allowed to change in
+subsequent versions.
+
+XML changes. [Hannah will supply needed changes.]
+
+Build the background versioner.
 
 ------------------
 Versioning: waiting
 ------------------
 
-Edits made to subsequent versions of Hydrus objects are lost during
-accessionWF, due to an interaction between accessionWF and sdr robots.
-[Tentative proposal: modify dor-services to pick the newer of file or
-datastream. Need to discuss with Lynn and implement.]
-
 Deploy and run item through the pipeline.
-
   - After do_publish() runs on a subsequent version the start-assembly step in
     the hydrusAssemblyWF is still marked as waiting. [Might be fixed: deploy
     and check.]
 
+Remove Dor::Processable from APOs after Jon include the concern at the dor-services
+level [Expected soon.]
+
 --------
-Candidates for February
+Other possibilities for February
 --------
+
+All displayed datetimes: yyyy-mm-dd hh:mm am|pm (12 hour).
 
 Hydrus has recursive symlinking in is uploads directory. For example: see
 uploads/nw/312/yv/4331/nw312yv4331. [Speak with Peter.]
-
-Remove Dor::Processable from APOs after Jon include the concern at the dor-services
-level [Expected soon.]
 
 Support user's ability to hide specific files, which has the effect of setting
 publish and shelve to false in the content metadata. Offer a "Hide" checkbox
@@ -51,8 +60,25 @@ HYDRUS-52. Item license selection. See ticket for details. Also include "No
 license" as an option for the default value set at the collection level.
 [Questions emailed to Hannah; she will clarify the ticket.]
 
-Object cleanup and remediation in deployed environments: delete as many objects
-as possible; remediate any survivors.
+Use and reproduction. See details below.
+
+--------
+Use and reproduction
+--------
+
+  - Collection edit. Show Stanford default. Offer textbox for additional text.
+    Then offer radio button where collection manager decides whether Item
+    depositor can edit that additional text.
+
+  - Item edit. Provide text box. If the collection manager wrote additional
+    text, the Item text box will be pre-populated with that text (if the
+    manager said the Item depositor could edit) or with nothing.
+
+  - Join the three pieces of text (Stanford, Collection, Item) with two line
+    breaks.
+
+  - Hannah will supply the default Stanford text. See Consul for
+    how to store this info in the rightsMetadata.
 
 --------
 Other: blocked, requires discussion, uncertain need, etc.
