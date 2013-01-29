@@ -11,9 +11,17 @@ Deploy and run item through the pipeline.
     wrong. It was correct for a little while in the Hydrus app (a couple of
     page views), but when I returned later, the old title was back.
 
+    zh431pw6231  apo
+    dw277xb7761  coll
+    nw312yv4331  item
+
+    emailed Richard, who will run the SDR robots.
+
 Hydrus objects are not accessible in Argo, because the hydrus apo for the
 object don't have the dlss:developers group in them. Should this be defined in
 the immediate APO or the ur-APO?
+
+Collection view: link to APO for admin users.
 
 ----
 
