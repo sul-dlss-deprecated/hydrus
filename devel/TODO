@@ -1,21 +1,9 @@
 ------------------
-Versioning for Items
+Versioning
 ------------------
 
 HYDRUS-54. Implement restrictions governing what a user is allowed to change in
 subsequent versions.
-
-Deploy and run item through the pipeline.
-
-  - Items in pipeline:
-    wfs  = %w(assemblyWf accessionWF)
-    pids = %w(zh431pw6231 dw277xb7761 nw312yv4331)  # apo, coll, item
-    wfs.product(pids).each { |wf, pid| Dor::WorkflowService.archive_workflow('dor', pid, wf) }
-
-  - Confirm that item has new info:
-      title has "even cheesier"
-      abstract has "Cheese slices!!!!"
-      version 2.0.0 description has "More slices"
 
 Hydrus objects are not accessible in Argo, because the hydrus apo for the
 object don't have the dlss:developers group in them. The Hydrs APOs need
@@ -26,16 +14,30 @@ to end up having the following in their roleMetadata:
     <group>
       <identifier type="workgroup">dlss:developers</identifier>
 
-Remove Dor::Processable from APOs after Jon include the concern at the dor-services
-level [Expected by Monday.]
+------------------
+Versioning: waiting
+------------------
 
-After do_publish() runs on a subsequent version the start-assembly step in the
-hydrusAssemblyWF is still marked as waiting. [Might be fixed: deploy, run new
-object through pipeline.]
+Edits made to subsequent versions of Hydrus objects are lost during
+accessionWF, due to an interaction between accessionWF and sdr robots.
+[Tentative proposal: modify dor-services to pick the newer of file or
+datastream. Need to discuss with Lynn and implement.]
+
+Deploy and run item through the pipeline.
+
+  - After do_publish() runs on a subsequent version the start-assembly step in
+    the hydrusAssemblyWF is still marked as waiting. [Might be fixed: deploy
+    and check.]
 
 --------
 Candidates for February
 --------
+
+Hydrus has recursive symlinking in is uploads directory. For example: see
+uploads/nw/312/yv/4331/nw312yv4331. [Speak with Peter.]
+
+Remove Dor::Processable from APOs after Jon include the concern at the dor-services
+level [Expected soon.]
 
 Support user's ability to hide specific files, which has the effect of setting
 publish and shelve to false in the content metadata. Offer a "Hide" checkbox
@@ -49,11 +51,14 @@ HYDRUS-52. Item license selection. See ticket for details. Also include "No
 license" as an option for the default value set at the collection level.
 [Questions emailed to Hannah; she will clarify the ticket.]
 
-Object cleanup and remediation in deployed environments (test and prod).
+Object cleanup and remediation in deployed environments: delete as many objects
+as possible; remediate any survivors.
 
 --------
 Other: blocked, requires discussion, uncertain need, etc.
 --------
+
+Migrate functionality from Hydrus to dor-services gem.
 
 Modify purl_page_ready() to indicate if the page is for the prior version -- in
 effect, "ready but stale".
@@ -78,8 +83,8 @@ created.
 Collection Items page: Type column is temporarily commented out. Add back when
 we distinguish between different item types.
 
-Work with Willy to switch local dev environment to use a local workflow service
-rather than the workflow service on sul-lyberservices-dev.
+Workflow service for local development: get workflow service running locally
+rather than using the service on sul-lyberservices-dev.
 
 Search results page: design could use some improvement. In addition, the
 page does not provide a link back to the home page.
@@ -91,7 +96,7 @@ Should submit_for_approval() and resubmit() send email messages?
 
 Should the hydrus app be logging more systematically?
 
-Implement the ability for an admin to become some other user.
+Implement the ability for an admin to impersonate another user.
 
 Gryphondor for Hydrus, so that Hydrus objects appear in SearchWorks.
 [Gryphondor might be ready to add Hydrus as a project in February.]
@@ -100,7 +105,7 @@ Create object mc322hh4254 (hydra:referencesAgreement) on hydrus-dev,
 hydrus-test, and hydrus-prod. [Hannah/Lynn]
 
 Collection create: APO.roleMetadata: set the value of <name> for the
-collection-manager [waiting on LDAP].
+collection-manager. [Waiting on LDAP].
 
 Update SUL-chrome gem to latest Bootstrap (needed to be able to use the
 unchecked checkbox icon, which is not available in our current SUL-chrome gem).
