@@ -2,6 +2,11 @@
 Versioning for Items
 ------------------
 
+Relocate unit tests for methods in Hydrus::Processable and Hydrus::Contentable.
+
+HYDRUS-54. Implement restrictions governing what a user is allowed to change in
+subsequent versions.
+
 Deploy and run item through the pipeline.
 
   - Versioning mystery: this Item on hydrus-test was edited as v1.1 and send
@@ -21,33 +26,17 @@ Hydrus objects are not accessible in Argo, because the hydrus apo for the
 object don't have the dlss:developers group in them. Should this be defined in
 the immediate APO or the ur-APO?
 
-----
-
-Relocate unit tests for methods in Hydrus::Processable and Hydrus::Contentable.
-
 Remove Dor::Processable from APOs after Jon include the concern at the dor-services
 level [Expected by Monday.]
-
-HYDRUS-54. Implement restrictions governing what a user is allowed to change in
-subsequent versions.
-
-Assembly robots should be able to handle collections and apos without
-contentMetadata. After making that change, stop invoking contentMetadata
-creation for non-items, and remove the contentMetadata datastream from APOs.
-[Speak with Peter.]
 
 --------
 Candidates for February
 --------
 
-Convert all_fixture_foxml() to be a no-op if not running in test mode.
-
 Support user's ability to hide specific files, which has the effect of setting
 publish and shelve to false in the content metadata. Offer a "Hide" checkbox
 (default unchecked) next to each uploaded file. Also include an info icon with
 some help text.
-
-HYDRUS-50. Add new roles to the Contributor drop-down: Advisor, Primary advisor.
 
 HYDRUS-51. Add support for "corporate" and "conference" Contributor name types.
 [See ticket for details.]
@@ -56,19 +45,17 @@ HYDRUS-52. Item license selection. See ticket for details. Also include "No
 license" as an option for the default value set at the collection level.
 [Questions emailed to Hannah; she will clarify the ticket.]
 
-Get hydrus-dev.stanford.edu working as dordev environment.
-
 Object cleanup and remediation in deployed environments (test and prod).
-
-Modify purl_page_ready() to indicate if the page is for the prior version -- in
-effect, "ready but stale".
 
 --------
 Other: blocked, requires discussion, uncertain need, etc.
 --------
 
-rightsMD: <access> blocks should include <none/> to indicate no access. This is
-sort of a pain: how important is it?
+Modify purl_page_ready() to indicate if the page is for the prior version -- in
+effect, "ready but stale".
+
+The <access> blocks in rightsMetadata should include <none/> to indicate no
+access. This is sort of a pain: how important is it?
 
 Dashboard: implement hyperlinks to items-by-status. For example, "3 published"
 should be a hyperlink to the 3 published items for the applicable collection.
@@ -161,3 +148,12 @@ dor-services and workflow service accept an options hash allowing the caller to
 request that particular steps in the workflow be marked as skipped.
 
 Consider adding version_significance() to dor-services gem.
+
+Because it's simpler to run all Hydrus objects through the same pipeline
+(assembly then accessioning), because assembly requires the existence of
+contentMetadata, and because the accessioning robots will ultimately add a
+contentMetadata datastream to all objects, Hydrus Collections and APOs have the
+contentMetadata datastream, which might not be officially correct (though it
+doesn't really hurt anything). If we care, we need to change assembly,
+accesioning, and the Hydrus code that adds the contentMetadata datastream to
+Collections and APOs.

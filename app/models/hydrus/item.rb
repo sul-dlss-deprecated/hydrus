@@ -515,11 +515,13 @@ class Hydrus::Item < Hydrus::GenericObject
       "Author",
       "Creator",
       "Collector",
-      "Contributing Author",
+      "Contributing author",
       "Distributor",
-      "Principal Investigator",
+      "Principal investigator",
       "Publisher",
       "Sponsor",
+      "Advisor",
+      "Primary advisor",
     ]
   end
 
