@@ -12,6 +12,8 @@ module Hydrus::Authorizable
       hfrost
       petucket
       hindman
+      geisler
+      lmcrae
     )
   end
 
