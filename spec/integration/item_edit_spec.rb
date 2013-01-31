@@ -69,7 +69,7 @@ describe("Item edit", :type => :request, :integration => true) do
     orig_name = "Rosenfeld, Michael J."
     field_np  = "hydrus_item_person_0"
     field_rt  = "hydrus_item_person_role_0"
-    orig_role = "Principal Investigator"
+    orig_role = "Principal investigator"
     new_role  = "Collector"
 
     login_as('archivist1')

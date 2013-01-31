@@ -2,20 +2,13 @@
 Priorities for February
 ------------------
 
-Edits made to subsequent versions of Hydrus objects are lost during
-accessionWF, due to an interaction between accessionWF and sdr robots. [Modify
-dor-services to pick the newer: file or datastream. Also, Richard will modify
-sdr-ingest-transfer to avoid polluting workarea.]
+Hydrus objects are not accessible in Argo. The Hydrus APOs need to end up
+having the following in their roleMetadata:
 
-Hydrus objects are not accessible in Argo, because the hydrus apo for the
-object don't have the dlss:developers group in them. The Hydrus APOs need
-to end up having the following in their roleMetadata:
-
-  # APO
   <role type="dor-apo-manager">
-    <group>
-      <identifier type="workgroup">dlss:developers</identifier>
-      <identifier type="workgroup">dlss:pmag-staff</identifier>
+    <group><identifier type="workgroup">dlss:pmag-staff</identifier></group>
+    <group><identifier type="workgroup">dlss:developers</identifier></group>
+  </role>
 
 Object cleanup and remediation in deployed environments. Prod: delete the stray
 item (kr880mc3948); remediate the rest. Test: can delete all objects.
@@ -27,26 +20,34 @@ XML changes. [Hannah will supply needed changes.]
 
 Build the background versioner.
 
+Hydrus has recursive symlinking in is uploads directory. For example: see
+uploads/nw/312/yv/4331/nw312yv4331. Appears to occur for items with subsequent
+versions. Check path_to_object() in findable.rb in assembly for possible bugs.
+
 ------------------
 Versioning: waiting
 ------------------
 
 Deploy and run item through the pipeline.
-  - After do_publish() runs on a subsequent version the start-assembly step in
-    the hydrusAssemblyWF is still marked as waiting. [Might be fixed: deploy
-    and check.]
+
+    - After do_publish() runs on a subsequent version the start-assembly step
+      in the hydrusAssemblyWF is still marked as waiting. [Might be fixed:
+      deploy and check.]
+
+    - Check whether edits made to subsequent versions are lost during
+      accessionWF.
 
 Remove Dor::Processable from APOs after Jon include the concern at the dor-services
 level [Expected soon.]
+
+Before we can go to production: must deploy common-accessioning with the
+lastest dor-services.
 
 --------
 Other possibilities for February
 --------
 
 All displayed datetimes: yyyy-mm-dd hh:mm am|pm (12 hour).
-
-Hydrus has recursive symlinking in is uploads directory. For example: see
-uploads/nw/312/yv/4331/nw312yv4331. [Speak with Peter.]
 
 Support user's ability to hide specific files, which has the effect of setting
 publish and shelve to false in the content metadata. Offer a "Hide" checkbox

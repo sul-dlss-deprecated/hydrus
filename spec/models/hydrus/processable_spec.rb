@@ -9,12 +9,6 @@ describe Hydrus::Processable do
 
   describe "complete_workflow_step()" do
 
-    it "should do nothing if the step is already completed" do
-      Dor::WorkflowService.should_not_receive(:update_workflow_status)
-      @go.stub_chain(:workflows, :workflow_step_is_done).and_return(true)
-      @go.complete_workflow_step('foo')
-    end
-
     it "can exercise the method, stubbing out call to WF service" do
       step = 'submit'
       args = ['dor', @go.pid, kind_of(Symbol), step, 'completed']
