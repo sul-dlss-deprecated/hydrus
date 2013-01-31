@@ -15,17 +15,24 @@ class Hydrus::RoleMetadataDS < ActiveFedora::NokogiriDatastream
         end
         t.name
       end
+      t.group do
+        t.identifier do
+          t.type_ :path => {:attribute => 'type'}
+        end
+      end
     end
 
     t.person_id :proxy => [:role, :person, :identifier]
 
+    # Collection-level roles.
     t.collection_creator        :ref => [:role], :attributes => {:type => 'hydrus-collection-creator'}
     t.collection_manager        :ref => [:role], :attributes => {:type => 'hydrus-collection-manager'}
     t.collection_depositor      :ref => [:role], :attributes => {:type => 'hydrus-collection-depositor'}
     t.collection_item_depositor :ref => [:role], :attributes => {:type => 'hydrus-collection-item-depositor'}
     t.collection_reviewer       :ref => [:role], :attributes => {:type => 'hydrus-collection-reviewer'}
     t.collection_viewer         :ref => [:role], :attributes => {:type => 'hydrus-collection-viewer'}
-    # item object roles
+
+    # Item-level roles.
     t.item_manager              :ref => [:role], :attributes => {:type => 'hydrus-item-manager'}
     t.item_depositor            :ref => [:role], :attributes => {:type => 'hydrus-item-depositor'}
 
@@ -36,16 +43,23 @@ class Hydrus::RoleMetadataDS < ActiveFedora::NokogiriDatastream
   ####
 
   # Takes a SUNET ID and a role.
-  # Adds the person under the given role. Will spawn a new role node,
-  # if the role isn't already present.
-  def add_person_with_role(id, role_type)
-    role_node = find_by_xpath("/roleMetadata/role[@type='#{role_type}']")
-    if role_node.size == 0
-      new_role_node = insert_role(role_type)
-      return insert_person(new_role_node, id)
-    else
-      return insert_person(role_node, id)
-    end
+  # Adds the person under the given role.
+  def add_person_with_role(sunetid, role_type)
+    return insert_person(get_or_add_role_node(role_type), sunetid)
+  end
+
+  # Takes a workgroup name and a role.
+  # Adds the group under the given role.
+  def add_group_with_role(workgroup, role_type)
+    return insert_group(get_or_add_role_node(role_type), workgroup)
+  end
+
+  # Takes a role name.
+  # Returns the Nokogiri node corresponding to that role.
+  # Creates the node if it does not exist already.
+  def get_or_add_role_node(role_type)
+    nodes = find_by_xpath("/roleMetadata/role[@type='#{role_type}']")
+    return nodes.size == 0 ? insert_role(role_type) : nodes.first
   end
 
   def add_empty_person_to_role(role_type)
@@ -60,6 +74,10 @@ class Hydrus::RoleMetadataDS < ActiveFedora::NokogiriDatastream
     add_hydrus_child_node(role_node, :person, sunetid)
   end
 
+  def insert_group(role_node, workgroup)
+    add_hydrus_child_node(role_node, :group, workgroup)
+  end
+
   ####
   # OM templates.
   ####
@@ -72,6 +90,12 @@ class Hydrus::RoleMetadataDS < ActiveFedora::NokogiriDatastream
     xml.person {
       xml.identifier(:type => 'sunetid') { xml.text(sunetid) }
       xml.name
+    }
+  end
+
+  define_template :group do |xml, workgroup|
+    xml.group {
+      xml.identifier(:type => 'workgroup') { xml.text(workgroup) }
     }
   end
 

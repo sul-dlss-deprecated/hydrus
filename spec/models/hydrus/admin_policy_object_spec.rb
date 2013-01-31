@@ -8,6 +8,7 @@ describe Hydrus::AdminPolicyObject do
 
   it "can exercise a stubbed version of create()" do
     # More substantive testing is done at integration level.
+    # Setup.
     druid = 'druid:BLAH'
     stubs = [
       :remove_relationship,
@@ -18,14 +19,18 @@ describe Hydrus::AdminPolicyObject do
     @apo.stub(:pid).and_return(druid)
     @apo.stub(:adapt_to).and_return(@apo)
     Hydrus::GenericObject.stub(:register_dor_object).and_return(@apo)
+    # Preliminary assertions.
     @apo.title.should == ''
     @apo.roleMetadata.find_by_xpath('//role').size.should == 0
+    # Create APO and check title.
     Hydrus::AdminPolicyObject.create('USERFOO').pid.should == druid
     @apo.title.should == Dor::Config.hydrus.initial_apo_title
+    # Check roleMetadata.
     role_nodes = @apo.roleMetadata.find_by_xpath('//role')
-    role_nodes.size.should == 2
-    role_nodes[0]['type'].should == 'hydrus-collection-manager'
-    role_nodes[1]['type'].should == 'hydrus-collection-depositor'
+    exp_roles = %w(hydrus-collection-manager hydrus-collection-depositor dor-apo-manager)
+    actual_roles = role_nodes.map { |nd| nd['type'] }
+    Set.new(exp_roles).should == Set.new(actual_roles)
+    # Check referencesAgreement.
     ra_regex = /<hydra:referencesAgreement[^>]+druid:mc322hh4254"\/>/x
     @apo.rels_ext.to_rels_ext.should =~ ra_regex
   end

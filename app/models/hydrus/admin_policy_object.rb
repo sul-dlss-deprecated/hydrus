@@ -71,9 +71,12 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
     apo.title = dconf.initial_apo_title
     apo.label = apo.title
     # Add roleMetadata with current user as hydrus-collection-manager.
-    apo.roleMetadata.add_person_with_role(user, 'hydrus-collection-manager')
-    apo.roleMetadata.add_person_with_role(user, 'hydrus-collection-depositor')
-    # create defaultObjectRights datastream
+    rmd = apo.roleMetadata
+    rmd.add_person_with_role(user, 'hydrus-collection-manager')
+    rmd.add_person_with_role(user, 'hydrus-collection-depositor')
+    rmd.add_group_with_role("dlss:pmag-staff", "dor-apo-manager")
+    rmd.add_group_with_role("dlss:developers", "dor-apo-manager")
+    # Create defaultObjectRights datastream ... by mentioning it.
     apo.defaultObjectRights.ng_xml
     # Add the references agreement to the APO's RELS-EXT.
     apo.add_relationship(:references_agreement, "info:fedora/druid:mc322hh4254")

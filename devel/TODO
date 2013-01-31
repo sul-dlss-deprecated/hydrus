@@ -2,14 +2,6 @@
 Priorities for February
 ------------------
 
-Hydrus objects are not accessible in Argo. The Hydrus APOs need to end up
-having the following in their roleMetadata:
-
-  <role type="dor-apo-manager">
-    <group><identifier type="workgroup">dlss:pmag-staff</identifier></group>
-    <group><identifier type="workgroup">dlss:developers</identifier></group>
-  </role>
-
 Object cleanup and remediation in deployed environments. Prod: delete the stray
 item (kr880mc3948); remediate the rest. Test: can delete all objects.
 

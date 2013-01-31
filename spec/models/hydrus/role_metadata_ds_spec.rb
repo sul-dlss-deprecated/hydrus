@@ -9,6 +9,8 @@ describe Hydrus::RoleMetadataDS do
     @p2 = '<person><identifier type="sunetid">sunetid2</identifier><name/></person>'
     @p3 = '<person><identifier type="sunetid">sunetid3</identifier><name/></person>'
     @p4 = '<person><identifier type="sunetid">sunetid4</identifier><name/></person>'
+    @g1 = '<group><identifier type="workgroup">dlss:pmag-staff</identifier></group>'
+    @g2 = '<group><identifier type="workgroup">dlss:developers</identifier></group>'
   end
 
   context "APO role metadata" do
@@ -148,7 +150,8 @@ describe Hydrus::RoleMetadataDS do
       rmdoc.ng_xml.should be_equivalent_to exp_xml
     end
 
-    context "add_person_with_role" do
+    context "add_person_with_role()" do
+
       before(:each) do
         xml = <<-EOF
           #{@rmd_start}
@@ -210,6 +213,31 @@ describe Hydrus::RoleMetadataDS do
       end
 
     end
+
+    context "add_group_with_role()" do
+
+      before(:each) do
+        xml = <<-EOF
+          #{@rmd_start}
+          #{@rmd_end}
+        EOF
+        @rmdoc = Hydrus::RoleMetadataDS.from_xml(xml)
+      end
+
+      it "should add groups under roles" do
+        exp_parts = [
+          @rmd_start,
+          '<role type="dor-apo-manager">', @g1, @g2, '</role>',
+          @rmd_end,
+        ]
+        exp_xml = noko_doc(exp_parts.join '')
+        @rmdoc.add_group_with_role("dlss:pmag-staff", "dor-apo-manager")
+        @rmdoc.add_group_with_role("dlss:developers", "dor-apo-manager")
+        @rmdoc.ng_xml.should be_equivalent_to exp_xml
+      end
+
+    end
+
 
   end
 
