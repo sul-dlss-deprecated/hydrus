@@ -14,6 +14,7 @@ module Hydrus::Authorizable
       hindman
       geisler
       lmcrae
+      jdeering
     )
   end
 
