@@ -2,22 +2,20 @@
 Priorities for February
 ------------------
 
-Object cleanup and remediation in deployed environments. Prod: delete the stray
-item (kr880mc3948); remediate the rest. Test: can delete all objects.
+Use and reproduction: add the required Stanford statement.
 
 HYDRUS-54. Implement restrictions governing what a user is allowed to change in
 subsequent versions.
 
-XML changes. [Hannah will supply needed changes.]
-
-Build the background versioner.
+Object cleanup and remediation in deployed environments. Prod: delete the stray
+item (kr880mc3948); remediate the rest. Test: can delete all objects.
 
 Hydrus has recursive symlinking in is uploads directory. For example: see
 uploads/nw/312/yv/4331/nw312yv4331. Appears to occur for items with subsequent
 versions. Check path_to_object() in findable.rb in assembly for possible bugs.
 
 ------------------
-Versioning: waiting
+Priorities for February: waiting
 ------------------
 
 Deploy and run item through the pipeline.
@@ -29,6 +27,10 @@ Deploy and run item through the pipeline.
     - Check whether edits made to subsequent versions are lost during
       accessionWF.
 
+XML changes. [Hannah will supply needed changes.]
+
+Build the background versioner.
+
 Remove Dor::Processable from APOs after Jon include the concern at the dor-services
 level [Expected soon.]
 
@@ -38,6 +40,9 @@ lastest dor-services.
 --------
 Other possibilities for February
 --------
+
+Move definition of administrators and collection_creators to config files, and
+all them to vary by environment.
 
 All displayed datetimes: yyyy-mm-dd hh:mm am|pm (12 hour).
 
@@ -53,10 +58,10 @@ HYDRUS-52. Item license selection. See ticket for details. Also include "No
 license" as an option for the default value set at the collection level.
 [Questions emailed to Hannah; she will clarify the ticket.]
 
-Use and reproduction. See details below.
+Use and reproduction customization. See details below.
 
 --------
-Use and reproduction
+Use and reproduction customization
 --------
 
   - Collection edit. Show Stanford default. Offer textbox for additional text.

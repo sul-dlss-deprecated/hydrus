@@ -1,5 +1,15 @@
 = Hydrus change log
 
+== 2013.01.31a
+
+* APOs include the dlss:pmag-staff and dlss:developers workgroups in roleMetadata.
+* Upgraded to current dor-services stack.
+* Added more admin users.
+* Attempt to fix bug causing subsequent versions to leave start-assembly in waiting state.
+* HYDRUS-50: added contributor roles: Advisor, Primary advisor.
+* Coll view page: added link to APO (visible for admin users).
+* Deployed to hydrus-test.
+
 == 2013.01.28a
 
 * Hydrus APOs will now run through the assembly and accessioning pipeline.
