@@ -113,9 +113,11 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
   # Keys correspond to the license_option in the OM terminology.
   # Values are displayed in the web form.
   def self.license_types
-    {'none'   => 'no license -- content creator retains exclusive rights',
-     'varies' => 'varies -- contributor may select a license for each item',
-     'fixed'  => 'required license -- applies to all items in the collection'}
+    return {
+      'none'   => 'no license',
+      'varies' => 'varies -- contributor may select a license for each item, with a default of',
+      'fixed'  => 'required license -- applies to all items in the collection',
+    }
   end
 
   # WARNING - the keys of this hash (which appear in the radio buttons in the

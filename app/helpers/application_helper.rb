@@ -19,7 +19,7 @@ module ApplicationHelper
     elsif license_type == 'openDataCommons'
       link_to license_name,'http://opendatacommons.org/licenses/'
     else
-      license_code
+      license_name
     end
   end
 

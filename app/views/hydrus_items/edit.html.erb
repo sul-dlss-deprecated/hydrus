@@ -215,7 +215,7 @@
       <% if @fobj.licenses_can_vary %>
         This item will be licensed under
         <%= f.select :license,
-                     grouped_options_for_select(Hydrus::Collection.licenses, @fobj.license), 
+                     grouped_options_for_select(Hydrus::GenericObject.license_groups, @fobj.license), 
                      {:prompt => 'Select license'}, 
                      {:class => 'inline-select right' } %>
       <% else %>

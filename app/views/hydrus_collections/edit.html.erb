@@ -137,7 +137,7 @@
                   <%= f.select(
                         "license_#{lic_opt}".to_sym,
                         grouped_options_for_select(
-                          Hydrus::Collection.licenses,
+                          Hydrus::GenericObject.license_groups,
                           @fobj.send("license_#{lic_opt}")
                         ),
                         {:prompt => 'Select license'},

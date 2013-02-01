@@ -206,22 +206,25 @@ class Hydrus::GenericObject < Dor::Item
     identityMetadata.content_will_change!
   end
 
-  def self.licenses
-    {
-      'Creative Commons Licenses' =>  [
+  def self.license_groups
+    [
+      ['None',  [
+        ['No license', 'none'],
+      ]],
+      ['Creative Commons Licenses',  [
         ['CC BY Attribution'                                 , 'cc-by'],
         ['CC BY-SA Attribution Share Alike'                  , 'cc-by-sa'],
         ['CC BY-ND Attribution-NoDerivs'                     , 'cc-by-nd'],
         ['CC BY-NC Attribution-NonCommercial'                , 'cc-by-nc'],
         ['CC BY-NC-SA Attribution-NonCommercial-ShareAlike'  , 'cc-by-nc-sa'],
         ['CC BY-NC-ND Attribution-NonCommercial-NoDerivs'    , 'cc-by-nc-nd'],
-      ],
-      'Open Data Commons Licenses'  =>  [
+      ]],
+      ['Open Data Commons Licenses',  [
         ['PDDL Public Domain Dedication and License'         , 'pddl'],
         ['ODC-By Attribution License'                        , 'odc-by'],
         ['ODC-ODbl Open Database License'                    , 'odc-odbl'],
-      ]
-    }
+      ]],
+    ]
   end
 
   def self.license_type(code)
@@ -235,13 +238,12 @@ class Hydrus::GenericObject < Dor::Item
     end
   end
 
+  # Takes a license code: cc-by, pddl, none, etc...
+  # Returns the corresponding text description of that license.
   def self.license_human(code)
-    licenses.each do |type, license|
-      license.each do |lic|
-        return lic.first if code == lic.last
-      end
-    end
-    return "No license. All rights reserved by content creator."
+    code = 'none' if code.blank?
+    lic = license_groups.map(&:last).flatten(1).find { |txt, c| c == code }
+    return lic ? lic.first : "Unknown license"
   end
 
   def self.license_commons
@@ -391,14 +393,15 @@ class Hydrus::GenericObject < Dor::Item
     rightsMetadata.use.machine(*args).first
   end
 
+  # TODO: needs overhaul and fixing.
   def license= val
     rightsMetadata.remove_nodes(:use)
-    Hydrus::Collection.licenses.each do |type,licenses|
+    Hydrus::GenericObject.license_groups.each do |type,licenses|
       licenses.each do |license|
         if license.last == val
           # TODO I would like to do this type_attribute part better.
           # Maybe infer the insert method and call send on rightsMetadata.
-          type_attribute = Hydrus::Collection.license_commons[type]
+          type_attribute = Hydrus::GenericObject.license_commons[type]
           if type_attribute == "creativeCommons"
             rightsMetadata.insert_creative_commons
           elsif type_attribute == "openDataCommons"

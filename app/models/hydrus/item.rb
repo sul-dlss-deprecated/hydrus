@@ -71,16 +71,13 @@ class Hydrus::Item < Hydrus::GenericObject
     item.augment_identity_metadata(itype)
     # Add roleMetadata with current user as hydrus-item-depositor.
     item.roleMetadata.add_person_with_role(user, 'hydrus-item-depositor')
-    # Set default embargo and visibility.
+    # Set default license, embargo, and visibility.
+    item.license = item.collection.license
     if coll.embargo_option == 'fixed'
       item.embargo_date = HyTime.date_display(item.end_of_embargo_range)
     end
     vov = coll.visibility_option_value
     item.visibility = vov == 'stanford' ? vov : 'world'
-    # Set default license
-    clo = coll.license_option
-    item.license = clo == 'none'  ? clo :
-                   clo == 'fixed' ? item.collection.license : nil
     # Set object status.
     item.object_status = 'draft'
     # Set version info.

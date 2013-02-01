@@ -91,24 +91,31 @@ describe Hydrus::GenericObject do
   describe "class methods" do
 
     it "should define a licenses hash" do
-      Hydrus::GenericObject.licenses.should be_a Hash
+      Hydrus::GenericObject.license_groups.should be_a Array
     end
 
     describe "license_commons" do
-      it "should define be a hash" do
+
+      it "should define a hash" do
         Hydrus::GenericObject.license_commons.should be_a Hash
       end
+
       it "keys should all match license types" do
-        Hydrus::GenericObject.license_commons.keys.should == Hydrus::GenericObject.licenses.keys
+        hgo = Hydrus::GenericObject
+        ks = hgo.license_groups.map(&:first)
+        hgo.license_commons.keys.each do |k|
+          ks.should include(k)
+        end
       end
+
     end
 
-    it "should have a license_human method that will return a human readible value for a license code" do
+    it "license_human() should return a human readable value for a license code" do
       hgo = Hydrus::GenericObject
       hgo.license_human("cc-by").should == "CC BY Attribution"
       hgo.license_human("cc-by-nc-sa").should == "CC BY-NC-SA Attribution-NonCommercial-ShareAlike"
       hgo.license_human("odc-odbl").should == "ODC-ODbl Open Database License"
-      hgo.license_human('blah!!').should =~ /no license/i
+      hgo.license_human('blah!!').should =~ /unknown license/i
     end
 
   end

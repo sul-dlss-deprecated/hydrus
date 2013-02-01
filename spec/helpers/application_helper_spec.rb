@@ -68,7 +68,8 @@ describe ApplicationHelper do
   it "should return a correct license link" do
     license_link('cc-by').should == '<a href="http://creativecommons.org/licenses/">CC BY Attribution</a>'
     license_link('pddl').should  == '<a href="http://opendatacommons.org/licenses/">PDDL Public Domain Dedication and License</a>'
-    license_link('junkola').should == "junkola"
+    license_link('none').should == 'No license'
+    license_link('junkola').should == 'Unknown license'
   end
 
   it "should strip text values including nil" do
