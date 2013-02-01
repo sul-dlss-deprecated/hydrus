@@ -103,10 +103,16 @@
     <%- end -%>
     <%= hydrus_form_value(:class=>"short-textarea") do  -%>
       <%= f.text_area :preferred_citation, :value=>hydrus_strip(@fobj.preferred_citation) %>
+      <div class="help">
+        <strong>Example citation</strong>: "Stanford, Jane L (1905). The
+        efficacy of bicarbonate of soda in the treatment of digestive maladies.
+        Stanford Digital Repository. Available at <%= @fobj.purl_url %>."
+      </div>
     <%- end -%>
   </div>
 
   <div class="row field-group">
+    <br/>
     <%= hydrus_form_label do %>
       <%= f.label :"related_citation_0", "Related published work" %>
     <%- end -%>

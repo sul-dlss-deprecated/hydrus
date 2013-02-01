@@ -15,10 +15,7 @@ subsequent versions.
 HYDRUS-58. Use and reproduction: add the required Stanford statement. Requires
 refactoring of license setter, which is too aggressive to deleting nodes.
 
-  BLAH BLAH = User agrees that, where applicable, content will not be used to
-  identify or to otherwise infringe the privacy or confidentiality rights of
-  individuals. Content distributed via the Stanford Digital Repository may be
-  subject to additional license and use restrictions applied by the depositor.
+  self.stanford_terms_of_use
 
   Add to rightsMetadata of Collections and Items:
     
@@ -79,8 +76,6 @@ HYDRUS-10. Support user's ability to hide specific files, which has the effect
 of setting publish and shelve to false in the content metadata. Offer a "Hide"
 checkbox (default unchecked) next to each uploaded file. Also include an info
 icon with some help text.
-
-HYDRUS-67: Add instructional text for Citations section in Item Edit view.
 
 Remove Dor::Processable from APOs after Jon include the concern at the dor-services
 level [Expected soon.]

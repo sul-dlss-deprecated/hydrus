@@ -286,6 +286,16 @@ class Hydrus::GenericObject < Dor::Item
     return h1.merge(h2)[object_status]
   end
 
+  def self.stanford_terms_of_use
+    return '
+      User agrees that, where applicable, content will not be used to identify
+      or to otherwise infringe the privacy or confidentiality rights of
+      individuals.  Content distributed via the Stanford Digital Repository may
+      be subject to additional license and use restrictions applied by the
+      depositor.
+    '.squish
+  end
+
   # Registers an object in Dor, and returns it.
   def self.register_dor_object(*args)
     params = self.dor_registration_params(*args)
