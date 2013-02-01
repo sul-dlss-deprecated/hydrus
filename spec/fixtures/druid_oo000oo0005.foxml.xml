@@ -46,7 +46,6 @@
           <objectCreator>DOR</objectCreator>
           <otherId name="uuid">need_new</otherId>
           <tag>Project : Hydrus</tag>
-          <tag>Hydrus : dataset</tag>
         </identityMetadata>
       </foxml:xmlContent>
     </foxml:datastreamVersion>

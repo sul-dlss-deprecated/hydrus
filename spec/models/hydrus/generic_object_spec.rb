@@ -115,8 +115,8 @@ describe Hydrus::GenericObject do
 
   it "augment_identity_metadata() should add correct tags" do
     tests = {
-      :collection => '<tag>Hydrus : collection</tag><objectType>set</objectType>',
-      :dataset    => '<tag>Hydrus : dataset</tag>',
+      :collection => '<objectType>set</objectType>',
+      :dataset    => '',
     }
     tests.each do |item_type, xml|
       exp  = "<identityMetadata>#{xml}</identityMetadata>"

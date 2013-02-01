@@ -76,7 +76,7 @@ describe("Item create", :type => :request, :integration => true) do
     wf_nodes.size.should == 1
     wf_nodes.first[:id].should == Dor::Config.hydrus.app_workflow.to_s
     # Check identityMetadata of Item.
-    item.identityMetadata.tag.should include("Hydrus : dataset", "Project : Hydrus")
+    item.identityMetadata.tag.should include("Project : Hydrus")
     # Check person roles of the Item.
     item.person_roles.should == { "hydrus-item-depositor" => Set.new(["archivist1"]) }
     # Check events.

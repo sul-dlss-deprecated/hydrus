@@ -203,7 +203,6 @@ class Hydrus::GenericObject < Dor::Item
   # Adds some Hydrus-specific information to the identityMetadata.
   def augment_identity_metadata(typ)
     identityMetadata.add_value(:objectType, 'set') if typ == :collection
-    identityMetadata.add_value(:tag, "Hydrus : #{typ}")
     identityMetadata.content_will_change!
   end
 
