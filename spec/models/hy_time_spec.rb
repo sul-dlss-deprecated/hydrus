@@ -36,8 +36,8 @@ describe HyTime do
         pf                => dt1,
         # Display formats should be 8 hours in the past relative to UTC.
         :date_display     => '2000-01-01',
-        :time_display     => '19:04:05',
-        :datetime_display => '2000-01-01 19:04:05',
+        :time_display     => '7:04 pm',
+        :datetime_display => '2000-01-01 7:04 pm',
       }
       exp.each do |f, e|
         # String, with and without a :parse format.
@@ -51,7 +51,7 @@ describe HyTime do
     it "should use :datetime as the default output format" do
       dt = '2000-01-02T03:04:05Z'
       HyTime.formatted(dt).should == dt
-      HyTime.formatted(dt, :format => :time_display).should  == '19:04:05'
+      HyTime.formatted(dt, :format => :time_display).should  == '7:04 pm'
       HyTime.formatted('2000-01-02', :parse => :date).should == '2000-01-02T00:00:00Z'
     end
 

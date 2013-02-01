@@ -32,8 +32,8 @@ module HyTime
     :datetime_full    => '%FT%T.%LZ',  # With milliseconds.
     # Display formats -- for the web UI, for example.
     :date_display     => '%F',
-    :time_display     => '%T',
-    :datetime_display => '%F %T',
+    :time_display     => '%-l:%M %P',
+    :datetime_display => '%F %-l:%M %P',
   }
 
   DEFAULT_TIMEZONE   = 'UTC'

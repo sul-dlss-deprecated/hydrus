@@ -5,6 +5,10 @@ Current
 HYDRUS-54. Implement restrictions governing what a user is allowed to change in
 subsequent versions.
 
+  - License can change, but it forces the version to be treated as major.
+  - Visibility (world|stanford) may not be reduced.
+  - Embargo date can be reduced or removed but cannot be shifted farther into future.
+
 Deploy and run item through the pipeline.
 
     Waiting on Richard to run SDR robots.
@@ -16,6 +20,43 @@ Deploy and run item through the pipeline.
 
     Check whether edits made to subsequent versions are lost during
     accessionWF.
+
+HYDRUS-52. Item license selection. Add a new option: "No license" (at both the
+Collection and Item levels). Also, pre-populate the Item choice with the
+Collection default.
+
+HYDRUS-58. Use and reproduction: add the required Stanford statement. Requires
+refactoring of license setter, which is too aggressive to deleting nodes.
+
+  BLAH BLAH = User agrees that, where applicable, content will not be used to
+  identify or to otherwise infringe the privacy or confidentiality rights of
+  individuals. Content distributed via the Stanford Digital Repository may be
+  subject to additional license and use restrictions applied by the depositor.
+
+  Add to rightsMetadata of Collections and Items:
+    
+    <use><human type="useAndReproduction">BLAH BLAH</human></use>
+
+  Collection edit page:
+    Change section title to "Terms of Use and Licenses".
+    Above the license selections, add this text:
+
+      The following Terms of Use will be displayed with each item published in
+      this collection: "BLAH BLAH".
+
+  Collection view page:
+    Ditto.
+
+  Item Edit page:
+    Change section title.
+    Add this text:
+
+      The following Terms of Use will be displayed with this item when published:
+      "BLAH BLAH".
+
+  Item view page:
+    Change section title: "Release, Visibility, License, and Terms of Use".
+    Add "Terms of use" item, with the text: "BLAH BLAH".
 
 ------------------
 On-deck
@@ -32,10 +73,8 @@ symlink, stacks, and SDR. Hydrus: hydrus-Solr, hydrus-uploads-dir, hydrus-DB.
 Remediate the ur-APO and run in through pipeline, including SDR: druid:zw306xn5593.
 The current object lacks workflows datastream.
 
-HYDRUS-58. Use and reproduction: add the required Stanford statement. Requires
-refactoring of license getter and setter. This statement will reside in the
-rightsMetadata of Collections and Items: <use><human
-type="useAndReproduction">Blah blah</human></use>.
+HYDRUS-51. Add support for "corporate" and "conference" Contributor name types.
+[See ticket for details.]
 
 Hydrus has recursive symlinking in its uploads directory. For example: see
 uploads/nw/312/yv/4331/nw312yv4331. Appears to occur for items with subsequent
@@ -55,15 +94,6 @@ Move definition of administrators and collection_creators to config files, and
 allow them to vary by environment.
 
 File a SAR ticket to bump up the power of hydrus-test.
-
-HYDRUS-57. All displayed datetimes: yyyy-mm-dd hh:mm am|pm (12 hour).
-
-HYDRUS-51. Add support for "corporate" and "conference" Contributor name types.
-[See ticket for details.]
-
-HYDRUS-52. Item license selection. See ticket for details. Also include "No
-license" as an option for the default value set at the collection level.
-[Questions emailed to Hannah; she will clarify the ticket.]
 
 --------
 Other possibilities for February
