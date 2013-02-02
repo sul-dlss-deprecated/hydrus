@@ -56,6 +56,9 @@ Assembly::Utils. What's required to nuke an object? In general: Fedora,
 dor-Solr, workflow DB, /dor/assembly files or symlink, /dor/workspace files or
 symlink, stacks, and SDR. Hydrus: hydrus-Solr, hydrus-uploads-dir, hydrus-DB.
 
+Implement delete() properly. Current method is insufficient. For now, I have
+commented out the delete link in the actions box.
+
 Remediate the ur-APO and run in through pipeline, including SDR: druid:zw306xn5593.
 The current object lacks workflows datastream.
 

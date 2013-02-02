@@ -115,7 +115,9 @@
     </p>
 
     <!-- Delete link  -->
-    <% if can?(:edit, @fobj) && @fobj.is_destroyable %>
+    <!-- This is currently disabled in the if-test.
+         We need to improve the delete() method. -->
+    <% if false && can?(:edit, @fobj) && @fobj.is_destroyable %>
         <p style="display:none;" id="discard-item" class="discard-item">
           <i class="icon-trash"></i>
           <%= link_to 'Discard this item', @fobj, :method=>:delete, :confirm => 'Are you sure you want to delete this item? This action cannot be undone.'%>
