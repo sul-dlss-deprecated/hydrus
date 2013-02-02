@@ -96,7 +96,7 @@
 
       <div class="collection-items">
 
-        <h4>Release, Visibility and License</h4>
+        <h4>Release, Visibility, License, and Terms of Use</h4>
 
         <dt>Release</dt>
         <dd>
@@ -118,12 +118,19 @@
         </dd>
 
         <dt>License</dt>
-          <dd>
-            <span class="highlight-value">
-              <% lic = Hydrus::Collection.license_human(@fobj.license) %>
-              <%= hydrus_object_setting_value(lic) %>
-            </span>
-          </dd>
+        <dd>
+          <span class="highlight-value">
+            <% lic = Hydrus::Collection.license_human(@fobj.license) %>
+            <%= hydrus_object_setting_value(lic) %>
+          </span>
+        </dd>
+ 
+        <dt>Terms of use</dt>
+        <dd>
+          <span class="highlight-value">
+            <%= @fobj.terms_of_use %>
+          </span>
+        </dd>
  
       </div>
 

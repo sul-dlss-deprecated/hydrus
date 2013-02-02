@@ -120,8 +120,14 @@
 
     </div>
 
-    <%= hydrus_form_header {"License"} %>
+    <%= hydrus_form_header {"Terms of Use and Licenses"} %>
     <div id="license">
+      <p>
+        The following Terms of Use will be displayed with each item published in
+        this collection:
+        <%= '"' + @fobj.terms_of_use + '"' %>
+      </p>
+
       <p>After its release date, items in this collection should be covered by:</p>
       <div class="row radio-select-group">
         <%= hydrus_form_value do %>

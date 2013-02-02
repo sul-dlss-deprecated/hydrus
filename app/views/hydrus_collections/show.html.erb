@@ -71,27 +71,41 @@
     </div>
 
     <div class="collection-items">
-         <h4>License</h4>
-       <p>
-        <%if @fobj.embargo_option == 'none' %>
-          Upon release
-        <% else %>
-          After its release date,
-        <% end %>
-        items in this collection are covered by the following license terms:</p>
 
-        <p>
+      <h4>Terms of Use and Licenses</h4>
+
+      <p>
+        The following Terms of Use will be displayed with each item published in
+        this collection:
+        <%= '"' + @fobj.terms_of_use + '"' %>
+      </p>
+
+      <p>
+        <%if @fobj.embargo_option == 'none' %>
+           Upon release
+        <% else %>
+           After its release date,
+        <% end %>
+        items in this collection are covered by the following license terms:
+      </p>
+
+      <p>
         <% if @fobj.license_option == 'none' %>
-          No license
+           No license
         <% else %>
           <% if @fobj.license_option == 'varies' %>
             A default license -- the license below applies to items in this collection by default, but can be changed for each item.
           <% else %>
             A required license -- the license below applies to all items in the collection.
           <% end %>
-        </p>
-          <p><%=license_image(@fobj.license)%> <%=license_link(@fobj.license)%></p>
         <% end %>
+      </p>
+
+      <p>
+        <%=license_image(@fobj.license)%>
+        <%=license_link(@fobj.license)%>
+      </p>
+
     </div>
 
     <div class="collection-items">

@@ -212,9 +212,18 @@
     </div>
   </div>
 
-  <!-- License -->
+  <!-- Terms of use and license -->
 
-  <%= hydrus_form_header(:required => @fobj.licenses_can_vary) {"License"} %>
+  <%= hydrus_form_header(:required => @fobj.licenses_can_vary) {"Terms of Use and Licenses"} %>
+
+  <div class="row field-group">
+    <div class="span9">
+      <p>
+        The following Terms of Use will be displayed with this item when published:
+        <%= '"' + @fobj.terms_of_use + '"' %>
+      </p>
+    </div>
+  </div>
 
   <div class="row field-group">
     <div class="span9">

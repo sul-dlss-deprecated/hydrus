@@ -2,6 +2,13 @@
 Current
 ------------------
 
+HYDRUS-58. Stanford use and repro: tests.
+
+    new and refactored methods
+    rightsMetadata needs a test file
+    integration: run through full cycle of Collection settings and Item edits
+    view assertions (?)
+
 HYDRUS-54. Implement restrictions governing what a user is allowed to change in
 subsequent versions.
 
@@ -11,36 +18,6 @@ subsequent versions.
     increased to beyond the date of P + D, where P is date of initial
     publication, and D is the max delta (eg, 2 years) set at the collection
     level.
-
-HYDRUS-58. Use and reproduction: add the required Stanford statement.
-
-  Add to fixtures: <human type="useAndReproduction">.
-
-  Tests:
-    new and refactored methods
-    rightsMetadata needs a test file
-    integration: run through full cycle of Collection settings and Item edits
-
-  Collection edit page:
-    Change section title to "Terms of Use and Licenses".
-    Above the license selections, add this text:
-
-      The following Terms of Use will be displayed with each item published in
-      this collection: "BLAH BLAH".
-
-  Collection view page:
-    Ditto.
-
-  Item Edit page:
-    Change section title.
-    Add this text:
-
-      The following Terms of Use will be displayed with this item when published:
-      "BLAH BLAH".
-
-  Item view page:
-    Change section title: "Release, Visibility, License, and Terms of Use".
-    Add "Terms of use" item, with the text: "BLAH BLAH".
 
 ------------------
 On-deck
