@@ -12,14 +12,14 @@ subsequent versions.
     publication, and D is the max delta (eg, 2 years) set at the collection
     level.
 
-HYDRUS-58. Use and reproduction: add the required Stanford statement. Requires
-refactoring of license setter, which is too aggressive to deleting nodes.
+HYDRUS-58. Use and reproduction: add the required Stanford statement.
 
-  self.stanford_terms_of_use
+  Add to fixtures: <human type="useAndReproduction">.
 
-  Add to rightsMetadata of Collections and Items:
-    
-    <use><human type="useAndReproduction">BLAH BLAH</human></use>
+  Tests:
+    new and refactored methods
+    rightsMetadata needs a test file
+    integration: run through full cycle of Collection settings and Item edits
 
   Collection edit page:
     Change section title to "Terms of Use and Licenses".

@@ -267,7 +267,8 @@ describe Hydrus::Item do
       # XML snippets for rightsMetadata.
       rm_start = %Q[<rightsMetadata>]
       rm_end   = '<access type="edit"><machine/></access>' +
-                 '<use><human/><machine/></use></rightsMetadata>'
+                 '<use><human type="useAndReproduction"/></use>' +
+                 '</rightsMetadata>'
       # Assemble expected Nokogiri XML for embargoMetadata and rightsMetadata.
       @xml = {
         :em_world   => noko_doc([em_start, em_world, em_end].join),
@@ -382,31 +383,36 @@ describe Hydrus::Item do
 
   end
 
-  describe "license() and license=" do
+  describe "license(), license_text(), and license=" do
 
-    describe "license()" do
-
-      it "Item-level license is present" do
-        exp = 'foo ITEM_LICENSE'
-        @hi.stub_chain(:rightsMetadata, :use, :machine).and_return([exp])
-        @hi.license.should == exp
-      end
-
+    it "Item-level license is present" do
+      exp = 'foo ITEM_LICENSE'
+      @hi.stub_chain(:rightsMetadata, :use, :machine).and_return([exp])
+      @hi.license.should == exp
     end
 
     it "should set the human readable version properly" do
-      @hi.rightsMetadata.use.human.first.should be_blank
+      @hi.license_text.should == ''
       @hi.license = "cc-by-nc"
-      @hi.rightsMetadata.use.human.first.should == "CC BY-NC Attribution-NonCommercial"
+      @hi.license_text.should == "CC BY-NC Attribution-NonCommercial"
     end
 
     it "should set the type attribute properly depending on the license applied" do
-       @hi.rightsMetadata.use.human.first.should be_blank
-       @hi.license = "cc-by-nc"
-       @hi.rightsMetadata.ng_xml.to_s.should match(/type=\"creativeCommons\"/)
-       @hi.license = "odc-odbl"
-       @hi.rightsMetadata.ng_xml.to_s.should_not match(/type=\"creativeCommons\"/)
-       @hi.rightsMetadata.ng_xml.to_s.should match(/type=\"openDataCommons\"/)
+      @hi.license_text.should == ''
+      @hi.license = "cc-by-nc"
+      @hi.license_group_code.should == "creativeCommons"
+      @hi.license = "odc-odbl"
+      @hi.license_group_code.should == "openDataCommons"
+    end
+
+  end
+
+  describe "terms of use" do
+
+    it "can set a value for terms of use" do
+      exp = 'foobar'
+      @hi.terms_of_use = exp
+      @hi.terms_of_use.should == exp
     end
 
   end

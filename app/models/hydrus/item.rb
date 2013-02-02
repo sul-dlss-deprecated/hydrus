@@ -78,6 +78,7 @@ class Hydrus::Item < Hydrus::GenericObject
     end
     vov = coll.visibility_option_value
     item.visibility = vov == 'stanford' ? vov : 'world'
+    item.terms_of_use = Hydrus::GenericObject.stanford_terms_of_use
     # Set object status.
     item.object_status = 'draft'
     # Set version info.

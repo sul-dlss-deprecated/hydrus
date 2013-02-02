@@ -70,6 +70,7 @@ class Hydrus::Collection < Hydrus::GenericObject
     coll.embargo_terms           = ''
     coll.requires_human_approval = 'no'
     coll.license_option          = 'none'
+    coll.terms_of_use            = Hydrus::GenericObject.stanford_terms_of_use
     # Set object status.
     coll.object_status = 'draft'
     coll.title = ''

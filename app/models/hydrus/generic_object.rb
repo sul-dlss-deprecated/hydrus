@@ -51,10 +51,11 @@ class Hydrus::GenericObject < Dor::Item
     ],
     "rightsMetadata" => [
       [:rmd_embargo_release_date, true,  :read_access, :machine, :embargo_release_date],
+      [:terms_of_use,             true,  ],
     ],
   )
 
-  # delete the file upload directory and then call the super method
+  # Delete the file upload directory and then call the super method.
   def delete
     parent_object_directory=File.join(self.base_file_directory,'..')
     FileUtils.rm_rf(parent_object_directory) if File.directory?(parent_object_directory)
@@ -206,6 +207,13 @@ class Hydrus::GenericObject < Dor::Item
     identityMetadata.content_will_change!
   end
 
+  def self.license_commons
+    return {
+      'Creative Commons Licenses'  => "creativeCommons",
+      'Open Data Commons Licenses' => "openDataCommons",
+    }
+  end
+
   def self.license_groups
     [
       ['None',  [
@@ -238,7 +246,7 @@ class Hydrus::GenericObject < Dor::Item
     end
   end
 
-  # Takes a license code: cc-by, pddl, none, etc...
+  # Takes a license code: cc-by, pddl, none, ...
   # Returns the corresponding text description of that license.
   def self.license_human(code)
     code = 'none' if code.blank?
@@ -246,11 +254,44 @@ class Hydrus::GenericObject < Dor::Item
     return lic ? lic.first : "Unknown license"
   end
 
-  def self.license_commons
-    return {
-      'Creative Commons Licenses'  => "creativeCommons",
-      'Open Data Commons Licenses' => "openDataCommons",
-    }
+  # Takes a license code: cc-by, pddl, none, ...
+  # Returns the corresponding license group code.
+  def self.license_group_code(code)
+    hgo = Hydrus::GenericObject
+    hgo.license_groups.each do |grp, licenses|
+      licenses.each do |txt, c|
+        return hgo.license_commons[grp] if c == code
+      end
+    end
+    return nil
+  end
+
+  # Returns the object's license code: cc-by, pddl...
+  # In this context, no license corresponds to a return of nil.
+  # In the setter, no licnese corresponds to an input code of 'none'.
+  def license
+    rightsMetadata.use.machine.first
+  end
+
+  def license_text
+    nds = rightsMetadata.use.human.nodeset
+    nd  = nds.find { |nd| nd[:type] != 'useAndReproduction' }
+    return nd ? nd.content : ''
+  end
+
+  def license_group_code
+    return rightsMetadata.use.machine.type.first
+  end
+
+  # Takes a license code: cc-by, pddl, none, ...
+  # Replaces the existing license, if any, with the license for that code.
+  def license=(code)
+    rightsMetadata.remove_license()
+    return if code == 'none'
+    hgo   = Hydrus::GenericObject
+    gcode = hgo.license_group_code(code)
+    txt   = hgo.license_human(code)
+    rightsMetadata.insert_license(gcode, code, txt)
   end
 
   # Takes a symbol (:collection or :item).
@@ -397,31 +438,6 @@ class Hydrus::GenericObject < Dor::Item
 
   def purl_page_ready?
     return RestClient.get(purl_url) { |resp, req, res| resp }.code == 200
-  end
-
-  def license *args
-    rightsMetadata.use.machine(*args).first
-  end
-
-  # TODO: needs overhaul and fixing.
-  def license= val
-    rightsMetadata.remove_nodes(:use)
-    Hydrus::GenericObject.license_groups.each do |type,licenses|
-      licenses.each do |license|
-        if license.last == val
-          # TODO I would like to do this type_attribute part better.
-          # Maybe infer the insert method and call send on rightsMetadata.
-          type_attribute = Hydrus::GenericObject.license_commons[type]
-          if type_attribute == "creativeCommons"
-            rightsMetadata.insert_creative_commons
-          elsif type_attribute == "openDataCommons"
-            rightsMetadata.insert_open_data_commons
-          end
-          rightsMetadata.use.machine = val
-          rightsMetadata.use.human = license.first
-        end
-      end
-    end
   end
 
 end
