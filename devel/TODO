@@ -4,10 +4,58 @@ Current
 
 HYDRUS-58. Stanford use and repro: tests.
 
-    new and refactored methods
-    rightsMetadata needs a test file
-    integration: run through full cycle of Collection settings and Item edits
-    view assertions (?)
+    new objects should have terms-of-use
+        Coll
+        Item
+
+    license methods
+        license_group_code()
+        license()
+        license_text()
+
+    rightsMetadata
+        has a test file
+        can call getters/setters on rightsMetadata
+        :license template
+        insert_license()
+        remove_license()
+
+    integration: object pages should show the terms-of-use
+        Coll: show, edit
+        Item: show, edit
+
+    integration: check combinations and an item-editing cycle
+
+        Coll: none   >> Item none
+        Coll: fixed  >> Item fixed
+
+        Coll: varies >> Item with that default
+            with a license
+            with none
+
+        Coll: varies: Item edit cycle
+            change license
+            none
+            new license
+
+Admin users:
+
+    global viewers (role = hydrus-viewer):
+        makeller
+        rns
+        mchris
+        ctierney
+        mcalter
+        zbaker
+
+    admins:
+        tcramer
+        lmcrae
+        tonyn
+        bess
+        snydman
+
+Deploy.
 
 HYDRUS-54. Implement restrictions governing what a user is allowed to change in
 subsequent versions.
@@ -23,18 +71,21 @@ subsequent versions.
 On-deck
 ------------------
 
-Fortune Cookie: (a) nuke!(). (b) Shorten robot sleep time.
+Fortune Cookie: (a) nuke(). (b) Shorten robot sleep time.
+
+Implement a Hydrus variant of nuke(). See delete() in generic_object.rb, along
+with cleanup_object() in Assembly::Utils. What's required to nuke an object? In
+general: Fedora, dor-Solr, workflow DB, /dor/assembly files or symlink,
+/dor/workspace files or symlink, stacks, and SDR. Hydrus: hydrus-Solr,
+hydrus-uploads-dir, hydrus-DB.
+
+Implement delete() properly. Current method is insufficient. For now, I have
+commented out the delete link in the actions box.
 
 HYDRUS-61 and HYDRUS-60. Object cleanup and remediation in deployed
 environments. Prod: remediate Collection md919gh6774 and its APO and Items (but
 delete its stray Item kr880mc3948), and nuke the rest. Test: nuke everything.
-See delete() in generic_object.rb, along with cleanup_object() in
-Assembly::Utils. What's required to nuke an object? In general: Fedora,
-dor-Solr, workflow DB, /dor/assembly files or symlink, /dor/workspace files or
-symlink, stacks, and SDR. Hydrus: hydrus-Solr, hydrus-uploads-dir, hydrus-DB.
-
-Implement delete() properly. Current method is insufficient. For now, I have
-commented out the delete link in the actions box.
+See tickets for additional details.
 
 Remediate the ur-APO and run in through pipeline, including SDR: druid:zw306xn5593.
 The current object lacks workflows datastream.
