@@ -1,4 +1,5 @@
 module ApplicationHelper
+
   include HydrusFormHelper
 
   def application_name
@@ -6,30 +7,21 @@ module ApplicationHelper
   end
 
   def license_image(license_code)
-    if Hydrus::GenericObject.license_type(license_code) == 'creativeCommons'
-      image_tag "licenses/" + license_code.downcase.gsub('-','_') + ".png"
-    end
+    gcode = Hydrus::GenericObject.license_group_code(license_code)
+    lcode = license_code.downcase.gsub('-', '_')
+    return gcode == 'creativeCommons' ? image_tag("licenses/#{lcode}.png") : ''
   end
 
   def license_link(license_code)
-    license_name=Hydrus::GenericObject.license_human(license_code)
-    license_type=Hydrus::GenericObject.license_type(license_code)
-    if license_type == 'creativeCommons'
-      link_to license_name,'http://creativecommons.org/licenses/'
-    elsif license_type == 'openDataCommons'
-      link_to license_name,'http://opendatacommons.org/licenses/'
-    else
-      license_name
-    end
+    hgo   = Hydrus::GenericObject
+    txt   = hgo.license_human(license_code)
+    gcode = hgo.license_group_code(license_code)
+    url   = hgo.license_group_urls[gcode]
+    return gcode ? link_to(txt, url) : ''
   end
 
   def button_color(status)
-    case status.downcase
-      when "published"
-        "success"
-      else
-        "warning"
-      end
+    return status.downcase == 'published' ? 'success' : 'warning'
   end
 
   def seen_beta_dialog?
@@ -102,8 +94,10 @@ module ApplicationHelper
     return link_to(title_text(obj), polymorphic_path(obj))
   end
 
-  # this checks to see if the object passed in is "empty", which could be nil, a blank string, an array of strings with all elements that are blank,
-  # an arbitrary object whose attributes are all blank, or an array of arbitrary objects whose attributes are all blank
+  # this checks to see if the object passed in is "empty", which could be nil,
+  # a blank string, an array of strings with all elements that are blank, an
+  # arbitrary object whose attributes are all blank, or an array of arbitrary
+  # objects whose attributes are all blank
   def hydrus_is_empty?(obj)
     if obj.nil? # nil case
       is_blank=true
@@ -115,14 +109,16 @@ module ApplicationHelper
       is_blank=hydrus_is_object_empty?(obj)
     end
     return is_blank
-   end
+  end
 
   # this checks to see if the object passed in has attributes that are all blank
   def hydrus_is_object_empty?(obj)
     !get_attributes(obj).collect{|attribute| obj.send(attribute).blank?}.include?(false)
   end
 
-  # this returns an array of the attributes that have setter methods on any arbitrary object (stripping out attribures you don't want), "=" stripped out as well
+  # this returns an array of the attributes that have setter methods on any
+  # arbitrary object (stripping out attribures you don't want), "=" stripped
+  # out as well
   def get_attributes(obj)
     obj.methods.grep(/\w=$/).collect{|method| method.to_s.gsub('=','')}-['validation_context','_validate_callbacks','_validators']
   end

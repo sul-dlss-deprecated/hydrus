@@ -23,6 +23,13 @@ describe Hydrus::Item do
 
   it "can exercise a stubbed version of create()" do
     # More substantive testing is done at integration level.
+    Hydrus::Authorizable.stub(:can_create_items_in).and_return(true)
+    # Stub out the Collection find() method.
+    hc = Hydrus::Collection.new
+    hc.stub(:visibility_option_value).and_return('varies')
+    hc.stub(:is_open).and_return(true)
+    Hydrus::Collection.stub(:find).and_return(hc)
+    # Set up an Item for use when stubbing register_dor_object().
     druid = 'druid:BLAH'
     stubs = [
       :remove_relationship,
@@ -34,16 +41,15 @@ describe Hydrus::Item do
     @hi.should_receive(:save).with(:no_edit_logging => true, :no_beautify => true)
     @hi.stub(:pid).and_return(druid)
     @hi.stub(:adapt_to).and_return(@hi)
-    hc = Hydrus::Collection.new
-    hc.stub(:visibility_option_value).and_return('varies')
-    hc.stub(:is_open).and_return(true)
-    Hydrus::Collection.stub(:find).and_return(hc)
     @hi.stub(:collection).and_return(hc)
     Hydrus::GenericObject.stub(:register_dor_object).and_return(@hi)
-    Hydrus::Authorizable.stub(:can_create_items_in).and_return(true)
-    Hydrus::Item.create(hc.pid, mock_user).pid.should == druid
-    @hi.version_started_time.should =~ /\A\d{4}/
-    @hi.version_tag.should == 'v1.0.0'
+    # Call create().
+    obj = Hydrus::Item.create(hc.pid, mock_user)
+    obj.pid.should == druid
+    obj.get_hydrus_events.size.should == 1
+    obj.terms_of_use.should =~ /user agrees/i
+    obj.version_started_time.should =~ /\A\d{4}/
+    obj.version_tag.should == 'v1.0.0'
   end
 
   it "can exercise a stubbed version of create when terms have already been accepted on another item" do
@@ -379,40 +385,6 @@ describe Hydrus::Item do
 
       end
 
-    end
-
-  end
-
-  describe "license(), license_text(), and license=" do
-
-    it "Item-level license is present" do
-      exp = 'foo ITEM_LICENSE'
-      @hi.stub_chain(:rightsMetadata, :use, :machine).and_return([exp])
-      @hi.license.should == exp
-    end
-
-    it "should set the human readable version properly" do
-      @hi.license_text.should == ''
-      @hi.license = "cc-by-nc"
-      @hi.license_text.should == "CC BY-NC Attribution-NonCommercial"
-    end
-
-    it "should set the type attribute properly depending on the license applied" do
-      @hi.license_text.should == ''
-      @hi.license = "cc-by-nc"
-      @hi.license_group_code.should == "creativeCommons"
-      @hi.license = "odc-odbl"
-      @hi.license_group_code.should == "openDataCommons"
-    end
-
-  end
-
-  describe "terms of use" do
-
-    it "can set a value for terms of use" do
-      exp = 'foobar'
-      @hi.terms_of_use = exp
-      @hi.terms_of_use.should == exp
     end
 
   end

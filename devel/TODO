@@ -4,21 +4,7 @@ Current
 
 HYDRUS-58. Stanford use and repro: tests.
 
-    new objects should have terms-of-use
-        Coll
-        Item
-
-    license methods
-        license_group_code()
-        license()
-        license_text()
-
-    rightsMetadata
-        has a test file
-        can call getters/setters on rightsMetadata
-        :license template
-        insert_license()
-        remove_license()
+    g c -a -m 'HYDRUS-58: add Stanford use-and-repro statement: ...'
 
     integration: object pages should show the terms-of-use
         Coll: show, edit
@@ -75,9 +61,11 @@ Fortune Cookie: (a) nuke(). (b) Shorten robot sleep time.
 
 Implement a Hydrus variant of nuke(). See delete() in generic_object.rb, along
 with cleanup_object() in Assembly::Utils. What's required to nuke an object? In
-general: Fedora, dor-Solr, workflow DB, /dor/assembly files or symlink,
-/dor/workspace files or symlink, stacks, and SDR. Hydrus: hydrus-Solr,
-hydrus-uploads-dir, hydrus-DB.
+general: Fedora, dor-Solr (might happen automatically), workflow DB,
+/dor/assembly files or symlink, /dor/workspace files or symlink, stacks, SDR,
+OAI (?), replications (?). Hydrus: hydrus-Solr (might happen automatically via
+the Fedora delete), hydrus-uploads-dir, hydrus-DB.  Also see Lynn's recent
+email.
 
 Implement delete() properly. Current method is insufficient. For now, I have
 commented out the delete link in the actions box.
@@ -130,6 +118,9 @@ pieces of text (Stanford, Collection, Item) with two line breaks.
 --------
 Other: blocked, requires discussion, uncertain need, etc.
 --------
+
+Refactor license_groups() and related methods to be simpler and less
+duplicative at the model level.
 
 Migrate functionality from Hydrus to dor-services gem.
 

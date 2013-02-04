@@ -7,7 +7,12 @@ describe Hydrus::Collection do
   end
 
   it "can exercise a stubbed version of create()" do
-    # More substantive testing is done at integration level.
+    # Note: more substantive testing is done at integration level.
+    Hydrus::Authorizable.stub(:can_create_collections).and_return(true)
+    # Stub out the APO create() method.
+    apo = Hydrus::AdminPolicyObject.new
+    Hydrus::AdminPolicyObject.stub(:create).and_return(apo)
+    # Set up a collection for use when stubbing register_dor_object().
     druid = 'druid:BLAH'
     stubs = [
       :remove_relationship,
@@ -18,11 +23,12 @@ describe Hydrus::Collection do
     @hc.should_receive(:save).with(:no_edit_logging => true, :no_beautify => true)
     @hc.stub(:pid).and_return(druid)
     @hc.stub(:adapt_to).and_return(@hc)
-    apo = Hydrus::AdminPolicyObject.new
-    Hydrus::AdminPolicyObject.stub(:create).and_return(apo)
     Hydrus::GenericObject.stub(:register_dor_object).and_return(@hc)
-    Hydrus::Authorizable.stub(:can_create_collections).and_return(true)
-    Hydrus::Collection.create('USERFOO').pid.should == druid
+    # Call create().
+    obj = Hydrus::Collection.create('USERFOO')
+    obj.pid.should == druid
+    obj.get_hydrus_events.size.should == 1
+    obj.terms_of_use.should =~ /user agrees/i
   end
 
   describe "open() and close()" do

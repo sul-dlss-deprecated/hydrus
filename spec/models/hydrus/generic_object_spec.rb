@@ -88,23 +88,50 @@ describe Hydrus::GenericObject do
 
   end
 
-  describe "class methods" do
+  describe "license and terms of use" do
 
-    it "should define a licenses hash" do
-      Hydrus::GenericObject.license_groups.should be_a Array
-    end
+    describe "license_groups(), license_commons(), and license_group_urls()" do
 
-    describe "license_commons" do
-
-      it "should define a hash" do
+      it "should get expected object types" do
+        Hydrus::GenericObject.license_groups.should be_a Array
         Hydrus::GenericObject.license_commons.should be_a Hash
+        Hydrus::GenericObject.license_group_urls.should be_a Hash
       end
 
-      it "keys should all match license types" do
+      it "license_groups() labels should be keys in license_commons()" do
         hgo = Hydrus::GenericObject
-        ks = hgo.license_groups.map(&:first)
-        hgo.license_commons.keys.each do |k|
-          ks.should include(k)
+        lgs = hgo.license_groups.map(&:first)
+        lcs = hgo.license_commons.keys
+        lcs.each { |lc| lgs.should include(lc) }
+      end
+
+    end
+
+    describe "license() license=(), license_text(), and license_group_code()" do
+
+      it "setting license should also set license_text and license_group_code" do
+        # Before.
+        @go.license.should == nil
+        @go.license_text.should == ''
+        @go.license_group_code.should == nil
+        @go.terms_of_use.should == ''
+        # Set a value for terms of use.
+        tou = 'blah blah blah'
+        @go.terms_of_use = tou
+        # Check various license flavors.
+        tests = [
+          ['cc-by-nc', 'CC BY-NC Attribution-NonCommercial', 'creativeCommons'],
+          ['odc-odbl', 'ODC-ODbl Open Database License',     'openDataCommons'],
+          ['none',     '',                                   nil],
+        ]
+        tests.each do |lcode, txt, gcode|
+          exp = (lcode == 'none' ? nil : lcode)
+          @go.license = lcode
+          @go.license.should == exp
+          @go.license_text.should == txt
+          @go.license_group_code.should == gcode
+          # Terms of use should be unaffected.
+          @go.terms_of_use.should == tou
         end
       end
 
@@ -116,6 +143,13 @@ describe Hydrus::GenericObject do
       hgo.license_human("cc-by-nc-sa").should == "CC BY-NC-SA Attribution-NonCommercial-ShareAlike"
       hgo.license_human("odc-odbl").should == "ODC-ODbl Open Database License"
       hgo.license_human('blah!!').should =~ /unknown license/i
+    end
+
+    it "terms_of_use: getter and setter" do
+      exp = 'foobar'
+      @go.terms_of_use.should == ''
+      @go.terms_of_use = exp
+      @go.terms_of_use.should == exp
     end
 
   end

@@ -89,22 +89,21 @@
         items in this collection are covered by the following license terms:
       </p>
 
-      <p>
-        <% if @fobj.license_option == 'none' %>
-           No license
+      <% if @fobj.license_option == 'none' %>
+        <p>No license.</p>
+      <% else %>
+        <% if @fobj.license_option == 'varies' %>
+          <p>A default license -- the license below applies to items in this
+          collection by default, but can be changed for each item.</p>
         <% else %>
-          <% if @fobj.license_option == 'varies' %>
-            A default license -- the license below applies to items in this collection by default, but can be changed for each item.
-          <% else %>
-            A required license -- the license below applies to all items in the collection.
-          <% end %>
+          <p>A required license -- the license below applies to all items in the
+          collection.</p>
         <% end %>
-      </p>
-
-      <p>
-        <%=license_image(@fobj.license)%>
-        <%=license_link(@fobj.license)%>
-      </p>
+        <p>
+          <%=license_image(@fobj.license)%>
+          <%=license_link(@fobj.license)%>
+        </p>
+      <% end %>
 
     </div>
 

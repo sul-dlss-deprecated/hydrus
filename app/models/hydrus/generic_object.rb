@@ -207,13 +207,10 @@ class Hydrus::GenericObject < Dor::Item
     identityMetadata.content_will_change!
   end
 
-  def self.license_commons
-    return {
-      'Creative Commons Licenses'  => "creativeCommons",
-      'Open Data Commons Licenses' => "openDataCommons",
-    }
-  end
-
+  # Returns a data structure intended to be passed into
+  # grouped_options_for_select(). This is an awkward approach (too
+  # view-centric), leading to some minor data duplication in other
+  # license-related methods, along with some overly complex lookup methods.
   def self.license_groups
     [
       ['None',  [
@@ -235,15 +232,20 @@ class Hydrus::GenericObject < Dor::Item
     ]
   end
 
-  def self.license_type(code)
-    return "" if code.blank?
-    if code[0..1].downcase == 'cc'
-      "creativeCommons"
-    elsif code.downcase == 'pddl' || code[0..2].downcase == 'odc'
-      "openDataCommons"
-    else
-      ""
-    end
+  # Should consolidate with info in license_groups().
+  def self.license_commons
+    return {
+      'Creative Commons Licenses'  => "creativeCommons",
+      'Open Data Commons Licenses' => "openDataCommons",
+    }
+  end
+
+  # Should consolidate with info in license_groups().
+  def self.license_group_urls
+    return {
+      "creativeCommons" => 'http://creativecommons.org/licenses/',
+      "openDataCommons" => 'http://opendatacommons.org/licenses/',
+    }
   end
 
   # Takes a license code: cc-by, pddl, none, ...
@@ -255,7 +257,7 @@ class Hydrus::GenericObject < Dor::Item
   end
 
   # Takes a license code: cc-by, pddl, none, ...
-  # Returns the corresponding license group code.
+  # Returns the corresponding license group code: eg, creativeCommons.
   def self.license_group_code(code)
     hgo = Hydrus::GenericObject
     hgo.license_groups.each do |grp, licenses|
@@ -270,15 +272,18 @@ class Hydrus::GenericObject < Dor::Item
   # In this context, no license corresponds to a return of nil.
   # In the setter, no licnese corresponds to an input code of 'none'.
   def license
-    rightsMetadata.use.machine.first
+    return rightsMetadata.use.machine.first
   end
 
+  # Returns the text label of the object's license.
   def license_text
     nds = rightsMetadata.use.human.nodeset
     nd  = nds.find { |nd| nd[:type] != 'useAndReproduction' }
     return nd ? nd.content : ''
   end
 
+  # Returns the license group code (eg creativeCommons) corresponding
+  # to the object's license.
   def license_group_code
     return rightsMetadata.use.machine.type.first
   end
