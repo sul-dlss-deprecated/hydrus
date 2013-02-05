@@ -495,4 +495,76 @@ describe("Item create", :type => :request, :integration => true) do
 
   end
 
+  describe "licenses" do
+
+    before(:each) do
+      @lic_select = 'select#hydrus_item_license'
+    end
+
+    it "collection: no license: new items should have no license" do
+      login_as('archivist1')
+      # Set collection to no-license mode.
+      coll = Hydrus::Collection.find(@hc_druid)
+      coll.license_option = 'none'
+      coll.license = 'none'
+      coll.save
+      # Create a new item: page should not offer the license selector.
+      druid = should_visit_new_item_page(@hc_druid)
+      page.should_not have_css(@lic_select)
+      page.should have_content('No license')
+    end
+
+    it "collection: fixed license: new items should have that license" do
+      login_as('archivist1')
+      # Set collection to fixed-license mode.
+      coll = Hydrus::Collection.find(@hc_druid)
+      coll.license_option = 'fixed'
+      coll.license = 'cc-by-nd'
+      coll.save
+      # Create a new item: page should not offer the license selector.
+      druid = should_visit_new_item_page(@hc_druid)
+      page.should_not have_css(@lic_select)
+      page.should have_content('CC BY-ND Attribution-NoDerivs')
+    end
+
+    describe "collection: variable license" do
+
+      it "with a license: new items offer selector, with default selected" do
+        login_as('archivist1')
+        # Set collection to fixed-license mode.
+        coll = Hydrus::Collection.find(@hc_druid)
+        coll.license_option = 'varies'
+        coll.license = 'odc-by'
+        coll.save
+        # Create a new item: page should offer the license selector.
+        druid = should_visit_new_item_page(@hc_druid)
+        page.should have_css(@lic_select)
+        within(@lic_select) {
+          nodes = all('option[selected]')
+          nodes.size.should == 1
+          nodes.first.text.should == "ODC-By Attribution License"
+        }
+      end
+
+      it "with no license: new items offer selector, with no-license selected" do
+        login_as('archivist1')
+        # Set collection to fixed-license mode.
+        coll = Hydrus::Collection.find(@hc_druid)
+        coll.license_option = 'varies'
+        coll.license = 'none'
+        coll.save
+        # Create a new item: page should offer the license selector.
+        druid = should_visit_new_item_page(@hc_druid)
+        page.should have_css(@lic_select)
+        within(@lic_select) {
+          nodes = all('option[selected]')
+          nodes.size.should == 1
+          nodes.first.text.should == "No license"
+        }
+      end
+
+    end
+
+  end
+
 end

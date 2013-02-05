@@ -415,4 +415,34 @@ describe("Collection edit", :type => :request, :integration => true) do
 
   end
 
+  it "form should enforce license selection for license options varies and fixed" do
+    %w(varies fixed).each do |opt|
+      # Set collection to no-license mode.
+      @hc.license_option = 'none'
+      @hc.license = 'none'
+      @hc.save
+      # Some values we need.
+      vs = {
+        :radio    => "hydrus_collection_license_option_#{opt}",
+        :select   => "license_option_#{opt}",
+        :lic_txt  => "ODC-ODbl Open Database License",
+        :alert    => "div.alert",
+        :msg_err  => 'License must be specified',
+        :msg_save => 'Your changes have been saved',
+      }
+      # Edit collection, but forget to choose a license.
+      login_as('archivist1')
+      should_visit_edit_page(@hc)
+      choose(vs[:radio])
+      click_button(@buttons[:save])
+      # We should still be on edit page, with a flash error.
+      page.should have_css("input#" + vs[:radio])
+      find(vs[:alert]).should have_content(vs[:msg_err])
+      # Select a license and save -- much success.
+      select(vs[:lic_txt], :from => vs[:select])
+      click_button(@buttons[:save])
+      find(vs[:alert]).should have_content(vs[:msg_save])
+    end
+  end
+
 end

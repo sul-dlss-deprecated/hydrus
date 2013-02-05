@@ -17,7 +17,7 @@ module ApplicationHelper
     txt   = hgo.license_human(license_code)
     gcode = hgo.license_group_code(license_code)
     url   = hgo.license_group_urls[gcode]
-    return gcode ? link_to(txt, url) : ''
+    return gcode ? link_to(txt, url) : txt
   end
 
   def button_color(status)

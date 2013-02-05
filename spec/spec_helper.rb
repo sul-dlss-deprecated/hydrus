@@ -187,6 +187,17 @@ def should_visit_edit_page(obj)
   current_path.should == edit_polymorphic_path(obj)
 end
 
+# Takes a collection.
+# Visits url to create new item in that collection.
+# Extracts the new item's druid from the path and returns it.
+def should_visit_new_item_page(coll)
+  rgx = Regexp.new('/items/(druid:\w{11})/edit')
+  visit new_hydrus_item_path(:collection => coll)
+  current_path.should =~ rgx
+  druid = rgx.match(current_path)[1]
+  return druid
+end
+
 def confirm_rights_metadata_in_apo(obj)
   obj.apo.defaultObjectRights.ng_xml.should be_equivalent_to obj.rightsMetadata.ng_xml # collection rights metadata should be equal to apo default object rights
 end

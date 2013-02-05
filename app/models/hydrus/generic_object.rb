@@ -269,10 +269,10 @@ class Hydrus::GenericObject < Dor::Item
   end
 
   # Returns the object's license code: cc-by, pddl...
-  # In this context, no license corresponds to a return of nil.
-  # In the setter, no licnese corresponds to an input code of 'none'.
+  # Returns license code of 'none' if there is no license, a
+  # behavior that parallels the setter.
   def license
-    return rightsMetadata.use.machine.first
+    return rightsMetadata.use.machine.first || 'none'
   end
 
   # Returns the text label of the object's license.

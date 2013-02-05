@@ -2,28 +2,6 @@
 Current
 ------------------
 
-HYDRUS-58. Stanford use and repro: tests.
-
-    g c -a -m 'HYDRUS-58: add Stanford use-and-repro statement: ...'
-
-    integration: object pages should show the terms-of-use
-        Coll: show, edit
-        Item: show, edit
-
-    integration: check combinations and an item-editing cycle
-
-        Coll: none   >> Item none
-        Coll: fixed  >> Item fixed
-
-        Coll: varies >> Item with that default
-            with a license
-            with none
-
-        Coll: varies: Item edit cycle
-            change license
-            none
-            new license
-
 Admin users:
 
     global viewers (role = hydrus-viewer):
@@ -121,6 +99,13 @@ Other: blocked, requires discussion, uncertain need, etc.
 
 Refactor license_groups() and related methods to be simpler and less
 duplicative at the model level.
+
+The check_emb_vis_lic() method is used to verifying embargo, visibility, and
+license information in various integration tests. (1) It should operate on a
+higher level, using basic model-level getters rather than mucking around in the
+datastreams (those model getters should have their own tests). (2) It's a
+hassle to debug because it does not report line numbers when an assertion
+fails.
 
 Migrate functionality from Hydrus to dor-services gem.
 

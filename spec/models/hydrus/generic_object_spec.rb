@@ -111,7 +111,7 @@ describe Hydrus::GenericObject do
 
       it "setting license should also set license_text and license_group_code" do
         # Before.
-        @go.license.should == nil
+        @go.license.should == 'none'
         @go.license_text.should == ''
         @go.license_group_code.should == nil
         @go.terms_of_use.should == ''
@@ -125,9 +125,8 @@ describe Hydrus::GenericObject do
           ['none',     '',                                   nil],
         ]
         tests.each do |lcode, txt, gcode|
-          exp = (lcode == 'none' ? nil : lcode)
           @go.license = lcode
-          @go.license.should == exp
+          @go.license.should == lcode
           @go.license_text.should == txt
           @go.license_group_code.should == gcode
           # Terms of use should be unaffected.

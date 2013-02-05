@@ -118,6 +118,12 @@ Also see:
   rails runner devel/get_datastreams.rb
   rails runner devel/list_all_hydrus_objects.rb
 
+== Misc
+
+If you see an error relating to generate_intial_workflow() for nil:NilClass, run this:
+
+  rake hydrus:reindex_workflow_objects
+
 
 == Starting Jetty on deployment servers
 

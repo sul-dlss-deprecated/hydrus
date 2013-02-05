@@ -20,15 +20,17 @@ class Hydrus::Collection < Hydrus::GenericObject
   validate  :check_license_options
 
   def check_embargo_options
-    if embargo_option != 'none' && embargo_terms.blank?
-      errors.add(:embargo, "must have a maximum time period specified when the varies or fixed option is selected")
-    end
+    return if embargo_option == 'none'
+    return unless embargo_terms.blank?
+    msg = "must have a maximum time period when the varies or fixed option is selected"
+    errors.add(:embargo, msg)
   end
 
   def check_license_options
-    if license_option != 'none' && license.blank?
-      errors.add(:license, "must be specified when the varies or fixed license option is selected")
-    end
+    return if license_option == 'none'
+    return unless license.blank?
+    msg = "must be specified when the varies or fixed license option is selected"
+    errors.add(:license, msg)
   end
 
   attr_accessor :item_counts
@@ -260,9 +262,11 @@ class Hydrus::Collection < Hydrus::GenericObject
     apo.save
   end
 
+  # Called before validation occurs.
+  # Used to keep embargo_terms and license in sync with their related options.
   def remove_values_for_associated_attribute_with_value_none
-    self.embargo_terms = nil if embargo_option == "none"
-    self.license       = nil if license_option == "none"
+    self.embargo_terms = nil    if embargo_option == "none"
+    self.license       = 'none' if license_option == "none"
   end
 
   def roles_of_person(user)

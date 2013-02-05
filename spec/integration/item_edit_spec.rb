@@ -314,6 +314,8 @@ describe("Item edit", :type => :request, :integration => true) do
     new_collection_license = "CC BY Attribution"
     item_licenses          = "hydrus_item_license"
     new_item_license       = "PDDL Public Domain Dedication and License"
+    no_license             = "No license"
+    css_lic_select         = "optgroup/option[@selected='selected']"
 
     # Item has expected rights.
     ps = {:embargo_date=>'', :visibility=>'world', :license_code=>'cc-by'}
@@ -333,7 +335,7 @@ describe("Item edit", :type => :request, :integration => true) do
 
     # Verify that the default license set at the collection-level is selected.
     within("select##{item_licenses}") do
-      selected_license = find("optgroup/option[@selected='selected']").text
+      selected_license = find(css_lic_select).text
       selected_license.should == new_collection_license
     end
 
@@ -347,12 +349,43 @@ describe("Item edit", :type => :request, :integration => true) do
     ps = {:embargo_date => '', :visibility => 'world', :license_code => 'pddl'}
     check_emb_vis_lic(@hi,ps)
 
-    # Verify that the selected license is set.
+    # Back to the edit page.
     should_visit_edit_page(@hi)
+
+    # Verify that the previous license was set.
     within("select##{item_licenses}") do
-      selected_license = find("optgroup/option[@selected='selected']").text
+      selected_license = find(css_lic_select).text
       selected_license.should == new_item_license
     end
+
+    # Select no license, and save.
+    select(no_license, :from => item_licenses)
+    click_button(@buttons[:save])
+    page.should have_content(@notice)
+
+    # Back to the edit page.
+    should_visit_edit_page(@hi)
+
+    # Verify that the previous license was set.
+    within("select##{item_licenses}") do
+      selected_license = find(css_lic_select).text
+      selected_license.should == no_license
+    end
+
+    # Select original license, and save.
+    select(new_collection_license, :from => item_licenses)
+    click_button(@buttons[:save])
+    page.should have_content(@notice)
+
+    # Back to the edit page.
+    should_visit_edit_page(@hi)
+
+    # Verify that the previous license was set.
+    within("select##{item_licenses}") do
+      selected_license = find(css_lic_select).text
+      selected_license.should == new_collection_license
+    end
+
   end
 
   describe "role-protection" do

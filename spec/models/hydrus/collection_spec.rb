@@ -98,7 +98,6 @@ describe Hydrus::Collection do
         :contact,
         :embargo,
         :embargo_option,
-        :license,
         :license_option,
       ]
       @dru = 'druid:oo000oo9999'
