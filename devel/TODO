@@ -2,45 +2,54 @@
 Current
 ------------------
 
-Deploy.
-
 HYDRUS-54. Implement restrictions governing what a user is allowed to change in
 subsequent versions.
 
   - License can change, but it forces the version to be treated as major.
+
   - Visibility (world|stanford) may not be reduced.
+
   - Embargo date can be removed, reduced, or even increased, but it cannot be
     increased to beyond the date of P + D, where P is date of initial
     publication, and D is the max delta (eg, 2 years) set at the collection
     level.
 
 ------------------
-On-deck
+On-deck -- top priority
 ------------------
 
-Fortune Cookie: (a) nuke(). (b) Shorten robot sleep time.
-
-Implement a Hydrus variant of nuke(). See delete() in generic_object.rb, along
-with cleanup_object() in Assembly::Utils. What's required to nuke an object? In
-general: Fedora, dor-Solr (might happen automatically), workflow DB,
-/dor/assembly files or symlink, /dor/workspace files or symlink, stacks, SDR,
-OAI (?), replications (?). Hydrus: hydrus-Solr (might happen automatically via
-the Fedora delete), hydrus-uploads-dir, hydrus-DB.  Also see Lynn's recent
-email.
-
 Implement delete() properly. Current method is insufficient. For now, I have
-commented out the delete link in the actions box.
+commented out the delete link in the actions box. Components to delete: Fedora
+object; entry in hydrus-Solr (might happen automatically); hydrus-uploads-dir;
+hydrus-DB.
 
-HYDRUS-61 and HYDRUS-60. Object cleanup and remediation in deployed
-environments. Prod: remediate Collection md919gh6774 and its APO and Items (but
-delete its stray Item kr880mc3948), and nuke the rest. Test: nuke everything.
-See tickets for additional details.
+HYDRUS-61 and HYDRUS-60. Remediate objects in prod that we care about:
+md919gh6774 and its APO and Items (but delete its stray Item kr880mc3948) See
+tickets for additional details regarding roles and files.
 
-Remediate the ur-APO and run in through pipeline, including SDR: druid:zw306xn5593.
-The current object lacks workflows datastream.
+Remediate the ur-APO and run in through pipeline, including SDR:
+druid:zw306xn5593. The current object lacks workflows datastream.
+
+HYDRUS-10. Support user's ability to hide specific files, which has the effect
+of setting publish and shelve to false in the content metadata. Offer a "Hide"
+checkbox (default unchecked) next to each uploaded file. Also include an info
+icon with some help text.
 
 HYDRUS-51. Add support for "corporate" and "conference" Contributor name types.
 [See ticket for details.]
+
+Before we can go to production: must deploy common-accessioning with the
+lastest dor-services.
+
+Remove Dor::Processable from APOs after Jon include the concern at the
+dor-services level. [Expected soon.]
+
+------------------
+On-deck -- later
+------------------
+
+Clear out cruft: all objects in -test environment, and stray Item pkr880mc3948
+in -prod. See notes on dor-services nuke().
 
 Hydrus has recursive symlinking in its uploads directory. For example: see
 uploads/nw/312/yv/4331/nw312yv4331. Appears to occur for items with subsequent
@@ -50,18 +59,7 @@ HYDRUS-49. XML changes. [Hannah will supply needed changes.]
 
 HYDRUS-55. Build the background versioner.
 
-HYDRU-56. Refine the "published on" date.
-
-HYDRUS-10. Support user's ability to hide specific files, which has the effect
-of setting publish and shelve to false in the content metadata. Offer a "Hide"
-checkbox (default unchecked) next to each uploaded file. Also include an info
-icon with some help text.
-
-Remove Dor::Processable from APOs after Jon include the concern at the dor-services
-level [Expected soon.]
-
-Before we can go to production: must deploy common-accessioning with the
-lastest dor-services.
+HYDRUS-56. Refine the "published on" date.
 
 Move definition of administrators and collection_creators to config files, and
 allow them to vary by environment.
@@ -75,6 +73,28 @@ text. (2) Item edit. Provide text box. If the collection manager wrote
 additional text, the Item text box will be pre-populated with that text (if the
 manager said the Item depositor could edit) or with nothing. (3) Join the three
 pieces of text (Stanford, Collection, Item) with two line breaks.
+
+------------------
+Project Fortune Cookie
+------------------
+
+Example implementations of nuke()
+  - delete() in generic_object.rb.
+  - cleanup_object() in Assembly::Utils
+
+Components of nuke():
+  - Fedora object.
+  - Entry in Solr index: should happen automatically.
+  - Workflow DB rows.
+  - Druid tree in /dor/assembly. Might be a symlink -- eg, to Hydrus.
+  - Druid tree in /dor/workspace. Might be a symlink -- eg, to /dor/assembly.
+  - Files in stacks: unshelve().
+  - Metadata in PURL document cache: unpublish().
+  - Entry in Searchworks SOLR index: might happen automatically.
+  - The online object in preservation-core.
+  - The replication copies in preservation-core.
+
+Shorten robot sleep time.
 
 --------
 Other: blocked, requires discussion, uncertain need, etc.

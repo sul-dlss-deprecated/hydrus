@@ -1,5 +1,17 @@
 = Hydrus change log
 
+== 2013.02.05a
+
+* Added admin uses and global viewers.
+* HYDRUS-58: add Stanford use-and-repro statement: integration tests for license refactor.
+* Disable the delete-Item hyperlink: the delete() method needs more work.
+* HYDRUS-67: Add instructional text for preferred citations.
+* HYDRUS-52 and HYDRUS-65: Add no-license option and pre-populate Item with Coll default.
+* Refactored license-related code to support no-license as a choice.
+* HYDRUS-57. Show displayed datetimes using 12-hour clock with am/pm.
+* HYDRUS-53. Delete tag "Hydrus : dataset".
+* Deployed to hydrus-test.
+
 == 2013.01.31a
 
 * APOs include the dlss:pmag-staff and dlss:developers workgroups in roleMetadata.
