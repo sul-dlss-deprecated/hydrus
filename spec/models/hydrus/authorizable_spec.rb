@@ -36,7 +36,7 @@ describe Hydrus::Authorizable do
   end
 
   describe "administrators" do
-    
+
     it "is_administrator() should work as expected" do
       @auth.stub(:administrators).and_return(@s1)
       @auth.is_administrator(@ua).should == true
@@ -64,8 +64,14 @@ describe Hydrus::Authorizable do
     @auth.can_create_collections(@uf).should == false
   end
 
+  it "is_global_viewer() should work as expected" do
+    @auth.stub(:global_viewers).and_return(@s1)
+    @auth.is_global_viewer(@ua).should == true
+    @auth.is_global_viewer(@uf).should == false
+  end
+
   describe "can_do_it()" do
-    
+
     it "should return false if given nil object" do
       @auth.can_do_it('foo', 'bar', nil).should == false
     end
@@ -97,12 +103,12 @@ describe Hydrus::Authorizable do
 
     it "should return true directly if the user has power to create collections" do
       @hc.should_not_receive(:roles_of_person)
-      @auth.stub(:can_create_collections).and_return(true)
+      @auth.stub(:is_global_viewer).and_return(true)
       @auth.can_read_collection(@ua, @hc).should == true
     end
 
     it "should return true if the user has any role in the collection/apo" do
-      @auth.stub(:can_create_collections).and_return(false)
+      @auth.stub(:is_global_viewer).and_return(false)
       # Roles in the APO.
       @hc.stub(:roles_of_person).and_return(@s1)
       @auth.can_read_collection(@ua, @hc).should == true
@@ -117,12 +123,12 @@ describe Hydrus::Authorizable do
 
     it "should return true directly if the user has power to create collections" do
       @hi.should_not_receive(:roles_of_person)
-      @auth.stub(:can_create_collections).and_return(true)
+      @auth.stub(:is_global_viewer).and_return(true)
       @auth.can_read_item(@ua, @hi).should == true
     end
 
     it "should return true if the user has any role in the item or the collection/apo" do
-      @auth.stub(:can_create_collections).and_return(false)
+      @auth.stub(:is_global_viewer).and_return(false)
       # Roles in the item, but not the APO.
       @hi.stub(:roles_of_person).and_return(@s1)
       @hi.stub_chain(:apo, :roles_of_person).and_return(@s0)

@@ -4,17 +4,21 @@
 module Hydrus::Authorizable
 
   ####
-  # SUNET IDs of administrators and collection creators.
+  # SUNET IDs of those with Hydrus-wide powers.
   ####
 
   def self.administrators
     return Set.new %w(
-      hfrost
-      petucket
-      hindman
+      bess
       geisler
-      lmcrae
+      hfrost
+      hindman
       jdeering
+      lmcrae
+      petucket
+      snydman
+      tcramer
+      tonyn
     )
   end
 
@@ -25,6 +29,18 @@ module Hydrus::Authorizable
       amyhodge
       ronbo
       mmarosti
+    )
+    return administrators.union(ids)
+  end
+
+  def self.global_viewers
+    ids = Set.new %w(
+      ctierney
+      makeller
+      mcalter
+      mchris
+      rns
+      zbaker
     )
     return administrators.union(ids)
   end
@@ -64,7 +80,7 @@ module Hydrus::Authorizable
   end
 
   ####
-  # Abilities and related methods.
+  # Utility methods and Hydrus-wide abilities.
   ####
 
   # Takes two Sets.
@@ -78,6 +94,11 @@ module Hydrus::Authorizable
     return administrators.include?(user.sunetid)
   end
 
+  # Returns true if the given user is a Hydrus-wide viewer.
+  def self.is_global_viewer(user)
+    return global_viewers.include?(user.sunetid)
+  end
+
   # Returns true if the given user can act as a Hydrus administrator,
   # either by being one or because we're running in development mode.
   def self.can_act_as_administrator(user)
@@ -89,6 +110,10 @@ module Hydrus::Authorizable
     return collection_creators.include?(user.sunetid)
   end
 
+  ####
+  # General-purpose dispatching methods.
+  ####
+
   # Takes a verb (read or edit), user, and object.
   # Dispatches to the appropriate can_* method.
   def self.can_do_it(verb, user, obj)
@@ -97,9 +122,21 @@ module Hydrus::Authorizable
     return send("can_#{verb}_#{c}", user, obj)
   end
 
+  # Takes a user and a Collection or Item.
+  # Returns true if the user can read the object.
   def self.can_read_object(user, obj)
     return can_do_it('read', user, obj)
   end
+
+  # Takes a user and a Collection or Item.
+  # Returns true if the user can edit the object.
+  def self.can_edit_object(user, obj)
+    return can_do_it('edit', user, obj)
+  end
+
+  ####
+  # Particular abilities.
+  ####
 
   # Returns true if the given user can view the given APO.
   def self.can_read_apo(user, apo)
@@ -108,14 +145,14 @@ module Hydrus::Authorizable
 
   # Returns true if the given user can view the given Collection.
   def self.can_read_collection(user, coll)
-    return true if can_create_collections(user)
+    return true if is_global_viewer(user)
     user_roles = coll.roles_of_person(user.sunetid)
     return user_roles.size > 0
   end
 
   # Returns true if the given user can view the given Item.
   def self.can_read_item(user, item)
-    return true if can_create_collections(user)
+    return true if is_global_viewer(user)
     sid = user.sunetid
     user_roles = item.roles_of_person(sid) + item.apo.roles_of_person(sid)
     return user_roles.size > 0
@@ -128,12 +165,6 @@ module Hydrus::Authorizable
     return true if is_administrator(user)
     user_roles = coll.roles_of_person(user.sunetid)
     return does_intersect(user_roles, item_creator_roles)
-  end
-
-  # Takes a user and a Collection or Item.
-  # Returns true if the user can edit the object.
-  def self.can_edit_object(user, obj)
-    return can_do_it('edit', user, obj)
   end
 
   # Returns true if the given user can edit the given Collection.

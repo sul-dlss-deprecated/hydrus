@@ -2,23 +2,6 @@
 Current
 ------------------
 
-Admin users:
-
-    global viewers (role = hydrus-viewer):
-        makeller
-        rns
-        mchris
-        ctierney
-        mcalter
-        zbaker
-
-    admins:
-        tcramer
-        lmcrae
-        tonyn
-        bess
-        snydman
-
 Deploy.
 
 HYDRUS-54. Implement restrictions governing what a user is allowed to change in
