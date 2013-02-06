@@ -188,11 +188,13 @@
   <div class="row field-group">
     <div class="span9">
       After its release, this item can be downloaded and discovered by
-      <% if @fobj.visibilities_can_vary %>
-        <%= select_tag 'hydrus_item[embarg_visib][visibility]', options_for_select(Hydrus::Item.discovery_roles.to_a, @fobj.visibility) %>
+      <% if @fobj.visibility_can_be_changed %>
+        <%= select_tag(
+              'hydrus_item[embarg_visib][visibility]',
+              options_for_select(Hydrus::Item.discovery_roles.to_a, @fobj.visibility)) %>
       <% else %>
         <span class="highlight-value">
-          <%= @fobj.visibility == ['world'] ? 'anyone' : 'the Stanford community'%>
+          <%= @fobj.visibility == ['world'] ? 'anyone.' : 'the Stanford community.'%>
         </span>
       <% end %>
     </div>

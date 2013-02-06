@@ -24,16 +24,26 @@ class Hydrus::Item < Hydrus::GenericObject
   validate  :embargo_date_in_range,          :if => :should_validate
 
   validate  :check_version_if_license_changed
+  validate  :check_visibility_not_reduced
 
   # During subsequent versions the user is allowed to change the license,
   # but only if the new version is designated as a major version change.
-  # This validation enforces that policy.
   def check_version_if_license_changed
     return if is_initial_version
     return if license == prior_license
     return if version_significance == :major
     msg = "must be 'major' if license is changed"
     errors.add(:version, msg)
+  end
+
+  # During subsequent versions the user not allowed to reduce visibility.
+  def check_visibility_not_reduced
+    return if is_initial_version
+    v = visibility
+    return if v == ['world']
+    return if v == [prior_visibility]
+    msg = "cannot be reduced in subsequent versions"
+    errors.add(:visibility, msg)
   end
 
   setup_delegations(
@@ -53,6 +63,7 @@ class Hydrus::Item < Hydrus::GenericObject
       [:accepted_terms_of_deposit, true   ],
       [:version_started_time,      true   ],
       [:prior_license,             true   ],
+      [:prior_visibility,          true   ],
     ]
   )
 
@@ -188,9 +199,10 @@ class Hydrus::Item < Hydrus::GenericObject
     # Put the object back in the draft state.
     self.object_status = 'draft'
     uncomplete_workflow_steps()
-    # Store a copy of the current license.
-    # We use this in the check_version_if_license_changed() validation.
+    # Store a copy of the current license and visibility.
+    # We use those values when enforcing subsequent-version validations.
     self.prior_license = license
+    self.prior_visibility = visibility
     # Log the event.
     events.add_event('hydrus', @current_user, "New version opened")
   end
@@ -351,10 +363,15 @@ class Hydrus::Item < Hydrus::GenericObject
     return collection.embargo_option == 'varies'
   end
 
-  # Return's true if the Item belongs to a collection that allows
-  # Items to set their own licenses.
-  def visibilities_can_vary
-    return collection.visibility_option == 'varies'
+  # Return's true if the user can modify the Item visibility.
+  #   - Collection must allow it.
+  #   - Initial version: anything goes.
+  #   - Subsequent versions: visibility cannot be reduced from world to stanford.
+  def visibility_can_be_changed
+    return false unless collection.visibility_option == 'varies'
+    return true  if is_initial_version
+    return false if prior_visibility == 'world'
+    return true
   end
 
   # Return's true if the Item belongs to a collection that allows
@@ -370,11 +387,11 @@ class Hydrus::Item < Hydrus::GenericObject
   #                     nil            # Form did not offer embargo choice.
   #
   #     'date'       => 'YYYY-MM-DD'
-  #                     nil            # Form did not offer embargo choice.
+  #                     nil            # Ditto.
   #
   #     'visibility' => 'world'
   #                     'stanford'
-  #                     nil            # Form did not offer visibility choice.
+  #                     nil            # Ditto.
   #
   # Given that hash, we call the embargo_date and visibility
   # setters. The UI invovkes this combined setter (not the individual

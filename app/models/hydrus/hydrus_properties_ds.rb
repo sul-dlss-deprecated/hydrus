@@ -28,6 +28,7 @@ class Hydrus::HydrusPropertiesDS < ActiveFedora::NokogiriDatastream
     t.visibility_option         :path => 'visibilityOption'
     t.license_option            :path => 'licenseOption'
     t.prior_license             :path => 'priorLicense'
+    t.prior_visibility          :path => 'priorVisibility'
 
   end
 

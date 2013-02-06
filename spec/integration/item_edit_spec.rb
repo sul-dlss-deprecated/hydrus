@@ -685,6 +685,71 @@ describe("Item edit", :type => :request, :integration => true) do
       @hi.license.should == orig_lic
     end
 
+    describe "editability of item visibility" do
+
+      before(:each) do
+        # Set the item's collection to visibility-varies mode.
+        coll = @hi.collection
+        coll.visibility_option = 'varies'
+        coll.save
+        # Some css selectors.
+        @vis_css = 'hydrus_item_embarg_visib_visibility'
+        @vis_sel_css = 'select#' + @vis_css
+      end
+
+      describe "initial version" do
+
+        it "collection in visibility-varies mode: offer visibility drop-down" do
+          login_as('archivist1')
+          should_visit_edit_page(@hi)
+          page.should have_selector(@vis_sel_css)
+        end
+
+        it "collection in visibility-fixed mode: do not offer visibility drop-down" do
+          # Set the item's collection to visibility-varies mode.
+          coll = @hi.collection
+          coll.visibility_option = 'fixed'
+          coll.save
+          # Go to edit page.
+          login_as('archivist1')
+          should_visit_edit_page(@hi)
+          page.should_not have_selector(@vis_sel_css)
+        end
+
+      end
+
+      describe "subsequent version" do
+
+        it "prior visibility = world: do not offer drop-down" do
+          # Set visibility to world.
+          @hi.visibility = 'world'
+          @hi.save
+          # Open new version.
+          login_as('archivist1')
+          should_visit_view_page(@hi)
+          click_button(@buttons[:open_new_version])
+          # Edit page should not offer ability to change visibility.
+          should_visit_edit_page(@hi)
+          page.should_not have_selector(@vis_sel_css)
+        end
+
+        it "prior visibility = stanford: offer drop-down" do
+          # Set visibility to world.
+          @hi.visibility = 'stanford'
+          @hi.save
+          # Open new version.
+          login_as('archivist1')
+          should_visit_view_page(@hi)
+          click_button(@buttons[:open_new_version])
+          # Edit page should not offer ability to change visibility.
+          should_visit_edit_page(@hi)
+          page.should have_selector(@vis_sel_css)
+        end
+
+      end
+
+    end
+
   end
 
 end

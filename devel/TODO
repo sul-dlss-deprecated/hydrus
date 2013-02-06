@@ -5,19 +5,20 @@ Current
 HYDRUS-54. Implement restrictions governing what a user is allowed to change in
 subsequent versions.
 
-  - Visibility (world|stanford) may not be reduced.
-
   - Embargo date can be removed, reduced, or even increased, but it cannot be
     increased to beyond the date of P + D, where P is date of initial
     publication, and D is the max delta (eg, 2 years) set at the collection
     level.
 
-When validations fail, 'contact' is an extraneous key in the errors hash --
-at least for collections.
+  g c -m 'HYDRUS-54: subsequent-version restrictions: '
 
 ------------------
 On-deck -- top priority
 ------------------
+
+When validations fail for collections, 'contact' is an extraneous key in the
+errors hash. Problem does not affect items. I can't find any difference between
+the validation of contact for Items and Collections.
 
 Implement delete() properly. Current method is insufficient. For now, I have
 commented out the delete link in the actions box. Components to delete: Fedora
@@ -92,7 +93,7 @@ Components of nuke():
   - Druid tree in /dor/workspace. Might be a symlink -- eg, to /dor/assembly.
   - Entry in Searchworks SOLR index: might happen automatically.
   - Fedora object.
-  - Entry in Solr index: should happen automatically.
+  - Entry in Solr index: stub out for now; need to build functionality in GDor.
   - Move preservation-core copies to graveyard area.
   - Add info to a nuke-audit table in the WF service DB.
 

@@ -501,18 +501,94 @@ describe Hydrus::Item do
       @hi.valid?.should == true
     end
 
-  end
-
-  it "enforce_collection_is_open() should return true only if the Item is in an open Collection" do
-    n  = 0
-    [true, false, nil].each do |stub_val|
-      c    = double('collection', :is_open => stub_val)
-      exp  = not(not(stub_val))
-      n   += 1 unless exp
-      @hi.stub(:collection).and_return(c)
-      @hi.enforce_collection_is_open.should == exp
-      @hi.errors.size.should == n
+    it "enforce_collection_is_open() should return true only if the Item is in an open Collection" do
+      n  = 0
+      [true, false, nil].each do |stub_val|
+        c    = double('collection', :is_open => stub_val)
+        exp  = not(not(stub_val))
+        n   += 1 unless exp
+        @hi.stub(:collection).and_return(c)
+        @hi.enforce_collection_is_open.should == exp
+        @hi.errors.size.should == n
+      end
     end
+
+    describe "check_version_if_license_changed()" do
+
+      before(:each) do
+        # Setup failing conditions.
+        @hi.stub(:is_initial_version).and_return(false)
+        @hi.stub(:license).and_return('A')
+        @hi.stub(:prior_license).and_return('B')
+        @hi.stub(:version_significance).and_return(:minor)
+        # Lambdas to check for errors.
+        @assert_no_errors = lambda { @hi.errors.messages.keys.should == [] }
+        @assert_no_errors.call
+      end
+
+      it "can produce a version error" do
+        @hi.check_version_if_license_changed
+        @hi.errors.messages.keys.should == [:version]
+      end
+
+      it "initial version: cannot produce a version error" do
+        @hi.stub(:is_initial_version).and_return(true)
+        @hi.check_version_if_license_changed
+        @assert_no_errors.call
+      end
+
+      it "license was not changed: cannot produce a version error" do
+        @hi.stub(:prior_license).and_return(@hi.license)
+        @hi.check_version_if_license_changed
+        @assert_no_errors.call
+      end
+
+      it "version is major: cannot produce a version error" do
+        @hi.stub(:version_significance).and_return(:major)
+        @hi.check_version_if_license_changed
+        @assert_no_errors.call
+      end
+
+    end
+
+    describe "check_visibility_not_reduced()" do
+
+      before(:each) do
+        # Setup failing conditions.
+        @hi.stub(:is_initial_version).and_return(false)
+        @hi.stub(:visibility).and_return(['stanford'])
+        @hi.stub(:prior_visibility).and_return('world')
+        # Lambdas to check for errors.
+        @assert_no_errors = lambda { @hi.errors.messages.keys.should == [] }
+        @assert_no_errors.call
+      end
+
+      it "can produce a version error" do
+        @hi.check_visibility_not_reduced
+        @hi.errors.messages.keys.should == [:visibility]
+      end
+
+      it "initial version: cannot produce a visibility error" do
+        @hi.stub(:is_initial_version).and_return(true)
+        @hi.check_visibility_not_reduced
+        @assert_no_errors.call
+      end
+
+      it "visibility was not changed: cannot produce a visibility error" do
+        @hi.stub(:prior_visibility).and_return(@hi.visibility.first)
+        @hi.check_visibility_not_reduced
+        @assert_no_errors.call
+      end
+
+      it "visibility was expanded: cannot produce a visibility error" do
+        @hi.stub(:visibility).and_return(['world'])
+        @hi.stub(:prior_visibility).and_return('stanford')
+        @hi.check_visibility_not_reduced
+        @assert_no_errors.call
+      end
+
+    end
+
   end
 
   it "can exercise discovery_roles()" do
