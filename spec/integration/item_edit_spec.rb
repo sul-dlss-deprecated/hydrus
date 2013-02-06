@@ -595,6 +595,7 @@ describe("Item edit", :type => :request, :integration => true) do
       @hi.version_description.should == 'Initial Version'
       @hi.version_started_time.should == '2012-11-01T00:00:22Z'
       @hi.object_status.should == 'published'
+      @hi.prior_license.should == nil
       n_events = @hi.get_hydrus_events.size
       wf_steps = %w(submit approve)
       wf_steps.each { |s| @hi.workflows.workflow_step_is_done(s).should == true }
@@ -612,6 +613,7 @@ describe("Item edit", :type => :request, :integration => true) do
       @hi.version_description.should == ''
       @hi.version_started_time[0..9].should == HyTime.now_date
       @hi.object_status.should == 'draft'
+      @hi.prior_license.should == @hi.license
       es = @hi.get_hydrus_events
       es.size.should == n_events + 1
       es.last.text.should == 'New version opened'
@@ -654,6 +656,33 @@ describe("Item edit", :type => :request, :integration => true) do
       # Assertions after opening new version.
       @hi = Hydrus::Item.find(@hi.pid)
       @hi.version_tag.should == 'v2.0.0'
+    end
+
+    it "changing license should force user to select :major version" do
+      # Set the item's collection to license-varies mode.
+      orig_lic = 'cc-by'
+      coll = @hi.collection
+      coll.license_option = 'varies'
+      coll.license = orig_lic
+      coll.save
+      # Open new version.
+      login_as('archivist1')
+      should_visit_view_page(@hi)
+      click_button(@buttons[:open_new_version])
+      # Go to edit page:
+      #   - change license
+      #   - set version to minor
+      should_visit_edit_page(@hi)
+      fill_in("hydrus_item_version_description", :with => 'Blah blah')
+      choose("Minor")
+      select("PDDL Public Domain Dedication and License", :from => 'hydrus_item_license')
+      # Try to save.
+      #   - Should get a flash error message.
+      #   - Item's license should be unchanged.
+      click_button(@buttons[:save])
+      find("div.alert").should have_content("Version must be 'major'")
+      @hi = Hydrus::Item.find(@hi.pid)
+      @hi.license.should == orig_lic
     end
 
   end

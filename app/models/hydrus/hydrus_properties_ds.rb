@@ -27,6 +27,7 @@ class Hydrus::HydrusPropertiesDS < ActiveFedora::NokogiriDatastream
     t.embargo_terms             :path => 'embargoTerms'
     t.visibility_option         :path => 'visibilityOption'
     t.license_option            :path => 'licenseOption'
+    t.prior_license             :path => 'priorLicense'
 
   end
 

@@ -23,6 +23,19 @@ class Hydrus::Item < Hydrus::GenericObject
   validate  :embargo_date_is_correct_format, :if => :should_validate
   validate  :embargo_date_in_range,          :if => :should_validate
 
+  validate  :check_version_if_license_changed
+
+  # During subsequent versions the user is allowed to change the license,
+  # but only if the new version is designated as a major version change.
+  # This validation enforces that policy.
+  def check_version_if_license_changed
+    return if is_initial_version
+    return if license == prior_license
+    return if version_significance == :major
+    msg = "must be 'major' if license is changed"
+    errors.add(:version, msg)
+  end
+
   setup_delegations(
     # [:METHOD_NAME,               :uniq, :at... ]
     "descMetadata" => [
@@ -39,6 +52,7 @@ class Hydrus::Item < Hydrus::GenericObject
       [:reviewed_release_settings, true   ],
       [:accepted_terms_of_deposit, true   ],
       [:version_started_time,      true   ],
+      [:prior_license,             true   ],
     ]
   )
 
@@ -174,6 +188,9 @@ class Hydrus::Item < Hydrus::GenericObject
     # Put the object back in the draft state.
     self.object_status = 'draft'
     uncomplete_workflow_steps()
+    # Store a copy of the current license.
+    # We use this in the check_version_if_license_changed() validation.
+    self.prior_license = license
     # Log the event.
     events.add_event('hydrus', @current_user, "New version opened")
   end

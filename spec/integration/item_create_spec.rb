@@ -531,7 +531,7 @@ describe("Item create", :type => :request, :integration => true) do
 
       it "with a license: new items offer selector, with default selected" do
         login_as('archivist1')
-        # Set collection to fixed-license mode.
+        # Set collection to variable-license mode.
         coll = Hydrus::Collection.find(@hc_druid)
         coll.license_option = 'varies'
         coll.license = 'odc-by'
@@ -548,7 +548,7 @@ describe("Item create", :type => :request, :integration => true) do
 
       it "with no license: new items offer selector, with no-license selected" do
         login_as('archivist1')
-        # Set collection to fixed-license mode.
+        # Set collection to variable-license mode.
         coll = Hydrus::Collection.find(@hc_druid)
         coll.license_option = 'varies'
         coll.license = 'none'
