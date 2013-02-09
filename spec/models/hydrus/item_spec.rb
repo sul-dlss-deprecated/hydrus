@@ -974,11 +974,6 @@ describe Hydrus::Item do
       expect { @hi.close_version }.to raise_exception(@cannot_do_regex)
     end
 
-    it "should raise exception if item has not been opened for versioning" do
-      @hi.stub(:is_initial_version).and_return(false)
-      expect { @hi.close_version }.to raise_exception(Dor::Exception)
-    end
-
   end
 
   it "should indicate no files have been uploaded yet" do

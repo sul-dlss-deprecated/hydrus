@@ -1,8 +1,3 @@
-# TODO: remove this after it is included at the dor-services level.
-class Dor::AdminPolicyObject
-  include Dor::Processable
-end
-
 class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
 
   include Hydrus::ModelHelper
@@ -30,7 +25,6 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
     :label => 'Default Object Rights',
     :control_group => 'M')
 
-  # TODO: remove this.
   has_metadata(
     :name => "contentMetadata",
     :type => Dor::ContentMetadataDS,

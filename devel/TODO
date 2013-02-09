@@ -8,11 +8,6 @@ Implement delete()
 
 Deploy to production:
 
-  - Get latest dor-services, and then remove the monkey patch adding the
-    Processable concern to Hydrus APO.
-
-  - Security vulnerability: update to rack 1.4.5 (not 1.5).
-
   - HYDRUS-61 and HYDRUS-60. Remediate objects in prod that we care about:
     md919gh6774 and its APO and Items (but delete its stray Item kr880mc3948)
     See tickets for additional details regarding roles and files.
