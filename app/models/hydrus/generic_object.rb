@@ -13,7 +13,21 @@ class Hydrus::GenericObject < Dor::Item
   attr_accessor :files_were_changed
 
   validates :pid, :is_druid => true
-  validates :contact, :email_format => {:message => 'is not a valid email address'}, :if => :should_validate
+  validate :check_contact_email_format, :if => :should_validate
+
+  # We are using the validates_email_format_of gem to check email addresses.
+  # Normally, you can use this tool with a simple validates() call:
+  #
+  #   validates :contact, :email_format => {:message => '...'}
+  #
+  # However, that resulted in an extraneous :contact key in the errors.messages
+  # hash whenever a Collection had a validation error not involving the contact
+  # email. This approach solved the problem.
+  def check_contact_email_format
+    problems = ValidatesEmailFormatOf::validate_email_format(contact)
+    return if problems.nil?
+    errors.add(:contact, "is not a valid email address")
+  end
 
   has_metadata(
     :name => "rightsMetadata",
@@ -84,11 +98,10 @@ class Hydrus::GenericObject < Dor::Item
   def required_fields_completed?
     # Validate, and return true if all is OK.
     return true if validate!
-    # Get keys in the errors hash that have non-blank values.
-    # The presence of a key does not indicate an error; you have to check the value.
-    es = errors.reject { |k,v| v.blank? }.map { |k,v| k }.uniq
-    # If the intersection of those keys and the required fields
-    return (es & self.class::REQUIRED_FIELDS).size == 0
+    # If the intersection of the errors keys and the required fields
+    # is empty, the required fields are complete and the validation errors
+    # are coming from other problems.
+    return (errors.keys & self.class::REQUIRED_FIELDS).size == 0
   end
 
   # We override save() so we can control whether editing events are logged.

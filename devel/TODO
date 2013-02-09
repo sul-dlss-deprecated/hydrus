@@ -2,10 +2,6 @@
 Current
 ------------------
 
-When validations fail for collections, 'contact' is an extraneous key in the
-errors hash. Problem does not affect items. I can't find any difference between
-the validation of contact for Items and Collections.
-
 Implement delete() properly. Current method is insufficient. For now, I have
 commented out the delete link in the actions box. Components to delete: Fedora
 object; entry in hydrus-Solr (might happen automatically); hydrus-uploads-dir;
@@ -15,9 +11,6 @@ Deploy to production:
 
   - Get latest dor-services, and then remove the monkey patch adding the
     Processable concern to Hydrus APO.
-
-  - Deploy common-accessioning with the lastest dor-services. [Willy is doing
-    soon.]
 
   - Security vulnerability: update to rack 1.4.5 (not 1.5).
 
