@@ -20,9 +20,9 @@ class Hydrus::Item < Hydrus::GenericObject
   validates :files,  :at_least_one => true,  :if => :should_validate
   validate  :must_accept_terms_of_deposit,   :if => :should_validate
   validate  :must_review_release_settings,   :if => :should_validate
-  validate  :embargo_date_is_correct_format, :if => :should_validate
-  validate  :embargo_date_in_range,          :if => :should_validate
 
+  validate  :embargo_date_is_well_formed
+  validate  :embargo_date_in_range
   validate  :check_version_if_license_changed
   validate  :check_visibility_not_reduced
 
@@ -42,6 +42,11 @@ class Hydrus::Item < Hydrus::GenericObject
     v = visibility
     return if v == ['world']
     return if v == [prior_visibility]
+    # ap({
+    #   :visibility         => visibility,
+    #   :prior_visibility   => prior_visibility,
+    #   :embargo_date       => embargo_date,
+    # })
     msg = "cannot be reduced in subsequent versions"
     errors.add(:visibility, msg)
   end
@@ -135,12 +140,18 @@ class Hydrus::Item < Hydrus::GenericObject
   # A method to implement the steps steps associated with publishing an Item.
   # Called by publish_directly() and approve(), not by the controller.
   def do_publish
+    # Set publish times: latest and initial.
+    tm = HyTime.now_datetime
+    self.publish_time = tm
+    self.initial_publish_time = tm if is_initial_version()
+    # Set label and title.
     t = title()
-    self.publish_time = HyTime.now_datetime
     identityMetadata.objectLabel = t
     self.label = t
+    # Update object status and advance workflow.
     self.object_status = 'published'
     complete_workflow_step('approve')
+    # Version, events, and assembly pipeline.
     close_version() unless is_initial_version()
     events.add_event('hydrus', @current_user, "Item published: #{version_tag()}")
     start_common_assembly()
@@ -357,10 +368,21 @@ class Hydrus::Item < Hydrus::GenericObject
     events.add_event('hydrus', user, 'Terms of deposit accepted')
   end
 
-  # Return's true if the Item belongs to a collection that allows
-  # Items to set their own embargoes.
-  def embargoes_can_vary
-    return collection.embargo_option == 'varies'
+  # Returns true if the Item's embargo_date can be changed, based on the
+  # Collection setting, the version, and whether the Item has an embargo_date.
+  def embargo_can_be_changed
+    # Collection must allow it.
+    return false unless collection.embargo_option == 'varies'
+    # Behavior varies by version.
+    if is_initial_version
+      return true
+    else
+      # In subsequent versions, Item must
+      #   - have an existing embargo
+      #   - that has a max embargo date some time in the future
+      return false unless is_embargoed
+      return HyTime.now < end_of_embargo_range.to_datetime
+    end
   end
 
   # Return's true if the user can modify the Item visibility.
@@ -401,10 +423,10 @@ class Hydrus::Item < Hydrus::GenericObject
   def embarg_visib=(opts)
     e  = opts['embargoed']
     d  = opts['date']
-    v  = opts['visibility']
+    v  = opts['visibility'] || visibility.first
     dt = to_bool(e) ? d : ''
     self.embargo_date = dt unless e.nil?
-    self.visibility   = v  unless v.nil?
+    self.visibility   = v
   end
 
   # Returns true if the Item is embargoed.
@@ -414,18 +436,42 @@ class Hydrus::Item < Hydrus::GenericObject
 
   # Returns the embargo date from the embargoMetadata, not the rightsMetadata.
   # We don't use the latter because it is a convenience copy used by the PURL app.
+  # Switched to returning '' rather than nil, because we were getting extraneous
+  # editing events related to embargo_date (old value of '' and new value of nil).
   def embargo_date
-    return embargoMetadata ? embargoMetadata.release_date : nil
+    ed = embargoMetadata ? embargoMetadata.release_date : ''
+    ed = '' if ed.nil?
+    return ed
   end
 
   # Sets the embargo date in both embargoMetadata and rightsMetadata.
   # The new value is assumed to be expressed in the local time zone.
-  # If the new date is blank or nil, the embargoMetadata datastream is deleted.
-  # Do not call this directly from the UI. Instead, use embarg_visib=().
+  # If the new date is blank, nil, or not parsable as a datetime,
+  # the embargoMetadata datastream is deleted.
+  #
+  # Notes:
+  #   - We do not call this directly from the UI. Instead, the embarg_visib
+  #     setter is used (see its notes).
+  #   - If the argument is not parsable as a datetime, we set an instance
+  #     variable, which we use latter (during validations) to tell the
+  #     user that the embargo date was malformed. This awkwardness could
+  #     be avoided if we simplify the UI, removing the embargo radio button.
   def embargo_date= val
-    ed = HyTime.datetime(val, :from_localzone => true)
+    if HyTime.is_well_formed_datetime(val)
+      ed = HyTime.datetime(val, :from_localzone => true)
+    elsif val.blank?
+      ed = nil
+    else
+      @embargo_date_was_malformed = true
+      return
+    end
     if ed.blank?
+      # Note: we must removed the embargo date from embargoMetadata (even
+      # though we also delete the entire datastream), because the former
+      # happens right away (which we need) and the latter appears to
+      # happen later (maybe during save).
       rightsMetadata.remove_embargo_date
+      embargoMetadata.remove_embargo_date
       embargoMetadata.delete
     else
       self.rmd_embargo_release_date = ed
@@ -434,6 +480,20 @@ class Hydrus::Item < Hydrus::GenericObject
     end
   end
 
+  # Adds an embargo_date validation error if the prior call to
+  # the embargo_date setter determined that the date supplied by
+  # the user had in invalid format.
+  def embargo_date_is_well_formed
+    return unless @embargo_date_was_malformed
+    msg = "must be in #{HyTime::DATE_PICKER_FORMAT} format"
+    errors.add(:embargo_date, msg)
+  end
+
+  # Validates that the embargo date set by the user falls within the allowed range.
+  # Note: the embargo date picker does not offer the user the choice of setting a
+  # date in the past; nonetheless, it is possible for a valid object to have a
+  # past embargo date, because the nightly job that removes embargoMetadata
+  # once the date has passed might not have run yet.
   def embargo_date_in_range
     return unless is_embargoed
     b  = beginning_of_embargo_range.to_datetime
@@ -442,13 +502,19 @@ class Hydrus::Item < Hydrus::GenericObject
     unless (b <= dt and dt <= e)
       b = HyTime.date_display(b)
       e = HyTime.date_display(e)
-      errors.add(:embargo_date, "must be in the range #{b} - #{e}")
+      errors.add(:embargo_date, "must be in the range #{b} through #{e}")
     end
   end
 
-  # Returns the publish_time or now, as a datetime string.
+  # Returns a datetime string for the start of the embargo range.
+  # Has item ever been published?
+  #   - No:  returns now.
+  #   - Yes: returns time of initial publication.
+  # Note: If the item has been published this method can return
+  # dates in the past; for that reason, we do not use this method
+  # to definie the beginning date allowed by the embargo date picker.
   def beginning_of_embargo_range
-    return publish_time || HyTime.now_datetime
+    return initial_publish_time || HyTime.now_datetime
   end
 
   # Parses embargo_terms (eg, "2 years") into its number and time-unit parts.
@@ -458,16 +524,6 @@ class Hydrus::Item < Hydrus::GenericObject
     n, time_unit = collection.embargo_terms.split
     dt = beginning_of_embargo_range.to_datetime + n.to_i.send(time_unit)
     return HyTime.datetime(dt)
-  end
-
-  def embargo_date_is_correct_format
-    return unless is_embargoed
-    begin
-     embargo_date.to_datetime
-    rescue ArgumentError
-     msg = "must be a valid date (#{HyTime::DATE_PICKER_FORMAT})"
-     errors.add(:embargo_date, msg)
-    end
   end
 
   # Returns visibility as an array -- typically either ['world'] or ['stanford'].

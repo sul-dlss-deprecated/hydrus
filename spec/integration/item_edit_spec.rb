@@ -6,7 +6,7 @@ describe("Item edit", :type => :request, :integration => true) do
   before :each do
     @druid = 'druid:oo000oo0001'
     @hi    = Hydrus::Item.find @druid
-    @notice = "Your changes have been saved."
+    @ok_notice = "Your changes have been saved."
     @buttons = {
       :add                 => 'Add',
       :save                => 'Save',
@@ -55,7 +55,7 @@ describe("Item edit", :type => :request, :integration => true) do
     click_button(@buttons[:save])
     # Confirm new location and flash message.
     current_path.should == polymorphic_path(@hi)
-    page.should have_content(@notice)
+    page.should have_content(@ok_notice)
     # Confirm new content in fedora.
     @hi = Hydrus::Item.find @druid
     @hi.abstract.should == ni.abstract
@@ -81,7 +81,7 @@ describe("Item edit", :type => :request, :integration => true) do
     fill_in(field_np, :with => new_name)
     select(new_role, :from => field_rt)
     click_button(@buttons[:save])
-    page.should have_content(@notice)
+    page.should have_content(@ok_notice)
 
     current_path.should == polymorphic_path(@hi)
     visit polymorphic_path(@hi)
@@ -107,7 +107,7 @@ describe("Item edit", :type => :request, :integration => true) do
 
     fill_in(new_field, :with => person)
     click_button(@buttons[:save])
-    page.should have_content(@notice)
+    page.should have_content(@ok_notice)
 
     should_visit_edit_page(@hi)
 
@@ -139,7 +139,7 @@ describe("Item edit", :type => :request, :integration => true) do
     fill_in(field_link,  :with => new_link)
     fill_in(field_title, :with => new_title)
     click_button(@buttons[:save])
-    page.should have_content(@notice)
+    page.should have_content(@ok_notice)
 
     # Confirm new content in fedora.
     @hi = Hydrus::Item.find(@druid)
@@ -164,7 +164,7 @@ describe("Item edit", :type => :request, :integration => true) do
     fill_in(field_link,  :with => new_link)
     fill_in(field_title, :with => new_title)
     click_button(@buttons[:save])
-    page.should have_content(@notice)
+    page.should have_content(@ok_notice)
 
     # Confirm new content in fedora.
     @hi = Hydrus::Item.find(@druid)
@@ -201,7 +201,7 @@ describe("Item edit", :type => :request, :integration => true) do
     fill_in(css_new_url, :with => url)
     # Save.
     click_button(@buttons[:save])
-    page.should have_content(@notice)
+    page.should have_content(@ok_notice)
     # Make sure the descMetadata has the expected N of relatedItem nodes.
     # At one point we had a bug where the new title and url were added
     # to the first node rather than the new empty node.
@@ -245,7 +245,7 @@ describe("Item edit", :type => :request, :integration => true) do
     click_button(@buttons[:save])
     # Confirm new location and flash message.
     current_path.should == polymorphic_path(@hi)
-    page.should have_content(@notice)
+    page.should have_content(@ok_notice)
     # Confirm new content in fedora.
     @hi = Hydrus::Item.find(@druid)
     @hi.related_item_title.first.should == ni.ri_title
@@ -262,7 +262,7 @@ describe("Item edit", :type => :request, :integration => true) do
     find_field(citation_field).value.strip.should == orig_pref_cit
     fill_in citation_field, :with => new_pref_cit
     click_button(@buttons[:save])
-    page.should have_content(@notice)
+    page.should have_content(@ok_notice)
 
     # Confirm new content in fedora.
     @hi = Hydrus::Item.find(@druid)
@@ -293,7 +293,7 @@ describe("Item edit", :type => :request, :integration => true) do
     fill_in(new_citation, :with => new_citation_text)
 
     click_button(@buttons[:save])
-    page.should have_content(@notice)
+    page.should have_content(@ok_notice)
 
     should_visit_edit_page(@hi)
 
@@ -327,7 +327,7 @@ describe("Item edit", :type => :request, :integration => true) do
     choose varies_radio
     select(new_collection_license, :from => collection_licenses)
     click_button(@buttons[:save])
-    page.should have_content(@notice)
+    page.should have_content(@ok_notice)
 
     # Item edit page should offer ability to select a license.
     should_visit_edit_page(@hi)
@@ -342,7 +342,7 @@ describe("Item edit", :type => :request, :integration => true) do
     # Select a different license, and save.
     select(new_item_license, :from => item_licenses)
     click_button(@buttons[:save])
-    page.should have_content(@notice)
+    page.should have_content(@ok_notice)
 
     # Item has expected rights.
     @hi = Hydrus::Item.find @druid
@@ -361,7 +361,7 @@ describe("Item edit", :type => :request, :integration => true) do
     # Select no license, and save.
     select(no_license, :from => item_licenses)
     click_button(@buttons[:save])
-    page.should have_content(@notice)
+    page.should have_content(@ok_notice)
 
     # Back to the edit page.
     should_visit_edit_page(@hi)
@@ -375,7 +375,7 @@ describe("Item edit", :type => :request, :integration => true) do
     # Select original license, and save.
     select(new_collection_license, :from => item_licenses)
     click_button(@buttons[:save])
-    page.should have_content(@notice)
+    page.should have_content(@ok_notice)
 
     # Back to the edit page.
     should_visit_edit_page(@hi)
@@ -522,7 +522,7 @@ describe("Item edit", :type => :request, :integration => true) do
       # Save and confirm.
       click_button(@buttons[:save])
       current_path.should == polymorphic_path(@hi)
-      page.should have_content(@notice)
+      page.should have_content(@ok_notice)
 
       # Check embargoMD and rightsMD: after setting an embargo date.
       @hi = Hydrus::Item.find(@hi.pid)
@@ -539,7 +539,7 @@ describe("Item edit", :type => :request, :integration => true) do
       # Save and confirm.
       click_button(@buttons[:save])
       current_path.should == polymorphic_path(@hi)
-      page.should have_content(@notice)
+      page.should have_content(@ok_notice)
 
       # Check embargoMD and rightsMD: after removing embargo.
       @hi = Hydrus::Item.find(@hi.pid)
@@ -746,6 +746,129 @@ describe("Item edit", :type => :request, :integration => true) do
           page.should have_selector(@vis_sel_css)
         end
 
+      end
+
+    end
+
+    describe "embargos" do
+
+      before(:each) do
+        @vs = {
+          :yes        => 'hydrus_item_embarg_visib_embargoed_yes',
+          :no         => 'hydrus_item_embarg_visib_embargoed_no',
+          :date       => 'hydrus_item_embarg_visib_date',
+          :date_sel   => 'input#hydrus_item_embarg_visib_date',
+          :flash      => 'div.alert',
+          :err_range  => 'Embargo date must be in the range',
+          :err_format => 'Embargo date must be in yyyy-mm-dd',
+        }
+      end
+
+      it "initial version never embargoed: should not be able to add an embargo" do
+        # Open new version.
+        login_as('archivist1')
+        should_visit_view_page(@hi)
+        click_button(@buttons[:open_new_version])
+        # Edit page should not offer ability to add an embargo.
+        should_visit_edit_page(@hi)
+        page.should_not have_selector(@vs[:date])
+      end
+
+      it "should be able to modify existing embargo (with valid dates) or even remove it" do
+        # Confirm initial status.
+        @hi.is_embargoed.should == false
+        @hi.visibility.should == ['world']
+        @hi.collection.embargo_terms.should == '1 year'
+        # Add an embargo to the Item:
+        #   - The Collection allows a max 1-year embargo window.
+        #   - Set publish time to 8 months ago.
+        #   - Set embargo date to 2 months in future.
+        #   - So we still have some window to work with, in both directions.
+        pd  = HyTime.now - 8.month
+        ed  = HyTime.now + 2.month
+        pds = HyTime.datetime(pd)
+        @hi.embarg_visib = { 'embargoed' => 'yes', 'date' => HyTime.date(ed) }
+        @hi.publish_time = pds
+        @hi.initial_publish_time = pds
+        @hi.save.should == true
+        # Confirm changes.
+        @hi = Hydrus::Item.find(@hi.pid)
+        @hi.is_embargoed.should == true
+        @hi.visibility.should == ['world']
+        @hi.initial_publish_time.should == pds
+        # Open new version.
+        login_as('archivist1')
+        should_visit_view_page(@hi)
+        click_button(@buttons[:open_new_version])
+        # Edit page should offer ability to add an embargo.
+        should_visit_edit_page(@hi)
+        page.should have_selector(@vs[:date_sel])
+        # 1. Try to set an embargo too far into the future.
+        choose(@vs[:yes])
+        fill_in(@vs[:date], :with => HyTime.date(pd + 1.year + 2.day))
+        click_button(@buttons[:save])
+        find(@vs[:flash]).should have_content(@vs[:err_range])
+        # 2. Try to set an embargo with a malformed date.
+        choose(@vs[:yes])
+        fill_in(@vs[:date], :with => 'foobar')
+        click_button(@buttons[:save])
+        find(@vs[:flash]).should have_content(@vs[:err_format])
+        # 3a. Should be able to set a valid embargo date, farther into future.
+        choose(@vs[:yes])
+        fill_in(@vs[:date], :with => HyTime.date(ed + 1.month))
+        click_button(@buttons[:save])
+        find(@vs[:flash]).should have_content(@ok_notice)
+        # 3b. Should be able to set a valid embargo date, closer to today.
+        should_visit_edit_page(@hi)
+        choose(@vs[:yes])
+        fill_in(@vs[:date], :with => HyTime.date(ed - 1.month))
+        click_button(@buttons[:save])
+        find(@vs[:flash]).should have_content(@ok_notice)
+        # Confirm that we set the embargo, and did not alter visibility.
+        @hi = Hydrus::Item.find(@hi.pid)
+        @hi.is_embargoed.should == true
+        @hi.visibility.should == ['world']
+        # 4. Should be able to remove the embargo entirely.
+        should_visit_edit_page(@hi)
+        choose(@vs[:no])
+        click_button(@buttons[:save])
+        find(@vs[:flash]).should have_content(@ok_notice)
+        # Confirm changes.
+        @hi = Hydrus::Item.find(@hi.pid)
+        @hi.is_embargoed.should == false
+        @hi.visibility.should == ['world']
+      end
+
+      it "should not be able to modify embargo if the embargo window has passed" do
+        # Confirm initial status.
+        @hi.is_embargoed.should == false
+        @hi.visibility.should == ['world']
+        @hi.collection.embargo_terms.should == '1 year'
+        # Add an embargo to the Item:
+        #   - The Collection allows a max 1-year embargo window.
+        #   - Set publish time to a bit more than a year ago.
+        #   - Set embargo date to a few days ago.
+        #   - This simulates a item with an embargo window that has passed,
+        #     but the embargo-release robot has not yet removed the embargo.
+        pd  = HyTime.now - 1.year - 2.day
+        ed  = HyTime.now - 3.day
+        pds = HyTime.datetime(pd)
+        @hi.embarg_visib = { 'embargoed' => 'yes', 'date' => HyTime.date(ed) }
+        @hi.publish_time = pds
+        @hi.initial_publish_time = pds
+        @hi.save.should == true
+        # Confirm changes.
+        @hi = Hydrus::Item.find(@hi.pid)
+        @hi.is_embargoed.should == true
+        @hi.visibility.should == ['world']
+        @hi.initial_publish_time.should == pds
+        # Open new version.
+        login_as('archivist1')
+        should_visit_view_page(@hi)
+        click_button(@buttons[:open_new_version])
+        # Edit page should not offer ability to modify the embargo.
+        should_visit_edit_page(@hi)
+        page.should_not have_selector(@vs[:date_sel])
       end
 
     end

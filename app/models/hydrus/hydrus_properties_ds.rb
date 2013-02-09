@@ -20,6 +20,7 @@ class Hydrus::HydrusPropertiesDS < ActiveFedora::NokogiriDatastream
     t.object_status             :path => 'objectStatus', :index_as => [:facetable, :searchable]
     t.disapproval_reason        :path => 'disapprovalReason'
     t.publish_time              :path => 'publishTime'
+    t.initial_publish_time      :path => 'initialPublishTime'
     t.submit_for_approval_time  :path => 'submitForApprovalTime'
     t.last_modify_time          :path => 'lastModifyTime'
     t.version_started_time      :path => 'versionStartedTime'

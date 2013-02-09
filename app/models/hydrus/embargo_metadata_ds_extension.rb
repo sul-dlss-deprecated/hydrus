@@ -16,7 +16,7 @@ module Dor
     end
 
     def release_date=(rd)
-      update_values([:release_date] => HyTime.datetime(rd))
+      update_values([:release_date] => rd)
       content_will_change!
     end
 

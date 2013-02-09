@@ -333,36 +333,53 @@ describe Hydrus::Item do
         @hi.embargo_date.should == exp
       end
 
-      it "setter should store value in UTC in both embargoMD and rightsMD" do
-        rd = '2012-08-30'
-        rd_dt = HyTime.datetime("#{rd}T08:00:00Z")
-        @hi.embargo_date = rd
-        @hi.embargo_date.should == rd_dt
-        @hi.rmd_embargo_release_date.should == rd_dt
-        @hi.embargoMetadata.status.should == 'embargoed'
+      describe "setter: with valid date" do
+
+        it "store date in UTC in both embargoMD and rightsMD" do
+          rd = '2012-08-30'
+          rd_dt = HyTime.datetime("#{rd}T08:00:00Z")
+          @hi.embargo_date = rd
+          @hi.embargo_date.should == rd_dt
+          @hi.rmd_embargo_release_date.should == rd_dt
+          @hi.embargoMetadata.status.should == 'embargoed'
+          @hi.instance_variable_get('@embargo_date_was_malformed').should == nil
+        end
+
       end
 
-      it "setter should delete embargoMetadata datastream if value is blank" do
-        @hi.embargoMetadata.should_receive(:delete)
-        dt = rand() < 0.5 ? '' : nil
-        @hi.embargo_date = dt
-        @hi.rightsMetadata.ng_xml.at_xpath("//embargoReleaseDate").should == nil
+      describe "setter: with invalid date" do
+
+        it "blank or nil: delete embargoMetadata; do not set instance var" do
+          @hi.embargoMetadata.should_receive(:delete)
+          dt = rand() < 0.5 ? '' : nil
+          @hi.embargo_date = dt
+          @hi.rightsMetadata.ng_xml.at_xpath("//embargoReleaseDate").should == nil
+          @hi.instance_variable_get('@embargo_date_was_malformed').should == nil
+        end
+
+        it "malformed: do not delete embargoMetadata; set instance var" do
+          @hi.embargoMetadata.should_not_receive(:delete)
+          @hi.embargo_date = 'blah'
+          @hi.rightsMetadata.ng_xml.at_xpath("//embargoReleaseDate").should == nil
+          @hi.instance_variable_get('@embargo_date_was_malformed').should == true
+        end
+
       end
 
     end
 
     describe "beginning_of_embargo_range()" do
 
-      it "publish_time missing: should return now_datetime()" do
+      it "initial_publish_time missing: should return now_datetime()" do
         exp = 'foo bar'
         HyTime.stub(:now_datetime).and_return(exp)
-        @hi.stub(:publish_time).and_return(nil)
+        @hi.stub(:initial_publish_time).and_return(nil)
         @hi.beginning_of_embargo_range.should == exp
       end
 
-      it "publish_time present: should return it" do
+      it "initial_publish_time present: should return it" do
         exp = 'foo bar blah'
-        @hi.stub(:publish_time).and_return(exp)
+        @hi.stub(:initial_publish_time).and_return(exp)
         @hi.beginning_of_embargo_range.should == exp
       end
 
@@ -381,6 +398,64 @@ describe Hydrus::Item do
         tests.each do |emb, exp|
           @hi.stub_chain(:collection, :embargo_terms).and_return(emb)
           @hi.end_of_embargo_range.should == exp
+        end
+      end
+
+    end
+
+    describe "embargo_can_be_changed()" do
+
+      # def embargo_can_be_changed
+      #   # Collection must allow it.
+      #   return false unless collection.embargo_option == 'varies'
+      #   # Behavior varies by version.
+      #   if is_initial_version
+      #     return true
+      #   else
+      #     # In subsequent versions, Item must
+      #     #   - have an existing embargo
+      #     #   - that has a max embargo date some time in the future
+      #     return false unless is_embargoed
+      #     return HyTime.now < end_of_embargo_range.to_datetime
+      #   end
+      # end
+
+      it "Collection does not allow embargo variability: should return false" do
+        @hi.should_not_receive(:is_initial_version)
+        %w(none fixed).each do |opt|
+          @hc.stub(:embargo_option).and_return(opt)
+          @hi.embargo_can_be_changed.should == false
+        end
+      end
+
+      describe "Collection allows embargo variability" do
+
+        before(:each) do
+          @hc.stub(:embargo_option).and_return('varies')
+        end
+
+        it "initial version: always true" do
+          @hi.stub(:is_initial_version).and_return(true)
+          @hi.should_not_receive(:is_embargoed)
+          @hi.embargo_can_be_changed.should == true
+        end
+
+        it "subsequent versions: not embargoed: always false" do
+          @hi.stub(:is_initial_version).and_return(false)
+          @hi.stub(:is_embargoed).and_return(false)
+          @hi.should_not_receive(:end_of_embargo_range)
+          @hi.embargo_can_be_changed.should == false
+        end
+
+        it "subsequent versions: embargoed: true if end_of_embargo_range is in future" do
+          @hi.stub(:is_initial_version).and_return(false)
+          @hi.stub(:is_embargoed).and_return(true)
+          tpast = HyTime.datetime(HyTime.now - 2.day)
+          tfut  = HyTime.datetime(HyTime.now + 2.day)
+          @hi.stub(:end_of_embargo_range).and_return(tpast)
+          @hi.embargo_can_be_changed.should == false
+          @hi.stub(:end_of_embargo_range).and_return(tfut)
+          @hi.embargo_can_be_changed.should == true
         end
 
       end
@@ -462,7 +537,7 @@ describe Hydrus::Item do
         edt = HyTime.datetime(e)
         @hi.stub(:beginning_of_embargo_range).and_return(bdt)
         @hi.stub(:end_of_embargo_range).and_return(edt)
-        exp_msg = "must be in the range #{b[0..9]} - #{e[0..9]}"
+        exp_msg = "must be in the range #{b[0..9]} through #{e[0..9]}"
         # Some embargo dates to validate.
         dts = {
           '2012-01-31T08:00:00Z' => false,
@@ -475,6 +550,7 @@ describe Hydrus::Item do
         @hi.stub(:is_embargoed).and_return(true)
         k = :embargo_date
         dts.each do |dt, is_ok|
+          @hi.errors.should_not have_key(k)
           @hi.stub(k).and_return(HyTime.datetime(dt))
           @hi.embargo_date_in_range
           if is_ok
@@ -784,11 +860,13 @@ describe Hydrus::Item do
       # Before-assertions.
       @hi.is_initial_version.should == true
       @hi.publish_time.should be_blank
+      @hi.initial_publish_time.should be_blank
       @hi.get_hydrus_events.size.should == 0
       # Run it, and make after-assertions.
       @hi.do_publish
       @hi.label.should == exp
       @hi.publish_time.should_not be_blank
+      @hi.initial_publish_time.should_not be_blank
       @hi.object_status.should == 'published'
       @hi.get_hydrus_events.first.text.should =~ /\AItem published: v\d/
     end
@@ -810,7 +888,7 @@ describe Hydrus::Item do
       expect { @hi.submit_for_approval }.to raise_exception(@cannot_do_regex)
     end
 
-    it "item is submittable: should set publish_time and status, and call expected methods" do
+    it "item is submittable: should set status and call expected methods" do
       @hi.stub(:is_submittable_for_approval).and_return(true)
       @hi.should_receive(:complete_workflow_step).with('submit')
       @hi.submit_for_approval_time.should be_blank
@@ -958,43 +1036,17 @@ describe Hydrus::Item do
     @hi.terms_of_deposit_accepted?.should == true
   end
 
-  describe "embargo_date_is_correct_format()" do
+  describe "embargo_date_is_well_formed()" do
 
-    it "should treat both datepicker and back-end datetimes as valid" do
+    it "should be driven by @embargo_date_was_malformed instance variable" do
       k = :embargo_date
-      @hi.stub(:is_embargoed).and_return(true)
-      valid_dates = [
-        '2012-12-31',           # Format from datepicker.
-        '2012-12-31T08:00:00Z', # Format stored in XML.
-      ]
-      valid_dates.each do |dt|
-        @hi.stub(k).and_return(dt)
-        @hi.embargo_date_is_correct_format
-        @hi.errors.messages.should_not include(k)
-      end
-    end
-
-    it "should add validation errors if the date has an invalid format" do
-      k = :embargo_date
-      @hi.stub(:is_embargoed).and_return(true)
-      invalid_dates = [
-        '12-31-2012',  # Don't allow mm-dd-yyyy.
-        'blah!!',
-      ]
-      invalid_dates.each do |dt|
-        @hi.stub(k).and_return(dt)
-        @hi.embargo_date_is_correct_format
-        @hi.errors.messages.should include(k)
+      [true, false].each do |exp|
+        @hi.errors.messages.keys.include?(k).should == false
+        @hi.instance_variable_set('@embargo_date_was_malformed', exp)
+        @hi.embargo_date_is_well_formed
+        @hi.errors.messages.keys.include?(k).should == exp
         @hi.errors.clear
       end
-    end
-
-    it "should not perform validation unless object is under embargo" do
-      k = :embargo_date
-      @hi.stub(:is_embargoed).and_return(false)
-      @hi.stub(k).and_return('blah!!!')
-      @hi.embargo_date_is_correct_format
-      @hi.errors.messages.should_not include(k)
     end
 
   end

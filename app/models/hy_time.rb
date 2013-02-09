@@ -46,13 +46,26 @@ module HyTime
   end
 
   # Takes a String or DateTime-ish object, along with an options hash.
-  # Return a string in the requested format (see DT_FORMATS).
-  # If the requested format is a display format, the time is
-  # converted to LOCAL_TIMEZONE. If the :from_localzone option is
-  # true, the code assume the provided datetime (most likely a String)
-  # is expressed in the local timezone.
+  # Returns a string in the requested format and time zone. See DT_FORMATS for
+  # the list of formats. Optionally, returns a DateTime rather than string.
+  #
   # Note that this method is not likely to be called directly; rather
   # it does the work of various generated methods, described above.
+  #
+  # Format:
+  #
+  #   - The :format option specifies the requested format, defaulting
+  #     to datetime. This option is baked into the generated methods.
+  #   - Use the :parse option to supply a parsing format string for strptime.
+  #     Otherwise, the method relies on to_datetime to do the parsing work.
+  #
+  # Timezone:
+  #
+  #   - If the requested format is a display format, the time is
+  #     converted to LOCAL_TIMEZONE.
+  #   - If the :from_localzone option is true, the methods assumes
+  #     that the provided datetime (most likely a String) is expressed
+  #     in the local timezone.
   def self.formatted(dt, opts = {})
     # If given nil or empty string, just return empty string.
     return '' if dt.blank?
@@ -90,6 +103,17 @@ module HyTime
     # HyTime.now_FMT
     define_singleton_method("now_#{f}") do
       return formatted(now, :format => f)
+    end
+  end
+
+  # Takes a string. Returns true if it can be parsed as a datetime.
+  def self.is_well_formed_datetime(val)
+    return false unless val.class == String
+    begin
+      return false if val.to_datetime.nil?
+      return true
+    rescue ArgumentError
+      return false
     end
   end
 

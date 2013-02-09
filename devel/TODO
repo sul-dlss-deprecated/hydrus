@@ -2,20 +2,6 @@
 Current
 ------------------
 
-HYDRUS-54. Implement restrictions governing what a user is allowed to change in
-subsequent versions.
-
-  - Embargo date can be removed, reduced, or even increased, but it cannot be
-    increased to beyond the date of P + D, where P is date of initial
-    publication, and D is the max delta (eg, 2 years) set at the collection
-    level.
-
-  g c -m 'HYDRUS-54: subsequent-version restrictions: '
-
-------------------
-On-deck -- top priority
-------------------
-
 When validations fail for collections, 'contact' is an extraneous key in the
 errors hash. Problem does not affect items. I can't find any difference between
 the validation of contact for Items and Collections.
@@ -25,18 +11,28 @@ commented out the delete link in the actions box. Components to delete: Fedora
 object; entry in hydrus-Solr (might happen automatically); hydrus-uploads-dir;
 hydrus-DB.
 
-HYDRUS-61 and HYDRUS-60. Remediate objects in prod that we care about:
-md919gh6774 and its APO and Items (but delete its stray Item kr880mc3948) See
-tickets for additional details regarding roles and files.
+Deploy to production:
 
-Remediate the ur-APO and run in through pipeline, including SDR:
-druid:zw306xn5593. The current object lacks workflows datastream.
+  - Get latest dor-services, and then remove the monkey patch adding the
+    Processable concern to Hydrus APO.
 
-Deploy to prodcution. Must deploy common-accessioning with the lastest
-dor-services.
+  - Deploy common-accessioning with the lastest dor-services. [Willy is doing
+    soon.]
 
-Remove Dor::Processable from APOs after Jon include the concern at the
-dor-services level. [Expected soon.]
+  - Security vulnerability: update to rack 1.4.5 (not 1.5).
+
+  - HYDRUS-61 and HYDRUS-60. Remediate objects in prod that we care about:
+    md919gh6774 and its APO and Items (but delete its stray Item kr880mc3948)
+    See tickets for additional details regarding roles and files.
+
+  - Remediate the ur-APO and run in through pipeline, including SDR:
+    druid:zw306xn5593. The current object lacks workflows datastream.
+
+  - Instantiate an Item with pid of tz124hw0000. What collection?
+
+------------------
+On-deck -- top priority
+------------------
 
 HYDRUS-10. Support user's ability to hide specific files, which has the effect
 of setting publish and shelve to false in the content metadata. Offer a "Hide"
@@ -57,16 +53,29 @@ Hydrus has recursive symlinking in its uploads directory. For example: see
 uploads/nw/312/yv/4331/nw312yv4331. Appears to occur for items with subsequent
 versions. Check path_to_object() in findable.rb in assembly for possible bugs.
 
+Move definition of users with app-wide powers to config files, and allow them
+to vary by environment.
+
+Simplify Item edit UI by removing the embargo radio button. "This item will be
+released for discovery and download immediately, on this date _____". The radio
+button adds nothing, makes the instructions harder to read, and causes a minor
+validation problem that is not easy to solve: currently the app does not
+protect the user from clicking the embargo-yes radio choice but forgetting to
+enter a date.
+
+File a SAR ticket to bump up the power of hydrus-test. First determine whether
+the problem is memory or processors.
+
 HYDRUS-49. XML changes. [Hannah will supply needed changes.]
 
 HYDRUS-55. Build the background versioner.
 
 HYDRUS-56. Refine the "published on" date.
 
-Move definition of administrators and collection_creators to config files, and
-allow them to vary by environment.
+HYDRUS-68. Modify message text in the collection open/close email. More
+generally, check whether the email code could use some DRYing up.
 
-File a SAR ticket to bump up the power of hydrus-test.
+Should the visibility() getter should return a string, rather than an array?
 
 Use and reproduction customization. (1) Collection edit. Show Stanford
 default. Offer textbox for additional text. Then offer radio button where

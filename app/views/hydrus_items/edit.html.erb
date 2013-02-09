@@ -146,7 +146,7 @@
   <!-- Embargo -->
   <div class="row embargo field-group">
     <div class="span9 sub-section">
-      <% if @fobj.embargoes_can_vary %>
+      <% if @fobj.embargo_can_be_changed %>
         This item will be released for discovery and download
         <div data-behavior="radio-disable-group" class="embargo-section">
           <%= radio_button_tag 'hydrus_item[embarg_visib][embargoed]',
@@ -166,7 +166,7 @@
                 HyTime.date_display(@fobj.embargo_date),
                 :"data-behavior"    => "datepicker",
                 :"data-date-format" => HyTime::DATE_PICKER_FORMAT,
-                :"data-start-date"  => HyTime.date_display(@fobj.beginning_of_embargo_range),
+                :"data-start-date"  => HyTime.date_display(HyTime.now_datetime),
                 :"data-end-date"    => HyTime.date_display(@fobj.end_of_embargo_range),
                 :class              => "datepicker") %>
         </div>

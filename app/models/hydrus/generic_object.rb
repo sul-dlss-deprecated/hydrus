@@ -45,6 +45,7 @@ class Hydrus::GenericObject < Dor::Item
       [:disapproval_reason,       true   ],
       [:object_status,            true   ],
       [:publish_time,             true   ],
+      [:initial_publish_time,     true   ],
       [:submit_for_approval_time, true   ],
       [:last_modify_time,         true   ],
       [:item_type,                true   ],
@@ -87,8 +88,6 @@ class Hydrus::GenericObject < Dor::Item
     # The presence of a key does not indicate an error; you have to check the value.
     es = errors.reject { |k,v| v.blank? }.map { |k,v| k }.uniq
     # If the intersection of those keys and the required fields
-    # is empty, the required fields are complete and the validation errors
-    # are coming from other problems.
     return (es & self.class::REQUIRED_FIELDS).size == 0
   end
 
