@@ -70,13 +70,6 @@ class Hydrus::GenericObject < Dor::Item
     ],
   )
 
-  # Delete the file upload directory and then call the super method.
-  def delete
-    parent_object_directory=File.join(self.base_file_directory,'..')
-    FileUtils.rm_rf(parent_object_directory) if File.directory?(parent_object_directory)
-    super
-  end
-
   def is_item?
     self.class == Hydrus::Item
   end

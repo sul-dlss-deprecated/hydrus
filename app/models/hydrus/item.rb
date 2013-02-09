@@ -675,6 +675,15 @@ class Hydrus::Item < Hydrus::GenericObject
            prev.minor != curr.minor ? :minor : :admin
   end
 
+  # Deletes an Item and its uploaded files.
+  def delete
+    cannot_do(:delete) unless is_destroyable
+    d = File.expand_path(File.join(self.base_file_directory, '..'))
+    FileUtils.rm_rf(d)            # Uploaded files.
+    files.each { |f| f.destroy }  # The corresponding DB entries.
+    super                         # Fedora object and SOLR entries.
+  end
+
 end
 
 class Hydrus::ItemWithoutCollectionError < StandardError

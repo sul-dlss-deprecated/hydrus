@@ -526,4 +526,11 @@ class Hydrus::Collection < Hydrus::GenericObject
     return item_counts.map { |s, n| [n, Hydrus::GenericObject.status_label(:item, s)] }
   end
 
+  # Deletes a Collection and its APO from Fedora and SOLR.
+  def delete
+    cannot_do(:delete) unless is_destroyable
+    apo.delete
+    super
+  end
+
 end
