@@ -1,5 +1,12 @@
 = Hydrus change log
 
+== 2013.02.11a
+
+* HYDRUS-54: implemented editing restrictions on subsequent versions.
+* Reimplemented a full-service version of delete().
+* Upgraded to current dor-services stack.
+* Deployed to hydrus-test.
+
 == 2013.02.05a
 
 * Added admin uses and global viewers.
