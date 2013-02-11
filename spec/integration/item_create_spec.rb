@@ -567,4 +567,54 @@ describe("Item create", :type => :request, :integration => true) do
 
   end
 
+  describe "delete()" do
+
+    it "should raise error if object is not destroyable" do
+      hi = Hydrus::Item.find('druid:oo000oo0001')
+      hi.is_destroyable.should == false
+      expect { hi.delete }.to raise_error(RuntimeError)
+    end
+
+    it "should fully delete item: from fedora, solr, workflows, DB, and files" do
+      # Setup.
+      hyi = Hydrus::Item
+      hyc = Hydrus::Collection
+      afe = ActiveFedora::ObjectNotFoundError
+      wfs = Dor::WorkflowService
+      hwf = Dor::Config.hydrus.app_workflow.to_s
+      # Create a new item.
+      hi  = create_new_item()
+      pid = hi.pid
+      dir = hi.content_directory
+      # Confirm existence of object:
+      #   - in Fedora
+      #   - in SOLR
+      #   - in workflows
+      hi.class.should == hyi
+      hyc.all_hydrus_objects(hyi).should include(pid)
+      wfs.get_workflows(pid).should == [hwf]
+      #   - with an uploaded file
+      #   - and a corresponding entry in DB table
+      Dir.glob(dir + "/*").size.should == 1
+      Hydrus::ObjectFile.find_all_by_pid(pid).size.should == 1
+      # Delete the Item.
+      hi.is_destroyable.should == true
+      click_link "Discard this item"
+      click_button "Discard"
+      hi = nil
+      # Confirm that object was deleted:
+      #   - from Fedora
+      #   - from SOLR
+      #   - from workflows
+      expect { hyi.find(pid) }.to raise_error(afe)
+      hyc.all_hydrus_objects(hyi).should_not include(pid)
+      wfs.get_workflows(pid).should == []
+      #   - with no upload directory
+      #   - and no DB entries
+      File.directory?(dir).should == false
+      Hydrus::ObjectFile.find_all_by_pid(pid).size.should == 0
+    end
+
+  end
+
 end

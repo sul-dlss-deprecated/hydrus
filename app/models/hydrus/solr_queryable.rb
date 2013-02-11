@@ -73,10 +73,16 @@ module Hydrus::SolrQueryable
 
   # Returns a hash of SOLR query parameters.
   # The query: get all Hydrus Collections.
-  def squery_all_hydrus_collections
+  def squery_all_hydrus_objects(models)
     h = HSQ.default_query_params()
-    HSQ.add_model_filter(h, 'Hydrus_Collection')
+    models.each { |m| HSQ.add_model_filter(h, m) }
     return h
+  end
+
+  # Returns a hash of SOLR query parameters.
+  # The query: get all Hydrus Collections.
+  def squery_all_hydrus_collections
+    return squery_all_hydrus_objects(['Hydrus_Collection'])
   end
 
   # Takes a string -- a user's SUNET ID.
@@ -114,6 +120,20 @@ module Hydrus::SolrQueryable
     }
     HSQ.add_model_filter(h, 'Hydrus_Item')
     return h
+  end
+
+  # Returns an array druids for all objects belonging to the
+  # requested models -- by default Hydrus APOs, Collections, and Items.
+  def all_hydrus_objects(*models)
+    models ||= [
+      Hydrus::AdminPolicyObject,
+      Hydrus::Collection,
+      Hydrus::Item,
+    ]
+    models = models.map { |m| m.to_s.gsub(/::/, '_') }
+    h           = squery_all_hydrus_objects(models)
+    resp, sdocs = issue_solr_query(h)
+    return get_druids_from_response(resp)
   end
 
 end

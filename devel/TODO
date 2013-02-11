@@ -2,10 +2,6 @@
 Current
 ------------------
 
-Implement delete()
-
-  - integration tests
-
 Deploy to production:
 
   - HYDRUS-61 and HYDRUS-60. Remediate objects in prod that we care about:
@@ -102,6 +98,9 @@ Shorten robot sleep time.
 --------
 Other: blocked, requires discussion, uncertain need, etc.
 --------
+
+Remove title-refreshing from open() and do_publish(). Instead, write a
+full-service title=() setter in generic_object.rb.
 
 Refactor license_groups() and related methods to be simpler and less
 duplicative at the model level.

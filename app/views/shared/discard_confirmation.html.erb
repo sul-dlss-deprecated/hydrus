@@ -1,3 +1,4 @@
-<p>Are you sure you want to discard the <%=@fobj.object_type%> '<%=title_text(@fobj)%>'?  This action cannot be undone.</p>
-<%= button_to 'Cancel', @fobj, :method => :get %>
+<p><%= delete_confirm_msg(@fobj) %></p>
+
+<%= button_to 'Cancel',  @fobj, :method => :get %>
 <%= button_to 'Discard', @fobj, :method => :delete %>

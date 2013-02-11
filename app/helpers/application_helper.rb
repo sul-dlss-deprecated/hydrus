@@ -89,6 +89,11 @@ module ApplicationHelper
     obj.title.blank? ? "Untitled" : obj.title
   end
 
+  def delete_confirm_msg(obj)
+    return "Are you sure you want to discard this #{obj.object_type}? " +
+           "This action cannot be undone."
+  end
+
   # a helper to create links to items that may or may not have titles yet
   def title_link(obj)
     return link_to(title_text(obj), polymorphic_path(obj))

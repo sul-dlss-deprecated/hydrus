@@ -206,4 +206,53 @@ describe("Collection create", :type => :request, :integration => true) do
     es[0...exp.size].zip(exp).each { |e, exp| e.text.should =~ exp  }
   end
 
+  describe "delete()" do
+
+    it "should raise error if object is not destroyable" do
+      hc = Hydrus::Collection.find('druid:oo000oo0004')
+      hc.is_destroyable.should == false
+      expect { hc.delete }.to raise_error(RuntimeError)
+    end
+
+    it "should fully delete collection and APO: from fedora, solr, workflows" do
+      # Setup.
+      hyc = Hydrus::Collection
+      hya = Hydrus::AdminPolicyObject
+      afe = ActiveFedora::ObjectNotFoundError
+      wfs = Dor::WorkflowService
+      hwf = Dor::Config.hydrus.app_workflow.to_s
+      # Create a new collection.
+      hc   = create_new_collection()
+      apo  = hc.apo
+      apid = hc.apo.pid
+      cpid = hc.pid
+      # Confirm existence of objects:
+      #   - in Fedora
+      apo.class.should == hya
+      hc.class.should  == hyc
+      #   - in SOLR
+      hyc.all_hydrus_objects(hya).should include(apid)
+      hyc.all_hydrus_objects(hyc).should include(cpid)
+      #   - in workflows
+      wfs.get_workflows(apid).should == [hwf]
+      wfs.get_workflows(cpid).should == [hwf]
+      # Delete the collection and its APO.
+      hc.is_destroyable.should == true
+      click_link "Discard this collection"
+      click_button "Discard"
+      hc = nil
+      # Confirm that objects were deleted:
+      #   - from Fedora
+      expect { hya.find(apid) }.to raise_error(afe)
+      expect { hyc.find(cpid) }.to raise_error(afe)
+      #   - from SOLR
+      hyc.all_hydrus_objects(hya).should_not include(apid)
+      hyc.all_hydrus_objects(hyc).should_not include(cpid)
+      #   - from workflows
+      wfs.get_workflows(apid).should == []
+      wfs.get_workflows(cpid).should == []
+    end
+
+  end
+
 end

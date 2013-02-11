@@ -2,6 +2,10 @@
 
 module Hydrus::Processable
 
+  WFS  = Dor::WorkflowService
+  HWF  = Dor::Config.hydrus.app_workflow  # 'hydrusAssemblyWF'
+  REPO = 'dor'
+
   # Takes the name of a step in the Hydrus workflow.
   # Calls the workflow service to mark that step as completed.
   def complete_workflow_step(step)
@@ -18,9 +22,13 @@ module Hydrus::Processable
   # Takes the name of a step in the Hydrus workflow.
   # Calls the workflow service to mark that step as completed.
   def update_workflow_status(step, status)
-    awf = Dor::Config.hydrus.app_workflow
-    Dor::WorkflowService.update_workflow_status('dor', pid, awf, step, status)
+    WFS.update_workflow_status(REPO, pid, HWF, step, status)
     workflows_content_is_stale
+  end
+
+  # Deletes an objects hydrus workflow.
+  def delete_hydrus_workflow
+    WFS.delete_workflow(REPO, pid, HWF)
   end
 
   # Resets two instance variables of the workflow datastream. By resorting to
@@ -48,7 +56,7 @@ module Hydrus::Processable
   def start_assembly_wf
     return unless should_start_assembly_wf
     xml = Dor::Config.hydrus.assembly_wf_xml
-    Dor::WorkflowService.create_workflow('dor', pid, 'assemblyWF', xml)
+    WFS.create_workflow(REPO, pid, 'assemblyWF', xml)
   end
 
   # Returns value of Dor::Config.hydrus.start_assembly_wf.
@@ -77,19 +85,17 @@ module Hydrus::Processable
     #   assemblyWF  start     pipelined
     #   accessionWF start     submitted
     #   accessionWF end       accessioned
-
-    wfs = Dor::WorkflowService
-    p   = pid()
+    p = pid()
 
     # Never accessioned.
     # This query check both active and archived rows.
-    return false unless wfs.get_lifecycle('dor', p, 'accessioned')
+    return false unless WFS.get_lifecycle(REPO, p, 'accessioned')
 
     # Actively in the middle of assemblyWF or accessionWF.
     # We don't want to treat an object as fully accessioned until
     # the robots are finished and the archiver has run.
-    return false if wfs.get_active_lifecycle('dor', p, 'pipelined')
-    return false if wfs.get_active_lifecycle('dor', p, 'submitted')
+    return false if WFS.get_active_lifecycle(REPO, p, 'pipelined')
+    return false if WFS.get_active_lifecycle(REPO, p, 'submitted')
 
     # Accessioned and archived.
     return true

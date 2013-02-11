@@ -31,6 +31,10 @@ module Hydrus::Contentable
       :include_root_xml    => false)
   end
 
+  def parent_directory
+    return File.expand_path(File.join(base_file_directory, '..'))
+  end
+
   def base_file_directory
     f = File.join(Rails.root, "public", Hydrus::Application.config.file_upload_path)
     DruidTools::Druid.new(pid, f).path
