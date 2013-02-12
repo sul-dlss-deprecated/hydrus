@@ -1,5 +1,11 @@
 = Hydrus change log
 
+== 2013.02.12a
+
+* HYDRUS-60 and 61: remediation of objects in production environment.
+* Deployed to hydrus-test.
+* Deployed to hydrus-prod.
+
 == 2013.02.11a
 
 * HYDRUS-54: implemented editing restrictions on subsequent versions.
