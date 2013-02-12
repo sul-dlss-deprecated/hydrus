@@ -4,18 +4,47 @@ Current
 
 Deploy to production:
 
-  - HYDRUS-61 and HYDRUS-60. Remediate objects in prod that we care about:
-    md919gh6774 and its APO and Items (but delete its stray Item kr880mc3948)
-    See tickets for additional details regarding roles and files.
+  - Deploy latest code to dortest and production.
 
-  - Remediate the ur-APO and run in through pipeline, including SDR:
-    druid:zw306xn5593. The current object lacks workflows datastream.
+  - Run ur-APOs through pipeline in dortest and production
+        - start_assembly:       dortest=done      prod=waiting
+        - also run through SDR: dortest=waiting   prod=waiting
 
-  - Instantiate an Item with pid of tz124hw0000. What collection?
+        bundle exec rails c production
+        apo = Hydrus::AdminPolicyObject.find 'druid:zw306xn5593'
+        apo.is_assemblable
+        apo.start_common_assembly
+
+  - Collection: Open new version with these edits:
+        Contact: hfrost 
+        License: varies ; no license
+        Owners: hfrost 
+        Managers: amyhodge, ronbo, mmarosti 
+        Reviewers : n/a 
+        Depositors : n/a 
+        Viewers: mchris, sweetkind, rns, makeller 
+
+  - Item: Open new version with these edits:
+        upload files (get them from PURL)
+
+  - HYDRUS-61 and HYDRUS-60. Close tickets.
+
+  - pids
+      druid:dd984qc3502   APO
+      druid:md919gh6774   Collection
+      druid:wp335yr5649   Item
+
+Instantiate an Item with pid of tz124hw0000. What collection?
+
+Clear out cruft: all objects in -test environment, and stray objects in -prod.
+See notes on dor-services nuke().
 
 ------------------
 On-deck -- top priority
 ------------------
+
+HYDRUS-69. Collection view and edit pages. Change wording describing the
+approval process.
 
 HYDRUS-10. Support user's ability to hide specific files, which has the effect
 of setting publish and shelve to false in the content metadata. Offer a "Hide"
@@ -28,9 +57,6 @@ HYDRUS-51. Add support for "corporate" and "conference" Contributor name types.
 ------------------
 On-deck -- later
 ------------------
-
-Clear out cruft: all objects in -test environment, and stray Item pkr880mc3948
-in -prod. See notes on dor-services nuke().
 
 Hydrus has recursive symlinking in its uploads directory. For example: see
 uploads/nw/312/yv/4331/nw312yv4331. Appears to occur for items with subsequent
