@@ -147,4 +147,9 @@ module ApplicationHelper
     return %Q("#{val}")
   end
 
+  def sdr_mail_to
+    mt = mail_to("sdr-contact@lists.stanford.edu", "sdr-contact@lists.stanford.edu")
+    return mt.html_safe
+  end
+
 end

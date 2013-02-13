@@ -1,4 +1,7 @@
 class HydrusMailer < ActionMailer::Base
+
+  helper ApplicationHelper
+
   default from: "no-reply@hydrus.stanford.edu"
 
   def invitation(opts={})

@@ -2,9 +2,6 @@
 Current
 ------------------
 
-HYDRUS-68. Modify message text in the collection open/close email. More
-generally, check whether the email code could use some DRYing up.
-
 Deploy.
 
 Instantiate an Item with pid of tz124hw0000, in -prod under the main

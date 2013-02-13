@@ -4,8 +4,19 @@
     <meta charset="utf-8" />
   </head>
   <body>
-    <p><%= @returned_by %> has returned the <%=@fobj.object_type%> <%= @fobj.title %> in the Stanford Digital Repository.  The reason given was <%=@fobj.disapproval_reason%>.</p>
-    <p>To edit and resubmit this <%=@fobj.object_type%>, follow this link <%= link_to(@item_url,@item_url) %>.</p>
-    <p>If you have any questions about the SDR, send a message to <%= mail_to("sdr-contact@lists.stanford.edu", "sdr-contact@lists.stanford.edu") %>.</p>
+    <p>
+      <%= @returned_by %> has returned the
+      <%= @fobj.object_type %> <%= in_quotes(@fobj.title) %>
+      in the Stanford Digital Repository.
+      The reason given was <%= in_quotes(@fobj.disapproval_reason) %>.
+    </p>
+    <p>
+      To edit and resubmit this <%= @fobj.object_type %>,
+      follow this link <%= link_to(@item_url, @item_url) %>.
+    </p>
+    <p>
+      If you have any questions about the SDR, send a message to
+      <%= sdr_mail_to() %>.
+    </p>
   </body>
 </html>

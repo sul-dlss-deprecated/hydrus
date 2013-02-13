@@ -24,7 +24,7 @@ describe HydrusMailer do
     end
     it "should have the correct text in the body" do
       body = Capybara.string(@mail.body.to_s)
-      body.should have_content("jdoe has opened the Collection Title collection for deposit")
+      body.should have_content('jdoe has opened the "Collection Title" collection for deposit')
     end
   end
 
@@ -43,7 +43,7 @@ describe HydrusMailer do
     end
     it "should have the correct text in the body" do
       body = Capybara.string(@mail.body.to_s)
-      body.should have_content("jdoe has closed the Collection Title collection")
+      body.should have_content('jdoe has closed the "Collection Title" collection')
     end
   end
 
@@ -61,7 +61,7 @@ describe HydrusMailer do
     end
     it "should have the correct text in the body" do
       body = Capybara.string(@mail.body.to_s)
-      body.should have_content("jdoe has invited you to deposit into the Collection Title collection")
+      body.should have_content('jdoe has invited you to deposit into the "Collection Title" collection')
     end
   end
 
@@ -80,7 +80,7 @@ describe HydrusMailer do
     end
     it "should have the correct text in the body" do
       body = Capybara.string(@mail.body.to_s)
-      body.should have_content("archivist1 has returned the collection Collection Title in the Stanford Digital Repository.")
+      body.should have_content('archivist1 has returned the collection "Collection Title" in the Stanford Digital Repository.')
     end
   end
 

@@ -4,8 +4,16 @@
     <meta charset="utf-8" />
   </head>
   <body>
-    <p><%= @fobj.owner %> has closed the <%= @fobj.title %> collection in the Stanford Digital Repository.</p>
-    <p>Items are no longer able to be deposited into this collection.</p>
-    <p>If you have any questions about the SDR, send a message to <%= mail_to("sdr-contact@lists.stanford.edu", "sdr-contact@lists.stanford.edu") %>.</p>
+    <p>
+      <%= @fobj.owner %> has closed the
+      <%= in_quotes(@fobj.title) %> collection in the Stanford Digital Repository.
+    </p>
+    <p>
+      Items are no longer able to be deposited into this collection.
+    </p>
+    <p>
+      If you have any questions about the SDR, send a message to
+      <%= sdr_mail_to() %>.
+    </p>
   </body>
 </html>
