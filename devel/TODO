@@ -2,12 +2,10 @@
 Current
 ------------------
 
-Deploy.
-
-Instantiate an Item with pid of tz124hw0000, in -prod under the main
-collection.
-
-Run ur-APO through SDR robots on test and prod. [Emailed Richard.]
+HYDRUS-10. Support user's ability to hide specific files, which has the effect
+of setting publish and shelve to false in the content metadata. Offer a "Hide"
+checkbox (default unchecked) next to each uploaded file. Also include an info
+icon with some help text.
 
 ------------------
 On-deck -- top priority
@@ -16,10 +14,8 @@ On-deck -- top priority
 Clear out cruft: all objects in -test environment, and stray objects in -prod.
 See notes on dor-services nuke().
 
-HYDRUS-10. Support user's ability to hide specific files, which has the effect
-of setting publish and shelve to false in the content metadata. Offer a "Hide"
-checkbox (default unchecked) next to each uploaded file. Also include an info
-icon with some help text.
+Run ur-APO through SDR robots on test and prod. [Done in -prod. Waiting on
+Willy before Richard finish in -test.]
 
 HYDRUS-51. Add support for "corporate" and "conference" Contributor name types.
 [See ticket for details.]

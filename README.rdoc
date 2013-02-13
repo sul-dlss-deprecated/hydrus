@@ -261,3 +261,14 @@ Relationship between object_status and workflow steps for items:
   cd /jenkins/jobs/Hydrus/workspace/jetty
   git reset --hard HEAD
   git clean -dfx
+
+== Creating a Hydrus Item with a particular PID
+
+  # Temporarily edit register_dor_object().
+  params[:pid] = 'ITEM_PID' if args.last == 'APO_PID'
+
+  # Run this in the Rails console.
+  bundle exec rails c ENV
+  hc = Hydrus::Collection.find 'COLL_PID'
+  u  = User.new(:email => 'EMAIL')
+  hi = Hydrus::Item.create(hc.pid, u)

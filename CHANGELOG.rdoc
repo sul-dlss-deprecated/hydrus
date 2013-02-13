@@ -1,5 +1,13 @@
 = Hydrus change log
 
+== 2013.02.13a
+
+* HYDRUS-68: quoted object titles in email messages; DRYed up mailing code.
+* HYDRUS-69. Collection view/edit: Changed wording describing human-approval.
+* Added in_quotes() helper, and used it when displaying terms_of_use.
+* Deployed to hydrus-test.
+* Deployed to hydrus-prod.
+
 == 2013.02.12a
 
 * HYDRUS-60 and 61: remediation of objects in production environment.
