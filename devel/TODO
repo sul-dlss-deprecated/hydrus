@@ -2,15 +2,13 @@
 Current
 ------------------
 
-HYDRUS-69. Collection view and edit pages. Change wording describing the
-approval process.
-
 HYDRUS-68. Modify message text in the collection open/close email. More
 generally, check whether the email code could use some DRYing up.
 
 Deploy.
 
-Instantiate an Item with pid of tz124hw0000. [Waiting on confirmation.]
+Instantiate an Item with pid of tz124hw0000, in -prod under the main
+collection.
 
 Run ur-APO through SDR robots on test and prod. [Emailed Richard.]
 
