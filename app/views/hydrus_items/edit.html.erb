@@ -222,7 +222,7 @@
     <div class="span9">
       <p>
         The following Terms of Use will be displayed with this item when published:
-        <%= '"' + @fobj.terms_of_use + '"' %>
+        <%= in_quotes(@fobj.terms_of_use) %>
       </p>
     </div>
   </div>

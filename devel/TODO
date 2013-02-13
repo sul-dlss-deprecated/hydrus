@@ -2,8 +2,6 @@
 Current
 ------------------
 
-Wrap terms_of_use in nil checks in views.
-
 HYDRUS-69. Collection view and edit pages. Change wording describing the
 approval process.
 

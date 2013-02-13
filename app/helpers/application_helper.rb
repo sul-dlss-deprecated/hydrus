@@ -139,4 +139,12 @@ module ApplicationHelper
   def select_status_checkbox_icon(field)
     content_tag(:i, nil, :class =>  field ? "icon-check" : "icon-minus")
   end
+
+  # Takes a value.
+  # Returns it as a string, in double-quotes.
+  # Nil will stringify to ''.
+  def in_quotes(val)
+    return %Q("#{val}")
+  end
+
 end
