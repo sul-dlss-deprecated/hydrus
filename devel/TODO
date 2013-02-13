@@ -2,49 +2,26 @@
 Current
 ------------------
 
-Deploy to production:
+Wrap terms_of_use in nil checks in views.
 
-  - Deploy latest code to dortest and production.
+HYDRUS-69. Collection view and edit pages. Change wording describing the
+approval process.
 
-  - Run ur-APOs through pipeline in dortest and production
-        - start_assembly:       dortest=done      prod=waiting
-        - also run through SDR: dortest=waiting   prod=waiting
+HYDRUS-68. Modify message text in the collection open/close email. More
+generally, check whether the email code could use some DRYing up.
 
-        bundle exec rails c production
-        apo = Hydrus::AdminPolicyObject.find 'druid:zw306xn5593'
-        apo.is_assemblable
-        apo.start_common_assembly
+Deploy.
 
-  - Collection: Open new version with these edits:
-        Contact: hfrost 
-        License: varies ; no license
-        Owners: hfrost 
-        Managers: amyhodge, ronbo, mmarosti 
-        Reviewers : n/a 
-        Depositors : n/a 
-        Viewers: mchris, sweetkind, rns, makeller 
+Instantiate an Item with pid of tz124hw0000. [Waiting on confirmation.]
 
-  - Item: Open new version with these edits:
-        upload files (get them from PURL)
-
-  - HYDRUS-61 and HYDRUS-60. Close tickets.
-
-  - pids
-      druid:dd984qc3502   APO
-      druid:md919gh6774   Collection
-      druid:wp335yr5649   Item
-
-Instantiate an Item with pid of tz124hw0000. What collection?
-
-Clear out cruft: all objects in -test environment, and stray objects in -prod.
-See notes on dor-services nuke().
+Run ur-APO through SDR robots on test and prod. [Emailed Richard.]
 
 ------------------
 On-deck -- top priority
 ------------------
 
-HYDRUS-69. Collection view and edit pages. Change wording describing the
-approval process.
+Clear out cruft: all objects in -test environment, and stray objects in -prod.
+See notes on dor-services nuke().
 
 HYDRUS-10. Support user's ability to hide specific files, which has the effect
 of setting publish and shelve to false in the content metadata. Offer a "Hide"
@@ -80,9 +57,6 @@ HYDRUS-49. XML changes. [Hannah will supply needed changes.]
 HYDRUS-55. Build the background versioner.
 
 HYDRUS-56. Refine the "published on" date.
-
-HYDRUS-68. Modify message text in the collection open/close email. More
-generally, check whether the email code could use some DRYing up.
 
 Should the visibility() getter should return a string, rather than an array?
 
