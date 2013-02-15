@@ -1,5 +1,12 @@
 = Hydrus change log
 
+== 2013.02.15a
+
+* HYDRUS-10. Support ability to hide specific files when Item is published.
+* Removed the ObjectFile controller.
+* Deployed to hydrus-test.
+* Deployed to hydrus-prod.
+
 == 2013.02.13a
 
 * HYDRUS-68: quoted object titles in email messages; DRYed up mailing code.
