@@ -2,19 +2,15 @@
 Current
 ------------------
 
-HYDRUS-10. Support ability to hide specific files when Item is published
+Run tests; commit; push.
 
-  - eliminate object file controller
-  - move those views
-  - move controller tests
-  - other?
+Implement nuke().
+
+Clear out cruft: all objects in -test environment, and stray objects in -prod.
 
 ------------------
 On-deck -- top priority
 ------------------
-
-Clear out cruft: all objects in -test environment, and stray objects in -prod.
-See notes on dor-services nuke().
 
 Run ur-APO through SDR robots on test and prod. [Done in -prod. Waiting on
 Willy before Richard finish in -test.]

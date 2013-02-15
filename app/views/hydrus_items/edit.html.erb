@@ -65,7 +65,7 @@
           description for each file.
         </p>
         <%- @fobj.files.each do |file| -%>
-          <%= render :partial => "object_files/object_file", :locals => {:file => file} %>
+          <%= render :partial => "object_file", :locals => {:file => file} %>
         <%- end -%>
       </div>
 

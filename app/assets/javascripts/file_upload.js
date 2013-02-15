@@ -28,6 +28,7 @@ function drop(evt) {
   evt.preventDefault();
 
   var files = evt.dataTransfer.files;
+
   for(i = 0;  i < files.length; i++) {
     var file = files[i];
     var reader = new FileReader();
@@ -38,7 +39,16 @@ function drop(evt) {
     //reader.onprogress = function(){ console.log(evt) };
     reader.onloadend = function(evt){
       var object_id = $("#object_id").attr("value");
-      $.post("/object_files?format=js", {file_name: evt.target.original_filename, binary_data: evt.target.result, id: object_id}, function(data){});
+      var post_url = "/items/" + object_id + "/create_file?format=js";
+      $.post(
+        post_url,
+        {
+          file_name: evt.target.original_filename,
+          binary_data: evt.target.result,
+          id: object_id
+        },
+        function(data){}
+      );
     };
   }
 }
