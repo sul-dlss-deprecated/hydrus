@@ -17,17 +17,22 @@ module Hydrus::Contentable
 
   # Generates and returns a string of contentMetadata XML for the object.
   def create_content_metadata_xml
+    conf = Hydrus::Application.config
+    objects = []
     if is_item?
-      objects = files.map { |f| Assembly::ObjectFile.new(f.current_path, :label => f.label) }
-    else
-      objects = []
+      files.each { |f|
+        aof = Assembly::ObjectFile.new(f.current_path)
+        aof.label = f.label
+        aof.file_attributes = conf.cm_file_attributes_hidden if f.hide
+        objects << aof
+      }
     end
     return Assembly::ContentMetadata.create_content_metadata(
       :druid               => pid,
       :objects             => objects,
       :add_file_attributes => true,
-      :style               => Hydrus::Application.config.cm_style,
-      :file_attributes     => Hydrus::Application.config.cm_file_attributes,
+      :style               => conf.cm_style,
+      :file_attributes     => conf.cm_file_attributes,
       :include_root_xml    => false)
   end
 

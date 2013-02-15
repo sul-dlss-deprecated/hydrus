@@ -1,7 +1,7 @@
 source :rubygems
 source 'http://sul-gems.stanford.edu'
 
-gem 'dor-services' 
+gem 'dor-services'
 gem 'druid-tools', '>= 0.2.0'
 gem 'sul_chrome'
 gem 'about_page'
@@ -23,7 +23,7 @@ gem 'bootstrap-datepicker-rails'
 gem 'cancan'
 gem 'validates_email_format_of'
 gem 'coderay'
-  
+
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'
   gem 'compass_twitter_bootstrap'
@@ -36,7 +36,7 @@ end
 
 # gems only needed for particular environments
 
-group :test do 
+group :test do
   gem "cucumber-rails"
   gem 'database_cleaner'
   gem 'rspec-rails', '>=2.9.0'
@@ -50,7 +50,7 @@ group :development, :test do
   gem 'awesome_print'
   gem 'launchy'
   gem 'ruby-prof'
-  # gem 'debugger'
+  gem 'debugger'
 end
 
 group :development do

@@ -2,10 +2,12 @@
 Current
 ------------------
 
-HYDRUS-10. Support user's ability to hide specific files, which has the effect
-of setting publish and shelve to false in the content metadata. Offer a "Hide"
-checkbox (default unchecked) next to each uploaded file. Also include an info
-icon with some help text.
+HYDRUS-10. Support ability to hide specific files when Item is published
+
+  - eliminate object file controller
+  - move those views
+  - move controller tests
+  - other?
 
 ------------------
 On-deck -- top priority
@@ -56,6 +58,10 @@ text. (2) Item edit. Provide text box. If the collection manager wrote
 additional text, the Item text box will be pre-populated with that text (if the
 manager said the Item depositor could edit) or with nothing. (3) Join the three
 pieces of text (Stanford, Collection, Item) with two line breaks.
+
+When JavaScript is disabled, the delete icons correctly delete the relevant
+thing, but any changes made by the user to other parts of the edit form are
+lost, without warning.
 
 ------------------
 Project Fortune Cookie

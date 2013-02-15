@@ -58,19 +58,23 @@
 
   <div class="row field-group">
     <div class="span9" id="file-upload">
+
       <div id="uploaded-files">
-        <p>Choose files or drag and drop them here. Then enter a short description for each file.</p>
-        <%- unless @fobj.files.blank? -%>
-          <%- @fobj.files.each do |file| -%>
-            <%= render :partial => "object_files/object_file", :locals => {:file => file} %>
-          <%- end -%>
+        <p>
+          Choose one or more files, or drag and drop them here. Then enter a short
+          description for each file.
+        </p>
+        <%- @fobj.files.each do |file| -%>
+          <%= render :partial => "object_files/object_file", :locals => {:file => file} %>
         <%- end -%>
       </div>
+
       <div class="row">
         <div class="span9">
           <%= file_field_tag "files[]", :multiple=>true %>
         </div>
       </div>
+
     </div>
   </div>
 

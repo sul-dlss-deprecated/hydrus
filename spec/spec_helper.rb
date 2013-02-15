@@ -380,3 +380,14 @@ def create_new_item(opts = {})
   should_visit_view_page(hi)
   return Hydrus::Item.find(druid)
 end
+
+# Takes the file_url of an Item's uploaded file.
+# Helper method to restore a file to the uploads directory
+# after it was deleted in a integration test.
+def restore_upload_file(file_url)
+  parts = file_url.split /\//
+  parts[0] = 'public'
+  dst = File.join(*parts)
+  src = File.join('spec/fixtures/files', parts[-3], parts[-1])
+  FileUtils.cp(src, dst)
+end

@@ -33,7 +33,9 @@
           <% end %>
       </div>
 
-      <% unless @fobj.files.size == 0 %>
+      <% files = @fobj.files %>
+      <% unless files.size == 0 %>
+
         <div class="item-files collection-items">
            <h4>Files associated with this item</h4>
 
@@ -43,12 +45,19 @@
               <th>Description</th>
             </thead>
             <tbody>
-              <%
-                @fobj.files.each do |file|
-              %>
+              <% files.each do |file| %>
                   <tr class="document <%= cycle("even","odd") %>">
-                    <td><%= link_to(file.filename, file.url) %></td>
-                    <td><%= file.label %></td>
+                    <td>
+                      <%= link_to(file.filename, file.url) %>
+                      <span class="hide_status_<%=file.id%>">
+                        <%= file.hide ? "[hidden]" : "" %>
+                      </span>
+                    </td>
+                    <td>
+                      <span class="file_label_<%=file.id%>">
+                        <%= file.label %>
+                      </span>
+                    </td>
                   </tr>
               <% end %>
             </tbody>

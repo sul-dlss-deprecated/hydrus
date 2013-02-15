@@ -1,45 +1,59 @@
 require 'spec_helper'
 require 'rake'
 
-describe Hydrus::ObjectFile, :integration=>true do
+describe Hydrus::ObjectFile do
 
-  fixtures :object_files
-
-  it "should find four files associated with the first item and it should grab the url of a given file" do
-    pid = 'druid:oo000oo0001'
-    files = Hydrus::ObjectFile.find_all_by_pid(pid)
-    files.size.should == 4
-    f = files[0]
-    exp_url = '/uploads/oo/000/oo/0001/oo000oo0001/content/pinocchio.htm'
-    f.url.should == exp_url
-    f.current_path.should == "#{Rails.root}/public#{exp_url}"
-    files[1].filename.should == %q{pinocchio characters tc in file name.pdf}
-    files[1].size.should > 0
+  before(:each) do
+    @nm = 'mock_uploaded_file_'
+    @hof = Hydrus::ObjectFile.new
+    @hof.file = Tempfile.new(@nm)
   end
 
-  it "should delete a file from the file system and disassociate from item when called" do
+  it "can exercise getters" do
+    @hof.size.should == 0
+    @hof.url.should =~ /\/#{@nm}/
+    @hof.current_path.should =~ /\/#{@nm}/
+    @hof.filename.should =~ /\A#{@nm}/
+  end
 
-    pid = 'druid:oo000oo0001'
-    @hi=Hydrus::Item.find(pid)
+  describe "set_file_info()" do
 
-    files = @hi.files
-    files.size.should == 4
+    it "should make no changes if given nil" do
+      @hof.should_not_receive('label=')
+      @hof.set_file_info(nil).should == false
+    end
 
-    filename = files[0].filename
-    file_url = files[0].url
-    full_file_path = "#{Rails.root}/public#{file_url}"
-    File.exists?(full_file_path).should == true
+    it "should make no changes if passed new values equivalent to current values" do
+      # Set current values.
+      lab = 'foobar'
+      hid = false
+      @hof.label = lab
+      @hof.hide = hid
+      # Call setter with equivalent values.
+      @hof.should_not_receive('label=')
+      @hof.set_file_info('label' => lab, 'hide' => 'no').should == false
+      @hof.set_file_info('label' => lab).should == false
+      # Final check.
+      @hof.label.should == lab
+      @hof.hide.should == hid
+    end
 
-    files[0].destroy
+    it "should make changes if passed new values that differ from current values" do
+      # Set current values.
+      lab = 'foobar'
+      hid = false
+      @hof.label = lab
+      @hof.hide = hid
+      # Call setter with equivalent values.
+      @hof.set_file_info('label' => 'foo', 'hide' => 'yes').should == true
+      @hof.set_file_info('label' => 'foo').should == true
+      @hof.set_file_info('hide' => 'yes').should == true
+      @hof.set_file_info('label' => 'bar', 'hide' => 'yes').should == true
+      # Final check.
+      @hof.label.should == 'bar'
+      @hof.hide.should == true
+    end
 
-    @hi=Hydrus::Item.find(pid)
-    @hi.files.size.should == 3
-    File.exists?(full_file_path).should == false
-
-    # restore original file and stream from fixtures
-    source_file_path="#{Rails.root}/spec/fixtures/files/#{pid.gsub('druid:','')}/#{filename}"
-    system "cp #{source_file_path} #{full_file_path}"
-    File.exists?(full_file_path).should == true
   end
 
 end

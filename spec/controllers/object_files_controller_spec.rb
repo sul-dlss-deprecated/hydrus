@@ -3,6 +3,7 @@ require 'spec_helper'
 describe ObjectFilesController do
 
   describe "file upload" do
+
     before(:each) do
       @filename="/../../spec/fixtures/files/fixture.html"
       @pid = "druid:oo000oo0001"
@@ -27,18 +28,7 @@ describe ObjectFilesController do
         cleanup file
       end
     end
-    describe "destroy" do
-        it "should delete a Hydrus::Object file and remove the file itself when destroy method is called" do
-          controller.stub(:current_user).and_return(mock_authed_user)
-          post :create, :id => @pid, :binary_data => @binary_data, :file_name => @name, :format => "js"
-          response.should be_success
-          file = assigns(:file)
-          File.exists?(file.current_path).should == true
-          post :destroy, :id => file.id, :format => "js"
-          File.exists?(file.current_path).should == false
-          Hydrus::ObjectFile.find_by_id(file.id).should == nil
-        end
-      end
+
   end
 
 end

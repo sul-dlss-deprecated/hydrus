@@ -114,7 +114,7 @@ function validate_hydrus_item() {
       all_required_filled = false;
     }
   });
-  if($("#uploaded-files .object_file").length == 0) {
+  if($("#uploaded-files .object_file_name").length == 0) {
     all_required_filled = false;
   }
   if(all_required_filled) {

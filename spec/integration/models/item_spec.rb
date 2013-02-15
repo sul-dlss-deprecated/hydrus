@@ -25,7 +25,7 @@ describe(Hydrus::Item, :integration => true) do
         </resource>
         <resource id="oo000oo0001_2" sequence="2" type="file">
           <label>Main survey -- as plain text (extracted into CSV tables)</label>
-          <file id="pinocchio.-punctuation_in=file.name.txt" preserve="yes" publish="yes" shelve="yes"/>
+          <file id="pinocchio.-punctuation_in=file.name.txt" preserve="yes" publish="no" shelve="no"/>
         </resource>
         <resource id="oo000oo0001_3" sequence="3" type="file">
           <label>Main survey -- as PDF (prepared May 17, 2012)</label>

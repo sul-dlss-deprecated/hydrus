@@ -65,29 +65,28 @@ class HydrusItemsController < ApplicationController
     notice = []
 
     ####
-    # Save uploaded files and their labels.
+    # Save uploaded files, along with their info (label and hide status).
     ####
 
+    file_info = params["file_info"] || {}
+
     if params.has_key?("files")
-      params["files"].each do |file|
-        new_file = Hydrus::ObjectFile.new
-        new_file.pid = params[:id]
-        new_file.label = params["file_label"][new_file.id] if params.has_key?("file_label") and params["file_label"][new_file.id]
-        new_file.file = file
-        new_file.save
-        notice << "'#{file.original_filename}' uploaded."
+      params["files"].each do |upload_file|
+        hof = Hydrus::ObjectFile.new
+        hof.pid = params[:id]
+        hof.set_file_info(file_info[hof.id])
+        hof.file = upload_file
+        hof.save
+        notice << "'#{upload_file.original_filename}' uploaded."
         @fobj.files_were_changed = true  # To log an editing event.
       end
     end
 
-    if params.has_key?("file_label")
-      params["file_label"].each do |id,label|
-        file = Hydrus::ObjectFile.find(id)
-        unless file.label == label
-          file.label = label
-          file.save
-          @fobj.files_were_changed = true  # To log an editing event.
-        end
+    file_info.each do |id, h|
+      hof = Hydrus::ObjectFile.find(id)
+      if hof.set_file_info(h)
+        hof.save
+        @fobj.files_were_changed = true  # To log an editing event.
       end
     end
 
@@ -196,6 +195,21 @@ class HydrusItemsController < ApplicationController
     respond_to do |format|
       format.html
       format.js
+    end
+  end
+
+  def destroy_file
+    @file_id = params[:file_id]
+    hof = Hydrus::ObjectFile.find(@file_id)
+    hof.destroy
+    respond_to do |want|
+       want.html {
+         flash[:warning] = "The file was deleted"
+         redirect_to :back
+       }
+       want.js {
+         render :action => :destroy_file
+       }
     end
   end
 

@@ -29,8 +29,8 @@ describe Hydrus::Contentable do
 
     it "non-item should get nothing but the parent node" do
       mock_files = [
-        double('fileA', :current_path => 'Rakefile', :label => 'fileA'),
-        double('fileB', :current_path => 'Gemfile',  :label => 'fileB'),
+        double('fileA', :current_path => 'Rakefile', :label => 'fileA', :hide => false),
+        double('fileB', :current_path => 'Gemfile',  :label => 'fileB', :hide => true),
       ]
       exp = '
         <contentMetadata objectId="oo000oo9999" type="file">
@@ -40,7 +40,7 @@ describe Hydrus::Contentable do
           </resource>
           <resource id="oo000oo9999_2" sequence="2" type="file">
             <label>fileB</label>
-            <file id="Gemfile" preserve="yes" publish="yes" shelve="yes"/>
+            <file id="Gemfile" preserve="yes" publish="no" shelve="no"/>
           </resource>
         </contentMetadata>
       '

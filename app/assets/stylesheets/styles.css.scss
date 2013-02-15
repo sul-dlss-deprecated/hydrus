@@ -79,8 +79,12 @@ form.step #file-upload {
 	#files_ {margin-top: 20px;}
 }
 
-.delete-node, .delete-file {
+.delete-node {
 	margin-bottom: 9px;
+}
+
+.delete-file {
+	margin-bottom: 3px;
 }
 
 form .help {
@@ -308,6 +312,15 @@ noscript #item-actions, noscript #collection-actions {
 		position: relative;
 		margin-left: 0;
 	}
+}
+.object_file_group {
+  margin-bottom: 20px;
+  input {
+    margin-bottom: 3px;
+  }
+}
+.object_file_name {
+  margin-bottom: 3px;
 }
   /* reformat sidebar based on screen size */
 .actions-box.item-status,
