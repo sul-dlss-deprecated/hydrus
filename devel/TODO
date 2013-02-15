@@ -2,32 +2,31 @@
 Current
 ------------------
 
-Run tests; commit; push.
+HYDRUS-51. Add support for "corporate" and "conference" name types.
 
-Implement nuke().
-
-Clear out cruft: all objects in -test environment, and stray objects in -prod.
-
-------------------
-On-deck -- top priority
-------------------
-
-Run ur-APO through SDR robots on test and prod. [Done in -prod. Waiting on
-Willy before Richard finish in -test.]
-
-HYDRUS-51. Add support for "corporate" and "conference" Contributor name types.
-[See ticket for details.]
+HYDRUS-56. Add a "published on" date, based on PURL/stacks.
 
 ------------------
 On-deck -- later
 ------------------
 
-Hydrus has recursive symlinking in its uploads directory. For example: see
-uploads/nw/312/yv/4331/nw312yv4331. Appears to occur for items with subsequent
-versions. Check path_to_object() in findable.rb in assembly for possible bugs.
+Implement nuke(). [See Consul page: chimera/DOR+object+deletion.]
+
+Clear out cruft: all objects in -test environment, and stray objects in -prod.
+
+Hydrus has some recursive symlinking in its uploads directory. For example: see
+uploads/nw/312/yv/4331/nw312yv4331. This appears to occur for items with
+subsequent versions. Check path_to_object() in findable.rb in assembly for
+possible bugs.
 
 Move definition of users with app-wide powers to config files, and allow them
 to vary by environment.
+
+HYDRUS-55. Build the background versioner.
+
+--------
+Other: blocked, requires discussion, uncertain need, etc.
+--------
 
 Simplify Item edit UI by removing the embargo radio button. "This item will be
 released for discovery and download immediately, on this date _____". The radio
@@ -36,16 +35,9 @@ validation problem that is not easy to solve: currently the app does not
 protect the user from clicking the embargo-yes radio choice but forgetting to
 enter a date.
 
-File a SAR ticket to bump up the power of hydrus-test. First determine whether
-the problem is memory or processors.
-
-HYDRUS-49. XML changes. [Hannah will supply needed changes.]
-
-HYDRUS-55. Build the background versioner.
-
-HYDRUS-56. Refine the "published on" date.
-
-Should the visibility() getter should return a string, rather than an array?
+When JavaScript is disabled, the delete icons correctly delete the relevant
+thing, but any changes made by the user to other parts of the edit form are
+lost, and without warning.
 
 Use and reproduction customization. (1) Collection edit. Show Stanford
 default. Offer textbox for additional text. Then offer radio button where
@@ -55,40 +47,12 @@ additional text, the Item text box will be pre-populated with that text (if the
 manager said the Item depositor could edit) or with nothing. (3) Join the three
 pieces of text (Stanford, Collection, Item) with two line breaks.
 
-When JavaScript is disabled, the delete icons correctly delete the relevant
-thing, but any changes made by the user to other parts of the edit form are
-lost, without warning.
+File a SAR ticket to bump up the power of hydrus-test. First determine whether
+the problem is memory or processors.
 
-------------------
-Project Fortune Cookie
-------------------
+Should the visibility() getter should return a string, rather than an array?
 
-Example implementations of nuke()
-  - delete() in generic_object.rb.
-  - cleanup_object() in Assembly::Utils
-  - cleanup_service in dor-services (implementation of druid-tree deletes).
-
-Components of nuke():
-  - Files in stacks: unshelve().
-  - Metadata in PURL document cache: unpublish().
-  - Workflow DB rows.
-  - Druid tree in /dor/assembly. Might be a symlink -- eg, to Hydrus.
-  - Druid tree in /dor/workspace. Might be a symlink -- eg, to /dor/assembly.
-  - Entry in Searchworks SOLR index: might happen automatically.
-  - Fedora object.
-  - Entry in Solr index: stub out for now; need to build functionality in GDor.
-  - Move preservation-core copies to graveyard area.
-  - Add info to a nuke-audit table in the WF service DB.
-
-Notes:
-  - Expose nuke capability via the dor-services-app.
-  - The dor-services-app might need role enforcement at some point.
-
-Shorten robot sleep time.
-
---------
-Other: blocked, requires discussion, uncertain need, etc.
---------
+HYDRUS-49. XML changes. [Hannah will supply needed changes.]
 
 Remove title-refreshing from open() and do_publish(). Instead, write a
 full-service title=() setter in generic_object.rb.
