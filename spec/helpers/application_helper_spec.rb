@@ -31,11 +31,11 @@ describe ApplicationHelper do
     hydrus_is_empty?('').should be true
     hydrus_is_empty?(['','']).should be true
     hydrus_is_empty?(['',['']]).should be true
-    hydrus_is_empty?(Hydrus::Actor.new).should be true
+    hydrus_is_empty?(Hydrus::Contributor.new).should be true
     hydrus_is_empty?(['',['stuff']]).should be false
     hydrus_is_empty?(['stuff']).should be false
     hydrus_is_empty?('stuff').should be false
-    hydrus_is_empty?(Hydrus::Actor.new(:name=>'peter',:role=>'el jefe')).should be false
+    hydrus_is_empty?(Hydrus::Contributor.new(:name=>'peter',:role=>'el jefe')).should be false
   end
 
   it "should show the item edit tab appropriately" do

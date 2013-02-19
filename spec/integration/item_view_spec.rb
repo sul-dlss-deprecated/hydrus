@@ -40,10 +40,10 @@ describe("Item view", :type => :request, :integration => true) do
       "How Couples Meet and Stay Together", # title
       "The story of Pinocchio", #abstract
       @druid,
-      'Contributing Author', # label for actor
-      'Frisbee, Hanna', # actor
-      'Sponsor', # label for actor
-      'US National Science Foundation, award SES-0751613', # actor
+      'Contributing Author', # label for contributor
+      'Frisbee, Hanna', # contributor
+      'Sponsor', # label for contributor
+      'US National Science Foundation, award SES-0751613', # contributor
       'wooden boys', # keyword
       'Keywords', # keywords label
       'pinocchio.htm', # file

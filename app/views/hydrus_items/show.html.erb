@@ -23,12 +23,12 @@
 
        <div class="collection-items">
            <h4>Contributors</h4>
-          <% if hydrus_is_empty?(@fobj.actors) %>
-              <dt>Author</dt><dd><%= hydrus_object_setting_value(@fobj.actors)%></dd>
+          <% if hydrus_is_empty?(@fobj.contributors) %>
+              <dt>Author</dt><dd><%= hydrus_object_setting_value(@fobj.contributors)%></dd>
           <% else %>
-            <% @fobj.actors.each do |actor| %>
-              <dt><%= actor.role %></dt>
-              <dd><%= actor.name %></dd>
+            <% @fobj.contributors.each do |contributor| %>
+              <dt><%= contributor.role %></dt>
+              <dd><%= contributor.name %></dd>
             <% end %>
           <% end %>
       </div>

@@ -46,7 +46,6 @@ Hydrus::Application.routes.draw do
   match "items/:id/create_file" => "hydrus_items#create_file", :as => 'create_hydrus_item_file', :via => "post"
   match "items/:id/destroy_file" => "hydrus_items#destroy_file", :as => 'destroy_hydrus_item_file', :via => "get"
   match "collections/:id/destroy_value" => "hydrus_collections#destroy_value", :as => 'destroy_hydrus_collection_value', :via => "get"
-  match "collections/:id/destroy_actor" => "hydrus_collections#destroy_actor", :as => 'destroy_hydrus_collection_actor', :via => "get"
   match "users/auth/webauth" => "signin#login", :as => "webauth_login"
   match "users/auth/webauth/logout" => "signin#logout", :as => "webauth_logout"
   match "error" => "signin#error", :as => "error"

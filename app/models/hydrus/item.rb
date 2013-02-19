@@ -16,7 +16,7 @@ class Hydrus::Item < Hydrus::GenericObject
   }
 
   validate  :enforce_collection_is_open,     :on => :create
-  validates :actors, :at_least_one => true,  :if => :should_validate
+  validates :contributors, :at_least_one => true,  :if => :should_validate
   validates :files,  :at_least_one => true,  :if => :should_validate
   validate  :must_accept_terms_of_deposit,   :if => :should_validate
   validate  :must_review_release_settings,   :if => :should_validate
@@ -562,13 +562,13 @@ class Hydrus::Item < Hydrus::GenericObject
     strip_whitespace_from_fields [:preferred_citation,:title,:abstract,:contact]
   end
 
-  def actors
-    @actors ||= descMetadata.find_by_terms(:name).collect do |actor_node|
-      name_node=actor_node.at_css('namePart')
-      role_node=actor_node.at_css('role roleTerm')
+  def contributors
+    @contributors ||= descMetadata.find_by_terms(:name).collect do |contributor_node|
+      name_node=contributor_node.at_css('namePart')
+      role_node=contributor_node.at_css('role roleTerm')
       name = (name_node.respond_to?(:content) and !name_node.content.blank?)     ? name_node.content : ''
       role = (role_node.respond_to?(:content) and !role_node.content.blank?) ? role_node.content : ''
-      Hydrus::Actor.new(:name=>name,:role=>role)
+      Hydrus::Contributor.new(:name=>name,:role=>role)
     end
   end
 

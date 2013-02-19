@@ -1,7 +1,7 @@
 require 'spec_helper'
 
-describe Hydrus::Actor do
-  subject { Hydrus::Actor.new :name => 'Angus', :role => 'guitar' }
+describe Hydrus::Contributor do
+  subject { Hydrus::Contributor.new :name => 'Angus', :role => 'guitar' }
 
   it "should have a #name accessor" do
     subject.name.should == "Angus"

@@ -20,17 +20,6 @@ describe HydrusCollectionsController do
         :id         => 'abc')
     end
 
-    it "should map collections destroy_actor action correctly" do
-      { :get => "/collections/abc/destroy_actor" }.should route_to(
-        :controller => 'hydrus_collections',
-        :action     => 'destroy_actor',
-        :id         => 'abc')
-    end
-
-    it "should have the destroy_hydrus_collection_actor convenience url" do
-      destroy_hydrus_collection_actor_path("123").should match(/collections\/123\/destroy_actor/)
-    end
-
     it "should map collections destroy_value action correctly" do
       { :get => "/collections/abc/destroy_value" }.should route_to(
         :controller => 'hydrus_collections',

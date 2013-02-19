@@ -4,11 +4,62 @@ Current
 
 HYDRUS-51. Add support for "corporate" and "conference" name types.
 
-HYDRUS-56. Add a "published on" date, based on PURL/stacks.
+    Individual Person            [personal]
+    - Advisor
+    - Author
+    - Collector
+    - Contributing author
+    - Creator
+    - Primary advisor
+    - Principal investigator
+
+    Organization                 [corporate]
+    - Author
+    - Contributing author
+    - Department
+    - Distributor
+    - Publisher
+    - Sponsor
+
+    Event                        [conference]
+    - Conference
+
+    change names of partials:
+      # and are 2 partials overkill?
+      people >> contributors
+      person >> contributor
+
+    refactor contributors(). simplify and move most of logic to datastream.
+
+    # data structure in Hydrus::Item
+    self.person_roles
+
+    # params
+    "person"      => {"0"=>"Nugent, Ted", "1"=>"Swift, Jimmy"}
+    "person_role" => {"0"=>"Author", "1"=>"Contributing author"}
+
+    # controller
+    #  - call to insert_person()
+    #  - Javascript handling
+
+    # uses of person in the app (ignoring spec)
+    app/assets/javascripts/hydrus.js
+    app/controllers/hydrus_items_controller.rb
+    app/models/hydrus/desc_metadata_ds.rb
+    app/models/hydrus/item.rb
+    app/views/hydrus_items/_people.html.erb
+    app/views/hydrus_items/_person.html.erb
+    app/views/hydrus_items/add_person.js.erb
+    app/views/hydrus_items/edit.html.erb
+    devel/create_test_item.rb
+
+    # fixtures
 
 ------------------
 On-deck -- later
 ------------------
+
+HYDRUS-56. Add a "published on" date, based on PURL/stacks.
 
 Implement nuke(). [See Consul page: chimera/DOR+object+deletion.]
 
@@ -23,6 +74,9 @@ Move definition of users with app-wide powers to config files, and allow them
 to vary by environment.
 
 HYDRUS-55. Build the background versioner.
+
+Figure out what causes this sporadic error: dor/models/workflow_object.rb:26:in
+initial_workflow: undefined method generate_intial_workflow for nil:NilClass.
 
 --------
 Other: blocked, requires discussion, uncertain need, etc.

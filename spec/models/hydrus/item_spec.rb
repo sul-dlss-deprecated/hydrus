@@ -107,7 +107,7 @@ describe Hydrus::Item do
     end
   end
 
-  describe "#actors" do
+  describe "#contributors" do
     subject { Hydrus::Item.new }
     let(:descMetadata_xml) { <<-eos
      <mods xmlns="http://www.loc.gov/mods/v3">
@@ -133,17 +133,17 @@ describe Hydrus::Item do
     end
 
     it "should have the right number of items" do
-      subject.actors.length.should == 2
-      subject.actors.all? { |x| x.should be_a_kind_of(Hydrus::Actor) }
+      subject.contributors.length.should == 2
+      subject.contributors.all? { |x| x.should be_a_kind_of(Hydrus::Contributor) }
     end
 
     it "should have array-like accessors" do
-      actor = subject.actors.first
-      actor.name.should == "Angus"
-      actor.role.should == "guitar"
+      c = subject.contributors.first
+      c.name.should == "Angus"
+      c.role.should == "guitar"
     end
 
-  end # describe #actors
+  end
 
   describe "#add_to_collection" do
     subject { Hydrus::Item.new }

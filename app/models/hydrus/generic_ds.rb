@@ -8,6 +8,10 @@ module Hydrus::GenericDS
     return node
   end
 
+  # Adds a node to a datastream, as a next sibling if possible.
+  # The first argument is the OM term to find the sibling.
+  # The rest of the arguments are passed to the OM method that
+  # does the work of adding the node.
   def add_hydrus_next_sibling_node(sib_term, *args)
     sibling = find_by_terms(sib_term).last
     node = sibling ? add_next_sibling_node(sibling, *args) :

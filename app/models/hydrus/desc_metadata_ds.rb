@@ -58,6 +58,7 @@ class Hydrus::DescMetadataDS < ActiveFedora::NokogiriDatastream
   # Blocks to pass into Nokogiri::XML::Builder.new()
 
   define_template :name do |xml|
+    # xml.name(:type => 'personal') {
     xml.name {
       xml.namePart
       xml.role {
