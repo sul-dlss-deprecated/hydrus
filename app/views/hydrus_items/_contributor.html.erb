@@ -12,7 +12,7 @@
 
   <%= select_tag(
         :"hydrus_item[person_role[#{i}]]",
-        options_for_select(Hydrus::Item.person_roles, role)) %>
+        options_for_select(Hydrus::Item.contributor_roles, role)) %>
 
   <%= link_to(
         '<i class="icon-trash"></i>'.html_safe,

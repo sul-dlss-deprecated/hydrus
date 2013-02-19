@@ -598,7 +598,7 @@ class Hydrus::Item < Hydrus::GenericObject
     kws.each { |kw| descMetadata.insert_topic(kw)  }
   end
 
-  def self.person_roles
+  def self.contributor_roles
     return [
       "Author",
       "Creator",

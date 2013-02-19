@@ -466,7 +466,7 @@ describe Hydrus::Item do
 
   describe "class methods" do
     it "should provide an array of person roles" do
-      Hydrus::Item.person_roles.should be_a Array
+      Hydrus::Item.contributor_roles.should be_a Array
     end
   end
 

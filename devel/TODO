@@ -26,15 +26,12 @@ HYDRUS-51. Add support for "corporate" and "conference" name types.
 
     refactor contributors(). simplify and move most of logic to datastream.
 
-    # data structure in Hydrus::Item
-    self.person_roles
-
     # params
     "person"      => {"0"=>"Nugent, Ted", "1"=>"Swift, Jimmy"}
     "person_role" => {"0"=>"Author", "1"=>"Contributing author"}
 
     # controller
-    #  - call to insert_person()
+    #  - call to insert_contributor()
     #  - Javascript handling
 
     # uses of person in the app (ignoring spec)
