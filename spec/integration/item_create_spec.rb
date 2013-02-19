@@ -23,7 +23,7 @@ describe("Item create", :type => :request, :integration => true) do
     @buttons = {
       :add                 => 'Add',
       :save                => 'Save',
-      :add_person          => 'Add Person',
+      :add_contributor     => 'Add Contributor',
       :submit_for_approval => 'Submit for Approval',
       :resubmit            => 'Resubmit for Approval',
       :disapprove          => 'Return Item',

@@ -119,7 +119,7 @@ class Hydrus::DescMetadataDS < ActiveFedora::NokogiriDatastream
     end.doc
   end
 
-  def insert_person
+  def insert_contributor
     add_hydrus_next_sibling_node(:name, :name)
   end
 

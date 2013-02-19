@@ -1,0 +1,34 @@
+<%
+  # Unpack locals we received.
+  i    = index
+  nm   = contributor ? hydrus_strip(contributor.name) : ""
+  role = contributor ? contributor.role               : ""
+%>
+
+<div class="person destroy-set">
+
+  <%= text_field_tag(:"hydrus_item[person[#{i}]]", nm, :required => true) %>
+  as
+
+  <%= select_tag(
+        :"hydrus_item[person_role[#{i}]]",
+        options_for_select(Hydrus::Item.person_roles, role)) %>
+
+  <%= link_to(
+        '<i class="icon-trash"></i>'.html_safe,
+        destroy_hydrus_item_value_path(:term => "name", :term_index => i, :type => "contributor"),
+        :class => "delete-node btn",
+        :id => "remove_name_#{i}") %>
+
+</div>
+
+<%# f.select(
+      "license_#{lic_opt}".to_sym,
+      grouped_options_for_select(
+        Hydrus::GenericObject.license_groups,
+        @fobj.send("license_#{lic_opt}")
+      ),
+      {:prompt => 'Select license'},
+      {:class => 'inline-select right', :id => "license_option_#{lic_opt}" }
+    )
+%>

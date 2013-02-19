@@ -103,14 +103,14 @@ class HydrusItemsController < ApplicationController
     ####
 
     has_mvf = (
-      params.has_key?(:add_person) or
+      params.has_key?(:add_contributor) or
       params.has_key?(:add_link) or
       params.has_key?(:add_related_citation)
     )
 
     if has_mvf
-      if params.has_key?(:add_person)
-        @fobj.descMetadata.insert_person
+      if params.has_key?(:add_contributor)
+        @fobj.descMetadata.insert_contributor
       elsif params.has_key?(:add_link)
         @fobj.descMetadata.insert_related_item
       elsif params.has_key?(:add_related_citation)
@@ -147,9 +147,9 @@ class HydrusItemsController < ApplicationController
         end
       }
       want.js {
-        if params.has_key?(:add_person)
+        if params.has_key?(:add_contributor)
           i = @fobj.person.length - 1
-          render "add_person", :locals => { :index => i }
+          render "add_contributor", :locals => { :index => i }
         elsif params.has_key?(:add_link)
           i = @fobj.related_items.length - 1
           render "add_link", :locals => { :index => i }

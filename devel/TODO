@@ -24,11 +24,6 @@ HYDRUS-51. Add support for "corporate" and "conference" name types.
     Event                        [conference]
     - Conference
 
-    change names of partials:
-      # and are 2 partials overkill?
-      people >> contributors
-      person >> contributor
-
     refactor contributors(). simplify and move most of logic to datastream.
 
     # data structure in Hydrus::Item
@@ -43,14 +38,12 @@ HYDRUS-51. Add support for "corporate" and "conference" name types.
     #  - Javascript handling
 
     # uses of person in the app (ignoring spec)
-    app/assets/javascripts/hydrus.js
     app/controllers/hydrus_items_controller.rb
     app/models/hydrus/desc_metadata_ds.rb
     app/models/hydrus/item.rb
-    app/views/hydrus_items/_people.html.erb
-    app/views/hydrus_items/_person.html.erb
-    app/views/hydrus_items/add_person.js.erb
-    app/views/hydrus_items/edit.html.erb
+    app/views/hydrus_items/_contributors.html.erb
+    app/views/hydrus_items/_contributor.html.erb
+    app/views/hydrus_items/destory_value.js.erb
     devel/create_test_item.rb
 
     # fixtures

@@ -84,7 +84,7 @@ function activate_edit_controls() {
     $("form.step").submit();
   });
 
-  $("#add_person, #add_link, #add_related_citation").live('click',function(){
+  $("#add_contributor, #add_link, #add_related_citation").live('click',function(){
     var button = $(this);
     var type = $(this).attr("class");
     var form = $(this).closest("form");

@@ -10,7 +10,7 @@ describe("Item edit", :type => :request, :integration => true) do
     @buttons = {
       :add                 => 'Add',
       :save                => 'Save',
-      :add_person          => 'Add Person',
+      :add_contributor     => 'Add Contributor',
       :submit_for_approval => 'Submit for Approval',
       :resubmit            => 'Resubmit for Approval',
       :disapprove          => 'Return Item',
@@ -101,7 +101,7 @@ describe("Item edit", :type => :request, :integration => true) do
     page.should have_css("input#hydrus_item_person_4")
     page.should_not have_css("##{new_field}")
 
-    click_button "add_person"
+    click_button(@buttons[:add_contributor])
     page.should have_css("##{new_field}")
     page.should have_css("##{new_delete_button}")
 

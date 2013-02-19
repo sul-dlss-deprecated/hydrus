@@ -1,0 +1,15 @@
+<% cs = @fobj.contributors %>
+
+<% cs.each_with_index do |c, i| %>
+  <%= render(
+        :partial => "hydrus_items/contributor",
+        :locals  => {:contributor => c, :index => i} ) %>
+<% end %>
+
+<%= button_tag(
+      "Add Contributor",
+      :name => "add_contributor",
+      :"data-attribute" => "add_contributor",
+      :id => "add_contributor",
+      :class => "btn",
+      :value => cs.size) %>

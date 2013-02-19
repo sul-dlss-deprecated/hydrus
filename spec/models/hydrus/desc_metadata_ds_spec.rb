@@ -84,9 +84,9 @@ describe Hydrus::DescMetadataDS do
       ].join '')
       @dsdoc   = Hydrus::DescMetadataDS.from_xml("#{@mods_start}</mods>")
       @dsdoc.insert_topic('foo')
-      @dsdoc.insert_person
-      @dsdoc.insert_person
-      @dsdoc.insert_person
+      @dsdoc.insert_contributor
+      @dsdoc.insert_contributor
+      @dsdoc.insert_contributor
       @dsdoc.insert_related_item
       @dsdoc.insert_related_citation
       @dsdoc.insert_related_item

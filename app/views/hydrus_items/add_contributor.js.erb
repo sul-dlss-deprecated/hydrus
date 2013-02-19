@@ -1,0 +1,4 @@
+$(".people-select #add_contributor").before(
+  "<%=escape_javascript(render :partial => 'contributor', :locals=>{:index=>index})%>"
+);
+validate_hydrus_item();
