@@ -596,90 +596,13 @@ class Hydrus::Item < Hydrus::GenericObject
     }
   end
 
-  def insert_contributor(name, role)
-    typ = 'personal'
+  def insert_contributor(name = '', role_key = nil)
+    typ, role = Hydrus::Contributor.lookup_with_role_key(role_key)
     descMetadata.insert_contributor(typ, name, role)
   end
 
   def contributors
-    return descMetadata.contributor_values.map { |name, role|
-      Hydrus::Contributor.new(:name => name, :role => role)
-    }
-  end
-
-  def self.default_contributor_role
-    return "Author"
-  end
-
-  def self.contributor_roles
-    return [
-      "Author",
-      "Creator",
-      "Collector",
-      "Contributing author",
-      "Distributor",
-      "Principal investigator",
-      "Publisher",
-      "Sponsor",
-      "Advisor",
-      "Primary advisor",
-    ]
-  end
-
-  # Sets up a data structure relating to Item contributors -- specifically,
-  # their groupings and labels. Returns info from that data structure, based
-  # on the options hash.
-  #
-  #   :default_value => true  The default value for a new contributor.
-  #
-  #   :for_select    => true  The data organized for use by grouped_options_for_select().
-  #
-  def self.contributor_groups(opts = {})
-    # Return directly if caller only wants the default.
-    return 'Author' if opts[:default_value]
-    # Set up data.
-    cgs = [
-      {
-        :group_label => 'Individual',
-        :name_type   => 'personal',
-        :values      => [
-          'Advisor',
-          'Author',
-          'Collector',
-          'Contributing author',
-          'Creator',
-          'Primary advisor',
-          'Principal investigator',
-        ],
-      },
-      {
-        :group_label => 'Organization',
-        :name_type   => 'corporate',
-        :values      => [
-          'Author',
-          'Contributing author',
-          'Department',
-          'Distributor',
-          'Publisher',
-          'Sponsor',
-        ],
-      },
-      {
-        :group_label => 'Event',
-        :name_type   => 'conference',
-        :values      => [
-          'Conference',
-        ],
-      },
-    ]
-    # Caller wants info reorganized for use in the view.
-    if opts[:for_select]
-      return cgs.map { |cg|
-        [ cg[:group_label], cg[:values].map { |v| [v,v] } ]
-      }
-    end
-    # Return everything by default.
-    return cgs
+    return descMetadata.contributors
   end
 
   def self.discovery_roles

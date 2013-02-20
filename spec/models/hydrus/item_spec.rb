@@ -464,12 +464,6 @@ describe Hydrus::Item do
 
   end
 
-  describe "class methods" do
-    it "should provide an array of person roles" do
-      Hydrus::Item.contributor_roles.should be_a Array
-    end
-  end
-
   describe "strip_whitespace_from_fields()" do
 
     before(:each) do

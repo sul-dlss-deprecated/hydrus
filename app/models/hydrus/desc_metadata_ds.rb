@@ -134,12 +134,24 @@ class Hydrus::DescMetadataDS < ActiveFedora::NokogiriDatastream
     add_hydrus_next_sibling_node(:subject, :topic, topic)
   end
 
-  def contributor_values
-    ks = ['namePart', 'role roleTerm']
-    return name.nodeset.map { |node|
-      ks.map { |k| node.at_css(k) }.
-         map { |n| n ? n.content : '' }
-    }
+  # Returns the contributor information from descMetadata as an array
+  # of Hydrus::Contributor objects.
+  def contributors
+    qs = ['namePart', 'role roleTerm']
+    cs = []
+    name.nodeset.each do |name_node|
+      # Get some inner nodes, converting nils to empty strings.
+      ns = qs.map { |k| name_node.at_css(k) }
+      vs = ns.map { |n| n ? n.content : '' }
+      # Create a contributor object and add it to the list.
+      c = Hydrus::Contributor.new(
+        :name      => vs.first,
+        :role      => vs.last,
+        :name_type => name_node[:type]
+      )
+      cs << c
+    end
+    return cs
   end
 
 end

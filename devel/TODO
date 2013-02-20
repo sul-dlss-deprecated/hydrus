@@ -4,28 +4,6 @@ Current
 
 HYDRUS-51. Add support for "corporate" and "conference" name types.
 
-    Add hierarchical selection: contributor_groups().
-
-        Individual Person            [personal]
-        - Advisor
-        - Author
-        - Collector
-        - Contributing author
-        - Creator
-        - Primary advisor
-        - Principal investigator
-
-        Organization                 [corporate]
-        - Author
-        - Contributing author
-        - Department
-        - Distributor
-        - Publisher
-        - Sponsor
-
-        Event                        [conference]
-        - Conference
-
     unit tests
 
     integration tests

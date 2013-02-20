@@ -1,17 +1,16 @@
 <%
-  # Unpack locals we received.
-  i    = index
-  nm   = contributor ? hydrus_strip(contributor.name) : ""
-  role = contributor ? contributor.role               : ""
+  # Unpack local variables we received, setting a default Contributor if needed.
+  c = (contributor || Hydrus::Contributor.default_contributor)
+  i = index
 %>
 
 <div class="person destroy-set">
 
-  <%= text_field_tag("hydrus_item[contributors][#{i}][name]", nm, :required => true) %>
+  <%= text_field_tag("hydrus_item[contributors][#{i}][name]", c.name, :required => true) %>
 
   <%= select_tag(
         "hydrus_item[contributors][#{i}][role]",
-        options_for_select(Hydrus::Item.contributor_roles, role)) %>
+        grouped_options_for_select(Hydrus::Contributor.groups_for_select, c.role_key)) %>
 
   <%= link_to(
         '<i class="icon-trash"></i>'.html_safe,
@@ -23,14 +22,3 @@
         :id => "remove_name_#{i}") %>
 
 </div>
-
-<%# f.select(
-      "license_#{lic_opt}".to_sym,
-      grouped_options_for_select(
-        Hydrus::GenericObject.license_groups,
-        @fobj.send("license_#{lic_opt}")
-      ),
-      {:prompt => 'Select license'},
-      {:class => 'inline-select right', :id => "license_option_#{lic_opt}" }
-    )
-%>
