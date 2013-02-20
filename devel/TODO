@@ -4,11 +4,8 @@ Current
 
 HYDRUS-51. Add support for "corporate" and "conference" name types.
 
-    unit tests
-
+    check fixtures
     integration tests
-
-    edit fixtures
 
 ------------------
 On-deck -- later

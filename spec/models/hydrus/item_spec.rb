@@ -108,39 +108,68 @@ describe Hydrus::Item do
   end
 
   describe "#contributors" do
-    subject { Hydrus::Item.new }
-    let(:descMetadata_xml) { <<-eos
-     <mods xmlns="http://www.loc.gov/mods/v3">
-          <name>
-              <namePart>Angus</namePart>
-              <role>
-                <roleTerm>guitar</roleTerm>
-              </role>
-          </name>
-          <name>
-              <namePart>John</namePart>
-              <role>
-                <roleTerm>bass</roleTerm>
-              </role>
-          </name>
-     </mods>
-     eos
-    }
-    let(:descMetadata) { Hydrus::DescMetadataDS.from_xml(descMetadata_xml) }
 
     before(:each) do
-      subject.stub(:descMetadata) { descMetadata }
+      @rattr = 'authority="marcrelator" type="text"'
+      @xml = <<-eos
+        <mods xmlns="http://www.loc.gov/mods/v3">
+          <name type="personal">
+            <namePart>Angus</namePart>
+            <role><roleTerm #{@rattr}>Guitar</roleTerm></role>
+          </name>
+          <name type="personal">
+            <namePart>Cliff</namePart>
+            <role><roleTerm #{@rattr}>Bass</roleTerm></role>
+          </name>
+          <name type="corporate">
+            <namePart>EMI</namePart>
+            <role><roleTerm #{@rattr}>Record Company</roleTerm></role>
+          </name>
+        </mods>
+      eos
+      @hi.stub(:descMetadata).and_return(Hydrus::DescMetadataDS.from_xml(@xml))
     end
 
-    it "should have the right number of items" do
-      subject.contributors.length.should == 2
-      subject.contributors.all? { |x| x.should be_a_kind_of(Hydrus::Contributor) }
+    it "contributors()" do
+      @hi.contributors.length.should == 3
+      @hi.contributors.all? { |c| c.should be_instance_of(Hydrus::Contributor) }
     end
 
-    it "should have array-like accessors" do
-      c = subject.contributors.first
-      c.name.should == "Angus"
-      c.role.should == "guitar"
+    it "insert_contributor()" do
+      extra_xml = <<-eos
+        <name type="corporate">
+          <namePart>FooBar</namePart>
+          <role><roleTerm #{@rattr}>Sponsor</roleTerm></role>
+        </name>
+        <name type="personal">
+          <namePart></namePart>
+          <role><roleTerm #{@rattr}>Author</roleTerm></role>
+        </name>
+      eos
+      @hi.insert_contributor('FooBar', 'corporate_sponsor')
+      @hi.insert_contributor
+      new_xml = @xml.sub(/<\/mods>/, extra_xml + '</mods>')
+      @hi.descMetadata.ng_xml.should be_equivalent_to(new_xml)
+    end
+
+    it "contributors=()" do
+      exp = <<-eos
+        <mods xmlns="http://www.loc.gov/mods/v3">
+          <name type="corporate">
+            <namePart>AAA</namePart>
+            <role><roleTerm #{@rattr}>Author</roleTerm></role>
+          </name>
+          <name type="personal">
+            <namePart>BBB</namePart>
+            <role><roleTerm #{@rattr}>Author</roleTerm></role>
+          </name>
+        </mods>
+      eos
+      @hi.contributors = {
+        "0" => {"name"=>"AAA", "role"=>"corporate_author"},
+        "1" => {"name"=>"BBB", "role"=>"personal_author"},
+      }
+      @hi.descMetadata.ng_xml.should be_equivalent_to(exp)
     end
 
   end
