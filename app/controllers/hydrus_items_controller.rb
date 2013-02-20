@@ -110,7 +110,7 @@ class HydrusItemsController < ApplicationController
 
     if has_mvf
       if params.has_key?(:add_contributor)
-        @fobj.descMetadata.insert_contributor
+        @fobj.insert_contributor('', @fobj.class.default_contributor_role)
       elsif params.has_key?(:add_link)
         @fobj.descMetadata.insert_related_item
       elsif params.has_key?(:add_related_citation)

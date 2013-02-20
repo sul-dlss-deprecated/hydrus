@@ -4,46 +4,33 @@ Current
 
 HYDRUS-51. Add support for "corporate" and "conference" name types.
 
-    Individual Person            [personal]
-    - Advisor
-    - Author
-    - Collector
-    - Contributing author
-    - Creator
-    - Primary advisor
-    - Principal investigator
+    Add hierarchical selection: contributor_groups().
 
-    Organization                 [corporate]
-    - Author
-    - Contributing author
-    - Department
-    - Distributor
-    - Publisher
-    - Sponsor
+        Individual Person            [personal]
+        - Advisor
+        - Author
+        - Collector
+        - Contributing author
+        - Creator
+        - Primary advisor
+        - Principal investigator
 
-    Event                        [conference]
-    - Conference
+        Organization                 [corporate]
+        - Author
+        - Contributing author
+        - Department
+        - Distributor
+        - Publisher
+        - Sponsor
 
-    refactor contributors(). simplify and move most of logic to datastream.
+        Event                        [conference]
+        - Conference
 
-    # params
-    "person"      => {"0"=>"Nugent, Ted", "1"=>"Swift, Jimmy"}
-    "person_role" => {"0"=>"Author", "1"=>"Contributing author"}
+    unit tests
 
-    # controller
-    #  - call to insert_contributor()
-    #  - Javascript handling
+    integration tests
 
-    # uses of person in the app (ignoring spec)
-    app/controllers/hydrus_items_controller.rb
-    app/models/hydrus/desc_metadata_ds.rb
-    app/models/hydrus/item.rb
-    app/views/hydrus_items/_contributors.html.erb
-    app/views/hydrus_items/_contributor.html.erb
-    app/views/hydrus_items/destory_value.js.erb
-    devel/create_test_item.rb
-
-    # fixtures
+    edit fixtures
 
 ------------------
 On-deck -- later

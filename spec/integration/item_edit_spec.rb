@@ -64,11 +64,10 @@ describe("Item edit", :type => :request, :integration => true) do
   end
 
   it "People/Role editing" do
-
     new_name  = "MY EDITIED PERSON"
     orig_name = "Rosenfeld, Michael J."
-    field_np  = "hydrus_item_person_0"
-    field_rt  = "hydrus_item_person_role_0"
+    field_np  = "hydrus_item_contributors_0_name"
+    field_rt  = "hydrus_item_contributors_0_role"
     orig_role = "Principal investigator"
     new_role  = "Collector"
 
@@ -87,18 +86,17 @@ describe("Item edit", :type => :request, :integration => true) do
     visit polymorphic_path(@hi)
     page.should have_content(new_name)
     page.should have_content(new_role)
-
   end
 
   it "People/Role adding and deleting" do
-    new_field = "hydrus_item_person_5"
+    new_field = "hydrus_item_contributors_5_name"
     new_delete_button = "remove_name_5"
     person = "Mr. Test Person"
 
     login_as('archivist1')
     should_visit_edit_page(@hi)
 
-    page.should have_css("input#hydrus_item_person_4")
+    page.should have_css("input#hydrus_item_contributors_4_name")
     page.should_not have_css("##{new_field}")
 
     click_button(@buttons[:add_contributor])

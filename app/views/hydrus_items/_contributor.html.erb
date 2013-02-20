@@ -7,16 +7,18 @@
 
 <div class="person destroy-set">
 
-  <%= text_field_tag(:"hydrus_item[person[#{i}]]", nm, :required => true) %>
-  as
+  <%= text_field_tag("hydrus_item[contributors][#{i}][name]", nm, :required => true) %>
 
   <%= select_tag(
-        :"hydrus_item[person_role[#{i}]]",
+        "hydrus_item[contributors][#{i}][role]",
         options_for_select(Hydrus::Item.contributor_roles, role)) %>
 
   <%= link_to(
         '<i class="icon-trash"></i>'.html_safe,
-        destroy_hydrus_item_value_path(:term => "name", :term_index => i, :type => "contributor"),
+        destroy_hydrus_item_value_path(
+          :term => "name",
+          :term_index => i,
+          :type => "contributor"),
         :class => "delete-node btn",
         :id => "remove_name_#{i}") %>
 

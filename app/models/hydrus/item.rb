@@ -15,11 +15,12 @@ class Hydrus::Item < Hydrus::GenericObject
     should_validate() && ! is_initial_version()
   }
 
-  validate  :enforce_collection_is_open,     :on => :create
+  validate  :enforce_collection_is_open, :on => :create
+
   validates :contributors, :at_least_one => true,  :if => :should_validate
-  validates :files,  :at_least_one => true,  :if => :should_validate
-  validate  :must_accept_terms_of_deposit,   :if => :should_validate
-  validate  :must_review_release_settings,   :if => :should_validate
+  validates :files, :at_least_one => true,         :if => :should_validate
+  validate  :must_accept_terms_of_deposit,         :if => :should_validate
+  validate  :must_review_release_settings,         :if => :should_validate
 
   validate  :embargo_date_is_well_formed
   validate  :embargo_date_in_range
@@ -562,16 +563,6 @@ class Hydrus::Item < Hydrus::GenericObject
     strip_whitespace_from_fields [:preferred_citation,:title,:abstract,:contact]
   end
 
-  def contributors
-    @contributors ||= descMetadata.find_by_terms(:name).collect do |contributor_node|
-      name_node=contributor_node.at_css('namePart')
-      role_node=contributor_node.at_css('role roleTerm')
-      name = (name_node.respond_to?(:content) and !name_node.content.blank?)     ? name_node.content : ''
-      role = (role_node.respond_to?(:content) and !role_node.content.blank?) ? role_node.content : ''
-      Hydrus::Contributor.new(:name=>name,:role=>role)
-    end
-  end
-
   def add_to_collection(pid)
     uri = "info:fedora/#{pid}"
     add_relationship_by_name('set', uri)
@@ -598,6 +589,28 @@ class Hydrus::Item < Hydrus::GenericObject
     kws.each { |kw| descMetadata.insert_topic(kw)  }
   end
 
+  def contributors=(h)
+    descMetadata.remove_nodes(:name)
+    h.values.each { |c|
+      insert_contributor(c['name'], c['role'])
+    }
+  end
+
+  def insert_contributor(name, role)
+    typ = 'personal'
+    descMetadata.insert_contributor(typ, name, role)
+  end
+
+  def contributors
+    return descMetadata.contributor_values.map { |name, role|
+      Hydrus::Contributor.new(:name => name, :role => role)
+    }
+  end
+
+  def self.default_contributor_role
+    return "Author"
+  end
+
   def self.contributor_roles
     return [
       "Author",
@@ -611,6 +624,62 @@ class Hydrus::Item < Hydrus::GenericObject
       "Advisor",
       "Primary advisor",
     ]
+  end
+
+  # Sets up a data structure relating to Item contributors -- specifically,
+  # their groupings and labels. Returns info from that data structure, based
+  # on the options hash.
+  #
+  #   :default_value => true  The default value for a new contributor.
+  #
+  #   :for_select    => true  The data organized for use by grouped_options_for_select().
+  #
+  def self.contributor_groups(opts = {})
+    # Return directly if caller only wants the default.
+    return 'Author' if opts[:default_value]
+    # Set up data.
+    cgs = [
+      {
+        :group_label => 'Individual',
+        :name_type   => 'personal',
+        :values      => [
+          'Advisor',
+          'Author',
+          'Collector',
+          'Contributing author',
+          'Creator',
+          'Primary advisor',
+          'Principal investigator',
+        ],
+      },
+      {
+        :group_label => 'Organization',
+        :name_type   => 'corporate',
+        :values      => [
+          'Author',
+          'Contributing author',
+          'Department',
+          'Distributor',
+          'Publisher',
+          'Sponsor',
+        ],
+      },
+      {
+        :group_label => 'Event',
+        :name_type   => 'conference',
+        :values      => [
+          'Conference',
+        ],
+      },
+    ]
+    # Caller wants info reorganized for use in the view.
+    if opts[:for_select]
+      return cgs.map { |cg|
+        [ cg[:group_label], cg[:values].map { |v| [v,v] } ]
+      }
+    end
+    # Return everything by default.
+    return cgs
   end
 
   def self.discovery_roles

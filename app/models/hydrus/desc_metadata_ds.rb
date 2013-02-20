@@ -57,12 +57,11 @@ class Hydrus::DescMetadataDS < ActiveFedora::NokogiriDatastream
 
   # Blocks to pass into Nokogiri::XML::Builder.new()
 
-  define_template :name do |xml|
-    # xml.name(:type => 'personal') {
-    xml.name {
-      xml.namePart
+  define_template :contributor do |xml, name_type, name, role|
+    xml.name(:type => name_type) {
+      xml.namePart { xml.text(name) }
       xml.role {
-        xml.roleTerm(:authority => "marcrelator", :type => "text")
+        xml.roleTerm(:authority => "marcrelator", :type => "text") { xml.text(role) }
       }
     }
   end
@@ -119,8 +118,8 @@ class Hydrus::DescMetadataDS < ActiveFedora::NokogiriDatastream
     end.doc
   end
 
-  def insert_contributor
-    add_hydrus_next_sibling_node(:name, :name)
+  def insert_contributor(name_type, name, role)
+    add_hydrus_next_sibling_node(:name, :contributor, name_type, name, role)
   end
 
   def insert_related_item
@@ -133,6 +132,14 @@ class Hydrus::DescMetadataDS < ActiveFedora::NokogiriDatastream
 
   def insert_topic(topic)
     add_hydrus_next_sibling_node(:subject, :topic, topic)
+  end
+
+  def contributor_values
+    ks = ['namePart', 'role roleTerm']
+    return name.nodeset.map { |node|
+      ks.map { |k| node.at_css(k) }.
+         map { |n| n ? n.content : '' }
+    }
   end
 
 end

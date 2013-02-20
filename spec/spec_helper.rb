@@ -357,7 +357,7 @@ def create_new_item(opts = {})
   druid = m[1]
   # Fill in the required fields.
   click_button('Add Contributor')
-  fill_in "hydrus_item_person_0", :with => opts.person
+  fill_in "hydrus_item_contributors_0_name", :with => opts.person
   fill_in "Title of item",        :with => opts.title
   fill_in "hydrus_item_abstract", :with => opts.abstract
   fill_in "hydrus_item_contact",  :with => opts.contact

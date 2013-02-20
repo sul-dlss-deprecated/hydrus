@@ -69,24 +69,23 @@ describe Hydrus::DescMetadataDS do
   context "Inserting new nodes" do
 
     it "Should be able to insert new XML nodes" do
-      nm = '<name><namePart/><role><roleTerm authority="marcrelator" type="text"/></role></name>'
+      nm = '<name type="personal"><namePart>NAME</namePart><role><roleTerm authority="marcrelator" type="text">ROLE</roleTerm></role></name>'
       ri = '<relatedItem><titleInfo><title/></titleInfo><location><url/></location></relatedItem>'
       rc = '<note type="citation/reference" displayLabel="Related Publication"></note>'
       to = '<subject><topic>foo</topic></subject>'
       @exp_xml = noko_doc([
         @mods_start,
         to,
-        nm, nm, nm,
         ri, ri,
         rc,
         to,
+        nm, nm,
         '</mods>',
       ].join '')
       @dsdoc   = Hydrus::DescMetadataDS.from_xml("#{@mods_start}</mods>")
       @dsdoc.insert_topic('foo')
-      @dsdoc.insert_contributor
-      @dsdoc.insert_contributor
-      @dsdoc.insert_contributor
+      @dsdoc.insert_contributor('personal', 'NAME', 'ROLE')
+      @dsdoc.insert_contributor('personal', 'NAME', 'ROLE')
       @dsdoc.insert_related_item
       @dsdoc.insert_related_citation
       @dsdoc.insert_related_item
