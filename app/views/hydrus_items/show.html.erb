@@ -21,7 +21,7 @@
 
       <%= render "hydrus_items/basic_item_metadata" %>
 
-       <div class="collection-items">
+       <div class="collection-items contributors-list">
            <h4>Contributors</h4>
           <% if hydrus_is_empty?(@fobj.contributors) %>
               <dt>Author</dt><dd><%= hydrus_object_setting_value(@fobj.contributors)%></dd>

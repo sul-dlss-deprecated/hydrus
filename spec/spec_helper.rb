@@ -337,7 +337,7 @@ def create_new_item(opts = {})
     :user                    => mock_authed_user,
     :title                   => 'title_foo',
     :abstract                => 'abstract_foo',
-    :person                  => 'foo_person',
+    :contributor             => 'foo_contributor',
     :contact                 => 'foo@bar.com',
     :keywords                => 'topicA,topicB',
     :requires_human_approval => 'yes',
@@ -357,7 +357,7 @@ def create_new_item(opts = {})
   druid = m[1]
   # Fill in the required fields.
   click_button('Add Contributor')
-  fill_in "hydrus_item_contributors_0_name", :with => opts.person
+  fill_in "hydrus_item_contributors_0_name", :with => opts.contributor
   fill_in "Title of item",        :with => opts.title
   fill_in "hydrus_item_abstract", :with => opts.abstract
   fill_in "hydrus_item_contact",  :with => opts.contact

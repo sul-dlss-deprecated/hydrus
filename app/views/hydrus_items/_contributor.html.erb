@@ -4,9 +4,11 @@
   i = index
 %>
 
-<div class="person destroy-set">
+<div class="contributor destroy-set">
 
   <%= text_field_tag("hydrus_item[contributors][#{i}][name]", c.name, :required => true) %>
+
+  as
 
   <%= select_tag(
         "hydrus_item[contributors][#{i}][role]",

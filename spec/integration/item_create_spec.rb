@@ -59,14 +59,14 @@ describe("Item create", :type => :request, :integration => true) do
     druid = @edit_path_regex.match(current_path)[1]
     # Fill in form and save.
     fill_in "Title of item", :with => 'title_foo'
-    fill_in "hydrus_item_contributors_0_name", :with => 'person_foo'
+    fill_in "hydrus_item_contributors_0_name", :with => 'contributor_foo'
     fill_in "Abstract", :with => 'abstract_foo'
     click_button(@buttons[:save])
     find(@div_alert).should have_content(@notices[:save])
     # Get Item out of fedora and confirm that our edits were persisted.
     item = Hydrus::Item.find(druid)
     item.title.should == 'title_foo'
-    item.person.first.should == 'person_foo'
+    item.contributors.first.name.should == 'contributor_foo'
     item.abstract.should == 'abstract_foo'
     item.should be_instance_of Hydrus::Item
     item.create_date.should_not be_blank
@@ -77,7 +77,7 @@ describe("Item create", :type => :request, :integration => true) do
     wf_nodes.first[:id].should == Dor::Config.hydrus.app_workflow.to_s
     # Check identityMetadata of Item.
     item.identityMetadata.tag.should include("Project : Hydrus")
-    # Check person roles of the Item.
+    # Check roles of the Item.
     item.person_roles.should == { "hydrus-item-depositor" => Set.new(["archivist1"]) }
     # Check events.
     exp = [
@@ -104,12 +104,12 @@ describe("Item create", :type => :request, :integration => true) do
   it "Requires approval: should be able to submit, disapprove, resubmit, approve, etc" do
     # Setup.
     ni = hash2struct(
-      :title    => 'title_foo',
-      :abstract => 'abstract_foo',
-      :contact  => 'ozzy@hell.com',
-      :reason   => 'Idiota',
-      :person   => 'person_foo',
-      :keywords => 'aaa,bbb',
+      :title       => 'title_foo',
+      :abstract    => 'abstract_foo',
+      :contact     => 'ozzy@hell.com',
+      :reason      => 'Idiota',
+      :contributor => 'contributor_foo',
+      :keywords    => 'aaa,bbb',
     )
 
     # Force Items to receive human approval.
@@ -126,7 +126,7 @@ describe("Item create", :type => :request, :integration => true) do
     druid = @edit_path_regex.match(current_path)[1]
 
     # Fill in form and save.
-    fill_in "hydrus_item_contributors_0_name", :with => ni.person
+    fill_in "hydrus_item_contributors_0_name", :with => ni.contributor
     fill_in "Title of item", :with => ni.title
     click_button(@buttons[:save])
     find(@div_alert).should have_content(@notices[:save])
@@ -307,12 +307,12 @@ describe("Item create", :type => :request, :integration => true) do
 
   it "Does not require approval: should be able to publish directly, with world visible rights and a different license than collection" do
     ni = hash2struct(
-      :title    => 'title_foo',
-      :abstract => 'abstract_foo',
-      :contact  => 'ozzy@hell.com',
-      :reason   => 'Idiota',
-      :person   => 'person_foo',
-      :keywords => 'aaa,bbb',
+      :title       => 'title_foo',
+      :abstract    => 'abstract_foo',
+      :contact     => 'ozzy@hell.com',
+      :reason      => 'Idiota',
+      :contributor => 'contributor_foo',
+      :keywords    => 'aaa,bbb',
     )
     # Force Items to not receive human approval and have varied visiblity and licenses
     coll = Hydrus::Collection.find(@hc_druid)
@@ -328,7 +328,7 @@ describe("Item create", :type => :request, :integration => true) do
     current_path.should =~ @edit_path_regex
     druid = @edit_path_regex.match(current_path)[1]
     # Fill in form and save.
-    fill_in "hydrus_item_contributors_0_name", :with => ni.person
+    fill_in "hydrus_item_contributors_0_name", :with => ni.contributor
     fill_in "Title of item", :with => ni.title
     select "everyone", :from => "hydrus_item_embarg_visib_visibility"
     select "CC BY-ND Attribution-NoDerivs", :from=>"hydrus_item_license"

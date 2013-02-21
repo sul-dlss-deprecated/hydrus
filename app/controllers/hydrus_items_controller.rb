@@ -148,7 +148,7 @@ class HydrusItemsController < ApplicationController
       }
       want.js {
         if params.has_key?(:add_contributor)
-          i = @fobj.person.length - 1
+          i = @fobj.contributors.length - 1
           render "add_contributor", :locals => { :index => i }
         elsif params.has_key?(:add_link)
           i = @fobj.related_items.length - 1

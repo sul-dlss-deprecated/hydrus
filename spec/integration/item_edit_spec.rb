@@ -63,61 +63,76 @@ describe("Item edit", :type => :request, :integration => true) do
     @hi.keywords.should == ni.keywords
   end
 
-  it "People/Role editing" do
-    new_name  = "MY EDITIED PERSON"
-    orig_name = "Rosenfeld, Michael J."
-    field_np  = "hydrus_item_contributors_0_name"
-    field_rt  = "hydrus_item_contributors_0_role"
-    orig_role = "Principal investigator"
-    new_role  = "Collector"
+  describe "contributors" do
 
-    login_as('archivist1')
-    should_visit_edit_page(@hi)
+    before(:each) do
+      @css = {
+        :name     => lambda { |i| "hydrus_item_contributors_#{i}_name" },
+        :role     => lambda { |i| "hydrus_item_contributors_#{i}_role" },
+        :remove   => lambda { |i| "remove_name_#{i}" },
+        :view_div => 'div.contributors-list',
+      }
+    end
 
-    find_field(field_np).value.should == orig_name
-    page.should have_content(orig_role)
+    it "scenario with deletes, edits, and adds" do
+      # We should have 5 contributors.
+      exp = @hi.contributors.map { |c| c.clone }
+      exp.size.should == 5
+      # Go to edit page.
+      login_as('archivist1')
+      should_visit_edit_page(@hi)
+      # Delete some contributors.
+      # Note: [3,1,1] corresponds to elements 3, 1, 2 from original list.
+      [3,1,1].each do |i|
+        exp.delete_at(i)
+        click_link(@css[:remove].call(i))
+      end
+      # Edit a contributor name.
+      nm = 'Herr Finkelstein'
+      fill_in(@css[:name].call(0), :with => nm)
+      exp[0].name = nm
+      # Add some contributors.
+      new_contributors = [
+        [ 'Foo Conference',  'conference', 'Conference' ],
+        [ 'Bar Corp Author', 'corporate',  'Author' ],
+        [ 'Quux Author',     'personal',   'Author' ],
+      ]
+      new_contributors.each do |name, name_type, role|
+        # Add a new contributor to exp list.
+        c = Hydrus::Contributor.new(
+          :name      => name,
+          :role      => role,
+          :name_type => name_type
+        )
+        exp << c
+        i = exp.size - 1
+        # Add the same contributor via the UI.
+        q1 = 'select#' + @css[:role].call(i)
+        q2 = "option[value='#{c.role_key}']"
+        click_button(@buttons[:add_contributor])
+        fill_in(@css[:name].call(i), :with => name)
+        find(q1).find(q2).select_option
+      end
+      # Save.
+      click_button(@buttons[:save])
+      # Check view page.
+      vdiv  = find(@css[:view_div])
+      roles = vdiv.all('dt').map { |nd| nd.text }
+      names = vdiv.all('dd').map { |nd| nd.text }
+      roles.zip(names).should == exp.map { |c| [c.role, c.name] }
+      # Check Fedora objects.
+      @hi = Hydrus::Item.find(@hi.pid)
+      @hi.contributors.should == exp
+      # Check edit page.
+      should_visit_edit_page(@hi)
+      exp.each_with_index do |c, i|
+        q1 = 'select#' + @css[:role].call(i)
+        q2 = 'input#'  + @css[:name].call(i)
+        find(q1).value.should == c.role_key
+        find(q2).value.should == c.name
+      end
+    end
 
-    fill_in(field_np, :with => new_name)
-    select(new_role, :from => field_rt)
-    click_button(@buttons[:save])
-    page.should have_content(@ok_notice)
-
-    current_path.should == polymorphic_path(@hi)
-    visit polymorphic_path(@hi)
-    page.should have_content(new_name)
-    page.should have_content(new_role)
-  end
-
-  it "People/Role adding and deleting" do
-    new_field = "hydrus_item_contributors_5_name"
-    new_delete_button = "remove_name_5"
-    person = "Mr. Test Person"
-
-    login_as('archivist1')
-    should_visit_edit_page(@hi)
-
-    page.should have_css("input#hydrus_item_contributors_4_name")
-    page.should_not have_css("##{new_field}")
-
-    click_button(@buttons[:add_contributor])
-    page.should have_css("##{new_field}")
-    page.should have_css("##{new_delete_button}")
-
-    fill_in(new_field, :with => person)
-    click_button(@buttons[:save])
-    page.should have_content(@ok_notice)
-
-    should_visit_edit_page(@hi)
-
-    page.should have_css("##{new_delete_button}")
-    find_field(new_field).value.should == person
-
-    # delete
-    click_link new_delete_button
-
-    current_path.should == edit_polymorphic_path(@hi)
-    page.should_not have_css("##{new_field}")
-    page.should_not have_css("##{new_delete_button}")
   end
 
   it "Related Content editing with adding protocol if it is missing" do

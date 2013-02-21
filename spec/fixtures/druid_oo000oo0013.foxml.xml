@@ -102,13 +102,13 @@
           <name type="personal">
             <namePart>Palanker, Daniel</namePart>
             <role>
-              <roleTerm authority="marcrelator" type="text">Thesis advisor</roleTerm>
+              <roleTerm authority="marcrelator" type="text">Advisor</roleTerm>
             </role>
           </name>
           <name type="corporate">
             <namePart>Stanford University Department of Physics</namePart>
             <role>
-              <roleTerm authority="marcrelator" type="text">Contributor</roleTerm>
+              <roleTerm authority="marcrelator" type="text">Contributing author</roleTerm>
             </role>
           </name>
           <typeOfResource>Text</typeOfResource>

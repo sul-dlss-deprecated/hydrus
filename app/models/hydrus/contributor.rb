@@ -101,4 +101,20 @@ class Hydrus::Contributor < Hydrus::GenericModel
     return self.class.make_role_key(name_type, role)
   end
 
+  # Method to check for equality.
+  # Used in testing.
+  def ==(other)
+    return (
+      self.name      == other.name &&
+      self.role      == other.role &&
+      self.name_type == other.name_type
+    )
+  end
+
+  # Returns new Contributor based on attributes of self.
+  # Used in testing.
+  def clone
+    return Hydrus::Contributor.new(:name => name, :role => role, :name_type => name_type)
+  end
+
 end

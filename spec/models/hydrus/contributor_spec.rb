@@ -35,4 +35,23 @@ describe Hydrus::Contributor do
 
   end
 
+  it "clone() and ==()" do
+    # Create two clones.
+    c1 = Hydrus::Contributor.default_contributor
+    c1.name = 'Los Pollos Hermanos'
+    c2 = c1.clone
+    # Should be equal but not the same object.
+    c1.should == c2
+    c1.object_id.should_not == c2.object_id
+    # Should be unequal if any single attribute differs.
+    [:name, :role, :name_type].each do |getter|
+      setter   = "#{getter}="
+      orig_val = c2.send(getter)
+      c2.send(setter, 'foobar')
+      c1.should_not == c2
+      c2.send(setter, orig_val)
+      c1.should == c2
+    end
+  end
+
 end

@@ -57,8 +57,6 @@ class Hydrus::Item < Hydrus::GenericObject
     "descMetadata" => [
       [:preferred_citation,        true   ],
       [:related_citation,          false  ],
-      [:person,                    false, :name, :namePart],
-      [:person_role,               false, :name, :role, :roleTerm],
     ],
     "roleMetadata" => [
       [:item_depositor_id,         true,  :item_depositor, :person, :identifier],

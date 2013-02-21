@@ -2,16 +2,13 @@
 Current
 ------------------
 
-HYDRUS-51. Add support for "corporate" and "conference" name types.
+Push and deploy.
 
-    check fixtures
-    integration tests
+HYDRUS-56. Add a "published on" date, based on PURL/stacks.
 
 ------------------
 On-deck -- later
 ------------------
-
-HYDRUS-56. Add a "published on" date, based on PURL/stacks.
 
 Implement nuke(). [See Consul page: chimera/DOR+object+deletion.]
 
