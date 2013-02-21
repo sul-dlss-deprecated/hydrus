@@ -587,20 +587,33 @@ class Hydrus::Item < Hydrus::GenericObject
     kws.each { |kw| descMetadata.insert_topic(kw)  }
   end
 
+  # Returns the Item's contributors, as an array of Hydrus::Contributor objects.
+  def contributors
+    return descMetadata.contributors
+  end
+
+  # This is the setter called from the Item edit UI.
+  # Takes a params-style hash like this, with the inner hashes
+  # having the name and role_key for the Item's contributors:
+  #   {
+  #     "0" => {"name"=>"AAA", "role_key"=>"corporate_author"},
+  #     "1" => {"name"=>"BBB", "role_key"=>"personal_author"},
+  #   }
+  #
+  # Uses that hash to rewrite all <name> nodes in the descMetadata.
   def contributors=(h)
     descMetadata.remove_nodes(:name)
     h.values.each { |c|
-      insert_contributor(c['name'], c['role'])
+      insert_contributor(c['name'], c['role_key'])
     }
   end
 
+  # Takes a Contributor name and role_key.
+  # Uses that role_key to lookup the corresponding name_type and role.
+  # Uses those to add a <name> node to the descMetadata.
   def insert_contributor(name = '', role_key = nil)
     typ, role = Hydrus::Contributor.lookup_with_role_key(role_key)
     descMetadata.insert_contributor(typ, name, role)
-  end
-
-  def contributors
-    return descMetadata.contributors
   end
 
   def self.discovery_roles

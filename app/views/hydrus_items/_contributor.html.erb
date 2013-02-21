@@ -11,7 +11,7 @@
   as
 
   <%= select_tag(
-        "hydrus_item[contributors][#{i}][role]",
+        "hydrus_item[contributors][#{i}][role_key]",
         grouped_options_for_select(Hydrus::Contributor.groups_for_select, c.role_key)) %>
 
   <%= link_to(

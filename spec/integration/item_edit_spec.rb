@@ -68,7 +68,7 @@ describe("Item edit", :type => :request, :integration => true) do
     before(:each) do
       @css = {
         :name     => lambda { |i| "hydrus_item_contributors_#{i}_name" },
-        :role     => lambda { |i| "hydrus_item_contributors_#{i}_role" },
+        :role     => lambda { |i| "hydrus_item_contributors_#{i}_role_key" },
         :remove   => lambda { |i| "remove_name_#{i}" },
         :view_div => 'div.contributors-list',
       }

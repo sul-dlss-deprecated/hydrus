@@ -166,8 +166,8 @@ describe Hydrus::Item do
         </mods>
       eos
       @hi.contributors = {
-        "0" => {"name"=>"AAA", "role"=>"corporate_author"},
-        "1" => {"name"=>"BBB", "role"=>"personal_author"},
+        "0" => {"name"=>"AAA", "role_key"=>"corporate_author"},
+        "1" => {"name"=>"BBB", "role_key"=>"personal_author"},
       }
       @hi.descMetadata.ng_xml.should be_equivalent_to(exp)
     end

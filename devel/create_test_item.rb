@@ -42,8 +42,10 @@ def create_test_item(*args)
   hi.license     = 'cc-by-nc'
   hi.keywords    = "foo,bar"
   hi.visibility  = 'stanford'
-  hi.person      = { "0" => "Nugent, Ted" }
-  hi.person_role = { "0" => "Author" }
+  hi.contributors = {
+    "0" => {"name"=>"Nugent, Ted", "role_key"=>"personal_author"},
+    "1" => {"name"=>"EMI",         "role_key"=>"corporate_sponsor"},
+  }
   hi.accepted_terms_of_deposit = 'yes'
   hi.reviewed_release_settings = 'yes'
   # Create a file for the Item.

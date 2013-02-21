@@ -4,6 +4,13 @@ Current
 
 HYDRUS-56. Add a "published on" date, based on PURL/stacks.
 
+  initial_version_published_on
+  latest_version_published_on
+
+  Definition of published-on:
+    (a) metadata is viewable on a PURL page
+    (b) content files, if any, are accessible from the stacks
+
 ------------------
 On-deck -- later
 ------------------
