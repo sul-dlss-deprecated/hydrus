@@ -1,5 +1,12 @@
 = Hydrus change log
 
+== 2013.02.21a
+
+* HYDRUS-51. Add support for "corporate" and "conference" name types.
+* Complete refactor of contributor-related code.
+* Deployed to hydrus-test.
+* Deployed to hydrus-prod.
+
 == 2013.02.15a
 
 * HYDRUS-10. Support ability to hide specific files when Item is published.
