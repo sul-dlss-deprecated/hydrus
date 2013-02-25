@@ -1,6 +1,6 @@
-------------------
+--------
 Current
-------------------
+--------
 
 HYDRUS-56. Add a "published on" date, based on PURL/stacks.
 
@@ -11,18 +11,63 @@ HYDRUS-56. Add a "published on" date, based on PURL/stacks.
     (a) metadata is viewable on a PURL page
     (b) content files, if any, are accessible from the stacks
 
-------------------
-On-deck -- later
-------------------
+  before open_new_version
+    call is_accessioned(:publish_datetime => true)
+    persist initial_version_published_on
 
-Implement nuke(). [See Consul page: chimera/DOR+object+deletion.]
+  to get latest_version_published_on
+    return WFS.get_lifecycle(REPO, PID, 'published')
 
-Clear out cruft: all objects in -test environment, and stray objects in -prod.
+  app/models/hydrus/collection.rb
+  app/models/hydrus/generic_object.rb
+  app/models/hydrus/hydrus_properties_ds.rb
+  app/models/hydrus/item.rb
+  app/views/hydrus_items/_basic_item_metadata.html.erb
+  spec/integration/collection_create_spec.rb
+  spec/integration/item_create_spec.rb
+  spec/integration/item_edit_spec.rb
+  spec/integration/item_versioning_spec.rb
+  spec/models/hydrus/collection_spec.rb
+  spec/models/hydrus/hydrus_properties_ds_spec.rb
+  spec/models/hydrus/item_spec.rb
+
+  Working on HYDRUS-56 (published-on date). Currently the app keeps track of when the user "publishes" the item -- that is, the moment they click the Approve or Publish button in the UI. HYDRUS-56 calls for something different -- the time the items gets through the shelve and publish steps in the common-accessioning pipeline. Should the UI display both of the these publish times, or just the latter?
+
+  Rename current attributes:
+    publish_time         >> submitted_for_publish_time
+    initial_publish_time >> initial_submitted_for_publish_time
+
+    -- Keep storing these.
+    -- But do not display in the UI.
+
+  "Actually published".
+    publish_time         >> submitted_for_publish_time
+    initial_publish_time >> initial_submitted_for_publish_time
+  
+
+--------
+On-deck
+--------
+
+HYDRUS-72. Collection view page: fix visibility text.
+
+Licenses: remove leading 'cc-' and maybe the other prefix as well (email
+question sent). Requires both code changes and object remediation. Fix code my
+altering the license getter and setter, in generic_object.rb.
+
+HYDRUS-71. Text changes for Terms of Deposit overlay screen and associated PDF.
+
+Remove empty <access type="edit"> blocks in rightsMetadata. Requires both code
+changes and object remediation. 
 
 Hydrus has some recursive symlinking in its uploads directory. For example: see
 uploads/nw/312/yv/4331/nw312yv4331. This appears to occur for items with
 subsequent versions. Check path_to_object() in findable.rb in assembly for
 possible bugs.
+
+Clear out cruft: all objects in -test environment, and stray objects in -prod.
+Depends on the implementionat of nuke() in dor-services. [See Consul page:
+chimera/DOR+object+deletion.]
 
 Move definition of users with app-wide powers to config files, and allow them
 to vary by environment.

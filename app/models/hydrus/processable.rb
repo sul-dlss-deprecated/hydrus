@@ -71,7 +71,6 @@ module Hydrus::Processable
     #   - Must be published before it can be accessioned.
     #   - For local development and automated testing, treat published as
     #     equivalent to accessioned.
-
     return false unless is_published
     return true if should_treat_as_accessioned
 
