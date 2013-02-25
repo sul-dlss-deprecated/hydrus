@@ -141,8 +141,8 @@ class Hydrus::Item < Hydrus::GenericObject
   def do_publish
     # Set publish times: latest and initial.
     tm = HyTime.now_datetime
-    self.publish_time = tm
-    self.initial_publish_time = tm if is_initial_version()
+    self.submitted_for_publish_time = tm
+    self.initial_submitted_for_publish_time = tm if is_initial_version()
     # Set label and title.
     t = title()
     identityMetadata.objectLabel = t
@@ -509,12 +509,12 @@ class Hydrus::Item < Hydrus::GenericObject
   # Returns a datetime string for the start of the embargo range.
   # Has item ever been published?
   #   - No:  returns now.
-  #   - Yes: returns time of initial publication.
+  #   - Yes: returns time of initial submission for publication.
   # Note: If the item has been published this method can return
   # dates in the past; for that reason, we do not use this method
   # to definie the beginning date allowed by the embargo date picker.
   def beginning_of_embargo_range
-    return initial_publish_time || HyTime.now_datetime
+    return initial_submitted_for_publish_time || HyTime.now_datetime
   end
 
   # Parses embargo_terms (eg, "2 years") into its number and time-unit parts.

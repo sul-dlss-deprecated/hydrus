@@ -399,16 +399,16 @@ describe Hydrus::Item do
 
     describe "beginning_of_embargo_range()" do
 
-      it "initial_publish_time missing: should return now_datetime()" do
+      it "initial_submitted_for_publish_time missing: should return now_datetime()" do
         exp = 'foo bar'
         HyTime.stub(:now_datetime).and_return(exp)
-        @hi.stub(:initial_publish_time).and_return(nil)
+        @hi.stub(:initial_submitted_for_publish_time).and_return(nil)
         @hi.beginning_of_embargo_range.should == exp
       end
 
-      it "initial_publish_time present: should return it" do
+      it "initial_submitted_for_publish_time present: should return it" do
         exp = 'foo bar blah'
-        @hi.stub(:initial_publish_time).and_return(exp)
+        @hi.stub(:initial_submitted_for_publish_time).and_return(exp)
         @hi.beginning_of_embargo_range.should == exp
       end
 
@@ -882,14 +882,14 @@ describe Hydrus::Item do
       @hi.should_receive(:start_common_assembly)
       # Before-assertions.
       @hi.is_initial_version.should == true
-      @hi.publish_time.should be_blank
-      @hi.initial_publish_time.should be_blank
+      @hi.submitted_for_publish_time.should be_blank
+      @hi.initial_submitted_for_publish_time.should be_blank
       @hi.get_hydrus_events.size.should == 0
       # Run it, and make after-assertions.
       @hi.do_publish
       @hi.label.should == exp
-      @hi.publish_time.should_not be_blank
-      @hi.initial_publish_time.should_not be_blank
+      @hi.submitted_for_publish_time.should_not be_blank
+      @hi.initial_submitted_for_publish_time.should_not be_blank
       @hi.object_status.should == 'published'
       @hi.get_hydrus_events.first.text.should =~ /\AItem published: v\d/
     end

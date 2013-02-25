@@ -508,12 +508,12 @@ describe("Item edit", :type => :request, :integration => true) do
       hc.visibility_option_value = 'varies'
       hc.save
 
-      # Reset the Item's publish_time, so this test won't fail a year from now.
-      today            = HyTime.now.beginning_of_day
-      later            = today + 10.days
-      later_dt         = HyTime.datetime(later, :from_localzone => true)
-      later_d          = HyTime.date(later, :from_localzone => true)
-      @hi.publish_time = HyTime.datetime(today, :from_localzone => true)
+      # Reset the Item's publish time, so this test won't fail a year from now.
+      today    = HyTime.now.beginning_of_day
+      later    = today + 10.days
+      later_dt = HyTime.datetime(later, :from_localzone => true)
+      later_d  = HyTime.date(later, :from_localzone => true)
+      @hi.submitted_for_publish_time = HyTime.datetime(today, :from_localzone => true)
       @hi.save
 
       # Check embargoMD and rightsMD: initial.

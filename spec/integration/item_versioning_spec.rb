@@ -248,14 +248,14 @@ describe("Item versioning", :type => :request, :integration => true) do
       ed  = HyTime.now + 2.month
       pds = HyTime.datetime(pd)
       @hi.embarg_visib = { 'embargoed' => 'yes', 'date' => HyTime.date(ed) }
-      @hi.publish_time = pds
-      @hi.initial_publish_time = pds
+      @hi.submitted_for_publish_time = pds
+      @hi.initial_submitted_for_publish_time = pds
       @hi.save.should == true
       # Confirm changes.
       @hi = Hydrus::Item.find(@hi.pid)
       @hi.is_embargoed.should == true
       @hi.visibility.should == ['world']
-      @hi.initial_publish_time.should == pds
+      @hi.initial_submitted_for_publish_time.should == pds
       # Open new version.
       login_as('archivist1')
       should_visit_view_page(@hi)
@@ -314,14 +314,14 @@ describe("Item versioning", :type => :request, :integration => true) do
       ed  = HyTime.now - 3.day
       pds = HyTime.datetime(pd)
       @hi.embarg_visib = { 'embargoed' => 'yes', 'date' => HyTime.date(ed) }
-      @hi.publish_time = pds
-      @hi.initial_publish_time = pds
+      @hi.submitted_for_publish_time = pds
+      @hi.initial_submitted_for_publish_time = pds
       @hi.save.should == true
       # Confirm changes.
       @hi = Hydrus::Item.find(@hi.pid)
       @hi.is_embargoed.should == true
       @hi.visibility.should == ['world']
-      @hi.initial_publish_time.should == pds
+      @hi.initial_submitted_for_publish_time.should == pds
       # Open new version.
       login_as('archivist1')
       should_visit_view_page(@hi)

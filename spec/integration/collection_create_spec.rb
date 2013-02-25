@@ -111,7 +111,7 @@ describe("Collection create", :type => :request, :integration => true) do
     coll.is_openable.should == false
     coll.is_published.should == false
     coll.is_destroyable.should == true
-    coll.publish_time.should be_blank
+    coll.submitted_for_publish_time.should be_blank
     coll.valid?.should == true  # Because unpublished, so validation is limited.
     coll.is_open.should == false
     # Go back to edit page and fill in required elements.
@@ -145,7 +145,7 @@ describe("Collection create", :type => :request, :integration => true) do
     coll.is_openable.should == false
     coll.is_published.should == true
     coll.is_destroyable.should == false
-    coll.publish_time.should_not be_blank
+    coll.submitted_for_publish_time.should_not be_blank
     coll.valid?.should == true
     coll.is_open.should == true
     # The workflow steps of both the collection and apo should be completed.

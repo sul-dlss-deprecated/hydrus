@@ -4,52 +4,58 @@ Current
 
 HYDRUS-56. Add a "published on" date, based on PURL/stacks.
 
-  initial_version_published_on
-  latest_version_published_on
+    Create attributes for "actually published":
+        publish_time
+        initial_publish_time
 
-  Definition of published-on:
-    (a) metadata is viewable on a PURL page
-    (b) content files, if any, are accessible from the stacks
+        - modify view to display these attributes, not the submitted-for variants
+        - modify tests to check this attribute also
+      
+    initial_publish_time
+        setting
+            - set the value in open_new_version(), before super call
+            - use a call to is_accessioned(:publish_datetime => true)
+        getting
+            return is_initial_version ? publish_time : initial_publish_time
 
-  before open_new_version
-    call is_accessioned(:publish_datetime => true)
-    persist initial_version_published_on
+    publish_time
+        WFS.get_lifecycle(REPO, PID, 'published')
 
-  to get latest_version_published_on
-    return WFS.get_lifecycle(REPO, PID, 'published')
+    affected files: 
 
-  app/models/hydrus/collection.rb
-  app/models/hydrus/generic_object.rb
-  app/models/hydrus/hydrus_properties_ds.rb
-  app/models/hydrus/item.rb
-  app/views/hydrus_items/_basic_item_metadata.html.erb
-  spec/integration/collection_create_spec.rb
-  spec/integration/item_create_spec.rb
-  spec/integration/item_edit_spec.rb
-  spec/integration/item_versioning_spec.rb
-  spec/models/hydrus/collection_spec.rb
-  spec/models/hydrus/hydrus_properties_ds_spec.rb
-  spec/models/hydrus/item_spec.rb
+        app/models/hydrus/hydrus_properties_ds.rb
+        spec/models/hydrus/hydrus_properties_ds_spec.rb
 
-  Working on HYDRUS-56 (published-on date). Currently the app keeps track of when the user "publishes" the item -- that is, the moment they click the Approve or Publish button in the UI. HYDRUS-56 calls for something different -- the time the items gets through the shelve and publish steps in the common-accessioning pipeline. Should the UI display both of the these publish times, or just the latter?
+        app/models/hydrus/generic_object.rb
+        app/models/hydrus/collection.rb
+        app/models/hydrus/item.rb
 
-  Rename current attributes:
-    publish_time         >> submitted_for_publish_time
-    initial_publish_time >> initial_submitted_for_publish_time
+        app/views/hydrus_items/_basic_item_metadata.html.erb
 
-    -- Keep storing these.
-    -- But do not display in the UI.
+        spec/integration/collection_create_spec.rb
+        spec/integration/item_create_spec.rb
+        spec/integration/item_edit_spec.rb
+        spec/integration/item_versioning_spec.rb
+        spec/models/hydrus/collection_spec.rb
+        spec/models/hydrus/item_spec.rb
 
-  "Actually published".
-    publish_time         >> submitted_for_publish_time
-    initial_publish_time >> initial_submitted_for_publish_time
-  
+        spec/fixtures/druid_oo000oo0001.foxml.xml
+        spec/fixtures/druid_oo000oo0003.foxml.xml
+        spec/fixtures/druid_oo000oo0004.foxml.xml
+        spec/fixtures/druid_oo000oo0006.foxml.xml
+        spec/fixtures/druid_oo000oo0007.foxml.xml
+        spec/fixtures/druid_oo000oo0010.foxml.xml
+        spec/fixtures/druid_oo000oo0011.foxml.xml
+        spec/fixtures/druid_oo000oo0012.foxml.xml
+        spec/fixtures/druid_oo000oo0013.foxml.xml
 
 --------
 On-deck
 --------
 
 HYDRUS-72. Collection view page: fix visibility text.
+
+APO citation display in Argo. See Hannah email.
 
 Licenses: remove leading 'cc-' and maybe the other prefix as well (email
 question sent). Requires both code changes and object remediation. Fix code my

@@ -61,7 +61,7 @@ describe Hydrus::Collection do
       @hc.identityMetadata.objectLabel.should     == [hc_title]
       @hc.label.should                            == hc_title
       @hc.apo.label.should                        == apo_title
-      @hc.publish_time.should_not be_blank
+      @hc.submitted_for_publish_time.should_not be_blank
     end
 
     it "close() should set object_status and add an event" do

@@ -19,8 +19,6 @@ class Hydrus::HydrusPropertiesDS < ActiveFedora::NokogiriDatastream
     t.item_type                 :path => 'itemType'
     t.object_status             :path => 'objectStatus', :index_as => [:facetable, :searchable]
     t.disapproval_reason        :path => 'disapprovalReason'
-    t.publish_time              :path => 'publishTime'
-    t.initial_publish_time      :path => 'initialPublishTime'
     t.submit_for_approval_time  :path => 'submitForApprovalTime'
     t.last_modify_time          :path => 'lastModifyTime'
     t.version_started_time      :path => 'versionStartedTime'
@@ -30,6 +28,8 @@ class Hydrus::HydrusPropertiesDS < ActiveFedora::NokogiriDatastream
     t.license_option            :path => 'licenseOption'
     t.prior_license             :path => 'priorLicense'
     t.prior_visibility          :path => 'priorVisibility'
+    t.submitted_for_publish_time         :path => 'submittedForPublishTime'
+    t.initial_submitted_for_publish_time :path => 'initialSubmittedForPublishTime'
 
   end
 

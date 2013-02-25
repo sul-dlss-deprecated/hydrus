@@ -25,8 +25,8 @@ describe Hydrus::HydrusPropertiesDS do
         <versionStartedTime>2011-09-01T00:00:00Z</versionStartedTime>
         <lastModifyTime>2011-09-02T00:00:00Z</lastModifyTime>
         <submitForApprovalTime>2011-08-03T00:00:00Z</submitForApprovalTime>
-        <publishTime>2011-09-03T00:00:00Z</publishTime>
-        <initialPublishTime>2011-09-03T00:00:11Z</publishTime>
+        <submittedForPublishTime>2011-09-03T00:00:00Z</submittedForPublishTime>
+        <initialSubmittedForPublishTime>2011-09-03T00:00:11Z</initialSubmittedForPublishTime>
       #{@ds_end}
     EOF
     @dsdoc = Hydrus::HydrusPropertiesDS.from_xml(xml)
@@ -51,8 +51,8 @@ describe Hydrus::HydrusPropertiesDS do
       [:item_type, ["dataset"]],
       [:object_status, ["draft"]],
       [:disapproval_reason, ["Idiota"]],
-      [:publish_time,  ["2011-09-03T00:00:00Z"]],
-      [:initial_publish_time,  ["2011-09-03T00:00:11Z"]],
+      [:submitted_for_publish_time,  ["2011-09-03T00:00:00Z"]],
+      [:initial_submitted_for_publish_time,  ["2011-09-03T00:00:11Z"]],
       [:submit_for_approval_time,  ["2011-08-03T00:00:00Z"]],
       [:last_modify_time,  ["2011-09-02T00:00:00Z"]],
       [:version_started_time,  ["2011-09-01T00:00:00Z"]],

@@ -173,7 +173,7 @@
       CREATED="2011-07-05T20:49:25.801Z" MIMETYPE="text/xml" SIZE="345">
       <foxml:xmlContent>
         <hydrusProperties>
-          <publishTime>2012-11-01T00:00:00Z</publishTime>
+          <submittedForPublishTime>2012-11-01T00:00:00Z</submittedForPublishTime>
           <lastModifyTime>2012-11-01T00:00:22Z</lastModifyTime>
           <versionStartedTime>2012-11-01T00:00:22Z</versionStartedTime>
           <reviewedReleaseSettings>true</reviewedReleaseSettings>

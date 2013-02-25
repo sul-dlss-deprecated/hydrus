@@ -42,5 +42,5 @@
 
 <% if @fobj.is_published %>
   <dt><%= to_bool(@fobj.requires_human_approval) ? "Approved" : "Published"%> on</dt>
-  <dd><%= HyTime.datetime_display(@fobj.publish_time) %></dd>
+  <dd><%= HyTime.datetime_display(@fobj.submitted_for_publish_time) %></dd>
 <% end %>

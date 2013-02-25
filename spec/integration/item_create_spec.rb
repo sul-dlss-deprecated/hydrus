@@ -143,7 +143,7 @@ describe("Item create", :type => :request, :integration => true) do
     item.is_published.should == false
     item.is_returned.should == false
     item.is_destroyable.should == true
-    item.publish_time.should be_blank
+    item.submitted_for_publish_time.should be_blank
     item.accepted_terms_of_deposit.should == "false"
     item.valid?.should == true  # Because unpublished, so validation is limited.
 
@@ -203,7 +203,7 @@ describe("Item create", :type => :request, :integration => true) do
     item.is_published.should == false
     item.is_returned.should == false
     item.is_destroyable.should == true
-    item.publish_time.should be_blank
+    item.submitted_for_publish_time.should be_blank
     item.submit_for_approval_time.should_not be_blank
     item.valid?.should == true
 
@@ -284,7 +284,7 @@ describe("Item create", :type => :request, :integration => true) do
     item.valid?.should == true
     item.disapproval_reason.should == nil
     item.is_embargoed.should == false
-    item.publish_time.should_not be_blank
+    item.submitted_for_publish_time.should_not be_blank
     item.visibility.should == ["stanford"]
     ps={:visibility=>'stanford',:license_code=>'cc-by',:embargo_date=>''}
     check_emb_vis_lic(item,ps)
