@@ -100,8 +100,19 @@ module Hydrus::Processable
     return true
   end
 
+  # Returns a string -- the datetime when the object achived the published
+  # lifecycle in common accessioning.
+  def publish_time
+    if should_treat_as_accessioned
+      # In development and test mode, simulated a publish_time of 1 day later.
+      pt = submitted_for_publish_time.to_datetime + 1.day
+    else
+      pt = WFS.get_lifecycle(REPO, pid, 'published')
+    end
+    return HyTime.datetime(pt)
+  end
+
   # Returns true if we are running in development or test mode.
-  # In a method to facilitate unit testing of is_accessioned().
   def should_treat_as_accessioned
     return %w(development test).include?(Rails.env)
   end

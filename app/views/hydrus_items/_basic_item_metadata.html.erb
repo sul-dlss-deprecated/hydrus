@@ -36,11 +36,19 @@
 <dd><%= HyTime.datetime_display(@fobj.last_modify_time) %></dd>
 
 <% if to_bool(@fobj.requires_human_approval) %>
+  <% sfat = HyTime.datetime_display(@fobj.submit_for_approval_time) %>
   <dt>Submitted for approval</dt>
-  <dd><%= HyTime.datetime_display(@fobj.submit_for_approval_time) %></dd>
+  <dd><%= hydrus_object_setting_value(sfat, :na => true) %></dd>
 <% end %>
 
 <% if @fobj.is_published %>
-  <dt><%= to_bool(@fobj.requires_human_approval) ? "Approved" : "Published"%> on</dt>
-  <dd><%= HyTime.datetime_display(@fobj.submitted_for_publish_time) %></dd>
+  <% pt = HyTime.datetime_display(@fobj.publish_time) %>
+  <dt>Published</dt>
+  <dd><%= hydrus_object_setting_value(pt, :na => true) %></dd>
+<% end %>
+
+<% unless @fobj.is_initial_version %>
+  <% pt = HyTime.datetime_display(@fobj.initial_publish_time) %>
+  <dt>Initial ver. published</dt>
+  <dd><%= hydrus_object_setting_value(pt, :na => true) %></dd>
 <% end %>

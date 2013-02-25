@@ -202,6 +202,8 @@ class Hydrus::Item < Hydrus::GenericObject
   #     during testing.
   def open_new_version(opts = {})
     cannot_do(:open_new_version) unless is_accessioned()
+    # Store the time when the object was initially published.
+    self.initial_publish_time = publish_time() if is_initial_version
     # Call the dor-services method, with a couple of Hydrus-specific options.
     super(:assume_accessioned => should_treat_as_accessioned(), :create_workflows_ds => false)
     # Set some version metadata that the Hydrus app uses.

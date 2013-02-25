@@ -74,8 +74,13 @@ module ApplicationHelper
     item.is_published ? "Published Version" : "View Draft"
   end
 
-  def hydrus_object_setting_value(obj)
-    hydrus_is_empty?(obj) ? content_tag(:span, "to be entered", :class => "unspecified") : obj
+  def hydrus_object_setting_value(obj, opts = {})
+    return obj unless hydrus_is_empty?(obj)
+    if opts[:na]
+      return content_tag(:span, 'not available yet', :class => "muted")
+    else
+      return content_tag(:span, 'to be entered', :class => "unspecified")
+    end
   end
 
   # Takes a string. Escapes any HTML characters, converts

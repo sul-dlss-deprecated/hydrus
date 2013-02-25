@@ -28,8 +28,21 @@ class Hydrus::HydrusPropertiesDS < ActiveFedora::NokogiriDatastream
     t.license_option            :path => 'licenseOption'
     t.prior_license             :path => 'priorLicense'
     t.prior_visibility          :path => 'priorVisibility'
+
+    # Two variants of publish time:
+    #   - The time the user clicks Open/Approve/Publish in UI.
+    #       - Stored in hydrusProperties.
+    #           submitted_for_publish_time
+    #           initial_submitted_for_publish_time
+    #       - Aligns conceptually with the is_published() method.
+    #   - The time the object achieves published lifecycle in accessioning.
+    #       - Stored in hydrusProperties, when 2nd version is opened.
+    #           initial_publish_time
+    #       - Obtained via workflow service.
+    #           publish_time
     t.submitted_for_publish_time         :path => 'submittedForPublishTime'
     t.initial_submitted_for_publish_time :path => 'initialSubmittedForPublishTime'
+    t.initial_publish_time               :path => 'initialPublishTime'
 
   end
 
