@@ -165,7 +165,9 @@ class Hydrus::Collection < Hydrus::GenericObject
     # require human approval, even when their items do. Note that the workflow
     # and assembly calls need to be executed both for the Collection and its APO.
     if first_time
-      self.submitted_for_publish_time = HyTime.now_datetime
+      tm = HyTime.now_datetime
+      self.submitted_for_publish_time = tm
+      self.initial_submitted_for_publish_time = tm
       [self, apo].each do |obj|
         obj.complete_workflow_step('submit')
         obj.complete_workflow_step('approve')

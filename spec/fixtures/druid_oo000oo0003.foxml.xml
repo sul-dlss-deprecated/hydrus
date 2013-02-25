@@ -115,6 +115,7 @@
       <foxml:xmlContent>
         <hydrusProperties>
           <submittedForPublishTime>2012-11-01T00:00:00Z</submittedForPublishTime>
+          <initialSubmittedForPublishTime>2012-11-01T00:00:00Z</initialSubmittedForPublishTime>
           <lastModifyTime>2012-11-01T00:00:22Z</lastModifyTime>
           <embargoOption>varies</embargoOption>
           <embargoTerms>1 year</embargoTerms>

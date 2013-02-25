@@ -6,6 +6,12 @@ HYDRUS-56. Add a "published on" date, based on PURL/stacks.
 
     Unit tests
 
+        hydrus_object_setting_value()
+        open()
+        do_publish()
+        beginning_of_embargo_range()
+        publish_time()
+
     Integration tests
 
     affected files: 
@@ -25,15 +31,21 @@ HYDRUS-56. Add a "published on" date, based on PURL/stacks.
         spec/models/hydrus/collection_spec.rb
         spec/models/hydrus/item_spec.rb
 
-        spec/fixtures/druid_oo000oo0001.foxml.xml
         spec/fixtures/druid_oo000oo0003.foxml.xml
         spec/fixtures/druid_oo000oo0004.foxml.xml
+        spec/fixtures/druid_oo000oo0010.foxml.xml
+
+        spec/fixtures/druid_oo000oo0001.foxml.xml
         spec/fixtures/druid_oo000oo0006.foxml.xml
         spec/fixtures/druid_oo000oo0007.foxml.xml
-        spec/fixtures/druid_oo000oo0010.foxml.xml
         spec/fixtures/druid_oo000oo0011.foxml.xml
         spec/fixtures/druid_oo000oo0012.foxml.xml
         spec/fixtures/druid_oo000oo0013.foxml.xml
+
+Deploy and remediate:
+    # Change attribute names in hydrusProperties.
+    submittedForPublishTime
+    initialSubmittedForPublishTime
 
 --------
 On-deck
