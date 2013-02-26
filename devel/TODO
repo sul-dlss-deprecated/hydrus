@@ -12,6 +12,8 @@ Set up remediation scripts:
 
       RAILS_ENV=production bundle exec rails runner remediations/script.rb
 
+      shutting down and starting the app
+
 Deploy and remediate:
 
     # Change attribute names in hydrusProperties.
