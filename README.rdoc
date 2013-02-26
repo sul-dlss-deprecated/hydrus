@@ -139,6 +139,11 @@ If you see an error relating to generate_intial_workflow() for nil:NilClass, run
 
 If you update the text, you should change the following:
 
+  # Headings.
+  app/views/hydrus_items/terms_of_deposit.html.erb
+  app/views/hydrus_items/_terms_of_deposit_popup.html.erb
+
+  # Text and headings.
   app/views/hydrus_items/_terms_of_deposit_text.html.erb
   doc/SDRSelfDepositTerms.doc
   public/SDRSelfDepositTerms.pdf

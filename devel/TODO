@@ -2,8 +2,6 @@
 Current
 --------
 
-HYDRUS-71. Text changes for Terms of Deposit overlay screen and associated PDF.
-
 Remove empty <access type="edit"> blocks in rightsMetadata. Requires both code
 changes and object remediation. 
 
@@ -24,6 +22,7 @@ Deploy and remediate:
     # Close tickets:
     HYDRUS-56
     HYDRUS-72
+    HYDRUS-71
 
 --------
 On-deck -- later
