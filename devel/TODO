@@ -2,14 +2,22 @@
 Current
 --------
 
-Remove empty <access type="edit"> blocks in rightsMetadata.
-
 APO citation display in Argo:
     # New APO: lacks human-friendly citation.
     # Something is weird with dc and/or descMetadata.
     tmp/druid_dx569vq3421.xml
     # Old, hand-crafted APO: has citation.
     tmp/druid_dd984qc3502.xml
+
+Set up remediation scripts:
+
+    remediations/
+      script.rb
+      ...
+
+    README
+
+      RAILS_ENV=production bundle exec rails runner remediations/script.rb
 
 Deploy and remediate:
 
@@ -45,7 +53,7 @@ Figure out what causes this sporadic error: dor/models/workflow_object.rb:26:in
 initial_workflow: undefined method generate_intial_workflow for nil:NilClass.
 
 --------
-Other: blocked, requires discussion, uncertain need, etc.
+Other: requires discussion, blocked, uncertain need, etc.
 --------
 
 HYDRUS-55. Build the background versioner.

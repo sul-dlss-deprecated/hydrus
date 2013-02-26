@@ -13,9 +13,6 @@
 #           <group>stanford</group>
 #         </machine>
 #       </access>
-#       <access type="edit">
-#         <machine/>
-#       </access>
 
 module Hydrus::Accessible
 

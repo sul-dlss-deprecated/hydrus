@@ -17,7 +17,6 @@ class Hydrus::RightsMetadataDS < ActiveFedora::NokogiriDatastream
 
     t.discover_access :ref => [:access], :attributes => {:type => "discover"}
     t.read_access     :ref => [:access], :attributes => {:type => "read"}
-    t.edit_access     :ref => [:access], :attributes => {:type => "edit"}
 
     t.use do
       t.human {
@@ -60,9 +59,6 @@ class Hydrus::RightsMetadataDS < ActiveFedora::NokogiriDatastream
           }
         }
         xml.access(:type => "read") {
-          xml.machine
-        }
-        xml.access(:type => "edit") {
           xml.machine
         }
         xml.use {

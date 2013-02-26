@@ -27,7 +27,6 @@ describe Hydrus::Accessible do
     rd_stanf  = %Q[<access type="read">#{ms}</access>]
     rd_embr   = %Q[<access type="read">#{embr}</access>]
     rd_blank  = %Q[<access type="read"><machine/></access>]
-    ed_blank  = %Q[<access type="edit"><machine/></access>]
     di_world  = %Q[<access type="discover">#{mw}</access>]
     # XML snippets for embargoMetadata.
     em_start  = %Q[<embargoMetadata><status/><releaseDate/>]
@@ -37,8 +36,7 @@ describe Hydrus::Accessible do
     em_stanf  = %Q[<releaseAccess>#{di_world}#{rd_stanf}</releaseAccess>]
     # XML snippets for rightsMetadata.
     rm_start  = %Q[<rightsMetadata>]
-    rm_end    = '<access type="edit"><machine/></access>' +
-               '<use><human/><machine/></use></rightsMetadata>'
+    rm_end    = '<use><human/><machine/></use></rightsMetadata>'
     # Assemble Nokogiri XML for embargoMetadata and rightsMetadata.
     @xml = {
       :em_initial => noko_doc([em_start, em_blank, em_end].join),

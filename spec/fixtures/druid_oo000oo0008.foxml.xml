@@ -69,9 +69,6 @@
               <group>stanford</group>
             </machine>
           </access>
-          <access type="edit">
-            <machine/>
-          </access>
           <use>
             <human type="creativeCommons">CC BY Attribution</human>
             <machine type="creativeCommons">by</machine>

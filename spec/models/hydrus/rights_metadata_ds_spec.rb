@@ -7,7 +7,6 @@ describe Hydrus::RightsMetadataDS do
       <rightsMetadata>
        <access type="discover"><machine><world/></machine></access>
        <access type="read"><machine/></access>
-       <access type="edit"><machine/></access>
        <use><human type="useAndReproduction"/></use>
       </rightsMetadata>
     )

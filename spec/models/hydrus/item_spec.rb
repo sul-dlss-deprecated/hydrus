@@ -301,8 +301,7 @@ describe Hydrus::Item do
       em_stanf = %Q[<releaseAccess>#{di_world}#{rd_stanf}</releaseAccess>]
       # XML snippets for rightsMetadata.
       rm_start = %Q[<rightsMetadata>]
-      rm_end   = '<access type="edit"><machine/></access>' +
-                 '<use><human type="useAndReproduction"/></use>' +
+      rm_end   = '<use><human type="useAndReproduction"/></use>' +
                  '</rightsMetadata>'
       # Assemble expected Nokogiri XML for embargoMetadata and rightsMetadata.
       @xml = {
