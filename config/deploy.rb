@@ -51,12 +51,6 @@ set :branch do
   tag.empty? ? default : tag
 end
 
-namespace :app do
-  task :add_date_to_version do
-    run "cd #{deploy_to}/current && date '+%Y-%m-%d %H:%M:%S' >> VERSION"
-  end
-end
-
 namespace :jetty do
   task :start do
     run "cd #{deploy_to}/current && rake hydra:jetty:config && rake jetty:start"
@@ -99,7 +93,5 @@ namespace :deploy do
 end
 
 after "deploy", "deploy:migrate"
-after "deploy", "app:add_date_to_version"
 after "deploy", "solr:reindex_workflow_objects"
 after "deploy", "files:create_upload_symlink"
-
