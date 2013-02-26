@@ -2,30 +2,28 @@
 Current
 --------
 
-Remove empty <access type="edit"> blocks in rightsMetadata. Requires both code
-changes and object remediation. 
-
 Licenses: remove leading 'cc-'. Requires both code changes and object
 remediation. Fix code by altering the license getter and setter, in
 generic_object.rb.
 
---------
-On-deck
---------
+Remove empty <access type="edit"> blocks in rightsMetadata. Requires both code
+changes and object remediation. 
 
 APO citation display in Argo. See Hannah email; discuss with Jon.
 
 Deploy and remediate:
+
     # Change attribute names in hydrusProperties.
     submittedForPublishTime
     initialSubmittedForPublishTime
+
     # Close tickets:
     HYDRUS-56
     HYDRUS-72
     HYDRUS-71
 
 --------
-On-deck -- later
+On-deck
 --------
 
 Hydrus has some recursive symlinking in its uploads directory. For example: see
