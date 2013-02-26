@@ -1,13 +1,19 @@
---------
+-------
 Current
 --------
 
 APO citation display in Argo:
-    # New APO: lacks human-friendly citation.
-    # Something is weird with dc and/or descMetadata.
-    tmp/druid_dx569vq3421.xml
-    # Old, hand-crafted APO: has citation.
-    tmp/druid_dd984qc3502.xml
+
+    def refresh_titles
+      t                                = title
+      apt                              = "APO for #{t}"
+      apo.identityMetadata.objectLabel = apt
+      apo.title                        = apt
+      apo.label                        = apt
+      apo.dc.content                   = apo.generate_dublin_core.to_s
+      identityMetadata.objectLabel     = t
+      self.label                       = t
+    end
 
 Set up remediation scripts:
 
@@ -30,6 +36,9 @@ Deploy and remediate:
     <machine type="creativeCommons">cc-by</machine>
 
     # Remove empty <access type="edit"> blocks in rightsMetadata.
+
+    # Refresh dc.content for all APOs.
+    apo.dc.content = apo.generate_dublin_core.to_s
 
     # Close tickets:
     HYDRUS-56
