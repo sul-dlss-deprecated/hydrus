@@ -107,8 +107,11 @@ describe ApplicationHelper do
   end
 
   it "should set the correct text for empty objects" do
-    hydrus_object_setting_value(nil).should == '<span class="unspecified">to be entered</span>'
-    hydrus_object_setting_value('').should == '<span class="unspecified">to be entered</span>'
+    exp_unsp = '<span class="unspecified">to be entered</span>'
+    exp_na   = '<span class="muted">not available yet</span>'
+    hydrus_object_setting_value(nil).should == exp_unsp
+    hydrus_object_setting_value('').should == exp_unsp
+    hydrus_object_setting_value('', :na => true).should == exp_na
     hydrus_object_setting_value('cool dude').should == 'cool dude'
   end
 

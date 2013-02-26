@@ -2,67 +2,33 @@
 Current
 --------
 
-HYDRUS-56. Add a "published on" date, based on PURL/stacks.
-
-    Unit tests
-
-        hydrus_object_setting_value()
-        open()
-        do_publish()
-        beginning_of_embargo_range()
-        publish_time()
-
-    Integration tests
-
-    affected files: 
-
-        app/models/hydrus/hydrus_properties_ds.rb
-        app/models/hydrus/generic_object.rb
-        app/models/hydrus/collection.rb
-        app/models/hydrus/item.rb
-
-        app/views/hydrus_items/_basic_item_metadata.html.erb
-
-        spec/models/hydrus/hydrus_properties_ds_spec.rb
-        spec/integration/collection_create_spec.rb
-        spec/integration/item_create_spec.rb
-        spec/integration/item_edit_spec.rb
-        spec/integration/item_versioning_spec.rb
-        spec/models/hydrus/collection_spec.rb
-        spec/models/hydrus/item_spec.rb
-
-        spec/fixtures/druid_oo000oo0003.foxml.xml
-        spec/fixtures/druid_oo000oo0004.foxml.xml
-        spec/fixtures/druid_oo000oo0010.foxml.xml
-
-        spec/fixtures/druid_oo000oo0001.foxml.xml
-        spec/fixtures/druid_oo000oo0006.foxml.xml
-        spec/fixtures/druid_oo000oo0007.foxml.xml
-        spec/fixtures/druid_oo000oo0011.foxml.xml
-        spec/fixtures/druid_oo000oo0012.foxml.xml
-        spec/fixtures/druid_oo000oo0013.foxml.xml
-
-Deploy and remediate:
-    # Change attribute names in hydrusProperties.
-    submittedForPublishTime
-    initialSubmittedForPublishTime
-
---------
-On-deck
---------
-
 HYDRUS-72. Collection view page: fix visibility text.
-
-APO citation display in Argo. See Hannah email.
-
-Licenses: remove leading 'cc-'. Requires both code changes and object
-remediation. Fix code my altering the license getter and setter, in
-generic_object.rb.
 
 HYDRUS-71. Text changes for Terms of Deposit overlay screen and associated PDF.
 
 Remove empty <access type="edit"> blocks in rightsMetadata. Requires both code
 changes and object remediation. 
+
+Licenses: remove leading 'cc-'. Requires both code changes and object
+remediation. Fix code by altering the license getter and setter, in
+generic_object.rb.
+
+--------
+On-deck
+--------
+
+APO citation display in Argo. See Hannah email; discuss with Jon.
+
+Deploy and remediate:
+    # Change attribute names in hydrusProperties.
+    submittedForPublishTime
+    initialSubmittedForPublishTime
+    # Close tickets:
+    HYDRUS-56
+
+--------
+On-deck -- later
+--------
 
 Hydrus has some recursive symlinking in its uploads directory. For example: see
 uploads/nw/312/yv/4331/nw312yv4331. This appears to occur for items with

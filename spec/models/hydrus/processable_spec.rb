@@ -88,7 +88,25 @@ describe Hydrus::Processable do
 
   end
 
-  it "can exercise should_treat_as_accessioned()" do
+  describe "publish_time()" do
+
+    it "development and test mode: 1 day after submitted_for_publish_time" do
+      spt = "2013-02-27T00:38:22Z"
+      exp = "2013-02-28T00:38:22Z"
+      @go.stub(:submitted_for_publish_time).and_return(spt)
+      @go.publish_time.should == exp
+    end
+
+    it "production mode: query workflow service" do
+      @go.stub(:should_treat_as_accessioned).and_return(false)
+      exp = "2000-02-01T00:30:00Z"
+      Dor::WorkflowService.stub(:get_lifecycle).and_return(exp)
+      @go.publish_time.should == exp
+    end
+
+  end
+
+  it "should_treat_as_accessioned(): can exercise" do
     @go.should_treat_as_accessioned.should == true
   end
 
