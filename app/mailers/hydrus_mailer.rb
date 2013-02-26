@@ -43,8 +43,9 @@ class HydrusMailer < ActionMailer::Base
   end
 
   protected
+
   def ignore?(pid)
-    Hydrus::Application.config.fixture_list.include?(pid)
+    Hydrus.fixture_pids.include?(pid)
   end
 
   def host

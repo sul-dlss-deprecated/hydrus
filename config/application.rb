@@ -63,4 +63,6 @@ module Hydrus
     config.assets.version = '1.0'
   end
 end
-Hydrus::Application.config.fixture_list = Dir["#{Rails.root}/spec/fixtures/*.foxml.xml"].map{ |f| f[/^.*\/(.+).foxml.xml$/]; $1.gsub("druid_", "druid:") }
+
+# Store the Hydrus app's version.
+Hydrus::Application.config.app_version = IO.read(File.join(Rails.root, 'VERSION')).strip

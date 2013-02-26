@@ -1,3 +1,5 @@
+#! /usr/bin/env ruby
+
 # A script used to deploy Hydrus.
 #
 # Could not get this to work as a Rake task -- specifically

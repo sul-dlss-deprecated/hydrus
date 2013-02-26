@@ -54,7 +54,7 @@
   </form>
 
   <% if Hydrus::Authorizable.can_act_as_administrator(current_user) %>
-    <%= render :partial => 'admin_links' %>
+    <%= render :partial => 'admin_info' %>
   <% end %>
 
 </div>

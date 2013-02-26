@@ -1,0 +1,15 @@
+<h3>Administrator Information</h3>
+
+<div class="collection-items">
+
+  <dl class="dl-horizontal collection-view">
+
+    <dt>App version</dt>
+    <dd><%= Hydrus::Application.config.app_version %></dd>
+
+    <dt>Inventory</dt>
+    <dd><%= link_to('All Hydrus objects', list_all_path) %></dd>
+
+  </dl>
+
+</div>
