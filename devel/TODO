@@ -2,19 +2,6 @@
 Current
 --------
 
-APO citation display in Argo:
-
-    def refresh_titles
-      t                                = title
-      apt                              = "APO for #{t}"
-      apo.identityMetadata.objectLabel = apt
-      apo.title                        = apt
-      apo.label                        = apt
-      apo.dc.content                   = apo.generate_dublin_core.to_s
-      identityMetadata.objectLabel     = t
-      self.label                       = t
-    end
-
 Set up remediation scripts:
 
     remediations/

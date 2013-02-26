@@ -194,12 +194,14 @@ class Hydrus::Collection < Hydrus::GenericObject
 
   # update various apo titles and collection titles from value set by user
   def refresh_titles
-    apo_title = "APO for #{title}"
-    apo.identityMetadata.objectLabel = apo_title
-    apo.title                        = apo_title
-    identityMetadata.objectLabel     = title
-    self.label                       = title
-    apo.label                        = apo_title
+    t                                = title
+    apt                              = "APO for #{t}"
+    apo.identityMetadata.objectLabel = apt
+    apo.title                        = apt
+    apo.label                        = apt
+    apo.dc.content                   = apo.generate_dublin_core.to_s
+    identityMetadata.objectLabel     = t
+    self.label                       = t
   end
 
   def send_invitation_email_notification(new_depositors)
