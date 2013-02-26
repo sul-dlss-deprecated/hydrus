@@ -33,8 +33,10 @@
     </div>
     <% end %>
 
-    <div class="collection-items">
-         <h4>Release and visibility of content</h4>
+    <div class="collection-items release-visibility-view">
+
+      <h4>Release and visibility of content</h4>
+
       <p>
         <%if @fobj.embargo_option == 'none' %>
         There is <strong>no delay</strong> before content in this collection is released for public or Stanford-only discovery and download.
@@ -51,26 +53,35 @@
       </p>
 
       <p>
-      <%if @fobj.embargo_option == 'none' %>
-        Upon release
-      <% else %>
-        After its release date,
-      <% end %>
-      content in this collection can be discovered and downloaded by
-        <% if @fobj.visibility == 'stanford' %>
-          <strong>the Stanford community -- all items will be visible only to Stanford-authenticated users.</strong>
-        <% elsif @fobj.visibility == 'everyone' %>
-          <strong>anyone -- all items will be visible to everybody, including non-Stanford users.</strong>
+        <%if @fobj.embargo_option == 'none' %>
+          Upon release
         <% else %>
-          <strong>anyone -- but individual items may restrict visibility to members of the Stanford community.</strong>
+          After its release date,
         <% end %>
+
+        content in this collection can be discovered and downloaded by
+
+        <strong>
+          <% if @fobj.visibility == ['stanford'] %>
+            the Stanford community -- all items will be visible only to Stanford-authenticated users.
+          <% else %>
+            <% if @fobj.visibility_option == 'varies' %>
+              anyone -- but individual items may restrict visibility to members of the Stanford community.
+            <% else %>
+              anyone -- all items will be visible to everybody, including non-Stanford users.
+            <% end %>
+          <% end %>
+        </strong>
+
       </p>
+
       <% if to_bool(@fobj.requires_human_approval) %>
         <p>
           Before being added to the collection, items <strong>must be</strong>
           approved by the collection manager or a reviewer.
         </p>
       <% end %>
+
     </div>
 
     <div class="collection-items">

@@ -2,8 +2,6 @@
 Current
 --------
 
-HYDRUS-72. Collection view page: fix visibility text.
-
 HYDRUS-71. Text changes for Terms of Deposit overlay screen and associated PDF.
 
 Remove empty <access type="edit"> blocks in rightsMetadata. Requires both code
@@ -25,6 +23,7 @@ Deploy and remediate:
     initialSubmittedForPublishTime
     # Close tickets:
     HYDRUS-56
+    HYDRUS-72
 
 --------
 On-deck -- later

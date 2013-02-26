@@ -76,17 +76,20 @@ describe("Collection view", :type => :request, :integration => true) do
     end
   end
 
-  # it "should show some APO info" do
-  #   exp_content = [
-  #     "cc-by",
-  #     "1 year",
-  #   ]
-  #   login_as('archivist1')
-  #   visit polymorphic_path(@hc)
-  #   current_path.should == polymorphic_path(@hc)
-  #   exp_content.each do |exp|
-  #     page.should have_content(exp)
-  #   end
-  # end
+  it "display of visibility options" do
+    login_as('archivist1')
+    tests = [
+      ['stanford', 'fixed',  'all items will be visible only to Stanford'],
+      ['world',    'varies', 'but individual items may restrict visibility'],
+      ['world',    'fixed',  'all items will be visible to everybody'],
+    ]
+    tests.each do |visib, opt, msg|
+      @hc.visibility = visib
+      @hc.visibility_option = opt
+      @hc.save
+      should_visit_view_page(@hc)
+      find('div.release-visibility-view').should have_content(msg)
+    end
+  end
 
 end
