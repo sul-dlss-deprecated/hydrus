@@ -271,7 +271,7 @@ def check_emb_vis_lic(obj, opts)
 
   # Check the license in rightsMetadata.
   u = obj.rightsMetadata.ng_xml.at_xpath('//use/machine')
-  u.content.should == opts[:license_code]
+  u.content.should == opts[:license_code].sub(/\Acc-/, '')
 end
 
 # Some integration tests requires the minting of a valid druid in

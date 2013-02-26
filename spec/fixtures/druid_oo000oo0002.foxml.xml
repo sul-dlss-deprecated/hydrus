@@ -74,7 +74,7 @@
           </access>
           <use>
             <human type="creativeCommons">CC BY Attribution</human>
-            <machine type="creativeCommons">cc-by</machine>
+            <machine type="creativeCommons">by</machine>
           </use>
         </defaultObjectRights>
       </foxml:xmlContent>

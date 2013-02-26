@@ -2,20 +2,26 @@
 Current
 --------
 
-Licenses: remove leading 'cc-'. Requires both code changes and object
-remediation. Fix code by altering the license getter and setter, in
-generic_object.rb.
+Remove empty <access type="edit"> blocks in rightsMetadata.
 
-Remove empty <access type="edit"> blocks in rightsMetadata. Requires both code
-changes and object remediation. 
-
-APO citation display in Argo. See Hannah email; discuss with Jon.
+APO citation display in Argo:
+    # New APO: lacks human-friendly citation.
+    # Something is weird with dc and/or descMetadata.
+    tmp/druid_dx569vq3421.xml
+    # Old, hand-crafted APO: has citation.
+    tmp/druid_dd984qc3502.xml
 
 Deploy and remediate:
 
     # Change attribute names in hydrusProperties.
     submittedForPublishTime
     initialSubmittedForPublishTime
+
+    # Modify <use> section in rightsMetadata: remove cc- prefixes
+    # from creativeCommons licenses. For example:
+    <machine type="creativeCommons">cc-by</machine>
+
+    # Remove empty <access type="edit"> blocks in rightsMetadata.
 
     # Close tickets:
     HYDRUS-56
@@ -35,17 +41,17 @@ Clear out cruft: all objects in -test environment, and stray objects in -prod.
 Depends on the implementionat of nuke() in dor-services. [See Consul page:
 chimera/DOR+object+deletion.]
 
-Move definition of users with app-wide powers to config files, and allow them
-to vary by environment.
-
-HYDRUS-55. Build the background versioner.
-
 Figure out what causes this sporadic error: dor/models/workflow_object.rb:26:in
 initial_workflow: undefined method generate_intial_workflow for nil:NilClass.
 
 --------
 Other: blocked, requires discussion, uncertain need, etc.
 --------
+
+HYDRUS-55. Build the background versioner.
+
+Move definition of users with app-wide powers to config files, and allow them
+to vary by environment.
 
 Simplify Item edit UI by removing the embargo radio button. "This item will be
 released for discovery and download immediately, on this date _____". The radio

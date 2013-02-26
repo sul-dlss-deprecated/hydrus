@@ -131,6 +131,10 @@ describe Hydrus::GenericObject do
           @go.license_group_code.should == gcode
           # Terms of use should be unaffected.
           @go.terms_of_use.should == tou
+          # License code in rightsMetadata XML should be correct.
+          # In particular, the cc-by-nc code should be stored by by-nc.
+          nd = @go.rightsMetadata.use.machine.nodeset.first
+          nd.text.should == lcode.sub(/\Acc-/, '') if nd
         end
       end
 
