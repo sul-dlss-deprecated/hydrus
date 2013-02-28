@@ -1,5 +1,8 @@
 class Hydrus::RemediationRunner
 
+  # Used with these deployments:
+  #   dortest:    2013.02.28a
+  #   production: 2013.02.28b
   def remediation_2013_02_27a(opts)
     # Setup.
     unpack_args(opts, __method__)
@@ -8,6 +11,7 @@ class Hydrus::RemediationRunner
     # Run the remediation code.
     do_remediation {
       rem_add_object_version
+      rem_add_prior_vis_and_license
       rem_remove_cc_prefix
       rem_modify_publish_nodes
       rem_remove_access_edit_nodes
@@ -21,6 +25,14 @@ class Hydrus::RemediationRunner
     fobj.object_version = remed_version
   end
 
+  # Sets a value for prior_visibility for Items.
+  def rem_add_prior_vis_and_license
+    return unless fobj.is_item?
+    log.info(__method__)
+    fobj.prior_visibility = 'stanford'         if fobj.prior_visibility.nil?
+    fobj.prior_license    = fobj.license.first if fobj.prior_license.nil?
+  end
+
   # Modify <use> section in rightsMetadata: remove cc- prefixes
   # from creativeCommons licenses. For example:
   #  OLD: <machine type="creativeCommons">cc-by</machine>
@@ -32,6 +44,10 @@ class Hydrus::RemediationRunner
     if nd && nd[:type] == 'creativeCommons'
       nd.content = nd.content.gsub(/\Acc-/, '')
       fobj.rightsMetadata.content_will_change!
+      if fobj.is_item? && !fobj.is_initial_version
+        fobj.prior_license = fobj.license
+        fobj.hydrusProperties.content_will_change!
+      end
     end
   end
 

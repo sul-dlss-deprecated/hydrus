@@ -1,5 +1,11 @@
 = Hydrus change log
 
+== 2013.02.28b
+
+* Remediation framework: worked out a few kinks.
+* Deployed to hydrus-test.
+* Deployed to hydrus-prod.
+
 == 2013.02.28a
 
 * More informative flash message when accessing an item while not logged in.
@@ -15,7 +21,6 @@
 * HYDRUS-56: refactor publish-time to be pased on common-accessioning publish.
 * Changed contributors=() to take key of role_key rather than role.
 * Deployed to hydrus-test.
-* Deployed to hydrus-prod.
 
 == 2013.02.21a
 

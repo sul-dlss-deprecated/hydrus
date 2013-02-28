@@ -27,7 +27,7 @@ class Hydrus::RemediationRunner
     @no_save       = opts[:no_save]
     # Set values we always need -- eg, for logging.
     @remed_version = LOWEST_VERSION
-    @pid           = 'UNKNOWN_PID'
+    @pid           = 'NO_PID_YET'
     # Set up the logger.
     @log           = Logger.new("#{Rails.root}/log/remediation.log", 10, 10240000)
     @log.formatter = proc { |severity, datetime, progname, msg|
@@ -42,6 +42,8 @@ class Hydrus::RemediationRunner
   #   :object_type     # String: Item, Collection, or AdminPolicyObject
   #   :object_version  # Used to determine whether a remediation needs to run.
   def run
+    log.info("====================")
+    log.info("run() started")
     rems = discover_remediations()
     all_hydrus_objects().each do |h|
       rems.each do |rem|

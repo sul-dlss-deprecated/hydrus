@@ -63,7 +63,7 @@
           <reviewedReleaseSettings>true</reviewedReleaseSettings>
           <acceptedTermsOfDeposit>true</acceptedTermsOfDeposit>
           <objectStatus>published</objectStatus>
-          <objectVersion>2013.02.27a</objectVersion>
+          <objectVersion>2013.02.26a</objectVersion>
         </hydrusProperties>
       </foxml:xmlContent>
     </foxml:datastreamVersion>

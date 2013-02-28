@@ -124,7 +124,7 @@
                 <user dateAccepted="2012-05-02T20:02:44Z">archivist3</user>
           </usersAcceptedTermsOfDeposit>
           <objectStatus>published_open</objectStatus>
-          <objectVersion>2013.02.27a</objectVersion>
+          <objectVersion>2013.02.26a</objectVersion>
         </hydrusProperties>
       </foxml:xmlContent>
     </foxml:datastreamVersion>

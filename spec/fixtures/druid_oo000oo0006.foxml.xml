@@ -221,7 +221,7 @@
           <acceptedTermsOfDeposit>true</acceptedTermsOfDeposit>
           <objectStatus>draft</objectStatus>
           <versionStartedTime>2012-11-01T00:00:22Z</versionStartedTime>
-          <objectVersion>2013.02.27a</objectVersion>
+          <objectVersion>2013.02.26a</objectVersion>
         </hydrusProperties>
       </foxml:xmlContent>
     </foxml:datastreamVersion>

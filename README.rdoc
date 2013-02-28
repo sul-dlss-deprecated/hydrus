@@ -138,6 +138,9 @@ Also see:
   # Running remediations (using dortest environment as the example):
   RAILS_ENV=dortest bundle exec rails runner remediations/run.rb
 
+  # Then search for problems.
+  grep -i warn log/remediation.log
+
 == Useful commands
 
   # List the Hydrus rake tasks.
