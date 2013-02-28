@@ -39,6 +39,7 @@ describe Hydrus::AccessControlsEnforcement do
     end
 
     it "should redirect to root path if user cannot read the object" do
+      @mc.stub('current_user').and_return('')
       @mc.stub('can?').and_return(false)
       @mc.stub(:root_url).and_return('/')
       @mc.should_receive(:redirect_to).with(@exp_rp)
@@ -46,6 +47,15 @@ describe Hydrus::AccessControlsEnforcement do
       f = @mc.flash
       f.should include(:error)
       f[:error].should =~ /privileges.+view/
+    end
+    it "should redirect with a more friendly message if user isnt logged in" do
+      @mc.stub('can?').and_return(false)
+      @mc.stub(:root_url).and_return('/')
+      @mc.should_receive(:redirect_to).with(@exp_rp)
+      @mc.enforce_show_permissions
+      f = @mc.flash
+      f.should include(:error)
+      f[:error].should == 'Please sign in below and you will be directed to the requested item: \'druid:oo000oo9999\'.'
     end
 
   end
