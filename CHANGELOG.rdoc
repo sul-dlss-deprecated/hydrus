@@ -1,5 +1,22 @@
 = Hydrus change log
 
+== 2013.02.28a
+
+* More informative flash message when accessing an item while not logged in.
+* Remediation framework.
+* Made app aware of its own version.
+* Removed app:add_date_to_version from deployment tasks.
+* Refresh APO.dc when refreshing Collecition titles.
+* Upgraded to dor-services 3.24.2 to get Describable in APOs.
+* Removed empty access-edit blocks from rightsMetadata.
+* Removed cc- prefix from creativeCommons licenses.
+* HYDRUS-71. Text changes for Terms of Deposit.
+* HYDRUS-72: Collection view page: fix visibility text.
+* HYDRUS-56: refactor publish-time to be pased on common-accessioning publish.
+* Changed contributors=() to take key of role_key rather than role.
+* Deployed to hydrus-test.
+* Deployed to hydrus-prod.
+
 == 2013.02.21a
 
 * HYDRUS-51. Add support for "corporate" and "conference" name types.
