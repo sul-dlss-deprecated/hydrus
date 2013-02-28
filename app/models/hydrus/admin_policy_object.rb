@@ -31,6 +31,12 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
     :label => 'Content Metadata',
     :control_group => 'M')
 
+  has_metadata(
+    :name => "hydrusProperties",
+    :type => Hydrus::HydrusPropertiesDS,
+    :label => 'Hydrus Properties',
+    :control_group => 'X')
+
   # Note: all other APO validation occurs in the Collection class.
   validates :pid, :is_druid => true
 
@@ -46,6 +52,7 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
     "hydrusProperties" => [
       [:reviewed_release_settings, true   ],
       [:accepted_terms_of_deposit, true   ],
+      [:object_version,            true   ],
     ]
   )
 

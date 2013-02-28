@@ -591,7 +591,7 @@ describe("Item create", :type => :request, :integration => true) do
       #   - in SOLR
       #   - in workflows
       hi.class.should == hyi
-      hyc.all_hydrus_objects(hyi).should include(pid)
+      hyc.all_hydrus_objects(:models => [hyi], :pids_only => true).should include(pid)
       wfs.get_workflows(pid).should == [hwf]
       #   - with an uploaded file
       #   - and a corresponding entry in DB table
@@ -607,7 +607,7 @@ describe("Item create", :type => :request, :integration => true) do
       #   - from SOLR
       #   - from workflows
       expect { hyi.find(pid) }.to raise_error(afe)
-      hyc.all_hydrus_objects(hyi).should_not include(pid)
+      hyc.all_hydrus_objects(:models => [hyi], :pids_only => true).should_not include(pid)
       wfs.get_workflows(pid).should == []
       #   - with no upload directory
       #   - and no DB entries

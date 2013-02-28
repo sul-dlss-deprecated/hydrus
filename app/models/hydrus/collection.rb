@@ -509,14 +509,6 @@ class Hydrus::Collection < Hydrus::GenericObject
   end
 
   # Takes a SOLR response.
-  # Returns an array of druids corresponding to the documents.
-  # Written as a separate method for testing purposes.
-  def self.get_druids_from_response(resp)
-    k = 'identityMetadata_objectId_t'
-    return resp.docs.map { |doc| doc[k].first }
-  end
-
-  # Takes a SOLR response.
   # Returns an array of hashes containing the needed facet counts.
   # Written as a separate method for testing purposes.
   def self.get_facet_counts_from_response(resp)

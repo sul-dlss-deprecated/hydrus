@@ -170,13 +170,12 @@
       CREATED="2011-07-05T20:49:25.801Z" MIMETYPE="text/xml" SIZE="345">
       <foxml:xmlContent>
         <hydrusProperties>
-          <submittedForPublishTime>2012-11-01T00:00:00Z</submittedForPublishTime>
-          <initialSubmittedForPublishTime>2012-11-01T00:00:00Z</initialSubmittedForPublishTime>
           <lastModifyTime>2012-11-01T00:00:22Z</lastModifyTime>
-          <versionStartedTime>2012-11-01T00:00:22Z</versionStartedTime>
           <reviewedReleaseSettings>true</reviewedReleaseSettings>
           <acceptedTermsOfDeposit>true</acceptedTermsOfDeposit>
-          <objectStatus>published</objectStatus>
+          <objectStatus>draft</objectStatus>
+          <versionStartedTime>2012-11-01T00:00:22Z</versionStartedTime>
+          <objectVersion>2013.02.27a</objectVersion>
         </hydrusProperties>
       </foxml:xmlContent>
     </foxml:datastreamVersion>

@@ -198,8 +198,12 @@ class Hydrus::Item < Hydrus::GenericObject
   # Notes:
   #   - After an Item is published, in order to make further edits, the
   #     user must open a new version.
-  #   - The :no_super option is used solely to prevent the super() call
-  #     during testing.
+  #   - Options used when opening versions during Hydrus remediations:
+  #       :significance
+  #       :description
+  #       :is_remediation
+  #   - Other options:
+  #       :no_super   Used to prevent super() during testing.
   def open_new_version(opts = {})
     cannot_do(:open_new_version) unless is_accessioned()
     # Store the time when the object was initially published.
@@ -207,25 +211,33 @@ class Hydrus::Item < Hydrus::GenericObject
     # Call the dor-services method, with a couple of Hydrus-specific options.
     super(:assume_accessioned => should_treat_as_accessioned(), :create_workflows_ds => false)
     # Set some version metadata that the Hydrus app uses.
-    versionMetadata.update_current_version(:description => '', :significance => :major)
-    self.version_started_time = HyTime.now_datetime
-    # Put the object back in the draft state.
-    self.object_status = 'draft'
-    uncomplete_workflow_steps()
-    # Store a copy of the current license and visibility.
-    # We use those values when enforcing subsequent-version validations.
-    self.prior_license = license
-    self.prior_visibility = visibility
-    # Log the event.
-    events.add_event('hydrus', @current_user, "New version opened")
+    sig  = opts[:significance] || :major
+    desc = opts[:description]  || ''
+    versionMetadata.update_current_version(:description => desc, :significance => sig)
+    # Varying behavior: remediations vs ordinary user edits.
+    if opts[:is_remediation]
+      # Just log the event.
+      events.add_event('hydrus', 'admin', "Object remediated")
+    else
+      self.version_started_time = HyTime.now_datetime
+      # Put the object back in the draft state.
+      self.object_status = 'draft'
+      uncomplete_workflow_steps()
+      # Store a copy of the current license and visibility.
+      # We use those values when enforcing subsequent-version validations.
+      self.prior_license = license
+      self.prior_visibility = visibility
+      # Log the event.
+      events.add_event('hydrus', @current_user, "New version opened")
+    end
   end
 
   # Closes the current version of the Item.
   # This occurs when an Item is published, unless it was the initial version.
   # See do_publish(), where all of the Hydrus-specific work is done; here
   # we simply invoke the dor-services method.
-  def close_version
-    cannot_do(:close_version) if is_initial_version()
+  def close_version(opts = {})
+    cannot_do(:close_version) if is_initial_version(:absolute => true)
     super(:version_num => version_id, :start_accession => false)
   end
 
@@ -653,8 +665,15 @@ class Hydrus::Item < Hydrus::GenericObject
   end
 
   # Returns true if the current version is the initial version.
-  def is_initial_version
-    return self.current_version == '1'
+  # By default "initial version" is user-centric and ignores administrative
+  # version changes (for example, those run during remediations). Thus,
+  # version_tags like v1.0.0 and v1.0.3 would pass the test.
+  # If the :absolute option is true, the test passes only if it's truly
+  # the first version.
+  def is_initial_version(opts = {})
+    return true if current_version == '1'
+    return false if opts[:absolute]
+    return version_tag =~ /\Av1\.0\./ ? true : false
   end
 
   # Takes a string.

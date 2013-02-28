@@ -83,6 +83,7 @@
       CREATED="2011-07-05T20:49:25.801Z" MIMETYPE="text/xml" SIZE="345">
       <foxml:xmlContent>
         <hydrusProperties>
+          <objectVersion>2013.02.27a</objectVersion>
         </hydrusProperties>
       </foxml:xmlContent>
     </foxml:datastreamVersion>

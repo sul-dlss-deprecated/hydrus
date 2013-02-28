@@ -2,37 +2,14 @@
 Current
 --------
 
-Set up remediation scripts:
-
-    remediations/
-      script.rb
-      ...
-
-    README
-
-      RAILS_ENV=production bundle exec rails runner remediations/script.rb
-
-      shutting down and starting the app
-
 Deploy and remediate:
 
-    # Change attribute names in hydrusProperties.
-    submittedForPublishTime
-    initialSubmittedForPublishTime
+Close tickets:
+  HYDRUS-56
+  HYDRUS-72
+  HYDRUS-71
 
-    # Modify <use> section in rightsMetadata: remove cc- prefixes
-    # from creativeCommons licenses. For example:
-    <machine type="creativeCommons">cc-by</machine>
-
-    # Remove empty <access type="edit"> blocks in rightsMetadata.
-
-    # Refresh dc.content for all APOs.
-    apo.dc.content = apo.generate_dublin_core.to_s
-
-    # Close tickets:
-    HYDRUS-56
-    HYDRUS-72
-    HYDRUS-71
+Push copy of config files.
 
 --------
 On-deck

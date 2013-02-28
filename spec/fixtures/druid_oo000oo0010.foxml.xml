@@ -55,7 +55,7 @@
           </titleInfo>
           <typeOfResource collection="yes" />
           <abstract>A collection of works by the top undergraduate students in Stanford's Department of Physics dating from 2010 to the present.</abstract>
-          <note type="contact">Physics Librarian, Stanford University Engineering Library</note>
+          <note type="contact" displayLabel="Contact">archivist1@example.com</note>
           <relatedItem type="references">
             <titleInfo>
               <title></title>
@@ -118,6 +118,7 @@
             <user dateAccepted="2011-10-02T10:05:31Z">archivist3</user>
           </usersAcceptedTermsOfDeposit>
           <objectStatus>published_open</objectStatus>
+          <objectVersion>2013.02.27a</objectVersion>
         </hydrusProperties>
       </foxml:xmlContent>
     </foxml:datastreamVersion>

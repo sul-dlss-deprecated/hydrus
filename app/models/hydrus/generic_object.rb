@@ -64,6 +64,7 @@ class Hydrus::GenericObject < Dor::Item
       [:submit_for_approval_time,           true   ],
       [:last_modify_time,                   true   ],
       [:item_type,                          true   ],
+      [:object_version,                     true   ],
     ],
     "rightsMetadata" => [
       [:rmd_embargo_release_date, true,  :read_access, :machine, :embargo_release_date],
@@ -98,13 +99,17 @@ class Hydrus::GenericObject < Dor::Item
     return (errors.keys & self.class::REQUIRED_FIELDS).size == 0
   end
 
-  # We override save() so we can control whether editing events are logged.
-  # Notes on options:
-  #   :no_super     To prevent the super() call during unit tests
+  # Notes:
+  #   - We override save() so we can control whether editing events are logged.
+  #   - This method is called via the normal operations of the web app, and
+  #     during Hydrus remediations.
+  #   - The :no_super is used to prevent the super() call during unit tests.
   def save(opts = {})
     # beautify_datastream(:descMetadata) unless opts[:no_beautify]
-    self.last_modify_time = HyTime.now_datetime
-    log_editing_events() unless opts[:no_edit_logging]
+    unless opts[:is_remediation]
+      self.last_modify_time = HyTime.now_datetime
+      log_editing_events() unless opts[:no_edit_logging]
+    end
     publish_metadata() if is_collection? && is_published
     super() unless opts[:no_super]
   end

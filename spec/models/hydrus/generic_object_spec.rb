@@ -418,7 +418,7 @@ describe Hydrus::GenericObject do
       @go.save(:no_edit_logging => true, :no_super => true)
     end
 
-    it "should not invoke log_editing_events() if no_edit_logging is true" do
+    it "should invoke log_editing_events() if no_edit_logging is false" do
       @go.should_receive(:log_editing_events).once
       @go.should_receive(:publish_metadata).once
       @go.stub('is_collection?').and_return(true)

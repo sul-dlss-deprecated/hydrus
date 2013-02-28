@@ -33,6 +33,33 @@ if USE_IRB
   IRB.start(__FILE__)
 end
 
+hc.apo.dc.title = ['blah']
+hc.apo.dc.content_will_change!
+hc.save_apo
+
+[hi, hc].each do |obj|
+  nd = obj.rightsMetadata.use.machine.nodeset.first
+  nd.content = 'cc-by'
+
+  hp = obj.hydrusProperties.ng_xml
+  node_mapping = {
+    'submittedForPublishTime'        => 'publishTime',
+    'initialSubmittedForPublishTime' => 'initialPublishTime',
+  }
+  node_mapping.each do |old_name, new_name|
+    old_node = hp.at_xpath('//' + old_name)
+    txt = old_node.content
+    old_node.remove
+    new_node = Nokogiri::XML::Node.new new_name, hp
+    new_node.content = txt
+    hp.root.add_child(new_node)
+  end
+
+  obj.rightsMetadata.content_will_change!
+  obj.hydrusProperties.content_will_change!
+  obj.save
+end
+
 __END__
 
 dmd.insert_related_item

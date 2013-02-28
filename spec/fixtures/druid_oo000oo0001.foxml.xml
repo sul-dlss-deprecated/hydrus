@@ -62,6 +62,7 @@
           <initialSubmittedForPublishTime>2012-11-01T00:00:00Z</initialSubmittedForPublishTime>
           <lastModifyTime>2012-11-01T00:00:22Z</lastModifyTime>
           <versionStartedTime>2012-11-01T00:00:22Z</versionStartedTime>
+          <objectVersion>2013.02.27a</objectVersion>
         </hydrusProperties>
       </foxml:xmlContent>
     </foxml:datastreamVersion>

@@ -29,6 +29,10 @@ class Hydrus::HydrusPropertiesDS < ActiveFedora::NokogiriDatastream
     t.prior_license             :path => 'priorLicense'
     t.prior_visibility          :path => 'priorVisibility'
 
+    # When Hydrus objects are created, the version of the application
+    # is stored here. Later, Hydrus remediation scripts can update this value.
+    t.object_version            :path => 'objectVersion'
+
     # Two variants of publish time:
     #   - The time the user clicks Open/Approve/Publish in UI.
     #       - Stored in hydrusProperties.

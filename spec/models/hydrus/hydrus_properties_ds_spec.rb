@@ -28,6 +28,7 @@ describe Hydrus::HydrusPropertiesDS do
         <submittedForPublishTime>2011-09-03T00:00:00Z</submittedForPublishTime>
         <initialSubmittedForPublishTime>2011-09-03T00:00:11Z</initialSubmittedForPublishTime>
         <initialPublishTime>2011-09-08T02:00:11Z</initialPublishTime>
+        <objectVersion>1999.01.01a</objectVersion>
       #{@ds_end}
     EOF
     @dsdoc = Hydrus::HydrusPropertiesDS.from_xml(xml)
@@ -58,6 +59,7 @@ describe Hydrus::HydrusPropertiesDS do
       [:submit_for_approval_time,  ["2011-08-03T00:00:00Z"]],
       [:last_modify_time,  ["2011-09-02T00:00:00Z"]],
       [:version_started_time,  ["2011-09-01T00:00:00Z"]],
+      [:object_version,  ["1999.01.01a"]],
     ]
     tests.each do |terms, exp|
       @dsdoc.term_values(*terms).should == exp

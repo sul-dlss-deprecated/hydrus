@@ -493,14 +493,6 @@ describe Hydrus::Collection do
       @HC.all_hydrus_collections.should == exp
     end
 
-    it "can exercise get_druids_from_response()" do
-      k    = 'identityMetadata_objectId_t'
-      exp  = [12, 34, 56]
-      docs = exp.map { |n| {k => [n]} }
-      resp = double('resp', :docs => docs)
-      @HC.get_druids_from_response(resp).should == exp
-    end
-
     it "can exercise get_facet_counts_from_response()" do
       exp  = 1234
       fcs  = {'facet_pivot' => {:a => exp}}

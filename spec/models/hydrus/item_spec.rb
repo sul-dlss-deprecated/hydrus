@@ -433,21 +433,6 @@ describe Hydrus::Item do
 
     describe "embargo_can_be_changed()" do
 
-      # def embargo_can_be_changed
-      #   # Collection must allow it.
-      #   return false unless collection.embargo_option == 'varies'
-      #   # Behavior varies by version.
-      #   if is_initial_version
-      #     return true
-      #   else
-      #     # In subsequent versions, Item must
-      #     #   - have an existing embargo
-      #     #   - that has a max embargo date some time in the future
-      #     return false unless is_embargoed
-      #     return HyTime.now < end_of_embargo_range.to_datetime
-      #   end
-      # end
-
       it "Collection does not allow embargo variability: should return false" do
         @hi.should_not_receive(:is_initial_version)
         %w(none fixed).each do |opt|
@@ -1080,13 +1065,14 @@ describe Hydrus::Item do
     before(:each) do
       vs = [
         '<version tag="1.0.0" versionId="1"><description>Blah 1.0.0</description></version>',
-        '<version tag="2.0.0" versionId="2"><description>Blah 2.0.0</description></version>',
-        '<version tag="2.1.0" versionId="3"><description>Blah 2.1.0</description></version>',
-        '<version tag="3.0.0" versionId="4"><description>Blah 3.0.0</description></version>',
-        '<version tag="3.0.1" versionId="5"><description>Blah 3.0.1</description></version>',
+        '<version tag="1.0.1" versionId="2"><description>Blah 1.0.1</description></version>',
+        '<version tag="2.0.0" versionId="3"><description>Blah 2.0.0</description></version>',
+        '<version tag="2.1.0" versionId="4"><description>Blah 2.1.0</description></version>',
+        '<version tag="3.0.0" versionId="5"><description>Blah 3.0.0</description></version>',
+        '<version tag="3.0.1" versionId="6"><description>Blah 3.0.1</description></version>',
       ]
       @stub_vm = lambda { |v|
-        tags = %w(1.0.0 2.0.0 2.1.0 3.0.0 3.0.1)
+        tags = %w(1.0.0 1.0.1 2.0.0 2.1.0 3.0.0 3.0.1)
         n = tags.find_index(v)
         xml = [
           '<?xml version="1.0"?>',
@@ -1107,7 +1093,7 @@ describe Hydrus::Item do
       @hi.version_tag.should == 'v1.0.0'
       @hi.version_description.should == 'Blah 1.0.0'
       @stub_vm.call('2.1.0')
-      @hi.version_id.should == '3'
+      @hi.version_id.should == '4'
       @hi.version_tag.should == 'v2.1.0'
       @hi.version_description.should == 'Blah 2.1.0'
     end
@@ -1115,6 +1101,10 @@ describe Hydrus::Item do
     it "is_initial_version() should return true only for the first version" do
       @stub_vm.call('1.0.0')
       @hi.is_initial_version.should == true
+      @stub_vm.call('1.0.1')
+      @hi.is_initial_version.should == true
+      @stub_vm.call('1.0.1')
+      @hi.is_initial_version(:absolute => true).should == false
       @stub_vm.call('2.0.0')
       @hi.is_initial_version.should == false
       @stub_vm.call('2.1.0')

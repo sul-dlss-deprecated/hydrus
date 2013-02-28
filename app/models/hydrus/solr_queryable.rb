@@ -72,10 +72,11 @@ module Hydrus::SolrQueryable
   end
 
   # Returns a hash of SOLR query parameters.
-  # The query: get all Hydrus Collections.
-  def squery_all_hydrus_objects(models)
+  # The query: get all Hydrus APOs, Collections, and Items.
+  def squery_all_hydrus_objects(models, opts = {})
     h = HSQ.default_query_params()
-    models.each { |m| HSQ.add_model_filter(h, m) }
+    h[:fl] = opts[:fields].join(',') if opts[:fields]
+    HSQ.add_model_filter(h, *models)
     return h
   end
 
@@ -122,18 +123,62 @@ module Hydrus::SolrQueryable
     return h
   end
 
-  # Returns an array druids for all objects belonging to the
+  # Returns an array of druids for all objects belonging to the
   # requested models -- by default Hydrus APOs, Collections, and Items.
-  def all_hydrus_objects(*models)
-    models ||= [
+  def all_hydrus_objects(opts = {})
+    # Get the requested models, in stringified form ready for SOLR query.
+    models = opts[:models] || [
       Hydrus::AdminPolicyObject,
       Hydrus::Collection,
       Hydrus::Item,
     ]
     models = models.map { |m| m.to_s.gsub(/::/, '_') }
-    h           = squery_all_hydrus_objects(models)
+    # Define SOLR query with the desired fields.
+    fields = {
+      'identityMetadata_objectId_t' => :pid,
+      'has_model_s'                 => :object_type,
+      'object_version_t'            => :object_version,
+    }
+    h = squery_all_hydrus_objects(models, :fields => fields.keys)
+    # Run query and return either a list of PIDs if that's all the caller wanted.
     resp, sdocs = issue_solr_query(h)
-    return get_druids_from_response(resp)
+    return get_druids_from_response(resp) if opts[:pids_only]
+    # Otherwise, return a list of hashes. Each hash corresponds
+    # to a SOLR doc, and its keys are the fields.values defined above.
+    # In addition, simplify the :object_type values to be "Item", "Collection",
+    # or "AdminPolicyObject".
+    data = get_fields_from_response(resp, fields)
+    data.each do |d|
+      d[:object_type] = d[:object_type].sub(/\Ainfo:fedora\/afmodel:Hydrus_/, '')
+    end
+    return data
+  end
+
+  # Takes a SOLR response.
+  # Returns an array of druids corresponding to the documents.
+  def get_druids_from_response(resp)
+    k = 'identityMetadata_objectId_t'
+    return resp.docs.map { |doc| doc[k].first }
+  end
+
+  # Takes a SOLR response and a hash of field remappings.
+  # Returns an array of hashes corresponding to the documents.
+  # The fields hash defines a mapping between the keys used to
+  # retrieve values from the SOLR documents and the keys used to
+  # store those values in the returned array-of-hashes. See the
+  # all_hydrus_objects() method for an example fields hash.
+  # When retrieving values from the SOLR documents, only the first
+  # values for each key is retained.
+  def get_fields_from_response(resp, fields)
+    return resp.docs.map { |doc|
+      h = {}
+      fields.each { |solr_doc_key, remapped_key|
+        d = doc[solr_doc_key]
+        val = d ? d.first : nil
+        h[remapped_key] = val
+      }
+      h
+    }
   end
 
 end

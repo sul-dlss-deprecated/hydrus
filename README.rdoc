@@ -32,6 +32,9 @@ Digital Repository for preservation and access.
 
   rake hydra:jetty:config
   rake hydrus:config
+
+  # Edit config/*.yml files, adding passwords, etc.
+
   rake jetty:start
 
   rake db:migrate
@@ -101,11 +104,39 @@ Also see:
   open coverage/index.html
 
 
-== Deployment.
+== Deployment:
 
-    # Run this script without arguments to view instructions.
-    devel/deploy_hydus.rb
+  # Run this script without arguments to view instructions.
+  devel/deploy_hydus.rb
 
+  # Run remediations the objects in the deployed environment require
+  # changes to be consistent with the new code.
+
+  1. Shut down the application.
+  2. Run remediations: see section below.
+  3. Start the application.
+
+== Remediations:
+
+  # The general framework, and the front-end.
+  # See the code for more details on how the process works.
+  app/models/hydrus/remediation_runner.rb
+  remediations/run.rb
+
+  # Remediation scripts:
+  - Stored in the remediations subdirectory.
+  - Naming following the application version naming convention:
+      2013.02.25a.rb
+      2013.02.27a.rb
+      2013.02.27b.rb
+      etc.
+  - See remediations/archive/0000.00.00a.rb for a schematic example.
+  - After remediations are run on all deployed environments, they
+    typically won't be needed in the future, so they can be moved
+    in the Git repo into the remediations/archive directory.
+
+  # Running remediations (using dortest environment as the example):
+  RAILS_ENV=dortest bundle exec rails runner remediations/run.rb
 
 == Useful commands
 

@@ -231,8 +231,8 @@ describe("Collection create", :type => :request, :integration => true) do
       apo.class.should == hya
       hc.class.should  == hyc
       #   - in SOLR
-      hyc.all_hydrus_objects(hya).should include(apid)
-      hyc.all_hydrus_objects(hyc).should include(cpid)
+      hyc.all_hydrus_objects(:models => [hya], :pids_only => true).should include(apid)
+      hyc.all_hydrus_objects(:models => [hyc], :pids_only => true).should include(cpid)
       #   - in workflows
       wfs.get_workflows(apid).should == [hwf]
       wfs.get_workflows(cpid).should == [hwf]
@@ -246,8 +246,8 @@ describe("Collection create", :type => :request, :integration => true) do
       expect { hya.find(apid) }.to raise_error(afe)
       expect { hyc.find(cpid) }.to raise_error(afe)
       #   - from SOLR
-      hyc.all_hydrus_objects(hya).should_not include(apid)
-      hyc.all_hydrus_objects(hyc).should_not include(cpid)
+      hyc.all_hydrus_objects(:models => [hya], :pids_only => true).should_not include(apid)
+      hyc.all_hydrus_objects(:models => [hyc], :pids_only => true).should_not include(cpid)
       #   - from workflows
       wfs.get_workflows(apid).should == []
       wfs.get_workflows(cpid).should == []
