@@ -30,6 +30,7 @@ class Hydrus::RemediationRunner
     #  - If you manipulate datastreams at the low level (for example, using
     #    Nokogiri and bypassing OM), be sure to call content_will_change!
     #    on the datastream.
+    #  - Use the log_warning() helper rather than calling log.warn() directly.
     ...
 
   end

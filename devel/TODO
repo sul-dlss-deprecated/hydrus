@@ -2,10 +2,6 @@
 Current
 --------
 
-test: deploy, remediate
-
-prod: deploy, remediate
-
 Close tickets:
   HYDRUS-56
   HYDRUS-72
@@ -14,6 +10,12 @@ Close tickets:
 --------
 On-deck
 --------
+
+Remediation follow-up. The following objects were remediated, but a new version
+could not be opened because they were in the middle of accessioning:
+yx282xq2090, kz354wt1387, jr652rx2541, mr373pn0879, tb469hy3847, vv654pm1204,
+gp361hz5082, qm274fz0921, rt187sc7864, wp335yr5649, bz017bq7668, th926tb9400,
+ry742gn4021, rh614yz5124, cy977mf7313, cv304vk9883, zc193vn8689.
 
 Hydrus has some recursive symlinking in its uploads directory. For example: see
 uploads/nw/312/yv/4331/nw312yv4331. This appears to occur for items with

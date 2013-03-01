@@ -29,8 +29,8 @@ class Hydrus::RemediationRunner
   def rem_add_prior_vis_and_license
     return unless fobj.is_item?
     log.info(__method__)
-    fobj.prior_visibility = 'stanford'         if fobj.prior_visibility.nil?
-    fobj.prior_license    = fobj.license.first if fobj.prior_license.nil?
+    fobj.prior_visibility = 'stanford'   if fobj.prior_visibility.nil?
+    fobj.prior_license    = fobj.license if fobj.prior_license.nil?
   end
 
   # Modify <use> section in rightsMetadata: remove cc- prefixes
@@ -77,7 +77,7 @@ class Hydrus::RemediationRunner
       end
       old_node.remove
     else
-      log.warn('did not find publishTime node')
+      log_warning('did not find publishTime node')
     end
     # For Items beyond first version, add an initialPublishTime node.
     return if fobj.is_collection? || fobj.is_initial_version

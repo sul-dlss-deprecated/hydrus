@@ -13,7 +13,8 @@ class Hydrus::RemediationRunner
     :needs_versioning,
     :no_versioning,
     :no_save,
-    :force
+    :force,
+    :problems
   )
 
   LOWEST_VERSION = '0000.00.00a'
@@ -28,6 +29,7 @@ class Hydrus::RemediationRunner
     # Set values we always need -- eg, for logging.
     @remed_version = LOWEST_VERSION
     @pid           = 'NO_PID_YET'
+    @problems      = Set.new
     # Set up the logger.
     @log           = Logger.new("#{Rails.root}/log/remediation.log", 10, 10240000)
     @log.formatter = proc { |severity, datetime, progname, msg|
@@ -49,6 +51,11 @@ class Hydrus::RemediationRunner
       rems.each do |rem|
         send(rem, h)
       end
+    end
+    if problems.size > 0
+      msgs = ['', 'Check the log for problems with the following objects:']
+      msgs << problems.to_a.sort.map { |p| "  #{p}" }
+      warn msgs.join("\n")
     end
   end
 
@@ -132,7 +139,7 @@ class Hydrus::RemediationRunner
       log.info('open_new_version(success)')
     rescue Exception => e
       self.needs_versioning = false  # So we won't try to close the version.
-      log.warn("open_new_version(FAILED): #{e.message}")
+      log_warning("open_new_version(FAILED): #{e.message}")
     end
   end
 
@@ -145,7 +152,7 @@ class Hydrus::RemediationRunner
     else
       es = fobj.errors
       msg = es ? es.messages.inspect : 'unknown reason'
-      log.warn("save failed: #{msg}")
+      log_warning("save failed: #{msg}")
     end
   end
 
@@ -156,8 +163,14 @@ class Hydrus::RemediationRunner
       fobj.close_version(:is_remediation => true)
       log.info('close_version(success)')
     rescue Exception => e
-      log.warn("close_version(FAILED): #{e.message}")
+      log_warning("close_version(FAILED): #{e.message}")
     end
+  end
+
+  # Keep track of PIDs with problems.
+  def log_warning(msg)
+    problems.add(pid)
+    log.warn(msg)
   end
 
 end

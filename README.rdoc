@@ -136,6 +136,7 @@ Also see:
     in the Git repo into the remediations/archive directory.
 
   # Running remediations (using dortest environment as the example):
+  # Must run from the deployed box.
   RAILS_ENV=dortest bundle exec rails runner remediations/run.rb
 
   # Then search for problems.
