@@ -66,7 +66,7 @@ class Hydrus::RemediationRunner
       m = File.basename(r, '.rb').gsub(/\./, '_')
       methods << 'remediation_' + m
     end
-    return methods
+    return methods.sort
   end
 
   # Called by a remediation method, which always receives one of the
