@@ -238,7 +238,10 @@ class Hydrus::Item < Hydrus::GenericObject
   # we simply invoke the dor-services method.
   def close_version(opts = {})
     cannot_do(:close_version) if is_initial_version(:absolute => true)
-    super(:version_num => version_id, :start_accession => false)
+    # We want to start accessioning only if ...
+    sa = !! opts[:is_remediation]              # ... we are running a remediation and
+    sa = false if should_treat_as_accessioned  # ... we are not in development or test
+    super(:version_num => version_id, :start_accession => sa)
   end
 
   # indicates if this item has an accepted terms of deposit, or if the supplied

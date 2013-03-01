@@ -1,6 +1,6 @@
 = Hydrus change log
 
-== 2013.02.28b
+== 2013.02.28b, 2013.02.28c
 
 * Remediation framework: worked out a few kinks.
 * Deployed to hydrus-test.

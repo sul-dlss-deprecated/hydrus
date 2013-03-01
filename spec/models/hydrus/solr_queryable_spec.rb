@@ -113,19 +113,19 @@ describe Hydrus::SolrQueryable do
 
     before(:each) do
       @all_objects = [
-        {:pid=>"druid:oo000oo0001", :object_type=>"Item",              :object_version=>"2013.02.27a"},
-        {:pid=>"druid:oo000oo0002", :object_type=>"AdminPolicyObject", :object_version=>"2013.02.27a"},
-        {:pid=>"druid:oo000oo0003", :object_type=>"Collection",        :object_version=>"2013.02.27a"},
-        {:pid=>"druid:oo000oo0004", :object_type=>"Collection",        :object_version=>"2013.02.27a"},
-        {:pid=>"druid:oo000oo0005", :object_type=>"Item",              :object_version=>"2013.02.27a"},
-        {:pid=>"druid:oo000oo0006", :object_type=>"Item",              :object_version=>"2013.02.27a"},
-        {:pid=>"druid:oo000oo0007", :object_type=>"Item",              :object_version=>"2013.02.27a"},
-        {:pid=>"druid:oo000oo0008", :object_type=>"AdminPolicyObject", :object_version=>"2013.02.27a"},
-        {:pid=>"druid:oo000oo0009", :object_type=>"AdminPolicyObject", :object_version=>"2013.02.27a"},
-        {:pid=>"druid:oo000oo0010", :object_type=>"Collection",        :object_version=>"2013.02.27a"},
-        {:pid=>"druid:oo000oo0011", :object_type=>"Item",              :object_version=>"2013.02.27a"},
-        {:pid=>"druid:oo000oo0012", :object_type=>"Item",              :object_version=>"2013.02.27a"},
-        {:pid=>"druid:oo000oo0013", :object_type=>"Item",              :object_version=>"2013.02.27a"}
+        {:pid=>"druid:oo000oo0001", :object_type=>"Item",              :object_version=>"2013.02.26a"},
+        {:pid=>"druid:oo000oo0002", :object_type=>"AdminPolicyObject", :object_version=>"2013.02.26a"},
+        {:pid=>"druid:oo000oo0003", :object_type=>"Collection",        :object_version=>"2013.02.26a"},
+        {:pid=>"druid:oo000oo0004", :object_type=>"Collection",        :object_version=>"2013.02.26a"},
+        {:pid=>"druid:oo000oo0005", :object_type=>"Item",              :object_version=>"2013.02.26a"},
+        {:pid=>"druid:oo000oo0006", :object_type=>"Item",              :object_version=>"2013.02.26a"},
+        {:pid=>"druid:oo000oo0007", :object_type=>"Item",              :object_version=>"2013.02.26a"},
+        {:pid=>"druid:oo000oo0008", :object_type=>"AdminPolicyObject", :object_version=>"2013.02.26a"},
+        {:pid=>"druid:oo000oo0009", :object_type=>"AdminPolicyObject", :object_version=>"2013.02.26a"},
+        {:pid=>"druid:oo000oo0010", :object_type=>"Collection",        :object_version=>"2013.02.26a"},
+        {:pid=>"druid:oo000oo0011", :object_type=>"Item",              :object_version=>"2013.02.26a"},
+        {:pid=>"druid:oo000oo0012", :object_type=>"Item",              :object_version=>"2013.02.26a"},
+        {:pid=>"druid:oo000oo0013", :object_type=>"Item",              :object_version=>"2013.02.26a"}
       ]
     end
 

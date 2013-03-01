@@ -2,12 +2,14 @@
 Current
 --------
 
-Deploy, remediate, and close tickets:
+test: deploy, remediate
+
+prod: deploy, remediate
+
+Close tickets:
   HYDRUS-56
   HYDRUS-72
   HYDRUS-71
-
-Push copy of config files.
 
 --------
 On-deck
@@ -19,8 +21,13 @@ subsequent versions. Check path_to_object() in findable.rb in assembly for
 possible bugs.
 
 Clear out cruft: all objects in -test environment, and stray objects in -prod.
-Depends on the implementionat of nuke() in dor-services. [See Consul page:
+Depends on the implementionat of nuke() in dor-services. The presense of these
+objects complicates the running of remediations. [See Consul page:
 chimera/DOR+object+deletion.]
+
+Set up an ability to disble the application via configuration. When in disabled
+mode, all requested would redirect to an app-under-maintenance page. This would
+be a good idea when running remediations.
 
 Figure out what causes this sporadic error: dor/models/workflow_object.rb:26:in
 initial_workflow: undefined method generate_intial_workflow for nil:NilClass.

@@ -83,7 +83,7 @@ class Hydrus::RemediationRunner
     @remed_version  = @remed_method.sub(/\A\D+/, '').gsub(/_/, '.')
     # Log that we've started.
     log.info("----")
-    log.info("started")
+    log.info("started (#{object_type})")
   end
 
   # Loads up the Fedora object.
@@ -107,8 +107,8 @@ class Hydrus::RemediationRunner
   # code via a block.
   def do_remediation
     # Open new version if necessary.
-    needs_versioning = fobj.is_item? && fobj.is_published
-    needs_versioning = false if no_versioning
+    self.needs_versioning = fobj.is_item? && fobj.is_published
+    self.needs_versioning = false if no_versioning
     open_new_version_of_object()
     # Run the remediation code that was passed via a block,
     # and update the object's version to the version associated
@@ -131,7 +131,7 @@ class Hydrus::RemediationRunner
                             :is_remediation => true)
       log.info('open_new_version(success)')
     rescue Exception => e
-      needs_versioning = false  # So we won't try to close the version.
+      self.needs_versioning = false  # So we won't try to close the version.
       log.warn("open_new_version(FAILED): #{e.message}")
     end
   end
@@ -153,7 +153,7 @@ class Hydrus::RemediationRunner
   def close_version_of_object
     return unless needs_versioning
     begin
-      fobj.close_version()
+      fobj.close_version(:is_remediation => true)
       log.info('close_version(success)')
     rescue Exception => e
       log.warn("close_version(FAILED): #{e.message}")
