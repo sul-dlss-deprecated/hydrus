@@ -19,6 +19,7 @@ module Hydrus::Authorizable
       snydman
       tcramer
       tonyn
+      jvine
     )
   end
 
@@ -29,6 +30,8 @@ module Hydrus::Authorizable
       amyhodge
       ronbo
       mmarosti
+      dhartwig 
+      
     )
     return administrators.union(ids)
   end
