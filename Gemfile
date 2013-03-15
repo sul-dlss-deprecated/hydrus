@@ -1,4 +1,4 @@
-source :rubygems
+source 'https://rubygems.org'
 source 'http://sul-gems.stanford.edu'
 
 gem 'dor-services'

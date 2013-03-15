@@ -19,7 +19,7 @@ class Hydrus::ObjectFile < ActiveRecord::Base
   end
 
   def filename
-    file.file.identifier
+    file.file.nil? ? "" : file.file.identifier # don't throw exception if file is blank for now so the page doesn't totally crap out
   end
 
   # A convenience uber-setter to simplify controller code.

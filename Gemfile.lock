@@ -15,7 +15,7 @@ GIT
       unicode
 
 GEM
-  remote: http://rubygems.org/
+  remote: https://rubygems.org/
   remote: http://sul-gems.stanford.edu/
   specs:
     RedCloth (4.2.9)
