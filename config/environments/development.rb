@@ -45,6 +45,7 @@ Dor::Config.configure do
   end
 
   hydrus do
+    show_standard_login   true   # if true, the user has the option to login via a username/password as well as webauth; if false; only webauth is allowed
     exception_error_page  false  # if true, a generic error page will be shown with no exception messages; if false, standard Rails exceptions are shown directly to the user
     exception_error_panel false  # if true and exception_error_page is also set to true, a collapsible exception error panel is shown on the friendly error page
     exception_recipients  ''     # list of email addresses, comma separated, that will be notified when an exception occurs - leave blank for no emails

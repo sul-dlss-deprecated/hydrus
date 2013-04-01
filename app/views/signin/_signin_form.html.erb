@@ -1,5 +1,13 @@
-<%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
-  <div class="modal-body">
+<%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %> 
+
+<% if params[:user] && /@stanford.edu\z/.match(params[:user][:email]).nil? == false%>
+	<div class="alert alert-info">
+	    <button class="close" data-dismiss="alert">×</button>
+	    Note: Stanford users should <%=link_to("sign in via WebAuth", webauth_login_path(:referrer => params[:referrer]))%> instead of via the email/password box.
+	  </div>
+<% end %>
+
+ <div class="modal-body">
     <div class="signin-form">
       <div class="signin-fields">
         <fieldset>
