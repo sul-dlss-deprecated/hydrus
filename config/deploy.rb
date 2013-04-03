@@ -59,25 +59,25 @@ namespace :jetty do
     run "if [ -d #{deploy_to}/current ]; then cd #{deploy_to}/current && rake jetty:stop; fi"
   end
   task :ingest_fixtures do
-    run "cd #{deploy_to}/current && rake hydrus:refreshfix RAILS_ENV=#{rails_env}"
+    run "cd #{deploy_to}/current && bundle exec rake hydrus:refreshfix RAILS_ENV=#{rails_env}"
   end
 end
 
 namespace :db do
   task :loadfixtures do
-    run "cd #{deploy_to}/current && rake db:fixtures:load RAILS_ENV=#{rails_env}"
+    run "cd #{deploy_to}/current && bundle exec rake db:fixtures:load RAILS_ENV=#{rails_env}"
   end
 end
 
 namespace :solr do
   task :reindex_workflow_objects do
-    run "cd #{deploy_to}/current && rake hydrus:reindex_workflow_objects RAILS_ENV=#{rails_env}"
+    run "cd #{deploy_to}/current && bundle exec rake hydrus:reindex_workflow_objects RAILS_ENV=#{rails_env}"
   end
 end
 
 namespace :files do
   task :refresh_fixtures do
-    run "cd #{deploy_to}/current && rake hydrus:refresh_upload_files"
+    run "cd #{deploy_to}/current && bundle exec rake hydrus:refresh_upload_files"
   end
   task :create_upload_symlink do
    run "ln -s /data/hydrus-files #{deploy_to}/current/public/uploads"
@@ -93,5 +93,5 @@ namespace :deploy do
 end
 
 after "deploy", "deploy:migrate"
-after "deploy", "solr:reindex_workflow_objects"
 after "deploy", "files:create_upload_symlink"
+after "deploy", "solr:reindex_workflow_objects"
