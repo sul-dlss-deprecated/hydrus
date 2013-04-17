@@ -34,9 +34,8 @@
                  "To add items, you must fill in all required fields and open the collection."
     %>
     <div class="btn-group add-content-dropdown" <%=raw "data-placement=\"bottom\" rel=\"tooltip\" data-original-title=\"#{message}\"" unless isopen%> style="display:none;" >
-      <button class="<%="disabled" unless isopen%> btn btn-small">Add new &hellip;</button>
       <button class="<%="disabled" unless isopen%> btn btn-small dropdown-toggle" data-toggle="dropdown">
-        <span class="caret"></span>
+        Add new &hellip; <span class="caret"></span>
       </button>
       <%= render :partial => "shared/add_content_options",
                  :locals => {:parent => @fobj} %>

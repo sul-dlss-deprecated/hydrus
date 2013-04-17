@@ -134,6 +134,7 @@ class Hydrus::Item < Hydrus::GenericObject
   def publish_directly
     cannot_do(:publish_directly) unless is_publishable()
     complete_workflow_step('submit')
+    send_item_deposit_email_notification
     do_publish()
   end
 
@@ -166,7 +167,7 @@ class Hydrus::Item < Hydrus::GenericObject
     self.object_status = 'awaiting_approval'
     complete_workflow_step('submit')
     events.add_event('hydrus', @current_user, "Item submitted for approval")
-    self.send_deposit_review_email_notification
+    send_deposit_review_email_notification
   end
 
   # Approve the Item.
@@ -194,7 +195,7 @@ class Hydrus::Item < Hydrus::GenericObject
     self.object_status = 'awaiting_approval'
     hydrusProperties.remove_nodes(:disapproval_reason)
     events.add_event('hydrus', @current_user, "Item resubmitted for approval")
-    self.send_deposit_review_email_notification
+    send_deposit_review_email_notification
   end
 
   # Opens a new version of the Item.
@@ -277,6 +278,12 @@ class Hydrus::Item < Hydrus::GenericObject
     email.deliver unless email.to.blank?
   end
 
+  def send_item_deposit_email_notification
+    return if recipients_for_item_deposit_emails.blank?
+    email = HydrusMailer.send("item_deposit", :object => self)
+    email.deliver unless email.to.blank?
+  end
+  
   def send_deposit_review_email_notification
     return if recipients_for_review_deposit_emails.blank?
     email = HydrusMailer.send("new_item_for_review", :object => self)
@@ -655,7 +662,12 @@ class Hydrus::Item < Hydrus::GenericObject
     }
   end
 
-  # the users who will receive email notifications when an item is deposited
+  # the users who will receive email notifications when an item is published or submitted for approval
+  def recipients_for_item_deposit_emails
+    self.item_depositor_id
+  end
+  
+  # the users who will receive email notifications when a new item is created
   def recipients_for_new_deposit_emails
     managers=apo.persons_with_role("hydrus-collection-manager").to_a
     managers.delete(self.item_depositor_id)

@@ -15,7 +15,7 @@
 </dd>
 
 <dt>In collection</dt>
-<dd><%= link_to(coll.title, polymorphic_path(coll)) %></dd>
+<dd><%= link_to(coll.title, polymorphic_path(coll)) %> (<%= link_to("view items", polymorphic_path([coll, :items])) %>)</dd>
 
 <dt>Deposited by</dt>
 <dd><%= @fobj.item_depositor_id %></dd>
