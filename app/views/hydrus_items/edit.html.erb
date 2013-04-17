@@ -41,10 +41,13 @@
     <%- end -%>
   </div>
 
-  <%= hydrus_form_header(:required=>true) {"Contributors"} -%>
+  <%= hydrus_form_header(:required=>true) {"Authors and Contributors"} -%>
 
   <div class="row field-group">
     <div class="span9 contributor-select destroy-group">
+	    <p>
+        Enter the name(s) of people, organizations or events responsible for producing the item.
+      </p>
       <%= render "contributors" %>
     </div>
   </div>

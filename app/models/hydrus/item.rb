@@ -126,6 +126,7 @@ class Hydrus::Item < Hydrus::GenericObject
     end
     # Save and return.
     item.save(:no_edit_logging => true, :no_beautify => true)
+    item.send_new_deposit_email_notification
     return item
   end
 
@@ -165,6 +166,7 @@ class Hydrus::Item < Hydrus::GenericObject
     self.object_status = 'awaiting_approval'
     complete_workflow_step('submit')
     events.add_event('hydrus', @current_user, "Item submitted for approval")
+    self.send_deposit_review_email_notification
   end
 
   # Approve the Item.
@@ -182,7 +184,7 @@ class Hydrus::Item < Hydrus::GenericObject
     self.object_status      = 'returned'
     self.disapproval_reason = reason
     events.add_event('hydrus', @current_user, "Item returned")
-    send_object_returned_email_notification()
+    send_object_returned_email_notification
   end
 
   # Resubmits an object after it was disapproved/returned.
@@ -192,6 +194,7 @@ class Hydrus::Item < Hydrus::GenericObject
     self.object_status = 'awaiting_approval'
     hydrusProperties.remove_nodes(:disapproval_reason)
     events.add_event('hydrus', @current_user, "Item resubmitted for approval")
+    self.send_deposit_review_email_notification
   end
 
   # Opens a new version of the Item.
@@ -268,6 +271,18 @@ class Hydrus::Item < Hydrus::GenericObject
     end
   end
 
+  def send_new_deposit_email_notification
+    return if recipients_for_new_deposit_emails.blank?
+    email = HydrusMailer.send("new_deposit", :object => self)
+    email.deliver unless email.to.blank?
+  end
+
+  def send_deposit_review_email_notification
+    return if recipients_for_review_deposit_emails.blank?
+    email = HydrusMailer.send("new_item_for_review", :object => self)
+    email.deliver unless email.to.blank?
+  end
+    
   # Returns true if the object can be submitted for approval:
   # a valid draft object that actually requires human approval.
   # Note: returned is not a valid object_status here, because this
@@ -640,6 +655,23 @@ class Hydrus::Item < Hydrus::GenericObject
     }
   end
 
+  # the users who will receive email notifications when an item is deposited
+  def recipients_for_new_deposit_emails
+    managers=apo.persons_with_role("hydrus-collection-manager").to_a
+    managers.delete(self.item_depositor_id)
+    return managers.join(', ')
+  end
+
+  # the users who will receive email notifications when an item is submitted for review
+  def recipients_for_review_deposit_emails
+    managers=(
+      apo.persons_with_role("hydrus-collection-manager") +
+      apo.persons_with_role("hydrus-collection-reviewer")
+    ).to_a
+    managers.delete(self.item_depositor_id)
+    return managers.join(', ')
+  end
+  
   # See GenericObject#changed_fields for discussion.
   def tracked_fields
     return {

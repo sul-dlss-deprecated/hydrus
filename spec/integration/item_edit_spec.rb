@@ -13,8 +13,8 @@ describe("Item edit", :type => :request, :integration => true) do
       :add_contributor     => 'Add Contributor',
       :submit_for_approval => 'Submit for Approval',
       :resubmit            => 'Resubmit for Approval',
-      :disapprove          => 'Return Item',
-      :approve             => 'Approve Item',
+      :disapprove          => 'Return',
+      :approve             => 'Approve and Publish',
       :publish_directly    => 'Publish',
       :open_new_version    => 'Open new version',
     }

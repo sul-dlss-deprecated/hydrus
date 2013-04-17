@@ -51,6 +51,7 @@ group :development, :test do
   gem 'launchy'
   gem 'ruby-prof'
   gem 'debugger'
+	gem 'letter_opener'
 end
 
 group :development do

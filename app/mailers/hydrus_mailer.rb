@@ -17,6 +17,18 @@ class HydrusMailer < ActionMailer::Base
     mail(:to=>HydrusMailer.process_user_list(@fobj.recipients_for_object_returned_email), :subject=>"#{@fobj.object_type.capitalize} returned in the Stanford Digital Repository") unless ignore?(@fobj.pid)
   end
 
+  def new_deposit(opts={})
+    @fobj = opts[:object]
+    @item_url = opts[:item_url] || polymorphic_url(@fobj, :host => host)
+    mail(:to=>HydrusMailer.process_user_list(@fobj.recipients_for_new_deposit_emails), :subject=>"#{@fobj.object_type.capitalize} deposited in the Stanford Digital Repository") unless ignore?(@fobj.pid)
+  end
+
+  def new_item_for_review(opts={})
+    @fobj = opts[:object]
+    @item_url = opts[:item_url] || polymorphic_url(@fobj, :host => host)
+    mail(:to=>HydrusMailer.process_user_list(@fobj.recipients_for_review_deposit_emails), :subject=>"#{@fobj.object_type.capitalize} ready for review in the Stanford Digital Repository") unless ignore?(@fobj.pid)
+  end
+    
   def open_notification(opts={})
     @fobj = opts[:object]
     @collection_url = polymorphic_url(@fobj, :host => host)

@@ -5,35 +5,38 @@
     <!-- Approve/disapprove. -->
     <% if @fobj.is_awaiting_approval && can?(:review, @fobj) %>
 
-      <!-- Approve. -->
-      <p>
-        <%= button_to(
-              "Approve Item",
-              approve_item_path(@fobj),
-              :id    => 'hydrus_item_approve',
-              :class => 'btn btn-small save-edits',
-              :disable_with => "Please wait..."  ) %>
-      </p>
-
       <!-- Disapprove. -->
       <%= form_tag(disapprove_item_path(@fobj)) do -%>
+      <p>
+        <%= label_tag("hydrus_item_disapproval_reason",
+                      "Reason for return",
+                      :class => "return-item") %>
+        <%= text_field_tag("hydrus_item_disapproval_reason",
+                           @fobj.disapproval_reason,
+                           :class => "return-item", :autofocus => true) -%><br />
+        <span class="help">Item depositor will be notified by email</span>
+      </p>
+
         <p>
           <%= button_tag(
-                "Return Item",
+                "Return",
                 :id    => 'hydrus_item_disapprove',
                 :class => 'btn btn-small save-edits',
                 :disable_with => "Please wait..."  ) %>
         </p>
-        <p>
-          <%= label_tag("hydrus_item_disapproval_reason",
-                        "Reason for return",
-                        :class => "return-item") %>
-          <%= text_field_tag("hydrus_item_disapproval_reason",
-                             @fobj.disapproval_reason,
-                             :class => "return-item", :autofocus => true) -%><br />
-          <span class="help">Item depositor will be notified by email</span>
-        </p>
+
       <% end -%>
+
+			      <!-- Approve. -->
+			      <p>
+			        <%= button_to(
+			              "Approve and Publish",
+			              approve_item_path(@fobj),
+			              :id    => 'hydrus_item_approve',
+			              :class => 'btn btn-small save-edits',
+										:confirm => 'You are about to deposit this item to the Stanford Digital Repository. While the deposit is in process, you will not be able to edit the item. Are you sure you want to proceed?',
+			              :disable_with => "Please wait..."  ) %>
+			      </p>
 
     <!-- Resubmit. -->
     <% elsif @fobj.is_returned && can?(:edit, @fobj) %>
@@ -58,6 +61,7 @@
               submit_for_approval_item_path(@fobj),
               :id    => 'hydrus_item_submit_for_approval',
               :class => 'btn btn-small save-edits',
+							:confirm => 'You are about to deposit this item to the Stanford Digital Repository. While the deposit is in process, you will not be able to edit the item. Are you sure you want to proceed?',
               :disable_with => "Please wait..."  ) %>
       </p>
 
@@ -69,6 +73,7 @@
               publish_directly_item_path(@fobj),
               :id    => 'hydrus_item_publish_directly',
               :class => 'btn btn-small save-edits',
+							:confirm => 'You are about to deposit this item to the Stanford Digital Repository. While the deposit is in process, you will not be able to edit the item. Are you sure you want to proceed?',
               :disable_with => "Please wait..."  ) %>
       </p>
 

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+  </head>
+  <body>
+    <p>
+			<%= @fobj.item_depositor_id %> has submitted the item <%= in_quotes(@fobj.title) %> for review in the <%= in_quotes(@fobj.collection.title) %> collection.
+    </p>
+    <p>
+      To view the item, follow this link:
+      <%= link_to(@item_url,@item_url) %>.
+    </p>
+    <p>
+      If you have any questions about the SDR, send a message to
+      <%= sdr_mail_to() %>.
+    </p>
+  </body>
+</html>
