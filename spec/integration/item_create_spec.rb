@@ -164,15 +164,13 @@ describe("Item create", :type => :request, :integration => true) do
     # we haven't accepted the terms.
     find(@div_actions).should_not have_button(@buttons[:submit_for_approval])
 
-    # Accept terms of deposit (hard to do via the UI since a pop-up window is
-    # involved, so let's exercise the method directly)
-    item = Hydrus::Item.find(druid)
-    item.accept_terms_of_deposit(mock_authed_user('archivist6'))
-    mock_authed_user
-    item.save
+    # Accept terms of deposit
+    should_visit_edit_page(item)
+    check "terms_of_deposit_checkbox"
+    click_button(@buttons[:save])
 
     # The view page should now offer the Submit for approval button since we
-    # haven't accepted the terms.
+    # have accepted the terms.
     visit hydrus_item_path(:id=>item.pid)
     find(@div_actions).should have_button(@buttons[:submit_for_approval])
 
@@ -363,10 +361,10 @@ describe("Item create", :type => :request, :integration => true) do
     # The view page should not offer the Publish button since we haven't accepted the terms yet
     find(@div_actions).should_not have_button(@buttons[:publish_directly])
 
-    # accept terms of deposit (hard to do via the UI since a pop-up window is involved, so let's exercise the method directly)
-    item = Hydrus::Item.find(druid)
-    item.accept_terms_of_deposit(mock_authed_user('archivist1'))
-    item.save
+    # Accept terms of deposit
+    should_visit_edit_page(item)
+    check "terms_of_deposit_checkbox"
+    click_button(@buttons[:save])
 
     visit hydrus_item_path(:id=>item.pid)
     # now we should have the publish button

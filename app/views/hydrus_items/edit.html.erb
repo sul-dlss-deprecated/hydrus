@@ -216,12 +216,36 @@
     </div>
   </div>
 
+  <!-- Terms of deposit -->
+
+  <%= hydrus_form_header(:required => @fobj.licenses_can_vary) {"Terms of Deposit"} %>
+
+  <div class="row field-group">
+    <div class="span9 sub-section">
+      <span>
+        <br />
+        <input type="checkbox"
+               <%="checked disabled" if to_bool(@fobj.terms_of_deposit_accepted?)%> 
+               name="hydrus_item[terms_of_deposit_checkbox]" 
+               value="true" id="terms_of_deposit_checkbox" /> I have read and agree to the SDR
+					     <% tod_path = terms_of_deposit_path(@fobj) %>
+					      <%= link_to( 
+					            "Terms of Deposit",
+					            tod_path,
+					            :target     => '_blank',
+					            :class      => 'tod_link',
+					            :"data-url" => "#{tod_path}&from=#{controller.action_name}"
+					          )
+					      %>      </span>
+    </div>
+  </div>
+
   <!-- Terms of use and license -->
 
   <%= hydrus_form_header(:required => @fobj.licenses_can_vary) {"Terms of Use and Licenses"} %>
 
   <div class="row field-group">
-    <div class="span9">
+    <div class="span9 sub-section">
       <p>
         The following Terms of Use will be displayed with this item when published:
         <%= in_quotes(@fobj.terms_of_use) %>

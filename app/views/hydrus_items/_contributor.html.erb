@@ -1,6 +1,6 @@
 <%
   # Unpack local variables we received, setting a default Contributor if needed.
-  c = (contributor || Hydrus::Contributor.default_contributor)
+  c = (contributor.nil? || contributor.role_key.blank?) ? Hydrus::Contributor.default_contributor : contributor
   i = index
 %>
 

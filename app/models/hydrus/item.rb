@@ -397,6 +397,11 @@ class Hydrus::Item < Hydrus::GenericObject
     end
   end
 
+  # method that catches the user checking a box on the item edit page which triggers terms of deposit acceptance
+  def terms_of_deposit_checkbox=(value)
+    accept_terms_of_deposit(@current_user) if value
+  end
+  
   # Accepts terms of deposit for the given user.
   # At the item level we store true/false.
   # At the colleciton level we store user name and datetime.

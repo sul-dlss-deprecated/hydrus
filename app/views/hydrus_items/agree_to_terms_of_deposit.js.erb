@@ -3,4 +3,6 @@ $('#actions-box').html("<%= escape_javascript(render( :partial => "hydrus_items/
 
 <% if @from == 'edit' %>
  activate_edit_controls();
+ $('#terms_of_deposit_checkbox').attr('disabled',true);
+ $('#terms_of_deposit_checkbox').attr('checked',true);
 <% end %>
