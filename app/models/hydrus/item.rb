@@ -78,7 +78,7 @@ class Hydrus::Item < Hydrus::GenericObject
     :control_group => 'M')
 
 
-  # Note: currently all items of of type :dataset. In the future,
+  # Note: currently all items of of type :item. In the future,
   # the calling code can pass in the needed value.
   def self.create(collection_pid, user, itype = :dataset)
     # Make sure user can create items in the parent collection.

@@ -1,5 +1,10 @@
 = Hydrus change log
 
+== 2013.04.18
+
+* The following tickets: Hydrus-126; Hydrus-129; Hydrus-127; Hydrus-85; Hydrus-125; Hydrus-84; Hydrus-89; Hydrus-76; Hydrus-82; Hydrus-90
+* Add users to collection creation role: Hydrus-135; Hydrus-131
+
 == 2013.04.01
 
 * Do not show email/password login box when on staging or production.
