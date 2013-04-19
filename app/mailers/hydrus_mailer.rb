@@ -2,7 +2,7 @@ class HydrusMailer < ActionMailer::Base
 
   helper ApplicationHelper
 
-  default from: "no-reply@hydrus.stanford.edu"
+  default from: "no-reply@sdr.stanford.edu"
 
   def invitation(opts={})
     @fobj = opts[:object]

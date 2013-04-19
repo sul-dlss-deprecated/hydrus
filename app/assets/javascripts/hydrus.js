@@ -47,7 +47,7 @@ function manage_radio_groups() {
       });
     });
     // add click events to radios in disable group to disable or enable the element referred in the data-control-element attribute.
-    $('[data-control-element]', group).on("click",function(){
+    $('[data-control-element]', group).click(function(){
       if($(this).attr("data-control-disable") == "true") {
         $($(this).attr("data-control-element"), group).prop("disabled", "disabled");
       }else{
@@ -61,7 +61,7 @@ function manage_radio_groups() {
 
 function activate_edit_controls() {
 
-  $(".delete-node").live("click", function(){
+  $(document).on('click','.delete-node',function(){
     var button = $(this);
     ajax_loading_indicator(button);
     $.ajax({url: button.attr("href") + "&format=js",
@@ -84,7 +84,7 @@ function activate_edit_controls() {
     $("form.step").submit();
   });
 
-  $("#add_contributor, #add_link, #add_related_citation").live('click',function(){
+  $(document).on("click","#add_contributor, #add_link, #add_related_citation",function(){
     var button = $(this);
     var type = $(this).attr("class");
     var form = $(this).closest("form");
@@ -219,7 +219,7 @@ function collection_edit_init(){
   // this method is called when the collection edit page is fully loaded
   validate_hydrus_collection();
   activate_edit_controls();
-  $("form input, form textarea").live("blur", function(){
+  $(document).on('blur',"form input, form textarea", function(){
       validate_hydrus_collection();
   });
 
@@ -239,10 +239,10 @@ function item_edit_init(){
   // this method is called when the item edit page is fully loaded
   validate_hydrus_item();
   activate_edit_controls();
-  $("form input, form textarea").live("blur", function(){
+  $(document).on('blur',"form input, form textarea",function(){
       validate_hydrus_item();
   });
-  $('[data-behavior="datepicker"]').each(function(){
+  $('[data-behavior="datepicker"]').each(function(event){
     $(this).datepicker({
       endDate:   $(this).attr("data-end-date"),
       startDate: $(this).attr("data-start-date")
