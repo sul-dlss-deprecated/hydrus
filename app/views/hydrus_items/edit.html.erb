@@ -57,21 +57,7 @@
   <div class="row field-group">
     <div class="span9" id="file-upload">
 
-      <div id="uploaded-files">
-        <p>
-          Choose one or more files, or drag and drop them here. Then enter a short
-          description for each file.
-        </p>
-        <%- @fobj.files.each do |file| -%>
-          <%= render :partial => "object_file", :locals => {:file => file} %>
-        <%- end -%>
-      </div>
-
-      <div class="row">
-        <div class="span9">
-          <%= file_field_tag "files[]", :multiple=>true %>
-        </div>
-      </div>
+		<%= render :partial=>'file_uploads' %>
 
     </div>
   </div>
@@ -99,7 +85,7 @@
   </div>
 
   <%= hydrus_form_header {"Citations"} -%>
-<p> Provide a bibliographic citation for this item in a format of your preference. Be sure to include the item’s persistent URL: <%=@fobj.purl_url%>. </p>
+<p> Provide a bibliographic citation for this item in a format of your preference. Be sure to include the item’s persistent URL: <br /><%=@fobj.purl_url%>. </p>
   <div class="row field-group">
     <%= hydrus_form_label do %>
       <%= f.label :preferred_citation, "Preferred citation for this #{object_type}", :class => "hidden-tablet" %>

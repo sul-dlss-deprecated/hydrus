@@ -2,9 +2,9 @@ $('#status-box').html("<%= escape_javascript(render( :partial => "hydrus_items/s
 ajax_loading_done('.tod_link');
 
 <% if @from == 'edit' %>
- activate_edit_controls();
- $('#terms_of_deposit_checkbox').attr('disabled',true);
- $('#terms_of_deposit_checkbox').attr('checked',true);
+   $('#terms_of_deposit_checkbox').attr('disabled',true);
+   $('#terms_of_deposit_checkbox').attr('checked',true);
+   activate_edit_controls();
 <% else %>
-	$('#actions-box').html("<%= escape_javascript(render( :partial => "hydrus_items/actions_box_#{@from}", :locals => {:id=>"js"})).html_safe %>");
+ $('#actions-box').html("<%= escape_javascript(render( :partial => "hydrus_items/actions_box_show", :locals => {:id=>"js"})).html_safe %>");
 <% end %>

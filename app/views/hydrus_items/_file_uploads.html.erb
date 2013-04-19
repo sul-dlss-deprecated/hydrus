@@ -1,0 +1,16 @@
+<div id="uploaded-files">
+  <p>
+    Choose one or more files, or drag and drop them here. Then enter a short
+    description for each file.
+  </p>
+  <%- @fobj.files.each do |file| -%>
+    <%= render :partial => "object_file", :locals => {:file => file} %>
+  <%- end -%>
+</div>
+
+<div class="row">
+  <div class="span9">
+    <%= file_field_tag "files[]", :multiple=>true %>
+  </div>
+</div>
+

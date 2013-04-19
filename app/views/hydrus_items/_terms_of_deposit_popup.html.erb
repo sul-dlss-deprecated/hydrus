@@ -21,7 +21,7 @@
 $(document).ready(function(){
   $(".tod-agree").each(function(){
     $(this).click(function(){
-			ajax_loading_indicator();
+	  ajax_loading_indicator();
       $.ajax($(this).attr("data-url") + "&format=js");
     });
   });
