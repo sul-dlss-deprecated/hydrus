@@ -6,24 +6,31 @@ class HydrusItemsController < ApplicationController
   include Hydrus::AccessControlsEnforcement
 
   #prepend_before_filter :sanitize_update_params, :only => :update
-  before_filter :enforce_access_controls
   before_filter :setup_attributes, :except => [:new, :index, :send_purl_email, :terms_of_deposit, :agree_to_terms_of_deposit]
+  before_filter :enforce_access_controls
   before_filter :check_for_collection, :only => :new
   before_filter :redirect_if_not_correct_object_type, :only => [:edit,:show]
 
   def index
-    if params.has_key?(:hydrus_collection_id)
-      @fobj = Hydrus::Collection.find(params[:hydrus_collection_id])
-      @fobj.current_user = current_user
-    else
-      flash[:warning]="You need to log in."
-      redirect_to new_user_session_path
+    if not @fobj
+      if params.has_key?(:hydrus_collection_id)
+        @fobj = Hydrus::Collection.find(params[:hydrus_collection_id])
+        @fobj.current_user = current_user
+      else
+        flash[:warning]="You need to log in."
+        redirect_to new_user_session_path
+      end
     end
   end
 
   def setup_attributes
-    @fobj = Hydrus::Item.find(params[:id])
-    @fobj.current_user = current_user
+    if params.has_key?(:hydrus_collection_id)
+      @fobj = Hydrus::Collection.find(params[:hydrus_collection_id])
+      @fobj.current_user = current_user
+    else
+      @fobj = Hydrus::Item.find(params[:id])
+      @fobj.current_user = current_user
+    end
   end
 
   def show
@@ -35,11 +42,11 @@ class HydrusItemsController < ApplicationController
   def destroy
     collection=@fobj.collection
     if @fobj.is_destroyable && can?(:edit, @fobj)
-       @fobj.delete
-       flash[:notice]="The item was deleted."
+      @fobj.delete
+      flash[:notice]="The item was deleted."
     else
-       flash[:error]="You do not have permissions to delete this item."
-     end
+      flash[:error]="You do not have permissions to delete this item."
+    end
     redirect_to polymorphic_path([collection,:items])
   end
 
@@ -48,8 +55,8 @@ class HydrusItemsController < ApplicationController
       @id=params[:id]
       render 'shared/discard_confirmation'
     else
-     flash[:error]="You do not have permissions to delete this item."
-     redirect_to polymorphic_path([@fobj.collection,:items])
+      flash[:error]="You do not have permissions to delete this item."
+      redirect_to polymorphic_path([@fobj.collection,:items])
     end
   end
 
@@ -103,9 +110,9 @@ class HydrusItemsController < ApplicationController
     ####
 
     has_mvf = (
-      params.has_key?(:add_contributor) or
-      params.has_key?(:add_link) or
-      params.has_key?(:add_related_citation)
+    params.has_key?(:add_contributor) or
+    params.has_key?(:add_link) or
+    params.has_key?(:add_related_citation)
     )
 
     if has_mvf
@@ -223,13 +230,13 @@ class HydrusItemsController < ApplicationController
     hof = Hydrus::ObjectFile.find(@file_id)
     hof.destroy
     respond_to do |want|
-       want.html {
-         flash[:warning] = "The file was deleted"
-         redirect_to :back
-       }
-       want.js {
-         render :action => :destroy_file
-       }
+      want.html {
+        flash[:warning] = "The file was deleted"
+        redirect_to :back
+      }
+      want.js {
+        render :action => :destroy_file
+      }
     end
   end
 
@@ -288,7 +295,8 @@ class HydrusItemsController < ApplicationController
 
   def enforce_index_permissions
     if params.has_key?(:hydrus_collection_id)
-      unless can? :read, params[:hydrus_collection_id]
+      obj=@fobj ? @fobj : params[:hydrus_collection_id]
+      unless can? :read, obj
         flash[:error] = "You do not have permissions to view this collection."
         redirect_to root_path
       end

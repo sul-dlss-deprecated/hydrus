@@ -43,11 +43,10 @@ describe HydrusItemsController do
   # SHOW ACTION.
   describe "Show Action", :integration => true do
 
-    it "should not get fedora document and assign various attributes when not logged in" do
+    it "should redirect when not logged in" do
       @pid = 'druid:oo000oo0001'
       controller.stub(:current_user).and_return(mock_user)
       get(:show, :id => @pid)
-      assigns[:fobj].should be_nil
       response.should redirect_to root_path
     end
 
