@@ -1,8 +1,8 @@
 <ul class="breadcrumb">
-  <li><%= link_to 'Home', root_path%></li>
+  <li><%= link_to 'Home', root_path,:disable_after_click=>'true'%></li>
   <% if @fobj %>
     <% if @fobj.is_item? %>
-      <li><span class="divider">/</span> <%= link_to truncate(title_text(@fobj.collection)), hydrus_collection_path(@fobj.collection)%> </li>
+      <li><span class="divider">/</span> <%= link_to truncate(title_text(@fobj.collection)), hydrus_collection_path(@fobj.collection),:disable_after_click=>'true'%> </li>
       <li><span class="divider">/</span> <%= "#{truncate(title_text(@fobj))} (#{@fobj.status_label})"%></li>
     <% else %>
       <li><span class="divider">/</span> <%= truncate(title_text(@fobj)) %></li>

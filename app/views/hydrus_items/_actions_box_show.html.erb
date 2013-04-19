@@ -22,7 +22,8 @@
                 "Return",
                 :id    => 'hydrus_item_disapprove',
                 :class => 'btn btn-small save-edits',
-                :disable_with => "Please wait..."  ) %>
+                :disable_with => "Please wait...",
+  							:show_loading_indicator=>"true") %>
         </p>
 
       <% end -%>
@@ -35,7 +36,8 @@
 			              :id    => 'hydrus_item_approve',
 			              :class => 'btn btn-small save-edits',
 										:confirm => 'You are about to deposit this item to the Stanford Digital Repository. While the deposit is in process, you will not be able to edit the item. Are you sure you want to proceed?',
-			              :disable_with => "Please wait..."  ) %>
+			              :disable_with => "Please wait...",
+			  						:show_loading_indicator=>"true") %>
 			      </p>
 
     <!-- Resubmit. -->
@@ -50,7 +52,8 @@
               resubmit_item_path(@fobj),
               :id    => 'hydrus_item_resubmit',
               :class => 'btn btn-small save-edits',
-              :disable_with => "Please wait..."  ) %>
+              :disable_with => "Please wait...",
+  						:show_loading_indicator=>"true") %>
       </p>
 
     <!-- Submit for Approval. -->
@@ -62,7 +65,8 @@
               :id    => 'hydrus_item_submit_for_approval',
               :class => 'btn btn-small save-edits',
 							:confirm => 'You are about to deposit this item to the Stanford Digital Repository. While the deposit is in process, you will not be able to edit the item. Are you sure you want to proceed?',
-              :disable_with => "Please wait..."  ) %>
+              :disable_with => "Please wait...",
+  						:show_loading_indicator=>"true") %>
       </p>
 
     <!-- Publish directly (applies only to items not requiring approval by reviewer). -->
@@ -74,7 +78,8 @@
               :id    => 'hydrus_item_publish_directly',
               :class => 'btn btn-small save-edits',
 							:confirm => 'You are about to deposit this item to the Stanford Digital Repository. While the deposit is in process, you will not be able to edit the item. Are you sure you want to proceed?',
-              :disable_with => "Please wait..."  ) %>
+              :disable_with => "Please wait...",  
+							:show_loading_indicator=>"true") %>
       </p>
 
     <!-- Open new version. -->
@@ -85,7 +90,8 @@
               open_new_version_item_path(@fobj),
               :id    => 'hydrus_item_open_new_version',
               :class => 'btn btn-small save-edits',
-              :disable_with => "Please wait..."  ) %>
+              :disable_with => "Please wait...",
+							:show_loading_indicator=>"true" ) %>
       </p>
 
     <% end %>
@@ -101,7 +107,7 @@
             tod_path,
             :target     => '_blank',
             :class      => 'tod_link',
-            :"data-url" => "#{tod_path}&from=#{controller.action_name}"
+            :"data-url" => "#{tod_path}&from=show"
           )
       %>
     </p>

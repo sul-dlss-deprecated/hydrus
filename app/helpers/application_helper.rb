@@ -105,7 +105,7 @@ module ApplicationHelper
 
   # a helper to create links to items that may or may not have titles yet
   def title_link(obj)
-    return link_to(title_text(obj), polymorphic_path(obj))
+    return link_to(title_text(obj), polymorphic_path(obj),:disable_after_click=>'true')
   end
 
   # this checks to see if the object passed in is "empty", which could be nil,

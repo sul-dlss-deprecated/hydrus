@@ -47,7 +47,7 @@ describe ApplicationHelper do
 
   it "should render the correct contextual layout" do
     controller=mock(HydrusCollectionsController)
-    render_contextual_layout.should == "<ul class=\"breadcrumb\">\n  <li><a href=\"/\">Home</a></li>\n</ul>\n\n\n<div class=\"row\">\n  <div class=\"span9\" id=\"main\"></div>\n  <div class=\"span3\" id=\"sidebar\"></div>\n</div>\n"
+    render_contextual_layout.should == "<ul class=\"breadcrumb\">\n  <li><a href=\"/\" disable_after_click=\"true\">Home</a></li>\n</ul>\n\n\n<div class=\"row\">\n  <div class=\"span9\" id=\"main\"></div>\n  <div class=\"span3\" id=\"sidebar\"></div>\n</div>\n"
   end
 
   it "should get_attributes for an object" do
@@ -175,8 +175,8 @@ describe ApplicationHelper do
       hi2=Hydrus::Item.find('druid:oo000oo0001')
       title_text(hi).should == 'Untitled'
       title_text(hi2).should == 'How Couples Meet and Stay Together'
-      title_link(hi).should == '<a href="/items">Untitled</a>'
-      title_link(hi2).should == '<a href="/items/druid:oo000oo0001">How Couples Meet and Stay Together</a>'
+      title_link(hi).should == '<a href="/items" disable_after_click="true">Untitled</a>'
+      title_link(hi2).should == '<a href="/items/druid:oo000oo0001" disable_after_click="true">How Couples Meet and Stay Together</a>'
     end
 
   end

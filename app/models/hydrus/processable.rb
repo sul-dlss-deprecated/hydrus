@@ -44,6 +44,7 @@ module Hydrus::Processable
   # workflow, and then kicks off the assembly and accessioning pipeline.
   def start_common_assembly
     cannot_do(:start_common_assembly) unless is_assemblable()
+    delete_missing_files if is_item?
     update_content_metadata
     complete_workflow_step('start-assembly')
     start_assembly_wf

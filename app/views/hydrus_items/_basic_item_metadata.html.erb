@@ -23,8 +23,8 @@
 <dt>Contact at</dt>
 <dd><%= @fobj.contact.blank? ? hydrus_object_setting_value(@fobj.contact) : mail_to(@fobj.contact) %></dd>
 
-<dt>Version</dt>
-<dd><%= "#{@fobj.version_tag}" %></dd>
+<dt>Version Details</dt>
+<dd><%= "#{@fobj.version_tag}" %> - <%= @fobj.version_description%></dd>
 
 <dt>Item created</dt>
 <dd><%= HyTime.datetime_display(@fobj.create_date) %></dd>

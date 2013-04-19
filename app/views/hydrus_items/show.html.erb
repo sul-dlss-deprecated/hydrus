@@ -28,7 +28,7 @@
           <% else %>
             <% @fobj.contributors.each do |contributor| %>
               <dt><%= contributor.role %></dt>
-              <dd><%= contributor.name %></dd>
+              <dd><% if contributor.name.blank? %><em>unspecified</em><% else %><%= contributor.name%></dd><% end %>
             <% end %>
           <% end %>
       </div>

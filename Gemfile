@@ -6,7 +6,7 @@ gem 'druid-tools', '>= 0.2.0'
 gem 'sul_chrome'
 gem 'about_page'
 gem 'is_it_working-cbeer', "~> 1.0.13"
-gem 'assembly-objectfile', ">= 1.4.5"
+gem 'assembly-objectfile', ">= 1.5.0"
 gem 'rsolr-client-cert', ">= 0.5.2"
 gem 'solrizer-fedora'
 

@@ -18,8 +18,13 @@ class Hydrus::ObjectFile < ActiveRecord::Base
     file.current_path
   end
 
+  # is this file missing on the file system?
+  def missing?
+    file.file.nil? || File.exists?(file.current_path) == false
+  end
+  
   def filename
-    file.file.nil? ? "" : file.file.identifier # don't throw exception if file is blank for now so the page doesn't totally crap out
+    file.file.nil? ? "" : file.file.identifier # don't throw exception if file is blank so the page doesn't show an exception
   end
 
   # A convenience uber-setter to simplify controller code.

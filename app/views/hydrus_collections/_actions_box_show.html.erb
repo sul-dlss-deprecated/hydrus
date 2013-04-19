@@ -13,7 +13,8 @@
               close_collection_path(@fobj),
               :id    => 'hydrus_collection_close',
               :class => 'btn btn-small save-edits',
-              :disable_with => "Please wait..."  ) %>
+              :disable_with => "Please wait...",
+							:show_loading_indicator=>"true") %>
       </p>
     <% elsif @fobj.is_openable %>
       <p>
@@ -22,7 +23,8 @@
               open_collection_path(@fobj),
               :id    => 'hydrus_collection_open',
               :class => 'btn btn-small save-edits',
-              :disable_with => "Please wait..."  ) %>
+              :disable_with => "Please wait...",
+  						:show_loading_indicator=>"true") %>
       </p>
     <% end %>
   <% end %>
@@ -48,7 +50,7 @@
               :class=>"add-content-options"
             )
         %>
-        <%= submit_tag("Add", :class=>"btn btn-small") %>
+        <%= submit_tag("Add", :class=>"btn btn-small", :show_loading_indicator=>"true" ) %>
       <%- end -%>
     </noscript>
   <% end %>

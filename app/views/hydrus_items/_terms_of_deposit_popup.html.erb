@@ -9,7 +9,7 @@
   <div class="modal-footer">
     <a href="/SDRSelfDepositTerms.pdf"><button class="btn">Save</button></a>
     <% if @fobj.terms_of_deposit_accepted?%>
-      <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Close</button>
+      <button class="btn btn-primary" data-dismiss="modal" id="tod-close-button" aria-hidden="true">Close</button>
     <% else %>
       <button class="btn" data-dismiss="modal" aria-hidden="true">Return without agreeing</button>
       <button class="tod-agree btn btn-primary" data-url="<%="#{terms_of_deposit_agree_path(@pid)}&from=#{@from}"%>" data-dismiss="modal">I agree to these terms</button>
@@ -21,10 +21,10 @@
 $(document).ready(function(){
   $(".tod-agree").each(function(){
     $(this).click(function(){
+			ajax_loading_indicator();
       $.ajax($(this).attr("data-url") + "&format=js");
     });
   });
-
 });
 </script>
 

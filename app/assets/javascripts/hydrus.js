@@ -151,15 +151,22 @@ function setup_action_links() {
     $('#copy-purl-link').select();
   });
 }
-// href links with the disable-after-click=true attribute will be automatically disabled after clicking to prevent double clicks
+// href links with the disable_after_click=true attribute will be automatically disabled after clicking to prevent double clicks
 function setup_links_that_disable() {
-  $("[disable-after-click='true']").each(function(){
+	$("[show_loading_indicator='true']").each(function(){
+    $(this).click(function(e){
+	    ajax_loading_indicator(); // show loading indicator in UI
+			if ($(this).attr("disable_with") != '') { $(this).text($(this).attr("disable_with"));} // change the text
+	    $(this).addClass('disabled'); // disable the element visually
+	    });
+    });
+  $("[disable_after_click='true']").each(function(){
     $(this).click(function(e){
       e.preventDefault(); // stop default href behavior
       ajax_loading_indicator(); // show loading indicator in UI
       url=$(this).attr("href"); // grab the URL
       $(this).attr("href","#"); // remove it so even if clicked again, nothing will happen!
-      $(this).text('Please wait...'); // change the text
+			if ($(this).attr("disable_with") != '') { $(this).text($(this).attr("disable_with"));} // change the text
       $(this).parent().addClass('disabled'); // disable the parent's element visually
       $(this).addClass('disabled'); // disable the element visually
       window.location.href=url; // go to the URL
@@ -175,6 +182,7 @@ function setup_form_state_change_tracking() {
 
 function ajax_loading_indicator(element) {
   $("body").css("cursor", "progress");
+	$('#loading-message').removeClass('hidden');
   if (!!element) {
     element.animate({opacity:0.25});
     element.attr("disabled","disabled");
@@ -183,10 +191,15 @@ function ajax_loading_indicator(element) {
 
 function ajax_loading_done(element) {
   $("body").css("cursor", "auto");
+	$('#loading-message').addClass('hidden');
   if (!!element) {
     element.animate({opacity:1.0});
     element.removeAttr("disabled");
     }
+}
+
+function show_message(text,id) {
+	$('#flash-notices').append('<div id="' + id + '" class="span8 offset2"><div class="alert alert-info"><button class="close" data-dismiss="alert">×</button>' + text + '</div></div>');
 }
 
 function check_tracked_form_state_change() {

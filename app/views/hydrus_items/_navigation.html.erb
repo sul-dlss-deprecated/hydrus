@@ -1,22 +1,22 @@
 <ul class="nav nav-pills">
 
   <li<%= " class='active'".html_safe if params[:action] == "show" %>>
-    <%= link_to(view_item_text(@fobj), polymorphic_path(@fobj)) %>
+    <%= link_to(view_item_text(@fobj), polymorphic_path(@fobj),:disable_after_click=>'true') %>
   </li>
 
   <% if show_item_edit(@fobj) %>
     <li<%= " class='active'".html_safe if ["edit", "update"].include?(params[:action]) %>>
-      <%= link_to(edit_item_text(@fobj), edit_polymorphic_path(@fobj)) %>
+      <%= link_to(edit_item_text(@fobj), edit_polymorphic_path(@fobj),:disable_after_click=>'true') %>
     </li>
   <% end %>
 
   <li<%= " class='active'".html_safe if params[:controller] == "events" %>>
-    <%= link_to("History", polymorphic_path([@fobj, :events])) %>
+    <%= link_to("History", polymorphic_path([@fobj, :events]),:disable_after_click=>'true') %>
   </li>
 
   <% if can?(:view_datastreams, @fobj) %>
     <li<%= " class='active'".html_safe if params[:controller] == "datastreams" %>>
-      <%= link_to("Datastreams", polymorphic_path([@fobj, :datastreams])) %>
+      <%= link_to("Datastreams", polymorphic_path([@fobj, :datastreams]),:disable_after_click=>'true') %>
     </li>
   <% end %>
 

@@ -95,3 +95,4 @@ end
 after "deploy", "deploy:migrate"
 after "deploy", "files:create_upload_symlink"
 after "deploy", "solr:reindex_workflow_objects"
+after "deploy:update", "deploy:cleanup" 

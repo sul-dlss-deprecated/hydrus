@@ -138,6 +138,11 @@ class HydrusItemsController < ApplicationController
     notice << "Your changes have been saved."
     flash[:notice] = notice.join("<br/>").html_safe unless notice.blank?
 
+    # delete any files that are missing and warn the user
+    if @fobj.delete_missing_files > 0 
+      flash[:error]="Some files did not upload correctly. Please check and re-upload any missing files."
+    end
+      
     respond_to do |want|
       want.html {
         if has_mvf

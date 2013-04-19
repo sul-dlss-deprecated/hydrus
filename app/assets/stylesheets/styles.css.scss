@@ -550,3 +550,14 @@ li.errors
 	font-size: 13px;
 	line-height: 18px;
 }
+
+#loading-message 
+{
+	background: none repeat scroll 0 0 #FFFEA1;
+  border: 1px solid #FFCC00;
+  font-family: Arial;
+  padding: 10px;
+  position: fixed;
+  right: 2%;
+  top: 2%;
+}

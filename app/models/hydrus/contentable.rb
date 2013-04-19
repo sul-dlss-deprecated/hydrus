@@ -2,6 +2,23 @@
 
 module Hydrus::Contentable
 
+  # Check to see if all of the files that are referenced in the database actually exist on the file system
+  def files_missing?
+    files.map{|f| f.missing?}.include?(true)
+  end
+  
+  # remove any files deemed missing from the database; return the number deleted
+  def delete_missing_files
+    files_missing=0
+    files.each do |f|
+      if f.missing?
+        f.destroy
+        files_missing+=1
+      end 
+    end
+    return files_missing
+  end
+  
   # Generates the object's contentMetadata XML, stores the XML in the
   # object's datastreams, and writes the XML to a file.
   def update_content_metadata
@@ -33,6 +50,7 @@ module Hydrus::Contentable
       :add_file_attributes => true,
       :style               => conf.cm_style,
       :file_attributes     => conf.cm_file_attributes,
+      :auto_labels         => false,
       :include_root_xml    => false)
   end
 

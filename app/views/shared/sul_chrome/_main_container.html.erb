@@ -1,4 +1,4 @@
-<div class="row">
+<div id="flash-notices" class="row">
   <%- if flash[:notice] -%>
     <div class="span8 offset2">
       <div class="alert alert-info">
@@ -7,6 +7,10 @@
       </div>
     </div>
   <%- end -%>
+  <div id="loading-message" class="hidden">
+      &nbsp;&nbsp;&nbsp;Working, please wait...&nbsp; <%= image_tag 'ajax-loader.gif'%>&nbsp;&nbsp;&nbsp;
+  </div>
+
   <%- if flash[:warning] || flash[:alert] -%>
     <div class="span8 offset2">
       <div class="alert">
