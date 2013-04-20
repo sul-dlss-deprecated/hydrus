@@ -3,6 +3,7 @@
     Choose one or more files, or drag and drop them here. Then enter a short
     description for each file.
   </p>
+  <span id="file_upload_status"></span>
   <%- @fobj.files.each do |file| -%>
     <%= render :partial => "object_file", :locals => {:file => file} %>
   <%- end -%>
