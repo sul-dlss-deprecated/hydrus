@@ -1,5 +1,10 @@
 = HYDRUS change log
 
+== 2013.04.22
+
+* Fix for HYDRUS-88; some more performance tuning around validations
+* Performance tuning: don't load objects more than once per page
+
 == 2013.04.19
 
 * The following tickets: HYDRUS-106; HYDRUS-128; HYDRUS-101; HYDRUS-139; HYDRUS-62; HYDRUS-86
