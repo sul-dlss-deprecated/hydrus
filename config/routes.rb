@@ -49,7 +49,7 @@ Hydrus::Application.routes.draw do
   match "users/auth/webauth" => "signin#login", :as => "webauth_login"
   match "users/auth/webauth/logout" => "signin#logout", :as => "webauth_logout"
   match "error" => "signin#error", :as => "error"
-
+  match "contact" => "application#contact", :as=>"contact"
   resources :signin
 
   # Actions for the HydrusSolrController.

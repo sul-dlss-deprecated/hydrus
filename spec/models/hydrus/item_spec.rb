@@ -990,6 +990,7 @@ describe Hydrus::Item do
   it "should indicate that release settings have not been reviewed yet" do
     @hi.reviewed_release_settings?.should == false
     @hi.reviewed_release_settings="true"
+    @hi.revalidate
     @hi.reviewed_release_settings?.should == true
   end
 
@@ -1034,6 +1035,7 @@ describe Hydrus::Item do
     @hi.terms_of_deposit_accepted?.should == false
     @hi.accepted_terms_of_deposit.should_not == 'true'
     @hi.accept_terms_of_deposit('archivist1')
+    @hi.revalidate
     @hi.accepted_terms_of_deposit.should == 'true'
     @hi.terms_of_deposit_accepted?.should == true
   end

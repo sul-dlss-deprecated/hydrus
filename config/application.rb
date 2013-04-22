@@ -66,3 +66,8 @@ end
 
 # Store the Hydrus app's version.
 Hydrus::Application.config.app_version = IO.read(File.join(Rails.root, 'VERSION')).strip
+
+Hydrus::Application.config.contact_us_topics = {'error'=>"Problem with the website",'question'=>"Ask a question",'feedback'=>"Provide feedback"} # sets the list of topics shown in the contact us page
+Hydrus::Application.config.contact_us_recipients = {'error'=>'sdr-contact@lists.stanford.edu','question'=>'sdr-contact@lists.stanford.edu','feedback'=>'sdr-contact@lists.stanford.edu'} # sets the email address for each contact us topic configed above
+Hydrus::Application.config.contact_us_cc_recipients = {'error'=>'','question'=>'','feedback'=>''} # sets the CC email address for each contact us topic configed above
+

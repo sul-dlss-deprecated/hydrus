@@ -1,0 +1,42 @@
+	     <h3><%= @page_title %></h3>
+	  	  <p></p>
+	  	  <%= form_tag(contact_path, :method=>'post', :class => 'form-horizontal') do %>
+	  	  	<%= hidden_field_tag 'from',@from%>
+	  	  	<div class="control-group">
+	  	  	  <label class="control-label" for="name">Name</label>
+	  	  	  <div class="controls">
+	  	  	    <%=text_field_tag 'name', @name, :placeholder => "Your name",:size=>80 %>
+	  	  	  </div>
+	  	  	</div>
+
+	  	  	<div class="control-group">
+	  	  	  <label class="control-label" for="email">Email Address</label>
+	  	  	  <div class="controls">
+	  	  	    <%=text_field_tag 'email', @email, :placeholder => "Your email address",:size=>80 %>
+	  	  	  </div>
+	  	  	</div>
+
+	  	  	<% if Hydrus::Application.config.contact_us_topics.size > 1 %>
+	  	  		<div class="control-group">
+	  	  		  <label class="control-label" for="subject">Subject</label>
+	  	  		  <div class="controls">
+	  	  		    <%= select_tag 'subject',options_from_collection_for_select(Hydrus::Application.config.contact_us_topics, :first, :last, @subject) %>
+	  	  		  </div>
+	  	  		</div>
+	  	  	<% else %>
+	  	  			<%= hidden_field_tag 'subject',Hydrus::Application.config.contact_us_topics.keys.first%>
+	  	  	<% end %>
+
+	  	  	<div class="control-group">
+	  	  	  <label class="control-label" for="message">Message</label>
+	  	  	  <div class="controls">
+	  	  	    <%=text_area_tag 'message', @message, :placeholder => "Your message", :rows => 10, :cols=>80 %>
+	  	  	  </div>
+	  	  	</div>
+
+	  	  	<div class="control-group">
+	  	  	  <div class="controls">
+	  	  	    <%=submit_tag t('blacklight.email.form.submit'), :class => 'btn' %>
+	  	  	  </div>
+	  	  	</div>
+	  	  <% end %>  

@@ -13,13 +13,20 @@ module Hydrus::Validatable
   end
 
   # Returns true only if the object is valid.
-  # Used to run validations even if the object is still a draft.
+  # Used to run validations even if the object is still a draft.  Cache the result to speed things up when generating the sidebar
   def validate!
-    prev = @should_validate
-    @should_validate = true
-    v = valid?
-    @should_validate = prev
-    return v
+    if @status_valid.nil?
+      prev = @should_validate
+      @should_validate = true
+      @status_valid = valid?
+      @should_validate = prev
+    end
+    return @status_valid
+  end
+  
+  # calling this method will removed the cached validate status, useful in unit tests
+  def revalidate
+    @status_valid=nil
   end
 
 end

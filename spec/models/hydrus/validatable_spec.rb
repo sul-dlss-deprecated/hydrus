@@ -29,9 +29,18 @@ describe Hydrus::Validatable do
 
   describe "validate!" do
 
-    it "should return the value of valid?, including when @should_validate is false" do
+    it "should return the value of valid?, but cached, so always equivalent to the first setting, including when @should_validate is false" do
       obj = MockValidatable.new
+      first_value=false
+      [first_value, true, false, true].each do |exp|
+        obj.stub('valid?').and_return(exp)
+        obj.validate!.should == first_value
+      end
+    end
+
+    it "should return the value of valid? including when @should_validate is false" do
       [false, true, false, true].each do |exp|
+        obj = MockValidatable.new
         obj.stub('valid?').and_return(exp)
         obj.validate!.should == exp
       end
