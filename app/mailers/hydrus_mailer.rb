@@ -12,6 +12,7 @@ class HydrusMailer < ActionMailer::Base
     @name=params[:name]
     @subject=params[:subject]
     @from=params[:from]
+    @user=opts[:user]
     to=Hydrus::Application.config.contact_us_recipients[@subject]
     cc=Hydrus::Application.config.contact_us_cc_recipients[@subject]    
     mail(:to=>to,:cc=>cc, :subject=>"Contact Message from the Hydrus (SDR) - #{@subject}") 

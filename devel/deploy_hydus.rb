@@ -63,7 +63,7 @@ puts
 cmds = [
   "git tag -a #{tag} -m #{tag}",
   "git push origin --tags",
-  "bash -i -c 'cd deploy && . .rvmrc && cap #{env} deploy'",
+  "bash -i -c 'source ~/.rvm/scripts/rvm && cd deploy && . .rvmrc && cap #{env} deploy'",
 ]
 
 cmds.each do |c|

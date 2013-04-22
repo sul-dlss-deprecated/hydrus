@@ -39,7 +39,7 @@ class ApplicationController < ActionController::Base
     
     if request.post?
       unless @message.blank?
-        HydrusMailer.contact_message(:params=>params,:request=>request).deliver 
+        HydrusMailer.contact_message(:params=>params,:request=>request,:user=>current_user).deliver 
         flash[:notice]="Your message has been sent."
         @message=nil
         @name=nil

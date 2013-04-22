@@ -2,20 +2,22 @@
 	  	  <p></p>
 	  	  <%= form_tag(contact_path, :method=>'post', :class => 'form-horizontal') do %>
 	  	  	<%= hidden_field_tag 'from',@from%>
-	  	  	<div class="control-group">
-	  	  	  <label class="control-label" for="name">Name</label>
-	  	  	  <div class="controls">
-	  	  	    <%=text_field_tag 'name', @name, :placeholder => "Your name",:size=>80 %>
-	  	  	  </div>
-	  	  	</div>
+			
+			<% unless current_user %>
+		  	  	<div class="control-group">
+		  	  	  <label class="control-label" for="name">Name</label>
+		  	  	  <div class="controls">
+		  	  	    <%=text_field_tag 'name', @name, :placeholder => "Your name",:size=>80 %>
+		  	  	  </div>
+		  	  	</div>
 
-	  	  	<div class="control-group">
-	  	  	  <label class="control-label" for="email">Email Address</label>
-	  	  	  <div class="controls">
-	  	  	    <%=text_field_tag 'email', @email, :placeholder => "Your email address",:size=>80 %>
-	  	  	  </div>
-	  	  	</div>
-
+		  	  	<div class="control-group">
+		  	  	  <label class="control-label" for="email">Email Address</label>
+		  	  	  <div class="controls">
+		  	  	    <%=text_field_tag 'email', @email, :placeholder => "Your email address",:size=>80 %>
+		  	  	  </div>
+		  	  	</div>
+			<% end %>
 	  	  	<% if Hydrus::Application.config.contact_us_topics.size > 1 %>
 	  	  		<div class="control-group">
 	  	  		  <label class="control-label" for="subject">Subject</label>
