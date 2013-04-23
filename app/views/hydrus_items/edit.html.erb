@@ -133,7 +133,7 @@
     </div>
   </div>
 
-  <%= hydrus_form_header{"Release and visibility of content"} %>
+  <%= hydrus_form_header(:required=>true) {"Release and visibility of content"} %>
 
   <!-- Embargo -->
   <div class="row embargo field-group">
@@ -208,7 +208,7 @@
 
   <!-- Terms of deposit -->
 
-  <%= hydrus_form_header(:required => @fobj.licenses_can_vary) {"Terms of Deposit"} %>
+  <%= hydrus_form_header(:required => true) {"Terms of Deposit"} %>
 
   <div class="row field-group">
     <div class="span9 sub-section">
