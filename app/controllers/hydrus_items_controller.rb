@@ -212,11 +212,13 @@ class HydrusItemsController < ApplicationController
 
   def create_file
     if request.post? 
-      hof = Hydrus::ObjectFile.new
-      hof.pid = params[:id]
-      hof.file = params[:file]
-      hof.save
-      @file = hof
+      @file = Hydrus::ObjectFile.new
+      @file.pid = params[:id]
+      @file.file = params[:file]
+      @file.save
+    else
+      render :nothing=>true 
+      return
     end
   end
 

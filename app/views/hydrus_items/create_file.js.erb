@@ -1,4 +1,16 @@
 var html = "<%= escape_javascript(render :partial => 'object_file', :locals => {:file => @file}) %>";
 $('#uploaded-files-list').prepend(html);
-$('#object_file_group_<%=@file.id%>').fadeOut(500).fadeIn(500).fadeOut(500).fadeIn(500).fadeOut(500).fadeIn(500);
+$('#object_file_group_<%=@file.id%>').fadeOut(500).fadeIn(500).fadeOut(500).fadeIn(500);
+
+<% @file.dupes.each do |dupe| %>
+  $('#object_file_group_<%=dupe.id%>').remove();
+<% end %>
+
+<% if @file.dupes.size > 0 %>
+	$('#file_dupe_alert').removeClass('hidden');
+	$('#file_dupe_message').text('"<%=@file.filename%>" was previously uploaded to this item.  The original file has been replaced with the version you just uploaded.');
+<% else %>
+	$('#file_dupe_alert').addClass('hidden');
+<% end %>
+
 validate_hydrus_item();

@@ -5,6 +5,7 @@ class Hydrus::ObjectFile < ActiveRecord::Base
   attr_accessible :label, :pid, :hide
 
   mount_uploader :file, FileUploader
+  #after_save :remove_dupes
 
   def size
     file.size
@@ -27,6 +28,19 @@ class Hydrus::ObjectFile < ActiveRecord::Base
     file.file.nil? ? "" : file.file.identifier # don't throw exception if file is blank so the page doesn't show an exception
   end
 
+  def is_dupe?(new_filename)
+    self.class.where('pid=? and file=?',pid,new_filename).size > 0
+  end
+  
+  def dupes
+    self.class.where('pid=? and file=? and id!=?',pid,filename,id)
+  end
+  
+  # any given object can only have one file with the same name; if the user uploads a new file with the same name as an existing file, the dupe will be removed  
+  def remove_dupes
+    dupes.each {|dupe| dupe.destroy}
+  end
+  
   # A convenience uber-setter to simplify controller code.
   #
   # Takes nil or a hash with possible keys of 'label' and 'hide'.

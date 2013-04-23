@@ -4,7 +4,10 @@
   </p>
   <div id="file-dropzone" class="">drop files here</div>
   
+  <div id="file_dupe_alert" class="hidden alert"><span id="file_dupe_message"></span></div>
+  
   <div id="file-progress"></div>
+  
   <div id="uploaded-files-list">
   <%- @fobj.files.each do |file| -%>
     <%= render :partial => "object_file", :locals => {:file => file} %>

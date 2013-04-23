@@ -254,7 +254,7 @@ GEM
       nokogiri
       systemu
     multi_json (1.7.2)
-    mysql (2.8.1)
+    mysql2 (0.3.11)
     net-sftp (2.1.1)
       net-ssh (>= 2.6.5)
     net-ssh (2.6.5)
@@ -439,7 +439,7 @@ DEPENDENCIES
   launchy
   letter_opener
   looksee
-  mysql
+  mysql2
   quiet_assets
   rails (= 3.2.11)
   rsolr-client-cert (>= 0.5.2)
