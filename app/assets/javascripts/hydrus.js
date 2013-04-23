@@ -74,7 +74,7 @@ function activate_edit_controls() {
     });
     return false;
   });
-
+  
   // javascript form submission
   $("#item-actions, #collection-actions").toggle();
   $("#item-actions button[type=submit], #collection-actions button[type=submit]").click(function(){
@@ -128,6 +128,25 @@ function validate_hydrus_item() {
   }
 }
 
+function check_for_files_uploading() {
+	$("#edit_form").submit(function(e) {
+	     var self = this;
+	     e.preventDefault();
+     	if (filesInProgress != 0) 
+			{
+			var r=confirm("There are still files uploading.  If you click OK to continue saving the form, you may lose the uploading files.  Click cancel to allow these files to finish uploading.");
+			if (r==false)
+			  {
+				  $('.save-edits').attr('disabled',false);
+				  $('.save-edits').text('Save');
+				  return false;
+			  }
+	 		}
+	      ajax_loading_indicator($('.save-edits')); // show loading indicator in UI
+          self.submit();		
+	});
+}
+
 function validate_hydrus_collection() {
   var all_required_filled = true;
   $("#hydrus_collections-edit form input:required, #hydrus_collections-edit form textarea:required,#hydrus_collections-update form input:required, #hydrus_collections-update form textarea:required").each(function(){
@@ -156,7 +175,7 @@ function setup_links_that_disable() {
 	$("[show_loading_indicator='true']").each(function(){
     $(this).click(function(e){
 	    ajax_loading_indicator(); // show loading indicator in UI
-			if ($(this).attr("disable_with") != '') { $(this).text($(this).attr("disable_with"));} // change the text
+		if ($(this).attr("disable_with") != '') { $(this).text($(this).attr("disable_with"));} // change the text
 	    $(this).addClass('disabled'); // disable the element visually
 	    });
     });
@@ -166,7 +185,7 @@ function setup_links_that_disable() {
       ajax_loading_indicator(); // show loading indicator in UI
       url=$(this).attr("href"); // grab the URL
       $(this).attr("href","#"); // remove it so even if clicked again, nothing will happen!
-			if ($(this).attr("disable_with") != '') { $(this).text($(this).attr("disable_with"));} // change the text
+	  if ($(this).attr("disable_with") != '') { $(this).text($(this).attr("disable_with"));} // change the text
       $(this).parent().addClass('disabled'); // disable the parent's element visually
       $(this).addClass('disabled'); // disable the element visually
       window.location.href=url; // go to the URL
@@ -239,6 +258,7 @@ function item_edit_init(){
   // this method is called when the item edit page is fully loaded
   validate_hydrus_item();
   activate_edit_controls();
+  check_for_files_uploading();
   $(document).on('blur',"form input, form textarea",function(){
       validate_hydrus_item();
   });

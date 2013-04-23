@@ -1,3 +1,4 @@
 var html = "<%= escape_javascript(render :partial => 'object_file', :locals => {:file => @file}) %>";
-$("#file-upload #uploaded-files").append(html);
+$('#uploaded-files-list').prepend(html);
+$('#object_file_group_<%=@file.id%>').fadeOut(500).fadeIn(500).fadeOut(500).fadeIn(500).fadeOut(500).fadeIn(500);
 validate_hydrus_item();

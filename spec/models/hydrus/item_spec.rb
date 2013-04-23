@@ -102,7 +102,7 @@ describe Hydrus::Item do
 
     it "should retrieve ObjectFiles from the database" do
       m = mock()
-      Hydrus::ObjectFile.should_receive(:find_all_by_pid).with(subject.pid, hash_including(:order => 'weight')).and_return(m)
+      Hydrus::ObjectFile.should_receive(:find_all_by_pid).with(subject.pid, hash_including({:order=>"weight ASC,label ASC,file ASC"})).and_return(m)
       subject.files.should == m
     end
   end

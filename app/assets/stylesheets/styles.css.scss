@@ -561,3 +561,38 @@ li.errors
   right: 2%;
   top: 2%;
 }
+
+#file-dropzone {
+    border: 2px dashed #555555;
+    border-radius: 7px 7px 7px 7px;
+    color: #555555;
+    cursor: default;
+    display: none;
+    font-weight: bold;
+    margin: 1em 0;
+    padding: 1em 0;
+    text-align: center;
+	display: block;
+}
+
+#file-dropzone.hover {
+    border-style: solid;
+    box-shadow: 0 3px 4px #000000 inset;
+    background-color: #FFFEA1;
+}
+
+#file-progress p
+{
+	display: block;
+	width: 240px;
+	padding: 2px 5px;
+	margin: 2px 0;
+	border: 1px inset #446;
+	border-radius: 5px;
+	background: #eee url("/assets/progress.png") 100% 0 repeat-y;
+}
+
+#file-progress p.failed
+{
+	background: #c00 none 0 0 no-repeat;
+}

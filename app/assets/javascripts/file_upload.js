@@ -1,62 +1,95 @@
 $(document).ready(function() {
-  var dropbox = document.getElementById("uploaded-files");
-
+  
+  var dropbox = document.getElementById("file-dropzone");
+  filesInProgress = 0;
+  
   if (dropbox != null) {
 	  // init event handlers
-	  dropbox.addEventListener("dragenter", dragEnter, false);
-	  dropbox.addEventListener("dragexit", dragExit, false);
-	  dropbox.addEventListener("dragover", dragOver, false);
+	  dropbox.addEventListener("dragenter", dragEvent, false);
+	  dropbox.addEventListener("dragexit", dragEvent, false);
+	  dropbox.addEventListener("dragover", dragEvent, false);
 	  dropbox.addEventListener("drop", drop, false);
   }
 });
 
-function dragEnter(evt) {
-  evt.stopPropagation();
-  evt.preventDefault();
-}
-
-function dragExit(evt) {
-  evt.stopPropagation();
-  evt.preventDefault();
-}
-
-function dragOver(evt) {
-  evt.stopPropagation();
-  evt.preventDefault();
+function dragEvent(evt) {
+	evt.stopPropagation();
+	evt.preventDefault();
+	evt.target.className = (evt.type == "dragover" ? "hover" : "");
 }
 
 function drop(evt) {
-  evt.stopPropagation();
-  evt.preventDefault();
-
-  var files = evt.dataTransfer.files;
-
-  for(i = 0;  i < files.length; i++) {
-    var file = files[i];
-    var reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.original_filename = file.name;
-
-    // We can do something like a progress bar below.
-    reader.onprogress = function(evt,filename){ 
-		if (evt.lengthComputable) {
-		      var percentage = Math.round((evt.loaded * 100) / evt.total);
-		      $('#file_upload_status').text('Loaded : '+percentage+'%'+' of '+filename);
-		    }                             
-	 };
-    reader.onloadend = function(evt){
-      var object_id = $("#object_id").attr("value");
-      var post_url = "/items/" + object_id + "/create_file?format=js";
-      $('#file_upload_status').text('');
-	  $.post(
-        post_url,
-        {
-          file_name: evt.target.original_filename,
-          binary_data: evt.target.result,
-          id: object_id
-        },
-        function(data){}
-      );
-    };
+  dragEvent(evt);
+  var files = evt.target.files || evt.dataTransfer.files;
+ 
+  // process all File objects
+ for (var i = 0, f; f = files[i]; i++) {
+		uploadFile(f);
   }
+}
+
+function updateFilesUploading(num) {
+	if (num == 0) {
+		$('#files-uploading').text("");		
+	}
+	else
+	{
+		$('#files-uploading').text(num + " files uploading");
+	}
+}
+
+function uploadFile(file) {
+
+	var xhr = new XMLHttpRequest();
+	filesInProgress += 1;
+	updateFilesUploading(filesInProgress);
+	
+	var filename=file.name;
+	
+	// create progress bar
+	var o = $("#file-progress");
+	var progress = $("<p />");
+	progress.attr("data-progress-bar",filename);
+	progress.text(filename);
+	o.append(progress);
+
+	// progress bar
+	xhr.upload.addEventListener("progress", function(e) {
+		var pc = parseInt(100 - (e.loaded / e.total * 100));
+		progress.css("backgroundPosition", pc + "% 0");
+	}, false);
+
+	// file received/failed
+	xhr.onreadystatechange = function(e) {
+		if (xhr.readyState == 4) {
+			filesInProgress -= 1;
+			updateFilesUploading(filesInProgress);
+			if (xhr.status == 200) 
+			{
+				// remove progress bar
+				progress.remove();
+				eval(xhr.responseText);
+			}
+			else
+			{
+				progress.text(filename + " failed");
+				progress.addClass('failed');
+			}
+		}
+	};
+
+	// create the post URL
+    var object_id = $("#object_id").attr("value");
+    var post_url = "/items/" + object_id + "/create_file?format=js";
+
+	// setup the form data
+	var data = new FormData();
+    data.append('file', file);
+	data.append('id',object_id);
+
+	// post to the server
+	xhr.open("POST", post_url, true);
+	xhr.setRequestHeader("X-CSRF-Token", $('meta[name="csrf-token"]').attr('content'));
+	xhr.send(data);
+			  
 }

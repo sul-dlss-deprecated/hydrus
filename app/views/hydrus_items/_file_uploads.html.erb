@@ -1,12 +1,15 @@
 <div id="uploaded-files">
   <p>
-    Choose one or more files, or drag and drop them here. Then enter a short
-    description for each file.
+    Choose one or more files, or drag and drop them below. If you use drag and drop, the files will be uploaded immediately, and you can enter a short description once upload is complete.  If you select files with the browse box, they will be uploaded when you save the page and you will need to return to this page to enter descriptions.  <em><strong>Important note</strong>: Large files may take a long time to upload.  If using drag and drop, do not save or leave this page until upload is complete and you see the file listed.</em>
   </p>
-  <span id="file_upload_status"></span>
+  <div id="file-dropzone" class="">drop files here</div>
+  
+  <div id="file-progress"></div>
+  <div id="uploaded-files-list">
   <%- @fobj.files.each do |file| -%>
     <%= render :partial => "object_file", :locals => {:file => file} %>
   <%- end -%>
+  </div>
 </div>
 
 <div class="row">
