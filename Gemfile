@@ -58,8 +58,8 @@ group :development do
   gem 'looksee'
 end
 
-group :production do
-  gem 'mysql'
+group :production, :dortest do
+  gem 'mysql2'
 end
 
 gem 'quiet_assets', :group => :development
