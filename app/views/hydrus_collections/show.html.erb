@@ -75,13 +75,6 @@
 
       </p>
 
-      <% if to_bool(@fobj.requires_human_approval) %>
-        <p>
-          Before being added to the collection, items <strong>must be</strong>
-          approved by the collection manager or a reviewer.
-        </p>
-      <% end %>
-
     </div>
 
     <div class="collection-items">
@@ -125,13 +118,29 @@
          <h4>Collection participants</h4>
           <dl class="dl-horizontal collection-view">
             <% Hydrus::Responsible.role_labels(:only_labels,:collection_level).each do |role, role_label| %>
-             <tr class="document <%= cycle("even","odd") %>">
+            <% next if (role == 'hydrus-collection-reviewer')%>
               <% people = @fobj.apo.persons_with_role(role) %>
               <dt><%= role_label.pluralize(people.size) %></dt>
               <dd><%= people.size == 0 ? "none" : people.to_a.join(', ') %></dd>
             <% end %>
           </dl>
     </div>
+
+    <% if to_bool(@fobj.requires_human_approval) %>	
+    <div class="collection-items">
+         <h4>Review Workflow</h4>
+         <p>
+           Before being added to the collection, items <strong>must be</strong>
+           approved by the collection manager or a reviewer.
+         </p>
+         <dl class="dl-horizontal collection-view">
+             <% people = @fobj.apo.persons_with_role('hydrus-collection-manager') + @fobj.apo.persons_with_role('hydrus-collection-reviewer') %>
+             <dt>All Reviewers</dt>
+             <dd><%= people.size == 0 ? "none" : people.to_a.join(', ') %></dd>
+         </dl>
+
+    </div>
+	<% end %>
 
   </div> <!-- object-content-wrapper -->
     <div id="druid-footer"><%= @fobj.pid %></div>

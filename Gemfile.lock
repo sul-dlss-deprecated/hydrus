@@ -54,6 +54,10 @@ GEM
       activesupport (= 3.2.11)
       arel (~> 3.0.2)
       tzinfo (~> 0.3.29)
+    activerecord-mysql-adapter (0.0.1)
+      activerecord (>= 3.2.9)
+      activesupport (>= 3.2.9)
+      mysql (>= 2.9.0)
     activeresource (3.2.11)
       activemodel (= 3.2.11)
       activesupport (= 3.2.11)
@@ -254,6 +258,7 @@ GEM
       nokogiri
       systemu
     multi_json (1.7.2)
+    mysql (2.9.1)
     mysql2 (0.3.11)
     net-sftp (2.1.1)
       net-ssh (>= 2.6.5)
@@ -414,6 +419,7 @@ PLATFORMS
 
 DEPENDENCIES
   about_page
+  activerecord-mysql-adapter
   assembly-objectfile (>= 1.5.0)
   awesome_print
   blacklight (~> 3.5)!

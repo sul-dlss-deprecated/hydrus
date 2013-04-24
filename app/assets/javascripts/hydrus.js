@@ -242,6 +242,18 @@ function collection_edit_init(){
       validate_hydrus_collection();
   });
 
+  // show or hide reviewer fields depending on if the user has selected the reviewer workflow
+  $("input:radio[name='hydrus_collection[requires_human_approval]']").on('click',function()
+  {
+  	  if ($(this).attr('value') == 'yes') {
+		  $('#reviewer-roles').removeClass('hidden'); 
+	  }
+	  else
+	  {
+		  $('#reviewer-roles').addClass('hidden'); 
+  	  }
+  });
+  
   // Manage state of select dropdowns when the select should be enabled only when its associated radio button is selected
   $('div.radio-select-group input:radio').click(function() { // when a radio button in the group is clicked
     $('div.radio-select-group select').prop('disabled', true); // disable all the selects
@@ -259,6 +271,7 @@ function item_edit_init(){
   validate_hydrus_item();
   activate_edit_controls();
   check_for_files_uploading();
+  
   $(document).on('blur',"form input, form textarea",function(){
       validate_hydrus_item();
   });
