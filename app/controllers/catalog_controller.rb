@@ -115,17 +115,10 @@ class CatalogController < ApplicationController
     # Issue some SOLR queries to get Collections involving the user,
     # along with counts of Items in those Collections, broken down by
     # their workflow status.
-    stats = Hydrus::Collection.dashboard_stats(current_user)
-
-    # Get the collections, and add the counts as attributes.
-    # Before doing that, we prune the status hash of
-    @collections = stats.keys.map { |coll_dru|
-      hc = Hydrus::Collection.find(coll_dru)
-      st = stats[hc.pid] || {}
-      hc.item_counts = st
-      hc
-    }
-
+    
+    #build a hash with all of the needed collection information without instantiating each collection, because fedora is slow
+    @collections = Hydrus::Collection.collections_hash(current_user)
+    
     super
   end
 

@@ -36,14 +36,14 @@ class Hydrus::Collection < Hydrus::GenericObject
   attr_accessor :item_counts
 
   setup_delegations(
-    # [:METHOD_NAME,             :uniq,  :at... ]
-    "hydrusProperties" => [
-      [:requires_human_approval, true   ],
-      [:embargo_option,          true,  ],
-      [:embargo_terms,           true,  ],
-      [:license_option,          true,  ],
-      [:visibility_option,       true,  ],
-    ],
+  # [:METHOD_NAME,             :uniq,  :at... ]
+  "hydrusProperties" => [
+    [:requires_human_approval, true   ],
+    [:embargo_option,          true,  ],
+    [:embargo_terms,           true,  ],
+    [:license_option,          true,  ],
+    [:visibility_option,       true,  ],
+  ],
   )
 
   has_relationship 'hydrus_items', :is_member_of_collection, :inbound => true
@@ -137,9 +137,9 @@ class Hydrus::Collection < Hydrus::GenericObject
   # the users who will receive email notifications when a collection is opened or closed
   def recipients_for_collection_update_emails
     (
-      apo.persons_with_role("hydrus-collection-item-depositor") +
-      apo.persons_with_role("hydrus-collection-manager") +
-      apo.persons_with_role("hydrus-collection-depositor")
+    apo.persons_with_role("hydrus-collection-item-depositor") +
+    apo.persons_with_role("hydrus-collection-manager") +
+    apo.persons_with_role("hydrus-collection-depositor")
     ).to_a.join(', ')
   end
 
@@ -238,7 +238,7 @@ class Hydrus::Collection < Hydrus::GenericObject
   end
 
   def strip_whitespace
-     strip_whitespace_from_fields [:title,:abstract,:contact]
+    strip_whitespace_from_fields [:title,:abstract,:contact]
   end
 
   # Rewrites the APO.person_roles, converting any email addresses to SUNET IDs.
@@ -438,10 +438,50 @@ class Hydrus::Collection < Hydrus::GenericObject
     # Returns the item counts for those collections.
     return item_counts_of_collections(coll_pids)
   end
+  # Takes the stats hash from dashboard_stats and a user name
+  # Returns a hash of solr documents, one for each collection
+  def self.dashboard_hash stats, user
+    toret={}
+    apo_pids = apos_involving_user(user)
+    return {} if apo_pids.size == 0
 
+    # Get PIDs of the Collections governed by those APOs.
+    coll_pids = collections_of_apos(apo_pids)
+    return {} if coll_pids.size == 0
+    h           = squery_collections_of_apos(apo_pids)
+    resp, sdocs = issue_solr_query(h)
+    resp.docs.each do |doc|
+      pid=doc['identityMetadata_objectId_t'].first
+      toret[pid]={}
+      toret[pid][:solr]=doc
+    end
+    toret
+  end
+  # Takes a username
+  # returns an array of collection hashes suitable for building the dashboard 
+  def self.collections_hash current_user
+    stats = Hydrus::Collection.dashboard_stats(current_user)
+    solr = Hydrus::Collection.dashboard_hash(stats, current_user)
+    #build a hash with all of the needed collection information without instantiating each collection, because fedora is slow
+    collections = stats.keys.map { |coll_dru|
+      hash={}
+      hash[:pid]=coll_dru
+      hash[:item_counts]=stats[coll_dru] || {}
+      hash[:title]=solr[coll_dru][:solr]['dc_title_t'].first
+      hash[:roles]=Hydrus::Responsible.roles_of_person current_user.to_s, solr[coll_dru][:solr]['is_governed_by_s'].first.gsub('info:fedora/','')
+      count=0
+      stats[coll_dru].keys.each do |key|
+        count += stats[coll_dru][key].to_i
+      end
+      hash[:hydrus_items]=count
+      hash[:solr]=solr[coll_dru]
+      hash
+    }
+    collections
+  end
   # Returns an array druids for the APOs in which USER plays a role.
   def self.all_hydrus_collections
-    h           = squery_all_hydrus_collections()
+    h           = squery_all_hydrus_collections(   )
     resp, sdocs = issue_solr_query(h)
     return get_druids_from_response(resp)
   end
@@ -518,10 +558,13 @@ class Hydrus::Collection < Hydrus::GenericObject
   # Returns an array-of-arrays containing the collection's @item_counts
   # information. Instead of using object_status values, the info
   # uses human readable labels for the UI. See unit test for an example.
-  def item_counts_with_labels
+  def item_counts_with_labels 
     return item_counts.map { |s, n| [n, Hydrus::GenericObject.status_label(:item, s)] }
   end
 
+  def  self.item_counts_with_labels ic
+    return ic.map { |s, n| [n, Hydrus::GenericObject.status_label(:item, s)] }
+  end
   # Deletes a Collection and its APO.
   def delete
     cannot_do(:delete) unless is_destroyable
