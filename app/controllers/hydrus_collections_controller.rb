@@ -153,7 +153,7 @@ class HydrusCollectionsController < ApplicationController
       redirect_to root_url
     end
     @all_collections = Hydrus::Collection.all_hydrus_collections.
-                       sort.map { |p| Hydrus::Collection.find(p) }
+                       sort.map { |p| Hydrus::Collection.find(p, :lightweight => true) }
   end
 
 end

@@ -18,24 +18,23 @@
       <tbody>
       <% @collections.each do |c| %>
         <tr>
-          <td><%= title_link(c) %></td>
+          <td><%= link_to(c[:title], hydrus_collection_path(c[:pid]),:disable_after_click=>'true') %></td>
           <td>
-            <%=
-              rs = c.roles_of_person(current_user.to_s)
-              Hydrus::Responsible.roles_for_ui(rs).join(', ').downcase
-            %>
+					  <%= c[:roles].join ', ' %>
+            
           </td>
           <td>
-            <% if c.hydrus_items.size == 0 %>
+            <% if c[:hydrus_items].size == 0 %>
                no items yet
             <% else %>
               <%= link_to(
-                    pluralize(c.hydrus_items.size, 'item'),
-                    polymorphic_path([c, :items]),:disable_after_click=>'true') %>
+                    pluralize(c[:hydrus_items], 'item'),
+                    hydrus_collection_items_path(c[:pid]),:disable_after_click=>'true') %>
             <% end %>
           </td>
           <td>
-            <%= c.item_counts_with_labels.map { |n, lab| "#{n} #{lab}" }.join('; ') %>
+              <%= Hydrus::Collection.item_counts_with_labels(c[:item_counts]).map { |n, lab| "#{n} #{lab}" }.join('; ') %>
+
           </td>
         </tr>
         <% end %>

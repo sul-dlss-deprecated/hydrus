@@ -254,6 +254,9 @@ function collection_edit_init(){
   	  }
   });
   
+  // if the user does not require human approval, hide the reviewer roles section by default
+  if ($('#hydrus_collection_requires_human_approval_no').is(':checked')) {$("#reviewer-roles").addClass('hidden')};
+  
   // Manage state of select dropdowns when the select should be enabled only when its associated radio button is selected
   $('div.radio-select-group input:radio').click(function() { // when a radio button in the group is clicked
     $('div.radio-select-group select').prop('disabled', true); // disable all the selects

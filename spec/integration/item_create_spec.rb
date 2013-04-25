@@ -139,6 +139,8 @@ describe("Item create", :type => :request, :integration => true) do
     # Check various Item attributes and methods.
     item = Hydrus::Item.find(druid)
     item.object_status.should == 'draft'
+    item.is_draft == true
+    item.is_awaiting_approval.should == false
     item.is_publishable.should == false
     item.is_published.should == false
     item.is_returned.should == false
@@ -169,14 +171,18 @@ describe("Item create", :type => :request, :integration => true) do
     check "terms_of_deposit_checkbox"
     click_button(@buttons[:save])
 
-    # The view page should now offer the Submit for approval button since we
+    # The view page should now offer the Submit for approval button (but no publish button) since we
     # have accepted the terms.
     visit hydrus_item_path(:id=>item.pid)
     find(@div_actions).should have_button(@buttons[:submit_for_approval])
+    find(@div_actions).should_not have_button(@buttons[:publish_directly])
 
     # Check various Item attributes and methods.
     item = Hydrus::Item.find(druid)
     item.object_status.should == 'draft'
+    item.is_draft.should == true
+    item.is_awaiting_approval.should == false
+    item.is_publishable_directly.should == false    
     item.is_publishable.should == false
     item.is_submittable_for_approval.should == true
     item.submit_for_approval_time.should be_blank
@@ -189,14 +195,16 @@ describe("Item create", :type => :request, :integration => true) do
     click_button(@buttons[:submit_for_approval])
     find(@div_alert).should have_content(@notices[:submit_for_approval])
 
-    # The view page should not offer the Submit for approval button anymore
+    # The view page should not offer the Submit for approval button or the publish button
     find(@div_actions).should_not have_button(@buttons[:submit_for_approval])
+    find(@div_actions).should_not have_button(@buttons[:publish_directly])
     find(@span_status).should have_content(@status_msgs[:awaiting_approval])
 
     # Check various Item attributes and methods.
     item = Hydrus::Item.find(druid)
     item.object_status.should == 'awaiting_approval'
     item.is_publishable.should == true
+    item.is_publishable_directly.should == false
     item.requires_human_approval.should == "yes"
     item.is_published.should == false
     item.is_returned.should == false
@@ -231,6 +239,7 @@ describe("Item create", :type => :request, :integration => true) do
     item = Hydrus::Item.find(druid)
     item.object_status.should == 'returned'
     item.is_publishable.should == false
+    item.is_publishable_directly.should == false
     item.is_published.should == false
     item.is_returned.should == true
     item.is_destroyable.should == true
@@ -252,6 +261,7 @@ describe("Item create", :type => :request, :integration => true) do
     item = Hydrus::Item.find(druid)
     item.object_status.should == 'awaiting_approval'
     item.is_publishable.should == true
+    item.is_publishable_directly.should == false
     item.is_published.should == false
     item.is_returned.should == false
     item.is_destroyable.should == true
@@ -373,6 +383,7 @@ describe("Item create", :type => :request, :integration => true) do
     item = Hydrus::Item.find(druid)
     item.object_status.should == 'draft'
     item.is_publishable.should == true
+    item.is_publishable_directly.should == true
     item.requires_human_approval.should == "no"
     item.is_submittable_for_approval.should == false
     item.is_published.should == false

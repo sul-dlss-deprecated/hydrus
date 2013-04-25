@@ -143,6 +143,8 @@
       </div>
     </div>
 
+    <div id="role-management-wth-reviewers">
+	
     <%= hydrus_form_header {"Collection participants"} %>
 
     <div id="role-management">
@@ -222,15 +224,7 @@
          </div>
 	   </div>
 	  </div>
-	  
-	  <% unless to_bool(@fobj.requires_human_approval) %>
-		  <script language="text/javascript">
-			  $(document).ready(function(){
-				  $("#reviewer-roles").addClass('hidden');
-			  });
-		  </script>
-	 <% end %>
-	 
+	 </div>
     <noscript>
       <div class="well actions-box" id="collection-actions">
         <%= render :partial => "actions_box_edit", :locals => {:id=>"nojs"}%>

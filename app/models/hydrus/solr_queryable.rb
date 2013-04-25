@@ -70,7 +70,12 @@ module Hydrus::SolrQueryable
     document_list = solr_response.docs.map {|doc| SolrDocument.new(doc, solr_response)}
     return [solr_response, document_list]
   end
-
+  #This static version was added specifically to deal with loading the dashboard without instantiating an object. 
+  def self.issue_solr_query(h)
+    solr_response = Blacklight.solr.find(h)
+    document_list = solr_response.docs.map {|doc| SolrDocument.new(doc, solr_response)}
+    return [solr_response, document_list]
+  end
   # Returns a hash of SOLR query parameters.
   # The query: get all Hydrus APOs, Collections, and Items.
   def squery_all_hydrus_objects(models, opts = {})
@@ -95,12 +100,18 @@ module Hydrus::SolrQueryable
     HSQ.add_involved_user_filter(h, user)
     return h
   end
-
+  
+  def squery_apo_roles(apo_druid)
+    
+  end
+  
+  
   # Takes an array of APO druids.
   # Returns a hash of SOLR query parameters.
   # The query: get the Collections governed by the APOs.
   def squery_collections_of_apos(druids)
     h = HSQ.default_query_params()
+    h[:fl]='*'
     HSQ.add_model_filter(h, 'Hydrus_Collection')
     HSQ.add_governed_by_filter(h, druids)
     return h
