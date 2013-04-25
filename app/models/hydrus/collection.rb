@@ -426,9 +426,9 @@ class Hydrus::Collection < Hydrus::GenericObject
   # Takes a user name.
   # Returns a hash of item counts (broken down by object status) for
   # collections in which the USER plays a role.
-  def self.dashboard_stats(user)
-    # Get PIDs of the APOs in which USER plays a role.
-    apo_pids = apos_involving_user(user)
+  def self.dashboard_stats(user=nil)
+    # Get PIDs of the APOs in which USER plays a role or all PIDs if no user supplied
+    apo_pids = user.nil? ? Hydrus::Collection.all_hydrus_apos : apos_involving_user(user)   
     return {} if apo_pids.size == 0
 
     # Get PIDs of the Collections governed by those APOs.
@@ -440,9 +440,10 @@ class Hydrus::Collection < Hydrus::GenericObject
   end
   # Takes the stats hash from dashboard_stats and a user name
   # Returns a hash of solr documents, one for each collection
-  def self.dashboard_hash stats, user
+  def self.dashboard_hash stats, user=nil
     toret={}
-    apo_pids = apos_involving_user(user)
+    
+    apo_pids = user.nil? ? Hydrus::Collection.all_hydrus_apos : apos_involving_user(user)   
     return {} if apo_pids.size == 0
 
     # Get PIDs of the Collections governed by those APOs.
@@ -459,7 +460,7 @@ class Hydrus::Collection < Hydrus::GenericObject
   end
   # Takes a username
   # returns an array of collection hashes suitable for building the dashboard 
-  def self.collections_hash current_user
+  def self.collections_hash(current_user=nil)
     stats = Hydrus::Collection.dashboard_stats(current_user)
     solr = Hydrus::Collection.dashboard_hash(stats, current_user)
     #build a hash with all of the needed collection information without instantiating each collection, because fedora is slow
@@ -479,13 +480,20 @@ class Hydrus::Collection < Hydrus::GenericObject
     }
     collections
   end
-  # Returns an array druids for the APOs in which USER plays a role.
+  # Returns an array collection druids for all APOs
   def self.all_hydrus_collections
     h           = squery_all_hydrus_collections(   )
     resp, sdocs = issue_solr_query(h)
     return get_druids_from_response(resp)
   end
 
+  # Returns an array of all APO druids 
+  def self.all_hydrus_apos
+    h           = squery_all_hydrus_apos(   )
+    resp, sdocs = issue_solr_query(h)
+    return get_druids_from_response(resp)
+  end
+  
   # Takes a user name.
   # Returns an array druids for the APOs in which USER plays a role.
   def self.apos_involving_user(user)

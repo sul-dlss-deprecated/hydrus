@@ -1,0 +1,34 @@
+  <table class="hydrus-striped-table table-striped table-condensed">
+    <thead>
+      <tr>
+        <th class="title">Collection</th>
+        <th class="journal">Your roles</th>
+        <th class="deposited">Collection Items</th>
+        <th class="deposited">Item Status</th>
+      </tr>
+    </thead>
+    <tbody>
+    <% collections.each do |c| %>
+      <tr>
+        <td><%= link_to(c[:title], hydrus_collection_path(c[:pid]),:disable_after_click=>'true') %></td>
+        <td>
+				  <%= c[:roles].join ', ' %>
+      
+        </td>
+        <td>
+          <% if c[:hydrus_items].size == 0 %>
+             no items yet
+          <% else %>
+            <%= link_to(
+                  pluralize(c[:hydrus_items], 'item'),
+                  hydrus_collection_items_path(c[:pid]),:disable_after_click=>'true') %>
+          <% end %>
+        </td>
+        <td>
+            <%= Hydrus::Collection.item_counts_with_labels(c[:item_counts]).map { |n, lab| "#{n} #{lab}" }.join('; ') %>
+
+        </td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
