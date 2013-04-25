@@ -5,7 +5,7 @@
     <br/>
 
   <%- else -%>
-    <h3>Your Active Collections</h3>
+    <h3>Your Active Collections (<%=@collections.size%>)</h3>
  	   <%= render :partial=>'collection_dashboard',:locals=>{:collections=>@collections}%>
 	<% end %>
 </div>
@@ -32,7 +32,7 @@
 	    <h3>No collections</h3>
 	    <br/>
 	  <%- else -%>
-	    <h4><a href="#" id="show_all_collections">Show All Collections</a></h4>
+	    <h4><a href="#" id="show_all_collections">Show All Collections (<%=@all_collections.size%>)</a></h4>
 	 	<div class="hidden" id="all_collections">
 			<%= render :partial=>'collection_dashboard',:locals=>{:collections=>@all_collections}%>
 		</div>

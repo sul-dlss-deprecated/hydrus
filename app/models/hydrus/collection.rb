@@ -467,8 +467,8 @@ class Hydrus::Collection < Hydrus::GenericObject
     collections = stats.keys.map { |coll_dru|
       hash={}
       hash[:pid]=coll_dru
-      hash[:item_counts]=stats[coll_dru] || {}
-      hash[:title]=solr[coll_dru][:solr]['dc_title_t'].first
+      hash[:item_counts]=stats[coll_dru] || {}      
+      hash[:title]=(solr[coll_dru][:solr]['identityMetadata_objectLabel_t'].nil? ? hash[:title]=solr[coll_dru][:solr]['dc_title_t'].first : solr[coll_dru][:solr]['identityMetadata_objectLabel_t'].first)
       hash[:roles]=Hydrus::Responsible.roles_of_person current_user.to_s, solr[coll_dru][:solr]['is_governed_by_s'].first.gsub('info:fedora/','')
       count=0
       stats[coll_dru].keys.each do |key|
