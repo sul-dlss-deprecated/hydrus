@@ -55,8 +55,6 @@ class HydrusCollectionsController < ApplicationController
 
     notice = []
 
-    depositors_before_update = @fobj.apo.persons_with_role("hydrus-collection-item-depositor")
-
     ####
     # Update attributes without saving.
     ####
@@ -64,13 +62,7 @@ class HydrusCollectionsController < ApplicationController
     if params.has_key?("hydrus_collection")
       @fobj.attributes = params["hydrus_collection"]
     end
-
-    if @fobj.is_open
-      depositors_after_update = @fobj.apo.persons_with_role("hydrus-collection-item-depositor")
-      new_depositors = (depositors_after_update - depositors_before_update).to_a.join(", ")
-      @fobj.send_invitation_email_notification(new_depositors)
-    end
-
+    
     ####
     # Handle requests to add to multi-valued fields.
     ####
@@ -96,6 +88,10 @@ class HydrusCollectionsController < ApplicationController
       flash[:error] = errors.join("<br/>").html_safe
       render :edit
       return
+    end
+
+    if params['should_send_role_change_emails']=="true" && @fobj.changed_fields.include?(:roles) # if roles have changed as the result of an update, send the appropriate emails    
+      @fobj.send_all_role_change_emails 
     end
 
     ####

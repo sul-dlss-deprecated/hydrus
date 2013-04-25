@@ -455,7 +455,7 @@ class Hydrus::GenericObject < Dor::Item
 
   # Returns the version of the object as it exists in fedora.
   def old_self
-    return self.class.find(pid)
+    @cached_old_self ||= self.class.find(pid)
   end
 
   # Takes a list of fields that were changed by the user and

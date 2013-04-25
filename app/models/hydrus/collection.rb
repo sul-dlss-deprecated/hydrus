@@ -3,7 +3,7 @@ class Hydrus::Collection < Hydrus::GenericObject
   extend Hydrus::SolrQueryable
 
   before_save :save_apo
-
+  
   REQUIRED_FIELDS = [:title, :abstract, :contact]
 
   before_validation :remove_values_for_associated_attribute_with_value_none
@@ -204,9 +204,47 @@ class Hydrus::Collection < Hydrus::GenericObject
     self.label                       = t
   end
 
-  def send_invitation_email_notification(new_depositors)
-    return if new_depositors.blank?
-    email=HydrusMailer.invitation(:to =>  new_depositors, :object =>  self)
+  def send_all_role_change_emails
+
+    # new depositors get an email if the collection is open
+    depositors_before_update = old_self.apo.persons_with_role("hydrus-collection-item-depositor")
+    depositors_after_update = self.apo.persons_with_role("hydrus-collection-item-depositor")
+    new_depositors = (depositors_after_update - depositors_before_update).to_a.join(", ")
+    removed_depositors = (depositors_before_update - depositors_after_update).to_a.join(", ")
+    if self.is_open
+      self.send_invitation_email_notification(new_depositors) if new_depositors.size > 0 
+      self.send_remove_invitation_email_notification(removed_depositors) if removed_depositors.size > 0
+    end
+
+    # collection managers changed, send an email to all managers
+    managers_before_update = old_self.apo.persons_with_role("hydrus-collection-manager")
+    managers_after_update = self.apo.persons_with_role("hydrus-collection-manager")
+    self.send_role_change_email(self.apo.persons_with_role("hydrus-collection-manager").to_a.join(',')) if managers_before_update != managers_after_update
+
+    # reviewers or viewers have been changed, send an email to all managers and reviewers
+    reviewers_before_update = old_self.apo.persons_with_role("hydrus-collection-reviewer")
+    reviewers_after_update = self.apo.persons_with_role("hydrus-collection-reviewer")
+    viewers_before_update = old_self.apo.persons_with_role("hydrus-collection-viewer")
+    viewers_after_update = self.apo.persons_with_role("hydrus-collection-viewer")
+    self.send_role_change_email((self.apo.persons_with_role("hydrus-collection-manager")+self.apo.persons_with_role("hydrus-collection-reviewer")).to_a.join(',')) if (reviewers_before_update != reviewers_after_update) || (viewers_before_update != viewers_after_update)
+        
+  end
+
+  def send_role_change_email(recipients)
+    return if recipients.blank?
+    email=HydrusMailer.role_change(:to =>  recipients, :object =>  self)
+    email.deliver unless email.to.blank?    
+  end
+  
+  def send_remove_invitation_email_notification(recipients)
+    return if recipients.blank?
+    email=HydrusMailer.invitation_removed(:to =>  recipients, :object =>  self)
+    email.deliver unless email.to.blank?
+  end
+    
+  def send_invitation_email_notification(recipients)
+    return if recipients.blank?
+    email=HydrusMailer.invitation(:to =>  recipients, :object =>  self)
     email.deliver unless email.to.blank?
   end
 
