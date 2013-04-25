@@ -820,6 +820,37 @@ describe Hydrus::Item do
 
   end
 
+  describe "is_publishable_directly()" do
+
+    it "invalid object: should always return false" do
+      # If the item were valid, this setup would cause the method to return true.
+      @hi.stub(:requires_human_approval).and_return('no')
+      @hi.stub(:is_draft).and_return(true)
+      # But it's not valid, so we should get false.
+      @hi.stub('validate!').and_return(false)
+      @hi.is_publishable_directly.should == false
+    end
+
+    it "valid object: requires approval: should always return false regardless of is_awaiting_approval status" do
+      @hi.stub('validate!').and_return(true)
+      @hi.stub(:requires_human_approval).and_return('yes')
+      [true, false, true, false].each do |exp|
+        @hi.stub(:is_awaiting_approval).and_return(exp)
+        @hi.is_publishable_directly.should == false
+      end
+    end
+
+    it "valid object: does not require approval: should return value of is_draft()" do
+      @hi.stub('validate!').and_return(true)
+      @hi.stub(:requires_human_approval).and_return('no')
+      [true, false, true, false].each do |exp|
+        @hi.stub(:is_draft).and_return(exp)
+        @hi.is_publishable_directly.should == exp
+      end
+    end
+
+  end
+  
   describe "is_assemblable()" do
 
     it "unpublished item: should always return false" do

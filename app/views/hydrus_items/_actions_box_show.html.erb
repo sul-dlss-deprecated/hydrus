@@ -70,7 +70,7 @@
       </p>
 
     <!-- Publish directly (applies only to items not requiring approval by reviewer). -->
-    <% elsif @fobj.is_publishable && can?(:edit, @fobj) %>
+    <% elsif @fobj.is_publishable_directly && can?(:edit, @fobj) %>
       <p>
         <%= button_to(
               "Publish",

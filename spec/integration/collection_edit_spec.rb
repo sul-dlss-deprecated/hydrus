@@ -204,7 +204,7 @@ describe("Collection edit", :type => :request, :integration => true) do
       # Takes a role info hash, like that returned by apo_person_roles().
       # Confirms that the role-management section of the current page
       # contains same information.
-      rmdiv = find('div#role-management')
+      rmdiv = find('div#role-management-wth-reviewers')
       dk    = 'hydrus_collection_apo_person_roles'
       got   = {}
       Hydrus::Responsible.role_labels(:collection_level).each do |role, h|
@@ -230,7 +230,7 @@ describe("Collection edit", :type => :request, :integration => true) do
         'hydrus-collection-viewer'         => Set.new(%w(gg hh ii)),
         'hydrus-collection-depositor'      => Set.new(%w(archivist3)),
       }
-      rmdiv = find('div#role-management')
+      rmdiv = find('div#role-management-wth-reviewers')
       dk    = 'hydrus_collection_apo_person_roles'
       role_info.each do |role,ids|
         rmdiv.fill_in("#{dk}[#{role}]", :with => ids.to_a.join(', '))
@@ -267,7 +267,7 @@ describe("Collection edit", :type => :request, :integration => true) do
         'hydrus-collection-viewer'         => Set.new(%w(gg hh ii)),
         'hydrus-collection-depositor'      => Set.new(%w(archivist3)),
       }
-      rmdiv = find('div#role-management')
+      rmdiv = find('div#role-management-wth-reviewers')
       dk    = 'hydrus_collection_apo_person_roles'
       role_info.each do |role,ids|
         rmdiv.fill_in("#{dk}[#{role}]", :with => ids.to_a.join(', '))

@@ -335,6 +335,14 @@ class Hydrus::Item < Hydrus::GenericObject
     return is_draft
   end
 
+  # Returns true if the item is publishable: must be valid and must
+  # have the correct object_status.  Any item requiring human approval is not publishable, it is only approvable
+  def is_publishable_directly
+    return false if to_bool(requires_human_approval)
+    return (validate! ? is_draft : false)
+  end
+
+  
   # Returns true if the object is ready for common assembly.
   # It's not strictly necessary to involve validate!, but it provides extra insurance.
   def is_assemblable

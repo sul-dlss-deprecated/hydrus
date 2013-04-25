@@ -103,25 +103,6 @@
         <% end %>
       </div>
 
-      <p class="form-section-para">
-        Before being added to the collection, items must be approved by the
-        collection manager or a reviewer:
-      </p>
-      <div class="row">
-        <%= hydrus_form_value do %>
-          <% %w(no yes).each do |opt| %>
-            <div class="row">
-              <div class="span1 radio-input">
-                <%= f.radio_button 'requires_human_approval', opt %>
-              </div>
-              <div class="span7 radio-label">
-                <%= f.label 'requires_human_approval', opt.capitalize, :value => opt %>
-              </div>
-            </div>
-          <% end %>
-        <% end %>
-      </div>
-
     </div>
 
     <%= hydrus_form_header {"Terms of Use and Licenses"} %>
@@ -162,11 +143,14 @@
       </div>
     </div>
 
+    <div id="role-management-wth-reviewers">
+	
     <%= hydrus_form_header {"Collection participants"} %>
 
     <div id="role-management">
-      <p>Provide a SUNet ID (NOT email address) for each person who can view, add, or review items in this
-         collection, or who can manage the collection. Separate multiple IDs with a comma.</p>
+      <p>Provide a SUNet ID (NOT email address) for each person who can manage, deposit or view items in this
+         collection. Separate multiple IDs with a comma. You only need to add a user once for the highest level role, since they will 
+		 have the ability to perform the actions for any roles below.</p>
           <div class="row field-group">
            <%= hydrus_form_label do %>
               <%= f.label :'apo_person_roles[hydrus-collection-depositor]', 'Owner' %>
@@ -175,14 +159,14 @@
               <%= f.text_field :'apo_person_roles[hydrus-collection-depositor]', :value=>@fobj.apo_persons_with_role('hydrus-collection-depositor').first, :readonly=>true%>
               <p class="help">This is the owner of the collection, and cannot be changed</p>
 
-  <%- end %>
+  			<%- end %>
          </div>
 
       <% Hydrus::Responsible.role_labels(:collection_level).each do |role, h| %>
         <%
           role_label = h[:label]
           help_text  = h[:help]
-          next if role == 'hydrus-collection-depositor'
+          next if (role == 'hydrus-collection-depositor' || role=='hydrus-collection-reviewer')
           k = :"apo_person_roles[#{role}]"
         %>
           <div class="row field-group">
@@ -198,7 +182,49 @@
       <% end %>
      </div>
 
+     <%= hydrus_form_header {"Review Workflow"} %>
 
+     <div id="review-workflow">
+       <p>Select the optional review workflow if you want each submitted item to be reviewed before final deposit into the repository.</p>
+	   
+       <div class="row">
+         <%= hydrus_form_value do %>
+           <% %w(no yes).each do |opt| %>
+             <div class="row">
+               <div class="span1 radio-input">
+                 <%= f.radio_button 'requires_human_approval', opt %>
+               </div>
+               <div class="span7 radio-label">
+                 <%= f.label 'requires_human_approval', opt.capitalize, :value => opt %>
+               </div>
+             </div>
+           <% end %>
+         <% end %>
+       </div>
+	   
+	   <div id="reviewer-roles">
+           <div class="row field-group">
+            <%= hydrus_form_label do %>
+               <%= f.label :managers, 'Managers' %>
+             <%- end %>
+           <%= hydrus_form_value do %>
+               <%= f.text_field :managers, :disabled=>true, :value=>@fobj.apo_persons_with_role('hydrus-collection-manager').to_a.join(', '), :readonly=>true%>
+               <p class="help">Manager(s) can review any submission by default.</p>
+
+   			<%- end %>
+          </div>
+          <div class="row field-group">
+           <%= hydrus_form_label do %>
+              <%= f.label :'apo_person_roles[hydrus-collection-reviewer]', 'Reviewers' %>
+            <%- end %>
+          <%= hydrus_form_value do %>
+              <%= f.text_field :'apo_person_roles[hydrus-collection-reviewer]', :value=>@fobj.apo_persons_with_role('hydrus-collection-reviewer').to_a.join(', ')%>
+              <p class="help">Enter the SUNet ID of additional individuals who you authorize to review submissions (but not to add or manage items).</p>
+  			<%- end %>
+         </div>
+	   </div>
+	  </div>
+	 </div>
     <noscript>
       <div class="well actions-box" id="collection-actions">
         <%= render :partial => "actions_box_edit", :locals => {:id=>"nojs"}%>

@@ -12,7 +12,6 @@ module Hydrus::Authorizable
       bess
       geisler
       hfrost
-      hindman
       jdeering
       lmcrae
       petucket
