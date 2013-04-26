@@ -1,6 +1,11 @@
 // this is loaded on each page
 $(document).ready(function(){
 
+	$('#show_all_collections').click(function (){
+		$('#all_collections').toggleClass('hidden');
+		return false;
+	});
+	
   if ($('#hydrus_collections-edit').length == 1 || $('#hydrus_collections-update').length == 1) {collection_edit_init();}
   if ($('#hydrus_items-edit').length == 1 || $('#hydrus_items-update').length == 1) {item_edit_init();}
   if ($('#itemsTable').length == 1) {$("#itemsTable").tablesorter();}

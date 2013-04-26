@@ -119,6 +119,8 @@ class CatalogController < ApplicationController
     #build a hash with all of the needed collection information without instantiating each collection, because fedora is slow
     @collections = Hydrus::Collection.collections_hash(current_user)
     
+    @all_collections = Hydrus::Collection.collections_hash if (current_user && Hydrus::Authorizable.can_act_as_administrator(current_user))
+    
     super
   end
 

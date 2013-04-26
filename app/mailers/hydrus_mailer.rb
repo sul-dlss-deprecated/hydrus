@@ -24,6 +24,18 @@ class HydrusMailer < ActionMailer::Base
     mail(:to=>HydrusMailer.process_user_list(opts[:to]), :subject=>"Invitation to deposit in the Stanford Digital Repository") unless ignore?(@fobj.pid)
   end
 
+  def invitation_removed(opts={})
+    @fobj = opts[:object]
+    @collection_url = polymorphic_url(@fobj, :host => host)
+    mail(:to=>HydrusMailer.process_user_list(opts[:to]), :subject=>"Removed as a depositor in the Stanford Digital Repository") unless ignore?(@fobj.pid)
+  end
+  
+  def role_change(opts={})
+    @fobj = opts[:object]
+    @collection_url = polymorphic_url(@fobj, :host => host)
+    mail(:to=>HydrusMailer.process_user_list(opts[:to]), :subject=>"Collection member updates in the Stanford Digital Repository") unless ignore?(@fobj.pid)
+  end
+  
   def object_returned(opts={})
     @fobj = opts[:object]
     @returned_by = opts[:returned_by]

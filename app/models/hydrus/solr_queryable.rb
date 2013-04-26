@@ -91,6 +91,12 @@ module Hydrus::SolrQueryable
     return squery_all_hydrus_objects(['Hydrus_Collection'])
   end
 
+  # Returns a hash of SOLR query parameters.
+  # The query: get all Hydrus Collections.
+  def squery_all_hydrus_apos
+    return squery_all_hydrus_objects(['Hydrus_AdminPolicyObject'])
+  end
+  
   # Takes a string -- a user's SUNET ID.
   # Returns a hash of SOLR query parameters.
   # The query: get the APOs for which USER has a role.

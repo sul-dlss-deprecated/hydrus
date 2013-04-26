@@ -5,43 +5,12 @@
     <br/>
 
   <%- else -%>
-    <h3>Your Active Collections</h3>
-    <table class="hydrus-striped-table table-striped table-condensed">
-      <thead>
-        <tr>
-          <th class="title">Collection</th>
-          <th class="journal">Your roles</th>
-          <th class="deposited">Collection Items</th>
-          <th class="deposited">Item Status</th>
-        </tr>
-      </thead>
-      <tbody>
-      <% @collections.each do |c| %>
-        <tr>
-          <td><%= link_to(c[:title], hydrus_collection_path(c[:pid]),:disable_after_click=>'true') %></td>
-          <td>
-					  <%= c[:roles].join ', ' %>
-            
-          </td>
-          <td>
-            <% if c[:hydrus_items].size == 0 %>
-               no items yet
-            <% else %>
-              <%= link_to(
-                    pluralize(c[:hydrus_items], 'item'),
-                    hydrus_collection_items_path(c[:pid]),:disable_after_click=>'true') %>
-            <% end %>
-          </td>
-          <td>
-              <%= Hydrus::Collection.item_counts_with_labels(c[:item_counts]).map { |n, lab| "#{n} #{lab}" }.join('; ') %>
+    <h3>Your Active Collections (<%=@collections.size%>)</h3>
+ 	   <%= render :partial=>'collection_dashboard',:locals=>{:collections=>@collections}%>
+	<% end %>
+</div>
 
-          </td>
-        </tr>
-        <% end %>
-      </tbody>
-    </table>
-  <%- end -%>
-
+<div id="new-collections">
   <form class="form-horizontal">
     <% if can?(:create_collections, Hydrus::Collection) %>
       <%= link_to(
@@ -52,9 +21,21 @@
             :disable_after_click=>'true')  %>
     <% end %>
   </form>
-
-  <% if Hydrus::Authorizable.can_act_as_administrator(current_user) %>
-    <%= render :partial => 'admin_info' %>
-  <% end %>
-
 </div>
+
+<% if Hydrus::Authorizable.can_act_as_administrator(current_user) %>
+<hr />
+	<h3>Administrator Information - App version <%= Hydrus::Application.config.app_version %></h3>
+
+	<div class="collection-items">
+	  <%- if @all_collections.blank? -%>
+	    <h3>No collections</h3>
+	    <br/>
+	  <%- else -%>
+	    <h4><a href="#" id="show_all_collections">Show All Collections (<%=@all_collections.size%>)</a></h4>
+	 	<div class="hidden" id="all_collections">
+			<%= render :partial=>'collection_dashboard',:locals=>{:collections=>@all_collections}%>
+		</div>
+	</div>
+	<% end %>
+<% end %>

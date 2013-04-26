@@ -329,23 +329,48 @@ describe("Collection edit", :type => :request, :integration => true) do
         config_mint_ids(@prev_mint_ids)
       end
 
-      it "should send an email to new depositors when we're updating a collection" do
+      it "should send an email to managers when we're opening a collection and to a depositor when we add them" do
         login_as('archivist1')
         visit new_hydrus_collection_path()
         fill_in "hydrus_collection_title", :with => "TestingTitle"
         fill_in "hydrus_collection_abstract", :with => "Summary of my content"
         fill_in "hydrus_collection_contact", :with => "jdoe@example.com"
-        fill_in "hydrus_collection_apo_person_roles[hydrus-collection-item-depositor]", :with => "jdoe"
         click_button("Save")
         page.should have_content("Your changes have been saved.")
 
         expect {click_button("Open Collection")}.to change { ActionMailer::Base.deliveries.count }.by(1)
 
         email = ActionMailer::Base.deliveries.last
-        email.to.should == ["jdoe@stanford.edu","archivist1@stanford.edu"]
+        email.to.should == ["archivist1@stanford.edu"]
         email.subject.should == "Collection opened for deposit in the Stanford Digital Repository"
+        
+        click_link("Edit Collection")
+
+        fill_in "hydrus_collection_apo_person_roles[hydrus-collection-item-depositor]", :with => "jdoe"
+        
+        expect {click_button("Save")}.to change { ActionMailer::Base.deliveries.count }.by(1)
+        email = ActionMailer::Base.deliveries.last
+        email.to.should == ["jdoe@stanford.edu"]
+        email.subject.should == "Invitation to deposit in the Stanford Digital Repository"       
       end
 
+      it "should not send an email to new depositors when we're updating a collection if user does not check the send email checkbox" do
+        login_as('archivist1')
+        visit new_hydrus_collection_path()
+        fill_in "hydrus_collection_title", :with => "TestingTitle"
+        fill_in "hydrus_collection_abstract", :with => "Summary of my content"
+        fill_in "hydrus_collection_contact", :with => "jdoe@example.com"
+        click_button("Save")
+        page.should have_content("Your changes have been saved.")
+        click_button("Open Collection")
+        click_link("Edit Collection")
+
+        fill_in "hydrus_collection_apo_person_roles[hydrus-collection-item-depositor]", :with => "jdoe"
+        uncheck("should_send_role_change_emails")
+        
+        expect {click_button("Save")}.to change { ActionMailer::Base.deliveries.count }.by(0)
+      end
+      
       it "should handle complex changes to depositors" do
         login_as('archivist1')
         visit new_hydrus_collection_path()
@@ -359,10 +384,10 @@ describe("Collection edit", :type => :request, :integration => true) do
         click_link("Edit Collection")
 
         fill_in "hydrus_collection_apo_person_roles[hydrus-collection-item-depositor]", :with => "jandoe, leland, jondoe"
-        expect {click_button("Save")}.to change { ActionMailer::Base.deliveries.count }.by(1)
+        expect {click_button("Save")}.to change { ActionMailer::Base.deliveries.count }.by(2) # a removal notice for jdoe,jandoe and an invitation notice jandoe and jondoe
         email = ActionMailer::Base.deliveries.last
-        email.to.should == ["jandoe@stanford.edu", "jondoe@stanford.edu"]
-        email.subject.should == "Invitation to deposit in the Stanford Digital Repository"
+        email.to.should == ["jdoe@stanford.edu", "janedoe@stanford.edu"]
+        email.subject.should == "Removed as a depositor in the Stanford Digital Repository"
       end
 
       it "should not send an email if the collection is closed" do

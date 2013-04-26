@@ -3,7 +3,7 @@ class Hydrus::Collection < Hydrus::GenericObject
   extend Hydrus::SolrQueryable
 
   before_save :save_apo
-
+  
   REQUIRED_FIELDS = [:title, :abstract, :contact]
 
   before_validation :remove_values_for_associated_attribute_with_value_none
@@ -204,9 +204,47 @@ class Hydrus::Collection < Hydrus::GenericObject
     self.label                       = t
   end
 
-  def send_invitation_email_notification(new_depositors)
-    return if new_depositors.blank?
-    email=HydrusMailer.invitation(:to =>  new_depositors, :object =>  self)
+  def send_all_role_change_emails
+
+    # new depositors get an email if the collection is open
+    depositors_before_update = old_self.apo.persons_with_role("hydrus-collection-item-depositor")
+    depositors_after_update = self.apo.persons_with_role("hydrus-collection-item-depositor")
+    new_depositors = (depositors_after_update - depositors_before_update).to_a.join(", ")
+    removed_depositors = (depositors_before_update - depositors_after_update).to_a.join(", ")
+    if self.is_open
+      self.send_invitation_email_notification(new_depositors) if new_depositors.size > 0 
+      self.send_remove_invitation_email_notification(removed_depositors) if removed_depositors.size > 0
+    end
+
+    # collection managers changed, send an email to all managers
+    managers_before_update = old_self.apo.persons_with_role("hydrus-collection-manager")
+    managers_after_update = self.apo.persons_with_role("hydrus-collection-manager")
+    self.send_role_change_email(self.apo.persons_with_role("hydrus-collection-manager").to_a.join(',')) if managers_before_update != managers_after_update
+
+    # reviewers or viewers have been changed, send an email to all managers and reviewers
+    reviewers_before_update = old_self.apo.persons_with_role("hydrus-collection-reviewer")
+    reviewers_after_update = self.apo.persons_with_role("hydrus-collection-reviewer")
+    viewers_before_update = old_self.apo.persons_with_role("hydrus-collection-viewer")
+    viewers_after_update = self.apo.persons_with_role("hydrus-collection-viewer")
+    self.send_role_change_email((self.apo.persons_with_role("hydrus-collection-manager")+self.apo.persons_with_role("hydrus-collection-reviewer")).to_a.join(',')) if (reviewers_before_update != reviewers_after_update) || (viewers_before_update != viewers_after_update)
+        
+  end
+
+  def send_role_change_email(recipients)
+    return if recipients.blank?
+    email=HydrusMailer.role_change(:to =>  recipients, :object =>  self)
+    email.deliver unless email.to.blank?    
+  end
+  
+  def send_remove_invitation_email_notification(recipients)
+    return if recipients.blank?
+    email=HydrusMailer.invitation_removed(:to =>  recipients, :object =>  self)
+    email.deliver unless email.to.blank?
+  end
+    
+  def send_invitation_email_notification(recipients)
+    return if recipients.blank?
+    email=HydrusMailer.invitation(:to =>  recipients, :object =>  self)
     email.deliver unless email.to.blank?
   end
 
@@ -426,9 +464,9 @@ class Hydrus::Collection < Hydrus::GenericObject
   # Takes a user name.
   # Returns a hash of item counts (broken down by object status) for
   # collections in which the USER plays a role.
-  def self.dashboard_stats(user)
-    # Get PIDs of the APOs in which USER plays a role.
-    apo_pids = apos_involving_user(user)
+  def self.dashboard_stats(user=nil)
+    # Get PIDs of the APOs in which USER plays a role or all PIDs if no user supplied
+    apo_pids = user.nil? ? Hydrus::Collection.all_hydrus_apos : apos_involving_user(user)   
     return {} if apo_pids.size == 0
 
     # Get PIDs of the Collections governed by those APOs.
@@ -440,9 +478,10 @@ class Hydrus::Collection < Hydrus::GenericObject
   end
   # Takes the stats hash from dashboard_stats and a user name
   # Returns a hash of solr documents, one for each collection
-  def self.dashboard_hash stats, user
+  def self.dashboard_hash stats, user=nil
     toret={}
-    apo_pids = apos_involving_user(user)
+    
+    apo_pids = user.nil? ? Hydrus::Collection.all_hydrus_apos : apos_involving_user(user)   
     return {} if apo_pids.size == 0
 
     # Get PIDs of the Collections governed by those APOs.
@@ -459,15 +498,15 @@ class Hydrus::Collection < Hydrus::GenericObject
   end
   # Takes a username
   # returns an array of collection hashes suitable for building the dashboard 
-  def self.collections_hash current_user
+  def self.collections_hash(current_user=nil)
     stats = Hydrus::Collection.dashboard_stats(current_user)
     solr = Hydrus::Collection.dashboard_hash(stats, current_user)
     #build a hash with all of the needed collection information without instantiating each collection, because fedora is slow
     collections = stats.keys.map { |coll_dru|
       hash={}
       hash[:pid]=coll_dru
-      hash[:item_counts]=stats[coll_dru] || {}
-      hash[:title]=solr[coll_dru][:solr]['dc_title_t'].first
+      hash[:item_counts]=stats[coll_dru] || {}      
+      hash[:title]=(solr[coll_dru][:solr]['identityMetadata_objectLabel_t'].nil? ? hash[:title]=solr[coll_dru][:solr]['dc_title_t'].first : solr[coll_dru][:solr]['identityMetadata_objectLabel_t'].first)
       hash[:roles]=Hydrus::Responsible.roles_of_person current_user.to_s, solr[coll_dru][:solr]['is_governed_by_s'].first.gsub('info:fedora/','')
       count=0
       stats[coll_dru].keys.each do |key|
@@ -479,13 +518,20 @@ class Hydrus::Collection < Hydrus::GenericObject
     }
     collections
   end
-  # Returns an array druids for the APOs in which USER plays a role.
+  # Returns an array collection druids for all APOs
   def self.all_hydrus_collections
     h           = squery_all_hydrus_collections(   )
     resp, sdocs = issue_solr_query(h)
     return get_druids_from_response(resp)
   end
 
+  # Returns an array of all APO druids 
+  def self.all_hydrus_apos
+    h           = squery_all_hydrus_apos(   )
+    resp, sdocs = issue_solr_query(h)
+    return get_druids_from_response(resp)
+  end
+  
   # Takes a user name.
   # Returns an array druids for the APOs in which USER plays a role.
   def self.apos_involving_user(user)

@@ -1,8 +1,13 @@
 = HYDRUS change log
 
-== 2013.04.25
+== 2013.04.26
+
+* Fix for HYDRUS-81, fix for HYDRUS-79
+
+== 2013.04.25a
 
 * Bug fix for HYDRUS-107; fix for HYDRUS-70
+* Build admin dashboard from solr using same technique as home page dashboard and show on home page
 
 == 2013.04.24
 
