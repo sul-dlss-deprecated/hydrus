@@ -505,8 +505,8 @@ class Hydrus::Collection < Hydrus::GenericObject
     collections = stats.keys.map { |coll_dru|
       hash={}
       hash[:pid]=coll_dru
-      hash[:item_counts]=stats[coll_dru] || {}      
-      hash[:title]=(solr[coll_dru][:solr]['identityMetadata_objectLabel_t'].nil? ? hash[:title]=solr[coll_dru][:solr]['dc_title_t'].first : solr[coll_dru][:solr]['identityMetadata_objectLabel_t'].first)
+      hash[:item_counts]=stats[coll_dru] || {}            
+      hash[:title]=self.object_title(solr[coll_dru])
       hash[:roles]=Hydrus::Responsible.roles_of_person current_user.to_s, solr[coll_dru][:solr]['is_governed_by_s'].first.gsub('info:fedora/','')
       count=0
       stats[coll_dru].keys.each do |key|
@@ -518,6 +518,19 @@ class Hydrus::Collection < Hydrus::GenericObject
     }
     collections
   end
+  
+  # given a solr document, try a few places to get the title, starting with objectlabel, then dc_title, and finally just untitled
+  def self.object_title(solr_doc)
+    object_label=solr_doc[:solr]['identityMetadata_objectLabel_t']
+    dc_title=solr_doc[:solr]['dc_title_t']
+    if !object_label.nil?
+      return object_label.first
+    elsif !dc_title.nil?
+      return dc_titlle.first unless dc_title.first=='Hydrus'
+    end
+    return "Untitled"
+  end
+  
   # Returns an array collection druids for all APOs
   def self.all_hydrus_collections
     h           = squery_all_hydrus_collections(   )
