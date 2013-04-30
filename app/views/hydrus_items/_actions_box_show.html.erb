@@ -23,7 +23,7 @@
                 :id    => 'hydrus_item_disapprove',
                 :class => 'btn btn-small save-edits',
                 :disable_with => "Please wait...",
-  							:show_loading_indicator=>"true") %>
+								:show_loading_indicator=>"true") %>
         </p>
 
       <% end -%>
@@ -36,8 +36,7 @@
 			              :id    => 'hydrus_item_approve',
 			              :class => 'btn btn-small save-edits',
 										:confirm => 'You are about to deposit this item to the Stanford Digital Repository. While the deposit is in process, you will not be able to edit the item. Are you sure you want to proceed?',
-			              :disable_with => "Please wait...",
-			  						:show_loading_indicator=>"true") %>
+			 							:disable_with => "Please wait...") %>
 			      </p>
 
     <!-- Resubmit. -->
@@ -65,8 +64,7 @@
               :id    => 'hydrus_item_submit_for_approval',
               :class => 'btn btn-small save-edits',
 							:confirm => 'You are about to deposit this item to the Stanford Digital Repository. While the deposit is in process, you will not be able to edit the item. Are you sure you want to proceed?',
-              :disable_with => "Please wait...",
-  						:show_loading_indicator=>"true") %>
+              :disable_with => "Please wait...") %>
       </p>
 
     <!-- Publish directly (applies only to items not requiring approval by reviewer). -->
@@ -78,8 +76,7 @@
               :id    => 'hydrus_item_publish_directly',
               :class => 'btn btn-small save-edits',
 							:confirm => 'You are about to deposit this item to the Stanford Digital Repository. While the deposit is in process, you will not be able to edit the item. Are you sure you want to proceed?',
-              :disable_with => "Please wait...",  
-							:show_loading_indicator=>"true") %>
+              :disable_with => "Please wait...") %>
       </p>
 
     <!-- Open new version. -->
@@ -90,8 +87,8 @@
               open_new_version_item_path(@fobj),
               :id    => 'hydrus_item_open_new_version',
               :class => 'btn btn-small save-edits',
-              :disable_with => "Please wait...",
-							:show_loading_indicator=>"true" ) %>
+							:confirm => 'You are about to open this published item for editing. When you complete editing, you will need to re-publish the item as a new version. The PURL for the revised item will not change. A text field is provided where you can enter a description of the changes in this version. Are you sure you want to proceed and open a new version?',
+              :disable_with => "Please wait..." ) %>
       </p>
 
     <% end %>

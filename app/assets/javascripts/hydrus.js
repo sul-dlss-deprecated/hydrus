@@ -1,4 +1,6 @@
 // this is loaded on each page
+var GLOB;
+
 $(document).ready(function(){
 
 	$('#show_all_collections').click(function (){
@@ -36,6 +38,18 @@ $(document).ready(function(){
   $(".add-content-dropdown").each(function(){
     $(this).toggle();
   });
+
+	$(document).on('confirm:complete', function(e,answer) {
+		item=$('#' + e.target.id);
+	  if (answer) { 	// user has OK in one of our "confirm" buttons
+  		ajax_loading_indicator(item);
+	  }
+	  else // user has clicked on the cancel button in one of our "confirm" buttons
+		{
+			ajax_loading_done(item);
+		}
+	});
+
 
 });
 
@@ -179,20 +193,16 @@ function setup_action_links() {
 function setup_links_that_disable() {
 	$("[show_loading_indicator='true']").each(function(){
     $(this).click(function(e){
-	    ajax_loading_indicator(); // show loading indicator in UI
-		if ($(this).attr("disable_with") != '') { $(this).text($(this).attr("disable_with"));} // change the text
-	    $(this).addClass('disabled'); // disable the element visually
+	    ajax_loading_indicator($(this)); // show loading indicator in UI
 	    });
     });
   $("[disable_after_click='true']").each(function(){
     $(this).click(function(e){
       e.preventDefault(); // stop default href behavior
-      ajax_loading_indicator(); // show loading indicator in UI
+      ajax_loading_indicator($(this)); // show loading indicator in UI
       url=$(this).attr("href"); // grab the URL
       $(this).attr("href","#"); // remove it so even if clicked again, nothing will happen!
-	  if ($(this).attr("disable_with") != '') { $(this).text($(this).attr("disable_with"));} // change the text
       $(this).parent().addClass('disabled'); // disable the parent's element visually
-      $(this).addClass('disabled'); // disable the element visually
       window.location.href=url; // go to the URL
       });
     });
@@ -210,6 +220,11 @@ function ajax_loading_indicator(element) {
   if (!!element) {
     element.animate({opacity:0.25});
     element.attr("disabled","disabled");
+		element.addClass("disabled");
+		if (element.attr("disable_with") != '') { 
+			element.attr("enable_with",element.text()); // store the current text
+			element.text(element.attr("disable_with"));  // change the text
+			}		
     }
 }
 
@@ -219,6 +234,8 @@ function ajax_loading_done(element) {
   if (!!element) {
     element.animate({opacity:1.0});
     element.removeAttr("disabled");
+    element.removeClass("disabled");
+		if (element.attr("enable_with") != '') { element.text(element.attr("enable_with"));} // change the text back		
     }
 }
 
