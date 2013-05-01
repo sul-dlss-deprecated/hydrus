@@ -54,10 +54,9 @@ group :development, :test do
 	gem 'letter_opener'
 end
 
-gem 'newrelic_rpm'
-
 group :development do
   gem 'looksee'
+	gem 'newrelic_rpm'
 end
 
 group :production, :dortest do
