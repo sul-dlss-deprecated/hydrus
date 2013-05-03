@@ -292,7 +292,8 @@ class Hydrus::Item < Hydrus::GenericObject
 
   # get the friendly display name for the current item type
   def item_type_for_display
-    self.class.item_types.key(self.item_type)
+    typ=self.class.item_types.key(self.item_type)
+    typ.blank? ? self.class.item_types.key(Hydrus::Application.config.default_item_type) : typ
   end
     
   # Returns true if the object can be submitted for approval:
