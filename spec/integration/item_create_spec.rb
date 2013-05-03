@@ -45,13 +45,13 @@ describe("Item create", :type => :request, :integration => true) do
   it "should have a non-js select list for depositing items into collections" do
     login_as('archivist1')
     visit hydrus_collection_path(:id=>@hc_druid)
-    select "item", :from => "collection"
+    select "data set", :from => "type"
     click_button(@buttons[:add])
     current_path.should_not == hydrus_collection_path(:id=>@hc_druid)
     current_path.should =~ @edit_path_regex
   end
 
-  it "should be able to create a new Item, with expected datastreams" do
+  it "should be able to create a new default Item type, with expected datastreams" do
     # Login, go to new Item page, and store the druid of the new Item.
     login_as('archivist1')
     visit new_hydrus_item_path(:collection => @hc_druid)
@@ -71,6 +71,8 @@ describe("Item create", :type => :request, :integration => true) do
     item.should be_instance_of Hydrus::Item
     item.create_date.should_not be_blank
     item.item_type.should == 'dataset'
+    item.descMetadata.typeOfResource.should == ['dataset']
+    item.descMetadata.date_created.should == [HyTime.now_date]
     # Check workflow of Item.
     wf_nodes = item.workflows.find_by_terms(:workflow)
     wf_nodes.size.should == 1
@@ -93,11 +95,35 @@ describe("Item create", :type => :request, :integration => true) do
     end
   end
 
+  it "should be able to create a new article type Item, with expected datastreams" do
+    # Login, go to new Item page, and store the druid of the new Item.
+    login_as('archivist1')
+    visit new_hydrus_item_path(:collection => @hc_druid, :type=>'article')
+    current_path.should =~ @edit_path_regex
+    druid = @edit_path_regex.match(current_path)[1]
+    # Fill in form and save.
+    fill_in "Title of item", :with => 'title_article'
+    fill_in "hydrus_item_contributors_0_name", :with => 'contributor_article'
+    fill_in "Abstract", :with => 'abstract_article'
+    click_button(@buttons[:save])
+    find(@div_alert).should have_content(@notices[:save])
+    # Get Item out of fedora and confirm that our edits were persisted.
+    item = Hydrus::Item.find(druid)
+    item.title.should == 'title_article'
+    item.contributors.first.name.should == 'contributor_article'
+    item.abstract.should == 'abstract_article'
+    item.should be_instance_of Hydrus::Item
+    item.create_date.should_not be_blank
+    item.item_type.should == 'article'
+    item.descMetadata.typeOfResource.should == ['article']
+    item.descMetadata.date_created.should == [HyTime.now_date]
+  end
+
   it "should be able to access create-new-Item screen via the Collection view page" do
     login_as('archivist1')
     collection = Hydrus::Collection.find(@hc_druid)
     visit polymorphic_path(collection)
-    click_link('item')
+    click_link('data set')
     current_path.should =~ @edit_path_regex
   end
 

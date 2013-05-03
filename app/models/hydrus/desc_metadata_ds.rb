@@ -32,6 +32,11 @@ class Hydrus::DescMetadataDS < ActiveFedora::NokogiriDatastream
         t.roleTerm IA
       end
     end
+    t.originInfo IANS do
+      t.dateCreated IA
+      t.dateIssued IA
+    end
+    t.typeOfResource IA
     t.abstract IA
     t.preferred_citation :path => 'note',  :attributes => { :type => "preferred citation" }
     t.related_citation   :path => 'note',  :attributes => { :type => "citation/reference" }
@@ -48,6 +53,13 @@ class Hydrus::DescMetadataDS < ActiveFedora::NokogiriDatastream
       end
     end
 
+    t.date_created(
+      :proxy => [:mods,:originInfo,:dateCreated]
+      )
+    t.date_issued(
+      :proxy => [:mods,:originInfo,:dateIssued]
+      )
+        
     t.main_title(
       :proxy => [:mods, :titleInfo, :title],
       :index_as => [:searchable, :displayable]
@@ -99,6 +111,10 @@ class Hydrus::DescMetadataDS < ActiveFedora::NokogiriDatastream
             xml.roleTerm(:authority => "marcrelator", :type => "text")
           }
         }
+        xml.originInfo {
+          xml.dateCreated
+        }
+        xml.typeOfResource
         xml.abstract
         xml.note(:type => "preferred citation", :displayLabel => 'Preferred Citation')
         xml.note(:type => "citation/reference", :displayLabel => 'Related Publication')

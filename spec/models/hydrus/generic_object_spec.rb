@@ -157,7 +157,7 @@ describe Hydrus::GenericObject do
 
   end
 
-  it "augment_identity_metadata() should add correct tags" do
+  it "set_item_type() should add correct tags" do
     tests = {
       :collection => '<objectType>set</objectType>',
       :dataset    => '',
@@ -167,7 +167,7 @@ describe Hydrus::GenericObject do
       obj  = Hydrus::GenericObject.new
       idmd = Dor::IdentityMetadataDS.new(nil, nil)
       obj.stub(:identityMetadata).and_return(idmd)
-      obj.augment_identity_metadata(item_type)
+      obj.set_item_type(item_type)
       idmd.ng_xml.should be_equivalent_to exp
     end
   end

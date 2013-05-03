@@ -35,7 +35,7 @@ describe Hydrus::Item do
       :remove_relationship,
       :assert_content_model,
       :add_to_collection,
-      :augment_identity_metadata,
+      :set_item_type,
     ]
     stubs.each { |s| @hi.should_receive(s) }
     @hi.should_receive(:save).with(:no_edit_logging => true, :no_beautify => true)
@@ -59,7 +59,7 @@ describe Hydrus::Item do
       :remove_relationship,
       :assert_content_model,
       :add_to_collection,
-      :augment_identity_metadata,
+      :set_item_type,
     ]
     stubs.each { |s| @hi.should_receive(s) }
     @hi.should_receive(:save).with(:no_edit_logging => true, :no_beautify => true)

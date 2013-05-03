@@ -80,7 +80,7 @@ class Hydrus::Item < Hydrus::GenericObject
 
   # Note: currently all items of of type :item. In the future,
   # the calling code can pass in the needed value.
-  def self.create(collection_pid, user, itype = :dataset)
+  def self.create(collection_pid, user, itype = Hydrus::Application.config.default_item_type)
     # Make sure user can create items in the parent collection.
     coll = Hydrus::Collection.find(collection_pid)
     cannot_do(:create) unless coll.is_open()
@@ -95,8 +95,8 @@ class Hydrus::Item < Hydrus::GenericObject
     # Create default rightsMetadata from the collection
     #item.rightsMetadata.content = coll.rightsMetadata.ng_xml.to_s
     # Set the item_type, and add some Hydrus-specific info to identityMetadata.
-    item.item_type = itype.to_s
-    item.augment_identity_metadata(itype)
+    item.set_item_type(itype)
+    item.descMetadata.date_created=HyTime.now_date
     # Add roleMetadata with current user as hydrus-item-depositor.
     item.roleMetadata.add_person_with_role(user, 'hydrus-item-depositor')
     # Set default license, embargo, and visibility.
@@ -288,6 +288,11 @@ class Hydrus::Item < Hydrus::GenericObject
     return if recipients_for_review_deposit_emails.blank?
     email = HydrusMailer.send("new_item_for_review", :object => self)
     email.deliver unless email.to.blank?
+  end
+
+  # get the friendly display name for the current item type
+  def item_type_for_display
+    self.class.item_types.key(self.item_type)
   end
     
   # Returns true if the object can be submitted for approval:

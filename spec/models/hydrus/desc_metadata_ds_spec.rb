@@ -110,6 +110,10 @@ describe Hydrus::DescMetadataDS do
               <roleTerm authority="marcrelator" type="text"/>
             </role>
           </name>
+          <originInfo>
+               <dateCreated/>
+          </originInfo>
+          <typeOfResource/>
           <relatedItem>
             <titleInfo>
               <title/>

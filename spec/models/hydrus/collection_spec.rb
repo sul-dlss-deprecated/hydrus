@@ -17,7 +17,7 @@ describe Hydrus::Collection do
     stubs = [
       :remove_relationship,
       :assert_content_model,
-      :augment_identity_metadata,
+      :set_item_type,
     ]
     stubs.each { |s| @hc.should_receive(s) }
     @hc.should_receive(:save).with(:no_edit_logging => true, :no_beautify => true)

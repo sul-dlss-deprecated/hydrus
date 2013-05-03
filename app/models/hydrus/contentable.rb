@@ -22,6 +22,7 @@ module Hydrus::Contentable
   # Generates the object's contentMetadata XML, stores the XML in the
   # object's datastreams, and writes the XML to a file.
   def update_content_metadata
+    return unless is_item?
     # Set the object's contentMetadata.
     xml = create_content_metadata_xml()
     datastreams['contentMetadata'].content = xml
@@ -33,17 +34,16 @@ module Hydrus::Contentable
   end
 
   # Generates and returns a string of contentMetadata XML for the object.
-  def create_content_metadata_xml
+  def create_content_metadata_xml 
+    return "" unless is_item? # only need contentMetadata for item types 
     conf = Hydrus::Application.config
     objects = []
-    if is_item?
       files.each { |f|
         aof = Assembly::ObjectFile.new(f.current_path)
         aof.label = f.label
         aof.file_attributes = conf.cm_file_attributes_hidden if f.hide
         objects << aof
       }
-    end
     return Assembly::ContentMetadata.create_content_metadata(
       :druid               => pid,
       :objects             => objects,

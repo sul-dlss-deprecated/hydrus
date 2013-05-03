@@ -112,6 +112,7 @@
           <licenseOption>fixed</licenseOption>
           <visibilityOption>fixed</visibilityOption>  
           <requiresHumanApproval>no</requiresHumanApproval>
+					<itemType>collection</itemType>
           <usersAcceptedTermsOfDeposit>
             <user dateAccepted="2011-09-02T09:02:32Z">archivist1</user>
             <user dateAccepted="2012-05-02T20:02:44Z">archivist2</user>

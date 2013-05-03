@@ -109,6 +109,7 @@
           <initialSubmittedForPublishTime>2012-11-01T00:00:00Z</initialSubmittedForPublishTime>
           <lastModifyTime>2012-11-01T00:00:22Z</lastModifyTime>
           <embargoTerms>1 year</embargoTerms>
+					<itemType>collection</itemType>
           <embargoOption>varies</embargoOption>
           <licenseOption>fixed</licenseOption>
           <visibilityOption>fixed</visibilityOption>

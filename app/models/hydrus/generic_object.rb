@@ -217,11 +217,28 @@ class Hydrus::GenericObject < Dor::Item
 
   # Takes an item_type: :dataset, etc. for items, or just :collection for collections.
   # Adds some Hydrus-specific information to the identityMetadata.
-  def augment_identity_metadata(typ)
-    identityMetadata.add_value(:objectType, 'set') if typ == :collection
-    identityMetadata.content_will_change!
+  def set_item_type(typ)
+    self.hydrusProperties.item_type=typ.to_s
+    if typ == :collection
+      identityMetadata.add_value(:objectType, 'set')
+      identityMetadata.content_will_change!
+    else
+      descMetadata.typeOfResource=typ.to_s
+      descMetadata.content_will_change!
+    end
   end
-
+  
+  # the possible types of items that can be created, hash of display value (keys) and values to store in object (value)
+  def self.item_types
+    {
+      "data set"      => "dataset",
+      "thesis"        => "thesis",
+      "article"       => "article",
+      "class project" => "class project",
+      "other"         => "other"                        
+    }
+  end
+  
   # Returns a data structure intended to be passed into
   # grouped_options_for_select(). This is an awkward approach (too
   # view-centric), leading to some minor data duplication in other

@@ -62,6 +62,7 @@
           <versionStartedTime>2012-11-01T00:00:22Z</versionStartedTime>
           <reviewedReleaseSettings>true</reviewedReleaseSettings>
           <acceptedTermsOfDeposit>true</acceptedTermsOfDeposit>
+					<itemType>item</itemType>
           <objectStatus>published</objectStatus>
           <objectVersion>2013.02.26a</objectVersion>
         </hydrusProperties>

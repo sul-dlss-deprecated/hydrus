@@ -62,7 +62,8 @@ class HydrusItemsController < ApplicationController
 
   def new
     coll_pid = params[:collection]
-    item = Hydrus::Item.create(coll_pid, current_user)
+    item_type = params[:type] || Hydrus::Application.config.default_item_type
+    item = Hydrus::Item.create(coll_pid, current_user, item_type)
     item.current_user = current_user
     redirect_to edit_polymorphic_path(item)
   end

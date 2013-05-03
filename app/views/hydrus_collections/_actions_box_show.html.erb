@@ -39,19 +39,23 @@
       <button class="<%="disabled" unless isopen%> btn btn-small dropdown-toggle" data-toggle="dropdown">
         Add new &hellip; <span class="caret"></span>
       </button>
-      <%= render :partial => "shared/add_content_options",
-                 :locals => {:parent => @fobj} %>
+      <%= render :partial => "shared/add_content_options" %>
     </div>
     <noscript>
-      <%= form_tag(new_hydrus_item_path, :method=>"GET", :class=>"add-content-options") do %>
-        <%= select_tag(
-              "collection",
-              options_for_select([["item", @fobj.pid]]),
-              :class=>"add-content-options"
-            )
-        %>
-        <%= submit_tag("Add", :class=>"btn btn-small", :show_loading_indicator=>"true" ) %>
-      <%- end -%>
+			<% if @fobj.is_open %>
+	      <%= form_tag(new_hydrus_item_path, :method=>"GET", :class=>"add-content-options") do %>
+				  <%= hidden_field_tag(:collection,@fobj.id)%>
+	        <%= select_tag(
+	              "type",
+	              options_for_select(Hydrus::Collection.item_types.to_a),
+	              :class=>"add-content-options"
+	            )
+	        %>
+	        <%= submit_tag("Add", :class=>"btn btn-small", :show_loading_indicator=>"true" ) %>
+	      <%- end -%>
+		  <% else %>
+		  	<%=message%>
+			<% end %>
     </noscript>
   <% end %>
 

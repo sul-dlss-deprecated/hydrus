@@ -174,6 +174,7 @@
           <reviewedReleaseSettings>true</reviewedReleaseSettings>
           <acceptedTermsOfDeposit>true</acceptedTermsOfDeposit>
           <objectStatus>draft</objectStatus>
+					<itemType>item</itemType>
           <versionStartedTime>2012-11-01T00:00:22Z</versionStartedTime>
           <objectVersion>2013.02.26a</objectVersion>
         </hydrusProperties>

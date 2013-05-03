@@ -190,6 +190,7 @@
         <hydrusProperties>
           <lastModifyTime>2012-11-01T00:00:22Z</lastModifyTime>
           <reviewedReleaseSettings>true</reviewedReleaseSettings>
+					<itemType>item</itemType>
           <acceptedTermsOfDeposit>true</acceptedTermsOfDeposit>
           <objectStatus>draft</objectStatus>
           <versionStartedTime>2012-11-01T00:00:22Z</versionStartedTime>

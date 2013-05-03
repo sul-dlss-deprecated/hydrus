@@ -1,11 +1,7 @@
 <ul class="dropdown-menu">
-  <li <%=raw "class='disabled'" unless parent.is_open%>>
-    <%= link_to 'item',new_hydrus_item_path(:collection => parent.pid), :disable_after_click=>'true', :disable_with=>'Please wait...'%>
+	<% Hydrus::Collection.item_types.each do |item_display,item_value| %>
+  <li <%=raw "class='disabled'" unless @fobj.is_open%>>
+    <%= link_to item_display,new_hydrus_item_path(:collection => @fobj.pid, :type=>item_value), :disable_after_click=>'true', :disable_with=>'Please wait...'%>
   </li>
-  <li class="divider"></li>
-  <li class="disabled"><a href="#">article</a></li>
-  <li class="disabled"><a href="#">dataset</a></li>
-  <li class="disabled"><a href="#">image</a></li>
-  <li class="disabled"><a href="#">paper</a></li>
-  <li class="disabled"><a href="#">other</a></li>
+	<% end %>
 </ul>

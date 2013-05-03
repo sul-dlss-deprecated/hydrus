@@ -18,7 +18,7 @@ class Hydrus::Collection < Hydrus::GenericObject
   validates :license_option, :presence => true, :if => :should_validate
   validate  :check_embargo_options
   validate  :check_license_options
-
+  
   def check_embargo_options
     return if embargo_option == 'none'
     return unless embargo_terms.blank?
@@ -61,9 +61,7 @@ class Hydrus::Collection < Hydrus::GenericObject
     coll.assert_content_model
     # Set the item_type, and add some Hydrus-specific info to identityMetadata.
     # Note that item_type can vary for items but is always :collection here.
-    itype = :collection
-    coll.item_type = itype.to_s
-    coll.augment_identity_metadata(itype)
+    coll.set_item_type(:collection)
     # Add event.
     coll.events.add_event('hydrus', user, 'Collection created')
     # Set defaults for visability, embargo, etc.
