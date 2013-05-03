@@ -36,6 +36,9 @@ module Hydrus::Authorizable
       amorgan2
       jejohns1
       ssussman
+      jlmcbrid
+      jmanton
+      mtashiro
     )
     return administrators.union(ids)
   end

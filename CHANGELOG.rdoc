@@ -1,5 +1,9 @@
 = HYDRUS change log
 
+== 2013.05.03
+
+* Fix for HYDRUS-153; HYDRUS-151; HYDRUS-150; HYDRUS-145
+
 == 2013.04.30
 
 * Fix for HYDRUS-103; other small tweaks to confirmation boxes

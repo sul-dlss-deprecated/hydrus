@@ -6,14 +6,14 @@
 
 <div class="contributor destroy-set">
 
-  <%= text_field_tag("hydrus_item[contributors][#{i}][name]", c.name, :required => true) %>
+  <%= text_field_tag("hydrus_item[contributors][#{i}][name]", c.name, :required => true, :class=>'authors_textbox',:"data-trigger"=>"manual",:"data-author-number"=>i) %>
 
   as
 
   <%= select_tag(
         "hydrus_item[contributors][#{i}][role_key]",
-        grouped_options_for_select(Hydrus::Contributor.groups_for_select, c.role_key)) %>
-
+        grouped_options_for_select(Hydrus::Contributor.groups_for_select, c.role_key), :class=>'authors_dropdown',:"data-author-number"=>i) %>
+	
   <%= link_to(
         '<i class="icon-trash"></i>'.html_safe,
         destroy_hydrus_item_value_path(

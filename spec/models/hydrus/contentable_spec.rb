@@ -21,13 +21,13 @@ describe Hydrus::Contentable do
 
   describe "create_content_metadata_xml()" do
 
-    it "non-item should get nothing but the parent node" do
-      exp = '<contentMetadata objectId="oo000oo9999" type="file"/>'
+    it "non-item should get blank XML node" do
+      exp = ''
       @go.stub('is_item?').and_return(false)
       @go.create_content_metadata_xml.should be_equivalent_to(exp)
     end
 
-    it "non-item should get nothing but the parent node" do
+    it "item should get real contentMetadata" do
       mock_files = [
         double('fileA', :current_path => 'Rakefile', :label => 'fileA', :hide => false),
         double('fileB', :current_path => 'Gemfile',  :label => 'fileB', :hide => true),

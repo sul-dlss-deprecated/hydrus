@@ -1,5 +1,5 @@
 // this is loaded on each page
-var GLOB;
+var tooltip;
 
 $(document).ready(function(){
 
@@ -41,12 +41,14 @@ $(document).ready(function(){
 
 	$(document).on('confirm:complete', function(e,answer) {
 		item=$('#' + e.target.id);
-	  if (answer) { 	// user has OK in one of our "confirm" buttons
+	  if (answer) { 	// user has clicked OK in one of our "confirm" buttons
   		ajax_loading_indicator(item);
+			return true;
 	  }
 	  else // user has clicked on the cancel button in one of our "confirm" buttons
 		{
 			ajax_loading_done(item);
+			return false;
 		}
 	});
 
@@ -217,14 +219,13 @@ function setup_form_state_change_tracking() {
 function ajax_loading_indicator(element) {
   $("body").css("cursor", "progress");
 	$('#loading-message').removeClass('hidden');
-  if (!!element) {
-    element.animate({opacity:0.25});
-    element.attr("disabled","disabled");
-		element.addClass("disabled");
-		if (element.attr("disable_with") != '') { 
-			element.attr("enable_with",element.text()); // store the current text
-			element.text(element.attr("disable_with"));  // change the text
-			}		
+  if (element) {
+      element.animate({opacity:0.25});
+  		element.addClass("disabled");
+  		if (element.attr("disable_with") != '') { 
+  			element.attr("enable_with",element.text()); // store the current text
+  			element.text(element.attr("disable_with"));  // change the text
+  			}		
     }
 }
 
@@ -290,6 +291,11 @@ function collection_edit_init(){
   setup_form_state_change_tracking();
 }
 
+function clear_author_tooltip(elem) {
+	elem.attr('data-title','');
+  elem.tooltip('hide');
+}
+
 function item_edit_init(){
 
   // this method is called when the item edit page is fully loaded
@@ -297,6 +303,21 @@ function item_edit_init(){
   activate_edit_controls();
   check_for_files_uploading();
   
+	// check for user entered authors/contributors -- if they have selected an "author" or "personal" type (e.g. personal name), warn them if we don't see any commas, implying they forgot to do LAST, FIRST
+	$(document).on('blur',".authors_textbox",function(){
+			var authorNumber=$(this).attr('data-author-number');
+			var authorType=$('.authors_dropdown[data-author-number="' + authorNumber + '"]').val();
+			if (authorType.indexOf('personal') == 0 || authorType.indexOf('author') != -1) {
+			  var authorName=$(this).val();
+				if (authorName.indexOf(',') == -1) {
+					tooltip=$(this);
+					tooltip.attr('data-title','Please be sure the format of personal names is LAST, FIRST.');
+					tooltip.tooltip('show');
+					window.setTimeout(function() { tooltip.tooltip('hide') }, 4000);
+					}
+				}
+		});
+		
   $(document).on('blur',"form input, form textarea",function(){
       validate_hydrus_item();
   });
