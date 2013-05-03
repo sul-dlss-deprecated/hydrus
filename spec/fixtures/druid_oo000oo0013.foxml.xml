@@ -114,12 +114,15 @@
               <roleTerm authority="marcrelator" type="text">Contributing author</roleTerm>
             </role>
           </name>
-          <typeOfResource>Text</typeOfResource>
           <abstract>Current safety considerations in retinal laser photocoagulation limit the exposure duration to a minimum of 20 ms per pulse. By numerical thermal modeling verified by in vivo experiments with 22 Dutch Belted rabbits, we demonstrate that this procedure can be rendered safe at pulse durations as short as 10 ms by spatial or temporal profile shaping of the laser beam. A combined spatio-temporal modulation may further decrease the minimal duration to 5 ms. Along with decreasing operation time, this increase of speed is expected to decrease the heat diffusion into the inner retina and choroid, therefore reducing the pain and discomfort for the patient, as well as decreasing collateral damage to the inner retina.
           </abstract>
           <note type="preferred citation" displayLabel="Preferred Citation">Brown, Jefferson. 2010. Thermodynamic Optimization of Retinal Photocoagulation Surgery. Stanford, CA: Department of Physics, Stanford University. http://purl.stanford.edu/oo000oo0013</note>
           <note type="citation/reference" displayLabel="Related Publication">None</note>
           <note type="contact" displayLabel="Contact">archivist1@example.com</note>
+					<typeOfResource>article</typeOfResource>
+					<originInfo>
+						<dateCreated>2011-07-01</dateCreated>
+					</originInfo>
           <subject>
             <topic>laser photocoagulation</topic>
           </subject>

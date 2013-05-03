@@ -124,6 +124,10 @@ In the second part of this thesis, I will describe an ongoing experiment whose f
           <note type="preferred citation" displayLabel="Preferred Citation">Gallagher, Patrick. 2010. Electronic transport in graphene nanoribbons and topological insulators. Stanford, CA: Department of Physics, Stanford University. http://purl.stanford.edu/oo000oo0011</note>
           <note type="citation/reference" displayLabel="Related Publication">None</note>
           <note type="contact" displayLabel="Contact">archivist1@example.com</note>
+					<typeOfResource>dataset</typeOfResource>
+					<originInfo>
+						<dateCreated>2011-07-01</dateCreated>
+					</originInfo>					
           <subject>
             <topic>topological insulator</topic>
           </subject>

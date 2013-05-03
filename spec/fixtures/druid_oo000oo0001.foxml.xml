@@ -125,7 +125,10 @@
               <roleTerm authority="marcrelator" type="text">Sponsor</roleTerm>
             </role>
           </name>
-          <typeOfResource>Data</typeOfResource>
+          <typeOfResource>dataset</typeOfResource>
+					<originInfo>
+						<dateCreated>2011-07-01</dateCreated>
+					</originInfo>
           <abstract>The story of Pinocchio, or, How Couples Meet and Stay Together (HCMST) is a study of how Americans meet their spouses and romantic partners.
             The study will provide answers to the following research questions:
 

@@ -94,11 +94,14 @@
               <roleTerm authority="marcrelator" type="text">Principal investigator</roleTerm>
             </role>
           </name>
-          <typeOfResource>Data</typeOfResource>
           <abstract>Blah, blah, blah.</abstract>
           <note type="preferred citation" displayLabel="Preferred Citation">FooBar Dataset Title. http://purl.stanford.edu/oo000oo0006</note>
           <note type="citation/reference" displayLabel="Related Publication">Abu-Nader, R., and Terrell, C.L. (2002). Mycobacterium bovis vertebral osteomyelitis as a complication of intravesical BCG use. Mayo Clin Proc 77, 393-397.</note>
           <note type="contact" displayLabel="Contact">archivist1@example.com</note>
+					<typeOfResource>dataset</typeOfResource>
+					<originInfo>
+						<dateCreated>2011-07-01</dateCreated>
+					</originInfo>
           <subject>
             <topic>stonehenge</topic>
           </subject>

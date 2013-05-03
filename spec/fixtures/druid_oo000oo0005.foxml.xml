@@ -89,7 +89,9 @@
               <roleTerm authority="marcrelator" type="text">Sponsor</roleTerm>
             </role>
           </name>
-          <typeOfResource>Data</typeOfResource>
+					<originInfo>
+						<dateCreated>2011-07-01</dateCreated>
+					</originInfo>
           <abstract>This project seeks to identify sources of ethnic and racial conflict and protest in urban America from 1954 through 1992. The data on collective events are coded using the New York Times. Detailed coding rules produced a chronological data set that allows researchers to:
 
             1. Analyze the location and timing of both conflicts (confrontations between two or more ethnic populations) and protests (marches, mass meetings, demonstrations on behalf of one ethnic group, expressing grievances related to discrimination or racial policy).
@@ -100,6 +102,7 @@
           <note type="preferred citation" displayLabel="Preferred Citation">Olzak, Susan, and Elizabeth West. 1995. Ethnic Collective Action in Contemporary Urban U.S. from 1954 to 1992. Stanford, CA: Department of Sociology, Stanford University. http://purl.stanford.edu/oo000oo0005</note>
           <note type="citation/reference" displayLabel="Related Publication">Clarke, A., Skelton, J., and Fraser, R.S. (1991). Fungal tracheobronchitis. Report of 9 cases and review of the literature. Medicine (Baltimore) 70, 1-14.</note>
           <note type="contact" displayLabel="Contact">archivist1@example.com</note>
+					<typeOfResource>dataset</typeOfResource>
           <subject>
             <topic>ethnic protest</topic>
           </subject>
