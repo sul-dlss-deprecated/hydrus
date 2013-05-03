@@ -7,7 +7,12 @@ $(document).ready(function(){
 		$('#all_collections').toggleClass('hidden');
 		return false;
 	});
-	
+
+	$('#show_special_users').click(function (){
+		$('#special_users').toggleClass('hidden');
+		return false;
+	});
+		
   if ($('#hydrus_collections-edit').length == 1 || $('#hydrus_collections-update').length == 1) {collection_edit_init();}
   if ($('#hydrus_items-edit').length == 1 || $('#hydrus_items-update').length == 1) {item_edit_init();}
   if ($('#itemsTable').length == 1) {$("#itemsTable").tablesorter();}

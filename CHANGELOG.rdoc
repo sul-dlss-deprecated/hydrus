@@ -3,6 +3,8 @@
 == 2013.05.03
 
 * Fix for HYDRUS-153; HYDRUS-151; HYDRUS-150; HYDRUS-145
+* Put global_viewers;admins;collection_creators in the database to make them easier to update
+* Hide item type in the UI for now
 
 == 2013.04.30
 

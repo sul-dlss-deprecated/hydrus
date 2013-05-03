@@ -1,0 +1,32 @@
+<hr />
+	<h3>Administrator Information - App version <%= Hydrus::Application.config.app_version %></h3>
+
+	<div class="collection-items">
+	  <%- if @all_collections.blank? -%>
+	    <h3>No collections</h3>
+	    <br/>
+	  <%- else -%>
+	    <h4><a href="#" id="show_all_collections">Show All Collections (<%=@all_collections.size%>)</a></h4>
+	 	<div class="hidden" id="all_collections">
+			<%= render :partial=>'collection_dashboard',:locals=>{:collections=>@all_collections}%>
+		</div>
+		<% end %>
+	</div>
+	
+	
+	<div id="edit_users">
+		<h4><a href="#" id="show_special_users">Edit Users</a></h4>
+    <span id="edit_user_message"></span>
+	 	<div class="hidden" id="special_users">
+		<p></p>
+		<p>Add or remove users in roles below.  Users must be comma separated list of SUNET IDs.  Administrators cannot be updated here. Click Save to update.</p>
+		<%= form_tag update_users_path, :remote=>true, :id=>'user_form',:class=>"step" do %>
+		Administrators: <%=text_area_tag :administrators,Hydrus::Authorizable.get_users_in_role('administrators').to_a.join(','), :size=>100, :disabled=>true%><br />
+		Collection Creators: <%=text_area_tag :collection_creators,Hydrus::Authorizable.get_users_in_role('collection_creators').to_a.join(','),:size=>100%><br />
+		Global Viewers: <%=text_area_tag :global_viewers,Hydrus::Authorizable.get_users_in_role('global_viewers').to_a.join(','),:size=>100%><br />
+		<%=submit_tag 'Save Changes',:confirm=>'Are you sure?  This change cannot be undone.  Please ensure the SUNET IDs are comma separated' %>
+		<% end %>
+		</div>
+	</div>
+
+	

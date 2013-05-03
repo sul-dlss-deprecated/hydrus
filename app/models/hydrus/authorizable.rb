@@ -4,57 +4,26 @@
 module Hydrus::Authorizable
 
   ####
-  # SUNET IDs of those with Hydrus-wide powers.
+  # get SUNET IDs of those with Hydrus-wide powers from database, move to LDAP groups later.
   ####
 
   def self.administrators
-    return Set.new %w(
-      bess
-      geisler
-      hfrost
-      jdeering
-      lmcrae
-      petucket
-      snydman
-      tcramer
-      tonyn
-      jvine
-    )
+    get_users_in_role('administrators')
   end
 
   def self.collection_creators
-    ids = Set.new %w(
-      archivist1
-      archivist2
-      amyhodge
-      ronbo
-      mmarosti
-      dhartwig 
-      skota
-      jcueva
-      gertvd
-      amorgan2
-      jejohns1
-      ssussman
-      jlmcbrid
-      jmanton
-      mtashiro
-    )
-    return administrators.union(ids)
+    return administrators.union(get_users_in_role('collection_creators'))
   end
 
   def self.global_viewers
-    ids = Set.new %w(
-      ctierney
-      makeller
-      mcalter
-      mchris
-      rns
-      zbaker
-    )
-    return administrators.union(ids)
+    return administrators.union(get_users_in_role('global_viewers'))
   end
 
+  def self.get_users_in_role(role)
+    users_in_role=UserRole.find_by_role(role)
+    return users_in_role.blank? ? Set.new([]) : Set.new(users_in_role.users.split(','))
+  end
+  
   ####
   # Roles.
   ####
