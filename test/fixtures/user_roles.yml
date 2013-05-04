@@ -1,0 +1,11 @@
+administrators:
+  role: 'administrators'
+  users: 'bess,geisler,hfrost,jdeering,lmcrae,petucket,snydman,tcramer,tonyn,jvine'
+  
+collection_creators:
+  role: 'collection_creators'
+  users: 'archivist1,archivist2,amyhodge,ronbo,mmarosti,dhartwig,skota,jcueva,gertvd,amorgan2,jejohns1,ssussman,jlmcbrid,jmanton,mtashiro'
+  
+global_viewers:
+  role: 'global_viewers'
+  users: 'ctierney,makeller,mcalter,mchris,rns,zbaker'
