@@ -11,7 +11,7 @@
       <%= apo.title %>
 
       <ul>
-        <%  coll.hydrus_items.sort_by(&:pid).each do |item| %>
+        <%  coll.items.sort_by(&:pid).each do |item| %>
           <li>
             <%= link_to(item.pid.split(':').last, polymorphic_path(item)) %>:
             <%= item.title %>

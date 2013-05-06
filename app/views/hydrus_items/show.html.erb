@@ -71,12 +71,14 @@
               <dd class="abstract">
                 <%= show_line_breaks(hydrus_object_setting_value(@fobj.abstract)) %>
               </dd>
-              <% unless hydrus_is_empty?(@fobj.keywords) %>
                 <dt>Keywords</dt>
                 <dd>
-                  <%= @fobj.keywords.map {|topic| link_to(topic, "#")}.join(", ").html_safe %>
+                  <% if hydrus_is_empty?(@fobj.keywords) %>
+										<%=hydrus_object_setting_value(@fobj.keywords)%>
+									<% else %>
+										<%= @fobj.keywords.map {|topic| link_to(topic, "#")}.join(", ").html_safe %>
+									<% end %>
                 </dd>
-              <% end %>
       </div>
 
       <% unless hydrus_is_empty?(@fobj.preferred_citation) && hydrus_is_empty?(@fobj.related_citation) && hydrus_is_empty?(@fobj.related_items) %>

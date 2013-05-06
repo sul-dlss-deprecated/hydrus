@@ -13,7 +13,8 @@ describe(Hydrus::Collection, :integration => true) do
   it "should be able to find its member Hydrus::Items" do
     druid = 'druid:oo000oo0003'
     hc    = Hydrus::Collection.find druid
-    items = hc.hydrus_items
+    hc.hydrus_items.should == hc.items
+    items = hc.items
     druids = items.map { |i| i.pid }
     %w(1 5 6 7).each { |n| druids.should include("druid:oo000oo000#{n}") }
   end
@@ -22,6 +23,7 @@ describe(Hydrus::Collection, :integration => true) do
     druid = 'druid:oo000oo0004'
     hc    = Hydrus::Collection.find druid
     hc.hydrus_items.should == []
+    hc.items.should == []
   end
 
   it "should be able to create a Collection object, with an APO" do

@@ -46,8 +46,13 @@ class Hydrus::Collection < Hydrus::GenericObject
   ],
   )
 
-  has_relationship 'hydrus_items', :is_member_of_collection, :inbound => true, :rows=>500
-
+  has_relationship 'hydrus_items', :is_member_of_collection, :inbound => true, :rows=>1000
+  
+  # get all of the items in this collection
+  def items
+    load_inbound_relationship('hydrus_items',:is_member_of_collection, :rows=>1000)  
+  end
+  
   # Creates a new Collection, sets up various defaults, saves and
   # returns the object.
   def self.create(user)
@@ -106,7 +111,7 @@ class Hydrus::Collection < Hydrus::GenericObject
 
   # Returns true only if the Collection has items.
   def has_items
-    return hydrus_items.size > 0
+    return items.size > 0
   end
 
   # Returns true if the collection is open.

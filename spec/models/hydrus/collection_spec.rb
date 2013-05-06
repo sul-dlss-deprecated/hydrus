@@ -151,8 +151,10 @@ describe Hydrus::Collection do
 
   it "has_items() should return true only if Collection has Items" do
     @hc.stub(:hydrus_items).and_return([])
+    @hc.stub(:items).and_return([])
     @hc.has_items.should == false
     @hc.stub(:hydrus_items).and_return([0, 11, 22])
+    @hc.stub(:items).and_return([0, 11, 22])
     @hc.has_items.should == true
   end
 

@@ -1,5 +1,11 @@
 = HYDRUS change log
 
+== 2013.05.06a
+
+* Bug fixes for default citation creator
+* Show more than 25 items on the collection items panel
+* Indicate to user when keywords are missing on an item
+
 == 2013.05.06
 
 * Add a button to create default citation format; update citation example to show multiple authors
