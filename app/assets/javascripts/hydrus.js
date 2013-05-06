@@ -313,6 +313,7 @@ function item_edit_init(){
   // fill in default citation using authors, year, title format
 	$('#use_default_citation').click(function(){
 		var authors=''
+		var title=$('#hydrus_item_title').val().replace(/\.$/, "");
 		
 		// build authors list
 		$('.authors_textbox').each(function(index) {
@@ -324,7 +325,7 @@ function item_edit_init(){
 		});
 				
 		// complete citation format		
-		var citation=authors.slice(0, -" and ".length) + ' (' + new Date().getFullYear() + '). ' + $('#hydrus_item_title').text() + '. Stanford Digital Repository. Available at http://purl.stanford.edu/' + $('#object_id').attr('value').replace('druid:','') + '.'; 
+		var citation=authors.slice(0, -" and ".length) + '. (' + new Date().getFullYear() + '). ' + title + '. Stanford Digital Repository. Available at http://purl.stanford.edu/' + $('#object_id').attr('value').replace('druid:','') + '.'; 
 		$('#hydrus_item_preferred_citation').text(citation);
 		return false;
 	});
