@@ -46,7 +46,7 @@ class Hydrus::Collection < Hydrus::GenericObject
   ],
   )
 
-  has_relationship 'hydrus_items', :is_member_of_collection, :inbound => true
+  has_relationship 'hydrus_items', :is_member_of_collection, :inbound => true, :rows=>500
 
   # Creates a new Collection, sets up various defaults, saves and
   # returns the object.

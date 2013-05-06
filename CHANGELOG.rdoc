@@ -1,5 +1,9 @@
 = HYDRUS change log
 
+== 2013.05.06
+
+* Add a button to create default citation format; update citation example to show multiple authors
+
 == 2013.05.03
 
 * Fix for HYDRUS-153; HYDRUS-151; HYDRUS-150; HYDRUS-145

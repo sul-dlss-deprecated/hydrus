@@ -3,6 +3,8 @@ var tooltip;
 
 $(document).ready(function(){
 
+	showOnLoad();
+	
 	$('#show_all_collections').click(function (){
 		$('#all_collections').toggleClass('hidden');
 		return false;
@@ -308,6 +310,25 @@ function item_edit_init(){
   activate_edit_controls();
   check_for_files_uploading();
   
+  // fill in default citation using authors, year, title format
+	$('#use_default_citation').click(function(){
+		var authors=''
+		
+		// build authors list
+		$('.authors_textbox').each(function(index) {
+			var authorNumber=$(this).attr('data-author-number');
+			var authorType=$('.authors_dropdown[data-author-number="' + authorNumber + '"]').val();
+			if (authorType.indexOf('personal') == 0 || authorType.indexOf('author') != -1) {
+		  	authors += $(this).val() + ' and ';	
+			}
+		});
+				
+		// complete citation format		
+		var citation=authors.slice(0, -" and ".length) + ' (' + new Date().getFullYear() + '). ' + $('#hydrus_item_title').text() + '. Stanford Digital Repository. Available at http://purl.stanford.edu/' + $('#object_id').attr('value').replace('druid:','') + '.'; 
+		$('#hydrus_item_preferred_citation').text(citation);
+		return false;
+	});
+	
 	// check for user entered authors/contributors -- if they have selected an "author" or "personal" type (e.g. personal name), warn them if we don't see any commas, implying they forgot to do LAST, FIRST
 	$(document).on('blur',".authors_textbox",function(){
 			var authorNumber=$(this).attr('data-author-number');
@@ -336,6 +357,11 @@ function item_edit_init(){
   setup_form_state_change_tracking();
 }
 
+
+function showOnLoad() {
+	$('.showOnLoad').removeClass('hidden');	
+	$('.showOnLoad').show();
+}
 
 $(window).on('beforeunload', function() {
   state_changed = check_tracked_form_state_change();
