@@ -1,5 +1,9 @@
 = HYDRUS change log
 
+== 2013.05.07
+
+* Build collection items panel view directly from solr and MySQL to avoid any calls to Fedora; speeds this page up greatly when there are many items
+
 == 2013.05.06a
 
 * Bug fixes for default citation creator

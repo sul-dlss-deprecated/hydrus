@@ -46,23 +46,34 @@ class Hydrus::Collection < Hydrus::GenericObject
   ],
   )
 
-  has_relationship 'hydrus_items', :is_member_of_collection, :inbound => true, :rows=>1000
+  has_relationship 'hydrus_items', :is_member_of_collection, :inbound => true
   
-  # get all of the items in this collection from fedora (slow if there are a lot)
+  # get all of the items in this collection
+  # this method is used instead of the "has_relationship" above, since we cannot specify the number of rows via has_relationship
+  # this will hopefully be fixed when upgrading to ActiveFedora
+  # TODO upgrade to ActiveFedora to avoid doing this manual load_inbound_relationship 
   def items
     load_inbound_relationship('hydrus_items',:is_member_of_collection, :rows=>1000)  
   end
   
-  # get solr documents for all items in this collection (much faster); return all solr docs and a helper array of hashes with just some basic info
+  # get solr documents for all items in this collection; return all solr docs and a helper array of hashes with just some basic info
+  # this allows us to build the item listing view without having to go to Fedora at all and is much faster
   def items_from_solr
     h           = self.class.squery_items_in_collection(self.pid)
     resp, sdocs = self.class.issue_solr_query(h)
     
     items=[]
     sdocs.each do |solr_doc|
-      items << {:title=>self.class.object_title(solr_doc)}
+      id=solr_doc['id']
+      title=self.class.object_title(solr_doc)
+      num_files=Hydrus::ObjectFile.count(:conditions=>['pid=?',id])
+      status=self.class.array_to_single(solr_doc['hydrusProperties_object_status_t'])
+      object_type=self.class.array_to_single(solr_doc['mods_typeOfResource_t'])
+      depositor=self.class.array_to_single(solr_doc['roleMetadata_t'])
+      create_date=solr_doc['system_create_dt']
+      items << {:pid=>id,:num_files=>num_files,:object_type=>object_type,:title=>title,:status_label=>status,:item_depositor_id=>depositor,:create_date=>create_date}
     end
-    return sdocs,items    
+    return items,sdocs
   end
   
   # Creates a new Collection, sets up various defaults, saves and
@@ -544,6 +555,11 @@ class Hydrus::Collection < Hydrus::GenericObject
       return dc_titlle.first unless dc_title.first=='Hydrus'
     end
     return "Untitled"
+  end
+  
+  # given a solr doc field that might be an array, extract the first value if not nil, otherwise return blank
+  def self.array_to_single(solr_doc_value)
+    solr_doc_value.blank? ? '' : solr_doc_value.first
   end
   
   # Returns an array collection druids for all APOs

@@ -14,8 +14,8 @@
 </div>
 <div id="object-content-wrapper">
   <h3><%= hydrus_object_setting_value(@fobj.title) %></h3>
-  <h4 class="muted"><%=@fobj.items.size%> Items in This Collection</h4>
-  <%- unless @fobj.items.blank? -%>
+  <h4 class="muted"><%=@items.size%> Items in This Collection</h4>
+  <%- unless @items.blank? -%>
     <div id="items" class="collection-items">
       <table id="itemsTable" class="tablesorter hydrus-striped-table table-striped table-condensed">
         <thead>
@@ -31,14 +31,14 @@
         <tbody>
           <!-- iterate through collection items  -->
           <!-- Can use Hydrus::Item.milestones.last to get status. Speak with Lynn. -->
-          <% @fobj.items.sort_by{|i|i.create_date}.reverse.each do |item| %>
+          <% @items.sort_by{|i|i[:create_date]}.reverse.each do |item| %>
             <tr class="document <%= cycle("even","odd") %>">
-              <td><%= title_link(item) %></td>
-              <td><%= item.item_depositor_id %></td>
-              <!-- <td><%#= item.object_type %></td> -->
-              <td><%= item.status_label %></td>
-              <td><%= item.files.size %></td>
-              <td><%= HyTime.datetime_display(item.create_date) %></td>
+              <td><%= link_to item[:title],hydrus_item_path(item[:pid]) %></td>
+              <td><%= item[:item_depositor_id] %></td>
+              <!-- <td><%#= item[:object_type] %></td> -->
+              <td><%= item[:status_label] %></td>
+              <td><%= item[:num_files] %></td>
+              <td><%= HyTime.datetime_display(item[:create_date]) %></td>
             </tr>
           <% end %>
         </tbody>

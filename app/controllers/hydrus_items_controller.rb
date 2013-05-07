@@ -16,6 +16,7 @@ class HydrusItemsController < ApplicationController
       if params.has_key?(:hydrus_collection_id)
         @fobj = Hydrus::Collection.find(params[:hydrus_collection_id])
         @fobj.current_user = current_user
+        @items,@solr_docs=@fobj.items_from_solr
       else
         flash[:warning]="You need to log in."
         redirect_to new_user_session_path
