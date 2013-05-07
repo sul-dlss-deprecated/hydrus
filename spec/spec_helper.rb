@@ -249,11 +249,13 @@ def check_emb_vis_lic(obj, opts)
     rm.has_world_read_node.should == false
     rm.group_read_nodes.size.should == 0
     rm.ng_xml.at_xpath("#{rd}/embargoReleaseDate").content.should == opts[:embargo_date]
+    rm.ng_xml.xpath("#{rd}/none").size.should == 1
   else
     # embargoMetadata: should be empty
     em.ng_xml.content.should == ''
     # rightsMetadata: should not have an embargoReleaseDate.
     rm.ng_xml.xpath("#{rd}/embargoReleaseDate").size.should == 0
+    rm.ng_xml.xpath("#{rd}/none").size.should == 0
   end
 
   # Check visibility: (world|stanford) stored in either embargoMetadata or rightsMetadata.

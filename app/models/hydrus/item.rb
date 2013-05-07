@@ -601,9 +601,8 @@ class Hydrus::Item < Hydrus::GenericObject
       # If embargoed, we set access info in embargoMetadata.
       embargoMetadata.initialize_release_access_node(:generic)
       embargoMetadata.update_access_blocks(val)
-      # And we clear our read access in rightsMetadata.
-      rightsMetadata.remove_world_read_access
-      rightsMetadata.remove_group_read_nodes
+      # And we clear our read access in rightsMetadata and add an explicit <none/> block.
+      rightsMetadata.deny_read_access
     else
       # Otherwise, just set access info in rightsMetadata.
       # The embargoMetadata should not exist at this point.

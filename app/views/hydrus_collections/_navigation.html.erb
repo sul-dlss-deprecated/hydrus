@@ -6,7 +6,11 @@
 
   <% if can?(:edit, @fobj) %>
     <li<%= " class='active'".html_safe if ["edit", "update"].include?(params[:action]) %>>
-      <%= link_to("Edit Collection", edit_polymorphic_path(@fobj),:disable_after_click=>'true') %>
+			<% if @fobj.is_open %>
+      	<%= link_to("Edit Collection", edit_polymorphic_path(@fobj),:confirm=>'You are about to edit a collection that is open for deposit. Are you sure that you want to proceed?') %>
+			<% else %>
+				<%= link_to("Edit Collection", edit_polymorphic_path(@fobj),:disable_after_click=>'true') %>
+			<% end %>
     </li>
   <% end %>
 

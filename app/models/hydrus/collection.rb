@@ -61,19 +61,27 @@ class Hydrus::Collection < Hydrus::GenericObject
   def items_from_solr
     h           = self.class.squery_items_in_collection(self.pid)
     resp, sdocs = self.class.issue_solr_query(h)
+    return sdocs
+  end
+
+  # return a helper array of hashes with just some basic info to build the items list -this allows us to build the item listing view without having to go to Fedora at all and is much faster  
+  def items_list(opts={})
+    
+    get_num_files=opts[:num_files] || true
     
     items=[]
-    sdocs.each do |solr_doc|
+    items_from_solr.each do |solr_doc|
       id=solr_doc['id']
       title=self.class.object_title(solr_doc)
-      num_files=Hydrus::ObjectFile.count(:conditions=>['pid=?',id])
+      num_files=(get_num_files ? Hydrus::ObjectFile.count(:conditions=>['pid=?',id]) : -1)
       status=self.class.array_to_single(solr_doc['hydrusProperties_object_status_t'])
       object_type=self.class.array_to_single(solr_doc['mods_typeOfResource_t'])
       depositor=self.class.array_to_single(solr_doc['roleMetadata_t'])
       create_date=solr_doc['system_create_dt']
       items << {:pid=>id,:num_files=>num_files,:object_type=>object_type,:title=>title,:status_label=>status,:item_depositor_id=>depositor,:create_date=>create_date}
     end
-    return items,sdocs
+    return items
+    
   end
   
   # Creates a new Collection, sets up various defaults, saves and
@@ -547,12 +555,12 @@ class Hydrus::Collection < Hydrus::GenericObject
   
   # given a solr document, try a few places to get the title, starting with objectlabel, then dc_title, and finally just untitled
   def self.object_title(solr_doc)
-    object_label=solr_doc['identityMetadata_objectLabel_t']
+    mods_title=solr_doc['mods_titleInfo_title_t']
     dc_title=solr_doc['dc_title_t']
-    if !object_label.nil?
-      return object_label.first
+    if !mods_title.nil?
+      return mods_title.first
     elsif !dc_title.nil?
-      return dc_titlle.first unless dc_title.first=='Hydrus'
+      return dc_title.first unless dc_title.first=='Hydrus'
     end
     return "Untitled"
   end

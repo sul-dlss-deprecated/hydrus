@@ -18,12 +18,13 @@ module Hydrus::Accessible
 
   # An Xpath snippet that is used frequently.
   def xp_machine(type = 'read')
-    return '//access[@type="read"]/machine'
+    return '//access[@type="' + type + '"]/machine'
   end
 
   # Takes a group (for example, 'stanford').
   # Adds a group read node.
   def add_read_group(group)
+    remove_access_none_nodes
     q = "#{xp_machine}/group[text()='#{group}']"
     unless ng_xml.at_xpath(q)
       g = "<group>#{group}</group>"
@@ -35,12 +36,22 @@ module Hydrus::Accessible
   # Removes all group read nodes and world read nodes.
   # Replaces them with a world read node.
   def make_world_readable
+    remove_access_none_nodes
     remove_group_read_nodes
     remove_world_read_access
     ng_xml.at_xpath(xp_machine).add_child('<world/>')
     content_will_change!
   end
 
+  # Removes all group read nodes and world read nodes.
+  # Replaces them with deny read access for all (required for embargoed info in rightsMetadata)
+  def deny_read_access
+    remove_group_read_nodes
+    remove_world_read_access
+    add_access_none_node
+    content_will_change!
+  end
+  
   # Returns true if there is a world read node.
   def has_world_read_node
     return world_read_nodes.size > 0
@@ -64,7 +75,20 @@ module Hydrus::Accessible
     remove_nodes_by_xpath(q)
     content_will_change!
   end
-
+  
+  # Add access <none/> node to read (remove any existing to avoid dupes)
+  def add_access_none_node
+    remove_access_none_nodes
+    ng_xml.at_xpath(xp_machine).add_child('<none/>')
+  end
+  
+  # Removes access = none nodes
+  def remove_access_none_nodes
+    q= "#{xp_machine}/none"
+    remove_nodes_by_xpath(q)
+    content_will_change!
+  end
+  
   # Removes world read nodes.
   def remove_world_read_access
     q = "#{xp_machine}/world"
@@ -78,11 +102,13 @@ module Hydrus::Accessible
     q = "#{xp_machine}/embargoReleaseDate"
     q = "//embargoMetadata/releaseDate" if self.class == Dor::EmbargoMetadataDS
     remove_nodes_by_xpath(q)
+    remove_access_none_nodes
   end
 
   # Takes a group -- typically 'world' or 'stanford'.
   # Modifies the datastream accordingly.
   def update_access_blocks(group)
+    remove_access_none_nodes
     if group == "world"
       make_world_readable
     else

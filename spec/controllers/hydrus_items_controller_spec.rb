@@ -106,7 +106,7 @@ describe HydrusItemsController do
         controller.stub(:current_user).and_return(mock_authed_user)
         mock_coll = mock("HydrusCollection")
         mock_coll.should_receive(:"current_user=").and_return("")
-        mock_coll.should_receive(:items_from_solr)
+        mock_coll.should_receive(:items_list)
         Hydrus::Collection.stub(:find).and_return(mock_coll)
         controller.stub(:'can?').and_return(true)
         get :index, :hydrus_collection_id=>"1234"

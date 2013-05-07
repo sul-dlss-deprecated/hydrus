@@ -285,7 +285,7 @@ describe Hydrus::Item do
     before(:each) do
       @edate = '2012-02-28T08:00:00Z'
       # XML snippets for various <access> nodes.
-      ed       = "<embargoReleaseDate>#{@edate}</embargoReleaseDate>"
+      ed       = "<embargoReleaseDate>#{@edate}</embargoReleaseDate><none/>"
       mw       = '<machine><world/></machine>'
       ms       = '<machine><group>stanford</group></machine>'
       me       = "<machine>#{ed}</machine>"

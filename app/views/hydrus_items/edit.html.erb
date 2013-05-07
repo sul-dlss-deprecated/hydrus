@@ -94,10 +94,7 @@
     <%= hydrus_form_value(:class=>"short-textarea") do  -%>
       <%= f.text_area :preferred_citation, :value=>hydrus_strip(@fobj.preferred_citation)%>
       <div class="help">
-			 <a href="#" id="use_default_citation" class="showOnLoad hidden">Use default citation <br /></a>
-       <strong>Example</strong>: "Stanford, Jane L and Clemans, Samuel. (1905). The
-        efficacy of bicarbonate of soda in the treatment of digestive maladies.
-        Stanford Digital Repository. Available at <%= @fobj.purl_url %>."
+			 <a href="#" id="use_default_citation" class="showOnLoad hidden">Use default citation</a>
       </div>
     <%- end -%>
   </div>

@@ -1,5 +1,10 @@
 = HYDRUS change log
 
+== 2013.05.08
+
+* Fix for HYDRUS-159, HYDRUS-121
+* Fix bug where item titles were not being correctly pulled from solr on the dashboard and item list view.
+
 == 2013.05.07
 
 * Build collection items panel view directly from solr and MySQL to avoid any calls to Fedora; speeds this page up greatly when there are many items
