@@ -123,6 +123,20 @@ module Hydrus::SolrQueryable
     return h
   end
 
+  # Takes the druid of a collection, returns solr documents for all items in that collection
+  def squery_items_in_collection(druid)
+    imo = %Q<"info:fedora/#{druid}">
+    h = {
+      :rows          => 1000,
+      :fl            => '',
+      :facet         => false,
+      :q             => '*',
+      :fq            => [ %Q<is_member_of_s:(#{imo})> ],
+    }
+    HSQ.add_model_filter(h, 'Hydrus_Item')
+    return h
+  end
+  
   # Takes an array of Collection druids.
   # Returns a hash of SOLR query parameters.
   # The query: get Item counts-by-status for those Collections.

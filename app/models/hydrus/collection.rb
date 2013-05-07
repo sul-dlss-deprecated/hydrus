@@ -48,9 +48,21 @@ class Hydrus::Collection < Hydrus::GenericObject
 
   has_relationship 'hydrus_items', :is_member_of_collection, :inbound => true, :rows=>1000
   
-  # get all of the items in this collection
+  # get all of the items in this collection from fedora (slow if there are a lot)
   def items
     load_inbound_relationship('hydrus_items',:is_member_of_collection, :rows=>1000)  
+  end
+  
+  # get solr documents for all items in this collection (much faster); return all solr docs and a helper array of hashes with just some basic info
+  def items_from_solr
+    h           = self.class.squery_items_in_collection(self.pid)
+    resp, sdocs = self.class.issue_solr_query(h)
+    
+    items=[]
+    sdocs.each do |solr_doc|
+      items << {:title=>self.class.object_title(solr_doc)}
+    end
+    return sdocs,items    
   end
   
   # Creates a new Collection, sets up various defaults, saves and
@@ -509,7 +521,7 @@ class Hydrus::Collection < Hydrus::GenericObject
       hash={}
       hash[:pid]=coll_dru
       hash[:item_counts]=stats[coll_dru] || {}            
-      hash[:title]=self.object_title(solr[coll_dru])
+      hash[:title]=self.object_title(solr[coll_dru][:solr])
       hash[:roles]=Hydrus::Responsible.roles_of_person current_user.to_s, solr[coll_dru][:solr]['is_governed_by_s'].first.gsub('info:fedora/','')
       count=0
       stats[coll_dru].keys.each do |key|
@@ -524,8 +536,8 @@ class Hydrus::Collection < Hydrus::GenericObject
   
   # given a solr document, try a few places to get the title, starting with objectlabel, then dc_title, and finally just untitled
   def self.object_title(solr_doc)
-    object_label=solr_doc[:solr]['identityMetadata_objectLabel_t']
-    dc_title=solr_doc[:solr]['dc_title_t']
+    object_label=solr_doc['identityMetadata_objectLabel_t']
+    dc_title=solr_doc['dc_title_t']
     if !object_label.nil?
       return object_label.first
     elsif !dc_title.nil?
