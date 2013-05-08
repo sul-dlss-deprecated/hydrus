@@ -85,7 +85,7 @@
   </div>
 
   <%= hydrus_form_header {"Citations"} -%>
-<p> Provide a bibliographic citation for this item in a format of your preference. Be sure to include the item’s persistent URL: <br /><%=@fobj.purl_url%>. </p>
+<p> Provide a bibliographic citation for this item in a format of your preference. Be sure to include the item’s persistent URL: <br /><%=@fobj.purl_url%> </p>
   <div class="row field-group">
     <%= hydrus_form_label do %>
       <%= f.label :preferred_citation, "Preferred citation for this #{object_type}", :class => "hidden-tablet" %>

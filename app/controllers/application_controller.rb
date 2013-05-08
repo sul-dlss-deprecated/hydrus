@@ -22,7 +22,7 @@ class ApplicationController < ActionController::Base
       HydrusMailer.error_notification(:exception=>@exception,:current_user=>current_user,:referer=>@referer).deliver 
     end
     
-    if Dor::Config.hydrus.exception_error_page && !(exception.message.trim == "Connection reset by peer") # connection reset by peer is coming from new relic
+    if Dor::Config.hydrus.exception_error_page && !(exception.message.strip == "Connection reset by peer") # connection reset by peer is coming from new relic
         logger.error(@exception.message)
         logger.error(@exception.backtrace.join("\n"))
         render 'error', :status=>500

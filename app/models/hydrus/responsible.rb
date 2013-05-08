@@ -69,7 +69,6 @@ module Hydrus::Responsible
     roles.keys.each do |key|
       #the solr field is based on the role name, but doesnt match it precisely
       field_name=key.gsub('hydrus-','').gsub('-','_')+'_person_identifier_t'
-      Rails.logger.warn field_name
       if doc[field_name]
         toret << roles[key][:label]
       end
