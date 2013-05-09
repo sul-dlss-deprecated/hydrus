@@ -4,13 +4,9 @@
     <meta charset="utf-8" />
   </head>
   <body>
-    <p>You have submitted <%= in_quotes(@fobj.title) %> for deposit in the Stanford Digital Repository. The deposit is currently in process 
-		<% if @fobj.is_awaiting_approval%> 
-			and requires approval before deposit is completed
-		<% end %>
-		.</p>
+    <p>You have submitted <%= in_quotes(@fobj.title) %> for deposit in the Stanford Digital Repository. The deposit is currently in process<% if @fobj.is_awaiting_approval%> and requires approval before deposit is completed<% end %>.</p>
 
-		<p>When processing is completed (and pending any release delay), it will be accessible at: <%= link_to(@fobj.purl_url, @fobj.purl_url) %>.</p>
+		<p>When processing is completed (and pending any release delay), it will be accessible at: <%= link_to(@fobj.purl_url, @fobj.purl_url) %></p>
 
 		<p>You may edit the deposit and submit a new version once processing is completed by visiting <%= link_to(@item_url,@item_url) %> and clicking "Open New Version".</p> 
     

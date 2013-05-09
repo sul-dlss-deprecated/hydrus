@@ -1,5 +1,9 @@
 = HYDRUS change log
 
+== 2013.05.09
+
+* Fix for HYDRUS-165
+
 == 2013.05.08
 
 * Fix for HYDRUS-159, HYDRUS-121

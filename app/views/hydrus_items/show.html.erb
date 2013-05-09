@@ -111,21 +111,12 @@
 
         <dt>Release</dt>
         <dd>
-          This item will be released for discovery and download
-          <span class="highlight-value">
-            <%= @fobj.is_embargoed ?
-                    HyTime.datetime_display(@fobj.embargo_date) :
-                    'as soon as it is published'
-            %>
-          </span>.
+          This item will be released for discovery and download <span class="highlight-value"><%= @fobj.is_embargoed ? HyTime.datetime_display(@fobj.embargo_date) : 'as soon as it is published'%></span>.
         </dd>
 
         <dt>Visibility</dt>
         <dd>
-          After its release, this item can be discovered and downloaded by
-          <span class="highlight-value">
-            <%= @fobj.visibility == ['world'] ? 'anyone' : 'the Stanford community'%>
-          </span>.
+          After its release, this item can be discovered and downloaded by <span class="highlight-value"><%= @fobj.visibility == ['world'] ? 'anyone' : 'the Stanford community'%></span>.
         </dd>
 
         <dt>License</dt>
