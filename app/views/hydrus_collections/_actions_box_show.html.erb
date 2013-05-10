@@ -37,7 +37,7 @@
     %>
     <div class="btn-group add-content-dropdown" <%=raw "data-placement=\"bottom\" rel=\"tooltip\" data-original-title=\"#{message}\"" unless isopen%> style="display:none;" >
       <button class="<%="disabled" unless isopen%> btn btn-small dropdown-toggle" data-toggle="dropdown">
-        Add new &hellip; <span class="caret"></span>
+        Add new item &hellip; <span class="caret"></span>
       </button>
       <%= render :partial => "shared/add_content_options" %>
     </div>
@@ -51,7 +51,7 @@
 	              :class=>"add-content-options"
 	            )
 	        %>
-	        <%= submit_tag("Add", :class=>"btn btn-small", :show_loading_indicator=>"true" ) %>
+	        <%= submit_tag("Add new item", :class=>"btn btn-small", :show_loading_indicator=>"true" ) %>
 	      <%- end -%>
 		  <% else %>
 		  	<%=message%>
