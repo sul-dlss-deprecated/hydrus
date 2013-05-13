@@ -35,7 +35,7 @@ module Hydrus::Contentable
 
   # Generates and returns a string of contentMetadata XML for the object.
   def create_content_metadata_xml 
-    return "" unless is_item? # only need contentMetadata for item types
+ #   return "" unless is_item? # only need contentMetadata for item types # TODO We can stop creating content metadata once the assembly robots are smart enough to deal with it not being there for APOs and Collections
     conf = Hydrus::Application.config
     objects = []
       files.each { |f|
