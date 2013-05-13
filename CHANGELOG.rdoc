@@ -1,5 +1,9 @@
 = HYDRUS change log
 
+== 2013.05.13
+
+* Fix bug where APOs were failing during accessioning since there was no DRUID tree directory being created anymore.
+
 == 2013.05.09
 
 * Fix for HYDRUS-165
