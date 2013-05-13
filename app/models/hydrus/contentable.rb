@@ -38,12 +38,14 @@ module Hydrus::Contentable
  #   return "" unless is_item? # only need contentMetadata for item types # TODO We can stop creating content metadata once the assembly robots are smart enough to deal with it not being there for APOs and Collections
     conf = Hydrus::Application.config
     objects = []
+    if is_item?
       files.each { |f|
         aof = Assembly::ObjectFile.new(f.current_path)
         aof.label = f.label
         aof.file_attributes = conf.cm_file_attributes_hidden if f.hide
         objects << aof
       }
+    end
     return Assembly::ContentMetadata.create_content_metadata(
       :druid               => pid,
       :objects             => objects,
