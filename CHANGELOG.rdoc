@@ -1,5 +1,9 @@
 = HYDRUS change log
 
+== 2013.05.14
+
+* Now that assembly robots are updated, add back in the change that only creates contentMetadata for item types
+
 == 2013.05.13
 
 * Fix bug where APOs were failing during accessioning since there was no DRUID tree directory being created anymore.

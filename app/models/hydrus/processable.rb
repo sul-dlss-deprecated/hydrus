@@ -45,7 +45,8 @@ module Hydrus::Processable
   def start_common_assembly
     cannot_do(:start_common_assembly) unless is_assemblable()
     delete_missing_files if is_item?
-    update_content_metadata
+    create_druid_tree
+    update_content_metadata if is_item?
     complete_workflow_step('start-assembly')
     start_assembly_wf
   end

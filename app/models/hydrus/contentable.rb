@@ -19,23 +19,26 @@ module Hydrus::Contentable
     return files_missing
   end
     
+  def create_druid_tree
+    return unless DruidTools::Druid.valid?(pid)
+    FileUtils.mkdir_p(metadata_directory)
+  end
+  
   # Generates the object's contentMetadata XML, stores the XML in the
   # object's datastreams, and writes the XML to a file.
   def update_content_metadata
-    # return unless is_item? # TODO We can stop creating content metadata once the assembly robots are smart enough to deal with it not being there for APOs and Collections
+    return unless is_item?
     # Set the object's contentMetadata.
     xml = create_content_metadata_xml()
     datastreams['contentMetadata'].content = xml
     # Write XML to file, provided that the druid is valid.
-    return unless DruidTools::Druid.valid?(pid)
-    FileUtils.mkdir_p(metadata_directory)
     fname = File.join(metadata_directory, 'contentMetadata.xml')
     File.open(fname, 'w') { |fh| fh.puts xml }
   end
 
   # Generates and returns a string of contentMetadata XML for the object.
   def create_content_metadata_xml 
- #   return "" unless is_item? # only need contentMetadata for item types # TODO We can stop creating content metadata once the assembly robots are smart enough to deal with it not being there for APOs and Collections
+    return "" unless is_item? # only need contentMetadata for item types
     conf = Hydrus::Application.config
     objects = []
     if is_item?
