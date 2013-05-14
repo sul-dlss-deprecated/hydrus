@@ -19,9 +19,9 @@ module Hydrus::Contentable
     return files_missing
   end
     
+  # create a DRUID tree folder for the project, providing its a valid druid (needed to some unit tests that don't use valid druids will work)  
   def create_druid_tree
-    return unless DruidTools::Druid.valid?(pid)
-    FileUtils.mkdir_p(metadata_directory)
+    FileUtils.mkdir_p(metadata_directory) if DruidTools::Druid.valid?(pid)
   end
   
   # Generates the object's contentMetadata XML, stores the XML in the
@@ -31,9 +31,11 @@ module Hydrus::Contentable
     # Set the object's contentMetadata.
     xml = create_content_metadata_xml()
     datastreams['contentMetadata'].content = xml
-    # Write XML to file, provided that the druid is valid.
-    fname = File.join(metadata_directory, 'contentMetadata.xml')
-    File.open(fname, 'w') { |fh| fh.puts xml }
+    # Write XML to file, provided that the druid is valid. (needed to some unit tests that don't use valid druids will work)  
+    if DruidTools::Druid.valid?(pid)
+      fname = File.join(metadata_directory, 'contentMetadata.xml')
+      File.open(fname, 'w') { |fh| fh.puts xml }
+    end
   end
 
   # Generates and returns a string of contentMetadata XML for the object.

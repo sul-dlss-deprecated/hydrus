@@ -37,9 +37,23 @@ describe Hydrus::Processable do
       expect { @go.start_common_assembly }.to raise_exception(@cannot_do_regex)
     end
 
-    it "can exercise the method, stubbed" do
+    it "can exercise the method for an item, calling the right methods, stubbed" do
       @go.stub(:is_assemblable).and_return(true)
+      @go.stub(:is_item?).and_return(true)
+      @go.should_receive(:delete_missing_files).once
+      @go.should_receive(:create_druid_tree).once
       @go.should_receive(:update_content_metadata).once
+      @go.should_receive(:complete_workflow_step).once
+      @go.should_receive(:start_assembly_wf).once
+      @go.start_common_assembly
+    end
+
+    it "can exercise the method for a non-item, only calling the right methods, stubbed" do
+      @go.stub(:is_assemblable).and_return(true)
+      @go.stub(:is_item?).and_return(false)
+      @go.should_not_receive(:delete_missing_files)
+      @go.should_receive(:create_druid_tree).once
+      @go.should_not_receive(:update_content_metadata)
       @go.should_receive(:complete_workflow_step).once
       @go.should_receive(:start_assembly_wf).once
       @go.start_common_assembly
