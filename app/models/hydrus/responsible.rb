@@ -57,7 +57,7 @@ module Hydrus::Responsible
   #use solr to quickly find the roles for a person under a given apo
   def self.roles_of_person person_id, apo_id
     toret=[]
-    roles=role_labels {:collection_level}
+    roles=role_labels(:collection_level)
     h           = Hydrus::SolrQueryable.default_query_params
     #query by id
     h[:q]="id:\"#{apo_id}\""
@@ -69,7 +69,7 @@ module Hydrus::Responsible
     roles.keys.each do |key|
       #the solr field is based on the role name, but doesnt match it precisely
       field_name=key.gsub('hydrus-','').gsub('-','_')+'_person_identifier_t'
-      if doc[field_name]
+      if doc[field_name] && doc[field_name].include?(person_id)
         toret << roles[key][:label]
       end
     end

@@ -1,5 +1,9 @@
 = HYDRUS change log
 
+== 2013.05.20
+
+* Fix for HYDRUS-172
+
 == 2013.05.14
 
 * Now that assembly robots are updated, add back in the change that only creates contentMetadata for item types

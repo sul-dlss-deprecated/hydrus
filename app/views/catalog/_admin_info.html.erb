@@ -8,7 +8,7 @@
 	  <%- else -%>
 	    <h4><a href="#" id="show_all_collections">Show All Collections (<%=@all_collections.size%>)</a></h4>
 	 	<div class="hidden" id="all_collections">
-			<%= render :partial=>'collection_dashboard',:locals=>{:collections=>@all_collections}%>
+			<%= render :partial=>'collection_dashboard',:locals=>{:collections=>@all_collections,:show_roles=>false}%>
 		</div>
 		<% end %>
 	</div>

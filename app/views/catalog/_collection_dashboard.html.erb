@@ -2,7 +2,7 @@
     <thead>
       <tr>
         <th class="title">Collection</th>
-        <th class="journal">Your roles</th>
+        <% if show_roles%><th class="journal">Your roles</th><% end %>
         <th class="deposited">Collection Items</th>
         <th class="deposited">Item Status</th>
       </tr>
@@ -11,10 +11,12 @@
     <% collections.each do |c| %>
       <tr>
         <td><%= link_to(c[:title], hydrus_collection_path(c[:pid]),:disable_after_click=>'true') %></td>
-        <td>
-				  <%= c[:roles].join ', ' %>
+        <% if show_roles %>
+					<td>
+					  <%= c[:roles].join ', ' %>
       
-        </td>
+	        </td>
+				<% end %>
         <td>
           <% if c[:hydrus_items].size == 0 %>
              no items yet
