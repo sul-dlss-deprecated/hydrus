@@ -92,14 +92,9 @@ class HydrusItemsController < ApplicationController
       end
     end
 
-    # delete any files that are missing and warn the user
-    if @fobj.delete_missing_files > 0 
-      flash[:error]+="Some files did not upload correctly. Please check and re-upload any missing files."
-    end
-    
     file_info.each do |id, h|
-      hof = Hydrus::ObjectFile.find(id)
-      if hof.set_file_info(h)
+      hof = Hydrus::ObjectFile.find_by_id(id)
+      if hof && hof.set_file_info(h)
         hof.save
         @fobj.files_were_changed = true  # To log an editing event.
       end
@@ -137,6 +132,11 @@ class HydrusItemsController < ApplicationController
     # Try to save(), and handle failure.
     ####
 
+    # delete any files that are missing and warn the user
+    if @fobj.delete_missing_files > 0 
+      flash[:error]+="Some files did not upload correctly. Please check and re-upload any missing files."
+    end
+    
     unless @fobj.save
       errors = @fobj.errors.messages.map { |field, error|
         "#{field.to_s.humanize.capitalize} #{error.join(', ')}"
@@ -151,7 +151,8 @@ class HydrusItemsController < ApplicationController
     ####
 
     notice << "Your changes have been saved."
-    flash[:notice] = notice.join("<br/>").html_safe unless notice.blank?
+    flash[:notice] = notice.join("<br/>").html_safe unless notice.blank?  
+    flash[:error] = nil if flash[:error].blank?
       
     respond_to do |want|
       want.html {
