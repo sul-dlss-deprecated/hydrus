@@ -1,4 +1,4 @@
-<div class="destroy-set">
+<div id="relatedItem-<%=guid%>" class="destroy-set">
 
   <div class="row related-item field-group">
 
@@ -13,6 +13,7 @@
                   destroy_hydrus_item_value_path(
                     :term=>"relatedItem",
                     :term_index=>index,
+										:guid => guid,
                     :type=>"related_item"),
                   :class=>"delete-node btn",
                   :id=>"remove_relatedItem_#{index}") %>

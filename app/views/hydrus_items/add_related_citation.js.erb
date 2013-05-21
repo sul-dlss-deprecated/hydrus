@@ -1,2 +1,2 @@
-$("#related-citations").append("<%= escape_javascript(render :partial => 'related_citation', :locals=>{:related_citation => "", :index=>index}) %>");
+$("#related-citations").append("<%= escape_javascript(render :partial => 'related_citation', :locals=>{:related_citation => "", :index=>index, :guid=>guid}) %>");
 validate_hydrus_item();

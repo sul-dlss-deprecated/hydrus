@@ -1,4 +1,4 @@
-<div class="related-citation destroy-set">
+<div id="related_citation-<%=guid%>" class="related-citation destroy-set">
   <%= text_area_tag :"hydrus_item[related_citation[#{index}]]", @fobj.related_citation[index.to_i].strip %>
-  <%= link_to('<i class="icon-trash"></i>'.html_safe, destroy_hydrus_item_value_path(:term=>"related_citation", :term_index=>index, :type=>"related_citation"), :class=>"delete-node btn", :id=>"remove_related_citation_#{index}")  %>
+  <%= link_to('<i class="icon-trash"></i>'.html_safe, destroy_hydrus_item_value_path(:term=>"related_citation", :term_index=>index,:guid => guid,:type=>"related_citation"), :class=>"delete-node btn", :id=>"remove_related_citation_#{index}")  %>
 </div>

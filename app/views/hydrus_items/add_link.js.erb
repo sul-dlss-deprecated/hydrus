@@ -1,2 +1,2 @@
-$("#related-items").append("<%= escape_javascript(render :partial => 'related_item', :locals=>{:index=>index}) %>");
+$("#related-items").append("<%= escape_javascript(render :partial => 'related_item', :locals=>{:index=>index,:guid=>guid}) %>");
 validate_hydrus_item();

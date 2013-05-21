@@ -1,3 +1,3 @@
 <%- @fobj.related_items.each_with_index do |item, index| -%>
-  <%= render :partial => "related_item", :locals => {:item=>item, :index=>index} %>
+  <%= render :partial => "related_item", :locals => {:item=>item, :index=>index, :guid=>SecureRandom.uuid} %>
 <%- end -%>

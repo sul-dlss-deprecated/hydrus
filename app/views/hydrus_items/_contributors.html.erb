@@ -1,9 +1,9 @@
 <% cs = @fobj.contributors %>
 
-<% cs.each_with_index do |c, i| %>
+<% cs.each_with_index do |contributor, index| %>
   <%= render(
         :partial => "hydrus_items/contributor",
-        :locals  => {:contributor => c, :index => i} ) %>
+        :locals  => {:contributor => contributor, :index => index, :guid=>SecureRandom.uuid} ) %>
 <% end %>
 
 <%= button_tag(

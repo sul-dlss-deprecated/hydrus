@@ -1,8 +1,9 @@
 = HYDRUS change log
 
-== 2013.05.21
+== 2013.05.21a
 
 * For fix Hydrus-172, Hydrus-177
+* Add GUIDs to multi-valued fields on the item edit form so that we can correctly delete the specific rows from the UI when the user deletes a multivalued item before saving the form.
 
 == 2013.05.14
 
