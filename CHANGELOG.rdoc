@@ -1,8 +1,8 @@
 = HYDRUS change log
 
-== 2013.05.20
+== 2013.05.21
 
-* Fix for HYDRUS-172
+* For fix Hydrus-172, Hydrus-177
 
 == 2013.05.14
 

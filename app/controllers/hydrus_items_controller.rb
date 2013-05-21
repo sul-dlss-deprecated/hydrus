@@ -78,7 +78,8 @@ class HydrusItemsController < ApplicationController
     ####
 
     file_info = params["file_info"] || {}
-
+    flash[:error]=""
+    
     if params.has_key?("files")
       params["files"].each do |upload_file|
         hof = Hydrus::ObjectFile.new
@@ -91,6 +92,11 @@ class HydrusItemsController < ApplicationController
       end
     end
 
+    # delete any files that are missing and warn the user
+    if @fobj.delete_missing_files > 0 
+      flash[:error]+="Some files did not upload correctly. Please check and re-upload any missing files."
+    end
+    
     file_info.each do |id, h|
       hof = Hydrus::ObjectFile.find(id)
       if hof.set_file_info(h)
@@ -135,7 +141,7 @@ class HydrusItemsController < ApplicationController
       errors = @fobj.errors.messages.map { |field, error|
         "#{field.to_s.humanize.capitalize} #{error.join(', ')}"
       }
-      flash[:error] = errors.join("<br/>").html_safe
+      flash[:error] += errors.join("<br/>").html_safe
       render :edit
       return
     end
@@ -146,11 +152,6 @@ class HydrusItemsController < ApplicationController
 
     notice << "Your changes have been saved."
     flash[:notice] = notice.join("<br/>").html_safe unless notice.blank?
-
-    # delete any files that are missing and warn the user
-    if @fobj.delete_missing_files > 0 
-      flash[:error]="Some files did not upload correctly. Please check and re-upload any missing files."
-    end
       
     respond_to do |want|
       want.html {
@@ -226,8 +227,8 @@ class HydrusItemsController < ApplicationController
 
   def destroy_file
     @file_id = params[:file_id]
-    hof = Hydrus::ObjectFile.find(@file_id)
-    hof.destroy
+    hof = Hydrus::ObjectFile.find_by_id(@file_id)
+    hof.destroy if hof
     respond_to do |want|
       want.html {
         flash[:warning] = "The file was deleted"
