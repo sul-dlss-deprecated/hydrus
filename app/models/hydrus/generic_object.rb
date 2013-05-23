@@ -110,7 +110,7 @@ class Hydrus::GenericObject < Dor::Item
       self.last_modify_time = HyTime.now_datetime
       log_editing_events() unless opts[:no_edit_logging]
     end
-    publish_metadata() if is_collection? && is_published
+    publish_metadata() if (is_collection? && is_published && is_open)
     super() unless opts[:no_super]
   end
 

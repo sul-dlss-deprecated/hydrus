@@ -423,6 +423,7 @@ describe Hydrus::GenericObject do
       @go.should_receive(:publish_metadata).once
       @go.stub('is_collection?').and_return(true)
       @go.stub(:is_published).and_return(true)
+      @go.stub(:is_open).and_return(true)
       @go.save(:no_super => true)
     end
 
