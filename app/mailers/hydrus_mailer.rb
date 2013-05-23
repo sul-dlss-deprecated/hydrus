@@ -52,7 +52,7 @@ class HydrusMailer < ActionMailer::Base
   def new_deposit(opts={})
     @fobj = opts[:object]
     @item_url = opts[:item_url] || polymorphic_url(@fobj, :host => host)
-    mail(:to=>HydrusMailer.process_user_list(@fobj.recipients_for_new_deposit_emails), :subject=>"#{@fobj.object_type.capitalize} deposited in the Stanford Digital Repository") unless ignore?(@fobj.pid)
+    mail(:to=>HydrusMailer.process_user_list(@fobj.recipients_for_new_deposit_emails), :subject=>"Draft #{@fobj.object_type.capitalize} created in the Stanford Digital Repository") unless ignore?(@fobj.pid)
   end
 
   def new_item_for_review(opts={})
