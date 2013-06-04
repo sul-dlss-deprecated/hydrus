@@ -17,12 +17,14 @@ class ApplicationController < ActionController::Base
 
     @exception=exception
     @referer=request.referer
+    @action=controller.action_name
+    @controller=controller.controller_name
     
-    unless Dor::Config.hydrus.exception_recipients.blank? || exception.message.strip == "Connection reset by peer" # connection reset by peer is coming from new relic
-      HydrusMailer.error_notification(:exception=>@exception,:current_user=>current_user,:referer=>@referer).deliver 
+    unless @action == 'reindex' || Dor::Config.hydrus.exception_recipients.blank? || exception.message.strip == "Connection reset by peer" # connection reset by peer is coming from new relic
+      HydrusMailer.error_notification(:exception=>@exception,:current_user=>current_user,:action=>@action,:controller=>@controller,:referer=>@referer).deliver 
     end
     
-    if Dor::Config.hydrus.exception_error_page && !(exception.message.strip == "Connection reset by peer") # connection reset by peer is coming from new relic
+    if @action != 'reindex' && Dor::Config.hydrus.exception_error_page && !(exception.message.strip == "Connection reset by peer") # connection reset by peer is coming from new relic
         logger.error(@exception.message)
         logger.error(@exception.backtrace.join("\n"))
         render 'error', :status=>500

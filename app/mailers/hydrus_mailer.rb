@@ -84,6 +84,8 @@ class HydrusMailer < ActionMailer::Base
     @mode=Rails.env
     @current_user=opts[:current_user]
     @referer=opts[:referer]
+    @action=opts[:action]
+    @controller=opts[:controller]
     mail(:to=>Dor::Config.hydrus.exception_recipients, :subject=>"Hydrus Exception Notification from #{@host} running in #{@mode} mode")
   end
 
