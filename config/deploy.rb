@@ -82,6 +82,9 @@ namespace :files do
   task :create_upload_symlink do
    run "ln -s /data/hydrus-files #{deploy_to}/current/public/uploads"
   end
+  task :cleanup_tmp do
+    run "cd #{deploy_to}/current && bundle exec rake hydrus:cleanup_tmp RAILS_ENV=#{rails_env}"
+  end  
 end
 
 namespace :deploy do
