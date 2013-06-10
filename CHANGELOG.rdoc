@@ -1,5 +1,9 @@
 = HYDRUS change log
 
+== 2013.06.10a
+
+* Set workflow priority for all hydrus objects
+
 == 2013.06.10
 
 * Add garbage cleanup to temp files in file uploader class. Add rake task for cleaning up old files and run it on every deploy.
