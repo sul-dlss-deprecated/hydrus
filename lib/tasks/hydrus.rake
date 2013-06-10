@@ -17,6 +17,11 @@ namespace :hydrus do
       cp("#{f}.example", f) unless File.exists?(f)
     end
   end
+  
+  desc "Cleanup file upload temp files"
+  task :cleanup_tmp => :environment do
+    CarrierWave.clean_cached_files!
+  end
 
 end
 
