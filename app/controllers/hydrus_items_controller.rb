@@ -87,6 +87,7 @@ class HydrusItemsController < ApplicationController
         hof.set_file_info(file_info[hof.id])
         hof.file = upload_file
         hof.save
+        hof.remove_dupes
         notice << "'#{upload_file.original_filename}' uploaded."
         @fobj.files_were_changed = true  # To log an editing event.
       end
@@ -96,6 +97,7 @@ class HydrusItemsController < ApplicationController
       hof = Hydrus::ObjectFile.find_by_id(id)
       if hof && hof.set_file_info(h)
         hof.save
+        hof.remove_dupes
         @fobj.files_were_changed = true  # To log an editing event.
       end
     end
@@ -220,6 +222,8 @@ class HydrusItemsController < ApplicationController
       @file.pid = params[:id]
       @file.file = params[:file]
       @file.save
+      @dupe_ids=@file.dupes.collect {|dupe| dupe.id}
+      @file.remove_dupes
     else
       render :nothing=>true 
       return
@@ -232,7 +236,7 @@ class HydrusItemsController < ApplicationController
     hof.destroy if hof
     respond_to do |want|
       want.html {
-        flash[:warning] = "The file was deleted"
+        flash[:warning] = "The file was deleted."
         redirect_to :back
       }
       want.js {
