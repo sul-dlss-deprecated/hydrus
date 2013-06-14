@@ -1,5 +1,9 @@
 = HYDRUS change log
 
+== 2013.06.14
+
+* Fix file dupe problem, so that a user who uploads a file with same filename as an existing file won't have it listed twice.
+
 == 2013.06.10a
 
 * Set workflow priority for all hydrus objects
