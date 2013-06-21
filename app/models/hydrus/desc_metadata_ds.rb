@@ -36,7 +36,11 @@ class Hydrus::DescMetadataDS < ActiveFedora::NokogiriDatastream
       t.dateCreated IA
       t.dateIssued IA
     end
-    t.typeOfResource IA
+    t.typeOfResource IA 
+    
+    t.genre IA do
+      t.authority        :path => '@authority'
+    end
     t.abstract IA
     t.preferred_citation :path => 'note',  :attributes => { :type => "preferred citation" }
     t.related_citation   :path => 'note',  :attributes => { :type => "citation/reference" }
@@ -87,6 +91,10 @@ class Hydrus::DescMetadataDS < ActiveFedora::NokogiriDatastream
         xml.url
       }
     }
+  end
+  
+  define_template :genre do |xml|
+    xml.genre
   end
 
   define_template :related_citation do |xml|
@@ -148,6 +156,9 @@ class Hydrus::DescMetadataDS < ActiveFedora::NokogiriDatastream
 
   def insert_topic(topic)
     add_hydrus_next_sibling_node(:subject, :topic, topic)
+  end
+  def insert_genre
+    add_hydrus_next_sibling_node(:typeOfResource, :genre)
   end
 
   # Returns the contributor information from descMetadata as an array
