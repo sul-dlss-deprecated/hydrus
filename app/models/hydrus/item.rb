@@ -3,7 +3,7 @@ class Hydrus::Item < Hydrus::GenericObject
   include Hydrus::Responsible
   include Hydrus::EmbargoMetadataDsExtension
 
-  REQUIRED_FIELDS = [:title, :abstract, :contact, :keywords, :version_description]
+  REQUIRED_FIELDS = [:title, :abstract, :contact, :keywords, :version_description, :date_created]
 
   after_validation :strip_whitespace
 
@@ -11,6 +11,7 @@ class Hydrus::Item < Hydrus::GenericObject
   validates :abstract,            :not_empty => true, :if => :should_validate
   validates :contact,             :not_empty => true, :if => :should_validate
   validates :keywords,            :not_empty => true, :if => :should_validate
+  #validates :date_created,        :not_empty => true, :if => :should_validate
   validates :version_description, :not_empty => true, :if => lambda {
     should_validate() && ! is_initial_version()
   }
@@ -26,6 +27,7 @@ class Hydrus::Item < Hydrus::GenericObject
   validate  :embargo_date_in_range
   validate  :check_version_if_license_changed
   validate  :check_visibility_not_reduced
+  validate  :ensure_date_created_format
 
   # During subsequent versions the user is allowed to change the license,
   # but only if the new version is designated as a major version change.
@@ -56,6 +58,7 @@ class Hydrus::Item < Hydrus::GenericObject
     # [:METHOD_NAME,               :uniq, :at... ]
     "descMetadata" => [
       [:preferred_citation,        true   ],
+      [:date_created,              true   ],
       [:related_citation,          false  ],
     ],
     "roleMetadata" => [
@@ -96,7 +99,7 @@ class Hydrus::Item < Hydrus::GenericObject
     #item.rightsMetadata.content = coll.rightsMetadata.ng_xml.to_s
     # Set the item_type, and add some Hydrus-specific info to identityMetadata.
     item.set_item_type(itype)
-    item.descMetadata.date_created=HyTime.now_date
+    
     # Add roleMetadata with current user as hydrus-item-depositor.
     item.roleMetadata.add_person_with_role(user, 'hydrus-item-depositor')
     # Set default license, embargo, and visibility.
@@ -124,6 +127,7 @@ class Hydrus::Item < Hydrus::GenericObject
     else
       item.accepted_terms_of_deposit="false"
     end
+    
     # Save and return.
     item.save(:no_edit_logging => true, :no_beautify => true)
     item.send_new_deposit_email_notification
@@ -408,6 +412,13 @@ class Hydrus::Item < Hydrus::GenericObject
   def must_review_release_settings
     if to_bool(reviewed_release_settings) != true
       errors.add(:release_settings, "must be reviewed")
+    end
+  end
+  
+  # the date_created must be of format YYYY or YYYY-MM or YYYY-MM-DD
+  def ensure_date_created_format
+    if not date_created =~ /^\d{4}$/ and not date_created =~ /^\d{4}-\d{2}$/ and not date_created =~ /^\d{4}-\d{2}-\d{2}$/
+      errors.add(:date_created, 'Incorrect date format')
     end
   end
 

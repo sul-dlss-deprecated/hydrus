@@ -580,6 +580,7 @@ describe Hydrus::Item do
       @exp.each { |e| @hi.stub(e).and_return(dru) unless e==:contact }
       @hi.stub(:contact).and_return('test@test.com') # we need a valid email address
       @hi.stub(:keywords).and_return(%w(aaa bbb))
+      @hi.stub(:date_created).and_return('2011')
       @hi.stub_chain([:collection, :embargo_option]).and_return("varies")
       @hi.valid?.should == true
     end

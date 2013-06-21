@@ -51,7 +51,18 @@
       <%= render "contributors" %>
     </div>
   </div>
-
+  <%= hydrus_form_header(:required=>true) {"Date"} -%>
+  
+  <div class="row field-group">
+    <div class="span9">
+	    <p>
+        Enter date information below formatted as <b>YYYY</b> or <b>YYYY-MM</b> or <b>YYYY-MM-DD</b>
+      </p>
+      <%= text_field_tag("hydrus_item[date_created]", @fobj.date_created, :required => true) %>
+	  <div class="help">Date when the contents of this item was created</div>
+    </div>
+  </div>
+  
   <%= hydrus_form_header(:required=>true) {"Upload file(s)"} -%>
 
   <div class="row field-group">
