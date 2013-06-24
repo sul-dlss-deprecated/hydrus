@@ -343,6 +343,7 @@ def create_new_item(opts = {})
     :contact                 => 'foo@bar.com',
     :keywords                => 'topicA,topicB',
     :requires_human_approval => 'yes',
+    :date_created            => '2011',
   }
   opts = hash2struct(default_opts.merge opts)
   # Set the Collection's require_human_approval value.
@@ -364,6 +365,7 @@ def create_new_item(opts = {})
   fill_in "hydrus_item_abstract", :with => opts.abstract
   fill_in "hydrus_item_contact",  :with => opts.contact
   fill_in "hydrus_item_keywords", :with => opts.keywords
+  fill_in "hydrus_item_date_created", :with => opts.date_created
   check "release_settings"
   # Add a file.
   f      = Hydrus::ObjectFile.new

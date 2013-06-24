@@ -42,6 +42,7 @@ describe Hydrus::Item do
     @hi.stub(:pid).and_return(druid)
     @hi.stub(:adapt_to).and_return(@hi)
     @hi.stub(:collection).and_return(hc)
+    @hi.stub(:date_created).and_return('2011')
     Hydrus::GenericObject.stub(:register_dor_object).and_return(@hi)
     # Call create().
     obj = Hydrus::Item.create(hc.pid, mock_user)
@@ -72,6 +73,7 @@ describe Hydrus::Item do
     Hydrus::Collection.stub(:find).and_return(hc)
     Hydrus::GenericObject.stub(:register_dor_object).and_return(@hi)
     @hi.stub(:collection).and_return(hc)
+    @hi.stub(:date_created).and_return('2011')
     Hydrus::Authorizable.stub(:can_create_items_in).and_return(true)
     new_item=Hydrus::Item.create(hc.pid, mock_user)
     new_item.pid.should == druid

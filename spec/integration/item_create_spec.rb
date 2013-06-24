@@ -72,7 +72,6 @@ describe("Item create", :type => :request, :integration => true) do
     item.create_date.should_not be_blank
     item.item_type.should == 'dataset'
     item.descMetadata.typeOfResource.should == ['dataset']
-    item.descMetadata.date_created.should == [HyTime.now_date]
     # Check workflow of Item.
     wf_nodes = item.workflows.find_by_terms(:workflow)
     wf_nodes.size.should == 1
@@ -116,7 +115,6 @@ describe("Item create", :type => :request, :integration => true) do
     item.create_date.should_not be_blank
     item.item_type.should == 'article'
     item.descMetadata.typeOfResource.should == ['article']
-    item.descMetadata.date_created.should == [HyTime.now_date]
   end
 
   it "should be able to access create-new-Item screen via the Collection view page" do
@@ -136,6 +134,7 @@ describe("Item create", :type => :request, :integration => true) do
       :reason      => 'Idiota',
       :contributor => 'contributor_foo',
       :keywords    => 'aaa,bbb',
+      :date_created => '2011',
     )
 
     # Force Items to receive human approval.
@@ -181,6 +180,7 @@ describe("Item create", :type => :request, :integration => true) do
     fill_in "hydrus_item_abstract", :with => ni.abstract
     fill_in "hydrus_item_contact",  :with => ni.contact
     fill_in "hydrus_item_keywords", :with => ni.keywords
+    fill_in "hydrus_item_date_created", :with => ni.date_created 
     f = Hydrus::ObjectFile.new
     f.pid = druid
     f.file = Tempfile.new('mock_HydrusObjectFile_')
@@ -347,6 +347,7 @@ describe("Item create", :type => :request, :integration => true) do
       :reason      => 'Idiota',
       :contributor => 'contributor_foo',
       :keywords    => 'aaa,bbb',
+      :date_created => '2011',
     )
     # Force Items to not receive human approval and have varied visiblity and licenses
     coll = Hydrus::Collection.find(@hc_druid)
@@ -388,6 +389,7 @@ describe("Item create", :type => :request, :integration => true) do
     fill_in "hydrus_item_abstract", :with => ni.abstract
     fill_in "hydrus_item_contact",  :with => ni.contact
     fill_in "hydrus_item_keywords", :with => ni.keywords
+    fill_in "hydrus_item_date_created", :with => ni.date_created
     f = Hydrus::ObjectFile.new
     f.pid = druid
     f.file = Tempfile.new('mock_HydrusObjectFile_')

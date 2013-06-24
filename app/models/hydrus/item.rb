@@ -27,7 +27,7 @@ class Hydrus::Item < Hydrus::GenericObject
   validate  :embargo_date_in_range
   validate  :check_version_if_license_changed
   validate  :check_visibility_not_reduced
-  validate  :ensure_date_created_format
+  validate  :ensure_date_created_format,          :if => :should_validate
 
   # During subsequent versions the user is allowed to change the license,
   # but only if the new version is designated as a major version change.
