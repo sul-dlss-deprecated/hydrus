@@ -32,6 +32,10 @@
             <% end %>
           <% end %>
       </div>
+	  <div class="collection-items date-created">
+		  <h4>Date</h4>
+		  <dt>Date Created</dt><dd><%= @fobj.date_created %></dd>
+	  </div>
 
       <% files = @fobj.files %>
       <% unless files.size == 0 %>
