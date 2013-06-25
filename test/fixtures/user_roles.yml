@@ -1,6 +1,6 @@
 administrators:
   role: 'administrators'
-  users: 'bess,geisler,hfrost,jdeering,lmcrae,petucket,snydman,tcramer,tonyn,jvine'
+  users: 'bess,geisler,hfrost,jdeering,lmcrae,petucket,snydman,tcramer,tonyn,jvine,amyhodge'
   
 collection_creators:
   role: 'collection_creators'
