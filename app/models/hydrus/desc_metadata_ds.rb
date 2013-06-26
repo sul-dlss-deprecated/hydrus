@@ -38,9 +38,8 @@ class Hydrus::DescMetadataDS < ActiveFedora::NokogiriDatastream
     end
     t.typeOfResource IA 
     
-    t.genre IA do
-      t.authority        :path => '@authority'
-    end
+    t.genre 
+    
     t.abstract IA
     t.preferred_citation :path => 'note',  :attributes => { :type => "preferred citation" }
     t.related_citation   :path => 'note',  :attributes => { :type => "citation/reference" }

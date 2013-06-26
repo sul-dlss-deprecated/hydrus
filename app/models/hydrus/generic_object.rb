@@ -223,7 +223,7 @@ class Hydrus::GenericObject < Dor::Item
       identityMetadata.add_value(:objectType, 'set')
       identityMetadata.content_will_change!
     else
-      case typ
+      case typ.to_sym
       when :dataset
         descMetadata.typeOfResource="software, multimedia"
         descMetadata.genre="dataset"

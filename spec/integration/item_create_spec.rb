@@ -71,7 +71,7 @@ describe("Item create", :type => :request, :integration => true) do
     item.should be_instance_of Hydrus::Item
     item.create_date.should_not be_blank
     item.item_type.should == 'dataset'
-    item.descMetadata.typeOfResource.should == ['dataset']
+    item.descMetadata.typeOfResource.should == ['software, multimedia']
     # Check workflow of Item.
     wf_nodes = item.workflows.find_by_terms(:workflow)
     wf_nodes.size.should == 1
@@ -114,7 +114,8 @@ describe("Item create", :type => :request, :integration => true) do
     item.should be_instance_of Hydrus::Item
     item.create_date.should_not be_blank
     item.item_type.should == 'article'
-    item.descMetadata.typeOfResource.should == ['article']
+    item.descMetadata.typeOfResource.should == ['text']
+    item.descMetadata.genre.should == ['article']
   end
 
   it "should be able to access create-new-Item screen via the Collection view page" do
