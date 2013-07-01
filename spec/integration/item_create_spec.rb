@@ -117,6 +117,30 @@ describe("Item create", :type => :request, :integration => true) do
     item.descMetadata.typeOfResource.should == ['text']
     item.descMetadata.genre.should == ['article']
   end
+  
+  it "should be able to create a new class project Item, with expected datastreams" do
+    # Login, go to new Item page, and store the druid of the new Item.
+    login_as('archivist1')
+    visit new_hydrus_item_path(:collection => @hc_druid, :type=>'class project')
+    current_path.should =~ @edit_path_regex
+    druid = @edit_path_regex.match(current_path)[1]
+    # Fill in form and save.
+    fill_in "Title of item", :with => 'title_article'
+    fill_in "hydrus_item_contributors_0_name", :with => 'contributor_article'
+    fill_in "Abstract", :with => 'abstract_article'
+    click_button(@buttons[:save])
+    find(@div_alert).should have_content(@notices[:save])
+    # Get Item out of fedora and confirm that our edits were persisted.
+    item = Hydrus::Item.find(druid)
+    item.title.should == 'title_article'
+    item.contributors.first.name.should == 'contributor_article'
+    item.abstract.should == 'abstract_article'
+    item.should be_instance_of Hydrus::Item
+    item.create_date.should_not be_blank
+    item.item_type.should == 'class project'
+    item.descMetadata.typeOfResource.should == ['text']
+    item.descMetadata.genre.should == ['student project report']
+  end
 
   it "should be able to access create-new-Item screen via the Collection view page" do
     login_as('archivist1')

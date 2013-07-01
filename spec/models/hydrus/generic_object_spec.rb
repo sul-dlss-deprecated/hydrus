@@ -174,14 +174,14 @@ describe Hydrus::GenericObject do
   it 'set_item_type() should set the correct desc metadata fields for a dataset' do
       obj  = Hydrus::GenericObject.new
       descMD = Dor::DescMetadataDS.new(nil, nil)
-      obj.set_item_type(:dataset)
+      obj.set_item_type('dataset')
       obj.descMetadata.ng_xml.search('//mods:typeOfResource', 'mods' => 'http://www.loc.gov/mods/v3').first.text.should == 'software, multimedia'
       obj.descMetadata.ng_xml.search('//mods:genre', 'mods' => 'http://www.loc.gov/mods/v3').first.text.should == 'dataset'
   end
   it 'set_item_type() should set the correct desc metadata fields for a thesis' do
       obj  = Hydrus::GenericObject.new
       descMD = Dor::DescMetadataDS.new(nil, nil)
-      obj.set_item_type(:thesis)
+      obj.set_item_type('thesis')
       obj.descMetadata.ng_xml.search('//mods:typeOfResource', 'mods' => 'http://www.loc.gov/mods/v3').first.text.should == 'text'
       obj.descMetadata.ng_xml.search('//mods:genre', 'mods' => 'http://www.loc.gov/mods/v3').first.text.should == 'thesis'
       obj.descMetadata.ng_xml.search('//mods:genre', 'mods' => 'http://www.loc.gov/mods/v3').first['authority'].should == 'marcgt'
@@ -189,7 +189,7 @@ describe Hydrus::GenericObject do
   it 'set_item_type() should set the correct desc metadata fields for a article' do
       obj  = Hydrus::GenericObject.new
       descMD = Dor::DescMetadataDS.new(nil, nil)
-      obj.set_item_type(:article)
+      obj.set_item_type('article')
       obj.descMetadata.ng_xml.search('//mods:typeOfResource', 'mods' => 'http://www.loc.gov/mods/v3').first.text.should == 'text'
       obj.descMetadata.ng_xml.search('//mods:genre', 'mods' => 'http://www.loc.gov/mods/v3').first.text.should == 'article'
       obj.descMetadata.ng_xml.search('//mods:genre', 'mods' => 'http://www.loc.gov/mods/v3').first['authority'].should == 'marcgt'
@@ -199,9 +199,17 @@ describe Hydrus::GenericObject do
   it 'set_item_type() should set the correct desc metadata fields for a class project' do
       obj  = Hydrus::GenericObject.new
       descMD = Dor::DescMetadataDS.new(nil, nil)
-      obj.set_item_type(:class_project)
+      obj.set_item_type('class project')
       obj.descMetadata.ng_xml.search('//mods:typeOfResource', 'mods' => 'http://www.loc.gov/mods/v3').first.text.should == 'text'
       obj.descMetadata.ng_xml.search('//mods:genre', 'mods' => 'http://www.loc.gov/mods/v3').first.text.should == 'student project report'
+  end
+  
+  it 'set_item_type() should set the correct desc metadata fields for a collection' do
+      obj  = Hydrus::GenericObject.new
+      descMD = Dor::DescMetadataDS.new(nil, nil)
+      obj.set_item_type(:collection)
+      obj.descMetadata.ng_xml.search('//mods:typeOfResource', 'mods' => 'http://www.loc.gov/mods/v3').first.text.should == ''
+      obj.descMetadata.ng_xml.search('//mods:typeOfResource', 'mods' => 'http://www.loc.gov/mods/v3').first['collection'].should == 'yes'
   end
   
 

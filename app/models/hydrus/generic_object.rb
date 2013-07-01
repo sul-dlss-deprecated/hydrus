@@ -222,22 +222,25 @@ class Hydrus::GenericObject < Dor::Item
     if typ == :collection
       identityMetadata.add_value(:objectType, 'set')
       identityMetadata.content_will_change!
+      descMetadata.ng_xml.search('//mods:mods/mods:typeOfResource', 'mods' => 'http://www.loc.gov/mods/v3').each do |node|				
+				node['collection']='yes'
+      end
     else
-      case typ.to_sym
-      when :dataset
+      case typ
+      when 'dataset'
         descMetadata.typeOfResource="software, multimedia"
         descMetadata.genre="dataset"
-      when :thesis
+      when 'thesis'
         descMetadata.typeOfResource="text"
         descMetadata.insert_genre
         descMetadata.genre="thesis"
         #this is messy but I couldnt get OM to do what I needed it to
         descMetadata.ng_xml.search('//mods:genre', 'mods' => 'http://www.loc.gov/mods/v3').first['authority'] = 'marcgt'
-      when :article
+      when 'article'
         descMetadata.typeOfResource="text"
         descMetadata.genre="article"
         descMetadata.ng_xml.search('//mods:genre', 'mods' => 'http://www.loc.gov/mods/v3').first['authority'] = 'marcgt'
-      when :class_project
+      when 'class project'
         descMetadata.typeOfResource="text"
         descMetadata.genre="student project report"
       else
