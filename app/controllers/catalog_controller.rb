@@ -117,9 +117,11 @@ class CatalogController < ApplicationController
     # their workflow status.
     
     #build a hash with all of the needed collection information without instantiating each collection, because fedora is slow
-    @collections = Hydrus::Collection.collections_hash(current_user)
+    @collections = Hydrus::Collection.collections_hash(current_user) if current_user
     
-    @all_collections = Hydrus::Collection.collections_hash if (current_user && Hydrus::Authorizable.can_act_as_administrator(current_user))
+    # TODO this query that gets all hydrus objects is too big for now, we can run it again when it works  
+    # until then, the admin panel will just have to be blank  -- July 8, 2013
+    @all_collections = [] # Hydrus::Collection.collections_hash if (current_user && Hydrus::Authorizable.can_act_as_administrator(current_user))
     
     super
   end
