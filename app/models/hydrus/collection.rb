@@ -499,29 +499,46 @@ class Hydrus::Collection < Hydrus::GenericObject
   # Returns a hash of item counts (broken down by object status) for
   # collections in which the USER plays a role.
   def self.dashboard_stats(user=nil)
-    # Get PIDs of the APOs in which USER plays a role or all PIDs if no user supplied
-    apo_pids = user.nil? ? Hydrus::Collection.all_hydrus_apos : apos_involving_user(user)   
-    return {} if apo_pids.size == 0
+    
+    if user.nil? # if we don't specify a user, we want everything (for an admin), so we can skip APO lookups and go directly to all collections
+      
+      coll_pids = all_hydrus_collections
+    
+    else   # Get PIDs of the APOs in which USER plays a role 
+    
+      apo_pids = apos_involving_user(user)   
+      return {} if apo_pids.size == 0
 
-    # Get PIDs of the Collections governed by those APOs.
-    coll_pids = collections_of_apos(apo_pids)
+      # Get PIDs of the Collections governed by those APOs.
+      coll_pids = collections_of_apos(apo_pids)
+    
+    end
+    
     return {} if coll_pids.size == 0
 
     # Returns the item counts for those collections.
     return item_counts_of_collections(coll_pids)
+  
   end
-  # Takes the stats hash from dashboard_stats and a user name
-  # Returns a hash of solr documents, one for each collection
-  def self.dashboard_hash stats, user=nil
+  
+  # Takes a user name
+  # Returns a hash of solr documents, one for each collection (if no user is supplied, you will get everything)
+  def self.dashboard_hash user=nil
+  
     toret={}
     
-    apo_pids = user.nil? ? Hydrus::Collection.all_hydrus_apos : apos_involving_user(user)   
-    return {} if apo_pids.size == 0
-
-    # Get PIDs of the Collections governed by those APOs.
-    coll_pids = collections_of_apos(apo_pids)
-    return {} if coll_pids.size == 0
-    h           = squery_collections_of_apos(apo_pids)
+    if user.nil? # if we don't specify a user, we want everything (for an admin), so we can skip APO lookups and go directly to all collections
+            
+      h = squery_all_hydrus_collections
+      
+    else # for a specific user, get PIDs of the APOs in which USER plays a role, then use that to construct query to get just those collections
+    
+      apo_pids = apos_involving_user(user)   
+      return {} if apo_pids.size == 0
+      h = squery_collections_of_apos(apo_pids)
+    
+    end
+      
     resp, sdocs = issue_solr_query(h)
     resp.docs.each do |doc|
       pid=doc['identityMetadata_objectId_t'].first
@@ -529,12 +546,15 @@ class Hydrus::Collection < Hydrus::GenericObject
       toret[pid][:solr]=doc
     end
     toret
+    
   end
-  # Takes a username
-  # returns an array of collection hashes suitable for building the dashboard 
+  
+  # Takes a username, and returns an array of collection hashes suitable for building the dashboard (if no user is supplied, you will get everything)
   def self.collections_hash(current_user=nil)
+    
     stats = Hydrus::Collection.dashboard_stats(current_user)
-    solr = Hydrus::Collection.dashboard_hash(stats, current_user)
+    solr = Hydrus::Collection.dashboard_hash(current_user)
+    
     #build a hash with all of the needed collection information without instantiating each collection, because fedora is slow
     collections = stats.keys.map { |coll_dru|
       hash={}

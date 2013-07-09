@@ -1,0 +1,20 @@
+  <table class="hydrus-striped-table table-striped table-condensed">
+    <thead>
+      <tr>
+        <th class="title">Collection</th>
+        <th class="deposited">View Items</th>
+      </tr>
+    </thead>
+    <tbody>
+    <% collections.each do |pid,doc| %>
+      <tr>
+        <td><%= link_to(Hydrus::Collection.object_title(doc[:solr]), hydrus_collection_path(pid),:disable_after_click=>'true') %></td>
+        <td>
+            <%= link_to(
+                  'items',
+                  hydrus_collection_items_path(pid),:disable_after_click=>'true') %>
+        </td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
