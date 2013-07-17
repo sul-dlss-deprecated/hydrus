@@ -7,6 +7,7 @@ group :deployment do
   gem 'rvm-capistrano'
   gem 'lyberteam-devel', '>=1.0.0'
   gem 'lyberteam-gems-devel', '>=1.0.0'
-  gem 'net-ssh-kerberos'
-  gem 'whenever'
+ # gem 'net-ssh-kerberos', :platform => :ruby_18
+  gem 'net-ssh-krb', :platform => :ruby_19
+  gem 'whenever', "~> 0.8.3"
 end
