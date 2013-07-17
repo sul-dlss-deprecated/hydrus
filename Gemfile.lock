@@ -96,7 +96,7 @@ GEM
       activesupport (>= 3.2.0)
     childprocess (0.3.5)
       ffi (~> 1.0, >= 1.0.6)
-    chronic (0.6.7)
+    chronic (0.9.1)
     chunky_png (1.2.6)
     coderay (1.0.8)
     coffee-rails (3.2.2)
@@ -412,9 +412,9 @@ GEM
     wasabi (3.0.0)
       httpi (~> 2.0)
       nokogiri (>= 1.4.0)
-    whenever (0.7.3)
+    whenever (0.8.3)
       activesupport (>= 2.3.4)
-      chronic (~> 0.6.3)
+      chronic (>= 0.6.3)
     xml-simple (1.1.2)
     xpath (0.1.4)
       nokogiri (~> 1.3)
@@ -467,4 +467,4 @@ DEPENDENCIES
   therubyracer
   uglifier (>= 1.0.3)
   validates_email_format_of
-  whenever
+  whenever (~> 0.8.3)
