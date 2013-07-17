@@ -4,6 +4,10 @@ require 'bundler/capistrano'
 require 'dlss/capistrano'
 require 'pathname'
 
+set :whenever_command, "bundle exec whenever"
+set :whenever_environment, defer { rails_env }
+require "whenever/capistrano"
+
 set :stages, %W(burndown development dortest production)
 set :default_stage, "dortest"
 set :bundle_flags, "--quiet"

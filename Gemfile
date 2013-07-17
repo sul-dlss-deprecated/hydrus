@@ -23,6 +23,7 @@ gem 'bootstrap-datepicker-rails'
 gem 'cancan'
 gem 'validates_email_format_of'
 gem 'coderay'
+gem 'whenever'
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'
@@ -49,13 +50,13 @@ group :development, :test do
   gem 'sqlite3'
   gem 'awesome_print'
   gem 'launchy'
-  gem 'ruby-prof'
-  gem 'debugger'
+  gem 'ruby-prof', :platform => 'ruby_19'
+  gem 'debugger', :platform => 'ruby_19'
 	gem 'letter_opener'
 end
 
 group :development do
-  gem 'looksee'
+  gem 'looksee', :platform => 'ruby_19'
 	gem 'newrelic_rpm'
 end
 
