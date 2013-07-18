@@ -36,7 +36,7 @@ class SolrDocument
   end
 
   def to_model
-    ActiveFedora::Base.load_instance_from_solr(id, self)
+    @model ||= ActiveFedora::Base.load_instance_from_solr(id, self)
   end
 
   def main_title
