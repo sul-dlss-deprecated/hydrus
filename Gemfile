@@ -14,7 +14,7 @@ gem 'blacklight', '~>3.5', :git => 'http://github.com/projectblacklight/blacklig
 gem 'hydra-head', '~> 4.1.1'
 gem 'rubydora',   '~> 0.5.11'
 
-gem 'devise'
+gem 'devise', '~> 2.2.5'
 gem 'carrierwave'
 gem 'rails', '3.2.11'
 gem 'jquery-rails'
