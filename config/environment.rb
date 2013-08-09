@@ -60,7 +60,7 @@ Dor::Config.configure do
   ssl do
     yaml = load_yaml_config.call('ssl_certs.yml')
     key_file File.join(Dor::Config.cert_dir,yaml['key_file']) if yaml['key_file']
-    cert_file File.join(Dor::Config.cert_dir,yaml['cert_file']) if yaml['key_file']
+    cert_file File.join(Dor::Config.cert_dir,yaml['cert_file']) if yaml['cert_file']
     key_pass yaml['key_pass']
   end
 
