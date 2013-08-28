@@ -257,6 +257,12 @@ class Hydrus::GenericObject < Dor::Item
       "thesis"        => "thesis",
       "article"       => "article",
       "class project" => "class project",
+      "computer game" => "computer game",
+      "video" => "video",      
+      "audio - music" => "audio - music",   
+      "audio - spoken" => "audio - spoken",      
+      "conference paper / presentation" => "conference paper / presentation",      
+      "technical report" => "technical report",
       "other"         => "other"                        
     }
   end
