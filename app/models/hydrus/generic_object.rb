@@ -235,19 +235,46 @@ class Hydrus::GenericObject < Dor::Item
         descMetadata.insert_genre
         descMetadata.genre="thesis"
         #this is messy but I couldnt get OM to do what I needed it to
-        descMetadata.ng_xml.search('//mods:genre', 'mods' => 'http://www.loc.gov/mods/v3').first['authority'] = 'marcgt'
+        set_genre_authority_to_marc descMetadata
       when 'article'
         descMetadata.typeOfResource="text"
         descMetadata.genre="article"
-        descMetadata.ng_xml.search('//mods:genre', 'mods' => 'http://www.loc.gov/mods/v3').first['authority'] = 'marcgt'
+        set_genre_authority_to_marc descMetadata
       when 'class project'
         descMetadata.typeOfResource="text"
         descMetadata.genre="student project report"
+      when 'computer game'
+        descMetadata.typeOfResource="software, multimedia"
+        descMetadata.genre="game"
+      when 'audio - music'
+        descMetadata.typeOfResource="sound recording-musical"
+        descMetadata.genre="sound"
+        set_genre_authority_to_marc descMetadata
+      when 'audio - spoken'
+        descMetadata.typeOfResource="sound recording-nonmusical"
+        descMetadata.genre="sound"
+        set_genre_authority_to_marc descMetadata
+      when 'video'
+        descMetadata.typeOfResource="moving image"
+        descMetadata.genre="motion picture"
+        set_genre_authority_to_marc descMetadata
+      when 'conference paper / presentation'
+        descMetadata.typeOfResource="text"
+        descMetadata.genre="conference publication"
+        set_genre_authority_to_marc descMetadata
+      when 'technical report'
+        descMetadata.typeOfResource="text"
+        descMetadata.genre="technical report"
+        set_genre_authority_to_marc descMetadata
+      
       else
         descMetadata.typeOfResource=typ.to_s
       end
       descMetadata.content_will_change!
     end
+  end
+  def set_genre_authority_to_marc  descMetadata
+    descMetadata.ng_xml.search('//mods:genre', 'mods' => 'http://www.loc.gov/mods/v3').first['authority'] = 'marcgt'
   end
   
   # the possible types of items that can be created, hash of display value (keys) and values to store in object (value)

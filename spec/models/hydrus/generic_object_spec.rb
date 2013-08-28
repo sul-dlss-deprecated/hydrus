@@ -203,7 +203,48 @@ describe Hydrus::GenericObject do
       obj.descMetadata.ng_xml.search('//mods:typeOfResource', 'mods' => 'http://www.loc.gov/mods/v3').first.text.should == 'text'
       obj.descMetadata.ng_xml.search('//mods:genre', 'mods' => 'http://www.loc.gov/mods/v3').first.text.should == 'student project report'
   end
-  
+  it 'set_item_type() should set the correct desc metadata fields for a computer game' do
+      obj  = Hydrus::GenericObject.new
+      descMD = Dor::DescMetadataDS.new(nil, nil)
+      obj.set_item_type('computer game')
+      obj.descMetadata.ng_xml.search('//mods:typeOfResource', 'mods' => 'http://www.loc.gov/mods/v3').first.text.should == 'software, multimedia'
+      obj.descMetadata.ng_xml.search('//mods:genre', 'mods' => 'http://www.loc.gov/mods/v3').first.text.should == 'game'
+  end
+  it 'set_item_type() should set the correct desc metadata fields for a audio - music' do
+      obj  = Hydrus::GenericObject.new
+      descMD = Dor::DescMetadataDS.new(nil, nil)
+      obj.set_item_type('audio - music')
+      obj.descMetadata.ng_xml.search('//mods:typeOfResource', 'mods' => 'http://www.loc.gov/mods/v3').first.text.should == 'sound recording-musical'
+      obj.descMetadata.ng_xml.search('//mods:genre', 'mods' => 'http://www.loc.gov/mods/v3').first.text.should == 'sound'
+  end
+  it 'set_item_type() should set the correct desc metadata fields for a audio - spoken' do
+      obj  = Hydrus::GenericObject.new
+      descMD = Dor::DescMetadataDS.new(nil, nil)
+      obj.set_item_type('audio - spoken')
+      obj.descMetadata.ng_xml.search('//mods:typeOfResource', 'mods' => 'http://www.loc.gov/mods/v3').first.text.should == 'sound recording-nonmusical'
+      obj.descMetadata.ng_xml.search('//mods:genre', 'mods' => 'http://www.loc.gov/mods/v3').first.text.should == 'sound'
+  end
+  it 'set_item_type() should set the correct desc metadata fields for a conference paper / presentation' do
+      obj  = Hydrus::GenericObject.new
+      descMD = Dor::DescMetadataDS.new(nil, nil)
+      obj.set_item_type('conference paper / presentation')
+      obj.descMetadata.ng_xml.search('//mods:typeOfResource', 'mods' => 'http://www.loc.gov/mods/v3').first.text.should == 'text'
+      obj.descMetadata.ng_xml.search('//mods:genre', 'mods' => 'http://www.loc.gov/mods/v3').first.text.should == 'conference publication'
+  end
+  it 'set_item_type() should set the correct desc metadata fields for a technical report' do
+      obj  = Hydrus::GenericObject.new
+      descMD = Dor::DescMetadataDS.new(nil, nil)
+      obj.set_item_type('technical report')
+      obj.descMetadata.ng_xml.search('//mods:typeOfResource', 'mods' => 'http://www.loc.gov/mods/v3').first.text.should == 'text'
+      obj.descMetadata.ng_xml.search('//mods:genre', 'mods' => 'http://www.loc.gov/mods/v3').first.text.should == 'technical report'
+  end
+  it 'set_item_type() should set the correct desc metadata fields for a video' do
+      obj  = Hydrus::GenericObject.new
+      descMD = Dor::DescMetadataDS.new(nil, nil)
+      obj.set_item_type('video')
+      obj.descMetadata.ng_xml.search('//mods:typeOfResource', 'mods' => 'http://www.loc.gov/mods/v3').first.text.should == 'moving image'
+      obj.descMetadata.ng_xml.search('//mods:genre', 'mods' => 'http://www.loc.gov/mods/v3').first.text.should == 'motion picture'
+  end
   it 'set_item_type() should set the correct desc metadata fields for a collection' do
       obj  = Hydrus::GenericObject.new
       descMD = Dor::DescMetadataDS.new(nil, nil)
