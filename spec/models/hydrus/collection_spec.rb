@@ -478,7 +478,20 @@ describe Hydrus::Collection do
       end
 
     end
-
+    describe 'dashboard_hash' do
+      it 'should send 1 solr query if there are 99 apos' do
+        arr=*(1..99)
+        @HC.should_receive(:apos_involving_user).and_return(arr)
+        @HC.should_receive(:squery_collections_of_apos).exactly(1).times
+        @HC.dashboard_hash(@user_foo)
+      end
+      it 'should send 2 solr queries for >100 items' do
+        arr=*(1..105)
+        @HC.should_receive(:apos_involving_user).and_return(arr)
+        @HC.should_receive(:squery_collections_of_apos).exactly(2).times
+        @HC.dashboard_hash(@user_foo)
+      end
+    end
     it "can exercise initial_item_counts()" do
       h = @HC.initial_item_counts()
       h.should be_instance_of(Hash)

@@ -526,28 +526,42 @@ class Hydrus::Collection < Hydrus::GenericObject
   def self.dashboard_hash user=nil
   
     toret={}
-    
+    queries=[]
     if user.nil? # if we don't specify a user, we want everything (for an admin), so we can skip APO lookups and go directly to all collections
             
-      h = squery_all_hydrus_collections
+      queries << squery_all_hydrus_collections
       
     else # for a specific user, get PIDs of the APOs in which USER plays a role, then use that to construct query to get just those collections
     
       apo_pids = apos_involving_user(user)   
       return {} if apo_pids.size == 0
-      h = squery_collections_of_apos(apo_pids)
+      while apo_pids.size > 0
+        pids = []
+        #create queries with at most 100 apos in them, because if the query gets too large, it will be truncated and fail.
+        if apo_pids.size>100
+          100.times do
+            pids << apo_pids.shift
+          end
+        else
+          pids=apo_pids
+          apo_pids = []
+        end
+        queries << squery_collections_of_apos(pids)
+        pids=[]
+      end
+      end
+      #for each of the queries we constructed, fetch the info for each collection.
+      queries.each do |h|
+        resp, sdocs = issue_solr_query(h)
+        resp.docs.each do |doc|
+          pid=doc['identityMetadata_objectId_t'].first
+          toret[pid]={}
+          toret[pid][:solr]=doc
+        end
+      end
+      toret
     
     end
-      
-    resp, sdocs = issue_solr_query(h)
-    resp.docs.each do |doc|
-      pid=doc['identityMetadata_objectId_t'].first
-      toret[pid]={}
-      toret[pid][:solr]=doc
-    end
-    toret
-    
-  end
   
   # Takes a username, and returns an array of collection hashes suitable for building the dashboard (if no user is supplied, you will get everything)
   def self.collections_hash(current_user=nil)
