@@ -323,9 +323,11 @@ function item_edit_init(){
 		  	authors += $(this).val() + ' and ';	
 			}
 		});
-				
+			
+		var entered_year = $('#hydrus_item_date_created').val().substr(0,4);
+		
 		// complete citation format		
-		var citation=authors.slice(0, -" and ".length) + '. (' + new Date().getFullYear() + '). ' + title + '. Stanford Digital Repository. Available at: http://purl.stanford.edu/' + $('#object_id').attr('value').replace('druid:',''); 
+		var citation=authors.slice(0, -" and ".length) + '. (' + entered_year + '). ' + title + '. Stanford Digital Repository. Available at: http://purl.stanford.edu/' + $('#object_id').attr('value').replace('druid:',''); 
 		$('#hydrus_item_preferred_citation').val(citation);
 		return false;
 	});
