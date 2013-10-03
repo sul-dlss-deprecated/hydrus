@@ -24,6 +24,7 @@ gem 'cancan'
 gem 'validates_email_format_of'
 gem 'coderay'
 gem 'whenever', "~> 0.8.3"
+gem 'nokogiri', ">= 1.6.0"
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'

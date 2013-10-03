@@ -20,14 +20,11 @@ namespace :hydrus do
   end
 
   desc "load hydrus fixtures"
-  task :loadfix do
-    Rake::Task['db:fixtures:load'].invoke
+  task :loadfix => ['db:fixtures:load'] do
+
+    fixture_loader = ActiveFedora::FixtureLoader.new('spec/fixtures')
     FIXTURE_PIDS.each { |pid|
-      d    = pid.sub(/:/, '_')
-      finp = "spec/fixtures/#{d}.foxml.xml"
-      ENV["foxml"] = finp
-      Rake::Task['repo:load'].reenable
-      Rake::Task['repo:load'].invoke
+      fixture_loader.reload(pid)
     }
 
     # index the workflow objects
@@ -120,19 +117,9 @@ namespace :hydrus do
     end
   end
 
-  desc "delete hydrus fixtures"
-  task :deletefix do
-    FIXTURE_PIDS.each { |pid|
-      ENV["pid"] = pid
-      Rake::Task['repo:delete'].reenable
-      Rake::Task['repo:delete'].invoke
-  }
-  end
-
   desc "refresh hydrus fixtures"
   task :refreshfix do
     ts = [
-      'hydrus:deletefix',
       'hydrus:loadfix',
       'hydrus:refresh_workflows',
       'hydrus:refresh_upload_files',

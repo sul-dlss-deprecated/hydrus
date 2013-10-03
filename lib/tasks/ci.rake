@@ -1,7 +1,8 @@
+ZIP_FILE = 'https://github.com/projecthydra/hydra-jetty/archive/v5.2.0.zip'
+
 desc "Run Continuous Integration Suite (tests, coverage, docs)"
-task :ci do
+task :ci => ['jetty:clean', 'jetty:config'] do
   Rake::Task["hydrus:config"].invoke
-  Rake::Task["hydra:jetty:config"].invoke
 
   require 'jettywrapper'
   jetty_params = Jettywrapper.load_config.merge({
