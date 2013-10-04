@@ -9,9 +9,9 @@ class EventsController < ApplicationController
   before_filter :authenticate_user!
 
   def index
-    authorize! :read, contextual_id
     @fobj = ActiveFedora::Base.find(contextual_id, :cast=>true)
     @fobj.current_user = current_user
+    authorize! :read, @fobj
   end
 
   protected

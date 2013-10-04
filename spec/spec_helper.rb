@@ -37,8 +37,14 @@ require 'tempfile'
 # in spec/support/ and its subdirectories.
 Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
 
+Warden.test_mode!
+
+
 RSpec.configure do |config|
 
+  config.include Devise::TestHelpers, :type => :controller
+  config.include Warden::Test::Helpers, :type => :controller
+  config.after(:each) { Warden.test_reset! }
   # ## Mock Framework
   #
   # If you prefer to use mocha, flexmock or RR, uncomment the appropriate line:
@@ -134,24 +140,15 @@ def noko_doc(x)
 end
 
 def mock_user
-  mock_user = double("user")
-  mock_user.stub(:email)
-  mock_user.stub(:sunetid)
-  mock_user.stub(:persisted?).and_return(false)
-  mock_user.stub(:new_record?).and_return(true)
-  mock_user.stub(:is_being_superuser?).and_return(false)
-  return mock_user
+  User.find_or_create_by_email("some-user@example.com") do |u|
+    u.password = "test12345"
+    u.password_confirmation = u.password
+    u.save
+  end
 end
 
 def mock_authed_user(u = 'archivist1')
-  mock_user = double("user")
-  mock_user.stub(:to_s).and_return(u)
-  mock_user.stub(:sunetid).and_return(u)
-  mock_user.stub(:email).and_return("#{u}@example.com")
-  mock_user.stub(:persisted?).and_return(true)
-  mock_user.stub(:new_record?).and_return(false)
-  mock_user.stub(:is_being_superuser?).and_return(false)
-  return mock_user
+  User.find_by_email("#{u}@example.com")
 end
 
 def login_pw
