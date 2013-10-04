@@ -9,12 +9,12 @@ class SessionsController < Devise::SessionsController
     super
   end
 
-  def destroy
-    unless Dor::Config.hydrus.show_standard_login
-      flash[:notice] = "You have successfully logged out of WebAuth." unless request.env["WEBAUTH_USER"]
+  def destroy_webauth
+    flash[:notice] = "You have successfully logged out of WebAuth." unless request.env["WEBAUTH_USER"]
       redirect_to root_url
-    end
+  end
 
+  def destroy
     super
   end
 end
