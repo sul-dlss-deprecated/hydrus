@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
   include Hydrus::ModelHelper
 
   check_authorization :unless => :devise_controller?
+  skip_authorization_check :only => [:contact]
 
   rescue_from Exception, :with=>:exception_on_website
 

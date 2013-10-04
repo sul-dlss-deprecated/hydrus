@@ -43,10 +43,18 @@ module ApplicationHelper
 
   def hydrus_signin_link
     if Dor::Config.hydrus.show_standard_login
-      link_to("Sign in", new_signin_path(:referrer => request.fullpath), :class=>'signin_link', :"data-url" => new_signin_path(:referrer => request.fullpath))
+      link_to("Sign in", new_user_session_path, :class=>'signin_link', :"data-url" => new_user_session_path)
     else
-      link_to("Sign in via WebAuth", webauth_login_path(:referrer => request.fullpath))
+      link_to("Sign in via WebAuth", webauth_login_path)
     end
+  end
+
+  def new_user_session_path options = {}
+    super({:referrer => request.fullpath}.merge options)
+  end
+
+  def webauth_login_path options = {}
+    super({:referrer => request.fullpath}.merge options)
   end
 
   def terms_of_deposit_path(pid)

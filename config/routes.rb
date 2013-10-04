@@ -7,7 +7,7 @@ Hydrus::Application.routes.draw do
 
   root :to => "catalog#index"
 
-  devise_for :users
+  devise_for :users, :controllers => { :sessions => "sessions" }
 
   # Actions to advance Collections through the Hydrus process.
   post "collections/open/:id"  => "hydrus_collections#open",     :as => 'open_collection'
@@ -52,7 +52,6 @@ Hydrus::Application.routes.draw do
   match "users/auth/webauth/logout" => "signin#logout", :as => "webauth_logout"
   match "error" => "signin#error", :as => "error"
   match "contact" => "application#contact", :as=>"contact"
-  resources :signin
 
   # Actions for the HydrusSolrController.
   match "hydrus_solr/reindex/:id"           => "hydrus_solr#reindex",           :as => 'reindex'

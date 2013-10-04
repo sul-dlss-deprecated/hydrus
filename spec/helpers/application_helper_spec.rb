@@ -23,7 +23,7 @@ describe ApplicationHelper do
 
   it "should show the signin link" do
     controller.request.stub(:fullpath).and_return('/items/oo000oo0001')
-    helper.hydrus_signin_link.should == "<a href=\"/signin/new?referrer=%2Fitems%2Foo000oo0001\" class=\"signin_link\" data-url=\"/signin/new?referrer=%2Fitems%2Foo000oo0001\">Sign in</a>"
+    helper.hydrus_signin_link.should == "<a href=\"/users/sign_in?referrer=%2Fitems%2Foo000oo0001\" class=\"signin_link\">Sign in</a>"
   end
 
   it "should indicate if an object is empty" do
