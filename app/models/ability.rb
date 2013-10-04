@@ -62,14 +62,15 @@ class Ability
   # return nil, and our methods in authorizable.rb need to return false
   # when the given a nil item/collection.
   def get_fedora_object(obj)
-    # If already an ActiveFedora object, just return it.
-    return obj unless obj.kind_of?(String)
-    # Use the PID to find the object.
-    begin
-      return ActiveFedora::Base.find(obj, :cast => true)
-    rescue ActiveFedora::ObjectNotFoundError
-      return nil
+    case obj
+    when ActiveFedora::Base
+      obj
+    when String
+      ActiveFedora::Base.find(obj, :cast => true)
+    else
+      nil
     end
+  rescue ActiveFedora::ObjectNotFoundError
+      return nil
   end
-
 end
