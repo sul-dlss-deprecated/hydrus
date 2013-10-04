@@ -50,62 +50,6 @@ describe ApplicationHelper do
     render_contextual_layout.should == "<ul class=\"breadcrumb\">\n  <li><a href=\"/\" disable_after_click=\"true\">Home</a></li>\n</ul>\n\n\n<div class=\"row\">\n  <div class=\"span9\" id=\"main\"></div>\n  <div class=\"span3\" id=\"sidebar\"></div>\n</div>\n"
   end
 
-  it "should get_attributes for an object" do
-    get_attributes(User.new).should == [
-      "before_add_for_bookmarks",
-      "after_add_for_bookmarks",
-      "before_remove_for_bookmarks",
-      "after_remove_for_bookmarks",
-      "before_add_for_searches",
-      "after_add_for_searches",
-      "before_remove_for_searches",
-      "after_remove_for_searches",
-      "password_confirmation",
-      "user_attributes",
-      "remember_me",
-      "extend_remember_period",
-      "password",
-      "documents_to_bookmark",
-      "bookmarks",
-      "bookmark_ids",
-      "searches",
-      "search_ids",
-      "id",
-      "email",
-      "encrypted_password",
-      "reset_password_token",
-      "reset_password_sent_at",
-      "remember_created_at",
-      "sign_in_count",
-      "current_sign_in_at",
-      "last_sign_in_at",
-      "current_sign_in_ip",
-      "last_sign_in_ip",
-      "created_at",
-      "updated_at",
-      "store_full_sti_class",
-      "_accessible_attributes",
-      "_protected_attributes",
-      "_active_authorizer",
-      "_mass_assignment_sanitizer",
-      "partial_updates",
-      "serialized_attributes",
-      "record_timestamps",
-      "_validation_callbacks",
-      "_initialize_callbacks",
-      "_find_callbacks",
-      "_touch_callbacks",
-      "_save_callbacks",
-      "_create_callbacks",
-      "_update_callbacks",
-      "_destroy_callbacks",
-      "include_root_in_json",
-      "reflections",
-      "_commit_callbacks",
-      "_rollback_callbacks",
-      "attributes"]
-  end
-
   it "should set the correct text for empty objects" do
     exp_unsp = '<span class="unspecified">to be entered</span>'
     exp_na   = '<span class="muted">not available yet</span>'
