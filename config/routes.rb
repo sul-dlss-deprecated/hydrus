@@ -2,10 +2,11 @@ Hydrus::Application.routes.draw do
 
   mount AboutPage::Engine => '/about(.:format)'
 
-  Blacklight.add_routes(self)
+  #Blacklight.add_routes(self)
   HydraHead.add_routes(self)
 
   root :to => "catalog#index"
+  get "catalog" => "catalog#index", :as => :catalog_index
 
   devise_for :users, :controllers => { :sessions => "sessions" }
 
