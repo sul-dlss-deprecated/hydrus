@@ -1,5 +1,7 @@
 class AdminController < ApplicationController
 
+  before_filter :authenticate_user!
+
   # updating the users can only be an ajax call from an administrator
   def update_users
     return unless request.xhr? && Hydrus::Authorizable.can_act_as_administrator(current_user)
