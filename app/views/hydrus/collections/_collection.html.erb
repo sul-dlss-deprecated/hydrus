@@ -1,0 +1,20 @@
+<%- document = collection %>
+    <div class="document <%= render_document_class document %>">
+    
+      <% # header bar for doc items in index view -%>
+      <div class="documentHeader clearfix">
+        <h5>
+        <%= link_to document.to_model.title, document.to_model %>
+        </h5>
+
+      </div>
+
+
+      <%= render_document_partial document, :thumbnail %>
+  <dl>
+  <dt>Object Type</dt>
+  <dd><%= document.object_type.capitalize %></dd>
+  <dt>Collection Status</dt>
+  <dd><%= document.object_status.capitalize %></dd>
+  </dl>
+    </div>

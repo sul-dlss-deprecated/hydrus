@@ -15,6 +15,26 @@ class Ability
       AUTH.can_read_object(user, get_fedora_object(obj))
     end
 
+    can(:read, Hydrus::Collection) do |obj|
+      AUTH.can_read_collection(user, obj)
+    end
+
+    can(:read, Hydrus::Item) do |obj|
+      AUTH.can_read_item(user, obj)
+    end
+
+    can(:read, String) do |obj|
+      o = get_fedora_object(obj)
+      case o
+      when Hydrus::Collection
+        AUTH.can_read_collection(user, obj)
+      when Hydrus::Item
+        AUTH.can_read_item(user, obj)
+      else
+        false
+      end
+    end
+
     cannot(:read, SolrDocument)
 
     # Create.

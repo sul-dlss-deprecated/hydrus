@@ -12,13 +12,13 @@ describe ApplicationHelper do
   it "should show correct view_item_text" do
     hi=Hydrus::Item.new
     hi.stub(:is_published).and_return(true)
-    view_item_text(hi).should == 'Published Version'
+    helper.view_item_text(hi).should == 'Published Version'
     hi.stub(:is_published).and_return(false)
-    view_item_text(hi).should == 'View Draft'
+    helper.view_item_text(hi).should == 'View Draft'
   end
 
   it "should get the local application name" do
-    application_name.should == "Stanford Digital Repository"
+    helper.application_name.should == "Stanford Digital Repository"
   end
 
   it "should show the signin link" do
@@ -97,18 +97,18 @@ describe ApplicationHelper do
   end
 
   it "should set the terms of deposit agree path" do
-    terms_of_deposit_agree_path('druid:oo000oo0001').should == '/items/agree_to_terms_of_deposit?pid=druid%3Aoo000oo0001'
+    helper.terms_of_deposit_agree_path('druid:oo000oo0001').should == '/items/agree_to_terms_of_deposit?pid=druid%3Aoo000oo0001'
   end
 
   it "should show edit item text" do
     hi=Hydrus::Item.new
-    edit_item_text(hi).should == 'Edit Draft'
+    helper.edit_item_text(hi).should == 'Edit Draft'
   end
 
   describe "render helpers" do
     it "should return a string that corresponds to the view path for that model" do
-      view_path_from_model(Hydrus::Collection.new(:pid=>"1234")).should == "hydrus_collections"
-      view_path_from_model(Hydrus::Item.new(:pid=>"1234")).should       == "hydrus_items"
+      helper.view_path_from_model(Hydrus::Collection.new(:pid=>"1234")).should == "hydrus_collections"
+      helper.view_path_from_model(Hydrus::Item.new(:pid=>"1234")).should       == "hydrus_items"
     end
   end
 
@@ -117,10 +117,10 @@ describe ApplicationHelper do
     it "should return item title links, showing special text when blank" do
       hi=Hydrus::Item.new
       hi2=Hydrus::Item.find('druid:oo000oo0001')
-      title_text(hi).should == 'Untitled'
-      title_text(hi2).should == 'How Couples Meet and Stay Together'
-      title_link(hi).should == '<a href="/items" disable_after_click="true">Untitled</a>'
-      title_link(hi2).should == '<a href="/items/druid:oo000oo0001" disable_after_click="true">How Couples Meet and Stay Together</a>'
+      helper.title_text(hi).should == 'Untitled'
+      helper.title_text(hi2).should == 'How Couples Meet and Stay Together'
+      helper.title_link(hi).should == '<a href="/items" disable_after_click="true">Untitled</a>'
+      helper.title_link(hi2).should == '<a href="/items/druid:oo000oo0001" disable_after_click="true">How Couples Meet and Stay Together</a>'
     end
 
   end
@@ -141,7 +141,7 @@ describe ApplicationHelper do
       br, br, br,
       'world',
     ].join
-    show_line_breaks(txt).should == exp
+    helper.show_line_breaks(txt).should == exp
   end
 
 end

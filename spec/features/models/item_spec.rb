@@ -7,7 +7,6 @@ describe(Hydrus::Item, :integration => true) do
     it "should be able to generate content metadata, returning blank CM when no files exist and setting content metadata stream to a blank template" do
       xml = "<contentMetadata objectId=\"__DO_NOT_USE__\" type=\"file\"/>"
       hi = Hydrus::Item.new
-      lambda{ hi.datastreams['contentMetadata'].content }.should raise_error
       hi.update_content_metadata
       hi.datastreams['contentMetadata'].content.should be_equivalent_to(xml)
     end

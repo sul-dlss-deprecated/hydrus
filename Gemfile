@@ -3,15 +3,15 @@ source 'http://sul-gems.stanford.edu'
 
 gem 'rails', '3.2.14'
 
-gem 'dor-services', ">= 3.0.0"
-gem 'sul_chrome'
+gem 'dor-services', ">= 4.3.1"
+gem 'sul_chrome', '~> 0.1.0'
 gem 'about_page'
 gem 'is_it_working-cbeer', "~> 1.0.13"
 gem 'assembly-objectfile', "1.5.0"
-
-gem 'blacklight', '~>3.8.2'
-gem 'hydra-head', '~> 4.1.3'
-
+gem 'blacklight', '~>4.4'
+gem 'hydra-head', '~> 5.1'
+gem 'active-fedora', "~> 5.7.1"
+gem 'solrizer', '~> 2.2'
 gem 'devise', '~> 2.2.5'
 gem 'carrierwave', "0.6.2"
 gem 'jquery-rails'
@@ -24,10 +24,8 @@ gem 'whenever', "~> 0.8.3"
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'
-  gem 'compass_twitter_bootstrap'
-  gem "compass-rails", "~> 1.0.0"
-  gem "compass-susy-plugin", "~> 0.9.0"
   gem 'coffee-rails', '~> 3.2.1'
+  gem "bootstrap-sass", '2.3.2.1'
   gem 'therubyracer'
   gem 'uglifier', '>= 1.0.3'
 end

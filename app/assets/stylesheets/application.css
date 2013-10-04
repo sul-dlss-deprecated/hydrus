@@ -16,6 +16,65 @@
  *
  *= require 'about_page'
  *= require bootstrap-datepicker
- *= require_self
  *= require_tree .
+ *= require_self
 */
+
+body {
+  padding-top: 0;
+  line-height: 18px;
+}
+
+p {
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+h2, h3, h4, h5, h6 {
+  margin: 0;
+}
+
+/* line 47, ../../../../../../../Users/cabeer/.rbenv/versions/2.0.0-p247/lib/ruby/gems/2.0.0/gems/compass_twitter_bootstrap-2.0.3/stylesheets/compass_twitter_bootstrap/_type.scss */
+h2 {
+  font-size: 24px;
+  line-height: 36px;
+}
+/* line 50, ../../../../../../../Users/cabeer/.rbenv/versions/2.0.0-p247/lib/ruby/gems/2.0.0/gems/compass_twitter_bootstrap-2.0.3/stylesheets/compass_twitter_bootstrap/_type.scss */
+h2 small {
+  font-size: 18px;
+}
+
+/* line 54, ../../../../../../../Users/cabeer/.rbenv/versions/2.0.0-p247/lib/ruby/gems/2.0.0/gems/compass_twitter_bootstrap-2.0.3/stylesheets/compass_twitter_bootstrap/_type.scss */
+h3 {
+  font-size: 18px;
+  line-height: 27px;
+}
+/* line 57, ../../../../../../../Users/cabeer/.rbenv/versions/2.0.0-p247/lib/ruby/gems/2.0.0/gems/compass_twitter_bootstrap-2.0.3/stylesheets/compass_twitter_bootstrap/_type.scss */
+h3 small {
+  font-size: 14px;
+}
+
+/* line 61, ../../../../../../../Users/cabeer/.rbenv/versions/2.0.0-p247/lib/ruby/gems/2.0.0/gems/compass_twitter_bootstrap-2.0.3/stylesheets/compass_twitter_bootstrap/_type.scss */
+h4, h5, h6 {
+  line-height: 18px;
+}
+
+/* line 64, ../../../../../../../Users/cabeer/.rbenv/versions/2.0.0-p247/lib/ruby/gems/2.0.0/gems/compass_twitter_bootstrap-2.0.3/stylesheets/compass_twitter_bootstrap/_type.scss */
+h4 {
+  font-size: 14px;
+}
+/* line 66, ../../../../../../../Users/cabeer/.rbenv/versions/2.0.0-p247/lib/ruby/gems/2.0.0/gems/compass_twitter_bootstrap-2.0.3/stylesheets/compass_twitter_bootstrap/_type.scss */
+h4 small {
+  font-size: 12px;
+}
+
+/* line 70, ../../../../../../../Users/cabeer/.rbenv/versions/2.0.0-p247/lib/ruby/gems/2.0.0/gems/compass_twitter_bootstrap-2.0.3/stylesheets/compass_twitter_bootstrap/_type.scss */
+h5 {
+  font-size: 12px;
+}
+
+/* line 73, ../../../../../../../Users/cabeer/.rbenv/versions/2.0.0-p247/lib/ruby/gems/2.0.0/gems/compass_twitter_bootstrap-2.0.3/stylesheets/compass_twitter_bootstrap/_type.scss */
+h6 {
+  font-size: 11px;
+  color: #999999;
+  text-transform: uppercase;
+}

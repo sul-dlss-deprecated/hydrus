@@ -25,13 +25,7 @@ $(document).ready(function(){
 
   $("[rel=tooltip]").tooltip();
 
-  // Modal sign in
-  $(".signin_link").each(function(){
-    $(this).click(function(){
-      $.ajax($(this).attr("data-url") + "&format=js");
-      return false;
-    });
-  });
+  Blacklight.setup_modal('.signin_link', '', true);
 
   // Open terms of deposit modal window for ajax users
   $(".tod_link").each(function(){
