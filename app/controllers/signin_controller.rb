@@ -1,4 +1,5 @@
 class SigninController < ApplicationController
+  skip_authorization_check
 
   def new
     redirect_to root_url and return if current_user # send users to the home page if they are already logged in

@@ -3,6 +3,9 @@
 
 en:
   hello: "Hello world"
+  unauthorized:
+    create:
+      :"hydrus/collection": "You do not have sufficient privileges to create collections."
   activemodel:
     errors:
       models:

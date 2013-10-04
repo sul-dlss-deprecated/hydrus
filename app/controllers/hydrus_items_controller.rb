@@ -3,11 +3,9 @@ class HydrusItemsController < ApplicationController
   include Hydra::Controller::ControllerBehavior
   include Hydra::AssetsControllerHelper  # This is to get apply_depositor_metadata method
   include Hydra::Controller::UploadBehavior
-  include Hydrus::AccessControlsEnforcement
 
   #prepend_before_filter :sanitize_update_params, :only => :update
   before_filter :setup_attributes, :except => [:new, :index, :send_purl_email, :terms_of_deposit, :agree_to_terms_of_deposit]
-  before_filter :enforce_access_controls
   before_filter :check_for_collection, :only => :new
   before_filter :redirect_if_not_correct_object_type, :only => [:edit,:show]
 
@@ -22,6 +20,11 @@ class HydrusItemsController < ApplicationController
         redirect_to new_user_session_path
       end
     end
+
+    @fobj = Hydrus::Collection.find(params[:hydrus_collection_id])
+    @fobj.current_user = current_user
+    authorize! :read, @fobj
+    @items=@fobj.items_list(:num_files=>true)
   end
 
   def setup_attributes
@@ -35,14 +38,17 @@ class HydrusItemsController < ApplicationController
   end
 
   def show
+    authorize! :read, @fobj
   end
 
   def edit
+    authorize! :edit, @fobj
   end
 
   def destroy
+    authorize! :edit, @fobj
     collection=@fobj.collection
-    if @fobj.is_destroyable && can?(:edit, @fobj)
+    if @fobj.is_destroyable
       @fobj.delete
       flash[:notice]="The item was deleted."
     else
@@ -52,7 +58,8 @@ class HydrusItemsController < ApplicationController
   end
 
   def discard_confirmation
-    if @fobj.is_destroyable && can?(:edit, @fobj)
+    authorize! :edit, @fobj
+    if @fobj.is_destroyable
       @id=params[:id]
       render 'shared/discard_confirmation'
     else
@@ -63,6 +70,10 @@ class HydrusItemsController < ApplicationController
 
   def new
     coll_pid = params[:collection]
+
+    authorize! :create, Hydrus::Item
+    authorize! :create_items_in, coll_pid
+
     item_type = params[:type] || Hydrus::Application.config.default_item_type
     item = Hydrus::Item.create(coll_pid, current_user, item_type)
     item.current_user = current_user
@@ -71,6 +82,7 @@ class HydrusItemsController < ApplicationController
 
   def update
 
+    authorize! :edit, @fobj
     notice = []
 
     ####
@@ -186,6 +198,7 @@ class HydrusItemsController < ApplicationController
     @pid=params[:pid]
     @from=params[:from]
     @fobj=Hydrus::Item.find(@pid)
+    authorize! :read, @fobj
     respond_to do |format|
       format.html
       format.js
@@ -196,6 +209,7 @@ class HydrusItemsController < ApplicationController
     @pid=params[:pid]
     @from=params[:from]
     @fobj=Hydrus::Item.find(@pid)
+    authorize! :edit, @fobj
     @fobj.accept_terms_of_deposit(current_user)
     @fobj.save
     respond_to do |format|
@@ -208,6 +222,7 @@ class HydrusItemsController < ApplicationController
     @pid=params[:pid]
     @from=params[:from]
     @fobj=Hydrus::Item.find(@pid)
+    authorize! :read, @fobj
     @recipients=params[:recipients]
     HydrusMailer.send_purl(:recipients=>@recipients,:current_user=>current_user,:object=>@fobj).deliver unless @recipients.blank?
     respond_to do |format|
@@ -217,6 +232,7 @@ class HydrusItemsController < ApplicationController
   end
 
   def create_file
+    authorize! :edit, @fobj
     if request.post? 
       @file = Hydrus::ObjectFile.new
       @file.pid = params[:id]
@@ -231,6 +247,7 @@ class HydrusItemsController < ApplicationController
   end
 
   def destroy_file
+    authorize! :edit, @fobj
     @file_id = params[:file_id]
     hof = Hydrus::ObjectFile.find_by_id(@file_id)
     hof.destroy if hof
@@ -246,6 +263,7 @@ class HydrusItemsController < ApplicationController
   end
 
   def destroy_value
+    authorize! :edit, @fobj
     @fobj.descMetadata.remove_node(params[:term], params[:term_index])
     @fobj.save
     respond_to do |want|
@@ -255,42 +273,42 @@ class HydrusItemsController < ApplicationController
   end
 
   def publish_directly
-    @fobj.cannot_do(:publish_directly) unless can?(:edit, @fobj)
+    authorize! :edit, @fobj
     @fobj.publish_directly
     try_to_save(@fobj, "Item published: #{@fobj.version_tag()}.")
     redirect_to(hydrus_item_path)
   end
 
   def submit_for_approval
-    @fobj.cannot_do(:submit_for_approval) unless can?(:edit, @fobj)
+    authorize! :edit, @fobj
     @fobj.submit_for_approval
     try_to_save(@fobj, "Item submitted for approval.")
     redirect_to(hydrus_item_path)
   end
 
   def approve
-    @fobj.cannot_do(:approve) unless can?(:review, @fobj)
+    authorize! :review, @fobj
     @fobj.approve
     try_to_save(@fobj, "Item approved and published: #{@fobj.version_tag()}.")
     redirect_to(hydrus_item_path)
   end
 
   def disapprove
-    @fobj.cannot_do(:disapprove) unless can?(:review, @fobj)
+    authorize! :review, @fobj
     @fobj.disapprove(params['hydrus_item_disapproval_reason'])
     try_to_save(@fobj, "Item returned.")
     redirect_to(hydrus_item_path)
   end
 
   def resubmit
-    @fobj.cannot_do(:resubmit) unless can?(:edit, @fobj)
+    authorize! :edit, @fobj
     @fobj.resubmit
     try_to_save(@fobj, "Item resubmitted for approval.")
     redirect_to(hydrus_item_path)
   end
 
   def open_new_version
-    @fobj.cannot_do(:open_new_version) unless can?(:edit, @fobj)
+    authorize! :edit, @fobj
     @fobj.open_new_version
     try_to_save(@fobj, "New version opened.")
     redirect_to(hydrus_item_path)

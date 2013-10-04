@@ -3,12 +3,12 @@ require 'blacklight/catalog'
 
 class CatalogController < ApplicationController
 
-  include Blacklight::Catalog
-  # Extend Blacklight::Catalog with Hydra behaviors (primarily editing).
-  include Hydrus::AccessControlsEnforcement
+  skip_authorization_check :only => [:index]
 
+  include Blacklight::Catalog
+  include Hydrus::AccessControlsEnforcement
   # These before_filters apply the hydra access controls
-  before_filter :enforce_access_controls
+  before_filter :enforce_index_permissions, :only => :index
   before_filter :enforce_viewing_context_for_show_requests, :only=>:show
   # This applies appropriate access controls to all solr queries
   CatalogController.solr_search_params_logic << :add_access_controls_to_solr_params
@@ -124,6 +124,8 @@ class CatalogController < ApplicationController
     super
     
   end
+
+  private
 
   def enforce_index_permissions
     if (current_user.nil? and has_search_parameters?)
