@@ -19,7 +19,8 @@ class Ability
 
     # Create.
 
-    can(:create_collections, :all) if AUTH.can_create_collections(user)
+    can(:create, Hydrus::Collection) if AUTH.can_create_collections(user)
+    can(:create, Hydrus::Item)
 
     can(:create_items_in, [String, Hydrus::Collection]) do |obj|
       AUTH.can_create_items_in(user, get_fedora_object(obj))
@@ -68,7 +69,8 @@ class Ability
     when String
       ActiveFedora::Base.find(obj, :cast => true)
     else
-      nil
+      Rails.logger.warn "Returning #{obj} from get_fedora_object"
+      obj
     end
   rescue ActiveFedora::ObjectNotFoundError
       return nil
