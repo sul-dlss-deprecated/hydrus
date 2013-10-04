@@ -72,9 +72,9 @@ RSpec.configure do |config|
       example.call
       # TODO: simplify if rollback_fixtures() is incorporated into Rubydora.
       if ENV['USE_OLD_ROLLBACK']
-        t.rollback
+       # t.rollback
       else
-        t.rollback_fixtures(FIXTURE_FOXML)
+      #  t.rollback_fixtures(FIXTURE_FOXML)
       end
     end
   end
@@ -108,7 +108,8 @@ class Rubydora::Transaction
         aps.each do |p|
           begin
             repository.purge_object(:pid => p)
-            run_hook(:after_rollback, :pid => p, :method => :ingest)
+            Blacklight.solr.delete_by_id p
+            #run_hook(:after_rollback, :pid => p, :method => :ingest)
           rescue
           end
         end
@@ -117,12 +118,20 @@ class Rubydora::Transaction
           next unless fps.include?(p)
           begin
             repository.ingest(:pid => p, :file => foxml)
-            run_hook(:after_rollback, :pid => p, :method => :purge_object)
+            $fixture_solr_cache ||= {}
+            $fixture_solr_cache[p] ||= begin
+              puts" indexing and caching #{p}"
+              ActiveFedora::Base.find(p, :cast => true).to_solr
+            end
+            
+            Blacklight.solr.add $fixture_solr_cache[p]
+            #run_hook(:after_rollback, :pid => p, :method => :purge_object)
           rescue
           end
         end
       end
       # Wrap up.
+      Blacklight.solr.commit
       repository.transactions_log.clear
       return true
     end
@@ -249,7 +258,7 @@ def check_emb_vis_lic(obj, opts)
     rm.ng_xml.xpath("#{rd}/none").size.should == 1
   else
     # embargoMetadata: should be empty
-    em.ng_xml.content.should == ''
+    em.ng_xml.content.strip.should be_empty
     # rightsMetadata: should not have an embargoReleaseDate.
     rm.ng_xml.xpath("#{rd}/embargoReleaseDate").size.should == 0
     rm.ng_xml.xpath("#{rd}/none").size.should == 0

@@ -57,14 +57,14 @@ class Hydrus::DescMetadataDS < ActiveFedora::NokogiriDatastream
     end
 
     t.date_created(
-      :proxy => [:mods,:originInfo,:dateCreated]
+      :proxy => [:originInfo,:dateCreated]
       )
     t.date_issued(
-      :proxy => [:mods,:originInfo,:dateIssued]
+      :proxy => [:originInfo,:dateIssued]
       )
         
     t.main_title(
-      :proxy => [:mods, :titleInfo, :title],
+      :proxy => [:titleInfo, :title],
       :index_as => [:searchable, :displayable]
     )
 

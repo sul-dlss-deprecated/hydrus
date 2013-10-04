@@ -43,7 +43,7 @@ module ApplicationHelper
 
   def hydrus_signin_link
     if Dor::Config.hydrus.show_standard_login
-      link_to("Sign in", new_user_session_path, :class=>'signin_link', :"data-url" => new_user_session_path)
+      link_to("Sign in", new_user_session_path, :class=>'signin_link')
     else
       link_to("Sign in via WebAuth", webauth_login_path)
     end

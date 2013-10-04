@@ -2,7 +2,8 @@
 # See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
 en:
-  hello: "Hello world"
+  blacklight:
+    application_name: "Stanford Digital Repository"
   unauthorized:
     create:
       :"hydrus/collection": "You do not have sufficient privileges to create collections."
