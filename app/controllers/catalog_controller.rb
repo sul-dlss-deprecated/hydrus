@@ -116,10 +116,12 @@ class CatalogController < ApplicationController
     # along with counts of Items in those Collections, broken down by
     # their workflow status.
     
-    @collections = Hydrus::Collection.collections_hash(current_user) if current_user
+    if current_user
+      @collections = Hydrus::Collection.collections_hash(current_user)
     
-    # administrators get a full list of collections, but not as detailed to save on a big SOLR query
-    @all_collections = Hydrus::Collection.dashboard_hash if (current_user && Hydrus::Authorizable.can_act_as_administrator(current_user))
+      # administrators get a full list of collections, but not as detailed to save on a big SOLR query
+      @all_collections = Hydrus::Collection.dashboard_hash if Hydrus::Authorizable.can_act_as_administrator(current_user)
+    end
     
     super
     
