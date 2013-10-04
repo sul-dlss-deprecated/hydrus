@@ -10,15 +10,8 @@ class HydrusItemsController < ApplicationController
   before_filter :redirect_if_not_correct_object_type, :only => [:edit,:show]
 
   def index
-    if not @fobj
-      if params.has_key?(:hydrus_collection_id)
-        @fobj = Hydrus::Collection.find(params[:hydrus_collection_id])
-        @fobj.current_user = current_user
-        @items=@fobj.items_list(:num_files=>true)
-      else
-        flash[:warning]="You need to log in."
-        redirect_to new_user_session_path
-      end
+    unless params.has_key?(:hydrus_collection_id)
+      raise ActionController::RoutingError.new('Not Found')
     end
 
     @fobj = Hydrus::Collection.find(params[:hydrus_collection_id])
@@ -28,13 +21,8 @@ class HydrusItemsController < ApplicationController
   end
 
   def setup_attributes
-    if params.has_key?(:hydrus_collection_id)
-      @fobj = Hydrus::Collection.find(params[:hydrus_collection_id])
-      @fobj.current_user = current_user
-    else
-      @fobj = Hydrus::Item.find(params[:id])
-      @fobj.current_user = current_user
-    end
+    @fobj = Hydrus::Item.find(params[:id])
+    @fobj.current_user = current_user
   end
 
   def show
@@ -316,15 +304,6 @@ class HydrusItemsController < ApplicationController
 
   protected
 
-  def enforce_index_permissions
-    if params.has_key?(:hydrus_collection_id)
-      obj=@fobj ? @fobj : params[:hydrus_collection_id]
-      unless can? :read, obj
-        flash[:error] = "You do not have permissions to view this collection."
-        redirect_to root_path
-      end
-    end
-  end
 
   def check_for_collection
     unless params.has_key?(:collection)
