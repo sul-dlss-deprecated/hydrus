@@ -8,7 +8,7 @@ describe("Item versioning", :type => :request, :integration => true) do
     @hi = Hydrus::Item.find('druid:oo000oo0001')
     @ok_notice = "Your changes have been saved."
     @buttons = {
-      :save                => 'Save',
+      :save                => 'save_nojs',
       :publish_directly    => 'Publish',
       :open_new_version    => 'Open new version',
     }
@@ -140,7 +140,7 @@ describe("Item versioning", :type => :request, :integration => true) do
     #   - Should get a flash error message.
     #   - Item's license should be unchanged.
     click_button(@buttons[:save])
-    find("div.alert").should have_content("Version must be 'major'")
+    find("#flash-notices div.alert").should have_content("Version must be 'major'")
     @hi = Hydrus::Item.find(@hi.pid)
     @hi.license.should == orig_lic
   end
@@ -218,7 +218,7 @@ describe("Item versioning", :type => :request, :integration => true) do
         :no         => 'hydrus_item_embarg_visib_embargoed_no',
         :date       => 'hydrus_item_embarg_visib_date',
         :date_sel   => 'input#hydrus_item_embarg_visib_date',
-        :flash      => 'div.alert',
+        :flash      => "#flash-notices div.alert",
         :err_range  => 'Embargo date must be in the range',
         :err_format => 'Embargo date must be in yyyy-mm-dd',
       }

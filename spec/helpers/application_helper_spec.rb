@@ -40,13 +40,13 @@ describe ApplicationHelper do
 
   it "should show the item edit tab appropriately" do
     [false, true].each do |exp|
-      item = mock(Hydrus::Item, :is_published => !exp)
+      item = double(Hydrus::Item, :is_published => !exp)
       show_item_edit(item).should == exp
     end
   end
 
   it "should render the correct contextual layout" do
-    controller=mock(HydrusCollectionsController)
+    controller=double("HydrusCollectionsController")
     render_contextual_layout.should == "<ul class=\"breadcrumb\">\n  <li><a href=\"/\" disable_after_click=\"true\">Home</a></li>\n</ul>\n\n\n<div class=\"row\">\n  <div class=\"span9\" id=\"main\"></div>\n  <div class=\"span3\" id=\"sidebar\"></div>\n</div>\n"
   end
 

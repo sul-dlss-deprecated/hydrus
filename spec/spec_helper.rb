@@ -134,23 +134,23 @@ def noko_doc(x)
 end
 
 def mock_user
-  mock_user =  mock("user")
-  mock_user.stub!(:email)
-  mock_user.stub!(:sunetid)
-  mock_user.stub!(:persisted?).and_return(false)
-  mock_user.stub!(:new_record?).and_return(true)
-  mock_user.stub!(:is_being_superuser?).and_return(false)
+  mock_user = double("user")
+  mock_user.stub(:email)
+  mock_user.stub(:sunetid)
+  mock_user.stub(:persisted?).and_return(false)
+  mock_user.stub(:new_record?).and_return(true)
+  mock_user.stub(:is_being_superuser?).and_return(false)
   return mock_user
 end
 
 def mock_authed_user(u = 'archivist1')
-  mock_user =  mock("user")
-  mock_user.stub!(:to_s).and_return(u)
-  mock_user.stub!(:sunetid).and_return(u)
-  mock_user.stub!(:email).and_return("#{u}@example.com")
-  mock_user.stub!(:persisted?).and_return(true)
-  mock_user.stub!(:new_record?).and_return(false)
-  mock_user.stub!(:is_being_superuser?).and_return(false)
+  mock_user = double("user")
+  mock_user.stub(:to_s).and_return(u)
+  mock_user.stub(:sunetid).and_return(u)
+  mock_user.stub(:email).and_return("#{u}@example.com")
+  mock_user.stub(:persisted?).and_return(true)
+  mock_user.stub(:new_record?).and_return(false)
+  mock_user.stub(:is_being_superuser?).and_return(false)
   return mock_user
 end
 
@@ -322,7 +322,7 @@ def create_new_collection(opts = {})
   fill_in "#{hc}_apo_person_roles[hydrus-collection-viewer]", :with => opts.viewers
   choose  "#{hc}_requires_human_approval_" + opts.requires_human_approval
   # Save.
-  click_button "Save"
+  click_button "save_nojs"
   current_path.should == "/collections/#{druid}"
   find('div.alert').should have_content("Your changes have been saved")
   # Get the collection from Fedora and return it.
@@ -373,7 +373,7 @@ def create_new_item(opts = {})
   f.file = Tempfile.new('mock_HydrusObjectFile_')
   f.save
   # Save.
-  click_button "Save"
+  click_button "save_nojs"
   current_path.should == "/items/#{druid}"
   find('div.alert').should have_content("Your changes have been saved")
   # Agree to terms of deposit (hard to do via the UI).

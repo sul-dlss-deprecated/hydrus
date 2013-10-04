@@ -11,7 +11,7 @@ describe EventsController do
 
   it "should assign the given object for the given ID as the fobj instance variable" do
     controller.stub(:current_user).and_return(mock_authed_user)
-    mock_coll = mock("HydrusCollection", :hydrus_class_to_s => 'Collection')
+    mock_coll = double("HydrusCollection", :hydrus_class_to_s => 'Collection')
     mock_coll.should_receive(:"current_user=").and_return("")
     ActiveFedora::Base.stub(:find).and_return(mock_coll)
     controller.stub(:'can?').and_return(true)

@@ -3,7 +3,7 @@ require 'spec_helper'
 describe("Item create", :type => :request, :integration => true) do
 
   before(:all) do
-    @div_alert   = "div.alert"
+    @div_alert   = "#flash-notices div.alert"
     @span_status = 'span#status-label'
     @div_actions = "div.collection-actions"
     @notices = {
@@ -22,7 +22,7 @@ describe("Item create", :type => :request, :integration => true) do
     }
     @buttons = {
       :add                 => 'Add',
-      :save                => 'Save',
+      :save                => 'save_nojs',
       :add_contributor     => 'Add Contributor',
       :submit_for_approval => 'Submit for Approval',
       :resubmit            => 'Resubmit for Approval',
@@ -42,14 +42,26 @@ describe("Item create", :type => :request, :integration => true) do
     Dor::Config.configure.suri.mint_ids = @prev_mint_ids
   end
 
-  it "should have a non-js select list for depositing items into collections" do
-    login_as('archivist1')
-    visit hydrus_collection_path(:id=>@hc_druid)
-    select "data set", :from => "type"
-    click_button(@buttons[:add])
-    current_path.should_not == hydrus_collection_path(:id=>@hc_druid)
-    current_path.should =~ @edit_path_regex
-  end
+  context "depositing items into collections" do
+      it "should have a non-js select list for depositing items into collections" do
+        login_as('archivist1')
+        visit hydrus_collection_path(:id=>@hc_druid)
+        select "data set", :from => "type"
+        click_button("Add new item")
+        current_path.should_not == hydrus_collection_path(:id=>@hc_druid)
+        current_path.should =~ @edit_path_regex
+      end
+
+      it "should be able to access create-new-Item screen via the Collection view page" do
+        Capybara.ignore_hidden_elements = false
+        login_as('archivist1')
+        collection = Hydrus::Collection.find(@hc_druid)
+        visit polymorphic_path(collection)
+        click_link 'data set'
+        current_path.should =~ @edit_path_regex
+        Capybara.ignore_hidden_elements = true
+      end
+    end
 
   it "should be able to create a new default Item type, with expected datastreams" do
     # Login, go to new Item page, and store the druid of the new Item.
@@ -129,6 +141,7 @@ describe("Item create", :type => :request, :integration => true) do
     fill_in "hydrus_item_contributors_0_name", :with => 'contributor_article'
     fill_in "Abstract", :with => 'abstract_article'
     click_button(@buttons[:save])
+
     find(@div_alert).should have_content(@notices[:save])
     # Get Item out of fedora and confirm that our edits were persisted.
     item = Hydrus::Item.find(druid)
@@ -142,13 +155,6 @@ describe("Item create", :type => :request, :integration => true) do
     item.descMetadata.genre.should == ['student project report']
   end
 
-  it "should be able to access create-new-Item screen via the Collection view page" do
-    login_as('archivist1')
-    collection = Hydrus::Collection.find(@hc_druid)
-    visit polymorphic_path(collection)
-    click_link('data set')
-    current_path.should =~ @edit_path_regex
-  end
 
   it "Requires approval: should be able to submit, disapprove, resubmit, approve, etc" do
     # Setup.
@@ -661,7 +667,8 @@ describe("Item create", :type => :request, :integration => true) do
       Hydrus::ObjectFile.find_all_by_pid(pid).size.should == 1
       # Delete the Item.
       hi.is_destroyable.should == true
-      click_link "Discard this item"
+      first(:link, "Discard this item").click
+      puts page.body
       click_button "Discard"
       hi = nil
       # Confirm that object was deleted:

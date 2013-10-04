@@ -12,12 +12,12 @@ describe("Collection view", :type => :request, :integration => true) do
 
   it "If not logged in, should be redirected to login page, then back to our intended page after logging in" do
     logout
-    visit polymorphic_url(@hc)
+    visit "/collections/#{@druid}"
     current_path.should == new_signin_path
     fill_in "Email", :with => 'archivist1@example.com'
     fill_in "Password", :with => login_pw
     click_button "Sign in"
-    current_path.should == polymorphic_path(@hc)
+    current_path.should == "/collections/#{@druid}"
   end
 
   it "Breadcrumbs should be displayed with home link and unlinked trucated collection name" do

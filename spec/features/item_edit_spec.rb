@@ -9,7 +9,7 @@ describe("Item edit", :type => :request, :integration => true) do
     @ok_notice = "Your changes have been saved."
     @buttons = {
       :add                 => 'Add',
-      :save                => 'Save',
+      :save                => 'save_nojs',
       :add_contributor     => 'Add Contributor',
       :submit_for_approval => 'Submit for Approval',
       :resubmit            => 'Resubmit for Approval',

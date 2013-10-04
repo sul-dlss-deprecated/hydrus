@@ -104,7 +104,7 @@ describe HydrusItemsController do
 
       it "should return the collection requested via the hydrus_collection_id parameter and assign it to the fobj instance variable" do
         controller.stub(:current_user).and_return(mock_authed_user)
-        mock_coll = mock("HydrusCollection")
+        mock_coll = double("HydrusCollection")
         mock_coll.should_receive(:"current_user=").and_return("")
         mock_coll.should_receive(:items_list)
         Hydrus::Collection.stub(:find).and_return(mock_coll)

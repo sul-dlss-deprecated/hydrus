@@ -37,7 +37,7 @@ describe("Collection create", :type => :request, :integration => true) do
     fill_in "hydrus_collection_title",    :with => ni.title
     fill_in "hydrus_collection_abstract", :with => ni.abstract
     fill_in "hydrus_collection_contact",  :with => ni.contact
-    click_button "Save"
+    click_button "save_nojs"
     find(@alert).should have_content(@notice_save)
     # Get Collection from fedora and confirm that our edits were persisted.
     coll = Hydrus::Collection.find(druid)
@@ -99,7 +99,7 @@ describe("Collection create", :type => :request, :integration => true) do
     # Fill in form and save.
     fill_in "hydrus_collection_title", :with => ni.title
     choose "hydrus_collection_requires_human_approval_yes"
-    click_button "Save"
+    click_button "save_nojs"
     find(@alert).should have_content(@notice_save)
     # The view page should display some validation error messages, and should not
     # offer the Open Collection button.
@@ -120,7 +120,7 @@ describe("Collection create", :type => :request, :integration => true) do
     should_visit_edit_page(coll)
     fill_in "hydrus_collection_abstract", :with => ni.abstract
     fill_in "hydrus_collection_contact",  :with => ni.contact
-    click_button "Save"
+    click_button "save_nojs"
     find(@alert).should have_content(@notice_save)
     # The view page should now offer the Open Collection button.
     page.should have_button(open_button)
@@ -173,12 +173,12 @@ describe("Collection create", :type => :request, :integration => true) do
     # Return to edit page, and try to save Collection with an empty title.
     click_link "Edit Collection"
     fill_in "hydrus_collection_title", :with => ''
-    click_button "Save"
+    click_button "save_nojs"
     page.should_not have_content(@notice_save)
     find('div.alert').should have_content('Title cannot be blank')
     # Fill in the title and save.
     fill_in "hydrus_collection_title", :with => ni.title
-    click_button "Save"
+    click_button "save_nojs"
     find(@alert).should have_content(@notice_save)
     # Open the Collection.
     click_button(open_button)
@@ -240,6 +240,8 @@ describe("Collection create", :type => :request, :integration => true) do
       wfs.get_workflows(cpid).should == [hwf]
       # Delete the collection and its APO.
       hc.is_destroyable.should == true
+      puts page.body
+      save_and_open_page
       click_link "Discard this collection"
       click_button "Discard"
       hc = nil
