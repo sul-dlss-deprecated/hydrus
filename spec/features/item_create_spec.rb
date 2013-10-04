@@ -668,7 +668,6 @@ describe("Item create", :type => :request, :integration => true) do
       # Delete the Item.
       hi.is_destroyable.should == true
       first(:link, "Discard this item").click
-      puts page.body
       click_button "Discard"
       hi = nil
       # Confirm that object was deleted:

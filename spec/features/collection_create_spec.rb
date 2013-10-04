@@ -240,8 +240,6 @@ describe("Collection create", :type => :request, :integration => true) do
       wfs.get_workflows(cpid).should == [hwf]
       # Delete the collection and its APO.
       hc.is_destroyable.should == true
-      puts page.body
-      save_and_open_page
       click_link "Discard this collection"
       click_button "Discard"
       hc = nil

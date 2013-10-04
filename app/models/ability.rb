@@ -5,7 +5,9 @@ class Ability
 
   AUTH = Hydrus::Authorizable
 
-  def hydra_default_permissions(user, session, *args)
+  def hydra_default_permissions
+
+    user = current_user
 
     # Read.
 
