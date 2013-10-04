@@ -1,22 +1,19 @@
 source 'https://rubygems.org'
 source 'http://sul-gems.stanford.edu'
 
-gem 'dor-services'
-gem 'druid-tools', '>= 0.2.0'
+gem 'rails', '3.2.14'
+
+gem 'dor-services', ">= 3.0.0"
 gem 'sul_chrome'
 gem 'about_page'
 gem 'is_it_working-cbeer', "~> 1.0.13"
-gem 'assembly-objectfile', ">= 1.5.0"
-gem 'rsolr-client-cert', ">= 0.5.2"
-gem 'solrizer-fedora'
+gem 'assembly-objectfile', "1.5.0"
 
-gem 'blacklight', '~>3.5', :git => 'http://github.com/projectblacklight/blacklight.git'
-gem 'hydra-head', '~> 4.1.1'
-gem 'rubydora',   '~> 0.5.11'
+gem 'blacklight', '~>3.8.2'
+gem 'hydra-head', '~> 4.1.3'
 
 gem 'devise', '~> 2.2.5'
-gem 'carrierwave'
-gem 'rails', '3.2.11'
+gem 'carrierwave', "0.6.2"
 gem 'jquery-rails'
 gem 'dynamic_form'
 gem 'bootstrap-datepicker-rails'
@@ -24,7 +21,6 @@ gem 'cancan'
 gem 'validates_email_format_of'
 gem 'coderay'
 gem 'whenever', "~> 0.8.3"
-gem 'nokogiri', ">= 1.6.0"
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'
@@ -39,9 +35,9 @@ end
 # gems only needed for particular environments
 
 group :test do
-  gem "cucumber-rails"
   gem 'database_cleaner'
   gem 'rspec-rails', '>=2.9.0'
+  gem 'capybara'
   gem 'simplecov'
   gem 'simplecov-rcov'
 end
@@ -53,6 +49,7 @@ group :development, :test do
   gem 'launchy'
   gem 'ruby-prof', :platform => 'ruby_19'
   gem 'debugger', :platform => 'ruby_19'
+  gem 'byebug', :platform => 'ruby_20'
 	gem 'letter_opener'
 end
 

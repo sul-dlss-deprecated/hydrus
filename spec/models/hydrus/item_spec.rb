@@ -288,6 +288,10 @@ describe Hydrus::Item do
       @edate = '2012-02-28T08:00:00Z'
       # XML snippets for various <access> nodes.
       ed       = "<embargoReleaseDate>#{@edate}</embargoReleaseDate><none/>"
+
+      twpc = "         <twentyPctVisibilityStatus/>
+         <twentyPctVisibilityReleaseDate/>"
+
       mw       = '<machine><world/></machine>'
       ms       = '<machine><group>stanford</group></machine>'
       me       = "<machine>#{ed}</machine>"
@@ -307,8 +311,8 @@ describe Hydrus::Item do
                  '</rightsMetadata>'
       # Assemble expected Nokogiri XML for embargoMetadata and rightsMetadata.
       @xml = {
-        :em_world   => noko_doc([em_start, em_world, em_end].join),
-        :em_stanf   => noko_doc([em_start, em_stanf, em_end].join),
+        :em_world   => noko_doc([em_start, em_world, twpc, em_end].join),
+        :em_stanf   => noko_doc([em_start, em_stanf, twpc, em_end].join),
         :rm_emb     => noko_doc([rm_start, di_world, rd_emb,   rm_end].join),
         :rm_world   => noko_doc([rm_start, di_world, rd_world, rm_end].join),
         :rm_stanf   => noko_doc([rm_start, di_world, rd_stanf, rm_end].join),
