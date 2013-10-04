@@ -4,7 +4,7 @@ class HydrusItemsController < ApplicationController
   include Hydra::AssetsControllerHelper  # This is to get apply_depositor_metadata method
   include Hydra::Controller::UploadBehavior
 
-  #prepend_before_filter :sanitize_update_params, :only => :update
+  before_filter :authenticate_user!
   before_filter :setup_attributes, :except => [:new, :index, :send_purl_email, :terms_of_deposit, :agree_to_terms_of_deposit]
   before_filter :check_for_collection, :only => :new
   before_filter :redirect_if_not_correct_object_type, :only => [:edit,:show]
