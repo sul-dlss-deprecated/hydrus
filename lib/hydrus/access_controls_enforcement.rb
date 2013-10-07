@@ -67,8 +67,7 @@ module Hydrus::AccessControlsEnforcement
       #      objects governed by APOs that mention current user in the APO roleMD
       #   OR objects that mention the user directly in their roleMD
       hsq = Hydrus::SolrQueryable
-      hsq.add_governed_by_filter(solr_parameters, apo_pids)
-      hsq.add_involved_user_filter(solr_parameters, current_user, :or => true)
+      hsq.add_gated_discovery(solr_parameters, apo_pids, current_user)
       # In addition, the objects must be Hydrus Collections or Items (not APOs).
       hsq.add_model_filter(solr_parameters, 'Hydrus_Collection', 'Hydrus_Item')
       # If there is no user, add a condition to guarantee zero search results.

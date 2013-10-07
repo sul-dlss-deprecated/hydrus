@@ -168,7 +168,7 @@ describe Hydrus::AccessControlsEnforcement do
       Hydrus::Collection.stub(:apos_involving_user).and_return(apo_pids)
       parts = {
         :igb => %Q<is_governed_by_s:("info:fedora/aaa" OR "info:fedora/bbb")>,
-        :rmd => %Q<roleMetadata_role_person_identifier_t:"userFoo">,
+        :rmd => %Q<roleMetadata_role_person_identifier_facet:"userFoo">,
         :hm  => @has_model_clause,
       }
       exp = {

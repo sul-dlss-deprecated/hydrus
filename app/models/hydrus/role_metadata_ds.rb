@@ -10,13 +10,13 @@ class Hydrus::RoleMetadataDS < ActiveFedora::NokogiriDatastream
     t.role do
       t.type_ :path => {:attribute => 'type'}
       t.person do
-        t.identifier do
+        t.identifier :index_as => [:facetable] do
           t.type_ :path => {:attribute => 'type'}
         end
         t.name
       end
       t.group do
-        t.identifier do
+        t.identifier :index_as => [:facetable]  do
           t.type_ :path => {:attribute => 'type'}
         end
       end

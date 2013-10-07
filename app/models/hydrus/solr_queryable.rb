@@ -9,6 +9,15 @@ module Hydrus::SolrQueryable
   # Module methods that modify the SOLR query parameters hash.
   ####
 
+  def self.add_gated_discovery(solr_parameters, apo_pids, user)
+
+    h = { :fq => []}
+    add_governed_by_filter(h, apo_pids)
+    add_involved_user_filter(h, user)
+    solr_parameters[:fq] ||= []
+    solr_parameters[:fq] << h[:fq].join(" OR ") unless h[:fq].empty?
+  end
+
   # Takes a hash of SOLR query parameters, along with a SUNET ID.
   # Adds a condition to the filter query parameter requiring that
   # the user's ID be present in the object's role metadata.
@@ -16,17 +25,9 @@ module Hydrus::SolrQueryable
   # preceding condition in the :fq array.
   def self.add_involved_user_filter(h, user, opt = {})
     return unless user
-    s = %Q<roleMetadata_role_person_identifier_t:"#{user}">
+    s = %Q<roleMetadata_role_person_identifier_facet:"#{user}">
     h[:fq] ||= []
-    if opt[:or]
-      if h[:fq].size == 0
-        h[:fq][0] = s
-      else
-        h[:fq][-1] += " OR #{s}"
-      end
-    else
-      h[:fq] << s
-    end
+    h[:fq] << s
   end
 
   # Takes a hash of SOLR query parameters, along with an array of APO druids.
