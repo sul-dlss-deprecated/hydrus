@@ -3,14 +3,14 @@ source 'http://sul-gems.stanford.edu'
 
 gem 'rails', '3.2.14'
 
-gem 'dor-services', "~> 4.0", :path => '../dor-services'
-gem 'sul_chrome', :path => '../sul_chrome'
+gem 'dor-services', ">= 4.3.0"
+gem 'sul_chrome', '~> 0.1.0'
 gem 'about_page'
 gem 'is_it_working-cbeer', "~> 1.0.13"
 gem 'assembly-objectfile', "1.5.0"
 gem 'blacklight', '~>4.4'
 gem 'hydra-head', '~> 5.1'
-gem 'active-fedora', :path => '../active_fedora'
+gem 'active-fedora', :github => 'projecthydra/active_fedora', :branch => '5.x'
 
 gem 'devise', '~> 2.2.5'
 gem 'carrierwave', "0.6.2"

@@ -1,5 +1,7 @@
-PATH
-  remote: ../active_fedora
+GIT
+  remote: git://github.com/projecthydra/active_fedora.git
+  revision: 4b5a470bf84652511f7661699e25b6f7b97f6d7c
+  branch: 5.x-ngxml
   specs:
     active-fedora (5.6.3)
       activeresource (>= 3.0.0)
