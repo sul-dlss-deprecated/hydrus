@@ -38,7 +38,7 @@
               <!-- <td><%#= item[:object_type] %></td> -->
               <td><%= item[:status_label] %></td>
               <td><%= item[:num_files] %></td>
-              <td><%= HyTime.datetime_display(item[:create_date]) %></td>
+              <td><%= HyTime.datetime_display(Array(item[:create_date]).first) %></td>
             </tr>
           <% end %>
         </tbody>
