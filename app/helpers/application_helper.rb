@@ -6,6 +6,10 @@ module ApplicationHelper
     'Stanford Digital Repository'
   end
 
+  def sidebar_items
+    @sidebar_items ||= []
+  end
+
   def license_image(license_code)
     gcode = Hydrus::GenericObject.license_group_code(license_code)
     lcode = license_code.downcase.gsub('-', '_')
