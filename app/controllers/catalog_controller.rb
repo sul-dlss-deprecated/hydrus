@@ -3,7 +3,7 @@ require 'blacklight/catalog'
 
 class CatalogController < ApplicationController
 
-  skip_authorization_check :only => [:index]
+  skip_authorization_check :only => [:home, :index]
 
   include Blacklight::Catalog
   include Hydrus::AccessControlsEnforcement
@@ -14,6 +14,8 @@ class CatalogController < ApplicationController
   CatalogController.solr_search_params_logic << :add_access_controls_to_solr_params
   # This filters out objects that you want to exclude from search results, like FileAssets
   CatalogController.solr_search_params_logic << :exclude_unwanted_models
+
+  helper_method :has_search_parameters?
 
   configure_blacklight do |config|
     config.default_solr_params = {
@@ -111,6 +113,23 @@ class CatalogController < ApplicationController
     config.spell_max = 5
   end
 
+  def home
+    # Issue some SOLR queries to get Collections involving the user,
+    # along with counts of Items in those Collections, broken down by
+    # their workflow status.
+    
+    if current_user
+      @collections = Hydrus::Collection.collections_hash(current_user)
+    
+      # administrators get a full list of collections, but not as detailed to save on a big SOLR query
+      @all_collections = Hydrus::Collection.dashboard_hash if Hydrus::Authorizable.can_act_as_administrator(current_user)
+    end
+
+    respond_to do |format|
+      format.html
+    end
+  end
+
   def index
     # Issue some SOLR queries to get Collections involving the user,
     # along with counts of Items in those Collections, broken down by
@@ -138,7 +157,7 @@ class CatalogController < ApplicationController
   end
   
   def has_search_parameters?
-    return not(params[:q].blank? and params[:f].blank? and params[:search_field].blank?)
+    true
   end
 
 end
