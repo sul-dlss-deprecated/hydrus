@@ -18,7 +18,6 @@ describe Hydrus::ObjectFile, :integration=>true do
   end
 
   it "should delete a file from the file system and disassociate from item when called" do
-
     pid = 'druid:oo000oo0001'
     @hi=Hydrus::Item.find(pid)
 
@@ -28,17 +27,17 @@ describe Hydrus::ObjectFile, :integration=>true do
     filename = files[0].filename
     file_url = files[0].url
     full_file_path = "public" + file_url
-    File.exists?(full_file_path).should == true
+    File.exists?(full_file_path).should be_true
 
     files[0].destroy
 
     @hi=Hydrus::Item.find(pid)
     @hi.files.size.should == 3
-    File.exists?(full_file_path).should == false
+    File.exists?(full_file_path).should be_false
 
     # restore original file and stream from fixtures
     restore_upload_file(file_url)
-    File.exists?(full_file_path).should == true
+    File.exists?(full_file_path).should be_true
   end
 
 end

@@ -58,7 +58,7 @@ describe Ability do
       [true, false].each do |exp|
         @auth.stub(:can_create_collections).and_return(exp)
         @ab = Ability.new(@obj)
-        @ab.can?(:create_collections, Hydrus::Collection).should == exp
+        @ab.can?(:create, Hydrus::Collection).should == exp
       end
     end
 

@@ -12,7 +12,7 @@
 
 <div id="new-collections">
   <form class="form-horizontal">
-    <% if can?(:create_collections, Hydrus::Collection) %>
+    <% if can?(:create, Hydrus::Collection) %>
       <%= link_to(
             "Create a new collection",
             new_polymorphic_path(Hydrus::Collection),

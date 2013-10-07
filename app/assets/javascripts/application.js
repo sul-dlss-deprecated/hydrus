@@ -14,12 +14,14 @@
 //= require jquery_ujs
 // Required by Hydra
 //
+// Required by Blacklight
+//= require blacklight/blacklight
 //= require about_page
 // Required by Hydrus:
 //= require jquery.truncator
 // Required by SULChrome:
 //= require sul_chrome/sul_chrome_base
-//= require bootstrap-all
+//= require bootstrap
 //= require bootstrap-datepicker
 //= require_tree .
 

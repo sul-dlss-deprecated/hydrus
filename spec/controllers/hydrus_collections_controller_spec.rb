@@ -4,9 +4,9 @@ describe HydrusCollectionsController do
 
   describe "Index action" do
 
-    it "should redirect with a flash message when we're not dealing w/ a nested resrouce" do
+    it "should redirect with a flash message when we're not dealing w/ a nested resource" do
       get :index
-      flash[:warning].should =~ /You need to log in/
+      flash[:alert].should == "You need to sign in or sign up before continuing."
       response.should redirect_to(new_user_session_path)
     end
   end
@@ -50,13 +50,12 @@ describe HydrusCollectionsController do
 
   describe "Show Action", :integration => true do
 
-    it "should not get fedora document and assign various attributes when not logged in" do
+    it "should redirect the user when not logged in" do
       @pid = 'druid:oo000oo0003'
-      controller.stub(:current_user).and_return(mock_user)
       get :show, :id => @pid
-      assigns[:fobj].should be_nil
-      response.should redirect_to root_path
+      response.should redirect_to new_user_session_path
     end
+
 
   end
 
@@ -67,10 +66,10 @@ describe HydrusCollectionsController do
     end
 
     it "should not allow a user to update an object if you do not have edit permissions" do
-      controller.stub(:current_user).and_return(mock_user)
+      sign_in(mock_user)
       put :update, :id => @pid
       response.should redirect_to(root_path)
-      flash[:error].should =~ /You do not have sufficient privileges to edit/
+      flash[:alert].should == "You are not authorized to access this page."
     end
 
   end
@@ -79,11 +78,11 @@ describe HydrusCollectionsController do
 
     it "should raise exception if user lacks required permissions" do
       pid = "druid:oo000oo0003"
-      err_msg = /\ACannot perform action:/
-      controller.stub(:current_user).and_return(mock_user)
+      sign_in(mock_user)
       [:open, :close].each do |action|
-        e = expect { post(action, :id => pid) }
-        e.to raise_exception(err_msg)
+        post(action, :id => pid)
+
+        flash[:alert].should == "You are not authorized to access this page."
       end
     end
 
@@ -92,20 +91,21 @@ describe HydrusCollectionsController do
   describe "list_all", :integration => true do
 
     it "should redirect to root url for non-admins when not in development mode" do
-      controller.stub(:current_user).and_return(mock_authed_user)
+      sign_in(mock_authed_user)
       get(:list_all)
-      flash[:error].should =~ /do not have permissions to list all/
+      flash[:alert].should == "You are not authorized to access this page."
       response.should redirect_to(root_path)
     end
 
     it "should redirect to root path when not logged in" do
-      controller.stub(:current_user).and_return(mock_user)
       get(:list_all)
-      response.should redirect_to(root_path)
+      response.should redirect_to(new_user_session_path)
     end
 
     it "should render the page for users with sufficient powers" do
-      controller.stub('can?').and_return(true)
+      controller.current_ability.can :list_all_collections, Hydrus::Collection
+      sign_in(mock_authed_user)
+      
       get(:list_all)
       assigns[:all_collections].should_not == nil
       response.should render_template(:list_all)

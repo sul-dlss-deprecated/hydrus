@@ -28,7 +28,7 @@ describe Hydrus::AccessControlsEnforcement do
       @mc.stub('current_user').and_return(nil)
       @mc.stub('session').and_return({})
       @mc.stub('request').and_return(OpenStruct.new(:full_path=>'some/fake/path'))
-      @mc.stub('new_signin_path').and_return('/users/signin')
+      @mc.stub('new_user_session_path').and_return('/users/signin')
     end
 
     it "should do nothing if the user can read the object" do
@@ -66,7 +66,7 @@ describe Hydrus::AccessControlsEnforcement do
       @mc = MockController.new(:id => @dru)
       @mc.stub('session').and_return({})
       @mc.stub('request').and_return(OpenStruct.new(:full_path=>'some/fake/path'))
-      @mc.stub('new_signin_path').and_return('/users/signin')
+      @mc.stub('new_user_session_path').and_return('/users/signin')
     end
 
     it "should do nothing if the user can edit the object" do
@@ -98,7 +98,7 @@ describe Hydrus::AccessControlsEnforcement do
       @mc.stub('current_user').and_return(OpenStruct.new)
       @mc.stub('session').and_return({})
       @mc.stub('request').and_return(OpenStruct.new(:full_path=>'some/fake/path'))
-      @mc.stub('new_signin_path').and_return('/users/signin')
+      @mc.stub('new_user_session_path').and_return('/users/signin')
     end
 
     it "should do nothing if the user can do it" do
@@ -129,7 +129,7 @@ describe Hydrus::AccessControlsEnforcement do
       @mc.stub('current_user').and_return(nil)
       @mc.stub('session').and_return({})
       @mc.stub('request').and_return(OpenStruct.new(:full_path=>'some/fake/path'))
-      @mc.stub('new_signin_path').and_return('/users/signin')
+      @mc.stub('new_user_session_path').and_return('/users/signin')
     end
 
     it "should do nothing if the user can do it" do
