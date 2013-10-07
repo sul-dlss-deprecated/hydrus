@@ -65,10 +65,8 @@ module Hydrus::SolrQueryable
   # Takes a hash of parameters for a SOLR query.
   # Runs the query an returns a two-element array containing the SOLR
   # response and an array of SolrDocuments.
-  def issue_solr_query(h)
-    solr_response = Blacklight.solr.find(h)
-    document_list = solr_response.docs.map {|doc| SolrDocument.new(doc, solr_response)}
-    return [solr_response, document_list]
+  def issue_solr_query(*args)
+    Hydrus::SolrQueryable.issue_solr_query *args
   end
   #This static version was added specifically to deal with loading the dashboard without instantiating an object. 
   def self.issue_solr_query(h)
