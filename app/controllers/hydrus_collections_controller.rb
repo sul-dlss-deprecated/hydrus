@@ -146,9 +146,8 @@ class HydrusCollectionsController < ApplicationController
 
   def list_all
     authorize! :list_all_collections, Hydrus::Collection
-
     @all_collections = Hydrus::Collection.all_hydrus_collections.
-                       sort.map { |p| Hydrus::Collection.find(p, :lightweight => true) }
+                       sort.map { |p| Hydrus::Collection.find({:id => p}, :lightweight => true) }
   end
 
   private
