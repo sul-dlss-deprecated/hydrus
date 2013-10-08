@@ -31,6 +31,17 @@ describe Hydrus::Collection do
     obj.terms_of_use.should =~ /user agrees/i
   end
 
+  describe "save()" do
+    it "should invoke log_editing_events() if no_edit_logging is false" do
+      @hc.should_receive(:log_editing_events).once
+      @hc.should_receive(:publish_metadata).once
+      @hc.stub('is_collection?').and_return(true)
+      @hc.stub(:is_published).and_return(true)
+      @hc.stub(:is_open).and_return(true)
+      @hc.save(:no_super => true)
+    end
+
+  end
   describe "open() and close()" do
 
     # More substantive testing is done at integration level.

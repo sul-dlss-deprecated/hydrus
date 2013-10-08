@@ -59,7 +59,6 @@ class Hydrus::GenericObject < Dor::Item
   def beautify_datastream(dsid)
     ds         = datastreams[dsid.to_s]
     ds.content = beautified_xml(ds.content)
-    ds.content_will_change!
   end
 
   # Takes some XML as a String.
