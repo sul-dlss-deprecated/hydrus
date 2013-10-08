@@ -20,64 +20,7 @@ describe Hydrus::Item do
     END
     @workflow_xml = noko_doc(@workflow_xml)
   end
-
-  it "can exercise a stubbed version of create()" do
-    # More substantive testing is done at integration level.
-    Hydrus::Authorizable.stub(:can_create_items_in).and_return(true)
-    # Stub out the Collection find() method.
-    hc = Hydrus::Collection.new
-    hc.stub(:visibility_option_value).and_return('varies')
-    hc.stub(:is_open).and_return(true)
-    Hydrus::Collection.stub(:find).and_return(hc)
-    # Set up an Item for use when stubbing register_dor_object().
-    druid = 'druid:BLAH'
-    stubs = [
-      :remove_relationship,
-      :assert_content_model,
-      :set_item_type,
-    ]
-    stubs.each { |s| @hi.should_receive(s) }
-    @hi.should_receive(:save).with(:no_edit_logging => true, :no_beautify => true)
-    @hi.stub(:pid).and_return(druid)
-    @hi.stub(:adapt_to).and_return(@hi)
-    @hi.stub(:collection).and_return(hc)
-    @hi.stub(:date_created).and_return('2011')
-    Hydrus::GenericObject.stub(:register_dor_object).and_return(@hi)
-    # Call create().
-    obj = Hydrus::Item.create(hc.pid, mock_user)
-    obj.pid.should == druid
-    obj.get_hydrus_events.size.should == 1
-    obj.terms_of_use.should =~ /user agrees/i
-    obj.version_started_time.should =~ /\A\d{4}/
-    obj.version_tag.should == 'v1.0.0'
-  end
-
-  it "can exercise a stubbed version of create when terms have already been accepted on another item" do
-    # More substantive testing is done at integration level.
-    druid = 'druid:BLAH'
-    stubs = [
-      :remove_relationship,
-      :assert_content_model,
-      :set_item_type,
-    ]
-    stubs.each { |s| @hi.should_receive(s) }
-    @hi.should_receive(:save).with(:no_edit_logging => true, :no_beautify => true)
-    @hi.stub(:pid).and_return(druid)
-    @hi.stub(:adapt_to).and_return(@hi)
-    @hi.stub(:requires_terms_acceptance).and_return(false)
-    hc = Hydrus::Collection.new
-    hc.stub(:visibility_option_value).and_return('varies')
-    hc.stub(:is_open).and_return(true)
-    Hydrus::Collection.stub(:find).and_return(hc)
-    Hydrus::GenericObject.stub(:register_dor_object).and_return(@hi)
-    @hi.stub(:collection).and_return(hc)
-    @hi.stub(:date_created).and_return('2011')
-    Hydrus::Authorizable.stub(:can_create_items_in).and_return(true)
-    new_item=Hydrus::Item.create(hc.pid, mock_user)
-    new_item.pid.should == druid
-    new_item.terms_of_deposit_accepted?.should be true
-  end
-
+  
   describe "#files" do
     subject { Hydrus::Item.new }
 

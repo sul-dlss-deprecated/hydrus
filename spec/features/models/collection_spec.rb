@@ -29,7 +29,16 @@ describe(Hydrus::Collection, :integration => true) do
   it "should be able to create a Collection object, with an APO" do
     coll  = Hydrus::Collection.create(mock_authed_user)
     coll.should be_instance_of Hydrus::Collection
-    expect(coll.apo_pid).to eq coll.apo.pid
+    expect(coll).to_not be_new
+    expect(coll.apo.roleMetadata.collection_manager.val.first.strip).to include mock_authed_user.sunetid
+    expect(coll.item_type).to eq 'collection'
+    expect(coll.events.event.val).to have(1).item
+    expect(coll.events.event).to include "Collection created"
+    expect(coll.object_status).to eq 'draft'
+    expect(coll.title).to be_empty
+    expect(coll.relationships(:has_model)).to_not include 'info:fedora/afmodel:Dor_Collection'
+    expect(coll.relationships(:has_model)).to include 'info:fedora/afmodel:Hydrus_Collection'
   end
+
 
 end
