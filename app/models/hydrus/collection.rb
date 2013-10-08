@@ -2,6 +2,7 @@ class Hydrus::Collection < Dor::Collection
 
   include Hydrus::GenericObjectStuff
   extend Hydrus::SolrQueryable
+  include Dor::Embargoable
 
   before_save :save_apo
   
