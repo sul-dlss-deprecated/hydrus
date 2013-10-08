@@ -36,6 +36,10 @@ class Hydrus::RoleMetadataDS < ActiveFedora::NokogiriDatastream
     t.item_manager              :ref => [:role], :attributes => {:type => 'hydrus-item-manager'}
     t.item_depositor            :ref => [:role], :attributes => {:type => 'hydrus-item-depositor'}
 
+    t.item_depositor_person_identifier(
+      :ref => [:item_depositor, :person, :identifier],
+      :index_as => [:facetable, :displayable]
+    )
   end
 
   ####

@@ -93,7 +93,7 @@ class Hydrus::Collection < Dor::Collection
       num_files=(get_num_files ? Hydrus::ObjectFile.count(:conditions=>['pid=?',id]) : -1)
       status=self.class.array_to_single(solr_doc['hydrusProperties_object_status_t'])
       object_type=self.class.array_to_single(solr_doc['mods_typeOfResource_t'])
-      depositor=self.class.array_to_single(solr_doc['roleMetadata_t'])
+      depositor=self.class.array_to_single(solr_doc['item_depositor_person_identifier_display'])
       create_date=solr_doc['system_create_dt']
       items << {:pid=>id,:num_files=>num_files,:object_type=>object_type,:title=>title,:status_label=>status,:item_depositor_id=>depositor,:create_date=>create_date}
     end
