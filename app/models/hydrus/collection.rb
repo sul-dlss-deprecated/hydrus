@@ -731,8 +731,9 @@ class Hydrus::Collection < Dor::Collection
     delete_hydrus_workflow
     apo.delete_hydrus_workflow
     # Fedora object and SOLR entries.
-    apo.delete
+    my_apo = apo
     super
+    my_apo.delete
   end
 
   def item_types
