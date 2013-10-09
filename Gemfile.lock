@@ -1,55 +1,3 @@
-PATH
-  remote: ../active_fedora
-  specs:
-    active-fedora (5.6.3)
-      activeresource (>= 3.0.0)
-      activesupport (>= 3.0.0)
-      builder (~> 3.0.0)
-      deprecation
-      mediashelf-loggable
-      nom-xml (>= 0.5.1)
-      om (~> 1.8.0)
-      rdf
-      rdf-rdfxml (~> 0.3.8)
-      rsolr
-      rubydora (~> 1.6)
-      solrizer (~> 2.1)
-
-PATH
-  remote: ../dor-services
-  specs:
-    dor-services (4.2.4)
-      active-fedora (~> 5.6, >= 5.6.3)
-      confstruct (>= 0.2.2)
-      dor-workflow-service (~> 1.3)
-      druid-tools (>= 0.2.3)
-      equivalent-xml (>= 0.2.2)
-      json
-      lyber-utils
-      moab-versioning (>= 1.2.1)
-      net-sftp
-      net-ssh
-      nokogiri (>= 1.6.0)
-      om
-      progressbar
-      rest-client
-      rsolr-client-cert (>= 0.5.1)
-      rsolr-ext
-      ruby-cache
-      ruby-graphviz
-      solrizer (~> 2.0)
-      stanford-mods (>= 0.0.14)
-      systemu
-      uuidtools
-      validatable
-
-PATH
-  remote: ../sul_chrome
-  specs:
-    sul_chrome (0.1.0.pre1)
-      bootstrap-sass
-      rails (>= 3.1.0)
-
 GEM
   remote: https://rubygems.org/
   remote: http://sul-gems.stanford.edu/
@@ -406,6 +354,9 @@ GEM
     stanford-mods (0.0.20)
       mods
     stomp (1.3.1)
+    sul_chrome (0.1.0)
+      bootstrap-sass
+      rails (>= 3.1.0)
     systemu (2.5.2)
     therubyracer (0.12.0)
       libv8 (~> 3.16.14.0)
@@ -472,7 +423,7 @@ DEPENDENCIES
   simplecov-rcov
   solrizer (~> 2.2)
   sqlite3
-  sul_chrome!
+  sul_chrome (~> 0.1.0)
   therubyracer
   uglifier (>= 1.0.3)
   validates_email_format_of
