@@ -7,7 +7,6 @@ describe(Hydrus::Item, :integration => true) do
     it "should be able to generate content metadata, returning blank CM when no files exist and setting content metadata stream to a blank template" do
       xml = "<contentMetadata objectId=\"__DO_NOT_USE__\" type=\"file\"/>"
       hi = Hydrus::Item.new
-      lambda{ hi.datastreams['contentMetadata'].content }.should raise_error
       hi.update_content_metadata
       hi.datastreams['contentMetadata'].content.should be_equivalent_to(xml)
     end
@@ -77,6 +76,61 @@ describe(Hydrus::Item, :integration => true) do
       check_statuses.call()
     end
 
+  end
+
+  describe "create()" do
+
+    before(:all) do
+      @prev_mint_ids = config_mint_ids()
+      Dor::WorkflowDs.any_instance.stub(:current_priority).and_return 0
+      
+      @collection = Hydrus::Collection.create mock_authed_user
+    end
+
+    after(:all) do
+      @collection.delete
+      config_mint_ids(@prev_mint_ids)
+    end
+
+    before(:each) do
+      Hydrus::Collection.stub(:find).with(collection.pid).and_return(collection)
+    end
+
+
+    let(:collection) do
+      @collection.stub(:is_open => true)
+      @collection
+    end
+
+    it "should create an item" do
+      collection.stub(:visibility_option_value => 'stanford', :license => 'some-license')
+      item  = Hydrus::Item.create(collection.pid, mock_authed_user, 'some-type')
+      item.should be_instance_of Hydrus::Item
+      expect(item).to_not be_new
+      expect(item.visibility).to include 'stanford'
+      expect(item.item_type).to eq 'some-type'
+      expect(item.events.event.val).to have(1).item
+      expect(item.events.event).to include "Item created"
+      expect(item.object_status).to eq 'draft'
+      expect(item.versionMetadata).to_not be_new
+      expect(item.license).to eq "some-license"
+      expect(item.roleMetadata.item_depositor).to include mock_authed_user.sunetid
+      expect(item.relationships(:has_model)).to_not include 'info:fedora/afmodel:Dor_Item'
+      expect(item.relationships(:has_model)).to include 'info:fedora/afmodel:Hydrus_Item'
+      expect(item.accepted_terms_of_deposit).to eq "false"
+    end
+
+    it "should create an item" do
+      Dor::WorkflowDs.any_instance.stub(:current_priority).and_return 0
+      collection.stub(:users_accepted_terms_of_deposit => { mock_authed_user.to_s => Time.now})
+
+      item  = Hydrus::Item.create(collection.pid, mock_authed_user, 'some-type')
+      item.should be_instance_of Hydrus::Item
+      expect(item).to_not be_new
+      expect(item.item_type).to eq 'some-type'
+      expect(item.events.event).to include "Terms of deposit accepted due to previous item acceptance in collection"
+      expect(item.accepted_terms_of_deposit).to eq "true"
+    end
   end
 
 end

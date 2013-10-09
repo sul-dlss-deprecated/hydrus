@@ -3,17 +3,19 @@ require 'blacklight/catalog'
 
 class CatalogController < ApplicationController
 
-  include Blacklight::Catalog
-  # Extend Blacklight::Catalog with Hydra behaviors (primarily editing).
-  include Hydrus::AccessControlsEnforcement
+  skip_authorization_check :only => [:home, :index]
 
+  include Blacklight::Catalog
+  include Hydrus::AccessControlsEnforcement
   # These before_filters apply the hydra access controls
-  before_filter :enforce_access_controls
+  before_filter :enforce_index_permissions, :only => :index
   before_filter :enforce_viewing_context_for_show_requests, :only=>:show
   # This applies appropriate access controls to all solr queries
   CatalogController.solr_search_params_logic << :add_access_controls_to_solr_params
   # This filters out objects that you want to exclude from search results, like FileAssets
   CatalogController.solr_search_params_logic << :exclude_unwanted_models
+
+  helper_method :has_search_parameters?
 
   configure_blacklight do |config|
     config.default_solr_params = {
@@ -95,7 +97,7 @@ class CatalogController < ApplicationController
     # solr request handler? The one set in config[:default_solr_parameters][:qt],
     # since we aren't specifying it otherwise.
 
-    config.add_search_field 'text', :label => 'Everywhere'
+#    config.add_search_field 'text', :label => 'Everywhere'
 
     # "sort results by" select (pulldown)
     # label in pulldown is followed by the name of the SOLR field to sort by and
@@ -111,19 +113,40 @@ class CatalogController < ApplicationController
     config.spell_max = 5
   end
 
+  def home
+    # Issue some SOLR queries to get Collections involving the user,
+    # along with counts of Items in those Collections, broken down by
+    # their workflow status.
+    
+    if current_user
+      @collections = Hydrus::Collection.collections_hash(current_user)
+    
+      # administrators get a full list of collections, but not as detailed to save on a big SOLR query
+      @all_collections = Hydrus::Collection.dashboard_hash if Hydrus::Authorizable.can_act_as_administrator(current_user)
+    end
+
+    respond_to do |format|
+      format.html
+    end
+  end
+
   def index
     # Issue some SOLR queries to get Collections involving the user,
     # along with counts of Items in those Collections, broken down by
     # their workflow status.
     
-    @collections = Hydrus::Collection.collections_hash(current_user) if current_user
+    if current_user
+      @collections = Hydrus::Collection.collections_hash(current_user)
     
-    # administrators get a full list of collections, but not as detailed to save on a big SOLR query
-    @all_collections = Hydrus::Collection.dashboard_hash if (current_user && Hydrus::Authorizable.can_act_as_administrator(current_user))
+      # administrators get a full list of collections, but not as detailed to save on a big SOLR query
+      @all_collections = Hydrus::Collection.dashboard_hash if Hydrus::Authorizable.can_act_as_administrator(current_user)
+    end
     
     super
     
   end
+
+  private
 
   def enforce_index_permissions
     if (current_user.nil? and has_search_parameters?)
@@ -132,32 +155,9 @@ class CatalogController < ApplicationController
       redirect_to(new_user_session_path)
     end
   end
-
-  # updating the users can only be an ajax call from an administrator
-  def update_users
-    return unless request.xhr? && Hydrus::Authorizable.can_act_as_administrator(current_user)
-        
-    # admins=UserRole.find_by_role('administrators')
-    # unless admins.blank?
-    #   admins.users=params[:administrators]
-    #   admins.save
-    # end
-    collection_creators=UserRole.find_by_role('collection_creators')
-    unless collection_creators.blank?
-      collection_creators.users=params[:collection_creators]
-      collection_creators.save
-    end
-    global_viewers=UserRole.find_by_role('global_viewers')
-    unless global_viewers.blank?
-      global_viewers.users=params[:global_viewers]
-      global_viewers.save
-    end
-    
-    render 'update_users.js'
-  end
   
   def has_search_parameters?
-    return not(params[:q].blank? and params[:f].blank? and params[:search_field].blank?)
+    true
   end
 
 end

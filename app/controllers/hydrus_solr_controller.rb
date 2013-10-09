@@ -22,6 +22,7 @@
 ####
 
 class HydrusSolrController < ApplicationController
+  skip_authorization_check
 
   # Takes a PID in params.
   # Gets the object from Fedora and re-solrizees it.
@@ -70,6 +71,7 @@ class HydrusSolrController < ApplicationController
     render(:text => msg)
   end
 
+  private
   # Private method to determine if the given object belongs to
   # one of the Hydrus classes.
   def is_hydrus_object(obj)
@@ -91,7 +93,5 @@ class HydrusSolrController < ApplicationController
     end
     return @@index_logger
   end
-
-  private(:is_hydrus_object, :solr, :index_logger)
 
 end

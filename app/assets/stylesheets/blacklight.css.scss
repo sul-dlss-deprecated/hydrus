@@ -1,0 +1,9 @@
+@import "bootstrap/variables";
+@import "bootstrap/mixins";
+@import 'blacklight/blacklight_defaults';
+@import 'blacklight/dropdown';
+@import 'blacklight/catalog';
+
+.btn a {
+  border-bottom: 0;
+}

@@ -10,13 +10,13 @@ class Hydrus::RoleMetadataDS < ActiveFedora::NokogiriDatastream
     t.role do
       t.type_ :path => {:attribute => 'type'}
       t.person do
-        t.identifier do
+        t.identifier :index_as => [:facetable] do
           t.type_ :path => {:attribute => 'type'}
         end
         t.name
       end
       t.group do
-        t.identifier do
+        t.identifier :index_as => [:facetable]  do
           t.type_ :path => {:attribute => 'type'}
         end
       end
@@ -36,6 +36,10 @@ class Hydrus::RoleMetadataDS < ActiveFedora::NokogiriDatastream
     t.item_manager              :ref => [:role], :attributes => {:type => 'hydrus-item-manager'}
     t.item_depositor            :ref => [:role], :attributes => {:type => 'hydrus-item-depositor'}
 
+    t.item_depositor_person_identifier(
+      :ref => [:item_depositor, :person, :identifier],
+      :index_as => [:facetable, :displayable]
+    )
   end
 
   ####

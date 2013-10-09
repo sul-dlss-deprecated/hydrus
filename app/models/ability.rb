@@ -5,7 +5,9 @@ class Ability
 
   AUTH = Hydrus::Authorizable
 
-  def hydra_default_permissions(user, session, *args)
+  def hydra_default_permissions
+
+    user = current_user
 
     # Read.
 
@@ -13,11 +15,32 @@ class Ability
       AUTH.can_read_object(user, get_fedora_object(obj))
     end
 
+    can(:read, Hydrus::Collection) do |obj|
+      AUTH.can_read_collection(user, obj)
+    end
+
+    can(:read, Hydrus::Item) do |obj|
+      AUTH.can_read_item(user, obj)
+    end
+
+    can(:read, String) do |obj|
+      o = get_fedora_object(obj)
+      case o
+      when Hydrus::Collection
+        AUTH.can_read_collection(user, obj)
+      when Hydrus::Item
+        AUTH.can_read_item(user, obj)
+      else
+        false
+      end
+    end
+
     cannot(:read, SolrDocument)
 
     # Create.
 
-    can(:create_collections, :all) if AUTH.can_create_collections(user)
+    can(:create, Hydrus::Collection) if AUTH.can_create_collections(user)
+    can(:create, Hydrus::Item)
 
     can(:create_items_in, [String, Hydrus::Collection]) do |obj|
       AUTH.can_create_items_in(user, get_fedora_object(obj))
@@ -60,14 +83,16 @@ class Ability
   # return nil, and our methods in authorizable.rb need to return false
   # when the given a nil item/collection.
   def get_fedora_object(obj)
-    # If already an ActiveFedora object, just return it.
-    return obj unless obj.kind_of?(String)
-    # Use the PID to find the object.
-    begin
-      return ActiveFedora::Base.find(obj, :cast => true)
-    rescue ActiveFedora::ObjectNotFoundError
-      return nil
+    case obj
+    when ActiveFedora::Base
+      obj
+    when String
+      ActiveFedora::Base.find(obj, :cast => true)
+    else
+      Rails.logger.warn "Returning #{obj} from get_fedora_object"
+      obj
     end
+  rescue ActiveFedora::ObjectNotFoundError
+      return nil
   end
-
 end

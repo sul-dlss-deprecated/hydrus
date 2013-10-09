@@ -1,28 +1,23 @@
 class DatastreamsController < ApplicationController
-
-  include Hydra::AccessControlsEnforcement
-  before_filter :enforce_access_controls
+  before_filter do
+    if contextual_id.blank?
+      raise ActionController::RoutingError.new('Not Found')
+    end
+  end
+  
+  before_filter :authenticate_user!
 
   def index
-    pid = obj_pid()
+    pid = contextual_id()
+    authorize! :view_datastreams, pid
     @fobj = ActiveFedora::Base.find(pid, :cast=>true)
     @fobj.current_user = current_user
   end
 
   protected
 
-  def enforce_index_permissions
-    pid = obj_pid()
-    return if pid && can?(:view_datastreams, pid)
-    flash[:error] = "You do not have sufficient privileges to view datastreams."
-    redirect_to root_path
-  end
-
-  def obj_pid
-    pid = params['hydrus_item_id'] ||
-          params['hydrus_collection_id'] ||
-          params['hydrus_admin_policy_object_id']
-    return pid
+  def contextual_id
+    @contextual_id ||= params.select{|k,v| k.to_s =~ /^hydrus_.*_id/}.each_value.first
   end
 
 end

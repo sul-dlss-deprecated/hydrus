@@ -11,8 +11,8 @@ describe("Item view", :type => :request, :integration => true) do
 
   it "If not logged in, should be redirected to the login page, then back to our intended page after logging in" do
     logout
-    visit polymorphic_url(@hi)
-    current_path.should == new_signin_path
+    visit "/items/#{@druid}"
+    current_path.should == new_user_session_path
     fill_in "Email", :with => 'archivist1@example.com'
     fill_in "Password", :with => login_pw
     click_button "Sign in"
@@ -60,7 +60,7 @@ describe("Item view", :type => :request, :integration => true) do
     should_visit_edit_page(@hi)
     click_link "remove_relatedItem_0" # remove both related items
     click_link "remove_relatedItem_0"
-    click_button "Save"
+    click_button "save_nojs"
     should_visit_view_page(@hi)
     page.should_not have_content('Related links')
     page.should_not have_content('story by Jennifer Ludden August 16, 2010')

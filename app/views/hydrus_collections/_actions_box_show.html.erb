@@ -4,8 +4,8 @@
 
 <div class="box-body">
 
-  <!-- Open/close. -->
   <% if can? :edit, @fobj %>
+  <!-- Open/close. -->
     <% if isopen %>
       <p>
         <%= button_to(
@@ -26,6 +26,9 @@
               :disable_with => "Please wait...",
   						:show_loading_indicator=>"true") %>
       </p>
+    <% else %>
+      <!-- <%= "#{isopen.inspect} #{@fobj.is_openable} #{@fobj.inspect}" %> -->
+
     <% end %>
   <% end %>
 
@@ -47,7 +50,7 @@
 				  <%= hidden_field_tag(:collection,@fobj.id)%>
 	        <%= select_tag(
 	              "type",
-	              options_for_select(Hydrus::Collection.item_types.to_a),
+	              options_for_select(@fobj.item_types.to_a),
 	              :class=>"add-content-options"
 	            )
 	        %>

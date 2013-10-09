@@ -9,6 +9,15 @@ module Hydrus::SolrQueryable
   # Module methods that modify the SOLR query parameters hash.
   ####
 
+  def self.add_gated_discovery(solr_parameters, apo_pids, user)
+
+    h = { :fq => []}
+    add_governed_by_filter(h, apo_pids)
+    add_involved_user_filter(h, user)
+    solr_parameters[:fq] ||= []
+    solr_parameters[:fq] << h[:fq].join(" OR ") unless h[:fq].empty?
+  end
+
   # Takes a hash of SOLR query parameters, along with a SUNET ID.
   # Adds a condition to the filter query parameter requiring that
   # the user's ID be present in the object's role metadata.
@@ -16,17 +25,9 @@ module Hydrus::SolrQueryable
   # preceding condition in the :fq array.
   def self.add_involved_user_filter(h, user, opt = {})
     return unless user
-    s = %Q<roleMetadata_role_person_identifier_t:"#{user}">
+    s = %Q<roleMetadata_role_person_identifier_facet:"#{user}">
     h[:fq] ||= []
-    if opt[:or]
-      if h[:fq].size == 0
-        h[:fq][0] = s
-      else
-        h[:fq][-1] += " OR #{s}"
-      end
-    else
-      h[:fq] << s
-    end
+    h[:fq] << s
   end
 
   # Takes a hash of SOLR query parameters, along with an array of APO druids.
@@ -65,10 +66,8 @@ module Hydrus::SolrQueryable
   # Takes a hash of parameters for a SOLR query.
   # Runs the query an returns a two-element array containing the SOLR
   # response and an array of SolrDocuments.
-  def issue_solr_query(h)
-    solr_response = Blacklight.solr.find(h)
-    document_list = solr_response.docs.map {|doc| SolrDocument.new(doc, solr_response)}
-    return [solr_response, document_list]
+  def issue_solr_query(*args)
+    Hydrus::SolrQueryable.issue_solr_query *args
   end
   #This static version was added specifically to deal with loading the dashboard without instantiating an object. 
   def self.issue_solr_query(h)
