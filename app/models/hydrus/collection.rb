@@ -1,6 +1,8 @@
-class Hydrus::Collection < Hydrus::GenericObject
+class Hydrus::Collection < Dor::Collection
 
+  include Hydrus::GenericObjectStuff
   extend Hydrus::SolrQueryable
+  include Dor::Embargoable
 
   before_save :save_apo
   
@@ -48,6 +50,21 @@ class Hydrus::Collection < Hydrus::GenericObject
 
   has_relationship 'hydrus_items', :is_member_of_collection, :inbound => true
   
+
+  # Notes:
+  #   - We override save() so we can control whether editing events are logged.
+  #   - This method is called via the normal operations of the web app, and
+  #     during Hydrus remediations.
+  #   - The :no_super is used to prevent the super() call during unit tests.
+  def save(opts = {})
+    unless opts[:is_remediation]
+      self.last_modify_time = HyTime.now_datetime
+      log_editing_events() unless opts[:no_edit_logging]
+    end
+    publish_metadata() if is_published && is_open
+    super() unless opts[:no_super]
+  end
+
   # get all of the items in this collection
   # this method is used instead of the "has_relationship" above, since we cannot specify the number of rows via has_relationship
   # this will hopefully be fixed when upgrading to ActiveFedora
@@ -76,7 +93,7 @@ class Hydrus::Collection < Hydrus::GenericObject
       num_files=(get_num_files ? Hydrus::ObjectFile.count(:conditions=>['pid=?',id]) : -1)
       status=self.class.array_to_single(solr_doc['hydrusProperties_object_status_t'])
       object_type=self.class.array_to_single(solr_doc['mods_typeOfResource_t'])
-      depositor=self.class.array_to_single(solr_doc['roleMetadata_t'])
+      depositor=self.class.array_to_single(solr_doc['item_depositor_person_identifier_display'])
       create_date=solr_doc['system_create_dt']
       items << {:pid=>id,:num_files=>num_files,:object_type=>object_type,:title=>title,:status_label=>status,:item_depositor_id=>depositor,:create_date=>create_date}
     end
@@ -92,12 +109,12 @@ class Hydrus::Collection < Hydrus::GenericObject
     # Create the object, with the correct model.
     apo     = Hydrus::AdminPolicyObject.create(user)
     dor_obj = Hydrus::GenericObject.register_dor_object(user, 'collection', apo.pid)
-    coll    = dor_obj.adapt_to(Hydrus::Collection)
+    coll    = Hydrus::Collection.find(dor_obj.pid)
     coll.remove_relationship :has_model, 'info:fedora/afmodel:Dor_Collection'
     coll.assert_content_model
     # Set the item_type, and add some Hydrus-specific info to identityMetadata.
     # Note that item_type can vary for items but is always :collection here.
-    coll.set_item_type(:collection)
+    coll.set_collection_type
     # Add event.
     coll.events.add_event('hydrus', user, 'Collection created')
     # Set defaults for visability, embargo, etc.
@@ -113,6 +130,16 @@ class Hydrus::Collection < Hydrus::GenericObject
     # Save and return.
     coll.save(:no_edit_logging => true, :no_beautify => true)
     return coll
+  end
+
+  def set_collection_type
+    self.hydrusProperties.item_type='collection'
+    identityMetadata.add_value(:objectType, 'set')
+    identityMetadata.content_will_change!
+    descMetadata.ng_xml.search('//mods:mods/mods:typeOfResource', 'mods' => 'http://www.loc.gov/mods/v3').each do |node|        
+      node['collection']='yes'
+      descMetadata.content_will_change!
+    end
   end
 
   # Returns true only if both the Collection and its APO are valid.
@@ -188,7 +215,7 @@ class Hydrus::Collection < Hydrus::GenericObject
     first_time = is_draft()
 
     self.object_status = 'published_open'
-    events.add_event('hydrus', @current_user, 'Collection opened')
+    events.add_event('hydrus', current_user, 'Collection opened')
 
     # Also, at the moment of publication, we refresh various titles and labels.
     # Note that the two label attributes reside in Fedora's foxml:objectProperties.
@@ -217,7 +244,7 @@ class Hydrus::Collection < Hydrus::GenericObject
   def close
     cannot_do(:close) unless is_closeable
     self.object_status = 'published_closed'
-    events.add_event('hydrus', @current_user, 'Collection closed')
+    events.add_event('hydrus', current_user, 'Collection closed')
     send_publish_email_notification(false)
   end
 
@@ -638,7 +665,7 @@ class Hydrus::Collection < Hydrus::GenericObject
   # Returns a hash with all Item object_status values as the
   # keys and zeros as the values.
   def self.initial_item_counts
-    return Hash[ status_labels(:item).keys.map { |s| [s,0]  } ]
+    return Hash[ Hydrus::GenericObject.status_labels(:item).keys.map { |s| [s,0]  } ]
   end
 
   # Takes an array of Collection druids.
@@ -704,8 +731,13 @@ class Hydrus::Collection < Hydrus::GenericObject
     delete_hydrus_workflow
     apo.delete_hydrus_workflow
     # Fedora object and SOLR entries.
-    apo.delete
+    my_apo = apo
     super
+    my_apo.delete
+  end
+
+  def item_types
+    Hydrus::GenericObject.item_types
   end
 
 end

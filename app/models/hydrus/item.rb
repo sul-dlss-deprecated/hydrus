@@ -90,11 +90,11 @@ class Hydrus::Item < Hydrus::GenericObject
     cannot_do(:create) unless Hydrus::Authorizable.can_create_items_in(user, coll)
     # Create the object, with the correct model.
     dor_item = Hydrus::GenericObject.register_dor_object(user, 'item', coll.apo_pid)
-    item     = dor_item.adapt_to(Hydrus::Item)
+    item     = Hydrus::Item.find(dor_item.pid)
     item.remove_relationship :has_model, 'info:fedora/afmodel:Dor_Item'
     item.assert_content_model
     # Add the Item to the Collection.
-    item.add_to_collection(coll.pid)
+    item.collections << coll
     # Create default rightsMetadata from the collection
     #item.rightsMetadata.content = coll.rightsMetadata.ng_xml.to_s
     # Set the item_type, and add some Hydrus-specific info to identityMetadata.
@@ -103,7 +103,7 @@ class Hydrus::Item < Hydrus::GenericObject
     # Add roleMetadata with current user as hydrus-item-depositor.
     item.roleMetadata.add_person_with_role(user, 'hydrus-item-depositor')
     # Set default license, embargo, and visibility.
-    item.license = item.collection.license
+    item.license = coll.license
     if coll.embargo_option == 'fixed'
       item.embargo_date = HyTime.date_display(item.end_of_embargo_range)
     end
@@ -367,8 +367,7 @@ class Hydrus::Item < Hydrus::GenericObject
 
   # Returns the Item's Collection.
   def collection
-    cs = super       # Get all collections.
-    return cs.first  # In Hydrus, we assume there is just one (for now).
+    @collection ||= collections.first       # Get all collections.
   end
 
   def requires_human_approval
@@ -627,18 +626,6 @@ class Hydrus::Item < Hydrus::GenericObject
 
   def strip_whitespace
     strip_whitespace_from_fields [:preferred_citation,:title,:abstract,:contact]
-  end
-
-  def add_to_collection(pid)
-    uri = "info:fedora/#{pid}"
-    add_relationship_by_name('set', uri)
-    add_relationship_by_name('collection', uri)
-  end
-
-  def remove_from_collection(pid)
-    uri = "info:fedora/#{pid}"
-    remove_relationship_by_name('set', uri)
-    remove_relationship_by_name('collection', uri)
   end
 
   def keywords(*args)

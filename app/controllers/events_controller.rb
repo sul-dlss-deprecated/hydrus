@@ -1,24 +1,23 @@
 class EventsController < ApplicationController
 
-  include Hydra::AccessControlsEnforcement
-  before_filter :enforce_access_controls
+  before_filter do
+    if contextual_id.blank?
+      raise ActionController::RoutingError.new('Not Found')
+    end
+  end
+  
+  before_filter :authenticate_user!
 
   def index
-    contextual_id = params.select{|k,v| k.to_s =~ /^hydrus_.*_id/}.each_value.first
-    unless contextual_id.blank?
-      @fobj = ActiveFedora::Base.find(contextual_id, :cast=>true)
-      @fobj.current_user = current_user
-    end
+    @fobj = ActiveFedora::Base.find(contextual_id, :cast=>true)
+    @fobj.current_user = current_user
+    authorize! :read, @fobj
   end
 
   protected
 
-  def enforce_index_permissions
-    contextual_id = params.select{|k,v| k.to_s =~ /^hydrus_.*_id/}.each_value.first
-    if contextual_id.blank? or !can?(:read, contextual_id)
-      flash[:error] = "You do not have sufficient privileges to read that document."
-      redirect_to root_path
-    end
+  def contextual_id
+    @contextual_id ||= params.select{|k,v| k.to_s =~ /^hydrus_.*_id/}.each_value.first
   end
 
 end

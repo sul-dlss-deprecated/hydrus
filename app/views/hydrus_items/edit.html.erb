@@ -262,7 +262,7 @@
                      {:class => 'inline-select right' } %>
       <% else %>
         <span class="highlight-value">
-          <% lic = Hydrus::Collection.license_human(@fobj.license) %>
+          <% lic = Hydrus::GenericObject.license_human(@fobj.license) %>
           <%= hydrus_object_setting_value(lic) %>
         </span>
       <% end %>

@@ -3,7 +3,7 @@ require 'spec_helper'
 describe("Home page", :type => :request, :integration => true) do
 
   before(:each) do
-    @search_box  = 'select.search_field + input.submit'
+    @search_box  = '.search-query-form #search'
     @sdr         = "Stanford Digital Repository"
     @your_cs     = "Your Active Collections"
     @breadcrumbs = "ul.breadcrumb li a"
@@ -53,7 +53,7 @@ describe("Home page", :type => :request, :integration => true) do
     exp.each do |user, exp_n|
       login_as(user)
       visit(@search_url)
-      find('div.pageEntriesInfo').should have_content("Displaying all #{exp_n} items")
+      find('.page_links').should have_content("1 - #{exp_n} of #{exp_n}")
     end
   end
 

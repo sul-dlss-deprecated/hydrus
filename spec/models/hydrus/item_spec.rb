@@ -20,90 +20,12 @@ describe Hydrus::Item do
     END
     @workflow_xml = noko_doc(@workflow_xml)
   end
-
-  it "can exercise a stubbed version of create()" do
-    # More substantive testing is done at integration level.
-    Hydrus::Authorizable.stub(:can_create_items_in).and_return(true)
-    # Stub out the Collection find() method.
-    hc = Hydrus::Collection.new
-    hc.stub(:visibility_option_value).and_return('varies')
-    hc.stub(:is_open).and_return(true)
-    Hydrus::Collection.stub(:find).and_return(hc)
-    # Set up an Item for use when stubbing register_dor_object().
-    druid = 'druid:BLAH'
-    stubs = [
-      :remove_relationship,
-      :assert_content_model,
-      :add_to_collection,
-      :set_item_type,
-    ]
-    stubs.each { |s| @hi.should_receive(s) }
-    @hi.should_receive(:save).with(:no_edit_logging => true, :no_beautify => true)
-    @hi.stub(:pid).and_return(druid)
-    @hi.stub(:adapt_to).and_return(@hi)
-    @hi.stub(:collection).and_return(hc)
-    @hi.stub(:date_created).and_return('2011')
-    Hydrus::GenericObject.stub(:register_dor_object).and_return(@hi)
-    # Call create().
-    obj = Hydrus::Item.create(hc.pid, mock_user)
-    obj.pid.should == druid
-    obj.get_hydrus_events.size.should == 1
-    obj.terms_of_use.should =~ /user agrees/i
-    obj.version_started_time.should =~ /\A\d{4}/
-    obj.version_tag.should == 'v1.0.0'
-  end
-
-  it "can exercise a stubbed version of create when terms have already been accepted on another item" do
-    # More substantive testing is done at integration level.
-    druid = 'druid:BLAH'
-    stubs = [
-      :remove_relationship,
-      :assert_content_model,
-      :add_to_collection,
-      :set_item_type,
-    ]
-    stubs.each { |s| @hi.should_receive(s) }
-    @hi.should_receive(:save).with(:no_edit_logging => true, :no_beautify => true)
-    @hi.stub(:pid).and_return(druid)
-    @hi.stub(:adapt_to).and_return(@hi)
-    @hi.stub(:requires_terms_acceptance).and_return(false)
-    hc = Hydrus::Collection.new
-    hc.stub(:visibility_option_value).and_return('varies')
-    hc.stub(:is_open).and_return(true)
-    Hydrus::Collection.stub(:find).and_return(hc)
-    Hydrus::GenericObject.stub(:register_dor_object).and_return(@hi)
-    @hi.stub(:collection).and_return(hc)
-    @hi.stub(:date_created).and_return('2011')
-    Hydrus::Authorizable.stub(:can_create_items_in).and_return(true)
-    new_item=Hydrus::Item.create(hc.pid, mock_user)
-    new_item.pid.should == druid
-    new_item.terms_of_deposit_accepted?.should be true
-  end
-
-  it "should be able to add and remove an item from a collection" do
-    collection_pid = 'druid:xx99xx9999'
-    exp_uri        = "info:fedora/#{collection_pid}"
-
-    # Initially, the item is not a member of a collection.
-    @hi.relationships(:is_member_of).should == []
-    @hi.relationships(:is_member_of_collection).should == []
-
-    # Add it to a collection, and confirm the relationships.
-    @hi.add_to_collection(collection_pid)
-    @hi.relationships(:is_member_of).should == [exp_uri]
-    @hi.relationships(:is_member_of_collection).should == [exp_uri]
-
-    # Remove it from the collection, and confirm.
-    @hi.remove_from_collection(collection_pid)
-    @hi.relationships(:is_member_of).should == []
-    @hi.relationships(:is_member_of_collection).should == []
-  end
-
+  
   describe "#files" do
     subject { Hydrus::Item.new }
 
     it "should retrieve ObjectFiles from the database" do
-      m = mock()
+      m = double()
       Hydrus::ObjectFile.should_receive(:find_all_by_pid).with(subject.pid, hash_including({:order=>"weight ASC,label ASC,file ASC"})).and_return(m)
       subject.files.should == m
     end
@@ -176,25 +98,6 @@ describe Hydrus::Item do
 
   end
 
-  describe "#add_to_collection" do
-    subject { Hydrus::Item.new }
-
-    it "should add 'set' and 'collection' relations" do
-      subject.should_receive(:add_relationship_by_name).with('set', 'info:fedora/collection_pid')
-      subject.should_receive(:add_relationship_by_name).with('collection', 'info:fedora/collection_pid')
-      subject.add_to_collection('collection_pid')
-    end
-  end
-
-  describe "#remove_from_collection" do
-    subject { Hydrus::Item.new }
-
-    it "should remove 'set' and 'collection' relations" do
-      subject.should_receive(:remove_relationship_by_name).with('set', 'info:fedora/collection_pid')
-      subject.should_receive(:remove_relationship_by_name).with('collection', 'info:fedora/collection_pid')
-      subject.remove_from_collection('collection_pid')
-    end
-  end
 
   describe "roleMetadata in the item", :integration=>true do
     subject { Hydrus::Item.find('druid:oo000oo0001') }
@@ -288,6 +191,10 @@ describe Hydrus::Item do
       @edate = '2012-02-28T08:00:00Z'
       # XML snippets for various <access> nodes.
       ed       = "<embargoReleaseDate>#{@edate}</embargoReleaseDate><none/>"
+
+      twpc = "         <twentyPctVisibilityStatus/>
+         <twentyPctVisibilityReleaseDate/>"
+
       mw       = '<machine><world/></machine>'
       ms       = '<machine><group>stanford</group></machine>'
       me       = "<machine>#{ed}</machine>"
@@ -307,8 +214,8 @@ describe Hydrus::Item do
                  '</rightsMetadata>'
       # Assemble expected Nokogiri XML for embargoMetadata and rightsMetadata.
       @xml = {
-        :em_world   => noko_doc([em_start, em_world, em_end].join),
-        :em_stanf   => noko_doc([em_start, em_stanf, em_end].join),
+        :em_world   => noko_doc([em_start, em_world, twpc, em_end].join),
+        :em_stanf   => noko_doc([em_start, em_stanf, twpc, em_end].join),
         :rm_emb     => noko_doc([rm_start, di_world, rd_emb,   rm_end].join),
         :rm_world   => noko_doc([rm_start, di_world, rd_world, rm_end].join),
         :rm_stanf   => noko_doc([rm_start, di_world, rd_stanf, rm_end].join),

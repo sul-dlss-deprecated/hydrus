@@ -32,7 +32,6 @@ This copy of the solr schema is only used in the context of testing hydra-head. 
     <fieldType name="text" class="solr.TextField" positionIncrementGap="100">
       <analyzer type="index">
         <tokenizer class="solr.StandardTokenizerFactory"/>
-        <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" enablePositionIncrements="true" />
         <!-- in this example, we will only use synonyms at query time
         <filter class="solr.SynonymFilterFactory" synonyms="index_synonyms.txt" ignoreCase="true" expand="false"/>
         -->
@@ -40,8 +39,6 @@ This copy of the solr schema is only used in the context of testing hydra-head. 
       </analyzer>
       <analyzer type="query">
         <tokenizer class="solr.StandardTokenizerFactory"/>
-        <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" enablePositionIncrements="true" />
-        <filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="true"/>
         <filter class="solr.LowerCaseFilterFactory"/>
       </analyzer>
     </fieldType>
@@ -98,8 +95,8 @@ This copy of the solr schema is only used in the context of testing hydra-head. 
    <dynamicField name="*_b"  type="boolean" indexed="true"  stored="true"/>
    <dynamicField name="*_f"  type="sfloat"  indexed="true"  stored="true"/>
    <dynamicField name="*_d"  type="sdouble" indexed="true"  stored="true"/>
-   <dynamicField name="*_dt" type="date"    indexed="true"  stored="true"/>
-
+   <field name="system_create_dt" type="date" indexed="true" stored="true" multiValued="false" />
+   <dynamicField name="*_dt" type="date"    indexed="true"  stored="true" multiValued="true"/>
    <dynamicField name="random*" type="random" />
    <!-- FIXME: Solr can't sort on a multivalued field -->
    <dynamicField name="*_sort" type="string" indexed="true" stored="false" multiValued="true"/>

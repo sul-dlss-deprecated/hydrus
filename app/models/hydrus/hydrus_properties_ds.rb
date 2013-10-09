@@ -31,7 +31,7 @@ class Hydrus::HydrusPropertiesDS < ActiveFedora::NokogiriDatastream
 
     # When Hydrus objects are created, the version of the application
     # is stored here. Later, Hydrus remediation scripts can update this value.
-    t.object_version            :path => 'objectVersion'
+    t.object_version            :path => 'objectVersion', :index_as => [:searchable]
 
     # Two variants of publish time:
     #   - The time the user clicks Open/Approve/Publish in UI.

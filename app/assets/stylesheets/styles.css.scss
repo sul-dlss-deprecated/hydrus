@@ -23,6 +23,10 @@
 	text-align: center;
 }
 
+.modal-header {
+	@include modal-header;
+}
+
 #druid-footer {@include druid-footer;}
 
 /* forms */
@@ -98,7 +102,7 @@ form.step .peer_reviewed label {
 }
 
 form .field_with_errors {
-	display: inline-block;
+	display: inline;
 }
 
 .dropdown-menu a {border-bottom: none;}
@@ -137,17 +141,14 @@ table form {
 }
 
 /* search form */
-#search {
+.search-query-form {
 	float: right;
 	margin-top: 12px;
 	label, h2 {
 		display: inline;
 	}
-	select#search_field {
-		width: auto;
-	}
 	/* we need to explicitly set the bottom margin here because the hydra html refactor CSS is being included in a weird way */
-	input.submit {@include primary-button; margin-bottom: 9px;}
+	.search-btn {@include primary-button; margin-bottom: 9px;}
 }
 
 #main {
@@ -358,7 +359,7 @@ noscript #item-actions, noscript #collection-actions {
 	}
 }
 
-#catalog-index .user-collections {
+#catalog-home .user-collections {
 	h3 {margin-top: 24px;}
 	table {border-bottom: 1px solid #ddd;}
 	// .btn-primary {@include primary-button;}

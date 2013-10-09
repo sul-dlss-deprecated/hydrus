@@ -11,7 +11,17 @@ describe Hydrus::SolrQueryable do
     @msq  = MockSolrQueryable.new
     @hsq  = Hydrus::SolrQueryable
     @user = 'userFoo'
-    @role_md_clause = %Q<roleMetadata_role_person_identifier_t:"#{@user}">
+    @role_md_clause = %Q<roleMetadata_role_person_identifier_facet:"#{@user}">
+  end
+
+  describe ".add_gated_discovery" do
+    it "should OR the facets for objects that involve the user and are governed by APOs the user has access to " do
+      h = {}
+      @hsq.add_gated_discovery(h, ['aaa', 'bbb'], @user)
+      expect(h[:fq]).to have(1).item
+
+      expect(h[:fq].first).to eq 'is_governed_by_s:("info:fedora/aaa" OR "info:fedora/bbb") OR ' + @role_md_clause
+    end
   end
 
   describe "add_involved_user_filter() modifies the SOLR :fq parameters" do
@@ -24,15 +34,12 @@ describe Hydrus::SolrQueryable do
 
     it "should add the expected :fq clause" do
       tests = [
-        [ false, {},                [@role_md_clause] ],
-        [ true,  {},                [@role_md_clause] ],
-        [ false, {:fq => []},       [@role_md_clause] ],
-        [ true,  {:fq => []},       [@role_md_clause] ],
-        [ false, {:fq => ['blah']}, ['blah', @role_md_clause] ],
-        [ true,  {:fq => ['blah']}, ["blah OR #{@role_md_clause}"] ],
+        [ {},                [@role_md_clause] ],
+        [ {:fq => []},       [@role_md_clause] ],
+        [ {:fq => ['blah']}, ['blah', @role_md_clause] ],
       ]
-      tests.each do |use_or, h, exp|
-        @hsq.add_involved_user_filter(h, @user, :or => use_or)
+      tests.each do |h, exp|
+        @hsq.add_involved_user_filter(h, @user)
         h[:fq].should == exp
       end
     end

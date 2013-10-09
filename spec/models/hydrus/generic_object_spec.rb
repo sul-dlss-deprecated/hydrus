@@ -18,26 +18,24 @@ describe Hydrus::GenericObject do
     @go.dru.should == 'oo000oo0003'
   end
 
-  it "apo() should return fedora object if the apo_pid is defined" do
-    mfo = double('mock_fedora_object')
-    @go.instance_variable_set('@apo_pid', @apo_pid)
-    @go.stub(:get_fedora_item).and_return mfo
-    @go.apo.should == mfo
+  describe "apo" do
+    it "should be the admin policy object if it is defined" do
+      apo = double(:id => 'xyz')
+      @go.stub(:admin_policy_object).and_return(apo)
+      expect(@go.apo).to eq apo
+    end
+
+    it "should default to a new APO object" do
+      @go.stub(:admin_policy_object).and_raise ActiveFedora::ObjectNotFoundError.new
+      expect(@go.apo).to be_a_kind_of Hydrus::AdminPolicyObject
+    end
   end
 
-  it "apo_pid() should get the correct PID from admin_policy_object_ids()" do
-    exp = 'foobar'
-    @go.stub(:admin_policy_object_ids).and_return [exp, 11, 22]
-    @go.should_receive :admin_policy_object_ids
-    @go.apo_pid.should == exp
-  end
-
-  it "apo_pid() should get PID directly from @apo_pid when it is defined" do
-    exp = 'foobarfubb'
-    @go.instance_variable_set('@apo_pid', exp)
-    @go.stub(:admin_policy_object_ids).and_return ['doh', 11, 22]
-    @go.should_not_receive :admin_policy_object_ids
-    @go.apo_pid.should == exp
+  describe "apo_pid" do
+    it "should return the pid of the APO" do
+      @go.stub(:admin_policy_object).and_return(double(:id => 'xyz'))
+      expect(@go.apo_pid).to eq 'xyz'
+    end
   end
 
   it "can exercise discover_access()" do
@@ -490,23 +488,12 @@ describe Hydrus::GenericObject do
 
     it "should invoke log_editing_events() usually" do
       @go.should_receive(:log_editing_events).once
-      @go.should_not_receive(:publish_metadata)
       @go.save(:no_super => true)
     end
 
     it "should not invoke log_editing_events() if no_edit_logging is true" do
-      @go.should_not_receive(:publish_metadata)
       @go.should_not_receive(:log_editing_events)
       @go.save(:no_edit_logging => true, :no_super => true)
-    end
-
-    it "should invoke log_editing_events() if no_edit_logging is false" do
-      @go.should_receive(:log_editing_events).once
-      @go.should_receive(:publish_metadata).once
-      @go.stub('is_collection?').and_return(true)
-      @go.stub(:is_published).and_return(true)
-      @go.stub(:is_open).and_return(true)
-      @go.save(:no_super => true)
     end
 
   end
@@ -571,10 +558,9 @@ describe Hydrus::GenericObject do
     end
 
     it "beautify_datastream()" do
-      @go.descMetadata.content = @orig_xml
-      @go.descMetadata.content.should == @orig_xml
+      @go.descMetadata.stub(:content).and_return @orig_xml
+      @go.descMetadata.should_receive(:content=).with(@exp)
       @go.beautify_datastream(:descMetadata)
-      @go.descMetadata.content.should == @exp
     end
 
   end
