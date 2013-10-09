@@ -48,7 +48,7 @@ class Hydrus::Collection < Dor::Collection
   ],
   )
 
-  has_relationship 'hydrus_items', :is_member_of_collection, :inbound => true
+  has_many :items, :property => :is_member_of_collection, :inbound => true, :class_name => 'Hydrus::Item'
   
 
   # Notes:
@@ -65,14 +65,6 @@ class Hydrus::Collection < Dor::Collection
     super() unless opts[:no_super]
   end
 
-  # get all of the items in this collection
-  # this method is used instead of the "has_relationship" above, since we cannot specify the number of rows via has_relationship
-  # this will hopefully be fixed when upgrading to ActiveFedora
-  # TODO upgrade to ActiveFedora to avoid doing this manual load_inbound_relationship 
-  def items
-    load_inbound_relationship('hydrus_items',:is_member_of_collection, :rows=>1000)  
-  end
-  
   # get solr documents for all items in this collection; return all solr docs and a helper array of hashes with just some basic info
   # this allows us to build the item listing view without having to go to Fedora at all and is much faster
   def items_from_solr
