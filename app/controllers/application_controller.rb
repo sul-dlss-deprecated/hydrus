@@ -112,6 +112,12 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def authenticate_user! *args
+    unless request.env["WEBAUTH_USER"]
+      super
+    end
+  end
+
   # Take a Collection or Item.
   # Using the objection's validation errors, builds an HTML-ready
   # string for display in a flash message.
