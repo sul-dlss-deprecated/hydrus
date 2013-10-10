@@ -152,16 +152,16 @@ class HydrusItemsController < ApplicationController
     ####
 
     notice << "Your changes have been saved."
+    @fobj.validate!
+    notice << @fobj.errors.messages.map { |field, error|
+        "#{field.to_s.humanize.capitalize} #{error.join(', ')}"
+      }
     flash[:notice] = notice.join("<br/>").html_safe unless notice.blank?  
     flash[:error] = nil if flash[:error].blank?
       
     respond_to do |want|
       want.html {
-        if has_mvf
           redirect_to [:edit, @fobj]
-        else
-          redirect_to @fobj
-        end
       }
       want.js {
         if params.has_key?(:add_contributor)
