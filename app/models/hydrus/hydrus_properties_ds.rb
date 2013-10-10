@@ -1,4 +1,4 @@
-class Hydrus::HydrusPropertiesDS < ActiveFedora::NokogiriDatastream
+class Hydrus::HydrusPropertiesDS < ActiveFedora::OmDatastream
 
   include Hydrus::GenericDS
   include SolrDocHelper

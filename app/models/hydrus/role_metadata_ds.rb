@@ -1,4 +1,4 @@
-class Hydrus::RoleMetadataDS < ActiveFedora::NokogiriDatastream
+class Hydrus::RoleMetadataDS < ActiveFedora::OmDatastream
 
   include SolrDocHelper
   include Hydrus::GenericDS
