@@ -154,17 +154,17 @@ class Hydrus::GenericObject < Dor::Item
   # the possible types of items that can be created, hash of display value (keys) and values to store in object (value)
   def self.item_types
     {
-      "data set"      => "dataset",
-      "thesis"        => "thesis",
       "article"       => "article",
+      "audio - music" => "audio - music",   
+      "audio - spoken" => "audio - spoken",   
       "class project" => "class project",
       "computer game" => "computer game",
-      "video" => "video",      
-      "audio - music" => "audio - music",   
-      "audio - spoken" => "audio - spoken",      
-      "conference paper / presentation" => "conference paper / presentation",      
+      "conference paper / presentation" => "conference paper / presentation",  
+      "data set"      => "dataset",
+      "other"         => "other",      
+      "thesis"        => "thesis",
       "technical report" => "technical report",
-      "other"         => "other"                        
+      "video" => "video"    
     }
   end
   
