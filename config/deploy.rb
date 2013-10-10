@@ -1,4 +1,3 @@
-require 'net/ssh/kerberos'
 require 'bundler/setup'
 require 'bundler/capistrano'
 require 'dlss/capistrano'

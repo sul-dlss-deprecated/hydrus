@@ -61,5 +61,13 @@ group :production, :dortest do
   gem 'activerecord-mysql-adapter'
 end
 
+group :deployment do
+  gem 'capistrano', "~> 2.0"
+  gem 'lyberteam-capistrano-devel', '>=1.0.0'
+  gem 'gssapi', :github => 'cbeer/gssapi'
+  gem 'net-ssh-krb', :platform => :ruby_19
+  gem 'whenever', "~> 0.8.3"
+end
+
 gem 'quiet_assets', :group => :development
 
