@@ -44,7 +44,8 @@ describe Hydrus::GenericObject do
   end
 
   it "can exercise url()" do
-    @go.purl_url.should == "http://purl.stanford.edu/__DO_NOT_USE__"
+    @go.stub(:pid).and_return('druid:oo000oo0003')
+    @go.purl_url.should == "http://purl.stanford.edu/oo000oo0003"
   end
 
   it "can exercise related_items()" do
