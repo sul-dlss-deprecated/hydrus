@@ -194,7 +194,7 @@ describe("Collection edit", :type => :request, :integration => true) do
     # verify embargo is now 'none' and terms are not set
     @hc = Hydrus::Collection.find @druid
     @hc.embargo_option.should == 'none'
-    @hc.embargo_terms.should == ''
+    @hc.embargo_terms.should be_blank
     confirm_rights_metadata_in_apo(@hc)
   end
 

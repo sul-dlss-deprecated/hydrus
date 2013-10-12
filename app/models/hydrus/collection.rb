@@ -8,7 +8,6 @@ class Hydrus::Collection < Dor::Collection
   
   REQUIRED_FIELDS = [:title, :abstract, :contact]
 
-  before_validation :remove_values_for_associated_attribute_with_value_none
   after_validation :strip_whitespace
 
   validates :title,    :not_empty => true, :if => :should_validate
@@ -21,14 +20,24 @@ class Hydrus::Collection < Dor::Collection
   validate  :check_license_options
   
   def check_embargo_options
-    return if embargo_option == 'none'
+    if embargo_option.nil? || embargo_option == 'none'
+      self.embargo_terms = nil unless embargo_terms.blank?
+      return
+    end
+
     return unless embargo_terms.blank?
     msg = "must have a maximum time period when the varies or fixed option is selected"
     errors.add(:embargo, msg)
   end
 
   def check_license_options
-    return if license_option == 'none'
+
+    if license_option == 'none'
+      self.license = "none"
+      return
+    end
+
+    return if license_option.nil? || license_option == 'none'
     return unless license.blank?
     msg = "must be specified when the varies or fixed license option is selected"
     errors.add(:license, msg)
@@ -354,13 +363,6 @@ class Hydrus::Collection < Dor::Collection
     refresh_titles
     refresh_default_object_rights
     apo.save
-  end
-
-  # Called before validation occurs.
-  # Used to keep embargo_terms and license in sync with their related options.
-  def remove_values_for_associated_attribute_with_value_none
-    self.embargo_terms = nil    if embargo_option == "none"
-    self.license       = 'none' if license_option == "none"
   end
 
   def roles_of_person(user)
