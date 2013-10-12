@@ -24,11 +24,6 @@ describe Hydrus::GenericObject do
       @go.stub(:admin_policy_object).and_return(apo)
       expect(@go.apo).to eq apo
     end
-
-    it "should default to a new APO object" do
-      @go.stub(:admin_policy_object).and_raise ActiveFedora::ObjectNotFoundError.new
-      expect(@go.apo).to be_a_kind_of Hydrus::AdminPolicyObject
-    end
   end
 
   describe "apo_pid" do

@@ -290,6 +290,7 @@ describe("Collection edit", :type => :request, :integration => true) do
 
       before(:each) do
         @coll = Hydrus::Collection.new
+        @coll.admin_policy_object = Hydrus::AdminPolicyObject.new
       end
 
       it "should send open email when there are item depositors" do

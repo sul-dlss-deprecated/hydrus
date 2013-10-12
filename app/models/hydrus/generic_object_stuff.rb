@@ -59,7 +59,7 @@ module Hydrus::GenericObjectStuff
   end
 
   def apo
-    @apo ||= (apo_pid ? admin_policy_object : Hydrus::AdminPolicyObject.new)
+    admin_policy_object || Hydrus::AdminPolicyObject.new
   end
 
   def apo_pid
