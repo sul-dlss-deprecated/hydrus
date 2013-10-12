@@ -249,7 +249,7 @@ class Hydrus::Collection < Dor::Collection
     apo.identityMetadata.objectLabel = apt
     apo.title                        = apt
     apo.label                        = apt
-    apo.dc.content                   = apo.generate_dublin_core.to_s
+    apo.datastreams["DC"].content                   = apo.generate_dublin_core.to_s
     identityMetadata.objectLabel     = t
     self.label                       = t
   end
