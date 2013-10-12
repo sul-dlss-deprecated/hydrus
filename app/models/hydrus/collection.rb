@@ -721,7 +721,7 @@ class Hydrus::Collection < Dor::Collection
     return ic.map { |s, n| [n, Hydrus::GenericObject.status_label(:item, s)] }
   end
   # Deletes a Collection and its APO.
-  def delete
+  def destroy
     cannot_do(:delete) unless is_destroyable
     # Hydrus workflow.
     delete_hydrus_workflow

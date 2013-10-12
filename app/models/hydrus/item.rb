@@ -764,7 +764,7 @@ class Hydrus::Item < Hydrus::GenericObject
   end
 
   # Deletes an Item.
-  def delete
+  def destroy
     cannot_do(:delete) unless is_destroyable
     d = parent_directory
     FileUtils.rm_rf(d)            # Uploaded files.

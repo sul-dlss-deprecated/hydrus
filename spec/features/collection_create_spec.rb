@@ -208,12 +208,12 @@ describe("Collection create", :type => :request, :integration => true) do
     es[0...exp.size].zip(exp).each { |e, exp| e.text.should =~ exp  }
   end
 
-  describe "delete()" do
+  describe "destroy()" do
 
     it "should raise error if object is not destroyable" do
       hc = Hydrus::Collection.find('druid:oo000oo0004')
       hc.is_destroyable.should == false
-      expect { hc.delete }.to raise_error(RuntimeError)
+      expect { hc.destroy }.to raise_error(RuntimeError)
     end
 
     it "should fully delete collection and APO: from fedora, solr, workflows" do

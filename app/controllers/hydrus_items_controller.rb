@@ -36,7 +36,7 @@ class HydrusItemsController < ApplicationController
     authorize! :edit, @fobj
     collection=@fobj.collection
     if @fobj.is_destroyable
-      @fobj.delete
+      @fobj.destroy
       flash[:notice]="The item was deleted."
     else
       flash[:error]="You do not have permissions to delete this item."

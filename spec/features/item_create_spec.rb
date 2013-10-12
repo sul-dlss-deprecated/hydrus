@@ -635,12 +635,12 @@ describe("Item create", :type => :request, :integration => true) do
 
   end
 
-  describe "delete()" do
+  describe "destroy()" do
 
     it "should raise error if object is not destroyable" do
       hi = Hydrus::Item.find('druid:oo000oo0001')
       hi.is_destroyable.should == false
-      expect { hi.delete }.to raise_error(RuntimeError)
+      expect { hi.destroy }.to raise_error(RuntimeError)
     end
 
     it "should fully delete item: from fedora, solr, workflows, DB, and files" do
