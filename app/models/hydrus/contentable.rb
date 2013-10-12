@@ -27,7 +27,7 @@ module Hydrus::Contentable
   # Generates the object's contentMetadata XML, stores the XML in the
   # object's datastreams, and writes the XML to a file.
   def update_content_metadata
-    return unless is_item?
+    return unless is_item? and !pid.nil?
     # Set the object's contentMetadata.
     xml = create_content_metadata_xml()
     datastreams['contentMetadata'].content = xml
