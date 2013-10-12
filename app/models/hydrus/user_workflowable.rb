@@ -24,23 +24,4 @@ module Hydrus::UserWorkflowable
     return (errors.keys & self.class::REQUIRED_FIELDS).size == 0
   end
 
-  # Compares the current object to its old self in fedora.
-  # Returns the list of fields for which differences are found.
-  # The comparisons are driven by the hash-of-arrays returned by
-  # tracked_fields() from the Item or Collection class.
-  def changed_fields
-    old = old_self()
-    cfs = []
-    tracked_fields.each do |k,fs|
-      next if fs.all? { |f| equal_when_stripped? old.send(f), self.send(f) }
-      cfs.push(k)
-    end
-    return cfs
-  end
-  
-  # Returns the version of the object as it exists in fedora.
-  def old_self
-    @cached_old_self ||= self.class.find(pid)
-  end
-
 end
