@@ -5,34 +5,11 @@ class SolrDocument
 
   # self.unique_key = 'id'
 
-  # The following shows how to setup this blacklight document to display marc documents
-  extension_parameters[:marc_source_field] = :marc_display
-  extension_parameters[:marc_format_type] = :marcxml
-  use_extension( Blacklight::Solr::Document::Marc) do |document|
-    document.key?( :marc_display  )
-  end
-
-  # Email uses the semantic field mappings below to generate the body of an email.
-  SolrDocument.use_extension( Blacklight::Solr::Document::Email )
-
-  # SMS uses the semantic field mappings below to generate the body of an SMS email.
-  SolrDocument.use_extension( Blacklight::Solr::Document::Sms )
-
-  # DublinCore uses the semantic field mappings below to assemble an OAI-compliant Dublin Core document
-  # Semantic mappings of solr stored fields. Fields may be multi or
-  # single valued. See Blacklight::Solr::Document::ExtendableClassMethods#field_semantics
-  # and Blacklight::Solr::Document#to_semantic_values
-  # Recommendation: Use field names from Dublin Core
-  use_extension( Blacklight::Solr::Document::DublinCore)
-  field_semantics.merge!(
-                         :title => "title_display",
-                         :author => "author_display",
-                         :language => "language_facet",
-                         :format => "format"
-                         )
-
   def route_key
-    get('has_model_s').split(':').last.downcase.sub(/^dor_/, 'hydrus_')
+    models = Array(get(Solrizer.solr_name('has_model', :symbol), :sep => nil))
+    route_key = models.select { |x| x =~ /Hydrus/ }.first
+    route_key ||= models.select { |x| x =~ /Dor/ }.first.gsub("Dor_", "Hydrus_")
+    route_key.split(':').last.downcase
   end
 
   def to_model
@@ -48,7 +25,7 @@ class SolrDocument
   end
 
   def object_type
-    return get('has_model_s').gsub(/.+:Hydrus_/, '').downcase
+    route_key.gsub("hydrus_", "")
   end
 
   def object_status

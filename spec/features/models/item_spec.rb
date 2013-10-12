@@ -115,7 +115,7 @@ describe(Hydrus::Item, :integration => true) do
       expect(item.versionMetadata).to_not be_new
       expect(item.license).to eq "some-license"
       expect(item.roleMetadata.item_depositor).to include mock_authed_user.sunetid
-      expect(item.relationships(:has_model)).to_not include 'info:fedora/afmodel:Dor_Item'
+      expect(item.relationships(:has_model)).to include 'info:fedora/afmodel:Dor_Item'
       expect(item.relationships(:has_model)).to include 'info:fedora/afmodel:Hydrus_Item'
       expect(item.accepted_terms_of_deposit).to eq "false"
     end

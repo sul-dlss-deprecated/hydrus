@@ -34,7 +34,6 @@ describe(Hydrus::Collection, :integration => true) do
     expect(coll.events.event).to include "Collection created"
     expect(coll.object_status).to eq 'draft'
     expect(coll.title).to be_empty
-    expect(coll.relationships(:has_model)).to_not include 'info:fedora/afmodel:Dor_Collection'
     expect(coll.relationships(:has_model)).to include 'info:fedora/afmodel:Hydrus_Collection'
   end
 
