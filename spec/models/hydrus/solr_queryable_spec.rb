@@ -138,13 +138,13 @@ describe Hydrus::SolrQueryable do
 
     it "should get all Hydrus objects, with the correct info" do
       got = @msq.all_hydrus_objects.sort_by { |h| h[:pid] }
-      got.should == @all_objects
+      got.should include *@all_objects
     end
 
     it "should get all Hydrus objects -- but only an array of PIDs" do
       got = @msq.all_hydrus_objects(:pids_only => true).sort
       exp = @all_objects.map { |h| h[:pid] }
-      got.should == exp
+      got.should include *exp
     end
 
     it "should all Items and Collections, with the correct info" do
