@@ -25,7 +25,7 @@ module Hydrus::SolrQueryable
   # preceding condition in the :fq array.
   def self.add_involved_user_filter(h, user, opt = {})
     return unless user
-    s = %Q<roleMetadata_role_person_identifier_facet:"#{user}">
+    s = %Q<#{Solrizer.solr_name 'role_person_identifier', :facetable}:"#{user}">
     h[:fq] ||= []
     h[:fq] << s
   end
@@ -37,7 +37,7 @@ module Hydrus::SolrQueryable
     return unless druids.size > 0
     h[:fq] ||= []
     igb = druids.map { |d| %Q<"info:fedora/#{d}"> }.join(' OR ')
-    h[:fq] << %Q<is_governed_by_s:(#{igb})>
+    h[:fq] << %Q<#{Solrizer.solr_name 'is_governed_by', :symbol}:(#{igb})>
   end
 
   # Takes a hash of SOLR query parameters, along with some model names.
@@ -47,14 +47,14 @@ module Hydrus::SolrQueryable
     return unless models.size > 0
     h[:fq] ||= []
     hms = models.map { |m| %Q<"info:fedora/afmodel:#{m}"> }.join(' OR ')
-    h[:fq] << %Q<has_model_s:(#{hms})>
+    h[:fq] << %Q<#{Solrizer.solr_name 'has_model', :symbol}:(#{hms})>
   end
 
   # Returns a default hash of query params, used by a few methods.
   def self.default_query_params
     return {
       :rows => 9999,
-      :fl   => 'identityMetadata_objectId_t',
+      :fl   => Solrizer.solr_name('objectId', :symbol),
       :q    => '*',
     }
   end
@@ -130,7 +130,7 @@ module Hydrus::SolrQueryable
       :fl            => '',
       :facet         => false,
       :q             => '*',
-      :fq            => [ %Q<is_member_of_s:(#{imo})> ],
+      :fq            => [ %Q<#{Solrizer.solr_name 'is_member_of', :symbol}:(#{imo})> ],
     }
     HSQ.add_model_filter(h, 'Hydrus_Item')
     return h
@@ -145,9 +145,9 @@ module Hydrus::SolrQueryable
       :rows          => 0,
       :fl            => '',
       :facet         => true,
-      :'facet.pivot' => 'is_member_of_s,object_status_facet',
+      :'facet.pivot' => "#{Solrizer.solr_name 'is_member_of', :symbol},#{Solrizer.solr_name 'object_status', :facetable}",
       :q             => '*',
-      :fq            => [ %Q<is_member_of_s:(#{imo})> ],
+      :fq            => [ %Q<#{Solrizer.solr_name 'is_member_of', :symbol}:(#{imo})> ],
     }
     HSQ.add_model_filter(h, 'Hydrus_Item')
     return h
@@ -165,9 +165,9 @@ module Hydrus::SolrQueryable
     models = models.map { |m| m.to_s.gsub(/::/, '_') }
     # Define SOLR query with the desired fields.
     fields = {
-      'identityMetadata_objectId_t' => :pid,
-      'has_model_s'                 => :object_type,
-      'object_version_t'            => :object_version,
+      Solrizer.solr_name('objectId', :symbol) => :pid,
+      Solrizer.solr_name('has_model', :symbol)                    => :object_type,
+      Solrizer.solr_name('object_version', :symbol )           => :object_version,
     }
     h = squery_all_hydrus_objects(models, :fields => fields.keys)
     # Run query and return either a list of PIDs if that's all the caller wanted.
@@ -187,7 +187,7 @@ module Hydrus::SolrQueryable
   # Takes a SOLR response.
   # Returns an array of druids corresponding to the documents.
   def get_druids_from_response(resp)
-    k = 'identityMetadata_objectId_t'
+    k = Solrizer.solr_name('objectId', :symbol)
     return resp.docs.map { |doc| doc[k].first }
   end
 

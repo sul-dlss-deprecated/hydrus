@@ -178,8 +178,8 @@ describe("Collection edit", :type => :request, :integration => true) do
     visit polymorphic_path(@hc)
     # Undo changes, and confirm.
     should_visit_edit_page(@hc)
-    page.has_select?('embargo_option_varies', :selected => []).should == true
-    page.has_select?('embargo_option_fixed', :selected => "#{new_embargo} after deposit").should == true
+    page.should have_select('embargo_option_varies', :selected => [])
+    page.should have_select('embargo_option_fixed', :selected => "#{new_embargo} after deposit")
     choose(orig_check_field)
     select(orig_embargo, :from => "embargo_option_#{orig_embargo_option}")
     click_button "save_nojs"
@@ -344,7 +344,7 @@ describe("Collection edit", :type => :request, :integration => true) do
         email = ActionMailer::Base.deliveries.last
         email.to.should == ["archivist1@stanford.edu"]
         email.subject.should == "Collection opened for deposit in the Stanford Digital Repository"
-        
+
         click_link("Edit Collection")
 
         fill_in "hydrus_collection_apo_person_roles[hydrus-collection-item-depositor]", :with => "jdoe"

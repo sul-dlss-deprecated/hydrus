@@ -68,7 +68,7 @@ module Hydrus::Responsible
     doc=resp.docs.first
     roles.keys.each do |key|
       #the solr field is based on the role name, but doesnt match it precisely
-      field_name=key.gsub('hydrus-','').gsub('-','_')+'_person_identifier_t'
+      field_name=Solrizer.solr_name(key.gsub('hydrus-','').gsub('-','_')+'_person_identifier', :facetable)
       if doc[field_name] && doc[field_name].include?(person_id)
         toret << roles[key][:label]
       end

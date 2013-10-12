@@ -11,7 +11,7 @@ describe Hydrus::SolrQueryable do
     @msq  = MockSolrQueryable.new
     @hsq  = Hydrus::SolrQueryable
     @user = 'userFoo'
-    @role_md_clause = %Q<roleMetadata_role_person_identifier_facet:"#{@user}">
+    @role_md_clause = %Q<#{Solrizer.solr_name("role_person_identifier", :facetable)}:"#{@user}">
   end
 
   describe ".add_gated_discovery" do
@@ -20,7 +20,7 @@ describe Hydrus::SolrQueryable do
       @hsq.add_gated_discovery(h, ['aaa', 'bbb'], @user)
       expect(h[:fq]).to have(1).item
 
-      expect(h[:fq].first).to eq 'is_governed_by_s:("info:fedora/aaa" OR "info:fedora/bbb") OR ' + @role_md_clause
+      expect(h[:fq].first).to eq Solrizer.solr_name("is_governed_by", :symbol) + ':("info:fedora/aaa" OR "info:fedora/bbb") OR ' + @role_md_clause
     end
   end
 
@@ -56,7 +56,7 @@ describe Hydrus::SolrQueryable do
 
     it "should add the expected :fq clause" do
       druids = %w(aaa bbb)
-      igb    = 'is_governed_by_s:("info:fedora/aaa" OR "info:fedora/bbb")'
+      igb    = Solrizer.solr_name("is_governed_by", :symbol) + ':("info:fedora/aaa" OR "info:fedora/bbb")'
       tests  = [
         [ {},                [igb] ],
         [ {:fq => []},       [igb] ],
@@ -80,7 +80,7 @@ describe Hydrus::SolrQueryable do
 
     it "should add the expected :fq clause" do
       models = %w(xxx yyy)
-      hms    = 'has_model_s:("info:fedora/afmodel:xxx" OR "info:fedora/afmodel:yyy")'
+      hms    = Solrizer.solr_name("has_model", :symbol) + ':("info:fedora/afmodel:xxx" OR "info:fedora/afmodel:yyy")'
       tests  = [
         [ {},                [hms] ],
         [ {:fq => []},       [hms] ],
@@ -108,7 +108,7 @@ describe Hydrus::SolrQueryable do
   end
 
   it "can exercise get_druids_from_response()" do
-    k    = 'identityMetadata_objectId_t'
+    k    = Solrizer.solr_name('objectId', :symbol)
     exp  = [12, 34, 56]
     docs = exp.map { |n| {k => [n]} }
     resp = double('resp', :docs => docs)

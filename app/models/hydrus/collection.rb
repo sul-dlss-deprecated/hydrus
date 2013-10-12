@@ -92,10 +92,10 @@ class Hydrus::Collection < Dor::Collection
       id=solr_doc['id']
       title=self.class.object_title(solr_doc)
       num_files=(get_num_files ? Hydrus::ObjectFile.count(:conditions=>['pid=?',id]) : -1)
-      status=self.class.array_to_single(solr_doc['hydrusProperties_object_status_t'])
-      object_type=self.class.array_to_single(solr_doc['mods_typeOfResource_t'])
-      depositor=self.class.array_to_single(solr_doc['item_depositor_person_identifier_display'])
-      create_date=solr_doc['system_create_dt']
+      status=self.class.array_to_single(solr_doc[Solrizer.solr_name('object_status', :displayable)])
+      object_type=self.class.array_to_single(solr_doc[Solrizer.solr_name('typeOfResource', :displayable)])
+      depositor=self.class.array_to_single(solr_doc[Solrizer.solr_name('item_depositor_person_identifier', :displayable)])
+      create_date=solr_doc[Solrizer.solr_name('system_create', :stored_sortable, :type => :date)]
       items << {:pid=>id,:num_files=>num_files,:object_type=>object_type,:title=>title,:status_label=>status,:item_depositor_id=>depositor,:create_date=>create_date}
     end
     return items
@@ -573,7 +573,7 @@ class Hydrus::Collection < Dor::Collection
       queries.each do |h|
         resp, sdocs = issue_solr_query(h)
         resp.docs.each do |doc|
-          pid=doc['identityMetadata_objectId_t'].first
+          pid=doc[Solrizer.solr_name('objectId', :symbol)].first
           toret[pid]={}
           toret[pid][:solr]=doc
         end
@@ -594,7 +594,7 @@ class Hydrus::Collection < Dor::Collection
       hash[:pid]=coll_dru
       hash[:item_counts]=stats[coll_dru] || {}            
       hash[:title]=self.object_title(solr[coll_dru][:solr])
-      hash[:roles]=Hydrus::Responsible.roles_of_person current_user.to_s, solr[coll_dru][:solr]['is_governed_by_s'].first.gsub('info:fedora/','')
+      hash[:roles]=Hydrus::Responsible.roles_of_person current_user.to_s, solr[coll_dru][:solr][Solrizer.solr_name('is_governed_by', :symbol)].first.gsub('info:fedora/','')
       count=0
       stats[coll_dru].keys.each do |key|
         count += stats[coll_dru][key].to_i
@@ -608,8 +608,8 @@ class Hydrus::Collection < Dor::Collection
   
   # given a solr document, try a few places to get the title, starting with objectlabel, then dc_title, and finally just untitled
   def self.object_title(solr_doc)
-    mods_title=solr_doc['mods_titleInfo_title_t']
-    dc_title=solr_doc['dc_title_t']
+    mods_title=solr_doc[Solrizer.solr_name('titleInfo_title', :displayable)]
+    dc_title=solr_doc[Solrizer.solr_name('title', :displayable)]
     if !mods_title.nil?
       return mods_title.first
     elsif !dc_title.nil?

@@ -8,7 +8,7 @@ describe SolrDocument do
       [ 'info:fedora/afmodel:Dor_Item',       'hydrus_item'],
     ]
     tests.each do |has_model_s, exp|
-      h = { :has_model_s => has_model_s }
+      h = { "#{Solrizer.solr_name("has_model", :symbol)}" => has_model_s }
       sdoc = SolrDocument.new h
       sdoc.route_key.should == exp
     end
@@ -24,15 +24,15 @@ describe SolrDocument do
 
   it "can exercise simple getters" do
     h = {
-      'main_title_t'                => 'foo title',
-      'identityMetadata_objectId_t' => 'foo:pid',
-      'has_model_s'                 => 'info:fedora/afmodel:Hydrus_Item',
-      'object_status_t'             => 'awaiting_approval',
-      "roleMetadata_item_depositor_person_identifier_t" => 'foo_user',
+      Solrizer.solr_name("main_title", :displayable)  => 'foo title',
+      Solrizer.solr_name('objectId', :symbol) => 'foo:pid',
+      Solrizer.solr_name("has_model", :symbol)                 => 'info:fedora/afmodel:Hydrus_Item',
+      Solrizer.solr_name("object_status", :displayable)             => 'awaiting_approval',
+      Solrizer.solr_name("item_depositor_person_identifier", :displayable) => 'foo_user',
     }
     sdoc = SolrDocument.new h
-    sdoc.main_title.should    == h['main_title_t']
-    sdoc.pid.should           == h['identityMetadata_objectId_t']
+    sdoc.main_title.should    == 'foo title'
+    sdoc.pid.should           == 'foo:pid'
     sdoc.object_type.should   == 'item'
     sdoc.object_status.should == 'waiting for approval'
     sdoc.depositor.should     == 'foo_user'

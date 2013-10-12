@@ -158,7 +158,7 @@ describe Hydrus::AccessControlsEnforcement do
         '"info:fedora/afmodel:Hydrus_Collection"',
         '"info:fedora/afmodel:Hydrus_Item"',
       ].join(' OR ')
-      @has_model_clause = %Q<has_model_s:(#{hmc})>
+      @has_model_clause = %Q<#{Solrizer.solr_name("has_model", :symbol)}:(#{hmc})>
     end
 
     it "hash should include expected clauses for the normal use case" do
@@ -167,8 +167,8 @@ describe Hydrus::AccessControlsEnforcement do
       apo_pids = %w(aaa bbb)
       Hydrus::Collection.stub(:apos_involving_user).and_return(apo_pids)
       parts = {
-        :igb => %Q<is_governed_by_s:("info:fedora/aaa" OR "info:fedora/bbb")>,
-        :rmd => %Q<roleMetadata_role_person_identifier_facet:"userFoo">,
+        :igb => %Q<#{Solrizer.solr_name("is_governed_by", :symbol)}:("info:fedora/aaa" OR "info:fedora/bbb")>,
+        :rmd => %Q<#{Solrizer.solr_name("role_person_identifier", :facetable)}:"userFoo">,
         :hm  => @has_model_clause,
       }
       exp = {
@@ -188,7 +188,7 @@ describe Hydrus::AccessControlsEnforcement do
       @mc.stub(:current_user).and_return(nil)
       parts = {
         :hm1 => @has_model_clause,
-        :hm2 => %Q<has_model_s:("info:fedora/afmodel:____USER_IS_NOT_LOGGED_IN____")>,
+        :hm2 => %Q<#{Solrizer.solr_name("has_model", :symbol)}:("info:fedora/afmodel:____USER_IS_NOT_LOGGED_IN____")>,
       }
       exp = { :fq => [ parts[:hm1], parts[:hm2] ] }
       solr_params = {}

@@ -11,10 +11,10 @@ describe(HydrusSolrController, :integration => true) do
     h = {
       :rows => 9999,
       :q    => '*',
-      :fl   => 'identityMetadata_objectId_t',
+      :fl   => Solrizer.solr_name('objectId', :symbol),
     }
     resp = obj.issue_solr_query(h).first['response']
-    druids = resp['docs'].map { |d| d['identityMetadata_objectId_t'].first  }
+    druids = resp['docs'].map { |d| d[Solrizer.solr_name('objectId', :symbol)].first  }
     n      = resp['numFound']
     return n, druids
   end
