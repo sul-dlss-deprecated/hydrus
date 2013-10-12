@@ -9,7 +9,6 @@ class Hydrus::Collection < Dor::Collection
   REQUIRED_FIELDS = [:title, :abstract, :contact]
 
   before_validation :remove_values_for_associated_attribute_with_value_none
-  after_validation :cleanup_usernames
   after_validation :strip_whitespace
 
   validates :title,    :not_empty => true, :if => :should_validate
@@ -333,20 +332,22 @@ class Hydrus::Collection < Dor::Collection
   end
 
   # Rewrites the APO.person_roles, converting any email addresses to SUNET IDs.
-  def cleanup_usernames
+  def cleanup_usernames!
     self.apo_person_roles = cleaned_usernames
   end
+
+  alias_method :cleanup_usernames, :cleanup_usernames!
 
   # Processes the APO.person_roles hash.
   # Converts all users names that are email addresses into SUNET IDs
   # by removing text following the @ sign. In addition, the
   # values of the hash are joined by commas, so that the hash is
   # ready for assignment back to apo_person_roles.
-  def cleaned_usernames
+  def cleaned_usernames apo_person_roles
     result = {}
     apo_person_roles.each { |role, users|
-      ids = users.map { |u| u.split('@').first }
-      result[role] = ids.join(',')
+      ids = Array(users).map { |ids| Hydrus::ModelHelper.parse_delimited(ids) }.flatten.map { |u| u.split('@').first.strip }
+      result[role] = Set.new(ids) unless ids.empty?
     }
     return result
   end
@@ -405,12 +406,15 @@ class Hydrus::Collection < Dor::Collection
   end
 
   def apo_person_roles
-    return apo.person_roles
+    apo.person_roles
   end
+  alias_method :roles, :apo_person_roles
 
   def apo_person_roles= val
-    apo.person_roles= val
+    val = cleaned_usernames(val)
+    apo.person_roles = val
   end
+  alias_method :roles=, :apo_person_roles=
 
   def apo_persons_with_role(role)
     return apo.persons_with_role(role)

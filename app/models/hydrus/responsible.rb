@@ -47,9 +47,9 @@ module Hydrus::Responsible
   # Rewrites roleMetadata <person> nodes to reflect the contents of the hash.
   def person_roles=(h)
     roleMetadata.remove_nodes(:role, :person)
-    Hydrus::Responsible.pruned_role_info(h).each do |id, roles|
-      roles.each do |r|
-        roleMetadata.add_person_with_role(id, r)
+    Hydrus::Responsible.pruned_role_info(h).each do |role, ids|
+      ids.each do |id|
+        roleMetadata.add_person_with_role(id, role)
       end
     end
   end
@@ -99,7 +99,9 @@ module Hydrus::Responsible
     # Parse the input hash and create the new hash.
     proles = {}
     h.each do |role, ids|
-      Hydrus::ModelHelper.parse_delimited(ids).each do |id|
+      ids = Hydrus::ModelHelper.parse_delimited(ids) if ids.is_a? String
+
+      ids.each do |id|
         proles[id] ||= Set.new
         proles[id] << role
       end
@@ -111,7 +113,17 @@ module Hydrus::Responsible
         rsmalls.each { |r| roles.delete(r) } if roles.include?(rbig)
       end
     end
-    return proles
+
+    role_info = {}
+
+    proles.each do |id, roles|
+      roles.each do |r|
+        role_info[r] ||= []
+        role_info[r] << id
+      end
+    end
+
+    return role_info
   end
 
   # By default, returns a hash-of-hashes of roles and their UI labels and help texts.

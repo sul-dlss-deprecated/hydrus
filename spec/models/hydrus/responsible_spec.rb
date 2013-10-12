@@ -125,23 +125,18 @@ describe Hydrus::Responsible do
 
   it "pruned_role_info() should prune out lesser roles" do
     h = {
-      'hydrus-collection-depositor'      => 'aaa',
-      'hydrus-collection-manager'        => 'aaa,bbb,ccc,ddd,eee',
-      'hydrus-collection-reviewer'       => 'bbb,ccc,xxx,yyy',
-      'hydrus-collection-item-depositor' => 'ccc,ddd,xxx,zzz',
-      'hydrus-collection-viewer'         => 'aaa,bbb,ccc,QQQ,RRR',
+      'hydrus-collection-depositor'      => Hydrus::ModelHelper.parse_delimited('aaa'),
+      'hydrus-collection-manager'        => Hydrus::ModelHelper.parse_delimited('aaa,bbb,ccc,ddd,eee'),
+      'hydrus-collection-reviewer'       => Hydrus::ModelHelper.parse_delimited('bbb,ccc,xxx,yyy'),
+      'hydrus-collection-item-depositor' => Hydrus::ModelHelper.parse_delimited('ccc,ddd,xxx,zzz'),
+      'hydrus-collection-viewer'         => Hydrus::ModelHelper.parse_delimited('aaa,bbb,ccc,QQQ,RRR'),
     }
     exp = {
-      'aaa' => Set.new(%w(hydrus-collection-depositor hydrus-collection-manager)),
-      'bbb' => Set.new(%w(hydrus-collection-manager)),
-      'ccc' => Set.new(%w(hydrus-collection-manager)),
-      'ddd' => Set.new(%w(hydrus-collection-manager)),
-      'eee' => Set.new(%w(hydrus-collection-manager)),
-      'xxx' => Set.new(%w(hydrus-collection-reviewer hydrus-collection-item-depositor)),
-      'yyy' => Set.new(%w(hydrus-collection-reviewer)),
-      'zzz' => Set.new(%w(hydrus-collection-item-depositor)),
-      'QQQ' => Set.new(%w(hydrus-collection-viewer)),
-      'RRR' => Set.new(%w(hydrus-collection-viewer)),
+      "hydrus-collection-depositor" => ["aaa"],
+      "hydrus-collection-item-depositor" => ["xxx", "zzz"],
+      "hydrus-collection-manager" => ["aaa", "bbb", "ccc", "ddd", "eee"],
+      "hydrus-collection-reviewer" => ["xxx", "yyy"],
+      "hydrus-collection-viewer" => ["QQQ", "RRR"]
     }
     Hydrus::Responsible.pruned_role_info(h).should == exp
   end

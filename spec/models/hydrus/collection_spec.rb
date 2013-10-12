@@ -329,11 +329,10 @@ describe Hydrus::Collection do
       'role2' => Set.new(%w(abc@def xyz www@stanford.edu)),
     }
     exp = {
-      'role1' => 'foo,bar,quux',
-      'role2' => 'abc,xyz,www',
+      'role1' => Set.new(['foo', 'bar', 'quux']),
+      'role2' => Set.new(['abc', 'xyz', 'www']),
     }
-    @hc.stub(:apo_person_roles).and_return(apr)
-    @hc.cleaned_usernames.should == exp
+    @hc.cleaned_usernames(apr).should == exp
   end
 
   describe "getters and setters" do
