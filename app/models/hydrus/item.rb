@@ -5,6 +5,8 @@ class Hydrus::Item < Hydrus::GenericObject
 
   REQUIRED_FIELDS = [:title, :abstract, :contact, :keywords, :version_description, :date_created]
 
+  define_attribute_method :files
+
   after_validation :strip_whitespace
 
   validates :title,               :not_empty => true, :if => :should_validate
@@ -694,18 +696,6 @@ class Hydrus::Item < Hydrus::GenericObject
     ).to_a
     managers.delete(self.item_depositor_id)
     return managers.join(', ')
-  end
-  
-  # See GenericObject#changed_fields for discussion.
-  def tracked_fields
-    return {
-      :title      => [:title],
-      :abstract   => [:abstract],
-      :files      => [:files_were_changed],
-      :embargo    => [:embargo_date],
-      :visibility => [:visibility],
-      :license    => [:license],
-    }
   end
 
   # Returns the Item's current version number, 1..N.

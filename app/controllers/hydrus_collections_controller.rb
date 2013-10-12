@@ -90,7 +90,7 @@ class HydrusCollectionsController < ApplicationController
       return
     end
 
-    if params['should_send_role_change_emails']=="true" && @fobj.changed_fields.include?(:roles) # if roles have changed as the result of an update, send the appropriate emails    
+    if params['should_send_role_change_emails']=="true" && @fobj.previous_changes.has_key?('roles') # if roles have changed as the result of an update, send the appropriate emails
       @fobj.send_all_role_change_emails 
     end
 

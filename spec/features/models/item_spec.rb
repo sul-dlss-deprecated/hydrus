@@ -78,6 +78,26 @@ describe(Hydrus::Item, :integration => true) do
 
   end
 
+  describe "editing_event_message" do
+
+    it "should include all the relevant user-changable attributes" do
+      hi    = Hydrus::Item.new
+      hi.stub(:user_changed_attributes).and_return ["a", "b", "c"]
+      hi.editing_event_message.should == "Item modified: a, b, c"
+    end
+  end
+
+  describe "user_changed_attributes" do
+
+    it "should include all the relevant user-changable attributes" do
+      hi    = Hydrus::Item.new
+      hi.files_will_change!
+      hi.attributes = { :title => 'xyz', :abstract => 'abc', :prior_license => 'xyz' }
+      hi.user_changed_attributes.should include "files", "title", "abstract"
+      hi.user_changed_attributes.should_not include "prior_license"
+    end
+  end
+
   describe "create()" do
 
     before(:all) do

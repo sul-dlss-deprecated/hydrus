@@ -7,6 +7,7 @@ class Hydrus::Collection < Dor::Collection
   before_save :save_apo
   
   REQUIRED_FIELDS = [:title, :abstract, :contact]
+  define_attribute_method :roles
 
   after_validation :strip_whitespace
 
@@ -264,10 +265,21 @@ class Hydrus::Collection < Dor::Collection
   end
 
   def send_all_role_change_emails
+    before, after = previous_changes['roles']
+
+    depositors_before_update = before.fetch('hydrus-collection-item-depositor', Set.new)
+    depositors_after_update = after.fetch('hydrus-collection-item-depositor', Set.new)
+
+    managers_before_update = before.fetch("hydrus-collection-manager", Set.new)
+    managers_after_update = after.fetch("hydrus-collection-manager", Set.new)
+ 
+    reviewers_before_update = before.fetch("hydrus-collection-reviewer", Set.new)
+    reviewers_after_update = after.fetch("hydrus-collection-reviewer", Set.new)
+
+    viewers_before_update = before.fetch("hydrus-collection-viewer", Set.new)
+    viewers_after_update = after.fetch("hydrus-collection-viewer", Set.new)
 
     # new depositors get an email if the collection is open
-    depositors_before_update = old_self.apo.persons_with_role("hydrus-collection-item-depositor")
-    depositors_after_update = self.apo.persons_with_role("hydrus-collection-item-depositor")
     new_depositors = (depositors_after_update - depositors_before_update).to_a.join(", ")
     removed_depositors = (depositors_before_update - depositors_after_update).to_a.join(", ")
     if self.is_open
@@ -276,15 +288,9 @@ class Hydrus::Collection < Dor::Collection
     end
 
     # collection managers changed, send an email to all managers
-    managers_before_update = old_self.apo.persons_with_role("hydrus-collection-manager")
-    managers_after_update = self.apo.persons_with_role("hydrus-collection-manager")
     self.send_role_change_email(self.apo.persons_with_role("hydrus-collection-manager").to_a.join(',')) if managers_before_update != managers_after_update
 
     # reviewers or viewers have been changed, send an email to all managers and reviewers
-    reviewers_before_update = old_self.apo.persons_with_role("hydrus-collection-reviewer")
-    reviewers_after_update = self.apo.persons_with_role("hydrus-collection-reviewer")
-    viewers_before_update = old_self.apo.persons_with_role("hydrus-collection-viewer")
-    viewers_after_update = self.apo.persons_with_role("hydrus-collection-viewer")
     self.send_role_change_email((self.apo.persons_with_role("hydrus-collection-manager")+self.apo.persons_with_role("hydrus-collection-reviewer")).to_a.join(',')) if (reviewers_before_update != reviewers_after_update) || (viewers_before_update != viewers_after_update)
         
   end
@@ -412,6 +418,7 @@ class Hydrus::Collection < Dor::Collection
 
   def apo_person_roles= val
     val = cleaned_usernames(val)
+    roles_will_change! unless val == apo_person_roles
     apo.person_roles = val
   end
   alias_method :roles=, :apo_person_roles=
@@ -499,17 +506,6 @@ class Hydrus::Collection < Dor::Collection
       'stanford' => 'fixed_stanford',
     }
     return lookup.merge(lookup.invert)
-  end
-
-  def tracked_fields
-    return {
-      :title       => [:title],
-      :description => [:abstract],
-      :embargo     => [:embargo_option, :embargo_terms],
-      :visibility  => [:visibility_option, :visibility],
-      :license     => [:license_option, :license],
-      :roles       => [:apo_person_roles],
-    }
   end
 
   ####

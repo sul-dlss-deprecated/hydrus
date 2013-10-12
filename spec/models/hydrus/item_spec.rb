@@ -588,10 +588,6 @@ describe Hydrus::Item do
     Hydrus::Item.discovery_roles.should be_instance_of(Hash)
   end
 
-  it "can exercise tracked_fields()" do
-    @hi.tracked_fields.should be_an_instance_of(Hash)
-  end
-
   describe "is_submittable_for_approval()" do
 
     it "if item is not a draft, should return false" do

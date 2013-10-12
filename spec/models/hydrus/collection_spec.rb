@@ -318,10 +318,6 @@ describe Hydrus::Collection do
 
   end
 
-  it "can exercise tracked_fields()" do
-    @hc.tracked_fields.should be_an_instance_of(Hash)
-  end
-
   it "cleaned_usernames() should process the apo_person_roles info as expected" do
     apr = {
       'role1' => Set.new(%w(foo bar@blah quux@blah.edu)),

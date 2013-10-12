@@ -88,7 +88,7 @@ class HydrusItemsController < ApplicationController
         hof.save
         hof.remove_dupes
         notice << "'#{upload_file.original_filename}' uploaded."
-        @fobj.files_were_changed = true  # To log an editing event.
+        @fobj.files_will_change!  # To log an editing event.
       end
     end
 
@@ -97,7 +97,7 @@ class HydrusItemsController < ApplicationController
       if hof && hof.set_file_info(h)
         hof.save
         hof.remove_dupes
-        @fobj.files_were_changed = true  # To log an editing event.
+        @fobj.files_will_change! # To log an editing event.
       end
     end
     

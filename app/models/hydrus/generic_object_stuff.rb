@@ -127,12 +127,19 @@ module Hydrus::GenericObjectStuff
     super()
   end
 
-  # Takes a list of fields that were changed by the user and
+  # Takes a changed fields and
   # returns a string used in event logging. For example:
   #   "Item modified: title, abstract, license"
-  def editing_event_message(fields)
-    fs = fields.map { |e| e.to_s }.join(', ')
+  def editing_event_message
+    fs = user_changed_attributes.map { |e| e.to_s.humanize.downcase }.join(', ')
     return "#{hydrus_class_to_s()} modified: #{fs}"
+  end
+
+  def user_changed_attributes
+    tracked_fields = ["title", "abstract", "embargo_option",
+      "embargo_terms", "embargo_date", "visibility_option", "visibility", 
+      "license_option", "license", "roles", "files"]
+    changes.select { |field, values| tracked_fields.include?(field) }.reject { |field, (old_value, new_value)| old_value.respond_to?(:strip) && new_value.respond_to?(:strip) && old_value.strip == new_value.strip }.keys
   end
 
 end
