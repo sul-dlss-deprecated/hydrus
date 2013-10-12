@@ -81,10 +81,7 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
     # Create the object, with the correct model.
     dconf = Dor::Config.hydrus
     args = [user, 'adminPolicy', dconf.ur_apo_druid]
-    apo  = Hydrus::GenericObject.register_dor_object(*args)
-    apo  = Hydrus::AdminPolicyObject.find(apo.pid)
-    apo.remove_relationship :has_model, 'info:fedora/afmodel:Dor_AdminPolicyObject'
-    apo.assert_content_model
+    apo  = Hydrus::GenericObject.register_dor_object(:user => user, :object_type => 'adminPolicy', :admin_policy => dconf.ur_apo_druid)
     # Add minimal descMetadata with a title.
     apo.title = dconf.initial_apo_title
     apo.label = apo.title

@@ -88,10 +88,7 @@ class Hydrus::Item < Hydrus::GenericObject
     cannot_do(:create) unless coll.is_open()
     cannot_do(:create) unless Hydrus::Authorizable.can_create_items_in(user, coll)
     # Create the object, with the correct model.
-    dor_item = Hydrus::GenericObject.register_dor_object(user, 'item', coll.apo_pid)
-    item     = Hydrus::Item.find(dor_item.pid)
-    item.remove_relationship :has_model, 'info:fedora/afmodel:Dor_Item'
-    item.assert_content_model
+    item = Hydrus::GenericObject.register_dor_object(:user => user, :object_type => 'item', :collection => coll, :admin_policy => coll.apo_pid)
     # Add the Item to the Collection.
     item.collections << coll
     # Create default rightsMetadata from the collection

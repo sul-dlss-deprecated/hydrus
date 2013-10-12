@@ -273,23 +273,15 @@ class Hydrus::GenericObject < Dor::Item
   end
 
   # Registers an object in Dor, and returns it.
-  def self.register_dor_object(*args)
-    params = self.dor_registration_params(*args)
-    return Dor::RegistrationService.register_object(params)
-  end
-
-  # Returns a hash of info needed to register a Dor object.
-  def self.dor_registration_params(user_string, obj_typ, apo_pid)
-    proj = 'Hydrus'
-    tm   = HyTime.now_datetime_full
-    return {
-      :object_type       => obj_typ,
-      :admin_policy      => apo_pid,
-      :source_id         => { proj => "#{obj_typ}-#{user_string}-#{tm}" },
-      :label             => proj,
-      :tags              => ["Project : #{proj}"],
-      :initiate_workflow => [Dor::Config.hydrus.app_workflow],
-    }
+  def self.register_dor_object(registration_params = {})
+    unless [:object_type, :user, :admin_policy].all? { |k| registration_params.has_key? k }
+      raise ArgumentError.new "register_dor_object requires :object_type, :admin_policy, :user parameters"
+    end
+    return Dor::RegistrationService.register_object({
+      :source_id         => { "Hydrus" => "#{registration_params[:object_type]}-#{registration_params[:user]}-#{HyTime.now_datetime_full}" },
+      :label             => "Hydrus",
+      :tags              => ["Project : Hydrus"],
+      :initiate_workflow => [Dor::Config.hydrus.app_workflow]}.merge(registration_params))
   end
 
   def recipients_for_object_returned_email

@@ -62,26 +62,16 @@ describe Hydrus::GenericObject do
 
   describe "registration" do
 
-    it "dor_registration_params() should return the expected hash" do
-      # Non-APO: hash should include initiate_workflow.
-      args = %w(whobar item somePID)
-      drp = Hydrus::GenericObject.dor_registration_params(*args)
-      drp.should be_instance_of Hash
-      drp[:admin_policy].should == args.last
-      drp.should include(:initiate_workflow)
-      # APO: hash should not includes initiate_workflow.
-      args = %w(whobar adminPolicy somePID)
-      drp = Hydrus::GenericObject.dor_registration_params(*args)
-      drp.should be_instance_of Hash
-      drp.should include(:initiate_workflow)
-    end
-
     it "should be able to exercise register_dor_object(), using stubbed call to Dor" do
-      args = %w(whobar item somePID)
-      drp = Hydrus::GenericObject.dor_registration_params(*args)
-      expectation = Dor::RegistrationService.should_receive(:register_object)
-      expectation.with(hash_including(*drp.keys))
-      Hydrus::GenericObject.register_dor_object(nil, nil, nil)
+      expectation = Dor::RegistrationService.should_receive(:register_object).with hash_including(
+      :source_id,
+      :admin_policy      => "admin_policy",
+      :label             => "Hydrus",
+      :tags              => ["Project : Hydrus"],
+      :initiate_workflow => [Dor::Config.hydrus.app_workflow]
+        )
+
+      Hydrus::GenericObject.register_dor_object({:user => "user_id", :admin_policy => "admin_policy", :object_type => "some_type"})
     end
 
   end
