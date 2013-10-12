@@ -54,6 +54,12 @@ class Hydrus::Item < Hydrus::GenericObject
     errors.add(:visibility, msg)
   end
 
+  has_metadata(
+    :name => "roleMetadata",
+    :type => Hydrus::RoleMetadataDS,
+    :label => 'Role Metadata',
+    :control_group => 'M')
+
   setup_delegations(
     # [:METHOD_NAME,               :uniq, :at... ]
     "descMetadata" => [
@@ -73,13 +79,6 @@ class Hydrus::Item < Hydrus::GenericObject
       [:prior_visibility,          true   ],
     ]
   )
-
-  has_metadata(
-    :name => "roleMetadata",
-    :type => Hydrus::RoleMetadataDS,
-    :label => 'Role Metadata',
-    :control_group => 'M')
-
 
   # Note: currently all items of of type :item. In the future,
   # the calling code can pass in the needed value.
