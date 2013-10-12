@@ -83,7 +83,6 @@ describe Hydrus::Collection do
         :title,
         :abstract,
         :contact,
-        :embargo,
         :embargo_option,
         :license_option,
       ]
