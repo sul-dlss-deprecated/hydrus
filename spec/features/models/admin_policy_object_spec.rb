@@ -4,6 +4,7 @@ describe(Hydrus::AdminPolicyObject, :integration => true) do
 
   it "should be able to create an APO object, whose APO is the Ur-APO" do
     # Create an APO.
+    Hydrus::Application.config.stub(:default_apo_agreement => "info:fedora/druid:mc322hh4254")
     Dor::SuriService.stub(:mint_id).and_return 'druid:oo000oo1234'
     Dor::WorkflowDs.any_instance.stub(:current_priority).and_return 0
     user = 'foo@bar.com'

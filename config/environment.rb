@@ -18,6 +18,8 @@ Hydrus::Application.configure do
   # style of content metadata to generate
   config.cm_style = :file
 
+  config.default_apo_agreement = nil
+
 end
 
 Dor::Config.configure do

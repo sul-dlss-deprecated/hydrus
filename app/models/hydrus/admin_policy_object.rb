@@ -89,7 +89,7 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
     # Create defaultObjectRights datastream ... by mentioning it.
     apo.defaultObjectRights.content_will_change!
     # Add the references agreement to the APO's RELS-EXT.
-    apo.add_relationship(:references_agreement, "info:fedora/druid:mc322hh4254")
+    apo.add_relationship(:references_agreement, Hydrus::Application.config.default_apo_agreement) if Hydrus::Application.config.default_apo_agreement
     # Save and return.
     apo.save!
     return apo
