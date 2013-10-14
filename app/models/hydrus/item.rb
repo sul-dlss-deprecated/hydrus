@@ -668,13 +668,6 @@ class Hydrus::Item < Hydrus::GenericObject
     descMetadata.insert_contributor(typ, name, role)
   end
 
-  def self.discovery_roles
-    return {
-      "everyone"      => "world",
-      "Stanford only" => "stanford",
-    }
-  end
-
   # the users who will receive email notifications when an item is published or submitted for approval
   def recipients_for_item_deposit_emails
     self.item_depositor_id

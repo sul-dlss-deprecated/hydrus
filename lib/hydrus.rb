@@ -222,6 +222,13 @@ module Hydrus
     return roles.map { |r| labels[r] }
   end
 
+  def self.discovery_roles
+    return {
+      "everyone"      => "world",
+      "Stanford only" => "stanford",
+    }
+  end
+
   # All of our fixture PIDs, in order: APOs, then Collections, then Items.
   # Items can't be loaded until their APOs and Collections are in Fedora;
   # otherwise the dor-services indexing code will blow up.
