@@ -10,7 +10,7 @@ module Hydrus::Embargoable
 
   # During subsequent versions the user not allowed to reduce visibility.
   def check_visibility_not_reduced
-    return if is_initial_version
+    return if is_initial_version?
     v = visibility
     return if v == ['world']
     return if v == [prior_visibility]
@@ -29,7 +29,7 @@ module Hydrus::Embargoable
   #   - Subsequent versions: visibility cannot be reduced from world to stanford.
   def visibility_can_be_changed
     return false unless collection.visibility_option == 'varies'
-    return true  if is_initial_version
+    return true  if is_initial_version?
     return false if prior_visibility == 'world'
     return true
   end
@@ -37,7 +37,7 @@ module Hydrus::Embargoable
   # Returns visibility as an array -- typically either ['world'] or ['stanford'].
   # Embargo status determines which datastream is used to obtain the information.
   def visibility
-    ds = is_embargoed ? embargoMetadata : rightsMetadata
+    ds = is_embargoed? ? embargoMetadata : rightsMetadata
     return ["world"] if ds.has_world_read_node
     return ds.group_read_nodes.map { |n| n.text }
   end
@@ -47,7 +47,7 @@ module Hydrus::Embargoable
   # values, along with the embargo status.
   # Do not call this directly from the UI. Instead, use embarg_visib=().
   def visibility= val
-    if is_embargoed
+    if is_embargoed?
       # If embargoed, we set access info in embargoMetadata.
       embargoMetadata.initialize_release_access_node(:generic)
       embargoMetadata.update_access_blocks(val)
@@ -66,13 +66,13 @@ module Hydrus::Embargoable
     # Collection must allow it.
     return false unless collection.embargo_option == 'varies'
     # Behavior varies by version.
-    if is_initial_version
+    if is_initial_version?
       return true
     else
       # In subsequent versions, Item must
       #   - have an existing embargo
       #   - that has a max embargo date some time in the future
-      return false unless is_embargoed
+      return false unless is_embargoed?
       return HyTime.now < end_of_embargo_range.to_datetime
     end
   end
@@ -105,7 +105,7 @@ module Hydrus::Embargoable
   end
 
   # Returns true if the Item is embargoed.
-  def is_embargoed
+  def is_embargoed?
     return not(embargo_date.blank?)
   end
 
@@ -132,7 +132,7 @@ module Hydrus::Embargoable
   #     user that the embargo date was malformed. This awkwardness could
   #     be avoided if we simplify the UI, removing the embargo radio button.
   def embargo_date= val
-    if HyTime.is_well_formed_datetime(val)
+    if HyTime.is_well_formed_datetime?(val)
       ed = HyTime.datetime(val, :from_localzone => true)
     elsif val.blank?
       ed = nil
@@ -170,7 +170,7 @@ module Hydrus::Embargoable
   # past embargo date, because the nightly job that removes embargoMetadata
   # once the date has passed might not have run yet.
   def embargo_date_in_range
-    return unless is_embargoed
+    return unless is_embargoed?
     b  = beginning_of_embargo_range.to_datetime
     e  = end_of_embargo_range.to_datetime
     dt = embargo_date.to_datetime

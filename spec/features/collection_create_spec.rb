@@ -110,12 +110,12 @@ describe("Collection create", :type => :request, :integration => true) do
     apo = coll.apo
     # Check various Collection attributes and methods.
     coll.object_status.should == 'draft'
-    coll.is_openable.should == false
-    coll.is_published.should == false
-    coll.is_destroyable.should == true
+    coll.is_openable?.should == false
+    coll.is_published?.should == false
+    coll.is_destroyable?.should == true
     coll.submitted_for_publish_time.should be_blank
     coll.valid?.should == true  # Because unpublished, so validation is limited.
-    coll.is_open.should == false
+    coll.is_open?.should == false
     # Go back to edit page and fill in required elements.
     should_visit_edit_page(coll)
     fill_in "hydrus_collection_abstract", :with => ni.abstract
@@ -129,11 +129,11 @@ describe("Collection create", :type => :request, :integration => true) do
     apo = coll.apo
     # Check various Collection attributes and methods.
     coll.object_status.should == 'draft'
-    coll.is_openable.should == true
-    coll.is_published.should == false
-    coll.is_destroyable.should == true
+    coll.is_openable?.should == true
+    coll.is_published?.should == false
+    coll.is_destroyable?.should == true
     coll.valid?.should == true
-    coll.is_open.should == false
+    coll.is_open?.should == false
     # Open the Collection.
     click_button(open_button)
     find(@alert).should have_content(@notice_open)
@@ -144,12 +144,12 @@ describe("Collection create", :type => :request, :integration => true) do
     apo = coll.apo
     # Check various Collection attributes and methods.
     coll.object_status.should == 'published_open'
-    coll.is_openable.should == false
-    coll.is_published.should == true
-    coll.is_destroyable.should == false
+    coll.is_openable?.should == false
+    coll.is_published?.should == true
+    coll.is_destroyable?.should == false
     coll.submitted_for_publish_time.should_not be_blank
     coll.valid?.should == true
-    coll.is_open.should == true
+    coll.is_open?.should == true
     # The workflow steps of both the collection and apo should be completed.
     Dor::Config.hydrus.app_workflow_steps.each do |step|
       coll.workflows.workflow_step_is_done(step).should == true
@@ -165,11 +165,11 @@ describe("Collection create", :type => :request, :integration => true) do
     apo = coll.apo
     # Check various Collection attributes and methods.
     coll.object_status.should == 'published_closed'
-    coll.is_openable.should == true
-    coll.is_published.should == true
-    coll.is_destroyable.should == false
+    coll.is_openable?.should == true
+    coll.is_published?.should == true
+    coll.is_destroyable?.should == false
     coll.valid?.should == true
-    coll.is_open.should == false
+    coll.is_open?.should == false
     # Return to edit page, and try to save Collection with an empty title.
     click_link "Edit Collection"
     fill_in "hydrus_collection_title", :with => ''
@@ -190,11 +190,11 @@ describe("Collection create", :type => :request, :integration => true) do
     apo = coll.apo
     # Check various Collection attributes and methods.
     coll.object_status.should == 'published_open'
-    coll.is_openable.should == false
-    coll.is_published.should == true
-    coll.is_destroyable.should == false
+    coll.is_openable?.should == false
+    coll.is_published?.should == true
+    coll.is_destroyable?.should == false
     coll.valid?.should == true
-    coll.is_open.should == true
+    coll.is_open?.should == true
     # Check events.
     exp = [
       /\ACollection created/,
@@ -212,7 +212,7 @@ describe("Collection create", :type => :request, :integration => true) do
 
     it "should raise error if object is not destroyable" do
       hc = Hydrus::Collection.find('druid:oo000oo0004')
-      hc.is_destroyable.should == false
+      hc.is_destroyable?.should == false
       expect { hc.destroy }.to raise_error(RuntimeError)
     end
 
@@ -239,7 +239,7 @@ describe("Collection create", :type => :request, :integration => true) do
       wfs.get_workflows(apid).should == [hwf]
       wfs.get_workflows(cpid).should == [hwf]
       # Delete the collection and its APO.
-      hc.is_destroyable.should == true
+      hc.is_destroyable?.should == true
       click_link "Discard this collection"
       click_button "Discard"
       hc = nil

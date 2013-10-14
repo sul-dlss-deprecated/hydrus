@@ -44,7 +44,7 @@ class Hydrus::RemediationRunner
     if nd && nd[:type] == 'creativeCommons'
       nd.content = nd.content.gsub(/\Acc-/, '')
       fobj.rightsMetadata.content_will_change!
-      if fobj.is_item? && !fobj.is_initial_version
+      if fobj.is_item? && !fobj.is_initial_version?
         fobj.prior_license = fobj.license
         fobj.hydrusProperties.content_will_change!
       end
@@ -61,7 +61,7 @@ class Hydrus::RemediationRunner
   #   - creted an initialPublishTime node
   def rem_modify_publish_nodes
     return if fobj.is_apo?
-    return unless fobj.is_published
+    return unless fobj.is_published?
     log.info(__method__)
     # Copy publishTime content to two new nodes,
     # and delete the publishTime node.
@@ -80,7 +80,7 @@ class Hydrus::RemediationRunner
       log_warning('did not find publishTime node')
     end
     # For Items beyond first version, add an initialPublishTime node.
-    return if fobj.is_collection? || fobj.is_initial_version
+    return if fobj.is_collection? || fobj.is_initial_version?
     node_name = 'initialPublishTime'
     unless hp.at_xpath('//' + node_name)
       new_node = Nokogiri::XML::Node.new(node_name, hp)

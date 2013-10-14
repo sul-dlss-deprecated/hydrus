@@ -280,7 +280,7 @@ describe Hydrus::GenericObject do
       @go.workflows.workflow_step_is_done('submit').should        == false
     end
 
-    it "is_published() should return true if object status is any flavor of publish" do
+    it "is_published?() should return true if object status is any flavor of publish" do
       tests = {
         'published'         => true,
         'published_open'    => true,
@@ -290,7 +290,7 @@ describe Hydrus::GenericObject do
       }
       tests.each do |status, exp|
         @go.stub(:object_status).and_return(status)
-        @go.is_published.should == exp
+        @go.is_published?.should == exp
       end
     end
 
@@ -303,8 +303,8 @@ describe Hydrus::GenericObject do
       @go.instance_variable_set('@should_validate', true)
     end
 
-    it "blank slate object (should_validate=false) should include only the :pid error" do
-      @go.stub(:should_validate).and_return(false)
+    it "blank slate object (should_validate?=false) should include only the :pid error" do
+      @go.stub(:should_validate?).and_return(false)
       @go.valid?.should == false
       @go.errors.messages.keys.should == [@exp.first]
     end
@@ -372,8 +372,8 @@ describe Hydrus::GenericObject do
   end
 
   it "publish_metadata() should do nothing if app is not configured to start common assembly" do
-    @go.stub(:should_start_assembly_wf).and_return(false)
-    @go.should_not_receive(:is_assemblable)
+    @go.stub(:should_start_assembly_wf?).and_return(false)
+    @go.should_not_receive(:is_assemblable?)
     @go.publish_metadata
   end
 

@@ -12,24 +12,24 @@ class Ability
     # Read.
 
     can(:read, [String, ActiveFedora::Base]) do |obj|
-      AUTH.can_read_object(user, get_fedora_object(obj))
+      AUTH.can_read_object?(user, get_fedora_object(obj))
     end
 
     can(:read, Hydrus::Collection) do |obj|
-      AUTH.can_read_collection(user, obj)
+      AUTH.can_read_collection?(user, obj)
     end
 
     can(:read, Hydrus::Item) do |obj|
-      AUTH.can_read_item(user, obj)
+      AUTH.can_read_item?(user, obj)
     end
 
     can(:read, String) do |obj|
       o = get_fedora_object(obj)
       case o
       when Hydrus::Collection
-        AUTH.can_read_collection(user, obj)
+        AUTH.can_read_collection?(user, obj)
       when Hydrus::Item
-        AUTH.can_read_item(user, obj)
+        AUTH.can_read_item?(user, obj)
       else
         false
       end
@@ -39,17 +39,17 @@ class Ability
 
     # Create.
 
-    can(:create, Hydrus::Collection) if AUTH.can_create_collections(user)
+    can(:create, Hydrus::Collection) if AUTH.can_create_collections?(user)
     can(:create, Hydrus::Item)
 
     can(:create_items_in, [String, Hydrus::Collection]) do |obj|
-      AUTH.can_create_items_in(user, get_fedora_object(obj))
+      AUTH.can_create_items_in?(user, get_fedora_object(obj))
     end
 
     # Update/edit.
 
     can([:edit, :update], [String, ActiveFedora::Base]) do |obj|
-      AUTH.can_edit_object(user, get_fedora_object(obj))
+      AUTH.can_edit_object?(user, get_fedora_object(obj))
     end
 
     cannot([:edit, :update], SolrDocument)
@@ -57,15 +57,15 @@ class Ability
     # Review (approve/disapprove).
 
     can(:review, [String, ActiveFedora::Base]) do |obj|
-      AUTH.can_review_item(user, get_fedora_object(obj))
+      AUTH.can_review_item?(user, get_fedora_object(obj))
     end
 
     # Admin actions:
     #   - View datastreams.
     #   - List all collections.
 
-    can(:view_datastreams,     :all) if AUTH.can_act_as_administrator(user)
-    can(:list_all_collections, :all) if AUTH.can_act_as_administrator(user)
+    can(:view_datastreams,     :all) if AUTH.can_act_as_administrator?(user)
+    can(:list_all_collections, :all) if AUTH.can_act_as_administrator?(user)
 
     # Destroy.
 

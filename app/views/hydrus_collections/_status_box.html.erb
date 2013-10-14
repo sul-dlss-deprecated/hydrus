@@ -1,6 +1,6 @@
 <div class="collection-status box-header">
   <span>Status</span>
-  <% if @fobj.is_open %>
+  <% if @fobj.is_open? %>
     <span  id="status-label" class="label label-success status-label">Open for deposit</span>
  <% else %>
     <span  id="status-label" class="label label-important status-label">Closed for deposit</span>
@@ -25,10 +25,10 @@
       License details provided
     </label>
 
-   <% unless @fobj.is_open %>
-    <%=check_box_tag 'collection_opened_checkbox', true, @fobj.is_openable, :disabled=>true%>
+   <% unless @fobj.is_open? %>
+    <%=check_box_tag 'collection_opened_checkbox', true, @fobj.is_openable?, :disabled=>true%>
     <label for="collection_opened_checkbox">
-      <%= select_status_checkbox_icon(@fobj.is_openable) %>
+      <%= select_status_checkbox_icon(@fobj.is_openable?) %>
       Collection can be opened for deposit
     </label>
   <% end %>

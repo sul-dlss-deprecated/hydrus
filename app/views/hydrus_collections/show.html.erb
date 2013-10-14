@@ -126,7 +126,7 @@
           </dl>
     </div>
 
-    <% if to_bool(@fobj.requires_human_approval) %>	
+    <% if @fobj.requires_human_approval? %>	
     <div class="collection-items">
          <h4>Review Workflow</h4>
          <p>

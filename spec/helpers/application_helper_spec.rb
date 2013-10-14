@@ -11,9 +11,9 @@ describe ApplicationHelper do
 
   it "should show correct view_item_text" do
     hi=Hydrus::Item.new
-    hi.stub(:is_published).and_return(true)
+    hi.stub(:is_published?).and_return(true)
     helper.view_item_text(hi).should == 'Published Version'
-    hi.stub(:is_published).and_return(false)
+    hi.stub(:is_published?).and_return(false)
     helper.view_item_text(hi).should == 'View Draft'
   end
 
@@ -40,7 +40,7 @@ describe ApplicationHelper do
 
   it "should show the item edit tab appropriately" do
     [false, true].each do |exp|
-      item = double(Hydrus::Item, :is_published => !exp)
+      item = double(Hydrus::Item, :is_published? => !exp)
       show_item_edit(item).should == exp
     end
   end

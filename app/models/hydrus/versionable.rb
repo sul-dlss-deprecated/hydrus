@@ -26,7 +26,7 @@ module Hydrus::Versionable
   # version_tags like v1.0.0 and v1.0.3 would pass the test.
   # If the :absolute option is true, the test passes only if it's truly
   # the first version.
-  def is_initial_version(opts = {})
+  def is_initial_version?(opts = {})
     return true if current_version == '1'
     return false if opts[:absolute]
     return version_tag =~ /\Av1\.0\./ ? true : false

@@ -121,8 +121,8 @@ module Hydrus::GenericObjectStuff
   #     for modified Collections and APOs. If it finds any, it will open a new
   #     version and run the object through the pipeline.
   def publish_metadata
-    return unless should_start_assembly_wf
-    cannot_do(:publish_metadata) unless is_assemblable()
+    return unless should_start_assembly_wf?
+    cannot_do(:publish_metadata) unless is_assemblable?
     super()
   end
 

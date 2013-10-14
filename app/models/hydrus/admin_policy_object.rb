@@ -111,7 +111,7 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
     "apo"
   end
 
-  def is_assemblable
+  def is_assemblable?
     true
   end
 

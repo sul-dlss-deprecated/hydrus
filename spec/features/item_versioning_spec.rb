@@ -41,7 +41,7 @@ describe("Item versioning", :type => :request, :integration => true) do
   end
 
   it "if item is initial version, should not offer version info on the editing page" do
-    @hi.is_initial_version.should == true
+    @hi.is_initial_version?.should == true
     login_as('archivist1')
     should_visit_edit_page(@hi)
     page.should_not have_css('textarea#hydrus_item_version_description')
@@ -49,7 +49,7 @@ describe("Item versioning", :type => :request, :integration => true) do
 
   it "should be able to open a new version" do
     # Before-assertions.
-    @hi.is_initial_version.should == true
+    @hi.is_initial_version?.should == true
     @hi.version_tag.should == 'v1.0.0'
     @hi.version_significance.should == :major
     @hi.version_description.should == 'Initial Version'
@@ -67,7 +67,7 @@ describe("Item versioning", :type => :request, :integration => true) do
 
     # Assertions after opening new version.
     @hi = Hydrus::Item.find(@hi.pid)
-    @hi.is_initial_version.should == false
+    @hi.is_initial_version?.should == false
     @hi.version_tag.should == 'v2.0.0'
     @hi.version_significance.should == :major
     @hi.version_description.should == ''
@@ -92,7 +92,7 @@ describe("Item versioning", :type => :request, :integration => true) do
 
     # Assertions after adding version description.
     @hi = Hydrus::Item.find(@hi.pid)
-    @hi.is_initial_version.should == false
+    @hi.is_initial_version?.should == false
     @hi.version_tag.should == 'v1.1.0'
     @hi.version_significance.should == :minor
     @hi.version_description.should == 'Blah blah'
@@ -236,7 +236,7 @@ describe("Item versioning", :type => :request, :integration => true) do
 
     it "should be able to modify existing embargo (with valid dates) or even remove it" do
       # Confirm initial status.
-      @hi.is_embargoed.should == false
+      @hi.is_embargoed?.should == false
       @hi.visibility.should == ['world']
       @hi.collection.embargo_terms.should == '1 year'
       # Add an embargo to the Item:
@@ -253,7 +253,7 @@ describe("Item versioning", :type => :request, :integration => true) do
       @hi.save.should == true
       # Confirm changes.
       @hi = Hydrus::Item.find(@hi.pid)
-      @hi.is_embargoed.should == true
+      @hi.is_embargoed?.should == true
       @hi.visibility.should == ['world']
       @hi.initial_submitted_for_publish_time.should == pds
       # Open new version.
@@ -286,7 +286,7 @@ describe("Item versioning", :type => :request, :integration => true) do
       find(@vs[:flash]).should have_content(@ok_notice)
       # Confirm that we set the embargo, and did not alter visibility.
       @hi = Hydrus::Item.find(@hi.pid)
-      @hi.is_embargoed.should == true
+      @hi.is_embargoed?.should == true
       @hi.visibility.should == ['world']
       # 4. Should be able to remove the embargo entirely.
       should_visit_edit_page(@hi)
@@ -295,13 +295,13 @@ describe("Item versioning", :type => :request, :integration => true) do
       find(@vs[:flash]).should have_content(@ok_notice)
       # Confirm changes.
       @hi = Hydrus::Item.find(@hi.pid)
-      @hi.is_embargoed.should == false
+      @hi.is_embargoed?.should == false
       @hi.visibility.should == ['world']
     end
 
     it "should not be able to modify embargo if the embargo window has passed" do
       # Confirm initial status.
-      @hi.is_embargoed.should == false
+      @hi.is_embargoed?.should == false
       @hi.visibility.should == ['world']
       @hi.collection.embargo_terms.should == '1 year'
       # Add an embargo to the Item:
@@ -319,7 +319,7 @@ describe("Item versioning", :type => :request, :integration => true) do
       @hi.save.should == true
       # Confirm changes.
       @hi = Hydrus::Item.find(@hi.pid)
-      @hi.is_embargoed.should == true
+      @hi.is_embargoed?.should == true
       @hi.visibility.should == ['world']
       @hi.initial_submitted_for_publish_time.should == pds
       # Open new version.

@@ -23,7 +23,7 @@ class HydrusCollectionsController < ApplicationController
 
   def destroy
     authorize! :edit, @fobj
-    if @fobj.is_destroyable
+    if @fobj.is_destroyable?
        @fobj.destroy
        flash[:notice]="The collection was deleted."
     else
@@ -34,7 +34,7 @@ class HydrusCollectionsController < ApplicationController
 
   def discard_confirmation
     authorize! :edit, @fobj
-    if @fobj.is_destroyable
+    if @fobj.is_destroyable?
       @id=params[:id]
       render 'shared/discard_confirmation'
     else

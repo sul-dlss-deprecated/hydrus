@@ -114,7 +114,7 @@ class Hydrus::RemediationRunner
   # code via a block.
   def do_remediation
     # Open new version if necessary.
-    self.needs_versioning = fobj.is_item? && fobj.is_published
+    self.needs_versioning = fobj.is_item? && fobj.is_published?
     self.needs_versioning = false if no_versioning
     open_new_version_of_object()
     # Run the remediation code that was passed via a block,

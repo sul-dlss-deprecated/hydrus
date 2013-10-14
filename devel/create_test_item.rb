@@ -80,7 +80,7 @@ def create_test_batch(*args)
     if opts.shift == 'c'
       hc = create_test_collection('archivist1', *opts)
     else
-      if hc && hc.is_open
+      if hc && hc.is_open?
         hi = create_test_item(hc.pid, 'archivist1', *opts)
       else
         help("Cannot create item without opening collection first")

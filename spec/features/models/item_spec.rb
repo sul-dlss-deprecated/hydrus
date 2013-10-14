@@ -68,8 +68,8 @@ describe(Hydrus::Item, :integration => true) do
       exp['start-deposit'] = 'completed'
       check_statuses.call()
       # After running do_publish, with start_assembly_wf=true.
-      hi.stub(:should_start_assembly_wf).and_return(true)
-      hi.stub(:is_assemblable).and_return(true)
+      hi.stub(:should_start_assembly_wf?).and_return(true)
+      hi.stub(:is_assemblable?).and_return(true)
       Dor::WorkflowService.should_receive(:create_workflow).once
       hi.do_publish()
       exp['approve'] = 'completed'
@@ -119,7 +119,7 @@ describe(Hydrus::Item, :integration => true) do
 
 
     let(:collection) do
-      @collection.stub(:is_open => true)
+      @collection.stub(:is_open? => true)
       @collection
     end
 

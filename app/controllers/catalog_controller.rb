@@ -122,7 +122,7 @@ class CatalogController < ApplicationController
       @collections = Hydrus::Collection.collections_hash(current_user)
     
       # administrators get a full list of collections, but not as detailed to save on a big SOLR query
-      @all_collections = Hydrus::Collection.dashboard_hash if Hydrus::Authorizable.can_act_as_administrator(current_user)
+      @all_collections = Hydrus::Collection.dashboard_hash if Hydrus::Authorizable.can_act_as_administrator?(current_user)
     end
 
     respond_to do |format|
@@ -139,7 +139,7 @@ class CatalogController < ApplicationController
       @collections = Hydrus::Collection.collections_hash(current_user)
     
       # administrators get a full list of collections, but not as detailed to save on a big SOLR query
-      @all_collections = Hydrus::Collection.dashboard_hash if Hydrus::Authorizable.can_act_as_administrator(current_user)
+      @all_collections = Hydrus::Collection.dashboard_hash if Hydrus::Authorizable.can_act_as_administrator?(current_user)
     end
     
     super

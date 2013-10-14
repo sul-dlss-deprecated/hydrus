@@ -181,7 +181,7 @@
           </div>
       <% end %>
 	  
-	  <% if @fobj.is_open%>
+	  <% if @fobj.is_open?%>
       <input type="checkbox" checked="checked" name="should_send_role_change_emails" value="true" id="should_send_role_change_emails" /> Send emails to collection participants when members are added/removed.
 	  <% end %>
 	  

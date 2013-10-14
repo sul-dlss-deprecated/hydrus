@@ -11,12 +11,12 @@ class Hydrus::Collection < Dor::Collection
 
   after_validation :strip_whitespace
 
-  validates :title,    :not_empty => true, :if => :should_validate
-  validates :abstract, :not_empty => true, :if => :should_validate
-  validates :contact,  :not_empty => true, :if => :should_validate
+  validates :title,    :not_empty => true, :if => :should_validate?
+  validates :abstract, :not_empty => true, :if => :should_validate?
+  validates :contact,  :not_empty => true, :if => :should_validate?
 
-  validates :embargo_option, :presence => true, :if => :should_validate
-  validates :license_option, :presence => true, :if => :should_validate
+  validates :embargo_option, :presence => true, :if => :should_validate?
+  validates :license_option, :presence => true, :if => :should_validate?
   validate  :check_embargo_options
   validate  :check_license_options
   
@@ -70,7 +70,7 @@ class Hydrus::Collection < Dor::Collection
       self.last_modify_time = HyTime.now_datetime
       log_editing_events() unless opts[:no_edit_logging]
     end
-    publish_metadata() if is_published && is_open
+    publish_metadata() if is_published? && is_open?
     super() unless opts[:no_super]
   end
 
@@ -106,7 +106,7 @@ class Hydrus::Collection < Dor::Collection
   # returns the object.
   def self.create(user)
     # Make sure user can create collections.
-    cannot_do(:create) unless Hydrus::Authorizable.can_create_collections(user)
+    cannot_do(:create) unless Hydrus::Authorizable.can_create_collections?(user)
     # Create the object, with the correct model.
     apo     = Hydrus::AdminPolicyObject.create(user)
     coll = Hydrus::GenericObject.register_dor_object(:user => user, :object_type => 'collection', :admin_policy => apo.pid)
@@ -162,8 +162,8 @@ class Hydrus::Collection < Dor::Collection
   end
 
   # Returns true only if the Collection is unpublished and has no Items.
-  def is_destroyable
-    return not(is_published or has_items)
+  def is_destroyable?
+    return not(is_published? or has_items)
   end
 
   # Returns true only if the Collection has items.
@@ -172,25 +172,25 @@ class Hydrus::Collection < Dor::Collection
   end
 
   # Returns true if the collection is open.
-  def is_open
+  def is_open?
     return object_status == 'published_open'
   end
 
   # Returns true if the collection can be opened.
-  def is_openable
-    return false if is_open
+  def is_openable?
+    return false if is_open?
     return validate!
   end
 
   # Returns true if the collection can be closed.
-  def is_closeable
-    return is_open
+  def is_closeable?
+    return is_open?
   end
 
   # Returns true if the object is ready for common assembly.
   # It's not strictly necessary to involve validate!, but it provides extra insurance.
-  def is_assemblable
-    return false unless is_open
+  def is_assemblable?
+    return false unless is_open?
     return validate!
   end
 
@@ -208,10 +208,10 @@ class Hydrus::Collection < Dor::Collection
   # After that, the user can toggle the open-closed state, but
   # the publishing step is irreversible.
   def open
-    cannot_do(:open) unless is_openable()
+    cannot_do(:open) unless is_openable?()
 
     # Determine if this is the first time the collection is being opened.
-    first_time = is_draft()
+    first_time = is_draft?()
 
     self.object_status = 'published_open'
     events.add_event('hydrus', current_user, 'Collection opened')
@@ -241,7 +241,7 @@ class Hydrus::Collection < Dor::Collection
 
   # Closes the collection.
   def close
-    cannot_do(:close) unless is_closeable
+    cannot_do(:close) unless is_closeable?
     self.object_status = 'published_closed'
     events.add_event('hydrus', current_user, 'Collection closed')
     send_publish_email_notification(false)
@@ -282,7 +282,7 @@ class Hydrus::Collection < Dor::Collection
     # new depositors get an email if the collection is open
     new_depositors = (depositors_after_update - depositors_before_update).to_a.join(", ")
     removed_depositors = (depositors_before_update - depositors_after_update).to_a.join(", ")
-    if self.is_open
+    if self.is_open?
       self.send_invitation_email_notification(new_depositors) if new_depositors.size > 0 
       self.send_remove_invitation_email_notification(removed_depositors) if removed_depositors.size > 0
     end
@@ -335,7 +335,7 @@ class Hydrus::Collection < Dor::Collection
   # Note that this process is initiated from the Item controller and an Item object,
   # but the date information is ultimately stored here at the Collection level.
   def accept_terms_of_deposit(user, datetime_accepted, item)
-    cannot_do(:accept_terms_of_deposit) unless Hydrus::Authorizable.can_edit_item(user, item)
+    cannot_do(:accept_terms_of_deposit) unless Hydrus::Authorizable.can_edit_item?(user, item)
     hydrusProperties.accept_terms_of_deposit(user, datetime_accepted)
     save()
   end
@@ -718,7 +718,7 @@ class Hydrus::Collection < Dor::Collection
   end
   # Deletes a Collection and its APO.
   def destroy
-    cannot_do(:delete) unless is_destroyable
+    cannot_do(:delete) unless is_destroyable?
     # Hydrus workflow.
     delete_hydrus_workflow
     apo.delete_hydrus_workflow
@@ -730,6 +730,10 @@ class Hydrus::Collection < Dor::Collection
 
   def item_types
     Hydrus.item_types
+  end
+
+  def requires_human_approval?
+    to_bool(requires_human_approval)
   end
 
 end

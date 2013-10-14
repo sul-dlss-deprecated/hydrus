@@ -5,7 +5,7 @@ class Hydrus::GenericObject < Dor::Item
   attr_accessor :files_were_changed
 
   validates :pid, :is_druid => true
-  validate :check_contact_email_format, :if => :should_validate
+  validate :check_contact_email_format, :if => :should_validate?
 
   # We are using the validates_email_format_of gem to check email addresses.
   # Normally, you can use this tool with a simple validates() call:

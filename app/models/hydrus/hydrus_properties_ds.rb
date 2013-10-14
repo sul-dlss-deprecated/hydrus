@@ -38,7 +38,7 @@ class Hydrus::HydrusPropertiesDS < ActiveFedora::OmDatastream
     #       - Stored in hydrusProperties.
     #           submitted_for_publish_time
     #           initial_submitted_for_publish_time
-    #       - Aligns conceptually with the is_published() method.
+    #       - Aligns conceptually with the is_published?() method.
     #   - The time the object achieves published lifecycle in accessioning.
     #       - Stored in hydrusProperties, when 2nd version is opened.
     #           initial_publish_time

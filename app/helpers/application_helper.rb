@@ -77,7 +77,7 @@ module ApplicationHelper
   #   - Object is not published.
   def show_item_edit(item)
     return false unless can?(:edit, item)
-    return ! item.is_published
+    return ! item.is_published?
   end
 
   def edit_item_text(item)
@@ -86,7 +86,7 @@ module ApplicationHelper
 
   # text to show on item view tab
   def view_item_text(item)
-    item.is_published ? "Published Version" : "View Draft"
+    item.is_published? ? "Published Version" : "View Draft"
   end
 
   def hydrus_object_setting_value(obj, opts = {})

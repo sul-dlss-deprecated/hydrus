@@ -11,29 +11,29 @@ class Hydrus::Item < Hydrus::GenericObject
 
   after_validation :strip_whitespace
 
-  validates :title,               :not_empty => true, :if => :should_validate
-  validates :abstract,            :not_empty => true, :if => :should_validate
-  validates :contact,             :not_empty => true, :if => :should_validate
-  validates :keywords,            :not_empty => true, :if => :should_validate
-  #validates :date_created,        :not_empty => true, :if => :should_validate
+  validates :title,               :not_empty => true, :if => :should_validate?
+  validates :abstract,            :not_empty => true, :if => :should_validate?
+  validates :contact,             :not_empty => true, :if => :should_validate?
+  validates :keywords,            :not_empty => true, :if => :should_validate?
+  #validates :date_created,        :not_empty => true, :if => :should_validate?
   validates :version_description, :not_empty => true, :if => lambda {
-    should_validate() && ! is_initial_version()
+    should_validate?() && ! is_initial_version?()
   }
 
   validate  :enforce_collection_is_open, :on => :create
 
-  validates :contributors, :at_least_one => true,  :if => :should_validate
-  validates :files, :at_least_one => true,         :if => :should_validate
-  validate  :must_accept_terms_of_deposit,         :if => :should_validate
-  validate  :must_review_release_settings,         :if => :should_validate
+  validates :contributors, :at_least_one => true,  :if => :should_validate?
+  validates :files, :at_least_one => true,         :if => :should_validate?
+  validate  :must_accept_terms_of_deposit,         :if => :should_validate?
+  validate  :must_review_release_settings,         :if => :should_validate?
 
   validate  :check_version, :if => :license_changed?
-  validate  :ensure_date_created_format,          :if => :should_validate
+  validate  :ensure_date_created_format,          :if => :should_validate?
 
   # During subsequent versions the user is allowed to change the license,
   # but only if the new version is designated as a major version change.
   def check_version
-    return if is_initial_version or version_significance == :major
+    return if is_initial_version? or version_significance == :major
     msg = "must be 'major' if license is changed" if license_changed?
     errors.add(:version, msg) unless msg.blank?
   end
@@ -69,8 +69,8 @@ class Hydrus::Item < Hydrus::GenericObject
   def self.create(collection_pid, user, itype = Hydrus::Application.config.default_item_type)
     # Make sure user can create items in the parent collection.
     coll = Hydrus::Collection.find(collection_pid)
-    cannot_do(:create) unless coll.is_open()
-    cannot_do(:create) unless Hydrus::Authorizable.can_create_items_in(user, coll)
+    cannot_do(:create) unless coll.is_open?()
+    cannot_do(:create) unless Hydrus::Authorizable.can_create_items_in?(user, coll)
     # Create the object, with the correct model.
     item = Hydrus::GenericObject.register_dor_object(:user => user, :object_type => 'item', :collection => coll, :admin_policy => coll.apo_pid)
     # Add the Item to the Collection.
@@ -116,7 +116,7 @@ class Hydrus::Item < Hydrus::GenericObject
 
   # Publish the Item directly, bypassing human approval.
   def publish_directly
-    cannot_do(:publish_directly) unless is_publishable()
+    cannot_do(:publish_directly) unless is_publishable?()
     complete_workflow_step('submit')
     send_item_deposit_email_notification
     do_publish()
@@ -128,7 +128,7 @@ class Hydrus::Item < Hydrus::GenericObject
     # Set publish times: latest and initial.
     tm = HyTime.now_datetime
     self.submitted_for_publish_time = tm
-    self.initial_submitted_for_publish_time = tm if is_initial_version()
+    self.initial_submitted_for_publish_time = tm if is_initial_version?()
     # Set label and title.
     t = title()
     identityMetadata.objectLabel = t
@@ -138,7 +138,7 @@ class Hydrus::Item < Hydrus::GenericObject
     self.object_status = 'published'
     complete_workflow_step('approve')
     # Version, events, and assembly pipeline.
-    close_version() unless is_initial_version()
+    close_version() unless is_initial_version?()
     events.add_event('hydrus', @current_user, "Item published: #{version_tag()}")
     start_common_assembly()
   end
@@ -146,7 +146,7 @@ class Hydrus::Item < Hydrus::GenericObject
   # Submit the Item for approval by a reviewer.
   # This method handles the initial submission, not resubmissions.
   def submit_for_approval
-    cannot_do(:submit_for_approval) unless is_submittable_for_approval()
+    cannot_do(:submit_for_approval) unless is_submittable_for_approval?()
     self.submit_for_approval_time   = HyTime.now_datetime
     self.object_status = 'awaiting_approval'
     complete_workflow_step('submit')
@@ -156,7 +156,7 @@ class Hydrus::Item < Hydrus::GenericObject
 
   # Approve the Item.
   def approve
-    cannot_do(:approve) unless is_approvable()
+    cannot_do(:approve) unless is_approvable?()
     hydrusProperties.remove_nodes(:disapproval_reason)
     events.add_event('hydrus', @current_user, "Item approved")
     do_publish()
@@ -165,7 +165,7 @@ class Hydrus::Item < Hydrus::GenericObject
   # Disapprove the Item -- return it for further editing.
   # Expects to receive a hash with a 'reason' key.
   def disapprove(reason)
-    cannot_do(:disapprove) unless is_disapprovable()
+    cannot_do(:disapprove) unless is_disapprovable?()
     self.object_status      = 'returned'
     self.disapproval_reason = reason
     events.add_event('hydrus', @current_user, "Item returned")
@@ -174,7 +174,7 @@ class Hydrus::Item < Hydrus::GenericObject
 
   # Resubmits an object after it was disapproved/returned.
   def resubmit
-    cannot_do(:resubmit) unless is_resubmittable()
+    cannot_do(:resubmit) unless is_resubmittable?()
     self.submit_for_approval_time   = HyTime.now_datetime
     self.object_status = 'awaiting_approval'
     hydrusProperties.remove_nodes(:disapproval_reason)
@@ -195,9 +195,9 @@ class Hydrus::Item < Hydrus::GenericObject
   def open_new_version(opts = {})
     cannot_do(:open_new_version) unless is_accessioned()
     # Store the time when the object was initially published.
-    self.initial_publish_time = publish_time() if is_initial_version
+    self.initial_publish_time = publish_time() if is_initial_version?
     # Call the dor-services method, with a couple of Hydrus-specific options.
-    super(:assume_accessioned => should_treat_as_accessioned(), :create_workflows_ds => false)
+    super(:assume_accessioned => should_treat_as_accessioned?(), :create_workflows_ds => false)
     # Set some version metadata that the Hydrus app uses.
     sig  = opts[:significance] || :major
     desc = opts[:description]  || ''
@@ -225,10 +225,10 @@ class Hydrus::Item < Hydrus::GenericObject
   # See do_publish(), where all of the Hydrus-specific work is done; here
   # we simply invoke the dor-services method.
   def close_version(opts = {})
-    cannot_do(:close_version) if is_initial_version(:absolute => true)
+    cannot_do(:close_version) if is_initial_version?(:absolute => true)
     # We want to start accessioning only if ...
     sa = !! opts[:is_remediation]              # ... we are running a remediation and
-    sa = false if should_treat_as_accessioned  # ... we are not in development or test
+    sa = false if should_treat_as_accessioned?  # ... we are not in development or test
     super(:version_num => version_id, :start_accession => sa)
   end
 
@@ -283,65 +283,65 @@ class Hydrus::Item < Hydrus::GenericObject
   # a valid draft object that actually requires human approval.
   # Note: returned is not a valid object_status here, because this
   # test concerns itself with the initial submission for approval.
-  def is_submittable_for_approval
+  def is_submittable_for_approval?
     return false unless object_status == 'draft'
-    return false unless to_bool(requires_human_approval)
+    return false unless requires_human_approval?
     return validate!
   end
 
   # Returns true if the object is waiting for approval by a reviewer.
-  def is_awaiting_approval
+  def is_awaiting_approval?
     return object_status == 'awaiting_approval'
   end
 
   # Returns true if the object status is currently returned-by-reviewer.
-  def is_returned
+  def is_returned?
     return object_status == 'returned'
   end
 
   # Returns true if the object can be approved by a reviewer.
-  def is_approvable
-    return false unless is_awaiting_approval
+  def is_approvable?
+    return false unless is_awaiting_approval?
     return validate!
   end
 
   # Returns true if the object can be returned by a reviewer.
-  def is_disapprovable
-    return is_awaiting_approval
+  def is_disapprovable?
+    return is_awaiting_approval?
   end
 
   # Returns true if the object can be resubmitted for approval.
-  def is_resubmittable
-    return false unless is_returned
+  def is_resubmittable?
+    return false unless is_returned?
     return validate!
   end
 
   # Returns true if the item is publishable: must be valid and must
   # have the correct object_status.
-  def is_publishable
+  def is_publishable?
     return false unless validate!
-    return is_awaiting_approval if to_bool(requires_human_approval)
-    return is_draft
+    return is_awaiting_approval? if requires_human_approval?
+    return is_draft?
   end
 
   # Returns true if the item is publishable: must be valid and must
   # have the correct object_status.  Any item requiring human approval is not publishable, it is only approvable
-  def is_publishable_directly
-    return false if to_bool(requires_human_approval)
-    return (validate! ? is_draft : false)
+  def is_publishable_directly?
+    return false if requires_human_approval?
+    return (validate! ? is_draft? : false)
   end
 
   
   # Returns true if the object is ready for common assembly.
   # It's not strictly necessary to involve validate!, but it provides extra insurance.
-  def is_assemblable
-    return false unless is_published
+  def is_assemblable?
+    return false unless is_published?
     return validate!
   end
 
   # Returns true only if the Item is unpublished.
-  def is_destroyable
-    return not(is_published)
+  def is_destroyable?
+    return not(is_published?)
   end
 
   # Returns the Item's Collection.
@@ -349,10 +349,7 @@ class Hydrus::Item < Hydrus::GenericObject
     @collection ||= collections.first       # Get all collections.
   end
 
-  def requires_human_approval
-    # Delegate this question to the collection.
-    collection.requires_human_approval
-  end
+  delegate :requires_human_approval?, :to => :collection
 
   # method used to build sidebar
   def files_uploaded?
@@ -374,7 +371,7 @@ class Hydrus::Item < Hydrus::GenericObject
   # returns false and adds a validation error.
   def enforce_collection_is_open
     c = collection
-    return true if c && c.is_open
+    return true if c && c.is_open?
     errors.add(:collection, "must be open to have new items added")
     return false
   end
@@ -409,7 +406,7 @@ class Hydrus::Item < Hydrus::GenericObject
   # At the item level we store true/false.
   # At the colleciton level we store user name and datetime.
   def accept_terms_of_deposit(user)
-    cannot_do(:accept_terms_of_deposit) unless Hydrus::Authorizable.can_edit_item(user, self)
+    cannot_do(:accept_terms_of_deposit) unless Hydrus::Authorizable.can_edit_item?(user, self)
     self.accepted_terms_of_deposit = "true"
     collection.accept_terms_of_deposit(user, HyTime.now_datetime, self)
     events.add_event('hydrus', user, 'Terms of deposit accepted')
@@ -490,7 +487,7 @@ class Hydrus::Item < Hydrus::GenericObject
 
   # Deletes an Item.
   def destroy
-    cannot_do(:delete) unless is_destroyable
+    cannot_do(:delete) unless is_destroyable?
     d = parent_directory
     FileUtils.rm_rf(d)            # Uploaded files.
     files.each { |f| f.destroy }  # The corresponding DB entries.

@@ -1,4 +1,4 @@
-<% isopen = @fobj.is_open %>
+<% isopen = @fobj.is_open? %>
 
 <div class="collection-actions box-header">Actions</div>
 
@@ -16,7 +16,7 @@
               :disable_with => "Please wait...",
 							:show_loading_indicator=>"true") %>
       </p>
-    <% elsif @fobj.is_openable %>
+    <% elsif @fobj.is_openable? %>
       <p>
         <%= button_to(
               "Open Collection",
@@ -27,14 +27,14 @@
   						:show_loading_indicator=>"true") %>
       </p>
     <% else %>
-      <!-- <%= "#{isopen.inspect} #{@fobj.is_openable} #{@fobj.inspect}" %> -->
+      <!-- <%= "#{isopen.inspect} #{@fobj.is_openable?} #{@fobj.inspect}" %> -->
 
     <% end %>
   <% end %>
 
   <!-- Create item. -->
   <% if can? :create_items_in, @fobj %>
-    <% message = @fobj.is_openable ?
+    <% message = @fobj.is_openable? ?
                  "To add items, you must open the collection." :
                  "To add items, you must fill in all required fields and open the collection."
     %>
@@ -45,7 +45,7 @@
       <%= render :partial => "shared/add_content_options" %>
     </div>
     <noscript>
-			<% if @fobj.is_open %>
+			<% if @fobj.is_open? %>
 	      <%= form_tag(new_hydrus_item_path, :method=>"GET", :class=>"add-content-options") do %>
 				  <%= hidden_field_tag(:collection,@fobj.id)%>
 	        <%= select_tag(
@@ -63,7 +63,7 @@
   <% end %>
 
   <!-- Delete. -->
-  <% if can?(:edit, @fobj) && @fobj.is_destroyable %>
+  <% if can?(:edit, @fobj) && @fobj.is_destroyable? %>
       <p style="display:none;" id="discard-item" class="discard-item">
         <i class="icon-trash"></i>
         <%= link_to('Discard this collection', 

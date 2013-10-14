@@ -73,7 +73,7 @@ describe HyTime do
 
   end
 
-  it "is_well_formed_datetime()" do
+  it "is_well_formed_datetime?()" do
     tests = {
       nil                    => false,
       ''                     => false,
@@ -83,7 +83,7 @@ describe HyTime do
       '2000-01-02T07:00:00Z' => true,
     }
     tests.each do |dt, exp|
-      HyTime.is_well_formed_datetime(dt).should == exp
+      HyTime.is_well_formed_datetime?(dt).should == exp
     end
 
   end
