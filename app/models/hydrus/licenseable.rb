@@ -1,5 +1,12 @@
 module Hydrus::Licenseable
 
+  # Return's true if the Item belongs to a collection that allows
+  # Items to set their own licenses.
+  def licenses_can_vary
+    return false unless respond_to? :collection
+    return collection.license_option == 'varies'
+  end
+
   # Returns the text label of the object's license.
   def license_text
     nds = rightsMetadata.use.human.nodeset
