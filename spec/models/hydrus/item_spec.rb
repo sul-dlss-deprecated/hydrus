@@ -506,13 +506,12 @@ describe Hydrus::Item do
       end
     end
 
-    describe "check_version_if_license_changed()" do
+    describe "check_version" do
 
       before(:each) do
         # Setup failing conditions.
         @hi.stub(:is_initial_version).and_return(false)
         @hi.stub(:license).and_return('A')
-        @hi.stub(:prior_license).and_return('B')
         @hi.stub(:version_significance).and_return(:minor)
         # Lambdas to check for errors.
         @assert_no_errors = lambda { @hi.errors.messages.keys.should == [] }
@@ -520,25 +519,26 @@ describe Hydrus::Item do
       end
 
       it "can produce a version error" do
-        @hi.check_version_if_license_changed
+        @hi.stub(:license_changed?).and_return(true)
+        @hi.check_version
         @hi.errors.messages.keys.should == [:version]
       end
 
       it "initial version: cannot produce a version error" do
         @hi.stub(:is_initial_version).and_return(true)
-        @hi.check_version_if_license_changed
-        @assert_no_errors.call
-      end
-
-      it "license was not changed: cannot produce a version error" do
-        @hi.stub(:prior_license).and_return(@hi.license)
-        @hi.check_version_if_license_changed
+        @hi.check_version
         @assert_no_errors.call
       end
 
       it "version is major: cannot produce a version error" do
         @hi.stub(:version_significance).and_return(:major)
-        @hi.check_version_if_license_changed
+        @hi.check_version
+        @assert_no_errors.call
+      end
+
+      it "license not changed: cannot produce a version error" do
+        @hi.stub(:license_changed?).and_return(false)
+        @hi.check_version
         @assert_no_errors.call
       end
 
@@ -1085,5 +1085,33 @@ describe Hydrus::Item do
       @hi.version_description.should == exp
     end
 
+  end
+
+  it "related_item_url=() and related_item_title=()" do
+    # Initial state.
+    @hi.related_item_title.should == ['']
+    @hi.related_item_url.should == ['']
+    # Assign a single value.
+    @hi.related_item_title = 'Z'
+    @hi.related_item_url = 'foo'
+    @hi.related_item_title.should == ['Z']
+    @hi.related_item_url.should == ['http://foo']
+    # Add two mode nodes.
+    @hi.descMetadata.insert_related_item
+    @hi.descMetadata.insert_related_item
+    # Set using hashes.
+    @hi.related_item_title = {'0' => 'A', '1' => 'B', '2' => 'C'}
+    @hi.related_item_url   = {'0' => 'boo', '1' => 'bar', '2' => 'ftp://quux'}
+    @hi.related_item_title.should == %w(A B C)
+    @hi.related_item_url.should == ['http://boo', 'http://bar', 'ftp://quux']
+    # Also confirm that each title and URL is put in its own relatedItem node.
+    # We had bugs causing them to be put all in the first node.
+    ri_nodes = @hi.descMetadata.find_by_terms(:relatedItem)
+    ri_nodes.size.should == 3
+    ri_nodes.each do |nd|
+      nd = Nokogiri::XML(nd.to_s, &:noblanks)  # Generic XML w/o namespaces.
+      nd.xpath('//title').size.should == 1
+      nd.xpath('//url').size.should == 1
+    end
   end
 end

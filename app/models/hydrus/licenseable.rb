@@ -1,4 +1,5 @@
 module Hydrus::Licenseable
+  extend ActiveSupport::Concern
 
   # Return's true if the Item belongs to a collection that allows
   # Items to set their own licenses.
@@ -39,11 +40,20 @@ module Hydrus::Licenseable
   # Takes a license code: cc-by, pddl, none, ...
   # Replaces the existing license, if any, with the license for that code.
   def license=(code)
+    license_will_change!
     rightsMetadata.remove_license
     return if code == 'none'
     gcode = Hydrus.license_group_code(code)
     txt   = Hydrus.license_human(code)
     code  = code.sub(/\Acc-/, '') if gcode == 'creativeCommons'
     rightsMetadata.insert_license(gcode, code, txt)
+  end
+
+  def license_changed?
+    @license_changed == true
+  end
+
+  def license_will_change!
+    @license_changed = true
   end
 end
