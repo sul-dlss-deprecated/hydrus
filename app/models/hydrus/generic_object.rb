@@ -150,126 +150,12 @@ class Hydrus::GenericObject < Dor::Item
   def set_genre_authority_to_marc  descMetadata
     descMetadata.ng_xml.search('//mods:genre', 'mods' => 'http://www.loc.gov/mods/v3').first['authority'] = 'marcgt'
   end
-  
-  # the possible types of items that can be created, hash of display value (keys) and values to store in object (value)
-  def self.item_types
-    {
-      "article"       => "article",
-      "audio - music" => "audio - music",   
-      "audio - spoken" => "audio - spoken",   
-      "class project" => "class project",
-      "computer game" => "computer game",
-      "conference paper / presentation" => "conference paper / presentation",  
-      "data set"      => "dataset",
-      "other"         => "other",      
-      "thesis"        => "thesis",
-      "technical report" => "technical report",
-      "video" => "video"    
-    }
-  end
-  
-  # Returns a data structure intended to be passed into
-  # grouped_options_for_select(). This is an awkward approach (too
-  # view-centric), leading to some minor data duplication in other
-  # license-related methods, along with some overly complex lookup methods.
-  def self.license_groups
-    [
-      ['None',  [
-        ['No license', 'none'],
-      ]],
-      ['Creative Commons Licenses',  [
-        ['CC BY Attribution'                                 , 'cc-by'],
-        ['CC BY-SA Attribution Share Alike'                  , 'cc-by-sa'],
-        ['CC BY-ND Attribution-NoDerivs'                     , 'cc-by-nd'],
-        ['CC BY-NC Attribution-NonCommercial'                , 'cc-by-nc'],
-        ['CC BY-NC-SA Attribution-NonCommercial-ShareAlike'  , 'cc-by-nc-sa'],
-        ['CC BY-NC-ND Attribution-NonCommercial-NoDerivs'    , 'cc-by-nc-nd'],
-      ]],
-      ['Open Data Commons Licenses',  [
-        ['PDDL Public Domain Dedication and License'         , 'pddl'],
-        ['ODC-By Attribution License'                        , 'odc-by'],
-        ['ODC-ODbl Open Database License'                    , 'odc-odbl'],
-      ]],
-    ]
-  end
-
-  # Should consolidate with info in license_groups().
-  def self.license_commons
-    return {
-      'Creative Commons Licenses'  => "creativeCommons",
-      'Open Data Commons Licenses' => "openDataCommons",
-    }
-  end
-
-  # Should consolidate with info in license_groups().
-  def self.license_group_urls
-    return {
-      "creativeCommons" => 'http://creativecommons.org/licenses/',
-      "openDataCommons" => 'http://opendatacommons.org/licenses/',
-    }
-  end
-
-  # Takes a license code: cc-by, pddl, none, ...
-  # Returns the corresponding text description of that license.
-  def self.license_human(code)
-    code = 'none' if code.blank?
-    lic = license_groups.map(&:last).flatten(1).find { |txt, c| c == code }
-    return lic ? lic.first : "Unknown license"
-  end
-
-  # Takes a license code: cc-by, pddl, none, ...
-  # Returns the corresponding license group code: eg, creativeCommons.
-  def self.license_group_code(code)
-    hgo = Hydrus::GenericObject
-    hgo.license_groups.each do |grp, licenses|
-      licenses.each do |txt, c|
-        return hgo.license_commons[grp] if c == code
-      end
-    end
-    return nil
-  end
-
-  # Takes a symbol (:collection or :item).
-  # Returns a hash of two hash, each having object_status as its
-  # keys and human readable labels as values.
-  def self.status_labels(typ, status = nil)
-    h = {
-      :collection => {
-        'draft'             => "draft",
-        'published_open'    => "published",
-        'published_closed'  => "published",
-      },
-      :item       => {
-        'draft'             => "draft",
-        'awaiting_approval' => "waiting for approval",
-        'returned'          => "item returned",
-        'published'         => "published",
-      },
-    }
-    return status ? h[typ] : h[typ]
-  end
-
-  # Takes an object_status value.
-  # Returns its corresponding label.
-  def self.status_label(typ, status)
-    return status_labels(typ)[status]
-  end
 
   # Returns a human readable label corresponding to the object's status.
   def status_label
-    h1 = Hydrus::GenericObject.status_labels(:collection)
-    h2 = Hydrus::GenericObject.status_labels(:item)
+    h1 = Hydrus.status_labels(:collection)
+    h2 = Hydrus.status_labels(:item)
     return h1.merge(h2)[object_status]
-  end
-
-  def self.stanford_terms_of_use
-    return '
-      User agrees that, where applicable, content will not be used to identify
-      or to otherwise infringe the privacy or confidentiality rights of
-      individuals.  Content distributed via the Stanford Digital Repository may
-      be subject to additional license and use restrictions applied by the
-      depositor.
-    '.squish
   end
 
   # Registers an object in Dor, and returns it.

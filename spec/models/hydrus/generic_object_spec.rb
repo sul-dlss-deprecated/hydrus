@@ -77,15 +77,14 @@ describe Hydrus::GenericObject do
     describe "license_groups(), license_commons(), and license_group_urls()" do
 
       it "should get expected object types" do
-        Hydrus::GenericObject.license_groups.should be_a Array
-        Hydrus::GenericObject.license_commons.should be_a Hash
-        Hydrus::GenericObject.license_group_urls.should be_a Hash
+        Hydrus.license_groups.should be_a Array
+        Hydrus.license_commons.should be_a Hash
+        Hydrus.license_group_urls.should be_a Hash
       end
 
       it "license_groups() labels should be keys in license_commons()" do
-        hgo = Hydrus::GenericObject
-        lgs = hgo.license_groups.map(&:first)
-        lcs = hgo.license_commons.keys
+        lgs = Hydrus.license_groups.map(&:first)
+        lcs = Hydrus.license_commons.keys
         lcs.each { |lc| lgs.should include(lc) }
       end
 
@@ -125,11 +124,10 @@ describe Hydrus::GenericObject do
     end
 
     it "license_human() should return a human readable value for a license code" do
-      hgo = Hydrus::GenericObject
-      hgo.license_human("cc-by").should == "CC BY Attribution"
-      hgo.license_human("cc-by-nc-sa").should == "CC BY-NC-SA Attribution-NonCommercial-ShareAlike"
-      hgo.license_human("odc-odbl").should == "ODC-ODbl Open Database License"
-      hgo.license_human('blah!!').should =~ /unknown license/i
+      Hydrus.license_human("cc-by").should == "CC BY Attribution"
+      Hydrus.license_human("cc-by-nc-sa").should == "CC BY-NC-SA Attribution-NonCommercial-ShareAlike"
+      Hydrus.license_human("odc-odbl").should == "ODC-ODbl Open Database License"
+      Hydrus.license_human('blah!!').should =~ /unknown license/i
     end
 
     it "terms_of_use: getter and setter" do
@@ -481,7 +479,7 @@ describe Hydrus::GenericObject do
   it "can exercise Hydrus::GenericObject.status_labels()" do
     tests = [:collection, :item]
     tests.each do |k|
-      Hydrus::GenericObject.status_labels(k).should be_instance_of Hash
+      Hydrus.status_labels(k).should be_instance_of Hash
     end
   end
 

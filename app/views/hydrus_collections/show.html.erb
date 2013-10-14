@@ -117,7 +117,7 @@
     <div class="collection-items">
          <h4>Collection participants</h4>
           <dl class="dl-horizontal collection-view">
-            <% Hydrus::Responsible.role_labels(:only_labels,:collection_level).each do |role, role_label| %>
+            <% Hydrus.role_labels(:only_labels,:collection_level).each do |role, role_label| %>
             <% next if (role == 'hydrus-collection-reviewer')%>
               <% people = @fobj.apo.persons_with_role(role) %>
               <dt><%= role_label.pluralize(people.size) %></dt>

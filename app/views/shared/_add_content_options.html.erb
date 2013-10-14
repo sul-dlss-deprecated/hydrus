@@ -1,5 +1,5 @@
 <ul class="dropdown-menu">
-	<% Hydrus::GenericObject.item_types.each do |item_display,item_value| %>
+	<% Hydrus.item_types.each do |item_display,item_value| %>
   <li <%=raw "class='disabled'" unless @fobj.is_open%>>
     <%= link_to item_display,new_hydrus_item_path(:collection => @fobj.pid, :type=>item_value), :disable_after_click=>'true', :disable_with=>'Please wait...'%>
   </li>

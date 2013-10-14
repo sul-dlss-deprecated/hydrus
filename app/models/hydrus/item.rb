@@ -107,7 +107,7 @@ class Hydrus::Item < Hydrus::GenericObject
     end
     vov = coll.visibility_option_value
     item.visibility = vov == 'stanford' ? vov : 'world'
-    item.terms_of_use = Hydrus::GenericObject.stanford_terms_of_use
+    item.terms_of_use = Hydrus.stanford_terms_of_use
     # Set object status.
     item.object_status = 'draft'
     # Set version info.
@@ -294,8 +294,7 @@ class Hydrus::Item < Hydrus::GenericObject
 
   # get the friendly display name for the current item type
   def item_type_for_display
-    typ=self.class.item_types.key(self.item_type)
-    typ.blank? ? self.class.item_types.key(Hydrus::Application.config.default_item_type) : typ
+    Hydrus.item_types.fetch(self.item_type, Hydrus.item_types[Hydrus.default_item_type])
   end
     
   # Returns true if the object can be submitted for approval:

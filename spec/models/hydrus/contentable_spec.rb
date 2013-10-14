@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Hydrus::Contentable do
 
   before(:each) do
-    @go       = Hydrus::GenericObject.new
+    @go       = Hydrus::Item.new
     @pid      = 'oo000oo9999'
     @base_dir = '/oo/000/oo/9999/oo000oo9999'
     @go.stub(:pid).and_return(@pid)

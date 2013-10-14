@@ -122,7 +122,7 @@ class Hydrus::Collection < Dor::Collection
     coll.embargo_terms           = ''
     coll.requires_human_approval = 'no'
     coll.license_option          = 'none'
-    coll.terms_of_use            = Hydrus::GenericObject.stanford_terms_of_use
+    coll.terms_of_use            = Hydrus.stanford_terms_of_use
     # Set object status.
     coll.object_status = 'draft'
     coll.title = ''
@@ -657,7 +657,7 @@ class Hydrus::Collection < Dor::Collection
   # Returns a hash with all Item object_status values as the
   # keys and zeros as the values.
   def self.initial_item_counts
-    return Hash[ Hydrus::GenericObject.status_labels(:item).keys.map { |s| [s,0]  } ]
+    return Hash[ Hydrus.status_labels(:item).keys.map { |s| [s,0]  } ]
   end
 
   # Takes an array of Collection druids.
@@ -710,11 +710,11 @@ class Hydrus::Collection < Dor::Collection
   # information. Instead of using object_status values, the info
   # uses human readable labels for the UI. See unit test for an example.
   def item_counts_with_labels 
-    return item_counts.map { |s, n| [n, Hydrus::GenericObject.status_label(:item, s)] }
+    return item_counts.map { |s, n| [n, Hydrus.status_label(:item, s)] }
   end
 
   def  self.item_counts_with_labels ic
-    return ic.map { |s, n| [n, Hydrus::GenericObject.status_label(:item, s)] }
+    return ic.map { |s, n| [n, Hydrus.status_label(:item, s)] }
   end
   # Deletes a Collection and its APO.
   def destroy
@@ -729,7 +729,7 @@ class Hydrus::Collection < Dor::Collection
   end
 
   def item_types
-    Hydrus::GenericObject.item_types
+    Hydrus.item_types
   end
 
 end

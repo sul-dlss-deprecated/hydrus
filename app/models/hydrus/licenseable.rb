@@ -34,9 +34,8 @@ module Hydrus::Licenseable
   def license=(code)
     rightsMetadata.remove_license
     return if code == 'none'
-    hgo   = Hydrus::GenericObject
-    gcode = hgo.license_group_code(code)
-    txt   = hgo.license_human(code)
+    gcode = Hydrus.license_group_code(code)
+    txt   = Hydrus.license_human(code)
     code  = code.sub(/\Acc-/, '') if gcode == 'creativeCommons'
     rightsMetadata.insert_license(gcode, code, txt)
   end

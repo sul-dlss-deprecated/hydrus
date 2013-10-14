@@ -10,7 +10,7 @@
     </p>
 	<p>Current collection participants are:</p>
     <ul>
-	<% Hydrus::Responsible.role_labels(:only_labels,:collection_level).each do |role, role_label| %>
+	<% Hydrus.role_labels(:only_labels,:collection_level).each do |role, role_label| %>
       <% people = @fobj.apo.persons_with_role(role) %>
       <li><%= role_label.pluralize(people.size) %>: <%= people.size == 0 ? "none" : people.to_a.join(', ') %></li>
     <% end %>

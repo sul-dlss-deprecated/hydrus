@@ -124,38 +124,4 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
     true
   end
 
-  # Returns a hash of info needed for licenses in the APO.
-  # Keys correspond to the license_option in the OM terminology.
-  # Values are displayed in the web form.
-  def self.license_types
-    return {
-      'none'   => 'no license',
-      'varies' => 'varies -- contributor may select a license for each item, with a default of',
-      'fixed'  => 'required license -- applies to all items in the collection',
-    }
-  end
-
-  # WARNING - the keys of this hash (which appear in the radio buttons in the
-  # colelction edit page) are used in the collection model to trigger specific
-  # getting and setting behavior of embargo lengths. If you change these keys
-  # here, you need to update the collection model as well
-  def self.embargo_types
-    {'none'   => 'No delay -- release all items as soon as they are deposited',
-     'varies' => 'Varies -- select a release date per item, from "now" to a maximum of',
-     'fixed'  => 'Fixed -- delay release of all items for'}
-  end
-
-  def self.visibility_types
-    {'everyone' => 'Everyone -- all items in this collection will be public',
-     'varies'   => 'Varies -- default is public, but you can choose to restrict some items to Stanford community',
-     'stanford' => 'Stanford community -- all items will be visible only to Stanford-authenticated users'}
-  end
-
-  def self.embargo_terms
-    {'6 months after deposit' => '6 months',
-     '1 year after deposit'   => '1 year',
-     '2 years after deposit'  => '2 years',
-     '3 years after deposit'  => '3 years'}
-  end
-
 end

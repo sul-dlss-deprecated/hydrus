@@ -41,7 +41,7 @@ class SolrDocument
   def object_status
     typ    = object_type.to_sym
     status = get(Solrizer.solr_name('object_status', :displayable))
-    return Hydrus::GenericObject.status_label(typ, status)
+    return Hydrus.status_label(typ, status)
   end
 
   def depositor
