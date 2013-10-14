@@ -160,6 +160,11 @@ class Hydrus::DescMetadataDS < ActiveFedora::OmDatastream
     add_hydrus_next_sibling_node(:typeOfResource, :genre)
   end
 
+  def marc_genre= val
+    self.genre = val
+    ng_xml.search('//mods:genre', 'mods' => MODS_NS).first['authority'] = 'marcgt'
+  end
+
   # Returns the contributor information from descMetadata as an array
   # of Hydrus::Contributor objects.
   def contributors

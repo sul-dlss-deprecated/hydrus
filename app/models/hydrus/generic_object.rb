@@ -85,14 +85,10 @@ class Hydrus::GenericObject < Dor::Item
         descMetadata.genre="dataset"
       when 'thesis'
         descMetadata.typeOfResource="text"
-        descMetadata.insert_genre
-        descMetadata.genre="thesis"
-        #this is messy but I couldnt get OM to do what I needed it to
-        set_genre_authority_to_marc descMetadata
+        descMetadata.marc_genre="thesis"
       when 'article'
         descMetadata.typeOfResource="text"
-        descMetadata.genre="article"
-        set_genre_authority_to_marc descMetadata
+        descMetadata.marc_genre="article"
       when 'class project'
         descMetadata.typeOfResource="text"
         descMetadata.genre="student project report"
@@ -101,33 +97,25 @@ class Hydrus::GenericObject < Dor::Item
         descMetadata.genre="game"
       when 'audio - music'
         descMetadata.typeOfResource="sound recording-musical"
-        descMetadata.genre="sound"
-        set_genre_authority_to_marc descMetadata
+        descMetadata.marc_genre="sound"
       when 'audio - spoken'
         descMetadata.typeOfResource="sound recording-nonmusical"
-        descMetadata.genre="sound"
-        set_genre_authority_to_marc descMetadata
+        descMetadata.marc_genre="sound"
       when 'video'
         descMetadata.typeOfResource="moving image"
-        descMetadata.genre="motion picture"
-        set_genre_authority_to_marc descMetadata
+        descMetadata.marc_genre="motion picture"
       when 'conference paper / presentation'
         descMetadata.typeOfResource="text"
-        descMetadata.genre="conference publication"
-        set_genre_authority_to_marc descMetadata
+        descMetadata.marc_genre="conference publication"
       when 'technical report'
         descMetadata.typeOfResource="text"
-        descMetadata.genre="technical report"
-        set_genre_authority_to_marc descMetadata
+        descMetadata.marc_genre="technical report"
       
       else
         descMetadata.typeOfResource=typ.to_s
       end
       descMetadata.content_will_change!
     end
-  end
-  def set_genre_authority_to_marc  descMetadata
-    descMetadata.ng_xml.search('//mods:genre', 'mods' => 'http://www.loc.gov/mods/v3').first['authority'] = 'marcgt'
   end
 
   # Returns a human readable label corresponding to the object's status.
