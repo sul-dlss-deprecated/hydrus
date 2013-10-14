@@ -16,11 +16,6 @@
 
 module Hydrus::Accessible
 
-  # An Xpath snippet that is used frequently.
-  def xp_machine(type = 'read')
-    return '//access[@type="' + type + '"]/machine'
-  end
-
   # Takes a group (for example, 'stanford').
   # Adds a group read node.
   def add_read_group(group)
@@ -118,6 +113,12 @@ module Hydrus::Accessible
   def initialize_release_access_node(style = nil)
     x = style == :generic ? generic_access_xml() : "<releaseAccess/>"
     self.release_access_node = Nokogiri::XML(x)
+  end
+
+  private
+  # An Xpath snippet that is used frequently.
+  def xp_machine(type = 'read')
+    return '//access[@type="' + type + '"]/machine'
   end
 
   # The Generic <releaseAccess> node for embargoMetadata.
