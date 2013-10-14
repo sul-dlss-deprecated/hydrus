@@ -271,7 +271,7 @@ GEM
       activesupport
       i18n
       nokogiri
-    om (3.0.3)
+    om (3.0.4)
       activemodel
       activesupport
       deprecation
@@ -439,6 +439,7 @@ DEPENDENCIES
   mysql2
   net-ssh-krb
   newrelic_rpm
+  om (>= 3.0.4)
   quiet_assets
   rails (= 3.2.14)
   rspec-rails (>= 2.9.0)

@@ -10,6 +10,7 @@ gem 'is_it_working-cbeer', "~> 1.0.13"
 gem 'assembly-objectfile', "1.5.0"
 gem 'blacklight', '~>4.4'
 gem 'hydra-head', '~> 6.0'
+gem 'om', ">= 3.0.4"
 gem 'devise', '~> 2.2.5'
 gem 'carrierwave', "0.6.2"
 gem 'jquery-rails'
