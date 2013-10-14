@@ -13,11 +13,6 @@ describe Hydrus::GenericObject do
     @go.apo.class.should == Hydrus::AdminPolicyObject
   end
 
-  it "dru() should return the druid without the prefix" do
-    @go.stub(:pid).and_return('druid:oo000oo0003')
-    @go.dru.should == 'oo000oo0003'
-  end
-
   describe "apo" do
     it "should be the admin policy object if it is defined" do
       apo = double(:id => 'xyz')
@@ -451,18 +446,6 @@ describe Hydrus::GenericObject do
 
   end
 
-  it "is_item? and is_collection? should work" do
-    hi = Hydrus::Item.new
-    hc = Hydrus::Collection.new
-    go = @go
-    hi.is_item?.should == true
-    hc.is_item?.should == false
-    go.is_item?.should == false
-    hi.is_collection?.should == false
-    hc.is_collection?.should == true
-    go.is_collection?.should == false
-  end
-
   it "can exercise status_label()" do
     tests = {
       'draft'          => 'draft',
@@ -516,34 +499,6 @@ describe Hydrus::GenericObject do
       @go.beautify_datastream(:descMetadata)
     end
 
-  end
-
-  it "related_item_url=() and related_item_title=()" do
-    # Initial state.
-    @go.related_item_title.should == ['']
-    @go.related_item_url.should == ['']
-    # Assign a single value.
-    @go.related_item_title = 'Z'
-    @go.related_item_url = 'foo'
-    @go.related_item_title.should == ['Z']
-    @go.related_item_url.should == ['http://foo']
-    # Add two mode nodes.
-    @go.descMetadata.insert_related_item
-    @go.descMetadata.insert_related_item
-    # Set using hashes.
-    @go.related_item_title = {'0' => 'A', '1' => 'B', '2' => 'C'}
-    @go.related_item_url   = {'0' => 'boo', '1' => 'bar', '2' => 'ftp://quux'}
-    @go.related_item_title.should == %w(A B C)
-    @go.related_item_url.should == ['http://boo', 'http://bar', 'ftp://quux']
-    # Also confirm that each title and URL is put in its own relatedItem node.
-    # We had bugs causing them to be put all in the first node.
-    ri_nodes = @go.descMetadata.find_by_terms(:relatedItem)
-    ri_nodes.size.should == 3
-    ri_nodes.each do |nd|
-      nd = Nokogiri::XML(nd.to_s, &:noblanks)  # Generic XML w/o namespaces.
-      nd.xpath('//title').size.should == 1
-      nd.xpath('//url').size.should == 1
-    end
   end
 
   it "with_protocol()" do

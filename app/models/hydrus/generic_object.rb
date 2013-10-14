@@ -21,23 +21,6 @@ class Hydrus::GenericObject < Dor::Item
     errors.add(:contact, "is not a valid email address")
   end
 
-  def is_item?
-    self.class == Hydrus::Item
-  end
-
-  def is_collection?
-    self.class == Hydrus::Collection
-  end
-
-  def is_apo?
-    false
-  end
-
-  # the pid without the druid: prefix
-  def dru
-    pid.gsub('druid:','')
-  end
-
   # Notes:
   #   - We override save() so we can control whether editing events are logged.
   #   - This method is called via the normal operations of the web app, and
@@ -72,16 +55,12 @@ class Hydrus::GenericObject < Dor::Item
     return nd.to_xml
   end
 
-  def get_fedora_item(pid)
-    return ActiveFedora::Base.find(pid, :cast => true)
-  end
-
   def discover_access
     return rightsMetadata.discover_access.first
   end
 
   def purl_url
-   "#{Dor::Config.purl.base_url}#{dru}"
+   "#{Dor::Config.purl.base_url}#{pid.gsub('druid:','')}"
   end
 
   # Takes an item_type: :dataset, etc. for items, or just :collection for collections.

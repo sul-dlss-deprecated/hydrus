@@ -44,11 +44,16 @@ module Hydrus::Processable
   # workflow, and then kicks off the assembly and accessioning pipeline.
   def start_common_assembly
     cannot_do(:start_common_assembly) unless is_assemblable()
-    delete_missing_files if is_item?
+    delete_missing_files if self.is_a? Hydrus::Contentable
     create_druid_tree
-    update_content_metadata if is_item?
+    update_content_metadata if self.is_a? Hydrus::Contentable
     complete_workflow_step('start-assembly')
     start_assembly_wf
+  end
+
+  # create a DRUID tree folder for the project, providing its a valid druid (needed to some unit tests that don't use valid druids will work)  
+  def create_druid_tree
+    druid_tree.metadata_dir(true) if DruidTools::Druid.valid?(pid)
   end
 
   # Kicks off a Hydrus-specific variant of assemblyWF -- one that skips

@@ -4,7 +4,6 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
   include Hydrus::Responsible
   include Hydrus::Validatable
   include Hydrus::Processable
-  include Hydrus::Contentable
   extend  Hydrus::Delegatable
 
   has_metadata(
@@ -56,10 +55,6 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
       [:object_version,            true   ],
     ]
   )
-
-  def initialize(*args)
-    super
-  end
 
   def identityMetadata
     if defined?(super)
@@ -114,10 +109,6 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
 
   def hydrus_class_to_s
     "apo"
-  end
-
-  def is_apo?
-    true
   end
 
   def is_assemblable
