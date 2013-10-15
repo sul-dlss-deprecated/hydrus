@@ -161,7 +161,11 @@ class HydrusItemsController < ApplicationController
       
     respond_to do |want|
       want.html {
+        if has_mvf
           redirect_to [:edit, @fobj]
+        else
+          redirect_to @fobj
+        end
       }
       want.js {
         if params.has_key?(:add_contributor)
