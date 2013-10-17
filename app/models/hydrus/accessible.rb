@@ -16,11 +16,6 @@
 
 module Hydrus::Accessible
 
-  # An Xpath snippet that is used frequently.
-  def xp_machine(type = 'read')
-    return '//access[@type="' + type + '"]/machine'
-  end
-
   # Takes a group (for example, 'stanford').
   # Adds a group read node.
   def add_read_group(group)
@@ -29,7 +24,7 @@ module Hydrus::Accessible
     unless ng_xml.at_xpath(q)
       g = "<group>#{group}</group>"
       ng_xml.at_xpath(xp_machine).add_child(g)
-      content_will_change!
+      ng_xml_will_change!
     end
   end
 
@@ -40,7 +35,7 @@ module Hydrus::Accessible
     remove_group_read_nodes
     remove_world_read_access
     ng_xml.at_xpath(xp_machine).add_child('<world/>')
-    content_will_change!
+    ng_xml_will_change!
   end
 
   # Removes all group read nodes and world read nodes.
@@ -49,7 +44,6 @@ module Hydrus::Accessible
     remove_group_read_nodes
     remove_world_read_access
     add_access_none_node
-    content_will_change!
   end
   
   # Returns true if there is a world read node.
@@ -73,27 +67,25 @@ module Hydrus::Accessible
   def remove_group_read_nodes
     q = "#{xp_machine}/group"
     remove_nodes_by_xpath(q)
-    content_will_change!
   end
   
   # Add access <none/> node to read (remove any existing to avoid dupes)
   def add_access_none_node
     remove_access_none_nodes
     ng_xml.at_xpath(xp_machine).add_child('<none/>')
+    ng_xml_will_change!
   end
   
   # Removes access = none nodes
   def remove_access_none_nodes
     q= "#{xp_machine}/none"
     remove_nodes_by_xpath(q)
-    content_will_change!
   end
   
   # Removes world read nodes.
   def remove_world_read_access
     q = "#{xp_machine}/world"
     remove_nodes_by_xpath(q)
-    content_will_change!
   end
 
   # Removes the embargo date node.
@@ -121,7 +113,12 @@ module Hydrus::Accessible
   def initialize_release_access_node(style = nil)
     x = style == :generic ? generic_access_xml() : "<releaseAccess/>"
     self.release_access_node = Nokogiri::XML(x)
-    content_will_change!
+  end
+
+  private
+  # An Xpath snippet that is used frequently.
+  def xp_machine(type = 'read')
+    return '//access[@type="' + type + '"]/machine'
   end
 
   # The Generic <releaseAccess> node for embargoMetadata.

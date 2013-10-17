@@ -11,16 +11,15 @@ module ApplicationHelper
   end
 
   def license_image(license_code)
-    gcode = Hydrus::GenericObject.license_group_code(license_code)
+    gcode = Hydrus.license_group_code(license_code)
     lcode = license_code.downcase.gsub('-', '_')
     return gcode == 'creativeCommons' ? image_tag("licenses/#{lcode}.png") : ''
   end
 
   def license_link(license_code)
-    hgo   = Hydrus::GenericObject
-    txt   = hgo.license_human(license_code)
-    gcode = hgo.license_group_code(license_code)
-    url   = hgo.license_group_urls[gcode]
+    txt   = Hydrus.license_human(license_code)
+    gcode = Hydrus.license_group_code(license_code)
+    url   = Hydrus.license_group_urls[gcode]
     return gcode ? link_to(txt, url) : txt
   end
 
@@ -78,7 +77,7 @@ module ApplicationHelper
   #   - Object is not published.
   def show_item_edit(item)
     return false unless can?(:edit, item)
-    return ! item.is_published
+    return ! item.is_published?
   end
 
   def edit_item_text(item)
@@ -87,7 +86,7 @@ module ApplicationHelper
 
   # text to show on item view tab
   def view_item_text(item)
-    item.is_published ? "Published Version" : "View Draft"
+    item.is_published? ? "Published Version" : "View Draft"
   end
 
   def hydrus_object_setting_value(obj, opts = {})

@@ -178,8 +178,8 @@ describe("Collection edit", :type => :request, :integration => true) do
     visit polymorphic_path(@hc)
     # Undo changes, and confirm.
     should_visit_edit_page(@hc)
-    page.has_select?('embargo_option_varies', :selected => []).should == true
-    page.has_select?('embargo_option_fixed', :selected => "#{new_embargo} after deposit").should == true
+    page.should have_select('embargo_option_varies', :selected => [])
+    page.should have_select('embargo_option_fixed', :selected => "#{new_embargo} after deposit")
     choose(orig_check_field)
     select(orig_embargo, :from => "embargo_option_#{orig_embargo_option}")
     click_button "save_nojs"
@@ -194,7 +194,7 @@ describe("Collection edit", :type => :request, :integration => true) do
     # verify embargo is now 'none' and terms are not set
     @hc = Hydrus::Collection.find @druid
     @hc.embargo_option.should == 'none'
-    @hc.embargo_terms.should == ''
+    @hc.embargo_terms.should be_blank
     confirm_rights_metadata_in_apo(@hc)
   end
 
@@ -207,7 +207,7 @@ describe("Collection edit", :type => :request, :integration => true) do
       rmdiv = find('div#role-management-wth-reviewers')
       dk    = 'hydrus_collection_apo_person_roles'
       got   = {}
-      Hydrus::Responsible.role_labels(:collection_level).each do |role, h|
+      Hydrus.role_labels(:collection_level).each do |role, h|
         ids = rmdiv.find("input[id^='#{dk}[#{role}]']")[:value]
         ids = Hydrus::ModelHelper.parse_delimited(ids)
         got[role] = Set.new(ids) if ids.length > 0
@@ -290,6 +290,7 @@ describe("Collection edit", :type => :request, :integration => true) do
 
       before(:each) do
         @coll = Hydrus::Collection.new
+        @coll.admin_policy_object = Hydrus::AdminPolicyObject.new
       end
 
       it "should send open email when there are item depositors" do
@@ -343,7 +344,7 @@ describe("Collection edit", :type => :request, :integration => true) do
         email = ActionMailer::Base.deliveries.last
         email.to.should == ["archivist1@stanford.edu"]
         email.subject.should == "Collection opened for deposit in the Stanford Digital Repository"
-        
+
         click_link("Edit Collection")
 
         fill_in "hydrus_collection_apo_person_roles[hydrus-collection-item-depositor]", :with => "jdoe"

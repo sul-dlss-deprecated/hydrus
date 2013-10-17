@@ -35,8 +35,8 @@ class HydrusItemsController < ApplicationController
   def destroy
     authorize! :edit, @fobj
     collection=@fobj.collection
-    if @fobj.is_destroyable
-      @fobj.delete
+    if @fobj.is_destroyable?
+      @fobj.destroy
       flash[:notice]="The item was deleted."
     else
       flash[:error]="You do not have permissions to delete this item."
@@ -46,7 +46,7 @@ class HydrusItemsController < ApplicationController
 
   def discard_confirmation
     authorize! :edit, @fobj
-    if @fobj.is_destroyable
+    if @fobj.is_destroyable?
       @id=params[:id]
       render 'shared/discard_confirmation'
     else
@@ -88,7 +88,7 @@ class HydrusItemsController < ApplicationController
         hof.save
         hof.remove_dupes
         notice << "'#{upload_file.original_filename}' uploaded."
-        @fobj.files_were_changed = true  # To log an editing event.
+        @fobj.files_will_change!  # To log an editing event.
       end
     end
 
@@ -97,7 +97,7 @@ class HydrusItemsController < ApplicationController
       if hof && hof.set_file_info(h)
         hof.save
         hof.remove_dupes
-        @fobj.files_were_changed = true  # To log an editing event.
+        @fobj.files_will_change! # To log an editing event.
       end
     end
     

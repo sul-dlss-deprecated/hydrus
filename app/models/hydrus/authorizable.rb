@@ -64,28 +64,28 @@ module Hydrus::Authorizable
 
   # Takes two Sets.
   # Returns true if they have any items in common.
-  def self.does_intersect(s1, s2)
+  def self.does_intersect?(s1, s2)
     return s1.intersection(s2).size > 0
   end
 
   # Returns true if the given user is a Hydrus administrator.
-  def self.is_administrator(user)
+  def self.is_administrator?(user)
     return administrators.include?(user.sunetid)
   end
 
   # Returns true if the given user is a Hydrus-wide viewer.
-  def self.is_global_viewer(user)
+  def self.is_global_viewer?(user)
     return global_viewers.include?(user.sunetid)
   end
 
   # Returns true if the given user can act as a Hydrus administrator,
   # either by being one or because we're running in development mode.
-  def self.can_act_as_administrator(user)
-    return (is_administrator(user) or Rails.env == 'development')
+  def self.can_act_as_administrator?(user)
+    return (is_administrator?(user) or Rails.env == 'development')
   end
 
   # Returns true if the given user can create new Hydrus Collections.
-  def self.can_create_collections(user)
+  def self.can_create_collections?(user)
     return collection_creators.include?(user.sunetid)
   end
 
@@ -95,22 +95,22 @@ module Hydrus::Authorizable
 
   # Takes a verb (read or edit), user, and object.
   # Dispatches to the appropriate can_* method.
-  def self.can_do_it(verb, user, obj)
+  def self.can_do_it?(verb, user, obj)
     return false if obj.nil?
     c = obj.hydrus_class_to_s.downcase # 'collection' or 'item' or 'apo'
-    return send("can_#{verb}_#{c}", user, obj)
+    return send("can_#{verb}_#{c}?", user, obj)
   end
 
   # Takes a user and a Collection or Item.
   # Returns true if the user can read the object.
-  def self.can_read_object(user, obj)
-    return can_do_it('read', user, obj)
+  def self.can_read_object?(user, obj)
+    return can_do_it?('read', user, obj)
   end
 
   # Takes a user and a Collection or Item.
   # Returns true if the user can edit the object.
-  def self.can_edit_object(user, obj)
-    return can_do_it('edit', user, obj)
+  def self.can_edit_object?(user, obj)
+    return can_do_it?('edit', user, obj)
   end
 
   ####
@@ -118,20 +118,20 @@ module Hydrus::Authorizable
   ####
 
   # Returns true if the given user can view the given APO.
-  def self.can_read_apo(user, apo)
-    return can_act_as_administrator(user)
+  def self.can_read_apo?(user, apo)
+    return can_act_as_administrator?(user)
   end
 
   # Returns true if the given user can view the given Collection.
-  def self.can_read_collection(user, coll)
-    return true if is_global_viewer(user)
+  def self.can_read_collection?(user, coll)
+    return true if is_global_viewer?(user)
     user_roles = coll.roles_of_person(user.sunetid)
     return user_roles.size > 0
   end
 
   # Returns true if the given user can view the given Item.
-  def self.can_read_item(user, item)
-    return true if is_global_viewer(user)
+  def self.can_read_item?(user, item)
+    return true if is_global_viewer?(user)
     sid = user.sunetid
     user_roles = item.roles_of_person(sid) + item.apo.roles_of_person(sid)
     return user_roles.size > 0
@@ -139,33 +139,33 @@ module Hydrus::Authorizable
 
   # Returns true if the given user can create new Items
   # in the given Collection.
-  def self.can_create_items_in(user, coll)
+  def self.can_create_items_in?(user, coll)
     return false if coll.nil?
-    return true if is_administrator(user)
+    return true if is_administrator?(user)
     user_roles = coll.roles_of_person(user.sunetid)
-    return does_intersect(user_roles, item_creator_roles)
+    return does_intersect?(user_roles, item_creator_roles)
   end
 
   # Returns true if the given user can edit the given Collection.
-  def self.can_edit_collection(user, coll)
-    return true if is_administrator(user)
+  def self.can_edit_collection?(user, coll)
+    return true if is_administrator?(user)
     user_roles = coll.roles_of_person(user.sunetid)
-    return does_intersect(user_roles, collection_editor_roles)
+    return does_intersect?(user_roles, collection_editor_roles)
   end
 
   # Returns true if the given user can edit the given Item.
-  def self.can_edit_item(user, item)
+  def self.can_edit_item?(user, item)
     sid = user.sunetid
-    return true if is_administrator(user)
+    return true if is_administrator?(user)
     user_roles = item.roles_of_person(sid) + item.apo.roles_of_person(sid)
-    return does_intersect(user_roles, item_editor_roles)
+    return does_intersect?(user_roles, item_editor_roles)
   end
 
   # Returns true if the given user can review the given Item.
-  def self.can_review_item(user, item)
-    return true if can_edit_collection(user, item.collection)
+  def self.can_review_item?(user, item)
+    return true if can_edit_collection?(user, item.collection)
     user_roles = item.apo.roles_of_person(user.sunetid)
-    return does_intersect(user_roles, item_reviewer_roles)
+    return does_intersect?(user_roles, item_reviewer_roles)
   end
 
 end

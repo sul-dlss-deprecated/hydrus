@@ -7,29 +7,38 @@ class Hydrus::Collection < Dor::Collection
   before_save :save_apo
   
   REQUIRED_FIELDS = [:title, :abstract, :contact]
+  define_attribute_method :roles
 
-  before_validation :remove_values_for_associated_attribute_with_value_none
-  after_validation :cleanup_usernames
   after_validation :strip_whitespace
 
-  validates :title,    :not_empty => true, :if => :should_validate
-  validates :abstract, :not_empty => true, :if => :should_validate
-  validates :contact,  :not_empty => true, :if => :should_validate
+  validates :title,    :not_empty => true, :if => :should_validate?
+  validates :abstract, :not_empty => true, :if => :should_validate?
+  validates :contact,  :not_empty => true, :if => :should_validate?
 
-  validates :embargo_option, :presence => true, :if => :should_validate
-  validates :license_option, :presence => true, :if => :should_validate
+  validates :embargo_option, :presence => true, :if => :should_validate?
+  validates :license_option, :presence => true, :if => :should_validate?
   validate  :check_embargo_options
   validate  :check_license_options
   
   def check_embargo_options
-    return if embargo_option == 'none'
+    if embargo_option.nil? || embargo_option == 'none'
+      self.embargo_terms = nil unless embargo_terms.blank?
+      return
+    end
+
     return unless embargo_terms.blank?
     msg = "must have a maximum time period when the varies or fixed option is selected"
     errors.add(:embargo, msg)
   end
 
   def check_license_options
-    return if license_option == 'none'
+
+    if license_option == 'none'
+      self.license = "none"
+      return
+    end
+
+    return if license_option.nil? || license_option == 'none'
     return unless license.blank?
     msg = "must be specified when the varies or fixed license option is selected"
     errors.add(:license, msg)
@@ -48,7 +57,7 @@ class Hydrus::Collection < Dor::Collection
   ],
   )
 
-  has_relationship 'hydrus_items', :is_member_of_collection, :inbound => true
+  has_many :items, :property => :is_member_of_collection, :inbound => true, :class_name => 'Hydrus::Item'
   
 
   # Notes:
@@ -61,18 +70,10 @@ class Hydrus::Collection < Dor::Collection
       self.last_modify_time = HyTime.now_datetime
       log_editing_events() unless opts[:no_edit_logging]
     end
-    publish_metadata() if is_published && is_open
+    publish_metadata() if is_published? && is_open?
     super() unless opts[:no_super]
   end
 
-  # get all of the items in this collection
-  # this method is used instead of the "has_relationship" above, since we cannot specify the number of rows via has_relationship
-  # this will hopefully be fixed when upgrading to ActiveFedora
-  # TODO upgrade to ActiveFedora to avoid doing this manual load_inbound_relationship 
-  def items
-    load_inbound_relationship('hydrus_items',:is_member_of_collection, :rows=>1000)  
-  end
-  
   # get solr documents for all items in this collection; return all solr docs and a helper array of hashes with just some basic info
   # this allows us to build the item listing view without having to go to Fedora at all and is much faster
   def items_from_solr
@@ -91,10 +92,10 @@ class Hydrus::Collection < Dor::Collection
       id=solr_doc['id']
       title=self.class.object_title(solr_doc)
       num_files=(get_num_files ? Hydrus::ObjectFile.count(:conditions=>['pid=?',id]) : -1)
-      status=self.class.array_to_single(solr_doc['hydrusProperties_object_status_t'])
-      object_type=self.class.array_to_single(solr_doc['mods_typeOfResource_t'])
-      depositor=self.class.array_to_single(solr_doc['item_depositor_person_identifier_display'])
-      create_date=solr_doc['system_create_dt']
+      status=self.class.array_to_single(solr_doc[Solrizer.solr_name('object_status', :displayable)])
+      object_type=self.class.array_to_single(solr_doc[Solrizer.solr_name('typeOfResource', :displayable)])
+      depositor=self.class.array_to_single(solr_doc[Solrizer.solr_name('item_depositor_person_identifier', :displayable)])
+      create_date=solr_doc[Solrizer.solr_name('system_create', :stored_sortable, :type => :date)]
       items << {:pid=>id,:num_files=>num_files,:object_type=>object_type,:title=>title,:status_label=>status,:item_depositor_id=>depositor,:create_date=>create_date}
     end
     return items
@@ -105,12 +106,10 @@ class Hydrus::Collection < Dor::Collection
   # returns the object.
   def self.create(user)
     # Make sure user can create collections.
-    cannot_do(:create) unless Hydrus::Authorizable.can_create_collections(user)
+    cannot_do(:create) unless Hydrus::Authorizable.can_create_collections?(user)
     # Create the object, with the correct model.
     apo     = Hydrus::AdminPolicyObject.create(user)
-    dor_obj = Hydrus::GenericObject.register_dor_object(user, 'collection', apo.pid)
-    coll    = Hydrus::Collection.find(dor_obj.pid)
-    coll.remove_relationship :has_model, 'info:fedora/afmodel:Dor_Collection'
+    coll = Hydrus::GenericObject.register_dor_object(:user => user, :object_type => 'collection', :admin_policy => apo.pid)
     coll.assert_content_model
     # Set the item_type, and add some Hydrus-specific info to identityMetadata.
     # Note that item_type can vary for items but is always :collection here.
@@ -123,7 +122,7 @@ class Hydrus::Collection < Dor::Collection
     coll.embargo_terms           = ''
     coll.requires_human_approval = 'no'
     coll.license_option          = 'none'
-    coll.terms_of_use            = Hydrus::GenericObject.stanford_terms_of_use
+    coll.terms_of_use            = Hydrus.stanford_terms_of_use
     # Set object status.
     coll.object_status = 'draft'
     coll.title = ''
@@ -163,8 +162,8 @@ class Hydrus::Collection < Dor::Collection
   end
 
   # Returns true only if the Collection is unpublished and has no Items.
-  def is_destroyable
-    return not(is_published or has_items)
+  def is_destroyable?
+    return not(is_published? or has_items)
   end
 
   # Returns true only if the Collection has items.
@@ -173,25 +172,25 @@ class Hydrus::Collection < Dor::Collection
   end
 
   # Returns true if the collection is open.
-  def is_open
+  def is_open?
     return object_status == 'published_open'
   end
 
   # Returns true if the collection can be opened.
-  def is_openable
-    return false if is_open
+  def is_openable?
+    return false if is_open?
     return validate!
   end
 
   # Returns true if the collection can be closed.
-  def is_closeable
-    return is_open
+  def is_closeable?
+    return is_open?
   end
 
   # Returns true if the object is ready for common assembly.
   # It's not strictly necessary to involve validate!, but it provides extra insurance.
-  def is_assemblable
-    return false unless is_open
+  def is_assemblable?
+    return false unless is_open?
     return validate!
   end
 
@@ -209,10 +208,10 @@ class Hydrus::Collection < Dor::Collection
   # After that, the user can toggle the open-closed state, but
   # the publishing step is irreversible.
   def open
-    cannot_do(:open) unless is_openable()
+    cannot_do(:open) unless is_openable?()
 
     # Determine if this is the first time the collection is being opened.
-    first_time = is_draft()
+    first_time = is_draft?()
 
     self.object_status = 'published_open'
     events.add_event('hydrus', current_user, 'Collection opened')
@@ -242,7 +241,7 @@ class Hydrus::Collection < Dor::Collection
 
   # Closes the collection.
   def close
-    cannot_do(:close) unless is_closeable
+    cannot_do(:close) unless is_closeable?
     self.object_status = 'published_closed'
     events.add_event('hydrus', current_user, 'Collection closed')
     send_publish_email_notification(false)
@@ -260,33 +259,38 @@ class Hydrus::Collection < Dor::Collection
     apo.identityMetadata.objectLabel = apt
     apo.title                        = apt
     apo.label                        = apt
-    apo.dc.content                   = apo.generate_dublin_core.to_s
+    apo.datastreams["DC"].content                   = apo.generate_dublin_core.to_s
     identityMetadata.objectLabel     = t
     self.label                       = t
   end
 
   def send_all_role_change_emails
+    before, after = previous_changes['roles']
+
+    depositors_before_update = before.fetch('hydrus-collection-item-depositor', Set.new)
+    depositors_after_update = after.fetch('hydrus-collection-item-depositor', Set.new)
+
+    managers_before_update = before.fetch("hydrus-collection-manager", Set.new)
+    managers_after_update = after.fetch("hydrus-collection-manager", Set.new)
+ 
+    reviewers_before_update = before.fetch("hydrus-collection-reviewer", Set.new)
+    reviewers_after_update = after.fetch("hydrus-collection-reviewer", Set.new)
+
+    viewers_before_update = before.fetch("hydrus-collection-viewer", Set.new)
+    viewers_after_update = after.fetch("hydrus-collection-viewer", Set.new)
 
     # new depositors get an email if the collection is open
-    depositors_before_update = old_self.apo.persons_with_role("hydrus-collection-item-depositor")
-    depositors_after_update = self.apo.persons_with_role("hydrus-collection-item-depositor")
     new_depositors = (depositors_after_update - depositors_before_update).to_a.join(", ")
     removed_depositors = (depositors_before_update - depositors_after_update).to_a.join(", ")
-    if self.is_open
+    if self.is_open?
       self.send_invitation_email_notification(new_depositors) if new_depositors.size > 0 
       self.send_remove_invitation_email_notification(removed_depositors) if removed_depositors.size > 0
     end
 
     # collection managers changed, send an email to all managers
-    managers_before_update = old_self.apo.persons_with_role("hydrus-collection-manager")
-    managers_after_update = self.apo.persons_with_role("hydrus-collection-manager")
     self.send_role_change_email(self.apo.persons_with_role("hydrus-collection-manager").to_a.join(',')) if managers_before_update != managers_after_update
 
     # reviewers or viewers have been changed, send an email to all managers and reviewers
-    reviewers_before_update = old_self.apo.persons_with_role("hydrus-collection-reviewer")
-    reviewers_after_update = self.apo.persons_with_role("hydrus-collection-reviewer")
-    viewers_before_update = old_self.apo.persons_with_role("hydrus-collection-viewer")
-    viewers_after_update = self.apo.persons_with_role("hydrus-collection-viewer")
     self.send_role_change_email((self.apo.persons_with_role("hydrus-collection-manager")+self.apo.persons_with_role("hydrus-collection-reviewer")).to_a.join(',')) if (reviewers_before_update != reviewers_after_update) || (viewers_before_update != viewers_after_update)
         
   end
@@ -331,7 +335,7 @@ class Hydrus::Collection < Dor::Collection
   # Note that this process is initiated from the Item controller and an Item object,
   # but the date information is ultimately stored here at the Collection level.
   def accept_terms_of_deposit(user, datetime_accepted, item)
-    cannot_do(:accept_terms_of_deposit) unless Hydrus::Authorizable.can_edit_item(user, item)
+    cannot_do(:accept_terms_of_deposit) unless Hydrus::Authorizable.can_edit_item?(user, item)
     hydrusProperties.accept_terms_of_deposit(user, datetime_accepted)
     save()
   end
@@ -341,20 +345,22 @@ class Hydrus::Collection < Dor::Collection
   end
 
   # Rewrites the APO.person_roles, converting any email addresses to SUNET IDs.
-  def cleanup_usernames
+  def cleanup_usernames!
     self.apo_person_roles = cleaned_usernames
   end
+
+  alias_method :cleanup_usernames, :cleanup_usernames!
 
   # Processes the APO.person_roles hash.
   # Converts all users names that are email addresses into SUNET IDs
   # by removing text following the @ sign. In addition, the
   # values of the hash are joined by commas, so that the hash is
   # ready for assignment back to apo_person_roles.
-  def cleaned_usernames
+  def cleaned_usernames apo_person_roles
     result = {}
     apo_person_roles.each { |role, users|
-      ids = users.map { |u| u.split('@').first }
-      result[role] = ids.join(',')
+      ids = Array(users).map { |ids| Hydrus::ModelHelper.parse_delimited(ids) }.flatten.map { |u| u.split('@').first.strip }
+      result[role] = Set.new(ids) unless ids.empty?
     }
     return result
   end
@@ -363,13 +369,6 @@ class Hydrus::Collection < Dor::Collection
     refresh_titles
     refresh_default_object_rights
     apo.save
-  end
-
-  # Called before validation occurs.
-  # Used to keep embargo_terms and license in sync with their related options.
-  def remove_values_for_associated_attribute_with_value_none
-    self.embargo_terms = nil    if embargo_option == "none"
-    self.license       = 'none' if license_option == "none"
   end
 
   def roles_of_person(user)
@@ -413,12 +412,16 @@ class Hydrus::Collection < Dor::Collection
   end
 
   def apo_person_roles
-    return apo.person_roles
+    apo.person_roles
   end
+  alias_method :roles, :apo_person_roles
 
   def apo_person_roles= val
-    apo.person_roles= val
+    val = cleaned_usernames(val)
+    roles_will_change! unless val == apo_person_roles
+    apo.person_roles = val
   end
+  alias_method :roles=, :apo_person_roles=
 
   def apo_persons_with_role(role)
     return apo.persons_with_role(role)
@@ -505,17 +508,6 @@ class Hydrus::Collection < Dor::Collection
     return lookup.merge(lookup.invert)
   end
 
-  def tracked_fields
-    return {
-      :title       => [:title],
-      :description => [:abstract],
-      :embargo     => [:embargo_option, :embargo_terms],
-      :visibility  => [:visibility_option, :visibility],
-      :license     => [:license_option, :license],
-      :roles       => [:apo_person_roles],
-    }
-  end
-
   ####
   # Some class method to run some SOLR queries to get Collections involving a
   # user, along with counts of Items in those Collections, broken down by their
@@ -581,7 +573,7 @@ class Hydrus::Collection < Dor::Collection
       queries.each do |h|
         resp, sdocs = issue_solr_query(h)
         resp.docs.each do |doc|
-          pid=doc['identityMetadata_objectId_t'].first
+          pid=doc[Solrizer.solr_name('objectId', :symbol)].first
           toret[pid]={}
           toret[pid][:solr]=doc
         end
@@ -602,7 +594,7 @@ class Hydrus::Collection < Dor::Collection
       hash[:pid]=coll_dru
       hash[:item_counts]=stats[coll_dru] || {}            
       hash[:title]=self.object_title(solr[coll_dru][:solr])
-      hash[:roles]=Hydrus::Responsible.roles_of_person current_user.to_s, solr[coll_dru][:solr]['is_governed_by_s'].first.gsub('info:fedora/','')
+      hash[:roles]=Hydrus::Responsible.roles_of_person current_user.to_s, solr[coll_dru][:solr][Solrizer.solr_name('is_governed_by', :symbol)].first.gsub('info:fedora/','')
       count=0
       stats[coll_dru].keys.each do |key|
         count += stats[coll_dru][key].to_i
@@ -616,8 +608,8 @@ class Hydrus::Collection < Dor::Collection
   
   # given a solr document, try a few places to get the title, starting with objectlabel, then dc_title, and finally just untitled
   def self.object_title(solr_doc)
-    mods_title=solr_doc['mods_titleInfo_title_t']
-    dc_title=solr_doc['dc_title_t']
+    mods_title=solr_doc[Solrizer.solr_name('titleInfo_title', :displayable)]
+    dc_title=solr_doc[Solrizer.solr_name('title', :displayable)]
     if !mods_title.nil?
       return mods_title.first
     elsif !dc_title.nil?
@@ -665,7 +657,7 @@ class Hydrus::Collection < Dor::Collection
   # Returns a hash with all Item object_status values as the
   # keys and zeros as the values.
   def self.initial_item_counts
-    return Hash[ Hydrus::GenericObject.status_labels(:item).keys.map { |s| [s,0]  } ]
+    return Hash[ Hydrus.status_labels(:item).keys.map { |s| [s,0]  } ]
   end
 
   # Takes an array of Collection druids.
@@ -718,15 +710,15 @@ class Hydrus::Collection < Dor::Collection
   # information. Instead of using object_status values, the info
   # uses human readable labels for the UI. See unit test for an example.
   def item_counts_with_labels 
-    return item_counts.map { |s, n| [n, Hydrus::GenericObject.status_label(:item, s)] }
+    return item_counts.map { |s, n| [n, Hydrus.status_label(:item, s)] }
   end
 
   def  self.item_counts_with_labels ic
-    return ic.map { |s, n| [n, Hydrus::GenericObject.status_label(:item, s)] }
+    return ic.map { |s, n| [n, Hydrus.status_label(:item, s)] }
   end
   # Deletes a Collection and its APO.
-  def delete
-    cannot_do(:delete) unless is_destroyable
+  def destroy
+    cannot_do(:delete) unless is_destroyable?
     # Hydrus workflow.
     delete_hydrus_workflow
     apo.delete_hydrus_workflow
@@ -737,7 +729,11 @@ class Hydrus::Collection < Dor::Collection
   end
 
   def item_types
-    Hydrus::GenericObject.item_types
+    Hydrus.item_types
+  end
+
+  def requires_human_approval?
+    to_bool(requires_human_approval)
   end
 
 end

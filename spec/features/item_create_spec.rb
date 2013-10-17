@@ -195,12 +195,12 @@ describe("Item create", :type => :request, :integration => true) do
     # Check various Item attributes and methods.
     item = Hydrus::Item.find(druid)
     item.object_status.should == 'draft'
-    item.is_draft == true
-    item.is_awaiting_approval.should == false
-    item.is_publishable.should == false
-    item.is_published.should == false
-    item.is_returned.should == false
-    item.is_destroyable.should == true
+    item.is_draft? == true
+    item.is_awaiting_approval?.should == false
+    item.is_publishable?.should == false
+    item.is_published?.should == false
+    item.is_returned?.should == false
+    item.is_destroyable?.should == true
     item.submitted_for_publish_time.should be_blank
     item.accepted_terms_of_deposit.should == "false"
     item.valid?.should == true  # Because unpublished, so validation is limited.
@@ -237,15 +237,15 @@ describe("Item create", :type => :request, :integration => true) do
     # Check various Item attributes and methods.
     item = Hydrus::Item.find(druid)
     item.object_status.should == 'draft'
-    item.is_draft.should == true
-    item.is_awaiting_approval.should == false
-    item.is_publishable_directly.should == false    
-    item.is_publishable.should == false
-    item.is_submittable_for_approval.should == true
+    item.is_draft?.should == true
+    item.is_awaiting_approval?.should == false
+    item.is_publishable_directly?.should == false    
+    item.is_publishable?.should == false
+    item.is_submittable_for_approval?.should == true
     item.submit_for_approval_time.should be_blank
-    item.is_published.should == false
-    item.is_returned.should == false
-    item.is_destroyable.should == true
+    item.is_published?.should == false
+    item.is_returned?.should == false
+    item.is_destroyable?.should == true
     item.valid?.should == true
 
     # Submit the Item for approval.
@@ -260,12 +260,12 @@ describe("Item create", :type => :request, :integration => true) do
     # Check various Item attributes and methods.
     item = Hydrus::Item.find(druid)
     item.object_status.should == 'awaiting_approval'
-    item.is_publishable.should == true
-    item.is_publishable_directly.should == false
-    item.requires_human_approval.should == "yes"
-    item.is_published.should == false
-    item.is_returned.should == false
-    item.is_destroyable.should == true
+    item.is_publishable?.should == true
+    item.is_publishable_directly?.should == false
+    item.requires_human_approval?.should == true
+    item.is_published?.should == false
+    item.is_returned?.should == false
+    item.is_destroyable?.should == true
     item.submitted_for_publish_time.should be_blank
     item.submit_for_approval_time.should_not be_blank
     item.valid?.should == true
@@ -295,11 +295,11 @@ describe("Item create", :type => :request, :integration => true) do
     # Check various Item attributes and methods.
     item = Hydrus::Item.find(druid)
     item.object_status.should == 'returned'
-    item.is_publishable.should == false
-    item.is_publishable_directly.should == false
-    item.is_published.should == false
-    item.is_returned.should == true
-    item.is_destroyable.should == true
+    item.is_publishable?.should == false
+    item.is_publishable_directly?.should == false
+    item.is_published?.should == false
+    item.is_returned?.should == true
+    item.is_destroyable?.should == true
     item.valid?.should == true
     item.disapproval_reason.should == ni.reason
     visit hydrus_item_path(:id=>item.pid)
@@ -317,11 +317,11 @@ describe("Item create", :type => :request, :integration => true) do
     # Check various Item attributes and methods.
     item = Hydrus::Item.find(druid)
     item.object_status.should == 'awaiting_approval'
-    item.is_publishable.should == true
-    item.is_publishable_directly.should == false
-    item.is_published.should == false
-    item.is_returned.should == false
-    item.is_destroyable.should == true
+    item.is_publishable?.should == true
+    item.is_publishable_directly?.should == false
+    item.is_published?.should == false
+    item.is_returned?.should == false
+    item.is_destroyable?.should == true
     item.valid?.should == true
     item.disapproval_reason.should == nil
     find(@span_status).should have_content(@status_msgs[:awaiting_approval])
@@ -342,13 +342,13 @@ describe("Item create", :type => :request, :integration => true) do
     # Check various Item attributes and methods.
     item = Hydrus::Item.find(druid)
     item.object_status.should == 'published'
-    item.is_publishable.should == false
-    item.is_published.should == true
-    item.is_returned.should == false
-    item.is_destroyable.should == false
+    item.is_publishable?.should == false
+    item.is_published?.should == true
+    item.is_returned?.should == false
+    item.is_destroyable?.should == false
     item.valid?.should == true
     item.disapproval_reason.should == nil
-    item.is_embargoed.should == false
+    item.is_embargoed?.should == false
     item.submitted_for_publish_time.should_not be_blank
     item.visibility.should == ["stanford"]
     ps={:visibility=>'stanford',:license_code=>'cc-by',:embargo_date=>''}
@@ -407,10 +407,10 @@ describe("Item create", :type => :request, :integration => true) do
     # Check various Item attributes and methods.
     item = Hydrus::Item.find(druid)
     item.object_status.should == 'draft'
-    item.is_publishable.should == false
-    item.is_published.should == false
-    item.is_returned.should == false
-    item.is_destroyable.should == true
+    item.is_publishable?.should == false
+    item.is_published?.should == false
+    item.is_returned?.should == false
+    item.is_destroyable?.should == true
     item.accepted_terms_of_deposit.should == "false"
     item.valid?.should == true  # Because unpublished, so validation is limited.
 
@@ -441,13 +441,13 @@ describe("Item create", :type => :request, :integration => true) do
     # Check various Item attributes and methods.
     item = Hydrus::Item.find(druid)
     item.object_status.should == 'draft'
-    item.is_publishable.should == true
-    item.is_publishable_directly.should == true
-    item.requires_human_approval.should == "no"
-    item.is_submittable_for_approval.should == false
-    item.is_published.should == false
-    item.is_returned.should == false
-    item.is_destroyable.should == true
+    item.is_publishable?.should == true
+    item.is_publishable_directly?.should == true
+    item.requires_human_approval?.should == false
+    item.is_submittable_for_approval?.should == false
+    item.is_published?.should == false
+    item.is_returned?.should == false
+    item.is_destroyable?.should == true
     item.valid?.should == true
     # Publish thte item
     click_button(@buttons[:publish_directly])
@@ -458,10 +458,10 @@ describe("Item create", :type => :request, :integration => true) do
     # Check various Item attributes and methods.
     item = Hydrus::Item.find(druid)
     item.object_status.should == 'published'
-    item.is_publishable.should == false
-    item.is_published.should == true
-    item.is_returned.should == false
-    item.is_destroyable.should == false
+    item.is_publishable?.should == false
+    item.is_published?.should == true
+    item.is_returned?.should == false
+    item.is_destroyable?.should == false
     item.valid?.should == true
     ps={:visibility=>'world',:license_code=>'cc-by-nd',:embargo_date=>''}
     check_emb_vis_lic(item,ps)
@@ -537,7 +537,7 @@ describe("Item create", :type => :request, :integration => true) do
 
     it "should indicate that a new item in a collection requires terms acceptance, when the user has not already accepted another item in this collection" do
       u='archivist5'
-      Hydrus::Authorizable.stub(:can_create_items_in).and_return(true)
+      Hydrus::Authorizable.stub(:can_create_items_in?).and_return(true)
       ni=Hydrus::Item.create(subject.pid,mock_authed_user(u))
       ni.requires_terms_acceptance(u,subject).should == true
       ni.accepted_terms_of_deposit.should == "false"
@@ -547,8 +547,8 @@ describe("Item create", :type => :request, :integration => true) do
     it "should accept the terms for an item, updating the appropriate hydrusProperties metadata in item and collection" do
       u    = 'archivist5'
       user = mock_authed_user(u)
-      Hydrus::Authorizable.stub(:can_create_items_in).and_return(true)
-      Hydrus::Authorizable.stub(:can_edit_item).and_return(true)
+      Hydrus::Authorizable.stub(:can_create_items_in?).and_return(true)
+      Hydrus::Authorizable.stub(:can_edit_item?).and_return(true)
       ni=Hydrus::Item.create(subject.pid, user)
       ni.requires_terms_acceptance(u,subject).should == true
       ni.accepted_terms_of_deposit.should == "false"
@@ -635,12 +635,12 @@ describe("Item create", :type => :request, :integration => true) do
 
   end
 
-  describe "delete()" do
+  describe "destroy()" do
 
     it "should raise error if object is not destroyable" do
       hi = Hydrus::Item.find('druid:oo000oo0001')
-      hi.is_destroyable.should == false
-      expect { hi.delete }.to raise_error(RuntimeError)
+      hi.is_destroyable?.should == false
+      expect { hi.destroy }.to raise_error(RuntimeError)
     end
 
     it "should fully delete item: from fedora, solr, workflows, DB, and files" do
@@ -666,7 +666,7 @@ describe("Item create", :type => :request, :integration => true) do
       Dir.glob(dir + "/*").size.should == 1
       Hydrus::ObjectFile.find_all_by_pid(pid).size.should == 1
       # Delete the Item.
-      hi.is_destroyable.should == true
+      hi.is_destroyable?.should == true
       first(:link, "Discard this item").click
       click_button "Discard"
       hi = nil

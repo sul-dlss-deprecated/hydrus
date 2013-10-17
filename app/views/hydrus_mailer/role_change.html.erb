@@ -10,7 +10,7 @@
     </p>
 	<p>Current collection participants are:</p>
     <ul>
-	<% Hydrus::Responsible.role_labels(:only_labels,:collection_level).each do |role, role_label| %>
+	<% Hydrus.role_labels(:only_labels,:collection_level).each do |role, role_label| %>
       <% people = @fobj.apo.persons_with_role(role) %>
       <li><%= role_label.pluralize(people.size) %>: <%= people.size == 0 ? "none" : people.to_a.join(', ') %></li>
     <% end %>
@@ -21,7 +21,7 @@
       <%= link_to(@collection_url,@collection_url) %>
     </p>
     
-	<p>Note: approval by a reviewer or manager <strong>is<%=" not" unless @fobj.requires_human_approval == 'yes'%></strong> required before publication to this collection.</p>
+	<p>Note: approval by a reviewer or manager <strong>is<%=" not" unless @fobj.requires_human_approval? %></strong> required before publication to this collection.</p>
 	<p>
       If you have any questions about the SDR, send a message to
       <%= sdr_mail_to() %>.

@@ -22,9 +22,8 @@ module Hydrus::Eventable
   # If the current object differs from the object's old self in federa,
   # editing events are logged.
   def log_editing_events
-    cfs = changed_fields()
-    return if cfs.length == 0
-    events.add_event('hydrus', @current_user, editing_event_message(cfs))
+    return if user_changed_attributes.empty?
+    events.add_event('hydrus', @current_user, editing_event_message)
   end
 
 end

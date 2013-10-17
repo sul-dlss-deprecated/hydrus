@@ -3,7 +3,7 @@
   <div class="box-body">
 
     <!-- Approve/disapprove. -->
-    <% if @fobj.is_awaiting_approval && can?(:review, @fobj) %>
+    <% if @fobj.is_awaiting_approval? && can?(:review, @fobj) %>
 
       <!-- Disapprove. -->
       <%= form_tag(disapprove_item_path(@fobj)) do -%>
@@ -40,7 +40,7 @@
 			      </p>
 
     <!-- Resubmit. -->
-    <% elsif @fobj.is_returned && can?(:edit, @fobj) %>
+    <% elsif @fobj.is_returned? && can?(:edit, @fobj) %>
       <p>
         <strong>Return reason:</strong>
         <%= @fobj.disapproval_reason %>
@@ -56,7 +56,7 @@
       </p>
 
     <!-- Submit for Approval. -->
-    <% elsif @fobj.is_submittable_for_approval && can?(:edit, @fobj)%>
+    <% elsif @fobj.is_submittable_for_approval? && can?(:edit, @fobj)%>
       <p>
         <%= button_to(
               "Submit for Approval",
@@ -68,7 +68,7 @@
       </p>
 
     <!-- Publish directly (applies only to items not requiring approval by reviewer). -->
-    <% elsif @fobj.is_publishable_directly && can?(:edit, @fobj) %>
+    <% elsif @fobj.is_publishable_directly? && can?(:edit, @fobj) %>
       <p>
         <%= button_to(
               "Publish",
@@ -123,7 +123,7 @@
     </p>
 
     <!-- Delete link  -->
-    <% if can?(:edit, @fobj) && @fobj.is_destroyable %>
+    <% if can?(:edit, @fobj) && @fobj.is_destroyable? %>
         <p style="display:none;" id="discard-item" class="discard-item">
           <i class="icon-trash"></i>
           <%= link_to('Discard this item', 

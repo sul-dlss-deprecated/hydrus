@@ -1,4 +1,4 @@
-class Hydrus::RightsMetadataDS < ActiveFedora::NokogiriDatastream
+class Hydrus::RightsMetadataDS < ActiveFedora::OmDatastream
 
   include Hydrus::GenericDS
   include Hydrus::Accessible

@@ -11,8 +11,8 @@ describe Hydrus::Collection do
       @hc.should_receive(:log_editing_events).once
       @hc.should_receive(:publish_metadata).once
       @hc.stub('is_collection?').and_return(true)
-      @hc.stub(:is_published).and_return(true)
-      @hc.stub(:is_open).and_return(true)
+      @hc.stub(:is_published?).and_return(true)
+      @hc.stub(:is_open?).and_return(true)
       @hc.save(:no_super => true)
     end
 
@@ -37,9 +37,9 @@ describe Hydrus::Collection do
       @hc.apo.should_receive(:complete_workflow_step).exactly(3).times
       @hc.should_receive(:start_assembly_wf).once
       @hc.should_receive(:send_publish_email_notification).once.with(true)
-      @hc.stub(:is_openable).and_return(true)
-      @hc.stub(:is_draft).and_return(true)
-      @hc.stub(:is_assemblable).and_return(true)
+      @hc.stub(:is_openable?).and_return(true)
+      @hc.stub(:is_draft?).and_return(true)
+      @hc.stub(:is_assemblable?).and_return(true)
       @hc.open
       @hc.get_hydrus_events.size.should > 0
       @hc.apo.identityMetadata.objectLabel.should == [apo_title]
@@ -55,15 +55,15 @@ describe Hydrus::Collection do
       @hc.get_hydrus_events.size.should == 0
       @hc.should_not_receive(:approve)
       @hc.should_receive(:send_publish_email_notification).once.with(false)
-      @hc.stub(:is_closeable).and_return(true)
+      @hc.stub(:is_closeable?).and_return(true)
       @hc.close
       @hc.get_hydrus_events.size.should > 0
     end
 
     it "should raise exceptions if the object cannot be opened/closed" do
       tests = {
-        :open  => :is_openable,
-        :close => :is_closeable,
+        :open  => :is_openable?,
+        :close => :is_closeable?,
       }
       tests.each do |meth, predicate|
         @hc.stub(predicate).and_return(false)
@@ -78,12 +78,11 @@ describe Hydrus::Collection do
     before(:each) do
       @apo = Hydrus::AdminPolicyObject.new
       @hc.stub(:apo).and_return(@apo)
-      @hc.stub(:should_validate).and_return(true)
+      @hc.stub(:should_validate?).and_return(true)
       @exp_errs = [
         :title,
         :abstract,
         :contact,
-        :embargo,
         :embargo_option,
         :license_option,
       ]
@@ -121,7 +120,7 @@ describe Hydrus::Collection do
 
   end
 
-  it "is_destroyable() should return true only if Collection is unpublished with 0 Items" do
+  it "is_destroyable?() should return true only if Collection is unpublished with 0 Items" do
     tests = [
       [false, false, true],
       [false, true,  false],
@@ -129,9 +128,9 @@ describe Hydrus::Collection do
       [false, false, true],
     ]
     tests.each do |is_p, has_i, exp|
-      @hc.stub(:is_published).and_return(is_p)
+      @hc.stub(:is_published?).and_return(is_p)
       @hc.stub(:has_items).and_return(has_i)
-      @hc.is_destroyable.should == exp
+      @hc.is_destroyable?.should == exp
     end
   end
 
@@ -144,7 +143,7 @@ describe Hydrus::Collection do
     @hc.has_items.should == true
   end
 
-  it "is_open() should return true if the collection is open for deposit" do
+  it "is_open?() should return true if the collection is open for deposit" do
     tests = {
       'published_open' => true,
       'published'      => false,
@@ -153,51 +152,59 @@ describe Hydrus::Collection do
     }
     tests.each do |status, exp|
       @hc.stub(:object_status).and_return(status)
-      @hc.is_open.should == exp
+      @hc.is_open?.should == exp
     end
   end
 
-  describe "is_openable()" do
+  describe "is_openable?()" do
 
     it "collection already open: should return false no matter what" do
       @hc.stub('validate!').and_return(true)
       @hc.stub(:object_status).and_return('published_open')
-      @hc.is_openable.should == false  # False in spite of being valid.
+      @hc.is_openable?.should == false  # False in spite of being valid.
     end
 
     it "collection not open: should return true if valid" do
-      @hc.stub(:is_open).and_return(false)
+      @hc.stub(:is_open?).and_return(false)
       [true, false, true].each do |exp|
         @hc.stub('validate!').and_return(exp)
-        @hc.is_openable.should == exp
+        @hc.is_openable?.should == exp
       end
     end
 
   end
 
-  it "is_closeable() should return the value of is_open()" do
+  it "is_closeable?() should return the value of is_open?()" do
     [true, false, true].each do |exp|
-      @hc.stub(:is_open).and_return(exp)
-      @hc.is_closeable.should == exp
+      @hc.stub(:is_open?).and_return(exp)
+      @hc.is_closeable?.should == exp
     end
   end
 
-  describe "is_assemblable()" do
+  describe "is_assemblable?" do
 
     it "closed collection: should always return false" do
-      @hc.stub(:is_open).and_return(false)
+      @hc.stub(:is_open?).and_return(false)
       @hc.should_not_receive('validate!')
-      @hc.is_assemblable.should == false
+      @hc.should_not be_is_assemblable
     end
 
-    it "published item: should return value of validate!" do
-      @hc.stub(:is_open).and_return(true)
-      [true, false].each do |exp|
-        @hc.stub('validate!').and_return(exp)
-        @hc.is_assemblable.should == exp
+    context "with an open collection" do
+
+      before(:each) do
+        @hc.stub(:is_open?).and_return(true)
+      end
+
+      it "should be assemblable if it is valid" do
+        @hc.stub('validate!' => true)
+        @hc.should be_is_assemblable
+      end
+
+      it "should not be assemblable if it is not valid" do
+        @hc.stub('validate!' => false)
+        @hc.should_not be_is_assemblable
       end
     end
-
   end
 
   describe "invite email" do
@@ -319,21 +326,16 @@ describe Hydrus::Collection do
 
   end
 
-  it "can exercise tracked_fields()" do
-    @hc.tracked_fields.should be_an_instance_of(Hash)
-  end
-
   it "cleaned_usernames() should process the apo_person_roles info as expected" do
     apr = {
       'role1' => Set.new(%w(foo bar@blah quux@blah.edu)),
       'role2' => Set.new(%w(abc@def xyz www@stanford.edu)),
     }
     exp = {
-      'role1' => 'foo,bar,quux',
-      'role2' => 'abc,xyz,www',
+      'role1' => Set.new(['foo', 'bar', 'quux']),
+      'role2' => Set.new(['abc', 'xyz', 'www']),
     }
-    @hc.stub(:apo_person_roles).and_return(apr)
-    @hc.cleaned_usernames.should == exp
+    @hc.cleaned_usernames(apr).should == exp
   end
 
   describe "getters and setters" do

@@ -5,6 +5,7 @@ describe(Hydrus::Item, :integration => true) do
   describe("Content metadata generation") do
 
     it "should be able to generate content metadata, returning blank CM when no files exist and setting content metadata stream to a blank template" do
+      pending
       xml = "<contentMetadata objectId=\"__DO_NOT_USE__\" type=\"file\"/>"
       hi = Hydrus::Item.new
       hi.update_content_metadata
@@ -67,8 +68,8 @@ describe(Hydrus::Item, :integration => true) do
       exp['start-deposit'] = 'completed'
       check_statuses.call()
       # After running do_publish, with start_assembly_wf=true.
-      hi.stub(:should_start_assembly_wf).and_return(true)
-      hi.stub(:is_assemblable).and_return(true)
+      hi.stub(:should_start_assembly_wf?).and_return(true)
+      hi.stub(:is_assemblable?).and_return(true)
       Dor::WorkflowService.should_receive(:create_workflow).once
       hi.do_publish()
       exp['approve'] = 'completed'
@@ -76,6 +77,26 @@ describe(Hydrus::Item, :integration => true) do
       check_statuses.call()
     end
 
+  end
+
+  describe "editing_event_message" do
+
+    it "should include all the relevant user-changable attributes" do
+      hi    = Hydrus::Item.new
+      hi.stub(:user_changed_attributes).and_return ["a", "b", "c"]
+      hi.editing_event_message.should == "Item modified: a, b, c"
+    end
+  end
+
+  describe "user_changed_attributes" do
+
+    it "should include all the relevant user-changable attributes" do
+      hi    = Hydrus::Item.new
+      hi.files_will_change!
+      hi.attributes = { :title => 'xyz', :abstract => 'abc', :prior_license => 'xyz' }
+      hi.user_changed_attributes.should include "files", "title", "abstract"
+      hi.user_changed_attributes.should_not include "prior_license"
+    end
   end
 
   describe "create()" do
@@ -98,7 +119,7 @@ describe(Hydrus::Item, :integration => true) do
 
 
     let(:collection) do
-      @collection.stub(:is_open => true)
+      @collection.stub(:is_open? => true)
       @collection
     end
 
@@ -115,7 +136,7 @@ describe(Hydrus::Item, :integration => true) do
       expect(item.versionMetadata).to_not be_new
       expect(item.license).to eq "some-license"
       expect(item.roleMetadata.item_depositor).to include mock_authed_user.sunetid
-      expect(item.relationships(:has_model)).to_not include 'info:fedora/afmodel:Dor_Item'
+      expect(item.relationships(:has_model)).to include 'info:fedora/afmodel:Dor_Item'
       expect(item.relationships(:has_model)).to include 'info:fedora/afmodel:Hydrus_Item'
       expect(item.accepted_terms_of_deposit).to eq "false"
     end

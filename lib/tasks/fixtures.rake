@@ -38,11 +38,9 @@ namespace :hydrus do
   # call with rake hydrus:reindex pid=druid:oo000oo0099
   desc "reindex specified pid"
   task :reindex => :environment do
-    require File.expand_path('config/environment')
     pid=ENV["pid"]
     obj = Dor.load_instance pid
     unless obj.nil?
-      puts "Reindexing #{pid} in solr"
       solr_doc = obj.to_solr
       Dor::SearchService.solr.add(solr_doc, :add_attributes => {:commitWithin => 1000})
     else
@@ -69,7 +67,7 @@ namespace :hydrus do
     pid=ENV["pid"]
     collection=Hydrus::Collection.find pid
     unless collection.nil?
-      items_pids=collection.hydrus_items.collect{|item| item.pid}
+      items_pids=collection.items.collect{|item| item.pid}
       all_pids = items_pids << collection.pid << collection.apo.pid
       all_pids.each do |pid|
         puts "Deleteing #{pid}"

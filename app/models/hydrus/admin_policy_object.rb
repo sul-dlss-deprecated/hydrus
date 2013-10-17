@@ -4,7 +4,6 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
   include Hydrus::Responsible
   include Hydrus::Validatable
   include Hydrus::Processable
-  include Hydrus::Contentable
   extend  Hydrus::Delegatable
 
   has_metadata(
@@ -57,10 +56,6 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
     ]
   )
 
-  def initialize(*args)
-    super
-  end
-
   def identityMetadata
     if defined?(super)
       super
@@ -81,10 +76,7 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
     # Create the object, with the correct model.
     dconf = Dor::Config.hydrus
     args = [user, 'adminPolicy', dconf.ur_apo_druid]
-    apo  = Hydrus::GenericObject.register_dor_object(*args)
-    apo  = Hydrus::AdminPolicyObject.find(apo.pid)
-    apo.remove_relationship :has_model, 'info:fedora/afmodel:Dor_AdminPolicyObject'
-    apo.assert_content_model
+    apo  = Hydrus::GenericObject.register_dor_object(:user => user, :object_type => 'adminPolicy', :admin_policy => dconf.ur_apo_druid)
     # Add minimal descMetadata with a title.
     apo.title = dconf.initial_apo_title
     apo.label = apo.title
@@ -97,7 +89,7 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
     # Create defaultObjectRights datastream ... by mentioning it.
     apo.defaultObjectRights.content_will_change!
     # Add the references agreement to the APO's RELS-EXT.
-    apo.add_relationship(:references_agreement, "info:fedora/druid:mc322hh4254")
+    apo.add_relationship(:references_agreement, Hydrus::Application.config.default_apo_agreement) if Hydrus::Application.config.default_apo_agreement
     # Save and return.
     apo.save!
     return apo
@@ -119,46 +111,8 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
     "apo"
   end
 
-  def is_apo?
+  def is_assemblable?
     true
-  end
-
-  def is_assemblable
-    true
-  end
-
-  # Returns a hash of info needed for licenses in the APO.
-  # Keys correspond to the license_option in the OM terminology.
-  # Values are displayed in the web form.
-  def self.license_types
-    return {
-      'none'   => 'no license',
-      'varies' => 'varies -- contributor may select a license for each item, with a default of',
-      'fixed'  => 'required license -- applies to all items in the collection',
-    }
-  end
-
-  # WARNING - the keys of this hash (which appear in the radio buttons in the
-  # colelction edit page) are used in the collection model to trigger specific
-  # getting and setting behavior of embargo lengths. If you change these keys
-  # here, you need to update the collection model as well
-  def self.embargo_types
-    {'none'   => 'No delay -- release all items as soon as they are deposited',
-     'varies' => 'Varies -- select a release date per item, from "now" to a maximum of',
-     'fixed'  => 'Fixed -- delay release of all items for'}
-  end
-
-  def self.visibility_types
-    {'everyone' => 'Everyone -- all items in this collection will be public',
-     'varies'   => 'Varies -- default is public, but you can choose to restrict some items to Stanford community',
-     'stanford' => 'Stanford community -- all items will be visible only to Stanford-authenticated users'}
-  end
-
-  def self.embargo_terms
-    {'6 months after deposit' => '6 months',
-     '1 year after deposit'   => '1 year',
-     '2 years after deposit'  => '2 years',
-     '3 years after deposit'  => '3 years'}
   end
 
 end

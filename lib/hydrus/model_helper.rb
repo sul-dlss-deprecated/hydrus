@@ -36,6 +36,11 @@ module Hydrus
       v2 = v2.strip if v2.respond_to?(:strip)
       return v1 == v2
     end
+    
+    def druid_tree
+      f = File.join(Rails.root, "public", Hydrus::Application.config.file_upload_path)
+      DruidTools::Druid.new pid, f
+    end
 
   end
 

@@ -8,7 +8,11 @@ module Hydrus::Delegatable
       delegate_these.each do |method_name, is_uniq, *at_fields|
         h = {:to => datastream}
         h.merge!(:at => at_fields) if at_fields.size > 0
-        h.merge!(:unique => true)  if is_uniq
+        if is_uniq
+          h.merge!(:multiple => false)
+        else
+          h.merge!(:multiple => true)
+        end
         delegate(method_name, h)
       end
     end

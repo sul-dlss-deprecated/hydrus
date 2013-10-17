@@ -151,7 +151,7 @@ describe Hydrus::Item do
     it "should return [] for initial visibility" do
       tests = [true, false]
       tests.each do |is_emb|
-        @hi.stub(:is_embargoed).and_return(is_emb)
+        @hi.stub(:is_embargoed?).and_return(is_emb)
         @hi.visibility.should == []
       end
     end
@@ -162,7 +162,7 @@ describe Hydrus::Item do
         false => :rightsMetadata,
       }
       tests.each do |is_emb, ds|
-        @hi.stub(:is_embargoed).and_return(is_emb)
+        @hi.stub(:is_embargoed?).and_return(is_emb)
         @hi.stub_chain(ds, :has_world_read_node).and_return(true)
         @hi.visibility.should == ['world']
       end
@@ -176,7 +176,7 @@ describe Hydrus::Item do
       exp_groups = %w(foo bar)  # Typically, just ['stanford']
       mock_nodes = exp_groups.map { |g| double('', :text => g) }
       tests.each do |is_emb, ds|
-        @hi.stub(:is_embargoed).and_return(is_emb)
+        @hi.stub(:is_embargoed?).and_return(is_emb)
         @hi.stub_chain(ds, :has_world_read_node).and_return(false)
         @hi.stub_chain(ds, :group_read_nodes).and_return(mock_nodes)
         @hi.visibility.should == exp_groups
@@ -222,7 +222,7 @@ describe Hydrus::Item do
       }
     end
 
-    it "can exercise all combinations of is_embargoed and visibility to get expected XML" do
+    it "can exercise all combinations of is_embargoed? and visibility to get expected XML" do
       # All permutations of embargoed = yes|no and visibility = world|stanford,
       # along with the expected rightsMetadata and embargoMetadata XML keys.
       tests = [
@@ -250,7 +250,7 @@ describe Hydrus::Item do
 
   describe "embargo" do
 
-    it "is_embargoed should return true if the Item has a non-blank embargo date" do
+    it "is_embargoed? should return true if the Item has a non-blank embargo date" do
       tests = {
         ''                     => false,
         nil                    => false,
@@ -258,7 +258,7 @@ describe Hydrus::Item do
       }
       tests.each do |dt, exp|
         @hi.stub(:embargo_date).and_return(dt)
-        @hi.is_embargoed.should == exp
+        @hi.is_embargoed?.should == exp
       end
     end
 
@@ -343,7 +343,7 @@ describe Hydrus::Item do
     describe "embargo_can_be_changed()" do
 
       it "Collection does not allow embargo variability: should return false" do
-        @hi.should_not_receive(:is_initial_version)
+        @hi.should_not_receive(:is_initial_version?)
         %w(none fixed).each do |opt|
           @hc.stub(:embargo_option).and_return(opt)
           @hi.embargo_can_be_changed.should == false
@@ -357,21 +357,21 @@ describe Hydrus::Item do
         end
 
         it "initial version: always true" do
-          @hi.stub(:is_initial_version).and_return(true)
-          @hi.should_not_receive(:is_embargoed)
+          @hi.stub(:is_initial_version?).and_return(true)
+          @hi.should_not_receive(:is_embargoed?)
           @hi.embargo_can_be_changed.should == true
         end
 
         it "subsequent versions: not embargoed: always false" do
-          @hi.stub(:is_initial_version).and_return(false)
-          @hi.stub(:is_embargoed).and_return(false)
+          @hi.stub(:is_initial_version?).and_return(false)
+          @hi.stub(:is_embargoed?).and_return(false)
           @hi.should_not_receive(:end_of_embargo_range)
           @hi.embargo_can_be_changed.should == false
         end
 
         it "subsequent versions: embargoed: true if end_of_embargo_range is in future" do
-          @hi.stub(:is_initial_version).and_return(false)
-          @hi.stub(:is_embargoed).and_return(true)
+          @hi.stub(:is_initial_version?).and_return(false)
+          @hi.stub(:is_embargoed?).and_return(true)
           tpast = HyTime.datetime(HyTime.now - 2.day)
           tfut  = HyTime.datetime(HyTime.now + 2.day)
           @hi.stub(:end_of_embargo_range).and_return(tpast)
@@ -426,13 +426,13 @@ describe Hydrus::Item do
       @hi.instance_variable_set('@should_validate', true)
     end
 
-    it "blank slate Item (should_validate=false) should include only two errors" do
-      @hi.stub(:should_validate).and_return(false)
+    it "blank slate Item (should_validate?=false) should include only two errors" do
+      @hi.stub(:should_validate?).and_return(false)
       @hi.valid?.should == false
       @hi.errors.messages.keys.should include(*@exp[0..1])
     end
 
-    it "blank slate Item (should_validate=true) should include all errors" do
+    it "blank slate Item (should_validate?=true) should include all errors" do
       @hi.valid?.should == false
       @hi.errors.messages.keys.should include(*@exp)
     end
@@ -441,7 +441,7 @@ describe Hydrus::Item do
 
       it "should not perform validation unless preconditions are met" do
         @hi.should_not_receive(:beginning_of_embargo_range)
-        @hi.stub(:is_embargoed).and_return(false)
+        @hi.stub(:is_embargoed?).and_return(false)
         @hi.embargo_date_in_range
       end
 
@@ -463,7 +463,7 @@ describe Hydrus::Item do
           '2012-03-02T08:00:00Z' => false,
         }
         # Validate those dates.
-        @hi.stub(:is_embargoed).and_return(true)
+        @hi.stub(:is_embargoed?).and_return(true)
         k = :embargo_date
         dts.each do |dt, is_ok|
           @hi.errors.should_not have_key(k)
@@ -497,7 +497,7 @@ describe Hydrus::Item do
     it "enforce_collection_is_open() should return true only if the Item is in an open Collection" do
       n  = 0
       [true, false, nil].each do |stub_val|
-        c    = double('collection', :is_open => stub_val)
+        c    = double('collection', :is_open? => stub_val)
         exp  = not(not(stub_val))
         n   += 1 unless exp
         @hi.stub(:collection).and_return(c)
@@ -506,13 +506,12 @@ describe Hydrus::Item do
       end
     end
 
-    describe "check_version_if_license_changed()" do
+    describe "check_version" do
 
       before(:each) do
         # Setup failing conditions.
-        @hi.stub(:is_initial_version).and_return(false)
+        @hi.stub(:is_initial_version?).and_return(false)
         @hi.stub(:license).and_return('A')
-        @hi.stub(:prior_license).and_return('B')
         @hi.stub(:version_significance).and_return(:minor)
         # Lambdas to check for errors.
         @assert_no_errors = lambda { @hi.errors.messages.keys.should == [] }
@@ -520,25 +519,26 @@ describe Hydrus::Item do
       end
 
       it "can produce a version error" do
-        @hi.check_version_if_license_changed
+        @hi.stub(:license_changed?).and_return(true)
+        @hi.check_version
         @hi.errors.messages.keys.should == [:version]
       end
 
       it "initial version: cannot produce a version error" do
-        @hi.stub(:is_initial_version).and_return(true)
-        @hi.check_version_if_license_changed
-        @assert_no_errors.call
-      end
-
-      it "license was not changed: cannot produce a version error" do
-        @hi.stub(:prior_license).and_return(@hi.license)
-        @hi.check_version_if_license_changed
+        @hi.stub(:is_initial_version?).and_return(true)
+        @hi.check_version
         @assert_no_errors.call
       end
 
       it "version is major: cannot produce a version error" do
         @hi.stub(:version_significance).and_return(:major)
-        @hi.check_version_if_license_changed
+        @hi.check_version
+        @assert_no_errors.call
+      end
+
+      it "license not changed: cannot produce a version error" do
+        @hi.stub(:license_changed?).and_return(false)
+        @hi.check_version
         @assert_no_errors.call
       end
 
@@ -548,7 +548,7 @@ describe Hydrus::Item do
 
       before(:each) do
         # Setup failing conditions.
-        @hi.stub(:is_initial_version).and_return(false)
+        @hi.stub(:is_initial_version?).and_return(false)
         @hi.stub(:visibility).and_return(['stanford'])
         @hi.stub(:prior_visibility).and_return('world')
         # Lambdas to check for errors.
@@ -562,7 +562,7 @@ describe Hydrus::Item do
       end
 
       it "initial version: cannot produce a visibility error" do
-        @hi.stub(:is_initial_version).and_return(true)
+        @hi.stub(:is_initial_version?).and_return(true)
         @hi.check_visibility_not_reduced
         @assert_no_errors.call
       end
@@ -585,22 +585,18 @@ describe Hydrus::Item do
   end
 
   it "can exercise discovery_roles()" do
-    Hydrus::Item.discovery_roles.should be_instance_of(Hash)
+    Hydrus.discovery_roles.should be_instance_of(Hash)
   end
 
-  it "can exercise tracked_fields()" do
-    @hi.tracked_fields.should be_an_instance_of(Hash)
-  end
-
-  describe "is_submittable_for_approval()" do
+  describe "is_submittable_for_approval?()" do
 
     it "if item is not a draft, should return false" do
       # Normally this would lead to a true result.
-      @hi.stub(:requires_human_approval).and_return('yes')
+      @hi.stub(:requires_human_approval? => true)
       @hi.stub('validate!').and_return(true)
       # But since the item is not a draft, we expect false.
       @hi.stub(:object_status).and_return('returned')
-      @hi.is_submittable_for_approval.should == false
+      @hi.is_submittable_for_approval?.should == false
     end
 
     it "if item does not require human approval, should return false" do
@@ -608,22 +604,22 @@ describe Hydrus::Item do
       @hi.stub(:object_status).and_return('draft')
       @hi.stub('validate!').and_return(true)
       # But since the item does not require human approval, we expect false.
-      @hi.stub(:requires_human_approval).and_return('no')
-      @hi.is_submittable_for_approval.should == false
+      @hi.stub(:requires_human_approval? => false)
+      @hi.is_submittable_for_approval?.should == false
     end
 
     it "otherwise, should return the value of validate!" do
       @hi.stub(:object_status).and_return('draft')
-      @hi.stub(:requires_human_approval).and_return('yes')
+      @hi.stub(:requires_human_approval? => true)
       [true, false, true, false].each do |exp|
         @hi.stub('validate!').and_return(exp)
-        @hi.is_submittable_for_approval.should == exp
+        @hi.is_submittable_for_approval?.should == exp
       end
     end
 
   end
 
-  it "is_awaiting_approval() should return true object_status has expected value" do
+  it "is_awaiting_approval?() should return true object_status has expected value" do
     tests = {
       'awaiting_approval' => true,
       'returned'          => false,
@@ -632,11 +628,11 @@ describe Hydrus::Item do
     }
     tests.each do |status, exp|
       @hi.stub(:object_status).and_return(status)
-      @hi.is_awaiting_approval.should == exp
+      @hi.is_awaiting_approval?.should == exp
     end
   end
 
-  it "is_returned() should return true object_status has expected value" do
+  it "is_returned?() should return true object_status has expected value" do
     tests = {
       'awaiting_approval' => false,
       'returned'          => true,
@@ -645,149 +641,157 @@ describe Hydrus::Item do
     }
     tests.each do |status, exp|
       @hi.stub(:object_status).and_return(status)
-      @hi.is_returned.should == exp
+      @hi.is_returned?.should == exp
     end
   end
 
-  describe "is_approvable()" do
+  describe "is_approvable?()" do
 
     it "item not awaiting approval: should always return false" do
-      @hi.stub(:is_awaiting_approval).and_return(false)
+      @hi.stub(:is_awaiting_approval?).and_return(false)
       @hi.should_not_receive('validate!')
-      @hi.is_approvable.should == false
+      @hi.is_approvable?.should == false
     end
 
     it "item not awaiting approval: should return value of validate!" do
-      @hi.stub(:is_awaiting_approval).and_return(true)
+      @hi.stub(:is_awaiting_approval?).and_return(true)
       [true, false].each do |exp|
         @hi.stub('validate!').and_return(exp)
-        @hi.is_approvable.should == exp
+        @hi.is_approvable?.should == exp
       end
     end
 
   end
 
-  it "is_disapprovable() should return the value of is_awaiting_approval()" do
+  it "is_disapprovable?() should return the value of is_awaiting_approval?()" do
     [true, false].each do |exp|
-      @hi.stub(:is_awaiting_approval).and_return(exp)
-      @hi.is_disapprovable.should == exp
+      @hi.stub(:is_awaiting_approval?).and_return(exp)
+      @hi.is_disapprovable?.should == exp
     end
   end
 
-  describe "is_resubmittable()" do
+  describe "is_resubmittable?()" do
 
     it "item not returned: should always return false" do
-      @hi.stub(:is_returned).and_return(false)
+      @hi.stub(:is_returned?).and_return(false)
       @hi.should_not_receive('validate!')
-      @hi.is_resubmittable.should == false
+      @hi.is_resubmittable?.should == false
     end
 
     it "item not returned: should return value of validate!" do
-      @hi.stub(:is_returned).and_return(true)
+      @hi.stub(:is_returned?).and_return(true)
       [true, false].each do |exp|
         @hi.stub('validate!').and_return(exp)
-        @hi.is_resubmittable.should == exp
+        @hi.is_resubmittable?.should == exp
       end
     end
 
   end
 
-  it "is_destroyable() should return the negative of is_published" do
-    @hi.stub(:is_published).and_return(false)
-    @hi.is_destroyable.should == true
-    @hi.stub(:is_published).and_return(true)
-    @hi.is_destroyable.should == false
+  it "is_destroyable?() should return the negative of is_published?" do
+    @hi.stub(:is_published?).and_return(false)
+    @hi.is_destroyable?.should == true
+    @hi.stub(:is_published?).and_return(true)
+    @hi.is_destroyable?.should == false
   end
 
-  describe "is_publishable()" do
+  describe "is_publishable?()" do
 
     it "invalid object: should always return false" do
       # If the item were valid, this setup would cause the method to return true.
-      @hi.stub(:requires_human_approval).and_return('no')
-      @hi.stub(:is_draft).and_return(true)
+      @hi.stub(:requires_human_approval? => false)
+      @hi.stub(:is_draft?).and_return(true)
       # But it's not valid, so we should get false.
       @hi.stub('validate!').and_return(false)
-      @hi.is_publishable.should == false
+      @hi.is_publishable?.should == false
     end
 
-    it "valid object: requires approval: should return value of is_awaiting_approval()" do
+    it "valid object: requires approval: should return value of is_awaiting_approval?()" do
       @hi.stub('validate!').and_return(true)
-      @hi.stub(:requires_human_approval).and_return('yes')
+      @hi.stub(:requires_human_approval? => true)
       [true, false, true, false].each do |exp|
-        @hi.stub(:is_awaiting_approval).and_return(exp)
-        @hi.is_publishable.should == exp
+        @hi.stub(:is_awaiting_approval?).and_return(exp)
+        @hi.is_publishable?.should == exp
       end
     end
 
-    it "valid object: does not require approval: should return value of is_draft()" do
+    it "valid object: does not require approval: should return value of is_draft?()" do
       @hi.stub('validate!').and_return(true)
-      @hi.stub(:requires_human_approval).and_return('no')
+      @hi.stub(:requires_human_approval? => false)
       [true, false, true, false].each do |exp|
-        @hi.stub(:is_draft).and_return(exp)
-        @hi.is_publishable.should == exp
+        @hi.stub(:is_draft?).and_return(exp)
+        @hi.is_publishable?.should == exp
       end
     end
 
   end
 
-  describe "is_publishable_directly()" do
+  describe "is_publishable_directly?()" do
 
     it "invalid object: should always return false" do
       # If the item were valid, this setup would cause the method to return true.
-      @hi.stub(:requires_human_approval).and_return('no')
-      @hi.stub(:is_draft).and_return(true)
+      @hi.stub(:requires_human_approval?).and_return(true)
+      @hi.stub(:is_draft?).and_return(true)
       # But it's not valid, so we should get false.
       @hi.stub('validate!').and_return(false)
-      @hi.is_publishable_directly.should == false
+      @hi.is_publishable_directly?.should == false
     end
 
-    it "valid object: requires approval: should always return false regardless of is_awaiting_approval status" do
+    it "valid object: requires approval: should always return false regardless of is_awaiting_approval? status" do
       @hi.stub('validate!').and_return(true)
-      @hi.stub(:requires_human_approval).and_return('yes')
+      @hi.stub(:requires_human_approval?).and_return(true)
       [true, false, true, false].each do |exp|
-        @hi.stub(:is_awaiting_approval).and_return(exp)
-        @hi.is_publishable_directly.should == false
+        @hi.stub(:is_awaiting_approval?).and_return(exp)
+        @hi.is_publishable_directly?.should == false
       end
     end
 
-    it "valid object: does not require approval: should return value of is_draft()" do
+    it "valid object: does not require approval: should return value of is_draft?()" do
       @hi.stub('validate!').and_return(true)
-      @hi.stub(:requires_human_approval).and_return('no')
+      @hi.stub(:requires_human_approval?).and_return(false)
       [true, false, true, false].each do |exp|
-        @hi.stub(:is_draft).and_return(exp)
-        @hi.is_publishable_directly.should == exp
+        @hi.stub(:is_draft?).and_return(exp)
+        @hi.is_publishable_directly?.should == exp
       end
     end
 
   end
   
-  describe "is_assemblable()" do
+  describe "is_assemblable?" do
 
     it "unpublished item: should always return false" do
-      @hi.stub(:is_published).and_return(false)
+      @hi.stub(:is_published?).and_return(false)
       @hi.should_not_receive('validate!')
-      @hi.is_assemblable.should == false
+      @hi.should_not be_is_assemblable
     end
 
-    it "published item: should return value of validate!" do
-      @hi.stub(:is_published).and_return(true)
-      [true, false].each do |exp|
-        @hi.stub('validate!').and_return(exp)
-        @hi.is_assemblable.should == exp
+    context "with an published item" do
+
+      before(:each) do
+        @hi.stub(:is_published?).and_return(true)
+      end
+
+      it "should be assemblable if it is valid" do
+        @hi.stub('validate!' => true)
+        @hi.should be_is_assemblable
+      end
+
+      it "should not be assemblable if it is not valid" do
+        @hi.stub('validate!' => false)
+        @hi.should_not be_is_assemblable
       end
     end
-
   end
 
   describe "publish_directly()" do
 
     it "item is not publishable: should raise exception" do
-      @hi.stub(:is_publishable).and_return(false)
+      @hi.stub(:is_publishable?).and_return(false)
       expect { @hi.publish_directly }.to raise_exception(@cannot_do_regex)
     end
 
     it "item is publishable: should call the expected methods" do
-      @hi.stub(:is_publishable).and_return(true)
+      @hi.stub(:is_publishable?).and_return(true)
       @hi.should_receive(:complete_workflow_step).with('submit')
       @hi.should_receive(:do_publish)
       @hi.publish_directly
@@ -806,7 +810,7 @@ describe Hydrus::Item do
       @hi.should_not_receive(:close_version)
       @hi.should_receive(:start_common_assembly)
       # Before-assertions.
-      @hi.is_initial_version.should == true
+      @hi.is_initial_version?.should == true
       @hi.submitted_for_publish_time.should be_blank
       @hi.initial_submitted_for_publish_time.should be_blank
       @hi.get_hydrus_events.size.should == 0
@@ -822,7 +826,7 @@ describe Hydrus::Item do
     it "should close_version() if the object is not an initial version" do
       @hi.stub(:complete_workflow_step)
       @hi.stub(:start_common_assembly)
-      @hi.stub(:is_initial_version).and_return(false)
+      @hi.stub(:is_initial_version?).and_return(false)
       @hi.should_receive(:close_version)
       @hi.do_publish
     end
@@ -832,12 +836,12 @@ describe Hydrus::Item do
   describe "submit_for_approval()" do
 
     it "item is not submittable: should raise exception" do
-      @hi.stub(:is_submittable_for_approval).and_return(false)
+      @hi.stub(:is_submittable_for_approval?).and_return(false)
       expect { @hi.submit_for_approval }.to raise_exception(@cannot_do_regex)
     end
 
     it "item is submittable: should set status and call expected methods" do
-      @hi.stub(:is_submittable_for_approval).and_return(true)
+      @hi.stub(:is_submittable_for_approval?).and_return(true)
       @hi.should_receive(:complete_workflow_step).with('submit')
       @hi.submit_for_approval_time.should be_blank
       @hi.object_status.should_not == 'awaiting_approval'
@@ -851,12 +855,12 @@ describe Hydrus::Item do
   describe "approve()" do
 
     it "item is not approvable: should raise exception" do
-      @hi.stub(:is_approvable).and_return(false)
+      @hi.stub(:is_approvable?).and_return(false)
       expect { @hi.approve }.to raise_exception(@cannot_do_regex)
     end
 
     it "item is approvable: should remove disapproval_reason and call expected methods" do
-      @hi.stub(:is_approvable).and_return(true)
+      @hi.stub(:is_approvable?).and_return(true)
       @hi.should_receive(:do_publish)
       @hi.disapproval_reason = 'some reason'
       @hi.approve
@@ -869,13 +873,13 @@ describe Hydrus::Item do
 
     it "item is not disapprovable: should raise exception" do
       reason = 'some reason'
-      @hi.stub(:is_disapprovable).and_return(false)
+      @hi.stub(:is_disapprovable?).and_return(false)
       expect { @hi.disapprove(reason) }.to raise_exception(@cannot_do_regex)
     end
 
     it "item is disapprovable: should set disapproval_reason and object status and call expected methods" do
       reason = 'some reason'
-      @hi.stub(:is_disapprovable).and_return(true)
+      @hi.stub(:is_disapprovable?).and_return(true)
       @hi.should_receive(:send_object_returned_email_notification)
       @hi.disapproval_reason.should == nil
       @hi.object_status.should_not == 'returned'
@@ -889,12 +893,12 @@ describe Hydrus::Item do
   describe "resubmit()" do
 
     it "item is not resubmittable: should raise exception" do
-      @hi.stub(:is_resubmittable).and_return(false)
+      @hi.stub(:is_resubmittable?).and_return(false)
       expect { @hi.resubmit }.to raise_exception(@cannot_do_regex)
     end
 
     it "item is resubmittable: should remove disapproval_reason, set object status, and call expected methods" do
-      @hi.stub(:is_resubmittable).and_return(true)
+      @hi.stub(:is_resubmittable?).and_return(true)
       @hi.disapproval_reason = 'some reason'
       @hi.object_status.should_not == 'awaiting_approval'
       @hi.resubmit
@@ -918,7 +922,7 @@ describe Hydrus::Item do
   describe "close_version()" do
 
     it "should raise exception if item is initial version" do
-      @hi.stub(:is_initial_version).and_return(true)
+      @hi.stub(:is_initial_version?).and_return(true)
       expect { @hi.close_version }.to raise_exception(@cannot_do_regex)
     end
 
@@ -970,7 +974,7 @@ describe Hydrus::Item do
 
   it "should accept the terms of deposit for a user" do
     @coll=Hydrus::Collection.new
-    Hydrus::Authorizable.stub(:can_edit_item).and_return(true)
+    Hydrus::Authorizable.stub(:can_edit_item?).and_return(true)
     @coll.stub(:accept_terms_of_deposit)
     @hi.stub(:collection).and_return(@coll)
     @hi.terms_of_deposit_accepted?.should == false
@@ -997,9 +1001,9 @@ describe Hydrus::Item do
   end
 
   it "requires_human_approval() should delegate to the collection" do
-    ["yes", "no", "yes"].each { |exp|
-      @hi.stub_chain(:collection, :requires_human_approval).and_return(exp)
-      @hi.requires_human_approval.should == exp
+    [true, false, true].each { |exp|
+      @hi.stub_chain(:collection, :requires_human_approval?).and_return(exp)
+      @hi.requires_human_approval?.should == exp
     }
   end
 
@@ -1041,17 +1045,17 @@ describe Hydrus::Item do
       @hi.version_description.should == 'Blah 2.1.0'
     end
 
-    it "is_initial_version() should return true only for the first version" do
+    it "is_initial_version?() should return true only for the first version" do
       @stub_vm.call('1.0.0')
-      @hi.is_initial_version.should == true
+      @hi.is_initial_version?.should == true
       @stub_vm.call('1.0.1')
-      @hi.is_initial_version.should == true
+      @hi.is_initial_version?.should == true
       @stub_vm.call('1.0.1')
-      @hi.is_initial_version(:absolute => true).should == false
+      @hi.is_initial_version?(:absolute => true).should == false
       @stub_vm.call('2.0.0')
-      @hi.is_initial_version.should == false
+      @hi.is_initial_version?.should == false
       @stub_vm.call('2.1.0')
-      @hi.is_initial_version.should == false
+      @hi.is_initial_version?.should == false
     end
 
     it "version_significance() should return :major, :minor, or :admin" do
@@ -1089,5 +1093,33 @@ describe Hydrus::Item do
       @hi.version_description.should == exp
     end
 
+  end
+
+  it "related_item_url=() and related_item_title=()" do
+    # Initial state.
+    @hi.related_item_title.should == ['']
+    @hi.related_item_url.should == ['']
+    # Assign a single value.
+    @hi.related_item_title = 'Z'
+    @hi.related_item_url = 'foo'
+    @hi.related_item_title.should == ['Z']
+    @hi.related_item_url.should == ['http://foo']
+    # Add two mode nodes.
+    @hi.descMetadata.insert_related_item
+    @hi.descMetadata.insert_related_item
+    # Set using hashes.
+    @hi.related_item_title = {'0' => 'A', '1' => 'B', '2' => 'C'}
+    @hi.related_item_url   = {'0' => 'boo', '1' => 'bar', '2' => 'ftp://quux'}
+    @hi.related_item_title.should == %w(A B C)
+    @hi.related_item_url.should == ['http://boo', 'http://bar', 'ftp://quux']
+    # Also confirm that each title and URL is put in its own relatedItem node.
+    # We had bugs causing them to be put all in the first node.
+    ri_nodes = @hi.descMetadata.find_by_terms(:relatedItem)
+    ri_nodes.size.should == 3
+    ri_nodes.each do |nd|
+      nd = Nokogiri::XML(nd.to_s, &:noblanks)  # Generic XML w/o namespaces.
+      nd.xpath('//title').size.should == 1
+      nd.xpath('//url').size.should == 1
+    end
   end
 end

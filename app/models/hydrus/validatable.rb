@@ -7,9 +7,9 @@ module Hydrus::Validatable
   # However, we often want to run validations in advance of that in
   # order to inform user about missing attributes. The @should_validate
   # instance variable provides a mechanism to short-circuit the typical logic.
-  def should_validate
+  def should_validate?
     return true if @should_validate
-    return !is_draft
+    return !is_draft?
   end
 
   # Returns true only if the object is valid.

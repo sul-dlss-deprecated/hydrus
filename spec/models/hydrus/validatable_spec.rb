@@ -9,19 +9,19 @@ end
 
 describe Hydrus::Validatable do
 
-  describe "should_validate()" do
+  describe "should_validate?()" do
 
-    it "should not call is_draft() when @should_validate is true" do
+    it "should not call is_draft?() when @should_validate is true" do
       obj = MockValidatable.new(true)
-      obj.should_not_receive(:is_draft)
-      obj.should_validate.should == true
+      obj.should_not_receive(:is_draft?)
+      obj.should_validate?.should == true
     end
 
-    it "should return the value of not(is_draft) when @should_validate is false" do
+    it "should return the value of not(is_draft?) when @should_validate is false" do
       obj = MockValidatable.new
       [false, true, false, true].each do |exp|
-        obj.stub(:is_draft).and_return(exp)
-        obj.should_validate.should == !exp
+        obj.stub(:is_draft?).and_return(exp)
+        obj.should_validate?.should == !exp
       end
     end
 

@@ -13,21 +13,11 @@ describe Hydrus::GenericObject do
     @go.apo.class.should == Hydrus::AdminPolicyObject
   end
 
-  it "dru() should return the druid without the prefix" do
-    @go.stub(:pid).and_return('druid:oo000oo0003')
-    @go.dru.should == 'oo000oo0003'
-  end
-
   describe "apo" do
     it "should be the admin policy object if it is defined" do
       apo = double(:id => 'xyz')
       @go.stub(:admin_policy_object).and_return(apo)
       expect(@go.apo).to eq apo
-    end
-
-    it "should default to a new APO object" do
-      @go.stub(:admin_policy_object).and_raise ActiveFedora::ObjectNotFoundError.new
-      expect(@go.apo).to be_a_kind_of Hydrus::AdminPolicyObject
     end
   end
 
@@ -49,7 +39,8 @@ describe Hydrus::GenericObject do
   end
 
   it "can exercise url()" do
-    @go.purl_url.should == "http://purl.stanford.edu/__DO_NOT_USE__"
+    @go.stub(:pid).and_return('druid:oo000oo0003')
+    @go.purl_url.should == "http://purl.stanford.edu/oo000oo0003"
   end
 
   it "can exercise related_items()" do
@@ -62,26 +53,16 @@ describe Hydrus::GenericObject do
 
   describe "registration" do
 
-    it "dor_registration_params() should return the expected hash" do
-      # Non-APO: hash should include initiate_workflow.
-      args = %w(whobar item somePID)
-      drp = Hydrus::GenericObject.dor_registration_params(*args)
-      drp.should be_instance_of Hash
-      drp[:admin_policy].should == args.last
-      drp.should include(:initiate_workflow)
-      # APO: hash should not includes initiate_workflow.
-      args = %w(whobar adminPolicy somePID)
-      drp = Hydrus::GenericObject.dor_registration_params(*args)
-      drp.should be_instance_of Hash
-      drp.should include(:initiate_workflow)
-    end
-
     it "should be able to exercise register_dor_object(), using stubbed call to Dor" do
-      args = %w(whobar item somePID)
-      drp = Hydrus::GenericObject.dor_registration_params(*args)
-      expectation = Dor::RegistrationService.should_receive(:register_object)
-      expectation.with(hash_including(*drp.keys))
-      Hydrus::GenericObject.register_dor_object(nil, nil, nil)
+      expectation = Dor::RegistrationService.should_receive(:register_object).with hash_including(
+      :source_id,
+      :admin_policy      => "admin_policy",
+      :label             => "Hydrus",
+      :tags              => ["Project : Hydrus"],
+      :initiate_workflow => [Dor::Config.hydrus.app_workflow]
+        )
+
+      Hydrus::GenericObject.register_dor_object({:user => "user_id", :admin_policy => "admin_policy", :object_type => "some_type"})
     end
 
   end
@@ -91,15 +72,14 @@ describe Hydrus::GenericObject do
     describe "license_groups(), license_commons(), and license_group_urls()" do
 
       it "should get expected object types" do
-        Hydrus::GenericObject.license_groups.should be_a Array
-        Hydrus::GenericObject.license_commons.should be_a Hash
-        Hydrus::GenericObject.license_group_urls.should be_a Hash
+        Hydrus.license_groups.should be_a Array
+        Hydrus.license_commons.should be_a Hash
+        Hydrus.license_group_urls.should be_a Hash
       end
 
       it "license_groups() labels should be keys in license_commons()" do
-        hgo = Hydrus::GenericObject
-        lgs = hgo.license_groups.map(&:first)
-        lcs = hgo.license_commons.keys
+        lgs = Hydrus.license_groups.map(&:first)
+        lcs = Hydrus.license_commons.keys
         lcs.each { |lc| lgs.should include(lc) }
       end
 
@@ -139,11 +119,10 @@ describe Hydrus::GenericObject do
     end
 
     it "license_human() should return a human readable value for a license code" do
-      hgo = Hydrus::GenericObject
-      hgo.license_human("cc-by").should == "CC BY Attribution"
-      hgo.license_human("cc-by-nc-sa").should == "CC BY-NC-SA Attribution-NonCommercial-ShareAlike"
-      hgo.license_human("odc-odbl").should == "ODC-ODbl Open Database License"
-      hgo.license_human('blah!!').should =~ /unknown license/i
+      Hydrus.license_human("cc-by").should == "CC BY Attribution"
+      Hydrus.license_human("cc-by-nc-sa").should == "CC BY-NC-SA Attribution-NonCommercial-ShareAlike"
+      Hydrus.license_human("odc-odbl").should == "ODC-ODbl Open Database License"
+      Hydrus.license_human('blah!!').should =~ /unknown license/i
     end
 
     it "terms_of_use: getter and setter" do
@@ -301,7 +280,7 @@ describe Hydrus::GenericObject do
       @go.workflows.workflow_step_is_done('submit').should        == false
     end
 
-    it "is_published() should return true if object status is any flavor of publish" do
+    it "is_published?() should return true if object status is any flavor of publish" do
       tests = {
         'published'         => true,
         'published_open'    => true,
@@ -311,7 +290,7 @@ describe Hydrus::GenericObject do
       }
       tests.each do |status, exp|
         @go.stub(:object_status).and_return(status)
-        @go.is_published.should == exp
+        @go.is_published?.should == exp
       end
     end
 
@@ -324,8 +303,8 @@ describe Hydrus::GenericObject do
       @go.instance_variable_set('@should_validate', true)
     end
 
-    it "blank slate object (should_validate=false) should include only the :pid error" do
-      @go.stub(:should_validate).and_return(false)
+    it "blank slate object (should_validate?=false) should include only the :pid error" do
+      @go.stub(:should_validate?).and_return(false)
       @go.valid?.should == false
       @go.errors.messages.keys.should == [@exp.first]
     end
@@ -393,8 +372,8 @@ describe Hydrus::GenericObject do
   end
 
   it "publish_metadata() should do nothing if app is not configured to start common assembly" do
-    @go.stub(:should_start_assembly_wf).and_return(false)
-    @go.should_not_receive(:is_assemblable)
+    @go.stub(:should_start_assembly_wf?).and_return(false)
+    @go.should_not_receive(:is_assemblable?)
     @go.publish_metadata
   end
 
@@ -414,41 +393,10 @@ describe Hydrus::GenericObject do
 
   end
 
-  it "old_self() should call find() with the object's pid" do
-    pid = @go.pid
-    r = 'blah blah!!'
-    Hydrus::GenericObject.should_receive(:find).with(pid).and_return(r)
-    @go.old_self.should == r
-  end
-
   it "editing_event_message() should return expected string" do
-    fs  = [:foo, :bar, :quux]
+    @go.stub(:user_changed_attributes => [:foo, :bar, :quux])
     exp = "GenericObject modified: foo, bar, quux"
-    @go.editing_event_message(fs).should == exp
-  end
-
-  it "changed_fields() should return ..." do
-    tf = {
-      :a   => [:aa],
-      :bb  => [:ba, :bb],
-      :ccc => [:ca, :cb, :cc],
-      :ddd => [:da, :db],
-    }
-    @go.stub(:tracked_fields).and_return(tf)
-    old = double('old_self')
-    exp_diff = [:a, :ccc]
-    tf.each do |k,vs|
-      vs.each do |v|
-        old.stub(v).and_return(v.to_s)
-        @go.stub(v).and_return(exp_diff.include?(k) ? 'new_val' : v.to_s)
-      end
-    end
-    @go.stub(:old_self).and_return(old)
-    @go.changed_fields.should == exp_diff
-  end
-
-  it "GenericObject does not implement tracked_fields()" do
-    expect{ @go.tracked_fields }.to raise_error(NoMethodError)
+    @go.editing_event_message.should == exp
   end
 
   describe "object returned email" do
@@ -468,13 +416,13 @@ describe Hydrus::GenericObject do
   describe "log_editing_events()" do
 
     it "should do nothing if there are no changed fields" do
-      @go.stub(:changed_fields).and_return([])
+      @go.stub(:changes).and_return({})
       @go.should_not_receive(:events)
       @go.log_editing_events
     end
 
     it "should add an editing event if there are changed fields" do
-      @go.stub(:changed_fields).and_return([:aa, :bb])
+      @go.stub(:user_changed_attributes).and_return([:aa, :bb])
       @go.get_hydrus_events.size.should == 0
       @go.log_editing_events
       es = @go.get_hydrus_events
@@ -498,18 +446,6 @@ describe Hydrus::GenericObject do
 
   end
 
-  it "is_item? and is_collection? should work" do
-    hi = Hydrus::Item.new
-    hc = Hydrus::Collection.new
-    go = @go
-    hi.is_item?.should == true
-    hc.is_item?.should == false
-    go.is_item?.should == false
-    hi.is_collection?.should == false
-    hc.is_collection?.should == true
-    go.is_collection?.should == false
-  end
-
   it "can exercise status_label()" do
     tests = {
       'draft'          => 'draft',
@@ -526,7 +462,7 @@ describe Hydrus::GenericObject do
   it "can exercise Hydrus::GenericObject.status_labels()" do
     tests = [:collection, :item]
     tests.each do |k|
-      Hydrus::GenericObject.status_labels(k).should be_instance_of Hash
+      Hydrus.status_labels(k).should be_instance_of Hash
     end
   end
 
@@ -563,34 +499,6 @@ describe Hydrus::GenericObject do
       @go.beautify_datastream(:descMetadata)
     end
 
-  end
-
-  it "related_item_url=() and related_item_title=()" do
-    # Initial state.
-    @go.related_item_title.should == ['']
-    @go.related_item_url.should == ['']
-    # Assign a single value.
-    @go.related_item_title = 'Z'
-    @go.related_item_url = 'foo'
-    @go.related_item_title.should == ['Z']
-    @go.related_item_url.should == ['http://foo']
-    # Add two mode nodes.
-    @go.descMetadata.insert_related_item
-    @go.descMetadata.insert_related_item
-    # Set using hashes.
-    @go.related_item_title = {'0' => 'A', '1' => 'B', '2' => 'C'}
-    @go.related_item_url   = {'0' => 'boo', '1' => 'bar', '2' => 'ftp://quux'}
-    @go.related_item_title.should == %w(A B C)
-    @go.related_item_url.should == ['http://boo', 'http://bar', 'ftp://quux']
-    # Also confirm that each title and URL is put in its own relatedItem node.
-    # We had bugs causing them to be put all in the first node.
-    ri_nodes = @go.descMetadata.find_by_terms(:relatedItem)
-    ri_nodes.size.should == 3
-    ri_nodes.each do |nd|
-      nd = Nokogiri::XML(nd.to_s, &:noblanks)  # Generic XML w/o namespaces.
-      nd.xpath('//title').size.should == 1
-      nd.xpath('//url').size.should == 1
-    end
   end
 
   it "with_protocol()" do

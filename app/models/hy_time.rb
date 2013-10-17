@@ -107,7 +107,7 @@ module HyTime
   end
 
   # Takes a string. Returns true if it can be parsed as a datetime.
-  def self.is_well_formed_datetime(val)
+  def self.is_well_formed_datetime?(val)
     return false unless val.class == String
     begin
       return false if val.to_datetime.nil?

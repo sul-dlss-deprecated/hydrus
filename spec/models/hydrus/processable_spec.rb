@@ -33,13 +33,13 @@ describe Hydrus::Processable do
   describe "start_common_assembly()" do
 
     it "should raise exception if the object is not assemblable" do
-      @go.stub(:is_assemblable).and_return(false)
+      @go.stub(:is_assemblable?).and_return(false)
       expect { @go.start_common_assembly }.to raise_exception(@cannot_do_regex)
     end
 
     it "can exercise the method for an item, calling the right methods, stubbed" do
-      @go.stub(:is_assemblable).and_return(true)
-      @go.stub(:is_item?).and_return(true)
+      @go.stub(:is_assemblable?).and_return(true)
+      @go.stub(:is_a?).with(Hydrus::Contentable).and_return(true)
       @go.should_receive(:delete_missing_files).once
       @go.should_receive(:create_druid_tree).once
       @go.should_receive(:update_content_metadata).once
@@ -48,8 +48,17 @@ describe Hydrus::Processable do
       @go.start_common_assembly
     end
 
+    it "can exercise the method for an item, calling the right methods, stubbed" do
+      @go.stub(:is_assemblable?).and_return(true)
+      @go.stub(:is_a?).with(Hydrus::Contentable).and_return(false)
+      @go.should_receive(:create_druid_tree).once
+      @go.should_receive(:complete_workflow_step).once
+      @go.should_receive(:start_assembly_wf).once
+      @go.start_common_assembly
+    end
+
     it "can exercise the method for a non-item, only calling the right methods, stubbed" do
-      @go.stub(:is_assemblable).and_return(true)
+      @go.stub(:is_assemblable?).and_return(true)
       @go.stub(:is_item?).and_return(false)
       @go.should_not_receive(:delete_missing_files)
       @go.should_receive(:create_druid_tree).once
@@ -64,13 +73,13 @@ describe Hydrus::Processable do
   describe "start_assembly_wf()" do
 
     it "should do nothing if the app is not configured to start assemblyWF" do
-      @go.stub(:should_start_assembly_wf).and_return(false)
+      @go.stub(:should_start_assembly_wf?).and_return(false)
       Dor::WorkflowService.should_not_receive(:create_workflow)
       @go.start_assembly_wf
     end
 
-    it "can exercise should_start_assembly_wf()" do
-      @go.should_start_assembly_wf.should == Dor::Config.hydrus.start_assembly_wf
+    it "can exercise should_start_assembly_wf?()" do
+      @go.should_start_assembly_wf?.should == Dor::Config.hydrus.start_assembly_wf
     end
 
   end
@@ -81,13 +90,13 @@ describe Hydrus::Processable do
       # At each stage, we set a stub, call is_accessioned(), and then reverse the stub.
       wfs = Dor::WorkflowService
       # Not published: false.
-      @go.stub(:is_published).and_return(false)
+      @go.stub(:is_published?).and_return(false)
       @go.is_accessioned.should == false
-      @go.stub(:is_published).and_return(true)
+      @go.stub(:is_published?).and_return(true)
       # Running in development or test mode: true.
-      @go.stub(:should_treat_as_accessioned).and_return(true)
+      @go.stub(:should_treat_as_accessioned?).and_return(true)
       @go.is_accessioned.should == true
-      @go.stub(:should_treat_as_accessioned).and_return(false)
+      @go.stub(:should_treat_as_accessioned?).and_return(false)
       # Never accessioned: false.
       wfs.stub(:get_lifecycle).and_return(false)
       @go.is_accessioned.should == false
@@ -112,7 +121,7 @@ describe Hydrus::Processable do
     end
 
     it "production mode: query workflow service" do
-      @go.stub(:should_treat_as_accessioned).and_return(false)
+      @go.stub(:should_treat_as_accessioned?).and_return(false)
       exp = "2000-02-01T00:30:00Z"
       Dor::WorkflowService.stub(:get_lifecycle).and_return(exp)
       @go.publish_time.should == exp
@@ -120,8 +129,8 @@ describe Hydrus::Processable do
 
   end
 
-  it "should_treat_as_accessioned(): can exercise" do
-    @go.should_treat_as_accessioned.should == true
+  it "should_treat_as_accessioned?(): can exercise" do
+    @go.should_treat_as_accessioned?.should == true
   end
 
 end

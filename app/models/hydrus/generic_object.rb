@@ -5,7 +5,7 @@ class Hydrus::GenericObject < Dor::Item
   attr_accessor :files_were_changed
 
   validates :pid, :is_druid => true
-  validate :check_contact_email_format, :if => :should_validate
+  validate :check_contact_email_format, :if => :should_validate?
 
   # We are using the validates_email_format_of gem to check email addresses.
   # Normally, you can use this tool with a simple validates() call:
@@ -19,23 +19,6 @@ class Hydrus::GenericObject < Dor::Item
     problems = ValidatesEmailFormatOf::validate_email_format(contact)
     return if problems.nil?
     errors.add(:contact, "is not a valid email address")
-  end
-
-  def is_item?
-    self.class == Hydrus::Item
-  end
-
-  def is_collection?
-    self.class == Hydrus::Collection
-  end
-
-  def is_apo?
-    false
-  end
-
-  # the pid without the druid: prefix
-  def dru
-    pid.gsub('druid:','')
   end
 
   # Notes:
@@ -72,16 +55,12 @@ class Hydrus::GenericObject < Dor::Item
     return nd.to_xml
   end
 
-  def get_fedora_item(pid)
-    return ActiveFedora::Base.find(pid, :cast => true)
-  end
-
   def discover_access
     return rightsMetadata.discover_access.first
   end
 
   def purl_url
-   "#{Dor::Config.purl.base_url}#{dru}"
+   "#{Dor::Config.purl.base_url}#{pid.gsub('druid:','')}"
   end
 
   # Takes an item_type: :dataset, etc. for items, or just :collection for collections.
@@ -106,14 +85,10 @@ class Hydrus::GenericObject < Dor::Item
         descMetadata.genre="dataset"
       when 'thesis'
         descMetadata.typeOfResource="text"
-        descMetadata.insert_genre
-        descMetadata.genre="thesis"
-        #this is messy but I couldnt get OM to do what I needed it to
-        set_genre_authority_to_marc descMetadata
+        descMetadata.marc_genre="thesis"
       when 'article'
         descMetadata.typeOfResource="text"
-        descMetadata.genre="article"
-        set_genre_authority_to_marc descMetadata
+        descMetadata.marc_genre="article"
       when 'class project'
         descMetadata.typeOfResource="text"
         descMetadata.genre="student project report"
@@ -122,24 +97,19 @@ class Hydrus::GenericObject < Dor::Item
         descMetadata.genre="game"
       when 'audio - music'
         descMetadata.typeOfResource="sound recording-musical"
-        descMetadata.genre="sound"
-        set_genre_authority_to_marc descMetadata
+        descMetadata.marc_genre="sound"
       when 'audio - spoken'
         descMetadata.typeOfResource="sound recording-nonmusical"
-        descMetadata.genre="sound"
-        set_genre_authority_to_marc descMetadata
+        descMetadata.marc_genre="sound"
       when 'video'
         descMetadata.typeOfResource="moving image"
-        descMetadata.genre="motion picture"
-        set_genre_authority_to_marc descMetadata
+        descMetadata.marc_genre="motion picture"
       when 'conference paper / presentation'
         descMetadata.typeOfResource="text"
-        descMetadata.genre="conference publication"
-        set_genre_authority_to_marc descMetadata
+        descMetadata.marc_genre="conference publication"
       when 'technical report'
         descMetadata.typeOfResource="text"
-        descMetadata.genre="technical report"
-        set_genre_authority_to_marc descMetadata
+        descMetadata.marc_genre="technical report"
       
       else
         descMetadata.typeOfResource=typ.to_s
@@ -147,149 +117,24 @@ class Hydrus::GenericObject < Dor::Item
       descMetadata.content_will_change!
     end
   end
-  def set_genre_authority_to_marc  descMetadata
-    descMetadata.ng_xml.search('//mods:genre', 'mods' => 'http://www.loc.gov/mods/v3').first['authority'] = 'marcgt'
-  end
-  
-  # the possible types of items that can be created, hash of display value (keys) and values to store in object (value)
-  def self.item_types
-    {
-      "article"       => "article",
-      "audio - music" => "audio - music",   
-      "audio - spoken" => "audio - spoken",   
-      "class project" => "class project",
-      "computer game" => "computer game",
-      "conference paper / presentation" => "conference paper / presentation",  
-      "data set"      => "dataset",
-      "other"         => "other",      
-      "thesis"        => "thesis",
-      "technical report" => "technical report",
-      "video" => "video"    
-    }
-  end
-  
-  # Returns a data structure intended to be passed into
-  # grouped_options_for_select(). This is an awkward approach (too
-  # view-centric), leading to some minor data duplication in other
-  # license-related methods, along with some overly complex lookup methods.
-  def self.license_groups
-    [
-      ['None',  [
-        ['No license', 'none'],
-      ]],
-      ['Creative Commons Licenses',  [
-        ['CC BY Attribution'                                 , 'cc-by'],
-        ['CC BY-SA Attribution Share Alike'                  , 'cc-by-sa'],
-        ['CC BY-ND Attribution-NoDerivs'                     , 'cc-by-nd'],
-        ['CC BY-NC Attribution-NonCommercial'                , 'cc-by-nc'],
-        ['CC BY-NC-SA Attribution-NonCommercial-ShareAlike'  , 'cc-by-nc-sa'],
-        ['CC BY-NC-ND Attribution-NonCommercial-NoDerivs'    , 'cc-by-nc-nd'],
-      ]],
-      ['Open Data Commons Licenses',  [
-        ['PDDL Public Domain Dedication and License'         , 'pddl'],
-        ['ODC-By Attribution License'                        , 'odc-by'],
-        ['ODC-ODbl Open Database License'                    , 'odc-odbl'],
-      ]],
-    ]
-  end
-
-  # Should consolidate with info in license_groups().
-  def self.license_commons
-    return {
-      'Creative Commons Licenses'  => "creativeCommons",
-      'Open Data Commons Licenses' => "openDataCommons",
-    }
-  end
-
-  # Should consolidate with info in license_groups().
-  def self.license_group_urls
-    return {
-      "creativeCommons" => 'http://creativecommons.org/licenses/',
-      "openDataCommons" => 'http://opendatacommons.org/licenses/',
-    }
-  end
-
-  # Takes a license code: cc-by, pddl, none, ...
-  # Returns the corresponding text description of that license.
-  def self.license_human(code)
-    code = 'none' if code.blank?
-    lic = license_groups.map(&:last).flatten(1).find { |txt, c| c == code }
-    return lic ? lic.first : "Unknown license"
-  end
-
-  # Takes a license code: cc-by, pddl, none, ...
-  # Returns the corresponding license group code: eg, creativeCommons.
-  def self.license_group_code(code)
-    hgo = Hydrus::GenericObject
-    hgo.license_groups.each do |grp, licenses|
-      licenses.each do |txt, c|
-        return hgo.license_commons[grp] if c == code
-      end
-    end
-    return nil
-  end
-
-  # Takes a symbol (:collection or :item).
-  # Returns a hash of two hash, each having object_status as its
-  # keys and human readable labels as values.
-  def self.status_labels(typ, status = nil)
-    h = {
-      :collection => {
-        'draft'             => "draft",
-        'published_open'    => "published",
-        'published_closed'  => "published",
-      },
-      :item       => {
-        'draft'             => "draft",
-        'awaiting_approval' => "waiting for approval",
-        'returned'          => "item returned",
-        'published'         => "published",
-      },
-    }
-    return status ? h[typ] : h[typ]
-  end
-
-  # Takes an object_status value.
-  # Returns its corresponding label.
-  def self.status_label(typ, status)
-    return status_labels(typ)[status]
-  end
 
   # Returns a human readable label corresponding to the object's status.
   def status_label
-    h1 = Hydrus::GenericObject.status_labels(:collection)
-    h2 = Hydrus::GenericObject.status_labels(:item)
+    h1 = Hydrus.status_labels(:collection)
+    h2 = Hydrus.status_labels(:item)
     return h1.merge(h2)[object_status]
   end
 
-  def self.stanford_terms_of_use
-    return '
-      User agrees that, where applicable, content will not be used to identify
-      or to otherwise infringe the privacy or confidentiality rights of
-      individuals.  Content distributed via the Stanford Digital Repository may
-      be subject to additional license and use restrictions applied by the
-      depositor.
-    '.squish
-  end
-
   # Registers an object in Dor, and returns it.
-  def self.register_dor_object(*args)
-    params = self.dor_registration_params(*args)
-    return Dor::RegistrationService.register_object(params)
-  end
-
-  # Returns a hash of info needed to register a Dor object.
-  def self.dor_registration_params(user_string, obj_typ, apo_pid)
-    proj = 'Hydrus'
-    tm   = HyTime.now_datetime_full
-    return {
-      :object_type       => obj_typ,
-      :admin_policy      => apo_pid,
-      :source_id         => { proj => "#{obj_typ}-#{user_string}-#{tm}" },
-      :label             => proj,
-      :tags              => ["Project : #{proj}"],
-      :initiate_workflow => [Dor::Config.hydrus.app_workflow],
-    }
+  def self.register_dor_object(registration_params = {})
+    unless [:object_type, :user, :admin_policy].all? { |k| registration_params.has_key? k }
+      raise ArgumentError.new "register_dor_object requires :object_type, :admin_policy, :user parameters"
+    end
+    return Dor::RegistrationService.register_object({
+      :source_id         => { "Hydrus" => "#{registration_params[:object_type]}-#{registration_params[:user]}-#{HyTime.now_datetime_full}" },
+      :label             => "Hydrus",
+      :tags              => ["Project : Hydrus"],
+      :initiate_workflow => [Dor::Config.hydrus.app_workflow]}.merge(registration_params))
   end
 
   def recipients_for_object_returned_email

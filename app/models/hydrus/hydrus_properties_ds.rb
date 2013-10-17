@@ -1,4 +1,4 @@
-class Hydrus::HydrusPropertiesDS < ActiveFedora::NokogiriDatastream
+class Hydrus::HydrusPropertiesDS < ActiveFedora::OmDatastream
 
   include Hydrus::GenericDS
   include SolrDocHelper
@@ -17,7 +17,7 @@ class Hydrus::HydrusPropertiesDS < ActiveFedora::NokogiriDatastream
     t.requires_human_approval   :path => 'requiresHumanApproval'
     t.reviewed_release_settings :path => 'reviewedReleaseSettings'
     t.item_type                 :path => 'itemType'
-    t.object_status             :path => 'objectStatus', :index_as => [:facetable, :searchable]
+    t.object_status             :path => 'objectStatus', :index_as => [:facetable, :searchable, :displayable]
     t.disapproval_reason        :path => 'disapprovalReason'
     t.submit_for_approval_time  :path => 'submitForApprovalTime'
     t.last_modify_time          :path => 'lastModifyTime'
@@ -31,14 +31,14 @@ class Hydrus::HydrusPropertiesDS < ActiveFedora::NokogiriDatastream
 
     # When Hydrus objects are created, the version of the application
     # is stored here. Later, Hydrus remediation scripts can update this value.
-    t.object_version            :path => 'objectVersion', :index_as => [:searchable]
+    t.object_version            :path => 'objectVersion', :index_as => [:symbol, :searchable, :displayable]
 
     # Two variants of publish time:
     #   - The time the user clicks Open/Approve/Publish in UI.
     #       - Stored in hydrusProperties.
     #           submitted_for_publish_time
     #           initial_submitted_for_publish_time
-    #       - Aligns conceptually with the is_published() method.
+    #       - Aligns conceptually with the is_published?() method.
     #   - The time the object achieves published lifecycle in accessioning.
     #       - Stored in hydrusProperties, when 2nd version is opened.
     #           initial_publish_time

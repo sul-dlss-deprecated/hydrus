@@ -152,13 +152,13 @@
         <div data-behavior="radio-disable-group" class="embargo-section">
           <%= radio_button_tag 'hydrus_item[embarg_visib][embargoed]',
                                "no",
-                               !@fobj.is_embargoed, 
+                               !@fobj.is_embargoed?, 
                                :"data-control-element" => "#hydrus_item_embarg_visib_date",
                                :"data-control-disable" => "true" %> 
           <%= f.label :embargo_immediate, "immediately" %>
           <%= radio_button_tag 'hydrus_item[embarg_visib][embargoed]',
                                "yes",
-                               @fobj.is_embargoed,
+                               @fobj.is_embargoed?,
                                :"data-control-element" => "#hydrus_item_embarg_visib_date", 
                                :"data-control-disable" => "false" %>
           <%= f.label :embargo_future, "on this date" %>
@@ -171,7 +171,7 @@
                 :"data-end-date"    => HyTime.date_display(@fobj.end_of_embargo_range),
                 :class              => "datepicker") %>
         </div>
-      <% elsif @fobj.is_embargoed %>
+      <% elsif @fobj.is_embargoed? %>
         This item will be released for discovery and download
         <span class="highlight-value">
           <%= HyTime.datetime_display(@fobj.embargo_date) + '.' %>
@@ -192,7 +192,7 @@
       <% if @fobj.visibility_can_be_changed %>
         <%= select_tag(
               'hydrus_item[embarg_visib][visibility]',
-              options_for_select(Hydrus::Item.discovery_roles.to_a, @fobj.visibility)) %>
+              options_for_select(Hydrus.discovery_roles.to_a, @fobj.visibility)) %>
       <% else %>
         <span class="highlight-value">
           <%= @fobj.visibility == ['world'] ? 'anyone.' : 'the Stanford community.'%>
@@ -257,12 +257,12 @@
       <% if @fobj.licenses_can_vary %>
         This item will be licensed under
         <%= f.select :license,
-                     grouped_options_for_select(Hydrus::GenericObject.license_groups, @fobj.license), 
+                     grouped_options_for_select(Hydrus.license_groups, @fobj.license), 
                      {:prompt => 'Select license'}, 
                      {:class => 'inline-select right' } %>
       <% else %>
         <span class="highlight-value">
-          <% lic = Hydrus::GenericObject.license_human(@fobj.license) %>
+          <% lic = Hydrus.license_human(@fobj.license) %>
           <%= hydrus_object_setting_value(lic) %>
         </span>
       <% end %>
@@ -271,7 +271,7 @@
 
   <!-- Version information -->
 
-  <% unless @fobj.is_initial_version %>
+  <% unless @fobj.is_initial_version? %>
 
     <%= hydrus_form_header(:required => true) {"Information about new version"} %>
 

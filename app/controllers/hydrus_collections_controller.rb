@@ -23,8 +23,8 @@ class HydrusCollectionsController < ApplicationController
 
   def destroy
     authorize! :edit, @fobj
-    if @fobj.is_destroyable
-       @fobj.delete
+    if @fobj.is_destroyable?
+       @fobj.destroy
        flash[:notice]="The collection was deleted."
     else
       flash[:error]="You do not have permissions to delete this collection."
@@ -34,7 +34,7 @@ class HydrusCollectionsController < ApplicationController
 
   def discard_confirmation
     authorize! :edit, @fobj
-    if @fobj.is_destroyable
+    if @fobj.is_destroyable?
       @id=params[:id]
       render 'shared/discard_confirmation'
     else
@@ -90,7 +90,7 @@ class HydrusCollectionsController < ApplicationController
       return
     end
 
-    if params['should_send_role_change_emails']=="true" && @fobj.changed_fields.include?(:roles) # if roles have changed as the result of an update, send the appropriate emails    
+    if params['should_send_role_change_emails']=="true" && @fobj.previous_changes.has_key?('roles') # if roles have changed as the result of an update, send the appropriate emails
       @fobj.send_all_role_change_emails 
     end
 

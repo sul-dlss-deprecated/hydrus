@@ -4,7 +4,7 @@ module Hydrus::Contentable
 
   # Check to see if all of the files that are referenced in the database actually exist on the file system
   def files_missing?
-    files.map{|f| f.missing?}.include?(true)
+    files.any? { |f| f.missing? }
   end
   
   # remove any files deemed missing from the database; return the number deleted
@@ -18,16 +18,11 @@ module Hydrus::Contentable
     end
     return files_missing
   end
-    
-  # create a DRUID tree folder for the project, providing its a valid druid (needed to some unit tests that don't use valid druids will work)  
-  def create_druid_tree
-    FileUtils.mkdir_p(metadata_directory) if DruidTools::Druid.valid?(pid)
-  end
   
   # Generates the object's contentMetadata XML, stores the XML in the
   # object's datastreams, and writes the XML to a file.
   def update_content_metadata
-    return unless is_item?
+    return if pid.nil?
     # Set the object's contentMetadata.
     xml = create_content_metadata_xml()
     datastreams['contentMetadata'].content = xml
@@ -40,17 +35,16 @@ module Hydrus::Contentable
 
   # Generates and returns a string of contentMetadata XML for the object.
   def create_content_metadata_xml 
-    return "" unless is_item? # only need contentMetadata for item types
     conf = Hydrus::Application.config
     objects = []
-    if is_item?
-      files.each { |f|
-        aof = Assembly::ObjectFile.new(f.current_path)
-        aof.label = f.label
-        aof.file_attributes = conf.cm_file_attributes_hidden if f.hide
-        objects << aof
-      }
-    end
+
+    files.each { |f|
+      aof = Assembly::ObjectFile.new(f.current_path)
+      aof.label = f.label
+      aof.file_attributes = conf.cm_file_attributes_hidden if f.hide
+      objects << aof
+    }
+
     return Assembly::ContentMetadata.create_content_metadata(
       :druid               => pid,
       :objects             => objects,
@@ -66,16 +60,15 @@ module Hydrus::Contentable
   end
 
   def base_file_directory
-    f = File.join(Rails.root, "public", Hydrus::Application.config.file_upload_path)
-    DruidTools::Druid.new(pid, f).path
+    druid_tree.path
   end
 
   def content_directory
-    File.join(base_file_directory, "content")
+    druid_tree.content_dir
   end
 
   def metadata_directory
-    File.join(base_file_directory, "metadata")
+    druid_tree.metadata_dir
   end
 
 end

@@ -4,7 +4,7 @@
       <% # header bar for doc items in index view -%>
       <div class="documentHeader clearfix">
         <h5>
-        <%= link_to document.to_model.title, document.to_model %>
+        <%= link_to document.main_title, document.to_model %>
         </h5>
 
       </div>
@@ -13,11 +13,11 @@
       <%= render_document_partial document, :thumbnail %>
   <dl>
   <dt>Object Type</dt>
-  <dd><%= document.object_type.capitalize %> / <%= document.first('hydrusProperties_item_type_t').to_s.capitalize %></dd>
+  <dd><%= document.object_type.capitalize %> / <%= document.first(Solrizer.solr_name('item_type', :displayable)).to_s.capitalize %></dd>
   <dt>Depositor</dt>
   <dd><%= document.depositor %></dd>
   <dt>Collection</dt>
-  <dd><%= link_to document.first('collection_title_t'), hydrus_collection_path((document.first('is_member_of_collection_s') || '').gsub('info:fedora/', '')) %></dd>
+  <dd><%= link_to document.collection_title, hydrus_collection_path(document.collection_id) %></dd>
   <dt>Object Status</dt>
   <dd><%= document.object_status.capitalize %></dd>
   </dl>

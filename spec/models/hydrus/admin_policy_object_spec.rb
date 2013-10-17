@@ -9,19 +9,19 @@ describe Hydrus::AdminPolicyObject do
   describe "class methods" do
 
     it "should define a license_types hash" do
-      Hydrus::AdminPolicyObject.license_types.should be_a Hash
+      Hydrus.license_types.should be_a Hash
     end
 
     it "should define an embargo_types hash " do
-      Hydrus::AdminPolicyObject.embargo_types.should be_a Hash
+      Hydrus.embargo_types.should be_a Hash
     end
 
     it "should define a visibility_typs hash" do
-      Hydrus::AdminPolicyObject.visibility_types.should be_a Hash
+      Hydrus.visibility_types.should be_a Hash
     end
 
     it "should define an embargo_terms hash" do
-      Hydrus::AdminPolicyObject.embargo_terms.should be_a Hash
+      Hydrus.embargo_terms.should be_a Hash
     end
 
   end

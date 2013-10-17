@@ -216,7 +216,7 @@ def check_emb_vis_lic(obj, opts)
   # An object's embargo status affects both the embargoMetadata
   # and rightsMetadata, as summarized here:
   #
-  # is_embargoed = true
+  # is_embargoed? = true
   #   embargoMetadata
   #     releaseAccess read node should = world|stanford
   #     status = embargoed
@@ -225,7 +225,7 @@ def check_emb_vis_lic(obj, opts)
   #     read access = NONE
   #     embargoReleaseDate = DATETIME
   #
-  # is_embargoed = false
+  # is_embargoed? = false
   #   embargoMetadata
   #     datastream should be empty
   #   rightsMetadata
@@ -237,9 +237,9 @@ def check_emb_vis_lic(obj, opts)
   rd     = '//access[@type="read"]/machine'
   rm     = obj.rightsMetadata
   em     = obj.embargoMetadata
-  is_emb = (obj.class == Hydrus::Item and obj.is_embargoed)
+  is_emb = (obj.class == Hydrus::Item and obj.is_embargoed?)
 
-  # Consistency between is_embargoed() and testing expectations.
+  # Consistency between is_embargoed?() and testing expectations.
   opts[:embargo_date].blank?.should == not(is_emb)
 
   # All objects should be world discoverable.

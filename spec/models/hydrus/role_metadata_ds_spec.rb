@@ -107,27 +107,6 @@ describe Hydrus::RoleMetadataDS do
 
   end
 
-  it "toggle_hyphen_underscore() should work correctly" do
-    rmdoc = Hydrus::RoleMetadataDS.from_xml('')
-    tests = {
-      # Should change.
-      'hydrus-item-foo'       => 'hydrus_item_foo',
-      'hydrus_item_foo'       => 'hydrus-item-foo',
-      'hydrus-collection-foo' => 'hydrus_collection_foo',
-      'hydrus_collection_foo' => 'hydrus-collection-foo',
-      'hydrus_collection_Foo' => 'hydrus-collection-Foo',
-      # No changes.
-      'item-'                 => 'item-',
-      'hydrus-item-'          => 'hydrus-item-',
-      'xcollection_foo'       => 'xcollection_foo',
-      'blah'                  => 'blah',
-      ''                      => '',
-    }
-    tests.each do |input, exp|
-      rmdoc.toggle_hyphen_underscore(input).should == exp
-    end
-  end
-
   context "inserting nodes" do
 
     before(:all) do

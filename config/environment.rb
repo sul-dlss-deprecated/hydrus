@@ -4,9 +4,6 @@ require File.expand_path('../application', __FILE__)
 current_path=File.dirname(__FILE__)
 no_solr_cert=(%w{development dortest test prod_w_local_dor}.include?(Rails.env))
 
-# Override make_solr_connection() so that we don't need certs in dev and test.
-require File.expand_path(File.join(current_path, 'rsolr_no_certificate')) if no_solr_cert
-
 Hydrus::Application.configure do
 
   # this is the path from the root of the public folder into which file uploads will be stored
@@ -20,6 +17,8 @@ Hydrus::Application.configure do
 
   # style of content metadata to generate
   config.cm_style = :file
+
+  config.default_apo_agreement = nil
 
 end
 
@@ -94,7 +93,5 @@ Encoding.default_internal = Encoding::UTF_8
 
 # Initialize the rails application
 Hydrus::Application.initialize!
-
-require File.expand_path(File.join(current_path, 'rsolr_certificate')) unless no_solr_cert
 
 require 'hydrus'

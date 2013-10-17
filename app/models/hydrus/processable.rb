@@ -43,12 +43,17 @@ module Hydrus::Processable
   # Generates the object's contentMetadata, finalizes the hydrusAssemblyWF
   # workflow, and then kicks off the assembly and accessioning pipeline.
   def start_common_assembly
-    cannot_do(:start_common_assembly) unless is_assemblable()
-    delete_missing_files if is_item?
+    cannot_do(:start_common_assembly) unless is_assemblable?
+    delete_missing_files if self.is_a? Hydrus::Contentable
     create_druid_tree
-    update_content_metadata if is_item?
+    update_content_metadata if self.is_a? Hydrus::Contentable
     complete_workflow_step('start-assembly')
     start_assembly_wf
+  end
+
+  # create a DRUID tree folder for the project, providing its a valid druid (needed to some unit tests that don't use valid druids will work)  
+  def create_druid_tree
+    druid_tree.metadata_dir(true) if DruidTools::Druid.valid?(pid)
   end
 
   # Kicks off a Hydrus-specific variant of assemblyWF -- one that skips
@@ -56,14 +61,14 @@ module Hydrus::Processable
   # configured to be a no-op during local development and the running of
   # automated tests.
   def start_assembly_wf
-    return unless should_start_assembly_wf
+    return unless should_start_assembly_wf?
     xml = Dor::Config.hydrus.assembly_wf_xml
     WFS.create_workflow(REPO, pid, 'assemblyWF', xml)
   end
 
   # Returns value of Dor::Config.hydrus.start_assembly_wf.
   # Wrapped in method to simplify testing stubs.
-  def should_start_assembly_wf
+  def should_start_assembly_wf?
     return Dor::Config.hydrus.start_assembly_wf
   end
 
@@ -73,8 +78,8 @@ module Hydrus::Processable
     #   - Must be published before it can be accessioned.
     #   - For local development and automated testing, treat published as
     #     equivalent to accessioned.
-    return false unless is_published
-    return true if should_treat_as_accessioned
+    return false unless is_published?
+    return true if should_treat_as_accessioned?
 
     # During the assembly-accessioning process, an object is assembled, then
     # the object is accessioned, and finally (during a nightly cron job) the
@@ -105,7 +110,7 @@ module Hydrus::Processable
   # Returns a string -- the datetime when the object achived the published
   # lifecycle in common accessioning.
   def publish_time
-    if should_treat_as_accessioned
+    if should_treat_as_accessioned?
       # In development and test mode, simulated a publish_time of 1 day later.
       pt = submitted_for_publish_time.to_datetime + 1.day
     else
@@ -115,7 +120,7 @@ module Hydrus::Processable
   end
 
   # Returns true if we are running in development or test mode.
-  def should_treat_as_accessioned
+  def should_treat_as_accessioned?
     return %w(development test).include?(Rails.env)
   end
 
