@@ -1,24 +1,19 @@
 <%- @page_title = application_name -%>
 
 <div class="row">
-  <div class="span6" id="home_text">
-    <%= render :partial=>'home_text' %>
-  </div>
-
   <%- if current_user %>
-    <div class="span6">
-      <%= render :partial=>'search_form' %>
+    <div class="span12" id="dashboard">
+      <%= render :partial=>'home_dashboard' %>
     </div>
-  <%- end %>
+  <%- else -%>
+    <div class="span7" id="home_text">
+      <%= render :partial=>'home_text' %>
+    </div>
+    <div class="span4 offset1 promotion">
+      <%= render :partial=>'home_promotion_links' %>
+    </div>
+  <%- end -%>
 </div>
 
-<%- if current_user %>
-  <div class="row">
-    <div class="span12" id="dashboard"><%= render :partial=>'home_dashboard' %></div>
-  </div>
-<%- else -%>
-  <p>
-    <%= hydrus_signin_link %>
-    to view your collections.
-  </p>
-<%- end -%>
+<%# removed search box pending decision about if and how we will enable searching %>
+<%#= render :partial=>'search_form' %>

@@ -1,13 +1,11 @@
 <div class="user-collections">
-
   <%- if @collections.blank? -%>
-    <h3>No active collections</h3>
-    <br/>
-
+    <h3>You have no active collections</h3>
   <%- else -%>
     <h3>Your Active Collections (<%=@collections.size%>)</h3>
- 	   <%= render :partial=>'collection_dashboard',:locals=>{:collections=>@collections,:show_roles=>true}%>
-	<% end %>
+     <%= render :partial=>'collection_dashboard',
+        :locals=>{:collections=>@collections,:show_roles=>true}%>
+  <% end %>
 </div>
 
 <div id="new-collections">
@@ -17,12 +15,12 @@
             "Create a new collection",
             new_polymorphic_path(Hydrus::Collection),
             :class => 'btn',
-						:disable_with=>'Please wait...',
+            :disable_with=>'Please wait...',
             :disable_after_click=>'true')  %>
     <% end %>
   </form>
 </div>
 
 <% if Hydrus::Authorizable.can_act_as_administrator(current_user) %>
-	<%= render :partial=>'admin_info' %>
+  <%= render :partial=>'admin_info' %>
 <% end %>

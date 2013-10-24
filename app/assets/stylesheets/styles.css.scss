@@ -360,7 +360,7 @@ noscript #item-actions, noscript #collection-actions {
 }
 
 #catalog-home .user-collections {
-	h3 {margin-top: 24px;}
+	h3 {margin-top: 6px;}
 	table {border-bottom: 1px solid #ddd;}
 	// .btn-primary {@include primary-button;}
 }
@@ -501,6 +501,125 @@ ul.breadcrumb {
 	a:hover {border-bottom: 1px dotted #84785A}
 	.divider {color: #CCC;}
 }
+
+.promotion .hero-unit {
+  border: 1px solid #ccc;
+  margin-top: 15px;
+  padding: 9px 12px;
+  text-align: center;
+  @media (min-width: 768px) {
+    margin-left: 30px;
+    max-width: 220px;
+  }
+  h3 {
+    color: #8d452d;
+    font-size: 14px;
+    line-height: 22px;
+  }
+  p {
+    font-size: 13px;
+    line-height: 16px;
+    margin-bottom: 0;
+    margin-top: 4px;
+  }
+  a, a:visited {
+   color: #8d452d;
+  }
+}
+
+.sdr-deposit {
+  margin: 15px 0 30px;
+  width: 460px;
+}
+
+.info-prefix {
+  color: #999;
+  font-size: 18px;
+}
+
+.sdr-content-types {
+  a, a:visited {
+   color: #8d452d;
+   font-weight: bold;
+  }
+}
+
+/* panel styles below will be unnecessary if we ever upgrade to Bootstrap V.3 */
+.panel {
+  margin-bottom: 20px;
+  background-color: #ffffff;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+          box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+}
+
+.panel-body {
+  padding: 15px;
+}
+
+.panel-body:before,
+.panel-body:after {
+  display: table;
+  content: " ";
+}
+
+.panel-body:after {
+  clear: both;
+}
+
+.panel-heading {
+  padding: 10px 15px;
+  border-bottom: 1px solid transparent;
+  border-top-right-radius: 3px;
+  border-top-left-radius: 3px;
+}
+
+.panel-title {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-size: 16px;
+}
+
+.panel-default {
+  border-color: #dddddd;
+  > .panel-heading {
+    color: #333333;
+    background-color: #f5f5f5;
+    border-color: #dddddd;
+  }
+}
+/* end default panel styles */
+
+.panel-home { // overriding defaul panel styling
+  margin-top: 30px;
+  > .panel-heading {
+    padding: 6px 12px;
+  }
+  .panel-title {
+    font-size: 14px;
+  }
+  .panel-body {
+    padding: 15px 15px 6px;
+    ul {
+      list-style: none;
+      margin-left: 0;
+      padding-left: 1em;
+      text-indent: -1em;
+      li {
+        margin-bottom: 3px;
+      }
+    }
+  }
+}
+
+/* dashboard */
+#dashboard {
+  .btn {
+    margin-top: 6px;
+  }
+}
+
 
 /* navigation */
 
