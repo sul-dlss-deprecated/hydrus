@@ -513,7 +513,7 @@ describe("Item edit", :type => :request, :integration => true) do
       later    = today + 10.days
       later_dt = HyTime.datetime(later, :from_localzone => true)
       later_d  = HyTime.date(later, :from_localzone => true)
-      @hi.submitted_for_publish_time = HyTime.datetime(today, :from_localzone => true)
+      @hi.initial_submitted_for_publish_time = HyTime.datetime(today, :from_localzone => true)
       @hi.save
 
       # Check embargoMD and rightsMD: initial.
