@@ -162,8 +162,8 @@ class Hydrus::GenericObject < Dor::Item
       "conference paper / presentation" => "conference paper / presentation",  
       "data set"      => "dataset",
       "other"         => "other",      
-      "thesis"        => "thesis",
       "technical report" => "technical report",
+      "thesis"        => "thesis",
       "video" => "video"    
     }
   end
