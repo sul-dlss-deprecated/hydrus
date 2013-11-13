@@ -140,7 +140,17 @@ class Hydrus::GenericObject < Dor::Item
         descMetadata.typeOfResource="text"
         descMetadata.genre="technical report"
         set_genre_authority_to_marc descMetadata
-      
+      when 'archival mixed material'
+        descMetadata.typeOfResource="mixed material"
+        set_type_of_resource_collection descMetadata
+      when 'image'
+        descMetadata.typeOfResource="still image"
+      when 'software'
+        descMetadata.typeOfResource="software, multimedia"
+      when 'textbook'
+        descMetadata.typeOfResource="text"
+        descMetadata.genre="instruction"
+        set_genre_authority_to_marc descMetadata
       else
         descMetadata.typeOfResource=typ.to_s
       end
@@ -150,10 +160,24 @@ class Hydrus::GenericObject < Dor::Item
   def set_genre_authority_to_marc  descMetadata
     descMetadata.ng_xml.search('//mods:genre', 'mods' => 'http://www.loc.gov/mods/v3').first['authority'] = 'marcgt'
   end
+  def remove_genre_authority descMetadata
+    node = descMetadata.ng_xml.search('//mods:genre', 'mods' => 'http://www.loc.gov/mods/v3').first
+    node.remove_attribute('authority') if node
+  end
+  
+  def set_type_of_resource_collection(descMetadata)
+    descMetadata.ng_xml.search('//mods:typeOfResource', 'mods' => 'http://www.loc.gov/mods/v3').first['manuscript'] = 'yes'
+  end
+  
+  def remove_type_of_resource_collection(descMetadata)
+     node = descMetadata.ng_xml.search('//mods:typeOfResource', 'mods' => 'http://www.loc.gov/mods/v3').first
+     node.remove_attribute('manuscript') if node
+  end
   
   # the possible types of items that can be created, hash of display value (keys) and values to store in object (value)
   def self.item_types
     {
+      "archival mixed material" => "archival mixed material",
       "article"       => "article",
       "audio - music" => "audio - music",   
       "audio - spoken" => "audio - spoken",   
@@ -161,8 +185,11 @@ class Hydrus::GenericObject < Dor::Item
       "computer game" => "computer game",
       "conference paper / presentation" => "conference paper / presentation",  
       "data set"      => "dataset",
+      "image"         => "image",
+      "software"      => "software",
       "other"         => "other",      
       "technical report" => "technical report",
+      "textbook"      => "textbook",
       "thesis"        => "thesis",
       "video" => "video"    
     }
