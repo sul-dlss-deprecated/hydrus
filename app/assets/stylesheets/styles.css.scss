@@ -23,6 +23,18 @@
 	text-align: center;
 }
 
+@mixin custom-list-bullets {
+  ul {
+    list-style: none;
+    margin-left: 0;
+    padding-left: 1em;
+    text-indent: -1em;
+    li {
+      margin-bottom: 3px;
+    }
+  }
+}
+
 .modal-header {
 	@include modal-header;
 }
@@ -359,10 +371,18 @@ noscript #item-actions, noscript #collection-actions {
 	}
 }
 
-#catalog-home .user-collections {
-	h3 {margin-top: 6px;}
+#dashboard {
+	h3 {
+    border-top: 1px dotted #ccc;
+    margin-top: 6px;
+    padding-top: 6px;
+  }
 	table {border-bottom: 1px solid #ddd;}
 	// .btn-primary {@include primary-button;}
+}
+
+.admin-info {
+  margin-top: 40px;
 }
 
 /* object views */
@@ -502,28 +522,37 @@ ul.breadcrumb {
 	.divider {color: #CCC;}
 }
 
-.promotion .hero-unit {
-  border: 1px solid #ccc;
-  margin-top: 15px;
-  padding: 9px 12px;
-  text-align: center;
-  @media (min-width: 768px) {
-    margin-left: 30px;
-    max-width: 220px;
+.promotion {
+  @include custom-list-bullets; // non-signed-in version of homepage
+  ul {
+    margin-left: 35px;
+    @media (max-width: 768px) {
+      margin-left: 0;
+    }
   }
-  h3 {
-    color: #8d452d;
-    font-size: 14px;
-    line-height: 22px;
-  }
-  p {
-    font-size: 13px;
-    line-height: 16px;
-    margin-bottom: 0;
-    margin-top: 4px;
-  }
-  a, a:visited {
-   color: #8d452d;
+  .hero-unit {
+    border: 1px solid #ccc;
+    margin-top: 15px;
+    padding: 9px 12px;
+    text-align: center;
+    @media (min-width: 768px) {
+      margin-left: 30px;
+      max-width: 220px;
+    }
+    h3 {
+      color: #8d452d;
+      font-size: 14px;
+      line-height: 22px;
+    }
+    p {
+      font-size: 13px;
+      line-height: 16px;
+      margin-bottom: 0;
+      margin-top: 4px;
+    }
+    a, a:visited {
+     color: #8d452d;
+    }
   }
 }
 
@@ -587,31 +616,24 @@ ul.breadcrumb {
     color: #333333;
     background-color: #f5f5f5;
     border-color: #dddddd;
+    padding: 3px 12px;
+  }
+  .dashboard & {
+    margin-top: 15px;
+    .panel-title {
+      font-size: 13px;
+    }
+    .panel-body {
+      padding: 15px 15px 6px;
+      @include custom-list-bullets;
+    }
+  }
+  @media (max-width: 767px) {
+    margin-left: 0;
+    max-width: none;
   }
 }
 /* end default panel styles */
-
-.panel-home { // overriding defaul panel styling
-  margin-top: 30px;
-  > .panel-heading {
-    padding: 6px 12px;
-  }
-  .panel-title {
-    font-size: 14px;
-  }
-  .panel-body {
-    padding: 15px 15px 6px;
-    ul {
-      list-style: none;
-      margin-left: 0;
-      padding-left: 1em;
-      text-indent: -1em;
-      li {
-        margin-bottom: 3px;
-      }
-    }
-  }
-}
 
 /* dashboard */
 #dashboard {
