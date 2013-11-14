@@ -1,8 +1,9 @@
 <div class="user-collections">
+  <h3>Your collections</h3>
   <%- if @collections.blank? -%>
-    <h3>You have no active collections</h3>
+    <p>You have no active collections.</p>
   <%- else -%>
-    <h3>Your Active Collections (<%=@collections.size%>)</h3>
+    <p>Your Active Collections (<%=@collections.size%>).</p>
      <%= render :partial=>'collection_dashboard',
         :locals=>{:collections=>@collections,:show_roles=>true}%>
   <% end %>
