@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 source 'http://sul-gems.stanford.edu'
 
-gem 'rails', '3.2.14'
+gem 'rails', '3.2.15'
 
 gem 'dor-services', ">= 4.3.1"
 gem 'sul_chrome', '~> 0.1.0'
