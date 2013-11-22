@@ -211,7 +211,7 @@ describe("Item create", :type => :request, :integration => true) do
     fill_in "hydrus_item_abstract", :with => ni.abstract
     fill_in "hydrus_item_contact",  :with => ni.contact
     fill_in "hydrus_item_keywords", :with => ni.keywords
-    fill_in "hydrus_item_date_created", :with => ni.date_created 
+    fill_in "hydrus_item_dates_date_created", :with => ni.date_created 
     f = Hydrus::ObjectFile.new
     f.pid = druid
     f.file = Tempfile.new('mock_HydrusObjectFile_')
@@ -420,7 +420,7 @@ describe("Item create", :type => :request, :integration => true) do
     fill_in "hydrus_item_abstract", :with => ni.abstract
     fill_in "hydrus_item_contact",  :with => ni.contact
     fill_in "hydrus_item_keywords", :with => ni.keywords
-    fill_in "hydrus_item_date_created", :with => ni.date_created
+    fill_in "hydrus_item_dates_date_created", :with => ni.date_created
     f = Hydrus::ObjectFile.new
     f.pid = druid
     f.file = Tempfile.new('mock_HydrusObjectFile_')

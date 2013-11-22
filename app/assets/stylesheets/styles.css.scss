@@ -52,6 +52,9 @@
 	> .span1, > .span9 {margin-left: 3px;}
 	&.first-header {margin-top: 6px;}
 }
+.span9{
+  width:840px;
+}
 .section-header .required {
 	// color: #990000;
 	color: #FFF;
@@ -67,11 +70,50 @@
 		text-align: left;
 	}
 }
+.date_div{
+  display:inline;
+  float:left;
+}
+.date_radio{
+  vertical-align:top;
+  margin-right:5px !important;
+}
+.dates input[type=checkbox]{
+  margin:3px;
+  clear:left
+}
+.date_label{
+  float:left; 
+  width:70px;
+}
+.dates{
+  display:inline;
+}
+.dates label{
+  display:inline;
+  vertical-align: top;
+  float:left;
+}
+.dates input{
+  display:inline;
+  vertical-align: top;
+  float:left;
+}
+.undated_div{
+  clear: both;
+}
+form.step .dates input[type=text]{
+  width:250px;
+  display:inline;
+}
 form.step textarea, form.step input[type=text] {
 	width: 95%;
 }
 .short-textarea textarea {
 	height: 60px;
+}
+.input_date{
+	width: 65px;
 }
 form.step .contributor-select {
 	input[type=text] {

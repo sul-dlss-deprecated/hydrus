@@ -32,7 +32,10 @@ class Hydrus::DescMetadataDS < ActiveFedora::NokogiriDatastream
         t.roleTerm IA
       end
     end
+    
     t.originInfo IANS do
+      t.date_range_start :path => 'dateCreated', :attributes => { :point => "start"}
+      t.date_range_end :path => 'dateCreated', :attributes => { :point => "end"}
       t.dateCreated IA
       t.dateIssued IA
     end
@@ -71,6 +74,12 @@ class Hydrus::DescMetadataDS < ActiveFedora::NokogiriDatastream
   end
 
   # Blocks to pass into Nokogiri::XML::Builder.new()
+
+  define_template :date_created do |xml|
+        xml.originInfo{
+          xml.dateCreated
+        }
+  end
 
   define_template :contributor do |xml, name_type, name, role|
     xml.name(:type => name_type) {
@@ -140,7 +149,9 @@ class Hydrus::DescMetadataDS < ActiveFedora::NokogiriDatastream
       }
     end.doc
   end
-
+  def insert_date_created
+    add_hydrus_next_sibling_node(:originInfo, :date_created)
+  end
   def insert_contributor(name_type, name, role)
     add_hydrus_next_sibling_node(:name, :contributor, name_type, name, role)
   end

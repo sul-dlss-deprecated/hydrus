@@ -2,11 +2,11 @@ class Hydrus::Item < Hydrus::GenericObject
 
   include Hydrus::Responsible
   include Hydrus::EmbargoMetadataDsExtension
-
+  
   REQUIRED_FIELDS = [:title, :abstract, :contact, :keywords, :version_description, :date_created]
 
   after_validation :strip_whitespace
-
+  attr_accessor :dates
   validates :title,               :not_empty => true, :if => :should_validate
   validates :abstract,            :not_empty => true, :if => :should_validate
   validates :contact,             :not_empty => true, :if => :should_validate
@@ -17,7 +17,7 @@ class Hydrus::Item < Hydrus::GenericObject
   }
 
   validate  :enforce_collection_is_open, :on => :create
-
+  
   validates :contributors, :at_least_one => true,  :if => :should_validate
   validates :files, :at_least_one => true,         :if => :should_validate
   validate  :must_accept_terms_of_deposit,         :if => :should_validate
@@ -27,7 +27,7 @@ class Hydrus::Item < Hydrus::GenericObject
   validate  :embargo_date_in_range
   validate  :check_version_if_license_changed
   validate  :check_visibility_not_reduced
-  validate  :ensure_date_created_format,          :if => :should_validate
+  validate  :has_specified_a_valid_date,          :if => :should_validate
 
   # During subsequent versions the user is allowed to change the license,
   # but only if the new version is designated as a major version change.
@@ -646,7 +646,86 @@ class Hydrus::Item < Hydrus::GenericObject
   def contributors
     return descMetadata.contributors
   end
-
+  
+  def dates
+    h={}
+    #raise descMetadata.ng_xml.to_s
+    h[:date_created] = single_date? ? descMetadata.date_created : '' 
+    #raise descMetadata.date_created.inspect
+    h[:date_created_approximate] = descMetadata.date_created.respond_to?(:node_set) ? date_created.node_set.first['qualifier'] == "approximate" : false 
+    h[:date_range_start] = descMetadata.originInfo.date_range_start ? descMetadata.originInfo.date_range_start : ''
+    h[:date_range_start_approximate] = descMetadata.originInfo.date_range_start.first ? descMetadata.ng_xml.search("//mods:originInfo/mods:dateCreated[@point='start']", 'mods' => 'http://www.loc.gov/mods/v3').first['qualifier'] == "approximate" : false
+    h[:date_range_end] = descMetadata.originInfo.date_range_end ? descMetadata.originInfo.date_range_end : ''
+    h[:date_range_end_approximate] = descMetadata.originInfo.date_range_end.first ? descMetadata.ng_xml.search("//mods:originInfo/mods:dateCreated[@point='end']", 'mods' => 'http://www.loc.gov/mods/v3').first['qualifier'] == "approximate" : false
+    h[:undated] = undated?
+    h[:range] = date_range?
+    h[:single] = single_date?
+    h
+  end
+  def dates=(h)
+    descMetadata.remove_nodes(:date_created)
+    if h[:date_type] == 'single'
+      descMetadata.insert_date_created
+      descMetadata.date_created = h[:date_created]
+      #the if respond to is for initial item creation
+      if descMetadata.date_created.respond_to? :node_set
+        descMetadata.date_created.node_set.first['qualifier'] = "approximate" if h[:date_created_approximate]
+        descMetadata.originInfo.date_created.nodeset.first['keyDate']="yes"
+        descMetadata.date_created.node_set.first['encoding']="w3cdtf"
+      end
+    end
+    if h[:date_type] == 'range'
+      descMetadata.originInfo.date_range_start = h[:date_start]
+      if descMetadata.originInfo.date_range_start.respond_to? :node_set
+        descMetadata.originInfo.date_range_start.nodeset.first['qualifier'] = "approximate" if h[:date_range_start_approximate] == "hi"
+        descMetadata.originInfo.date_range_start.nodeset.first['keyDate']="yes"
+        descMetadata.originInfo.date_range_start.nodeset.first['encoding']="w3cdtf"
+      end
+      descMetadata.originInfo.date_range_end = h[:date_range_end]
+      if descMetadata.originInfo.date_range_end.respond_to? :node_set
+        descMetadata.originInfo.date_range_end.nodeset.first['qualifier'] = "approximate" if h[:date_range_end_approximate] == "hi"
+        descMetadata.originInfo.date_range_end.nodeset.first['encoding']="w3cdtf"
+      end
+    end
+    if h[:date_type] == 'undated'
+      descMetadata.originInfo.dateCreated='Undated'
+    end
+  end
+  
+  def date_range?
+    descMetadata.originInfo.date_range_start.length == 1
+  end
+  
+  def single_date?
+    !date_range? and !undated?
+  end
+  
+  def undated?
+    !date_range? and date_created == 'Undated'
+  end
+  
+  #check whether a string that we think is a date matches our expected date format
+  def valid_date_string? str
+    str =~ /^\d{4}$/ or str =~ /^\d{4}-\d{2}$/ or str =~ /^\d{4}-\d{2}-\d{2}$/
+  end
+   
+  def has_specified_a_valid_date
+    if single_date?
+      if not valid_date_string? date_created
+        errors.add(:dates, 'Incorrect date format or missing date.')
+      end
+    else
+      if date_range?
+        if not valid_date_string?(descMetadata.originInfo.date_range_start) or not valid_date_string?(descMetadata.originInfo.date_range_end)
+          errors.add(:dates, 'Incorrect date formats or missing dates.')
+        else
+          if not undated?
+            errors.add(:dates, 'No date type selected.')
+          end
+        end
+      end
+    end
+  end
   # This is the setter called from the Item edit UI.
   # Takes a params-style hash like this, with the inner hashes
   # having the name and role_key for the Item's contributors:

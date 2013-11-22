@@ -62,7 +62,28 @@ describe("Item edit", :type => :request, :integration => true) do
     @hi.contact.should  == ni.contact
     @hi.keywords.should == ni.keywords
   end
-
+  
+  describe "dates" do
+    it 'should edit a single date' do
+      # Visit edit page.
+      login_as('archivist1')
+      should_visit_edit_page(@hi)
+      date_val = '2004'
+      find_field("hydrus_item[dates[date_created]]").value.should_not include(date_val)
+    
+      # Submit some changes.
+      fill_in("hydrus_item[dates[date_created]]", :with => date_val)
+      choose("hydrus_item_dates_date_type_single")
+      click_button(@buttons[:save])
+      # Confirm new location and flash message.
+      current_path.should == polymorphic_path(@hi)
+      page.should have_content(@ok_notice)
+      # Confirm new content in fedora.
+      @hi = Hydrus::Item.find @druid
+      @hi.dates[:date_created].should == [date_val]
+    end
+  end
+  
   describe "contributors" do
 
     before(:each) do

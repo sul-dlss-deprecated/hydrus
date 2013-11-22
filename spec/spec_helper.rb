@@ -371,7 +371,8 @@ def create_new_item(opts = {})
   fill_in "hydrus_item_abstract", :with => opts.abstract
   fill_in "hydrus_item_contact",  :with => opts.contact
   fill_in "hydrus_item_keywords", :with => opts.keywords
-  fill_in "hydrus_item_date_created", :with => opts.date_created
+  fill_in "hydrus_item_dates_date_created", :with => opts.date_created
+  choose "hydrus_item_dates_date_type_single"
   check "release_settings"
   # Add a file.
   f      = Hydrus::ObjectFile.new

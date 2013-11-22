@@ -303,6 +303,7 @@ function item_edit_init(){
   validate_hydrus_item();
   activate_edit_controls();
   check_for_files_uploading();
+  $('input[name="hydrus_item[dates[date_type]]"]:checked').click()
   
   // fill in default citation using authors, year, title format
 	$('#use_default_citation').click(function(){

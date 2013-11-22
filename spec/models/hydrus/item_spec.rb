@@ -97,7 +97,112 @@ describe Hydrus::Item do
     end
 
   end
+  describe "dates" do
+    before(:each) do
 
+    end
+    it 'single_date? should be true for a normal date_created' do
+      @xml = <<-eos
+        <mods xmlns="http://www.loc.gov/mods/v3">
+          <originInfo>
+          <dateCreated>
+          2013
+          </dateCreated>
+          </originInfo>
+        </mods>
+      eos
+      @hi.stub(:descMetadata).and_return(Hydrus::DescMetadataDS.from_xml(@xml))
+      @hi.single_date?.should be_true
+    end
+    it 'date_range? should be true for a date range' do
+      @xml = <<-eos
+        <mods xmlns="http://www.loc.gov/mods/v3">
+          <originInfo>
+          <dateCreated encoding="w3cdtf" point="start" keyDate="yes">2005-04</dateCreated> 
+          <dateCreated encoding="w3cdtf" point="end">2005-05</dateCreated> 
+          </originInfo>
+        </mods>
+      eos
+      @hi.stub(:descMetadata).and_return(Hydrus::DescMetadataDS.from_xml(@xml))
+      @hi.single_date?.should be_false
+      @hi.date_range?.should be_true
+    end
+    it 'undated? should be true for an undated item' do
+      @xml = <<-eos
+        <mods xmlns="http://www.loc.gov/mods/v3">
+          <originInfo>
+          <dateCreated >Undated</dateCreated>
+          </originInfo>
+        </mods>
+      eos
+      @hi.stub(:descMetadata).and_return(Hydrus::DescMetadataDS.from_xml(@xml))
+      @hi.undated?.should be_true
+      @hi.single_date?.should be_false
+      @hi.date_range?.should be_false
+    end
+    it 'should create a dates hash with the data to populate the form' do
+      @xml = <<-eos
+        <mods xmlns="http://www.loc.gov/mods/v3">
+          <originInfo>
+          <dateCreated encoding="w3cdtf" point="start" keyDate="yes" qualifier="approximate">2005-04</dateCreated> 
+          <dateCreated encoding="w3cdtf" point="end">2005-05</dateCreated> 
+          </originInfo>
+        </mods>
+      eos
+      @hi.stub(:descMetadata).and_return(Hydrus::DescMetadataDS.from_xml(@xml))
+      hash=@hi.dates
+      hash[:date_range_start].should == ['2005-04']
+      hash[:date_range_end].should == ['2005-05']
+      hash[:date_range_start_approximate].should be_true
+      hash[:date_range_end_approximate].should be_false
+    end
+    it 'should create a dates hash with the data to populate the form' do
+      @xml = <<-eos
+        <mods xmlns="http://www.loc.gov/mods/v3">
+          <originInfo>
+          <dateCreated >Undated</dateCreated>
+          </originInfo>
+        </mods>
+      eos
+      @hi.stub(:descMetadata).and_return(Hydrus::DescMetadataDS.from_xml(@xml))
+      hash=@hi.dates
+      hash[:date_range_start].should == []
+      hash[:date_range_end].should == []
+      hash[:date_range_start_approximate].should be_false
+      hash[:date_range_end_approximate].should be_false
+      hash[:undated].should be_true
+    end
+    it 'should create a dates hash with the data to populate the form' do
+      @xml = <<-eos
+        <mods xmlns="http://www.loc.gov/mods/v3">
+          <originInfo>
+          <dateCreated>2013</dateCreated>
+          </originInfo>
+        </mods>
+      eos
+      @hi.stub(:descMetadata).and_return(Hydrus::DescMetadataDS.from_xml(@xml))
+      hash=@hi.dates
+      hash[:date_created].should == ['2013']
+      hash[:date_range_start].should == []
+      hash[:date_range_end].should == []
+      hash[:date_range_start_approximate].should be_false
+      hash[:date_range_end_approximate].should be_false
+      hash[:undated].should be_false
+    end
+  end
+  describe "date=" do
+    it 'should clear out existing dates and set a single date' do
+      hash={
+        :date_created => ['2013'],
+        :date_created_approximate => 'hi',
+        :date_type => 'single'
+      }
+      @hi.dates = hash
+      new_hash=@hi.dates
+      new_hash[:date_created].should == ['2013']
+      @hi.single_date?.should be_true
+    end
+  end
 
   describe "roleMetadata in the item", :integration=>true do
     subject { Hydrus::Item.find('druid:oo000oo0001') }
@@ -489,8 +594,16 @@ describe Hydrus::Item do
       @exp.each { |e| @hi.stub(e).and_return(dru) unless e==:contact }
       @hi.stub(:contact).and_return('test@test.com') # we need a valid email address
       @hi.stub(:keywords).and_return(%w(aaa bbb))
+      @hi.stub(:dates).and_return({:date_created => '2011'})
       @hi.stub(:date_created).and_return('2011')
+      @hi.stub(:single_date?).and_return true
       @hi.stub_chain([:collection, :embargo_option]).and_return("varies")
+      if not @hi.valid? 
+        msg=@hi.errors.messages.map { |field, error|
+        "#{field.to_s.humanize.capitalize} #{error.join(', ')}"
+        }
+        raise msg.join ', \n'
+      end
       @hi.valid?.should == true
     end
 
