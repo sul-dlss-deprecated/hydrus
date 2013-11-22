@@ -7,10 +7,12 @@
     <div class="panel-body">
 <% end %>
       <ul>
-        <li>
-          <span class="info-prefix">&raquo;</span>
-          <%= link_to "Digital Collections in SearchWorks", "http://searchworks.stanford.edu/?f%5Bcollection_type%5D%5B%5D=Digital+Collection" %>
-        </li>
+        <%- if current_user %>
+          <li>
+            <span class="info-prefix">&raquo;</span>
+            <%= link_to "Digital Collections in SearchWorks", "http://searchworks.stanford.edu/?f%5Bcollection_type%5D%5B%5D=Digital+Collection" %>
+          </li>
+        <% end %>
         <li>
           <span class="info-prefix">&raquo;</span>
           <%= link_to "Data Management Plans and SDR", "http://library.stanford.edu/research/data-management-services/data-management-plans" %>
