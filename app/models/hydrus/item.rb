@@ -652,7 +652,7 @@ class Hydrus::Item < Hydrus::GenericObject
     #raise descMetadata.ng_xml.to_s
     h[:date_created] = single_date? ? descMetadata.date_created : '' 
     #raise descMetadata.date_created.inspect
-    h[:date_created_approximate] = descMetadata.originInfo.dateCreated.respond_to?(:nodeset) and single_date? ? date_created.node_set.first['qualifier'] == "approximate" : false 
+    h[:date_created_approximate] = descMetadata.originInfo.dateCreated.respond_to?(:nodeset) and single_date? ? descMetadata.originInfo.dateCreated.nodeset.first['qualifier'] == "approximate" : false 
     h[:date_range_start] = descMetadata.originInfo.date_range_start ? descMetadata.originInfo.date_range_start : ''
     h[:date_range_start_approximate] = descMetadata.originInfo.date_range_start.first ? descMetadata.ng_xml.search("//mods:originInfo/mods:dateCreated[@point='start']", 'mods' => 'http://www.loc.gov/mods/v3').first['qualifier'] == "approximate" : false
     h[:date_range_end] = descMetadata.originInfo.date_range_end ? descMetadata.originInfo.date_range_end : ''
