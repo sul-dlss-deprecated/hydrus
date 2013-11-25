@@ -3,7 +3,7 @@ module Hydrus::EmbargoMetadataDsExtension
 end
 
 module Dor
-  class EmbargoMetadataDS < ActiveFedora::NokogiriDatastream
+  class EmbargoMetadataDS < ActiveFedora::OmDatastream
 
     include Hydrus::GenericDS
     include Hydrus::Accessible
