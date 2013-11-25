@@ -74,6 +74,7 @@ describe("Item edit", :type => :request, :integration => true) do
       # Submit some changes.
       fill_in("hydrus_item[dates[date_created]]", :with => date_val)
       choose("hydrus_item_dates_date_type_single")
+      check "hydrus_item_dates_date_created_approximate"
       click_button(@buttons[:save])
       # Confirm new location and flash message.
       current_path.should == polymorphic_path(@hi)
@@ -83,6 +84,8 @@ describe("Item edit", :type => :request, :integration => true) do
       @hi.descMetadata.originInfo.dateCreated.nodeset.first.text.should == date_val
       @hi.descMetadata.originInfo.dateCreated.nodeset.first['keyDate'].should == 'yes'
       @hi.descMetadata.originInfo.dateCreated.nodeset.first['encoding'].should == 'w3cdtf'
+      @hi.descMetadata.originInfo.dateCreated.nodeset.first['qualifier'].should == 'approximate'
+      
       #check for duplicate nodes hannah reported
       @hi.descMetadata.originInfo.length.should == 1
     end
@@ -96,6 +99,7 @@ describe("Item edit", :type => :request, :integration => true) do
     
       # Submit some changes.
       fill_in("hydrus_item[dates[date_start]]", :with => date_val)
+      check "hydrus_item_dates_date_range_start_approximate"
       fill_in("hydrus_item[dates[date_range_end]]", :with => date_val_end)
       choose("hydrus_item_dates_date_type_range")
       click_button(@buttons[:save])
@@ -108,6 +112,7 @@ describe("Item edit", :type => :request, :integration => true) do
       @hi.descMetadata.originInfo.length.should == 1
       @hi.descMetadata.originInfo.date_range_start.nodeset.first['keyDate'].should == 'yes'
       @hi.descMetadata.originInfo.date_range_start.nodeset.first['encoding'].should == 'w3cdtf'
+      @hi.descMetadata.originInfo.date_range_start.nodeset.first['qualifier'].should == 'approximate'
       @hi.dates[:date_range_end].should == [date_val_end]
       @hi.descMetadata.originInfo.date_range_end.nodeset.first['encoding'].should == 'w3cdtf'
     end
