@@ -80,7 +80,36 @@ describe("Item edit", :type => :request, :integration => true) do
       page.should have_content(@ok_notice)
       # Confirm new content in fedora.
       @hi = Hydrus::Item.find @druid
-      @hi.dates[:date_created].should == [date_val]
+      @hi.descMetadata.originInfo.dateCreated.nodeset.first.text.should == date_val
+      @hi.descMetadata.originInfo.dateCreated.nodeset.first['keyDate'].should == 'yes'
+      @hi.descMetadata.originInfo.dateCreated.nodeset.first['encoding'].should == 'w3cdtf'
+      #check for duplicate nodes hannah reported
+      @hi.descMetadata.originInfo.length.should == 1
+    end
+    it 'should edit a date range' do
+      # Visit edit page.
+      login_as('archivist1')
+      should_visit_edit_page(@hi)
+      date_val = '2004'
+      date_val_end = '2005'
+      find_field("hydrus_item[dates[date_start]]").value.should_not include(date_val)
+    
+      # Submit some changes.
+      fill_in("hydrus_item[dates[date_start]]", :with => date_val)
+      fill_in("hydrus_item[dates[date_range_end]]", :with => date_val_end)
+      choose("hydrus_item_dates_date_type_range")
+      click_button(@buttons[:save])
+      # Confirm new location and flash message.
+      current_path.should == polymorphic_path(@hi)
+      page.should have_content(@ok_notice)
+      # Confirm new content in fedora.
+      @hi = Hydrus::Item.find @druid
+      @hi.dates[:date_range_start].should == [date_val]
+      @hi.descMetadata.originInfo.length.should == 1
+      @hi.descMetadata.originInfo.date_range_start.nodeset.first['keyDate'].should == 'yes'
+      @hi.descMetadata.originInfo.date_range_start.nodeset.first['encoding'].should == 'w3cdtf'
+      @hi.dates[:date_range_end].should == [date_val_end]
+      @hi.descMetadata.originInfo.date_range_end.nodeset.first['encoding'].should == 'w3cdtf'
     end
   end
   

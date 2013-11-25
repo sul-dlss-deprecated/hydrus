@@ -665,24 +665,23 @@ class Hydrus::Item < Hydrus::GenericObject
   def dates=(h)
     descMetadata.remove_nodes(:date_created)
     if h[:date_type] == 'single'
-      descMetadata.insert_date_created
-      descMetadata.date_created = h[:date_created]
+      descMetadata.originInfo.dateCreated = h[:date_created]
       #the if respond to is for initial item creation
-      if descMetadata.date_created.respond_to? :node_set
-        descMetadata.date_created.node_set.first['qualifier'] = "approximate" if h[:date_created_approximate]
-        descMetadata.originInfo.date_created.nodeset.first['keyDate']="yes"
-        descMetadata.date_created.node_set.first['encoding']="w3cdtf"
+      if descMetadata.originInfo.dateCreated and descMetadata.originInfo.dateCreated.respond_to? :nodeset
+        descMetadata.originInfo.dateCreated.nodeset.first['qualifier'] = "approximate" if h[:date_created_approximate]
+        descMetadata.originInfo.dateCreated.nodeset.first['keyDate']="yes"
+        descMetadata.originInfo.dateCreated.nodeset.first['encoding']="w3cdtf"
       end
     end
     if h[:date_type] == 'range'
       descMetadata.originInfo.date_range_start = h[:date_start]
-      if descMetadata.originInfo.date_range_start.respond_to? :node_set
+      if descMetadata.originInfo.date_range_start.respond_to? :nodeset
         descMetadata.originInfo.date_range_start.nodeset.first['qualifier'] = "approximate" if h[:date_range_start_approximate] == "hi"
         descMetadata.originInfo.date_range_start.nodeset.first['keyDate']="yes"
         descMetadata.originInfo.date_range_start.nodeset.first['encoding']="w3cdtf"
       end
       descMetadata.originInfo.date_range_end = h[:date_range_end]
-      if descMetadata.originInfo.date_range_end.respond_to? :node_set
+      if descMetadata.originInfo.date_range_end.respond_to? :nodeset
         descMetadata.originInfo.date_range_end.nodeset.first['qualifier'] = "approximate" if h[:date_range_end_approximate] == "hi"
         descMetadata.originInfo.date_range_end.nodeset.first['encoding']="w3cdtf"
       end
@@ -716,12 +715,12 @@ class Hydrus::Item < Hydrus::GenericObject
       end
     else
       if date_range?
-        if not valid_date_string?(descMetadata.originInfo.date_range_start) or not valid_date_string?(descMetadata.originInfo.date_range_end)
+        if not valid_date_string?(descMetadata.originInfo.date_range_start.first) or not valid_date_string?(descMetadata.originInfo.date_range_end.first)
           errors.add(:dates, 'Incorrect date formats or missing dates.')
-        else
-          if not undated?
-            errors.add(:dates, 'No date type selected.')
-          end
+        end
+      else
+        if not undated?
+          errors.add(:dates, 'No date type selected.')
         end
       end
     end
