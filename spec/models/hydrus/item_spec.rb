@@ -203,7 +203,56 @@ describe Hydrus::Item do
       @hi.single_date?.should be_true
     end
   end
-
+  describe 'date_display' do
+    it 'should render a date range with approximate dates' do 
+      @xml = <<-eos
+        <mods xmlns="http://www.loc.gov/mods/v3">
+          <originInfo>
+          <dateCreated encoding="w3cdtf" point="start" keyDate="yes" qualifier="approximate">2005-04</dateCreated> 
+          <dateCreated encoding="w3cdtf" point="end" qualifier="approximate">2005-05</dateCreated> 
+          </originInfo>
+        </mods>
+      eos
+      @hi.stub(:descMetadata).and_return(Hydrus::DescMetadataDS.from_xml(@xml))
+      @hi.date_display.should == '[ca 2005-04 to 2005-05]'
+    end
+    it 'should render a date range with one approximate date' do 
+      @xml = <<-eos
+        <mods xmlns="http://www.loc.gov/mods/v3">
+          <originInfo>
+          <dateCreated encoding="w3cdtf" point="start" keyDate="yes" qualifier="approximate">2005-04</dateCreated> 
+          <dateCreated encoding="w3cdtf" point="end">2005-05</dateCreated> 
+          </originInfo>
+        </mods>
+      eos
+      @hi.stub(:descMetadata).and_return(Hydrus::DescMetadataDS.from_xml(@xml))
+      @hi.date_display.should == '[ca 2005-04] to 2005-05'
+    end
+    it 'should render a date range with approximate dates' do 
+      @xml = <<-eos
+        <mods xmlns="http://www.loc.gov/mods/v3">
+          <originInfo>
+          <dateCreated encoding="w3cdtf" keyDate="yes" qualifier="approximate">2005-04</dateCreated> 
+          </originInfo>
+        </mods>
+      eos
+      @hi.stub(:descMetadata).and_return(Hydrus::DescMetadataDS.from_xml(@xml))
+      @hi.date_display.should == '[ca 2005-04]'
+    end
+    it 'should work with no date present' do 
+      @xml = <<-eos
+        <mods xmlns="http://www.loc.gov/mods/v3">
+          <originInfo>
+          <dateCreated></dateCreated> 
+          </originInfo>
+        </mods>
+      eos
+      @hi.stub(:descMetadata).and_return(Hydrus::DescMetadataDS.from_xml(@xml))
+      @hi.date_display.should == ''
+    end
+    
+    
+  end
   describe "roleMetadata in the item", :integration=>true do
     subject { Hydrus::Item.find('druid:oo000oo0001') }
     it "should have a roleMetadata datastream" do

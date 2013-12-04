@@ -3,7 +3,9 @@ source 'http://sul-gems.stanford.edu'
 
 gem 'rails', '3.2.15'
 
-gem 'dor-services', ">= 4.3.1"
+gem 'dor-workflow-service', '=1.4.1'
+gem "moab-versioning", "=1.3.1"
+gem 'dor-services', ">= 4.4.6"
 gem 'sul_chrome', '~> 0.1.0'
 gem 'about_page'
 gem 'is_it_working-cbeer', "~> 1.0.13"
