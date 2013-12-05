@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 source 'http://sul-gems.stanford.edu'
 
-gem 'rails', '3.2.15'
+gem 'rails', '3.2.16'
 
 gem 'dor-workflow-service', '=1.4.1'
 gem "moab-versioning", "=1.3.1"
