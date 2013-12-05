@@ -697,18 +697,18 @@ class Hydrus::Item < Hydrus::GenericObject
       start_only = true if dates[:date_range_start_approximate] and not dates[:date_range_end_approximate]
       end_only =  true if dates[:date_range_end_approximate] and not dates[:date_range_start_approximate]
       both = true if dates[:date_range_start_approximate] and dates[:date_range_end_approximate]
-      disp += '[ca ' if start_only or both
+      disp += '[ca. ' if start_only or both
       disp += "#{dates[:date_range_start].first}"
       disp += ']' if start_only
       disp += ' to '
       disp += '[' if end_only
-      disp += 'ca ' if end_only
+      disp += 'ca. ' if end_only
       disp += "#{dates[:date_range_end].first}"
       disp += ']' if end_only or both
       return disp
     else
       if single_date?
-        disp += '[ca ' if dates[:date_created_approximate]
+        disp += '[ca. ' if dates[:date_created_approximate]
         disp += "#{dates[:date_created].length > 0 ? dates[:date_created].first : ''}"
         disp += ']' if dates[:date_created_approximate]
         return disp

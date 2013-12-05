@@ -214,7 +214,7 @@ describe Hydrus::Item do
         </mods>
       eos
       @hi.stub(:descMetadata).and_return(Hydrus::DescMetadataDS.from_xml(@xml))
-      @hi.date_display.should == '[ca 2005-04 to 2005-05]'
+      @hi.date_display.should == '[ca. 2005-04 to 2005-05]'
     end
     it 'should render a date range with one approximate date' do 
       @xml = <<-eos
@@ -226,7 +226,7 @@ describe Hydrus::Item do
         </mods>
       eos
       @hi.stub(:descMetadata).and_return(Hydrus::DescMetadataDS.from_xml(@xml))
-      @hi.date_display.should == '[ca 2005-04] to 2005-05'
+      @hi.date_display.should == '[ca. 2005-04] to 2005-05'
     end
     it 'should render a date range with approximate dates' do 
       @xml = <<-eos
@@ -237,7 +237,7 @@ describe Hydrus::Item do
         </mods>
       eos
       @hi.stub(:descMetadata).and_return(Hydrus::DescMetadataDS.from_xml(@xml))
-      @hi.date_display.should == '[ca 2005-04]'
+      @hi.date_display.should == '[ca. 2005-04]'
     end
     it 'should work with no date present' do 
       @xml = <<-eos
