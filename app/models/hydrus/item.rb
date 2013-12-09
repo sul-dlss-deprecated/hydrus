@@ -702,7 +702,7 @@ class Hydrus::Item < Hydrus::GenericObject
       disp += ']' if start_only
       disp += ' to '
       disp += '[' if end_only
-      disp += 'ca. ' if end_only
+      disp += 'ca. ' if end_only or both
       disp += "#{dates[:date_range_end].first}"
       disp += ']' if end_only or both
       return disp

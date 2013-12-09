@@ -130,7 +130,7 @@ module Hydrus::SolrQueryable
       :fl            => '',
       :facet         => false,
       :q             => '*',
-      :fq            => [ %Q<is_member_of_s:(#{imo})> ],
+      :fq            => [ %Q<is_member_of_collection_s:(#{imo})> ],
     }
     HSQ.add_model_filter(h, 'Hydrus_Item')
     return h
@@ -145,9 +145,9 @@ module Hydrus::SolrQueryable
       :rows          => 0,
       :fl            => '',
       :facet         => true,
-      :'facet.pivot' => 'is_member_of_s,object_status_facet',
+      :'facet.pivot' => 'is_member_of_collection_s,object_status_facet',
       :q             => '*',
-      :fq            => [ %Q<is_member_of_s:(#{imo})> ],
+      :fq            => [ %Q<is_member_of_collection_s:(#{imo})> ],
     }
     HSQ.add_model_filter(h, 'Hydrus_Item')
     return h
