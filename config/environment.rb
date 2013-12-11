@@ -50,7 +50,7 @@ Dor::Config.configure do
 
   suri do
     mint_ids true
-    id_namespace 'druid')
+    id_namespace('druid')
     yaml = load_yaml_config.call('suri.yml')
     url yaml['url']
     user yaml['user']
