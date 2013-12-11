@@ -555,8 +555,13 @@ class Hydrus::Collection < Dor::Collection
     queries=[]
     if user.nil? # if we don't specify a user, we want everything (for an admin), so we can skip APO lookups and go directly to all collections
             
-      queries << squery_all_hydrus_collections
-      
+      h = squery_all_hydrus_collections
+      resp, sdocs = issue_solr_query(h)
+      resp.docs.each do |doc|
+        pid=doc['identityMetadata_objectId_t'].first
+        toret[pid]={}
+        toret[pid][:solr]=doc
+      end
     else # for a specific user, get PIDs of the APOs in which USER plays a role, then use that to construct query to get just those collections
     
       apo_pids = apos_involving_user(user)   
