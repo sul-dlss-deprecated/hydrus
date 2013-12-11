@@ -155,5 +155,16 @@ describe Hydrus::SolrQueryable do
     end
 
   end
+  describe "queries should send their parameters via post" do
+    it 'should not fail if the query is very long' do
+      fake_pids=[]
+      1000.times do 
+        fake_pids << 'fake_pid'
+      end
+      h = @msq.squery_item_counts_of_collections(fake_pids)
+      #this raises an exception due to receiving a 413 error from solr unless the parameters are posted
+      lambda{resp, sdocs = @msq.issue_solr_query(h)}.should_not raise_error
+    end
+  end
 
 end
