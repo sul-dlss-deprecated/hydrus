@@ -538,7 +538,6 @@ class Hydrus::Collection < Dor::Collection
 
       # Get PIDs of the Collections governed by those APOs.
       coll_pids = collections_of_apos(apo_pids)
-    
     end
     
     return {} if coll_pids.size == 0
@@ -562,46 +561,35 @@ class Hydrus::Collection < Dor::Collection
     
       apo_pids = apos_involving_user(user)   
       return {} if apo_pids.size == 0
-      while apo_pids.size > 0
-        pids = []
-        #create queries with at most 100 apos in them, because if the query gets too large, it will be truncated and fail.
-        if apo_pids.size>100
-          100.times do
-            pids << apo_pids.shift
-          end
-        else
-          pids=apo_pids
-          apo_pids = []
-        end
-        queries << squery_collections_of_apos(pids)
-        pids=[]
+
+      h=squery_collections_of_apos(apo_pids)
+      resp, sdocs = issue_solr_query(h)
+      resp.docs.each do |doc|
+        pid=doc['identityMetadata_objectId_t'].first
+        toret[pid]={}
+        toret[pid][:solr]=doc
       end
-      end
-      #for each of the queries we constructed, fetch the info for each collection.
-      queries.each do |h|
-        resp, sdocs = issue_solr_query(h)
-        resp.docs.each do |doc|
-          pid=doc['identityMetadata_objectId_t'].first
-          toret[pid]={}
-          toret[pid][:solr]=doc
-        end
-      end
-      toret
-    
     end
+    #for each of the queries we constructed, fetch the info for each collection.
+      
+
+
+    toret
+    
+  end
   
   # Takes a username, and returns an array of collection hashes suitable for building the dashboard (if no user is supplied, you will get everything)
   def self.collections_hash(current_user=nil)
     
     stats = Hydrus::Collection.dashboard_stats(current_user)
     solr = Hydrus::Collection.dashboard_hash(current_user)
-    
+
     #build a hash with all of the needed collection information without instantiating each collection, because fedora is slow
     collections = stats.keys.map { |coll_dru|
       hash={}
       hash[:pid]=coll_dru
       hash[:item_counts]=stats[coll_dru] || {}            
-      hash[:title]=self.object_title(solr[coll_dru][:solr])
+      hash[:title]=self.object_title(solr[coll_dru][:solr]) 
       hash[:roles]=Hydrus::Responsible.roles_of_person current_user.to_s, solr[coll_dru][:solr]['is_governed_by_s'].first.gsub('info:fedora/','')
       count=0
       stats[coll_dru].keys.each do |key|
@@ -674,11 +662,9 @@ class Hydrus::Collection < Dor::Collection
   def self.item_counts_of_collections(coll_pids)
     # Initalize the hash of item counts.
     counts = Hash[ coll_pids.map { |cp| [cp, initial_item_counts()] } ]
-
     # Run SOLR query to get items counts.
     h = squery_item_counts_of_collections(counts.keys)
     resp, sdocs = issue_solr_query(h)
-
     # Extract needed counts from SOLR response and put them into to the hash.
     # In the loop below, each fc hash looks like this example:
     #   {
@@ -694,6 +680,9 @@ class Hydrus::Collection < Dor::Collection
       fc['pivot'].each { |p|
         status = p['value']
         n      = p['count']
+        if not counts[druid]
+          raise 'adding '+druid
+        end
         counts[druid] ||= initial_item_counts()
         counts[druid][status] = n
       }

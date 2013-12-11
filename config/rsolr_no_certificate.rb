@@ -15,7 +15,7 @@ class RSolr::Connection
     body=uri.query
     uri.query=nil
     request_context[:uri]=uri
-    body=Rack::Utils.parse_nested_query(body)
+    body=Rack::Utils.parse_query(body)
     #move qt to post body
     
     h = http request_context[:uri], request_context[:proxy], request_context[:read_timeout], request_context[:open_timeout]
