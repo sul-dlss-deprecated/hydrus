@@ -124,7 +124,7 @@ module Hydrus::GenericObjectStuff
   def publish_metadata
     return unless should_start_assembly_wf
     cannot_do(:publish_metadata) unless is_assemblable()
-    super()
+    publish_metadata_remotely
   end
 
   # Takes a list of fields that were changed by the user and
