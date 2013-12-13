@@ -1,32 +1,29 @@
 class HydrusCollectionsController < ApplicationController
 
   include Hydra::Controller::ControllerBehavior
-  include Hydra::AssetsControllerHelper  # This is to get apply_depositor_metadata method
   include Hydra::Controller::UploadBehavior
-  include Hydrus::AccessControlsEnforcement
 
-  before_filter :enforce_access_controls
+  before_filter :authenticate_user!
   before_filter :setup_attributes, :except => [:index, :new, :list_all]
   before_filter :redirect_if_not_correct_object_type, :only => [:edit, :show]
 
   def index
+    authorize! :index, Hydrus::Collection
     flash[:warning]="You need to log in."
     redirect_to new_user_session_path
   end
 
-  def setup_attributes
-    @fobj = Hydrus::Collection.find(params[:id])
-    @fobj.current_user = current_user
-  end
-
   def show
+    authorize! :read, @fobj
   end
 
   def edit
+    authorize! :edit, @fobj
   end
 
   def destroy
-    if @fobj.is_destroyable && can?(:edit, @fobj)
+    authorize! :edit, @fobj
+    if @fobj.is_destroyable
        @fobj.delete
        flash[:notice]="The collection was deleted."
     else
@@ -36,7 +33,8 @@ class HydrusCollectionsController < ApplicationController
   end
 
   def discard_confirmation
-    if @fobj.is_destroyable && can?(:edit, @fobj)
+    authorize! :edit, @fobj
+    if @fobj.is_destroyable
       @id=params[:id]
       render 'shared/discard_confirmation'
     else
@@ -46,12 +44,14 @@ class HydrusCollectionsController < ApplicationController
   end
 
   def new
+    authorize! :create, Hydrus::Collection
     collection = Hydrus::Collection.create(current_user)
     collection.current_user = current_user
     redirect_to edit_polymorphic_path(collection)
   end
 
   def update
+    authorize! :edit, @fobj
 
     notice = []
 
@@ -121,6 +121,7 @@ class HydrusCollectionsController < ApplicationController
   end
 
   def destroy_value
+    authorize! :edit, @fobj
     @fobj.descMetadata.remove_node(params[:term], params[:term_index])
     @fobj.save
     respond_to do |want|
@@ -130,26 +131,29 @@ class HydrusCollectionsController < ApplicationController
   end
 
   def open
-    @fobj.cannot_do(:open) unless can?(:edit, @fobj)
+    authorize! :edit, @fobj
     @fobj.open
     try_to_save(@fobj, "Collection opened")
     redirect_to(hydrus_collection_path)
   end
 
   def close
-    @fobj.cannot_do(:close) unless can?(:edit, @fobj)
+    authorize! :edit, @fobj
     @fobj.close
     try_to_save(@fobj, "Collection closed")
     redirect_to(hydrus_collection_path)
   end
 
   def list_all
-    unless can?(:list_all_collections, nil)
-      flash[:error] = "You do not have permissions to list all collections."
-      redirect_to root_url
-    end
+    authorize! :list_all_collections, Hydrus::Collection
     @all_collections = Hydrus::Collection.all_hydrus_collections.
-                       sort.map { |p| Hydrus::Collection.find(p, :lightweight => true) }
+                       sort.map { |p| Hydrus::Collection.find({:id => p}, :lightweight => true) }
+  end
+
+  private
+  def setup_attributes
+    @fobj = Hydrus::Collection.find(params[:id])
+    @fobj.current_user = current_user
   end
 
 end

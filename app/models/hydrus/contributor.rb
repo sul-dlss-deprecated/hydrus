@@ -29,6 +29,7 @@ class Hydrus::Contributor < Hydrus::GenericModel
         'Collector',
         'Contributing author',
         'Creator',
+        'Editor',
         'Primary advisor',
         'Principal investigator',
       ],

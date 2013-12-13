@@ -4,10 +4,18 @@ class ApplicationController < ActionController::Base
   include Hydra::Controller::ControllerBehavior
   include Hydrus::ModelHelper
 
+  check_authorization :unless => :devise_controller?
+  skip_authorization_check :only => [:contact]
+
+  rescue_from Exception, :with=>:exception_on_website
+
+  rescue_from CanCan::AccessDenied do |exception|
+    redirect_to root_url, :alert => exception.message
+  end
+
   helper_method :to_bool
   helper_method :is_production?, :current_user
 
-  rescue_from Exception, :with=>:exception_on_website
 
   def layout_name
    'sul_chrome/application'
@@ -101,6 +109,12 @@ class ApplicationController < ActionController::Base
       current_user = WebAuthUser.new(request.env["WEBAUTH_USER"])
     else
       return super
+    end
+  end
+
+  def authenticate_user! *args
+    unless request.env["WEBAUTH_USER"]
+      super
     end
   end
 

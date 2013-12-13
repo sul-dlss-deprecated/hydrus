@@ -23,7 +23,8 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
     :name => "defaultObjectRights",
     :type => Hydrus::RightsMetadataDS,
     :label => 'Default Object Rights',
-    :control_group => 'M')
+    :control_group => 'M',
+    :autocreate => true)
 
   has_metadata(
     :name => "contentMetadata",
@@ -60,12 +61,28 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
     super
   end
 
+  def identityMetadata
+    if defined?(super)
+      super
+    else
+      datastreams['identityMetadata']
+    end
+  end
+
+  def defaultObjectRights
+    if defined?(super)
+      super
+    else
+      datastreams['defaultObjectRights']
+    end
+  end
+
   def self.create(user)
     # Create the object, with the correct model.
     dconf = Dor::Config.hydrus
     args = [user, 'adminPolicy', dconf.ur_apo_druid]
     apo  = Hydrus::GenericObject.register_dor_object(*args)
-    apo  = apo.adapt_to(Hydrus::AdminPolicyObject)
+    apo  = Hydrus::AdminPolicyObject.find(apo.pid)
     apo.remove_relationship :has_model, 'info:fedora/afmodel:Dor_AdminPolicyObject'
     apo.assert_content_model
     # Add minimal descMetadata with a title.
@@ -78,11 +95,11 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
     rmd.add_group_with_role("dlss:pmag-staff", "dor-apo-manager")
     rmd.add_group_with_role("dlss:developers", "dor-apo-manager")
     # Create defaultObjectRights datastream ... by mentioning it.
-    apo.defaultObjectRights.ng_xml
+    apo.defaultObjectRights.content_will_change!
     # Add the references agreement to the APO's RELS-EXT.
     apo.add_relationship(:references_agreement, "info:fedora/druid:mc322hh4254")
     # Save and return.
-    apo.save
+    apo.save!
     return apo
   end
 

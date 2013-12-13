@@ -45,33 +45,59 @@
 
   <div class="row field-group">
     <div class="span9 contributor-select destroy-group">
-	    <p>
+      <p>
         Enter the name(s) of people, organizations or events responsible for producing the item.  For personal names, please enter them as LAST, FIRST.
       </p>
       <%= render "contributors" %>
     </div>
   </div>
   <%= hydrus_form_header(:required=>true) {"Date"} -%>
+  <p>
+    Enter either a single date or a date range below that best describes when the content of this item was created. The date value(s) must be formatted as <b>YYYY</b> or <b>YYYY-MM</b> or <b>YYYY-MM-DD</b>.<br>
+    Select "Approximate" if an exact date value is not known.
+  </p>
   
-  <div class="row field-group">
-    <div class="span9">
-	    <p>
-        Enter date information below formatted as <b>YYYY</b> or <b>YYYY-MM</b> or <b>YYYY-MM-DD</b>
-      </p>
-      <%= text_field_tag("hydrus_item[date_created]", @fobj.date_created, :required => true) %>
-	  <div class="help">Date when the contents of this item was created</div>
+  <div class="radio-select-option">
+    <%=radio_button_tag(:"hydrus_item[dates[date_type]]","single",@fobj.dates[:single], {:class => "date_radio", :onclick => "$(\".dates input\").prop('disabled', true); $(\".single_date input\").prop('disabled', false)"})%>Single Date<br>
+    
+    <div class="span9 dates single_date">
+      <div class="date_div">
+       <%= text_field_tag("hydrus_item[dates[date_created]]",  @fobj.dates[:date_created], :required => true, :class => 'date_input_short') %>
+       <%=check_box_tag("hydrus_item[dates[date_created_approximate]]", "hi", @fobj.dates[:date_created_approximate])%>
+       <%= label_tag("hydrus_item[dates[date_created_approximate]]" ,"Approximate") %>
+      </div>
     </div>
   </div>
-  
-  <%= hydrus_form_header(:required=>true) {"Upload file(s)"} -%>
 
-  <div class="row field-group">
-    <div class="span9" id="file-upload">
 
-		<%= render :partial=>'file_uploads' %>
-
+  <div class="radio-select-option">
+    <%=radio_button_tag(:"hydrus_item[dates[date_type]]","range",@fobj.dates[:range], {:class => "date_radio", :onclick => "$(\".dates input\").prop('disabled', true); $(\".date_range input\").prop('disabled', false)"})%>Date Range<br>
+    
+    <div class="span9 dates date_range">
+      <div class="date_div">
+        <%= text_field_tag("hydrus_item[dates[date_start]]",  @fobj.dates[:date_range_start], :required => true, :class => 'date_input_short') %>
+        <%=check_box_tag("hydrus_item[dates[date_range_start_approximate]]", 'hi', @fobj.dates[:date_range_start_approximate])%>
+        <%= label_tag("hydrus_item[dates[date_start_approximate]]","Approximate") %>
+      </div>
+      <span style="float:left; margin-left:10px;margin-right:10px; vertical-align: top;">To</span>
+      <div class="date_div"><%= text_field_tag("hydrus_item[dates[date_range_end]]", @fobj.dates[:date_range_end], :required => true, :class => 'date_input_short') %>
+        <%=check_box_tag("hydrus_item[dates[date_range_end_approximate]]", 'hi', @fobj.dates[:date_range_end_approximate])%>
+        <%= label_tag("hydrus_item[dates[date_created_range_approximate]]", "Approximate") %>
+      </div>
     </div>
+  
+     <%=radio_button_tag(:"hydrus_item[dates[date_type]]","undated",@fobj.dates[:undated] , {:class => "date_radio", :onclick => "$(\".dates input\").prop('disabled', true);"})%>Undated: the date of the item is unknown and cannot be approximated.
   </div>
+  
+    <%= hydrus_form_header(:required=>true) {"Upload file(s)"} -%>
+
+    <div class="row field-group">
+      <div class="span9" id="file-upload">
+
+        <%= render :partial=>'file_uploads' %>
+
+      </div>
+    </div>
 
   <%= hydrus_form_header(:required=>true) {"Abstract and keywords"} -%>
 	<p>Enter a summary statement about the item contents (suggested 600 words maximum).
@@ -91,7 +117,7 @@
     <%- end -%>
     <%= hydrus_form_value do  -%>
       <%= text_field_tag("hydrus_item[keywords]", @fobj.keywords.join(", ")) -%>
-      <div class="help">separate keywords with commas</div>
+      <div class="help">Separate keywords with commas. Include the full name of your Stanford department, school, program, institute, etc. (excluding any commas).</div>
     <%- end -%>
   </div>
 
@@ -262,7 +288,7 @@
                      {:class => 'inline-select right' } %>
       <% else %>
         <span class="highlight-value">
-          <% lic = Hydrus::Collection.license_human(@fobj.license) %>
+          <% lic = Hydrus::GenericObject.license_human(@fobj.license) %>
           <%= hydrus_object_setting_value(lic) %>
         </span>
       <% end %>

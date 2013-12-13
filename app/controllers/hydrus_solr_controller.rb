@@ -22,6 +22,7 @@
 ####
 
 class HydrusSolrController < ApplicationController
+  skip_authorization_check
 
   # Takes a PID in params.
   # Gets the object from Fedora and re-solrizees it.
@@ -70,6 +71,7 @@ class HydrusSolrController < ApplicationController
     render(:text => msg)
   end
 
+  private
   # Private method to determine if the given object belongs to
   # one of the Hydrus classes.
   def is_hydrus_object(obj)
@@ -86,12 +88,10 @@ class HydrusSolrController < ApplicationController
   # Private method to return the logger for the SOLR reindexer.
   def index_logger
     @@index_logger ||= Logger.new("#{Rails.root}/log/indexer.log", 10, 10240000)
-    @@index_logger.formatter = proc do |severity, datetime, progname, msg|
-      "#{severity}: #{datetime}: #{msg}\n"
-    end
+    #@@index_logger.formatter = proc do |severity, t, progname, msg|
+    #  "#{severity}: #{t}: #{msg}\n"
+    #end
     return @@index_logger
   end
-
-  private(:is_hydrus_object, :solr, :index_logger)
 
 end

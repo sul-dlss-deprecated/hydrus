@@ -37,8 +37,14 @@ require 'tempfile'
 # in spec/support/ and its subdirectories.
 Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
 
+Warden.test_mode!
+
+
 RSpec.configure do |config|
 
+  config.include Devise::TestHelpers, :type => :controller
+  config.include Warden::Test::Helpers, :type => :controller
+  config.after(:each) { Warden.test_reset! }
   # ## Mock Framework
   #
   # If you prefer to use mocha, flexmock or RR, uncomment the appropriate line:
@@ -102,7 +108,8 @@ class Rubydora::Transaction
         aps.each do |p|
           begin
             repository.purge_object(:pid => p)
-            run_hook(:after_rollback, :pid => p, :method => :ingest)
+            Blacklight.solr.delete_by_id p
+            #run_hook(:after_rollback, :pid => p, :method => :ingest)
           rescue
           end
         end
@@ -111,12 +118,20 @@ class Rubydora::Transaction
           next unless fps.include?(p)
           begin
             repository.ingest(:pid => p, :file => foxml)
-            run_hook(:after_rollback, :pid => p, :method => :purge_object)
+            $fixture_solr_cache ||= {}
+            $fixture_solr_cache[p] ||= begin
+              puts" indexing and caching #{p}"
+              ActiveFedora::Base.find(p, :cast => true).to_solr
+            end
+            
+            Blacklight.solr.add $fixture_solr_cache[p]
+            #run_hook(:after_rollback, :pid => p, :method => :purge_object)
           rescue
           end
         end
       end
       # Wrap up.
+      Blacklight.solr.commit
       repository.transactions_log.clear
       return true
     end
@@ -134,24 +149,15 @@ def noko_doc(x)
 end
 
 def mock_user
-  mock_user =  mock("user")
-  mock_user.stub!(:email)
-  mock_user.stub!(:sunetid)
-  mock_user.stub!(:persisted?).and_return(false)
-  mock_user.stub!(:new_record?).and_return(true)
-  mock_user.stub!(:is_being_superuser?).and_return(false)
-  return mock_user
+  User.find_or_create_by_email("some-user@example.com") do |u|
+    u.password = "test12345"
+    u.password_confirmation = u.password
+    u.save
+  end
 end
 
 def mock_authed_user(u = 'archivist1')
-  mock_user =  mock("user")
-  mock_user.stub!(:to_s).and_return(u)
-  mock_user.stub!(:sunetid).and_return(u)
-  mock_user.stub!(:email).and_return("#{u}@example.com")
-  mock_user.stub!(:persisted?).and_return(true)
-  mock_user.stub!(:new_record?).and_return(false)
-  mock_user.stub!(:is_being_superuser?).and_return(false)
-  return mock_user
+  User.find_by_email("#{u}@example.com")
 end
 
 def login_pw
@@ -252,7 +258,7 @@ def check_emb_vis_lic(obj, opts)
     rm.ng_xml.xpath("#{rd}/none").size.should == 1
   else
     # embargoMetadata: should be empty
-    em.ng_xml.content.should == ''
+    em.ng_xml.content.strip.should be_empty
     # rightsMetadata: should not have an embargoReleaseDate.
     rm.ng_xml.xpath("#{rd}/embargoReleaseDate").size.should == 0
     rm.ng_xml.xpath("#{rd}/none").size.should == 0
@@ -322,7 +328,7 @@ def create_new_collection(opts = {})
   fill_in "#{hc}_apo_person_roles[hydrus-collection-viewer]", :with => opts.viewers
   choose  "#{hc}_requires_human_approval_" + opts.requires_human_approval
   # Save.
-  click_button "Save"
+  click_button "save_nojs"
   current_path.should == "/collections/#{druid}"
   find('div.alert').should have_content("Your changes have been saved")
   # Get the collection from Fedora and return it.
@@ -365,7 +371,8 @@ def create_new_item(opts = {})
   fill_in "hydrus_item_abstract", :with => opts.abstract
   fill_in "hydrus_item_contact",  :with => opts.contact
   fill_in "hydrus_item_keywords", :with => opts.keywords
-  fill_in "hydrus_item_date_created", :with => opts.date_created
+  fill_in "hydrus_item_dates_date_created", :with => opts.date_created
+  choose "hydrus_item_dates_date_type_single"
   check "release_settings"
   # Add a file.
   f      = Hydrus::ObjectFile.new
@@ -373,7 +380,7 @@ def create_new_item(opts = {})
   f.file = Tempfile.new('mock_HydrusObjectFile_')
   f.save
   # Save.
-  click_button "Save"
+  click_button "save_nojs"
   current_path.should == "/items/#{druid}"
   find('div.alert').should have_content("Your changes have been saved")
   # Agree to terms of deposit (hard to do via the UI).

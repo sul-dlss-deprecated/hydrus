@@ -34,7 +34,7 @@
       </div>
 	  <div class="collection-items date-created">
 		  <h4>Date</h4>
-		  <dt>Date Created</dt><dd><%= @fobj.date_created %></dd>
+		  <dt>Date Created</dt><dd><%= @fobj.date_display %></dd>
 	  </div>
 
       <% files = @fobj.files %>
@@ -126,7 +126,7 @@
         <dt>License</dt>
         <dd>
           <span class="highlight-value">
-            <% lic = Hydrus::Collection.license_human(@fobj.license) %>
+            <% lic = Hydrus::GenericObject.license_human(@fobj.license) %>
             <%= hydrus_object_setting_value(lic) %>
           </span>
         </dd>

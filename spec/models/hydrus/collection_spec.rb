@@ -6,31 +6,17 @@ describe Hydrus::Collection do
     @hc = Hydrus::Collection.new
   end
 
-  it "can exercise a stubbed version of create()" do
-    # Note: more substantive testing is done at integration level.
-    Hydrus::Authorizable.stub(:can_create_collections).and_return(true)
-    # Stub out the APO create() method.
-    apo = Hydrus::AdminPolicyObject.new
-    Hydrus::AdminPolicyObject.stub(:create).and_return(apo)
-    # Set up a collection for use when stubbing register_dor_object().
-    druid = 'druid:BLAH'
-    stubs = [
-      :remove_relationship,
-      :assert_content_model,
-      :set_item_type,
-    ]
-    stubs.each { |s| @hc.should_receive(s) }
-    @hc.should_receive(:save).with(:no_edit_logging => true, :no_beautify => true)
-    @hc.stub(:pid).and_return(druid)
-    @hc.stub(:adapt_to).and_return(@hc)
-    Hydrus::GenericObject.stub(:register_dor_object).and_return(@hc)
-    # Call create().
-    obj = Hydrus::Collection.create('USERFOO')
-    obj.pid.should == druid
-    obj.get_hydrus_events.size.should == 1
-    obj.terms_of_use.should =~ /user agrees/i
-  end
+  describe "save()" do
+    it "should invoke log_editing_events() if no_edit_logging is false" do
+      @hc.should_receive(:log_editing_events).once
+      @hc.should_receive(:publish_metadata).once
+      @hc.stub('is_collection?').and_return(true)
+      @hc.stub(:is_published).and_return(true)
+      @hc.stub(:is_open).and_return(true)
+      @hc.save(:no_super => true)
+    end
 
+  end
   describe "open() and close()" do
 
     # More substantive testing is done at integration level.
@@ -478,7 +464,14 @@ describe Hydrus::Collection do
       end
 
     end
-
+    describe 'dashboard_hash' do
+      it 'should send 1 solr query if there are 99 apos' do
+        arr=*(1..99)
+        @HC.should_receive(:apos_involving_user).and_return(arr)
+        @HC.should_receive(:squery_collections_of_apos).exactly(1).times
+        @HC.dashboard_hash(@user_foo)
+      end
+    end
     it "can exercise initial_item_counts()" do
       h = @HC.initial_item_counts()
       h.should be_instance_of(Hash)

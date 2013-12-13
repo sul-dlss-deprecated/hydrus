@@ -18,26 +18,24 @@ describe Hydrus::GenericObject do
     @go.dru.should == 'oo000oo0003'
   end
 
-  it "apo() should return fedora object if the apo_pid is defined" do
-    mfo = double('mock_fedora_object')
-    @go.instance_variable_set('@apo_pid', @apo_pid)
-    @go.stub(:get_fedora_item).and_return mfo
-    @go.apo.should == mfo
+  describe "apo" do
+    it "should be the admin policy object if it is defined" do
+      apo = double(:id => 'xyz')
+      @go.stub(:admin_policy_object).and_return(apo)
+      expect(@go.apo).to eq apo
+    end
+
+    it "should default to a new APO object" do
+      @go.stub(:admin_policy_object).and_raise ActiveFedora::ObjectNotFoundError.new
+      expect(@go.apo).to be_a_kind_of Hydrus::AdminPolicyObject
+    end
   end
 
-  it "apo_pid() should get the correct PID from admin_policy_object_ids()" do
-    exp = 'foobar'
-    @go.stub(:admin_policy_object_ids).and_return [exp, 11, 22]
-    @go.should_receive :admin_policy_object_ids
-    @go.apo_pid.should == exp
-  end
-
-  it "apo_pid() should get PID directly from @apo_pid when it is defined" do
-    exp = 'foobarfubb'
-    @go.instance_variable_set('@apo_pid', exp)
-    @go.stub(:admin_policy_object_ids).and_return ['doh', 11, 22]
-    @go.should_not_receive :admin_policy_object_ids
-    @go.apo_pid.should == exp
+  describe "apo_pid" do
+    it "should return the pid of the APO" do
+      @go.stub(:admin_policy_object).and_return(double(:id => 'xyz'))
+      expect(@go.apo_pid).to eq 'xyz'
+    end
   end
 
   it "can exercise discover_access()" do
@@ -171,88 +169,100 @@ describe Hydrus::GenericObject do
       idmd.ng_xml.should be_equivalent_to exp
     end
   end
+  context 'set_item_type' do
+    before :each do 
+      @obj  = Hydrus::GenericObject.new
+      @descMD = Dor::DescMetadataDS.new(nil, nil)
+    end
+    def type_of_resource
+      @obj.descMetadata.ng_xml.search('//mods:typeOfResource', 'mods' => 'http://www.loc.gov/mods/v3').first.text
+    end
+    def genre
+      @obj.descMetadata.ng_xml.search('//mods:genre', 'mods' => 'http://www.loc.gov/mods/v3').first.text
+    end 
   it 'set_item_type() should set the correct desc metadata fields for a dataset' do
-      obj  = Hydrus::GenericObject.new
-      descMD = Dor::DescMetadataDS.new(nil, nil)
-      obj.set_item_type('dataset')
-      obj.descMetadata.ng_xml.search('//mods:typeOfResource', 'mods' => 'http://www.loc.gov/mods/v3').first.text.should == 'software, multimedia'
-      obj.descMetadata.ng_xml.search('//mods:genre', 'mods' => 'http://www.loc.gov/mods/v3').first.text.should == 'dataset'
+      @obj.set_item_type('dataset')
+      type_of_resource.should == 'software, multimedia'
+      genre.should == 'dataset'
   end
   it 'set_item_type() should set the correct desc metadata fields for a thesis' do
-      obj  = Hydrus::GenericObject.new
-      descMD = Dor::DescMetadataDS.new(nil, nil)
-      obj.set_item_type('thesis')
-      obj.descMetadata.ng_xml.search('//mods:typeOfResource', 'mods' => 'http://www.loc.gov/mods/v3').first.text.should == 'text'
-      obj.descMetadata.ng_xml.search('//mods:genre', 'mods' => 'http://www.loc.gov/mods/v3').first.text.should == 'thesis'
-      obj.descMetadata.ng_xml.search('//mods:genre', 'mods' => 'http://www.loc.gov/mods/v3').first['authority'].should == 'marcgt'
+      @obj.set_item_type('thesis')
+      type_of_resource.should == 'text'
+      genre.should == 'thesis'
+      @obj.descMetadata.ng_xml.search('//mods:genre', 'mods' => 'http://www.loc.gov/mods/v3').first['authority'].should == 'marcgt'
   end
-  it 'set_item_type() should set the correct desc metadata fields for a article' do
-      obj  = Hydrus::GenericObject.new
-      descMD = Dor::DescMetadataDS.new(nil, nil)
-      obj.set_item_type('article')
-      obj.descMetadata.ng_xml.search('//mods:typeOfResource', 'mods' => 'http://www.loc.gov/mods/v3').first.text.should == 'text'
-      obj.descMetadata.ng_xml.search('//mods:genre', 'mods' => 'http://www.loc.gov/mods/v3').first.text.should == 'article'
-      obj.descMetadata.ng_xml.search('//mods:genre', 'mods' => 'http://www.loc.gov/mods/v3').first['authority'].should == 'marcgt'
-      
+  it 'set_item_type() should set the correct desc metadata fields for a article' do    
+      @obj.set_item_type('article')
+      type_of_resource.should == 'text'
+      genre.should == 'article'
+      @obj.descMetadata.ng_xml.search('//mods:genre', 'mods' => 'http://www.loc.gov/mods/v3').first['authority'].should == 'marcgt'
   end
   
   it 'set_item_type() should set the correct desc metadata fields for a class project' do
-      obj  = Hydrus::GenericObject.new
-      descMD = Dor::DescMetadataDS.new(nil, nil)
-      obj.set_item_type('class project')
-      obj.descMetadata.ng_xml.search('//mods:typeOfResource', 'mods' => 'http://www.loc.gov/mods/v3').first.text.should == 'text'
-      obj.descMetadata.ng_xml.search('//mods:genre', 'mods' => 'http://www.loc.gov/mods/v3').first.text.should == 'student project report'
+      @obj.set_item_type('class project')
+      type_of_resource.should == 'text'
+      genre.should == 'student project report'
   end
   it 'set_item_type() should set the correct desc metadata fields for a computer game' do
-      obj  = Hydrus::GenericObject.new
-      descMD = Dor::DescMetadataDS.new(nil, nil)
-      obj.set_item_type('computer game')
-      obj.descMetadata.ng_xml.search('//mods:typeOfResource', 'mods' => 'http://www.loc.gov/mods/v3').first.text.should == 'software, multimedia'
-      obj.descMetadata.ng_xml.search('//mods:genre', 'mods' => 'http://www.loc.gov/mods/v3').first.text.should == 'game'
+      @obj.set_item_type('computer game')
+      type_of_resource.should == 'software, multimedia'
+      genre.should == 'game'
   end
   it 'set_item_type() should set the correct desc metadata fields for a audio - music' do
-      obj  = Hydrus::GenericObject.new
-      descMD = Dor::DescMetadataDS.new(nil, nil)
-      obj.set_item_type('audio - music')
-      obj.descMetadata.ng_xml.search('//mods:typeOfResource', 'mods' => 'http://www.loc.gov/mods/v3').first.text.should == 'sound recording-musical'
-      obj.descMetadata.ng_xml.search('//mods:genre', 'mods' => 'http://www.loc.gov/mods/v3').first.text.should == 'sound'
+      @obj.set_item_type('audio - music')
+      type_of_resource.should == 'sound recording-musical'
+      genre.should == 'sound'
   end
   it 'set_item_type() should set the correct desc metadata fields for a audio - spoken' do
-      obj  = Hydrus::GenericObject.new
-      descMD = Dor::DescMetadataDS.new(nil, nil)
-      obj.set_item_type('audio - spoken')
-      obj.descMetadata.ng_xml.search('//mods:typeOfResource', 'mods' => 'http://www.loc.gov/mods/v3').first.text.should == 'sound recording-nonmusical'
-      obj.descMetadata.ng_xml.search('//mods:genre', 'mods' => 'http://www.loc.gov/mods/v3').first.text.should == 'sound'
+      @obj.set_item_type('audio - spoken')
+      type_of_resource.should == 'sound recording-nonmusical'
+      genre.should == 'sound'
   end
   it 'set_item_type() should set the correct desc metadata fields for a conference paper / presentation' do
-      obj  = Hydrus::GenericObject.new
-      descMD = Dor::DescMetadataDS.new(nil, nil)
-      obj.set_item_type('conference paper / presentation')
-      obj.descMetadata.ng_xml.search('//mods:typeOfResource', 'mods' => 'http://www.loc.gov/mods/v3').first.text.should == 'text'
-      obj.descMetadata.ng_xml.search('//mods:genre', 'mods' => 'http://www.loc.gov/mods/v3').first.text.should == 'conference publication'
+      @obj.set_item_type('conference paper / presentation')
+      type_of_resource.should == 'text'
+      genre.should == 'conference publication'
   end
   it 'set_item_type() should set the correct desc metadata fields for a technical report' do
-      obj  = Hydrus::GenericObject.new
-      descMD = Dor::DescMetadataDS.new(nil, nil)
-      obj.set_item_type('technical report')
-      obj.descMetadata.ng_xml.search('//mods:typeOfResource', 'mods' => 'http://www.loc.gov/mods/v3').first.text.should == 'text'
-      obj.descMetadata.ng_xml.search('//mods:genre', 'mods' => 'http://www.loc.gov/mods/v3').first.text.should == 'technical report'
+      @obj.set_item_type('technical report')
+      type_of_resource.should == 'text'
+      genre.should == 'technical report'
   end
   it 'set_item_type() should set the correct desc metadata fields for a video' do
-      obj  = Hydrus::GenericObject.new
-      descMD = Dor::DescMetadataDS.new(nil, nil)
-      obj.set_item_type('video')
-      obj.descMetadata.ng_xml.search('//mods:typeOfResource', 'mods' => 'http://www.loc.gov/mods/v3').first.text.should == 'moving image'
-      obj.descMetadata.ng_xml.search('//mods:genre', 'mods' => 'http://www.loc.gov/mods/v3').first.text.should == 'motion picture'
+      @obj.set_item_type('video')
+      type_of_resource.should == 'moving image'
+      genre.should == 'motion picture'
   end
-  it 'set_item_type() should set the correct desc metadata fields for a collection' do
-      obj  = Hydrus::GenericObject.new
-      descMD = Dor::DescMetadataDS.new(nil, nil)
-      obj.set_item_type(:collection)
-      obj.descMetadata.ng_xml.search('//mods:typeOfResource', 'mods' => 'http://www.loc.gov/mods/v3').first.text.should == ''
-      obj.descMetadata.ng_xml.search('//mods:typeOfResource', 'mods' => 'http://www.loc.gov/mods/v3').first['collection'].should == 'yes'
+  it 'set_item_type() should set the correct desc metadata fields for a video' do
+      @obj.set_item_type('video')
+      type_of_resource.should == 'moving image'
+      genre.should == 'motion picture'
+  end
+  it 'should set the correct desc metadata fields for an image' do
+      @obj.set_item_type('image')
+      type_of_resource.should == 'still image'
+  end
+  it 'set_item_type() should set the correct desc metadata fields for archival mixed material ' do
+      @obj.set_item_type('archival mixed material')
+      type_of_resource.should == 'mixed material'
+      @obj.descMetadata.ng_xml.search('//mods:typeOfResource', 'mods' => 'http://www.loc.gov/mods/v3').first['manuscript'].should == 'yes'
+  end
+  it 'should set the correct desc metadata fields for software' do
+      @obj.set_item_type('software')
+      type_of_resource.should == 'software, multimedia'
+  end
+  it 'should set the correct desc metadata fields for a textbook' do
+      @obj.set_item_type('textbook')
+      type_of_resource.should == 'text'
+      genre.should == 'instruction'
   end
   
+  it 'set_item_type() should set the correct desc metadata fields for a collection' do
+      @obj.set_item_type(:collection)
+      type_of_resource.should == ''
+      @obj.descMetadata.ng_xml.search('//mods:typeOfResource', 'mods' => 'http://www.loc.gov/mods/v3').first['collection'].should == 'yes'
+  end
+end
 
   describe "workflow stuff" do
 
@@ -490,23 +500,12 @@ describe Hydrus::GenericObject do
 
     it "should invoke log_editing_events() usually" do
       @go.should_receive(:log_editing_events).once
-      @go.should_not_receive(:publish_metadata)
       @go.save(:no_super => true)
     end
 
     it "should not invoke log_editing_events() if no_edit_logging is true" do
-      @go.should_not_receive(:publish_metadata)
       @go.should_not_receive(:log_editing_events)
       @go.save(:no_edit_logging => true, :no_super => true)
-    end
-
-    it "should invoke log_editing_events() if no_edit_logging is false" do
-      @go.should_receive(:log_editing_events).once
-      @go.should_receive(:publish_metadata).once
-      @go.stub('is_collection?').and_return(true)
-      @go.stub(:is_published).and_return(true)
-      @go.stub(:is_open).and_return(true)
-      @go.save(:no_super => true)
     end
 
   end
@@ -571,10 +570,9 @@ describe Hydrus::GenericObject do
     end
 
     it "beautify_datastream()" do
-      @go.descMetadata.content = @orig_xml
-      @go.descMetadata.content.should == @orig_xml
+      @go.descMetadata.stub(:content).and_return @orig_xml
+      @go.descMetadata.should_receive(:content=).with(@exp)
       @go.beautify_datastream(:descMetadata)
-      @go.descMetadata.content.should == @exp
     end
 
   end

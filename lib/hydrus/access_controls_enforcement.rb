@@ -17,9 +17,9 @@ module Hydrus::AccessControlsEnforcement
 
   def redirect_to_correct_page(url)
     request_url = request.fullpath # try to get the path the user is currently only before redirecting them
-    request_url = root_url if (request_url.blank? || request_url==new_signin_url || request_url==new_signin_path) # force the redirect page to be the home page if no return page found or the return page is the login page
+    request_url = root_url if (request_url.blank? || request_url==new_user_session_path || request_url==new_user_session_path) # force the redirect page to be the home page if no return page found or the return page is the login page
     session['user_return_to']=request_url
-    current_user.nil? ? redirect_to(new_signin_path(:referrer => request_url)) : redirect_to(url)
+    current_user.nil? ? redirect_to(new_user_session_path(:referrer => request_url)) : redirect_to(url)
   end
 
   # Redirects to the Item/Collection view page with a flash error
@@ -67,8 +67,7 @@ module Hydrus::AccessControlsEnforcement
       #      objects governed by APOs that mention current user in the APO roleMD
       #   OR objects that mention the user directly in their roleMD
       hsq = Hydrus::SolrQueryable
-      hsq.add_governed_by_filter(solr_parameters, apo_pids)
-      hsq.add_involved_user_filter(solr_parameters, current_user, :or => true)
+      hsq.add_gated_discovery(solr_parameters, apo_pids, current_user)
       # In addition, the objects must be Hydrus Collections or Items (not APOs).
       hsq.add_model_filter(solr_parameters, 'Hydrus_Collection', 'Hydrus_Item')
       # If there is no user, add a condition to guarantee zero search results.

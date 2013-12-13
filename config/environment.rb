@@ -4,8 +4,8 @@ require File.expand_path('../application', __FILE__)
 current_path=File.dirname(__FILE__)
 no_solr_cert=(%w{development dortest test prod_w_local_dor}.include?(Rails.env))
 
-# Override make_solr_connection() so that we don't need certs in dev and test.
-require File.expand_path(File.join(current_path, 'rsolr_no_certificate')) if no_solr_cert
+# Override make_solr_connection() so that we use POST for solr queries
+require File.expand_path(File.join(current_path, 'rsolr_no_certificate'))
 
 Hydrus::Application.configure do
 
@@ -50,7 +50,7 @@ Dor::Config.configure do
 
   suri do
     mint_ids true
-    id_namespace 'druid'
+    id_namespace('druid')
     yaml = load_yaml_config.call('suri.yml')
     url yaml['url']
     user yaml['user']
@@ -95,6 +95,5 @@ Encoding.default_internal = Encoding::UTF_8
 # Initialize the rails application
 Hydrus::Application.initialize!
 
-require File.expand_path(File.join(current_path, 'rsolr_certificate')) unless no_solr_cert
 
 require 'hydrus'

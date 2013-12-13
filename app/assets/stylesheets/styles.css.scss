@@ -23,6 +23,22 @@
 	text-align: center;
 }
 
+@mixin custom-list-bullets {
+  ul {
+    list-style: none;
+    margin-left: 0;
+    padding-left: 1em;
+    text-indent: -1em;
+    li {
+      margin-bottom: 3px;
+    }
+  }
+}
+
+.modal-header {
+	@include modal-header;
+}
+
 #druid-footer {@include druid-footer;}
 
 /* forms */
@@ -36,6 +52,7 @@
 	> .span1, > .span9 {margin-left: 3px;}
 	&.first-header {margin-top: 6px;}
 }
+
 .section-header .required {
 	// color: #990000;
 	color: #FFF;
@@ -51,11 +68,50 @@
 		text-align: left;
 	}
 }
+.date_div{
+  display:inline;
+  float:left;
+}
+.date_radio{
+  vertical-align:top;
+  margin-right:5px !important;
+}
+.dates input[type=checkbox]{
+  margin:3px;
+  clear:left
+}
+.date_label{
+  float:left; 
+  width:70px;
+}
+.dates{
+  display:inline;
+}
+.dates label{
+  display:inline;
+  vertical-align: top;
+  float:left;
+}
+.dates input{
+  display:inline;
+  vertical-align: top;
+  float:left;
+}
+.undated_div{
+  clear: both;
+}
+form.step .dates input[type=text]{
+  width:250px;
+  display:inline;
+}
 form.step textarea, form.step input[type=text] {
 	width: 95%;
 }
 .short-textarea textarea {
 	height: 60px;
+}
+.input_date{
+	width: 65px;
 }
 form.step .contributor-select {
 	input[type=text] {
@@ -98,7 +154,7 @@ form.step .peer_reviewed label {
 }
 
 form .field_with_errors {
-	display: inline-block;
+	display: inline;
 }
 
 .dropdown-menu a {border-bottom: none;}
@@ -137,17 +193,14 @@ table form {
 }
 
 /* search form */
-#search {
+.search-query-form {
 	float: right;
 	margin-top: 12px;
 	label, h2 {
 		display: inline;
 	}
-	select#search_field {
-		width: auto;
-	}
 	/* we need to explicitly set the bottom margin here because the hydra html refactor CSS is being included in a weird way */
-	input.submit {@include primary-button; margin-bottom: 9px;}
+	.search-btn {@include primary-button; margin-bottom: 9px;}
 }
 
 #main {
@@ -358,10 +411,18 @@ noscript #item-actions, noscript #collection-actions {
 	}
 }
 
-#catalog-index .user-collections {
-	h3 {margin-top: 24px;}
+#dashboard {
+	h3 {
+    border-top: 1px dotted #ccc;
+    margin-top: 6px;
+    padding-top: 6px;
+  }
 	table {border-bottom: 1px solid #ddd;}
 	// .btn-primary {@include primary-button;}
+}
+
+.admin-info {
+  margin-top: 40px;
 }
 
 /* object views */
@@ -500,6 +561,127 @@ ul.breadcrumb {
 	a:hover {border-bottom: 1px dotted #84785A}
 	.divider {color: #CCC;}
 }
+
+.promotion {
+  @include custom-list-bullets; // non-signed-in version of homepage
+  ul {
+    margin-left: 35px;
+    @media (max-width: 768px) {
+      margin-left: 0;
+    }
+  }
+  .hero-unit {
+    border: 1px solid #ccc;
+    margin-top: 15px;
+    padding: 9px 12px;
+    text-align: center;
+    @media (min-width: 768px) {
+      margin-left: 30px;
+      max-width: 220px;
+    }
+    h3 {
+      color: #8d452d;
+      font-size: 14px;
+      line-height: 22px;
+    }
+    p {
+      font-size: 13px;
+      line-height: 16px;
+      margin-bottom: 0;
+      margin-top: 4px;
+    }
+    a, a:visited {
+     color: #8d452d;
+    }
+  }
+}
+
+.sdr-deposit {
+  margin: 15px 0 30px;
+  width: 460px;
+}
+
+.info-prefix {
+  color: #999;
+  font-size: 18px;
+}
+
+.sdr-content-types {
+  a, a:visited {
+   color: #8d452d;
+   font-weight: bold;
+  }
+}
+
+/* panel styles below will be unnecessary if we ever upgrade to Bootstrap V.3 */
+.panel {
+  margin-bottom: 20px;
+  background-color: #ffffff;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+          box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+}
+
+.panel-body {
+  padding: 15px;
+}
+
+.panel-body:before,
+.panel-body:after {
+  display: table;
+  content: " ";
+}
+
+.panel-body:after {
+  clear: both;
+}
+
+.panel-heading {
+  padding: 10px 15px;
+  border-bottom: 1px solid transparent;
+  border-top-right-radius: 3px;
+  border-top-left-radius: 3px;
+}
+
+.panel-title {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-size: 16px;
+}
+
+.panel-default {
+  border-color: #dddddd;
+  > .panel-heading {
+    color: #333333;
+    background-color: #f5f5f5;
+    border-color: #dddddd;
+    padding: 3px 12px;
+  }
+  .dashboard & {
+    margin-top: 15px;
+    .panel-title {
+      font-size: 13px;
+    }
+    .panel-body {
+      padding: 15px 15px 6px;
+      @include custom-list-bullets;
+    }
+  }
+  @media (max-width: 767px) {
+    margin-left: 0;
+    max-width: none;
+  }
+}
+/* end default panel styles */
+
+/* dashboard */
+#dashboard {
+  .btn {
+    margin-top: 6px;
+  }
+}
+
 
 /* navigation */
 

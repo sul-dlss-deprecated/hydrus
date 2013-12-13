@@ -2,19 +2,20 @@ Hydrus::Application.routes.draw do
 
   mount AboutPage::Engine => '/about(.:format)'
 
-  Blacklight.add_routes(self)
+  #Blacklight.add_routes(self)
   HydraHead.add_routes(self)
 
-  root :to => "catalog#index"
+  root :to => "catalog#home"
+  get "catalog" => "catalog#index", :as => :catalog_index
 
-  devise_for :users
+  devise_for :users, :controllers => { :sessions => "sessions" }
 
   # Actions to advance Collections through the Hydrus process.
   post "collections/open/:id"  => "hydrus_collections#open",     :as => 'open_collection'
   post "collections/close/:id" => "hydrus_collections#close",    :as => 'close_collection'
   get  "collections/list_all"  => "hydrus_collections#list_all", :as => 'list_all'
 
-  post 'catalog/update_users' => 'catalog#update_users', :as=>'update_users'
+  post 'admin/update_users' => 'admin#update_users', :as=>'update_users'
   
   # Actions to advance Items through the Hydrus process.
   post "items/publish_directly/:id"    => "hydrus_items#publish_directly",    :as => 'publish_directly_item'
@@ -48,11 +49,12 @@ Hydrus::Application.routes.draw do
   match "items/:id/create_file" => "hydrus_items#create_file", :as => 'create_hydrus_item_file', :via => "post"
   match "items/:id/destroy_file" => "hydrus_items#destroy_file", :as => 'destroy_hydrus_item_file', :via => "get"
   match "collections/:id/destroy_value" => "hydrus_collections#destroy_value", :as => 'destroy_hydrus_collection_value', :via => "get"
-  match "users/auth/webauth" => "signin#login", :as => "webauth_login"
-  match "users/auth/webauth/logout" => "signin#logout", :as => "webauth_logout"
+  devise_scope :user do
+    match "users/auth/webauth" => "sessions#new", :as => "webauth_login"
+    match "users/auth/webauth/logout" => "sessions#destroy_webauth", :as => "webauth_logout"
+  end
   match "error" => "signin#error", :as => "error"
   match "contact" => "application#contact", :as=>"contact"
-  resources :signin
 
   # Actions for the HydrusSolrController.
   match "hydrus_solr/reindex/:id"           => "hydrus_solr#reindex",           :as => 'reindex'

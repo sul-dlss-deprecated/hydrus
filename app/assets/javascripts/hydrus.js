@@ -25,13 +25,7 @@ $(document).ready(function(){
 
   $("[rel=tooltip]").tooltip();
 
-  // Modal sign in
-  $(".signin_link").each(function(){
-    $(this).click(function(){
-      $.ajax($(this).attr("data-url") + "&format=js");
-      return false;
-    });
-  });
+  Blacklight.setup_modal('.signin_link', '', true);
 
   // Open terms of deposit modal window for ajax users
   $(".tod_link").each(function(){
@@ -309,6 +303,7 @@ function item_edit_init(){
   validate_hydrus_item();
   activate_edit_controls();
   check_for_files_uploading();
+  $('input[name="hydrus_item[dates[date_type]]"]:checked').click()
   
   // fill in default citation using authors, year, title format
 	$('#use_default_citation').click(function(){
@@ -323,9 +318,11 @@ function item_edit_init(){
 		  	authors += $(this).val() + ' and ';	
 			}
 		});
-				
+			
+		var entered_year = $('#hydrus_item_date_created').val().substr(0,4);
+		
 		// complete citation format		
-		var citation=authors.slice(0, -" and ".length) + '. (' + new Date().getFullYear() + '). ' + title + '. Stanford Digital Repository. Available at: http://purl.stanford.edu/' + $('#object_id').attr('value').replace('druid:',''); 
+		var citation=authors.slice(0, -" and ".length) + '. (' + entered_year + '). ' + title + '. Stanford Digital Repository. Available at: http://purl.stanford.edu/' + $('#object_id').attr('value').replace('druid:',''); 
 		$('#hydrus_item_preferred_citation').val(citation);
 		return false;
 	});

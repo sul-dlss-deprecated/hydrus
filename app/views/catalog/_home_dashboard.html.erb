@@ -1,28 +1,27 @@
 <div class="user-collections">
-
+  <h3>Your collections</h3>
   <%- if @collections.blank? -%>
-    <h3>No active collections</h3>
-    <br/>
-
+    <p>You have no active collections.</p>
   <%- else -%>
-    <h3>Your Active Collections (<%=@collections.size%>)</h3>
- 	   <%= render :partial=>'collection_dashboard',:locals=>{:collections=>@collections,:show_roles=>true}%>
-	<% end %>
+    <p>Your Active Collections (<%=@collections.size%>).</p>
+     <%= render :partial=>'collection_dashboard',
+        :locals=>{:collections=>@collections,:show_roles=>true}%>
+  <% end %>
 </div>
 
 <div id="new-collections">
   <form class="form-horizontal">
-    <% if can?(:create_collections, Hydrus::Collection) %>
+    <% if can?(:create, Hydrus::Collection) %>
       <%= link_to(
             "Create a new collection",
             new_polymorphic_path(Hydrus::Collection),
             :class => 'btn',
-						:disable_with=>'Please wait...',
+            :disable_with=>'Please wait...',
             :disable_after_click=>'true')  %>
     <% end %>
   </form>
 </div>
 
 <% if Hydrus::Authorizable.can_act_as_administrator(current_user) %>
-	<%= render :partial=>'admin_info' %>
+  <%= render :partial=>'admin_info' %>
 <% end %>

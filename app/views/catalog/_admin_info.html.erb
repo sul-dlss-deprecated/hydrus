@@ -1,12 +1,13 @@
-<hr />
-	<h3>Administrator Information - App version <%= Hydrus::Application.config.app_version %></h3>
+<div class="admin-info">
+	<h3>Administrator information for app version <%= Hydrus::Application.config.app_version %></h3>
 
-	<div class="collection-items">
+	<div>
 	  <%- if @all_collections.blank? -%>
-	    <h3>No collections</h3>
-	    <br/>
+	    <p>No collections.</p>
 	  <%- else -%>
-	    <h4><a href="#" id="show_all_collections">Show All Collections (<%=@all_collections.size%>)</a></h4>
+	    <h4>
+        <a href="#" id="show_all_collections">Show all collections (<%=@all_collections.size%>)</a>
+      </h4>
 	 	<div class="hidden" id="all_collections">
 			<%= render :partial=>'admin_collection_dashboard',:locals=>{:collections=>@all_collections}%>
 		</div>
@@ -15,7 +16,7 @@
 	
 	
 	<div id="edit_users">
-		<h4><a href="#" id="show_special_users">Edit Users</a></h4>
+		<h4><a href="#" id="show_special_users">Edit users</a></h4>
     <span id="edit_user_message"></span>
 	 	<div class="hidden" id="special_users">
 		<p></p>
@@ -28,5 +29,4 @@
 		<% end %>
 		</div>
 	</div>
-
-	
+</div>
