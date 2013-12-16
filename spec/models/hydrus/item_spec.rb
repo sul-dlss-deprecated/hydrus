@@ -114,6 +114,32 @@ describe Hydrus::Item do
       @hi.stub(:descMetadata).and_return(Hydrus::DescMetadataDS.from_xml(@xml))
       @hi.single_date?.should be_true
     end
+    it 'should handle an older item with no date created' do
+      @xml = <<-eos
+
+      <mods xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.loc.gov/mods/v3" version="3.3" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-3.xsd">
+        <titleInfo>
+          <title>Commencement addresses</title>
+        </titleInfo>
+  
+        <abstract>Transcripts of addresses delivered at Stanford commencement ceremonies.</abstract>
+        <note type="preferred citation" displayLabel="Preferred Citation">Stanford University Commencement Collection (1892- ). Stanford Digital Repository. Available at http://purl.stanford.edu/mp840zw9344.</note>
+        <note type="citation/reference" displayLabel="Related Publication"/>
+        <note type="contact" displayLabel="Contact">archivesref@stanford.edu</note>
+  
+        <relatedItem>
+          <titleInfo>
+            <title>Finding Aid</title>
+          </titleInfo>
+          <location>
+            <url>http://www.oac.cdlib.org/findaid/ark:/13030/c8vq322c</url>
+          </location>
+        </relatedItem><relatedItem><titleInfo><title>List of commencement speakers</title></titleInfo><location><url>http://library.stanford.edu/spc/university-archives/stanford-history/commencement-addresses</url></location></relatedItem>
+      <name type="corporate"><namePart>Stanford University.</namePart><role><roleTerm authority="marcrelator" type="text">Sponsor</roleTerm></role></name><subject><topic>Stanford University--Commencement</topic></subject><subject><topic>Stanford University--Invited speakers</topic></subject></mods>      
+      eos
+      @hi.stub(:descMetadata).and_return(Hydrus::DescMetadataDS.from_xml(@xml))
+      @hi.dates[:date_created_approximate].should be_false
+    end
     it 'date_range? should be true for a date range' do
       @xml = <<-eos
         <mods xmlns="http://www.loc.gov/mods/v3">

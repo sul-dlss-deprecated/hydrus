@@ -35,8 +35,17 @@
 
   <!-- the default high-performance update handler -->
   <updateHandler class="solr.DirectUpdateHandler2">
+    <updateLog>
+      <str name="dir">${solr.data.dir:}</str>
+    </updateLog>
   </updateHandler>
-
+  <requestHandler name="/replication" class="solr.ReplicationHandler" startup="lazy" />
+  <requestHandler name="/get" class="solr.RealTimeGetHandler">
+    <lst name="defaults">
+      <str name="omitHeader">true</str>
+    </lst>
+  </requestHandler>
+  <requestHandler name="/replication" class="solr.ReplicationHandler" startup="lazy" />
 
   <query>
     <maxBooleanClauses>1024</maxBooleanClauses>
