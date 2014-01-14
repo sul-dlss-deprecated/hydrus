@@ -33,6 +33,7 @@ module Hydrus::Contentable
     datastreams['contentMetadata'].content = xml
     # Write XML to file, provided that the druid is valid. (needed to some unit tests that don't use valid druids will work)  
     if DruidTools::Druid.valid?(pid)
+      create_druid_tree unless File.directory?(metadata_directory)
       fname = File.join(metadata_directory, 'contentMetadata.xml')
       File.open(fname, 'w') { |fh| fh.puts xml }
     end
