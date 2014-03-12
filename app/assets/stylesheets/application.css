@@ -1,6 +1,4 @@
 /*
- * Required by SULChrome:
- *= require sul_chrome/sul_chrome_base
  *
  * Required by Blacklight:
  *
@@ -17,6 +15,10 @@
  *= require 'about_page'
  *= require bootstrap-datepicker
  *= require_tree .
+ *
+ * Required by SULChrome:
+ *= require sul_chrome/sul_chrome_base
+ *
  *= require_self
 */
 
