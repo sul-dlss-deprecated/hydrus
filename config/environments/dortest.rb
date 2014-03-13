@@ -74,6 +74,10 @@ Dor::Config.configure do
   purl do
     base_url 'http://purl-test.stanford.edu/'
   end
+  
+  workflow do
+    timeout 120
+  end
 
   hydrus do
     show_standard_login   false   # if true, the user has the option to login via a username/password as well as webauth; if false; only webauth is allowed    
