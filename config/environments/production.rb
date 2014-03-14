@@ -76,7 +76,7 @@ Dor::Config.configure do
    end
 
    workflow do
-     timeout 120
+     timeout 240
    end
 
   hydrus do
