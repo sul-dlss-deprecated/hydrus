@@ -40,7 +40,7 @@ class Hydrus::Contributor < Hydrus::GenericModel
       :roles      => [
         'Author',
         'Contributing author',
-        'Department',
+        'Degree granting institution',
         'Distributor',
         'Publisher',
         'Sponsor',
