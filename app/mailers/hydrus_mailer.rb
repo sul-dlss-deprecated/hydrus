@@ -20,7 +20,7 @@ class HydrusMailer < ActionMailer::Base
   
   def invitation(opts={})
     @fobj = opts[:object]
-    @collection_url = polymorphic_url(@fobj, :host => host)
+    @collection_url = root_url(:host => host)
     mail(:to=>HydrusMailer.process_user_list(opts[:to]), :subject=>"Invitation to deposit in the Stanford Digital Repository") unless ignore?(@fobj.pid)
   end
 
@@ -63,7 +63,7 @@ class HydrusMailer < ActionMailer::Base
     
   def open_notification(opts={})
     @fobj = opts[:object]
-    @collection_url = polymorphic_url(@fobj, :host => host)
+    @collection_url = root_url(:host => host)
     mail(:to=>HydrusMailer.process_user_list(@fobj.recipients_for_collection_update_emails), :subject=>"Collection opened for deposit in the Stanford Digital Repository")  unless ignore?(@fobj.pid)
   end
 
