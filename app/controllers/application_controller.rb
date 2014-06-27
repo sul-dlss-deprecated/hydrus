@@ -3,11 +3,14 @@ class ApplicationController < ActionController::Base
   include Blacklight::Controller
   include Hydra::Controller::ControllerBehavior
   include Hydrus::ModelHelper
+  
+  if Rails.env.production?
+    include Squash::Ruby::ControllerMethods
+    enable_squash_client
+  end
 
   check_authorization :unless => :devise_controller?
   skip_authorization_check :only => [:contact]
-
-  rescue_from Exception, :with=>:exception_on_website
 
   rescue_from CanCan::AccessDenied do |exception|
     redirect_to root_url, :alert => exception.message
@@ -19,27 +22,6 @@ class ApplicationController < ActionController::Base
 
   def layout_name
    'sul_chrome/application'
-  end
-
-  def exception_on_website(exception)
-
-    @exception=exception
-    @referer=request.referer
-    @action=action_name
-    @controller=controller_name
-    
-    unless @action == 'reindex' || Dor::Config.hydrus.exception_recipients.blank? || exception.message.strip == "Connection reset by peer" # connection reset by peer is coming from new relic
-      HydrusMailer.error_notification(:exception=>@exception,:current_user=>current_user,:action=>@action,:controller=>@controller,:referer=>@referer).deliver 
-    end
-    
-    if @action != 'reindex' && Dor::Config.hydrus.exception_error_page && !(exception.message.strip == "Connection reset by peer") # connection reset by peer is coming from new relic
-        logger.error(@exception.message)
-        logger.error(@exception.backtrace.join("\n"))
-        render 'error', :status=>500
-      else
-        raise(@exception)
-     end
-
   end
 
   def contact

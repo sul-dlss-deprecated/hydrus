@@ -67,7 +67,11 @@ end
 
 group :deployment do
   gem 'capistrano', "~> 3.0"
+  gem 'capistrano-rails'
   gem 'lyberteam-capistrano-devel'
 end
+
+gem 'squash_ruby', :require => 'squash/ruby'
+gem 'squash_rails', ">= 1.3.3", :require => 'squash/rails'
 
 gem 'quiet_assets', :group => :development

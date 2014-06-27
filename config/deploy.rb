@@ -5,7 +5,7 @@ set :application, 'hydrus'
 set :repo_url, 'https://github.com/sul-dlss/hydrus.git'
 
 # Default branch is :master
-# ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
+ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
 
 # Default deploy_to directory is /var/www/my_app
 set :deploy_to, '/var/home/lyberadmin/hydrus'
@@ -32,6 +32,7 @@ set :linked_files, %w(
   config/ur_apo_druid.yml
   config/workflow.yml
   config/ssl_certs.yml
+  config/initializers/squash.rb
 )
 
 # Default value for linked_dirs is []
@@ -45,8 +46,6 @@ set :linked_dirs, %w{log config/certs tmp/pids tmp/cache tmp/sockets vendor/bund
 
 
 set :bundle_without, %w{development test deployment}.join(' ')
-
-before 'deploy:publishing', 'squash:write_revision'
 
 namespace :deploy do
 
