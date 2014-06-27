@@ -1,5 +1,4 @@
 source 'https://rubygems.org'
-source 'http://sul-gems.stanford.edu'
 
 gem 'rails', '3.2.17'
 gem "druid-tools", "~> 0.3.0"
@@ -22,7 +21,7 @@ gem 'bootstrap-datepicker-rails'
 gem 'cancan'
 gem 'validates_email_format_of'
 gem 'coderay'
-gem 'whenever', "~> 0.8.3"
+gem 'whenever', "~> 0.9"
 gem 'rainbow', "< 2.0"
 
 group :assets do
@@ -65,11 +64,8 @@ group :production, :dortest do
 end
 
 group :deployment do
-  gem 'capistrano', "~> 2.0"
-  gem 'lyberteam-capistrano-devel', '>=1.0.0'
-  gem 'gssapi', :github => 'cbeer/gssapi'
-  gem 'net-ssh-krb', :platform => :ruby_19
+  gem 'capistrano', "~> 3.0"
+  gem 'lyberteam-capistrano-devel'
 end
 
 gem 'quiet_assets', :group => :development
-
