@@ -106,9 +106,9 @@ class ApplicationController < ActionController::Base
 
   def current_user
     if request.env["WEBAUTH_USER"]
-      current_user = WebAuthUser.new(request.env["WEBAUTH_USER"])
+      WebAuthUser.new(request.env["WEBAUTH_USER"], request.env)
     else
-      return super
+      super
     end
   end
 

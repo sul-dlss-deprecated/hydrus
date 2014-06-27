@@ -8,13 +8,17 @@ describe Hydrus::Authorizable do
     @s1   = Set.new(%w(aa bb cc))
     @s2   = Set.new(%w(dd ee ff))
     @s3   = Set.new(%w(bb ee))
-    @ua   = double('mock_user', :sunetid => 'aa')
+    @ua   = double('mock_user', :sunetid => 'aa', :is_administrator? => false, :is_collection_creator? => false, :is_global_viewer? => false)
     @ub   = double('mock_user', :sunetid => 'bb')
-    @uf   = double('mock_user', :sunetid => 'ff')
+    @uf   = double('mock_user', :sunetid => 'ff', :is_administrator? => false, :is_collection_creator? => false, :is_global_viewer? => false)
     @obj  = double('mock_fedora_obj')
     @hc   = double('mock_collecton')
     @hi   = double('mock_item')
   end
+  
+  let(:admin_user) { double('mock_admin', :is_administrator? => true ) }
+  let(:creator_user) { double('mock_creator', :is_collection_creator? => true ) }
+  let(:viewer_user) { double('mock_viewer', :is_global_viewer? => true ) }
 
   it "should be able to exercise the methods returning fixed Sets" do
     methods = [
@@ -57,6 +61,21 @@ describe Hydrus::Authorizable do
     end
 
   end
+
+  describe "User model attributes" do
+    it "should be an admin if the user says it is" do
+      expect(@auth.can_act_as_administrator(admin_user)).to be_true
+    end
+
+    it "should be a collection creator if the user says it is" do
+      expect(@auth.can_create_collections(creator_user)).to be_true
+    end
+    
+    it "should be a collection creator if the user says it is" do
+      expect(@auth.is_global_viewer(viewer_user)).to be_true
+    end
+  end
+
 
   it "can_create_collections() should work as expected" do
     @auth.stub(:collection_creators).and_return(@s1)
