@@ -14,8 +14,6 @@ Hydrus::Application.routes.draw do
   post "collections/open/:id"  => "hydrus_collections#open",     :as => 'open_collection'
   post "collections/close/:id" => "hydrus_collections#close",    :as => 'close_collection'
   get  "collections/list_all"  => "hydrus_collections#list_all", :as => 'list_all'
-
-  post 'admin/update_users' => 'admin#update_users', :as=>'update_users'
   
   # Actions to advance Items through the Hydrus process.
   post "items/publish_directly/:id"    => "hydrus_items#publish_directly",    :as => 'publish_directly_item'
