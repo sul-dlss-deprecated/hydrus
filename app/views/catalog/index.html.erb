@@ -5,7 +5,9 @@
       <% @page_title = t('blacklight.search.title', :application_name => application_name) %>
 
 
-      <% extra_head_content << render_opensearch_response_metadata.html_safe %>
+      <% content_for(:head) do -%>
+        <%= render_opensearch_response_metadata %>
+      <% end -%>
 
       <%= render :partial => 'did_you_mean' %>
 

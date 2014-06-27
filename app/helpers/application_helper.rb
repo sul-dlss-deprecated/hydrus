@@ -38,7 +38,7 @@ module ApplicationHelper
   end
 
   def render_head_content
-    render_extra_head_content + content_for(:head)
+    content_for(:head)
   end
 
   def render_contextual_layout
