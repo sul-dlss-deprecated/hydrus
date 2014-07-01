@@ -23,7 +23,6 @@ gem 'cancan'
 gem 'validates_email_format_of'
 gem 'coderay'
 gem 'whenever', "~> 0.9"
-gem 'rainbow', "< 2.0"
 gem 'turnout'
 
 group :assets do
