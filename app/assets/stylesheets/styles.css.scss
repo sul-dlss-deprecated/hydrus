@@ -594,6 +594,9 @@ ul.breadcrumb {
      color: #8d452d;
     }
   }
+  &.logged-in .hero-unit {
+    margin-left: 0;
+  }
 }
 
 .sdr-deposit {
