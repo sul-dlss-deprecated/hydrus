@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.18'
+gem 'rails', '3.2.19'
 gem "druid-tools", "~> 0.3.0"
 gem 'dor-workflow-service'
 gem 'addressable', '2.3.5'
