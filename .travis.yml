@@ -1,0 +1,8 @@
+notifications:
+  email: false
+
+rvm:
+  - 2.1
+  - 1.9.3
+
+script: bundle exec rake ci
