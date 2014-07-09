@@ -19,6 +19,7 @@ class ApplicationController < ActionController::Base
   helper_method :to_bool
   helper_method :is_production?, :current_user
 
+  before_filter :add_google_analytics
 
   def layout_name
    'sul_chrome/application'
@@ -122,6 +123,10 @@ class ApplicationController < ActionController::Base
       flash[:error] = errors_for_display(obj)
     end
     return v
+  end
+
+  def add_google_analytics
+    extra_head_content << view_context.google_analytics if Rails.env.production?
   end
 
 end

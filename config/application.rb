@@ -69,6 +69,8 @@ module Hydrus
   end
 end
 
+GOOGLE_ANALYTICS_CODE = "UA-7219229-23" # GA tracking ID for sdr.stanford.edu
+
 # Store the Hydrus app's version.
 Hydrus::Application.config.app_version = IO.read(File.join(Rails.root, 'VERSION')).strip
 Hydrus::Application.config.default_item_type='dataset' # default item type to create
