@@ -38,7 +38,7 @@ module ApplicationHelper
   end
 
   def render_head_content
-    render_extra_head_content + content_for(:head)
+    content_for(:head)
   end
 
   def render_contextual_layout
@@ -171,6 +171,21 @@ module ApplicationHelper
   def sdr_mail_to
     mt = mail_to("sdr-contact@lists.stanford.edu", "sdr-contact@lists.stanford.edu")
     return mt.html_safe
+  end
+
+  def google_analytics
+    <<-HTML
+      <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', '#{GOOGLE_ANALYTICS_CODE}', 'auto');
+        ga('send', 'pageview');
+
+      </script>
+    HTML
   end
 
 end

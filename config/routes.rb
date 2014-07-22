@@ -14,8 +14,6 @@ Hydrus::Application.routes.draw do
   post "collections/open/:id"  => "hydrus_collections#open",     :as => 'open_collection'
   post "collections/close/:id" => "hydrus_collections#close",    :as => 'close_collection'
   get  "collections/list_all"  => "hydrus_collections#list_all", :as => 'list_all'
-
-  post 'admin/update_users' => 'admin#update_users', :as=>'update_users'
   
   # Actions to advance Items through the Hydrus process.
   post "items/publish_directly/:id"    => "hydrus_items#publish_directly",    :as => 'publish_directly_item'
@@ -60,4 +58,7 @@ Hydrus::Application.routes.draw do
   match "hydrus_solr/reindex/:id"           => "hydrus_solr#reindex",           :as => 'reindex'
   match "hydrus_solr/delete_from_index/:id" => "hydrus_solr#delete_from_index", :as => 'delete_from_index'
 
+
+   match '/404', :to => "exceptions#render_404"
+   match '/500', :to => "exceptions#render_500"
 end

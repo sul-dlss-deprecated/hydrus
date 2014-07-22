@@ -4,6 +4,7 @@ desc "Run Continuous Integration Suite (tests, coverage, docs)"
 task :ci => ['jetty:clean', 'jetty:config'] do
   Rails.env = "test"
   Rake::Task["hydrus:config"].invoke
+  Rake::Task["db:migrate"].invoke
 
   require 'jettywrapper'
   jetty_params = Jettywrapper.load_config.merge({
@@ -62,4 +63,3 @@ task :ci_alt do
   puts "Will run `rake ci` on port 8984 in #{dst}."
   system cmds.join(' && ')
 end
-

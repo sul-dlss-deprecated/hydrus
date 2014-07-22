@@ -1,11 +1,11 @@
 source 'https://rubygems.org'
-source 'http://sul-gems.stanford.edu'
 
-gem 'rails', '3.2.17'
+gem 'rails', '3.2.19'
 gem "druid-tools", "~> 0.3.0"
-gem 'dor-workflow-service', '~> 1.5'
+gem 'dor-workflow-service'
+gem 'addressable', '2.3.5'
 gem "moab-versioning", "=1.3.1"
-gem 'dor-services', ">= 4.6"
+gem 'dor-services', "~> 4.8"
 gem 'sul_chrome', '~> 0.1.0'
 gem 'about_page'
 gem 'is_it_working-cbeer', "~> 1.0.13"
@@ -22,8 +22,8 @@ gem 'bootstrap-datepicker-rails'
 gem 'cancan'
 gem 'validates_email_format_of'
 gem 'coderay'
-gem 'whenever', "~> 0.8.3"
-gem 'rainbow', "< 2.0"
+gem 'whenever', "~> 0.9"
+gem 'turnout'
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'
@@ -65,11 +65,12 @@ group :production, :dortest do
 end
 
 group :deployment do
-  gem 'capistrano', "~> 2.0"
-  gem 'lyberteam-capistrano-devel', '>=1.0.0'
-  gem 'gssapi', :github => 'cbeer/gssapi'
-  gem 'net-ssh-krb', :platform => :ruby_19
+  gem 'capistrano', "~> 3.0"
+  gem 'capistrano-rails'
+  gem 'lyberteam-capistrano-devel'
 end
 
-gem 'quiet_assets', :group => :development
+gem 'squash_ruby', :require => 'squash/ruby'
+gem 'squash_rails', ">= 1.3.3", :require => 'squash/rails'
 
+gem 'quiet_assets', :group => :development
