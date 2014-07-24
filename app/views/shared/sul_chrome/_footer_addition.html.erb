@@ -1,1 +1,3 @@
 <div id="hydra-attribution"><a href="http://projecthydra.org" rel="tooltip" data-placement='bottom' title="<%="#{application_name}"%>"><%= image_tag("hydra.png")%></div>
+  
+<%= google_analytics if Rails.env.production? %>
