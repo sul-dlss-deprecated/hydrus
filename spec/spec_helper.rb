@@ -96,6 +96,7 @@ class Rubydora::Transaction
     # original state, based on fixtures that are passed in as a
     # hash, with PIDs and keys and foxml as values.
     def rollback_fixtures(fixtures)
+      solr = RSolr.connect(Blacklight.solr_config)
       # Two sets of PIDs:
       #   - everything that was modified
       #   - fixtures that were modified
@@ -108,7 +109,7 @@ class Rubydora::Transaction
         aps.each do |p|
           begin
             repository.purge_object(:pid => p)
-            Blacklight.solr.delete_by_id p
+            solr.delete_by_id p
             #run_hook(:after_rollback, :pid => p, :method => :ingest)
           rescue
           end
@@ -123,15 +124,14 @@ class Rubydora::Transaction
               puts" indexing and caching #{p}"
               ActiveFedora::Base.find(p, :cast => true).to_solr
             end
-            
-            Blacklight.solr.add $fixture_solr_cache[p]
+            solr.add $fixture_solr_cache[p]
             #run_hook(:after_rollback, :pid => p, :method => :purge_object)
           rescue
           end
         end
       end
       # Wrap up.
-      Blacklight.solr.commit
+      solr.commit
       repository.transactions_log.clear
       return true
     end

@@ -22,4 +22,15 @@ class User < ActiveRecord::Base
     false
   end
 
+  def is_administrator?
+    false
+  end
+
+  def is_collection_creator?
+    false
+  end
+
+  def is_global_viewer?
+    false
+  end
 end

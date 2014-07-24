@@ -1,9 +1,6 @@
+server 'hydrus-prod.stanford.edu', user: 'lyberadmin', roles: %w{web db app}
+
+Capistrano::OneTimeKey.generate_one_time_key!
 set :rails_env, "production"
-set :deployment_host, "hydrus-prod.stanford.edu"
-set :bundle_without, [:deployment,:development,:test]
 
-role :web, deployment_host
-role :app, deployment_host
-role :db,  deployment_host, :primary => true
-
-after "deploy:update", "files:cleanup_tmp"
+before 'deploy:publishing', 'squash:write_revision'

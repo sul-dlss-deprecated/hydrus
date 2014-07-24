@@ -4,7 +4,8 @@
 module Hydrus::Authorizable
 
   ####
-  # get SUNET IDs of those with Hydrus-wide powers from database, move to LDAP groups later.
+  # Legacy logic to get SUNET IDs of those with Hydrus-wide powers from database.
+  # This is now managed by LDAP groups.
   ####
 
   def self.administrators
@@ -70,12 +71,12 @@ module Hydrus::Authorizable
 
   # Returns true if the given user is a Hydrus administrator.
   def self.is_administrator(user)
-    return administrators.include?(user.sunetid)
+    return user.is_administrator? || administrators.include?(user.sunetid)
   end
 
   # Returns true if the given user is a Hydrus-wide viewer.
   def self.is_global_viewer(user)
-    return global_viewers.include?(user.sunetid)
+    return user.is_global_viewer? || global_viewers.include?(user.sunetid)
   end
 
   # Returns true if the given user can act as a Hydrus administrator,
@@ -86,7 +87,7 @@ module Hydrus::Authorizable
 
   # Returns true if the given user can create new Hydrus Collections.
   def self.can_create_collections(user)
-    return collection_creators.include?(user.sunetid)
+    return user.is_collection_creator? || collection_creators.include?(user.sunetid)
   end
 
   ####
