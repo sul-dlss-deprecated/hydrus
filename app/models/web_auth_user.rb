@@ -28,11 +28,11 @@ class WebAuthUser
   end
   
   def is_collection_creator?
-    is_administrator? || groups.include?("dlss:hydrus-app-collection-creator")
+    is_administrator? || groups.include?("dlss:hydrus-app-collection-creators")
   end
   
   def is_global_viewer?
-    is_administrator? || groups.include?("dlss:hydrus-app-global-viewer")
+    is_administrator? || groups.include?("dlss:hydrus-app-global-viewers")
   end
 
 end
