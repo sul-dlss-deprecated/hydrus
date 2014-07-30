@@ -60,6 +60,7 @@ describe("Collection create", :type => :request, :integration => true) do
     coll.identityMetadata.objectType.should include('collection', 'set')
     # Check the typeOfResource of the collection
     coll.descMetadata.ng_xml.search('//mods:typeOfResource', 'mods' => 'http://www.loc.gov/mods/v3').first['collection'].should == 'yes'
+    coll.descMetadata.ng_xml.search('//mods:typeOfResource', 'mods' => 'http://www.loc.gov/mods/v3').first.text.should == 'mixed material'
     # Check person roles of the roleMetadata in APO
     coll.apo_person_roles.should == {
       "hydrus-collection-manager"   => Set.new([ "archivist1" ]),

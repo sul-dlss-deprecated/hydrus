@@ -138,6 +138,7 @@ class Hydrus::Collection < Dor::Collection
     identityMetadata.content_will_change!
     descMetadata.ng_xml.search('//mods:mods/mods:typeOfResource', 'mods' => 'http://www.loc.gov/mods/v3').each do |node|        
       node['collection']='yes'
+      node.content="mixed material"
       descMetadata.content_will_change!
     end
   end
