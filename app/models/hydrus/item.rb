@@ -360,9 +360,9 @@ class Hydrus::Item < Hydrus::GenericObject
     return validate!
   end
 
-  # Returns true only if the Item is unpublished.
+  # Returns true only if the Item is unpublished and is on the first version.
   def is_destroyable
-    return not(is_published)
+    return not(is_published) && is_initial_version
   end
 
   # Returns the Item's Collection.

@@ -7,6 +7,7 @@ describe("Item versioning", :type => :request, :integration => true) do
   before :each do
     @hi = Hydrus::Item.find('druid:oo000oo0001')
     @ok_notice = "Your changes have been saved."
+    @item_discard = ".icon-trash"
     @buttons = {
       :save                => 'save_nojs',
       :publish_directly    => 'Publish',
@@ -32,6 +33,17 @@ describe("Item versioning", :type => :request, :integration => true) do
     Dor::WorkflowService.create_workflow('dor', p, wf, wf_xml)
   end
 
+  it "initial unpublished version of an item offers discard button" do
+    login_as('archivist1')
+    item=Hydrus::Item.find('druid:oo000oo0005')
+    should_visit_view_page(item)
+    page.should have_css(@item_discard) # we are unpublished and on v1, we do have a discard button
+    item.is_initial_version.should == true
+    item.is_destroyable.should == true # can destroy an initial unpublished version
+    item.object_status.should_not == 'published'
+  end
+
+
   it "item view page should display version info" do
     login_as('archivist1')
     should_visit_view_page(@hi)
@@ -56,6 +68,7 @@ describe("Item versioning", :type => :request, :integration => true) do
     @hi.version_started_time.should == '2012-11-01T00:00:22Z'
     @hi.object_status.should == 'published'
     @hi.prior_license.should == nil
+    @hi.is_destroyable.should == false # cannot destroy a published version
     n_events = @hi.get_hydrus_events.size
     wf_steps = %w(submit approve)
     wf_steps.each { |s| @hi.workflows.workflow_step_is_done(s).should == true }
@@ -63,6 +76,8 @@ describe("Item versioning", :type => :request, :integration => true) do
     # Open new version.
     login_as('archivist1')
     should_visit_view_page(@hi)
+    page.should_not have_css(@item_discard) # we are published and on v1, we do not have a discard button
+
     click_button(@buttons[:open_new_version])
 
     # Assertions after opening new version.
@@ -74,14 +89,16 @@ describe("Item versioning", :type => :request, :integration => true) do
     @hi.version_started_time[0..9].should == HyTime.now_date
     @hi.object_status.should == 'draft'
     @hi.prior_license.should == @hi.license
+    @hi.is_destroyable.should == false
     es = @hi.get_hydrus_events
     es.size.should == n_events + 1
     es.last.text.should == 'New version opened'
     wf_steps.each { |s| @hi.workflows.workflow_step_is_done(s).should == false }
 
     # View page should not offer the Publish button, because the user
-    # needs to fill in a version description.
+    # needs to fill in a version description.  It should also not offer a discard button since this is v2 and is unpublished
     should_visit_view_page(@hi)
+    page.should_not have_css(@item_discard)
     page.should_not have_button(@buttons[:publish_directly])
 
     # Add the version info.
@@ -111,11 +128,18 @@ describe("Item versioning", :type => :request, :integration => true) do
 
     # View page should offer open version button.
     should_visit_view_page(@hi)
+    page.should_not have_css(@item_discard) # still no discard button
     click_button(@buttons[:open_new_version])
 
     # Assertions after opening new version.
     @hi = Hydrus::Item.find(@hi.pid)
     @hi.version_tag.should == 'v2.0.0'
+    @hi.is_destroyable.should == false # still can't delete it even though its not published, since we are on v2
+    @hi.object_status.should_not == 'published'
+
+    should_visit_view_page(@hi)
+    page.should_not have_css(@item_discard) # still no discard button even though we are not published, since we are on v2
+
   end
 
   it "changing license should force user to select :major version" do
