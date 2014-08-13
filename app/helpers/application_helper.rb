@@ -111,8 +111,9 @@ module ApplicationHelper
   end
 
   def delete_confirm_msg(obj)
-    return "Are you sure you want to discard this #{obj.object_type}? " +
-           "This action cannot be undone."
+    msg = "Are you sure you want to discard this #{obj.object_type}?"
+    msg += " This action is permanent and cannot be undone."
+    return msg
   end
 
   # a helper to create links to items that may or may not have titles yet
