@@ -44,6 +44,15 @@ Digital Repository for preservation and access.
   rake hydrus:refreshfix RAILS_ENV=test
   rake hydrus:refresh_upload_files
 
+== Ubuntu Packages
+
+If installing on Ubuntu, start with the following:
+
+  sudo apt-get install mysql-server curl wget gawk g++ libreadline6-dev zlib1g-dev libssl-dev libyaml-dev \
+    libsqlite3-dev sqlite3 autoconf libgdbm-dev libncurses5-dev automake libtool bison libffi-dev build-essential \
+    libxml2 libxml2-dev libxslt libxslt-dev
+
+  gem update debugger-ruby_core_source
 
 == Running the application
 
@@ -61,16 +70,15 @@ Run the Hydrus application in either of these ways:
 
 === Hydrus
 
-  * http://localhost:3000
-  * http://localhost:3000/about
+* http://localhost:3000
+* http://localhost:3000/about
 
 === Jetty server, Fedora, and SOLR.
 
-  * http://localhost:8983/
-  * http://localhost:8983/fedora/admin/
-  * http://localhost:8983/fedora/objects
-  * http://localhost:8983/solr/
-
+* http://localhost:8983/
+* http://localhost:8983/fedora/admin/
+* http://localhost:8983/fedora/objects
+* http://localhost:8983/solr/
 
 == User accounts used during development
 
