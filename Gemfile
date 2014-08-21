@@ -51,12 +51,11 @@ group :development, :test do
   gem 'ruby-prof', :platform => 'ruby_19'
   gem 'debugger', :platform => 'ruby_19'
   gem 'byebug', :platform => 'ruby_20'
-	gem 'letter_opener'
+  gem 'letter_opener'
 end
 
 group :development do
   gem 'looksee', :platform => 'ruby_19'
-	gem 'newrelic_rpm'
 end
 
 group :production, :dortest do
