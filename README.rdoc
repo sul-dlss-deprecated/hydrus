@@ -58,6 +58,7 @@ If installing on Ubuntu, start with the following:
   sudo apt-get update
   sudo apt-get install oracle-java8-installer
 
+  # Then after rvm install of ruby:
   gem update debugger-ruby_core_source
 
 == Running the application
@@ -355,3 +356,4 @@ Relationship between object_status and workflow steps for items:
 	e.g. +/data/hydrus-files/xx/111/yy/2222/xx111yy2222/content+
 
   6. Delete the files from the +/data/hydrus-files/tmp+ directory
+
