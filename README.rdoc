@@ -10,6 +10,7 @@ Digital Repository for preservation and access.
 
 * Stanford's dor-services gem.
 * Stanford's sul-chrome gem.
+* Dor certificates for client authentication.
 
 
 == Setting up your environment
@@ -51,6 +52,11 @@ If installing on Ubuntu, start with the following:
   sudo apt-get install mysql-server curl wget gawk g++ libreadline6-dev zlib1g-dev libssl-dev libyaml-dev \
     libsqlite3-dev sqlite3 autoconf libgdbm-dev libncurses5-dev automake libtool bison libffi-dev build-essential \
     libxml2 libxml2-dev libxslt libxslt-dev
+
+  # install Oracle java
+  sudo add-apt-repository ppa:webupd8team/java
+  sudo apt-get update
+  sudo apt-get install oracle-java8-installer
 
   gem update debugger-ruby_core_source
 
