@@ -79,7 +79,7 @@ Run the Hydrus application in either of these ways:
 * http://localhost:3000
 * http://localhost:3000/about
 
-=== Jetty server, Fedora, and SOLR.
+=== Jetty server, Fedora, and SOLR
 
 * http://localhost:8983
 * http://localhost:8983/fedora/admin
@@ -104,7 +104,7 @@ Also see:
   test/fixtures/users.yml
 
 
-== Running tests:
+== Running tests
 
   # Run unit tests, integration tests, or everything.
   rake unit_tests
@@ -119,7 +119,7 @@ Also see:
   open coverage/index.html
 
 
-== Deployment:
+== Deployment
 
   # Run this script without arguments to view instructions.
   devel/deploy_hydus.rb
@@ -131,7 +131,7 @@ Also see:
   2. Run remediations: see section below.
   3. Start the application.
 
-== Remediations:
+== Remediations
 
   # The general framework, and the front-end.
   # See the code for more details on how the process works.
