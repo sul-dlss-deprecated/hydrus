@@ -29,7 +29,6 @@ end
 ENV["RAILS_ENV"] ||= 'test'
 require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
-require 'rspec/autorun'
 require 'capybara/rspec'
 require 'tempfile'
 require 'rspec/matchers' # req by equivalent-xml custom matcher `be_equivalent_to`
