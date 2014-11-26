@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Hydrus::RoleMetadataDS do
+describe Hydrus::RoleMetadataDS, :type => :model do
 
   before(:all) do
     @rmd_start = '<roleMetadata>'
@@ -57,7 +57,7 @@ describe Hydrus::RoleMetadataDS do
         [[:role, :type], %w(hydrus-collection-manager hydrus-collection-depositor hydrus-collection-reviewer)],
       ]
       tests.each do |terms, exp|
-        @rmdoc.term_values(*terms).should == exp
+        expect(@rmdoc.term_values(*terms)).to eq(exp)
       end
     end
 
@@ -87,7 +87,7 @@ describe Hydrus::RoleMetadataDS do
         [[:role, :type], ['hydrus-item-depositor']],
       ]
       tests.each do |terms, exp|
-        @rmdoc.term_values(*terms).should == exp
+        expect(@rmdoc.term_values(*terms)).to eq(exp)
       end
     end
 
@@ -102,7 +102,7 @@ describe Hydrus::RoleMetadataDS do
       rmdoc   = Hydrus::RoleMetadataDS.from_xml("#{@rmd_start}#{@rmd_end}")
       role_node = rmdoc.insert_role('hydrus-item-depositor')
       rmdoc.insert_person(role_node, "")
-      rmdoc.ng_xml.should be_equivalent_to exp_xml
+      expect(rmdoc.ng_xml).to be_equivalent_to exp_xml
     end
 
   end
@@ -124,7 +124,7 @@ describe Hydrus::RoleMetadataDS do
       ''                      => '',
     }
     tests.each do |input, exp|
-      rmdoc.toggle_hyphen_underscore(input).should == exp
+      expect(rmdoc.toggle_hyphen_underscore(input)).to eq(exp)
     end
   end
 
@@ -147,7 +147,7 @@ describe Hydrus::RoleMetadataDS do
       role_node2 = rmdoc.insert_role('hydrus-collection-reviewer')
       rmdoc.insert_person(role_node2, "")
       rmdoc.insert_person(role_node1, "")
-      rmdoc.ng_xml.should be_equivalent_to exp_xml
+      expect(rmdoc.ng_xml).to be_equivalent_to exp_xml
     end
 
     context "add_person_with_role()" do
@@ -175,7 +175,7 @@ describe Hydrus::RoleMetadataDS do
         ]
         exp_xml = noko_doc(exp_parts.join '')
         @rmdoc.add_person_with_role("sunetid2", 'hydrus-collection-manager')
-        @rmdoc.ng_xml.should be_equivalent_to exp_xml
+        expect(@rmdoc.ng_xml).to be_equivalent_to exp_xml
         exp_parts = [
           @rmd_start,
           '<role type="hydrus-collection-manager">',  @p1, @p2, '</role>',
@@ -184,7 +184,7 @@ describe Hydrus::RoleMetadataDS do
         ]
         exp_xml = noko_doc(exp_parts.join '')
         @rmdoc.add_person_with_role("sunetid4", 'hydrus-collection-depositor')
-        @rmdoc.ng_xml.should be_equivalent_to exp_xml
+        expect(@rmdoc.ng_xml).to be_equivalent_to exp_xml
       end
 
       it "should create the role node when none exists" do
@@ -197,7 +197,7 @@ describe Hydrus::RoleMetadataDS do
         ]
         exp_xml = noko_doc(exp_parts.join '')
         @rmdoc.add_person_with_role("sunetid2", 'foo-role')
-        @rmdoc.ng_xml.should be_equivalent_to exp_xml
+        expect(@rmdoc.ng_xml).to be_equivalent_to exp_xml
       end
 
       it "add_empty_person_to_role should insert an empty person node as a child of the role node" do
@@ -209,7 +209,7 @@ describe Hydrus::RoleMetadataDS do
         ]
         exp_xml = noko_doc(exp_parts.join '')
         @rmdoc.add_empty_person_to_role('hydrus-collection-manager')
-        @rmdoc.ng_xml.should be_equivalent_to exp_xml
+        expect(@rmdoc.ng_xml).to be_equivalent_to exp_xml
       end
 
     end
@@ -233,7 +233,7 @@ describe Hydrus::RoleMetadataDS do
         exp_xml = noko_doc(exp_parts.join '')
         @rmdoc.add_group_with_role("dlss:pmag-staff", "dor-apo-manager")
         @rmdoc.add_group_with_role("dlss:developers", "dor-apo-manager")
-        @rmdoc.ng_xml.should be_equivalent_to exp_xml
+        expect(@rmdoc.ng_xml).to be_equivalent_to exp_xml
       end
 
     end
@@ -248,7 +248,7 @@ describe Hydrus::RoleMetadataDS do
     )
     exp_xml = noko_doc(exp_xml)
     rmdoc = Hydrus::RoleMetadataDS.new(nil, nil)
-    rmdoc.ng_xml.should be_equivalent_to exp_xml
+    expect(rmdoc.ng_xml).to be_equivalent_to exp_xml
   end
 
 end

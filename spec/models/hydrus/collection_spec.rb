@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Hydrus::Collection do
+describe Hydrus::Collection, :type => :model do
 
   before(:each) do
     @hc = Hydrus::Collection.new
@@ -8,11 +8,11 @@ describe Hydrus::Collection do
 
   describe "save()" do
     it "should invoke log_editing_events() if no_edit_logging is false" do
-      @hc.should_receive(:log_editing_events).once
-      @hc.should_receive(:publish_metadata).once
-      @hc.stub('is_collection?').and_return(true)
-      @hc.stub(:is_published).and_return(true)
-      @hc.stub(:is_open).and_return(true)
+      expect(@hc).to receive(:log_editing_events).once
+      expect(@hc).to receive(:publish_metadata).once
+      allow(@hc).to receive('is_collection?').and_return(true)
+      allow(@hc).to receive(:is_published).and_return(true)
+      allow(@hc).to receive(:is_open).and_return(true)
       @hc.save(:no_super => true)
     end
 
@@ -24,7 +24,7 @@ describe Hydrus::Collection do
     before(:each) do
       apo_druid = 'druid:oo000oo9991'
       apo = Hydrus::AdminPolicyObject.new(:pid => apo_druid)
-      @hc.stub(:apo).and_return(apo)
+      allow(@hc).to receive(:apo).and_return(apo)
     end
 
     it "open() should set object_status, add event, call approve" do
@@ -32,32 +32,32 @@ describe Hydrus::Collection do
       apo_title     = "APO for #{hc_title}"
       @hc.title     = hc_title
       @hc.apo.title = apo_title
-      @hc.get_hydrus_events.size.should == 0
-      @hc.should_receive(:complete_workflow_step).exactly(3).times
-      @hc.apo.should_receive(:complete_workflow_step).exactly(3).times
-      @hc.should_receive(:start_assembly_wf).once
-      @hc.should_receive(:send_publish_email_notification).once.with(true)
-      @hc.stub(:is_openable).and_return(true)
-      @hc.stub(:is_draft).and_return(true)
-      @hc.stub(:is_assemblable).and_return(true)
+      expect(@hc.get_hydrus_events.size).to eq(0)
+      expect(@hc).to receive(:complete_workflow_step).exactly(3).times
+      expect(@hc.apo).to receive(:complete_workflow_step).exactly(3).times
+      expect(@hc).to receive(:start_assembly_wf).once
+      expect(@hc).to receive(:send_publish_email_notification).once.with(true)
+      allow(@hc).to receive(:is_openable).and_return(true)
+      allow(@hc).to receive(:is_draft).and_return(true)
+      allow(@hc).to receive(:is_assemblable).and_return(true)
       @hc.open
-      @hc.get_hydrus_events.size.should > 0
-      @hc.apo.identityMetadata.objectLabel.should == [apo_title]
-      @hc.apo.title.should                        == apo_title
-      @hc.identityMetadata.objectLabel.should     == [hc_title]
-      @hc.label.should                            == hc_title
-      @hc.apo.label.should                        == apo_title
-      @hc.submitted_for_publish_time.should_not be_blank
-      @hc.initial_submitted_for_publish_time.should_not be_blank
+      expect(@hc.get_hydrus_events.size).to be > 0
+      expect(@hc.apo.identityMetadata.objectLabel).to eq([apo_title])
+      expect(@hc.apo.title).to                        eq(apo_title)
+      expect(@hc.identityMetadata.objectLabel).to     eq([hc_title])
+      expect(@hc.label).to                            eq(hc_title)
+      expect(@hc.apo.label).to                        eq(apo_title)
+      expect(@hc.submitted_for_publish_time).not_to be_blank
+      expect(@hc.initial_submitted_for_publish_time).not_to be_blank
     end
 
     it "close() should set object_status and add an event" do
-      @hc.get_hydrus_events.size.should == 0
-      @hc.should_not_receive(:approve)
-      @hc.should_receive(:send_publish_email_notification).once.with(false)
-      @hc.stub(:is_closeable).and_return(true)
+      expect(@hc.get_hydrus_events.size).to eq(0)
+      expect(@hc).not_to receive(:approve)
+      expect(@hc).to receive(:send_publish_email_notification).once.with(false)
+      allow(@hc).to receive(:is_closeable).and_return(true)
       @hc.close
-      @hc.get_hydrus_events.size.should > 0
+      expect(@hc.get_hydrus_events.size).to be > 0
     end
 
     it "should raise exceptions if the object cannot be opened/closed" do
@@ -66,7 +66,7 @@ describe Hydrus::Collection do
         :close => :is_closeable,
       }
       tests.each do |meth, predicate|
-        @hc.stub(predicate).and_return(false)
+        allow(@hc).to receive(predicate).and_return(false)
         expect { @hc.send(meth) }.to raise_error
       end
     end
@@ -77,8 +77,8 @@ describe Hydrus::Collection do
 
     before(:each) do
       @apo = Hydrus::AdminPolicyObject.new
-      @hc.stub(:apo).and_return(@apo)
-      @hc.stub(:should_validate).and_return(true)
+      allow(@hc).to receive(:apo).and_return(@apo)
+      allow(@hc).to receive(:should_validate).and_return(true)
       @exp_errs = [
         :title,
         :abstract,
@@ -92,31 +92,31 @@ describe Hydrus::Collection do
 
     it "should validate both Collection and its APO, and merge their errors" do
       # Give Collection a valid pid.
-      @hc.stub(:pid).and_return(@dru)
+      allow(@hc).to receive(:pid).and_return(@dru)
       # Collection error messages should include :pid, which came from the APO.
-      @hc.valid?.should == false
+      expect(@hc.valid?).to eq(false)
       es = @hc.errors.messages
-      es.should include(:pid)
+      expect(es).to include(:pid)
     end
 
     it "should get only the Collection errors when the APO is valid" do
       # Give Collection a valid pid, and stub the APO as valid.
-      @hc.stub(:pid).and_return(@dru)
-      @apo.stub(:'valid?').and_return(true)
+      allow(@hc).to receive(:pid).and_return(@dru)
+      allow(@apo).to receive(:'valid?').and_return(true)
       # Collection errors should not include PID, but should include the rest.
-      @hc.valid?.should == false
+      expect(@hc.valid?).to eq(false)
       es = @hc.errors.messages
-      es.should_not include(:pid)
-      es.should     include(*@exp_errs)
+      expect(es).not_to include(:pid)
+      expect(es).to     include(*@exp_errs)
     end
 
     it "should return true when both Collection and APO are valid" do
-      @exp_errs.each { |e| @hc.stub(e).and_return(@dru) unless e==:contact }
-      @hc.stub(:contact).and_return('test@test.com') # we need a valid email address
-      @hc.stub(:embargo_terms).and_return(@dru)
-      @hc.stub(:pid).and_return(@dru)
-      @apo.stub(:'valid?').and_return(true)
-      @hc.valid?.should == true
+      @exp_errs.each { |e| allow(@hc).to receive(e).and_return(@dru) unless e==:contact }
+      allow(@hc).to receive(:contact).and_return('test@test.com') # we need a valid email address
+      allow(@hc).to receive(:embargo_terms).and_return(@dru)
+      allow(@hc).to receive(:pid).and_return(@dru)
+      allow(@apo).to receive(:'valid?').and_return(true)
+      expect(@hc.valid?).to eq(true)
     end
 
   end
@@ -129,19 +129,19 @@ describe Hydrus::Collection do
       [false, false, true],
     ]
     tests.each do |is_p, has_i, exp|
-      @hc.stub(:is_published).and_return(is_p)
-      @hc.stub(:has_items).and_return(has_i)
-      @hc.is_destroyable.should == exp
+      allow(@hc).to receive(:is_published).and_return(is_p)
+      allow(@hc).to receive(:has_items).and_return(has_i)
+      expect(@hc.is_destroyable).to eq(exp)
     end
   end
 
   it "has_items() should return true only if Collection has Items" do
-    @hc.stub(:hydrus_items).and_return([])
-    @hc.stub(:items).and_return([])
-    @hc.has_items.should == false
-    @hc.stub(:hydrus_items).and_return([0, 11, 22])
-    @hc.stub(:items).and_return([0, 11, 22])
-    @hc.has_items.should == true
+    allow(@hc).to receive(:hydrus_items).and_return([])
+    allow(@hc).to receive(:items).and_return([])
+    expect(@hc.has_items).to eq(false)
+    allow(@hc).to receive(:hydrus_items).and_return([0, 11, 22])
+    allow(@hc).to receive(:items).and_return([0, 11, 22])
+    expect(@hc.has_items).to eq(true)
   end
 
   it "is_open() should return true if the collection is open for deposit" do
@@ -152,24 +152,24 @@ describe Hydrus::Collection do
       nil              => false,
     }
     tests.each do |status, exp|
-      @hc.stub(:object_status).and_return(status)
-      @hc.is_open.should == exp
+      allow(@hc).to receive(:object_status).and_return(status)
+      expect(@hc.is_open).to eq(exp)
     end
   end
 
   describe "is_openable()" do
 
     it "collection already open: should return false no matter what" do
-      @hc.stub('validate!').and_return(true)
-      @hc.stub(:object_status).and_return('published_open')
-      @hc.is_openable.should == false  # False in spite of being valid.
+      allow(@hc).to receive('validate!').and_return(true)
+      allow(@hc).to receive(:object_status).and_return('published_open')
+      expect(@hc.is_openable).to eq(false)  # False in spite of being valid.
     end
 
     it "collection not open: should return true if valid" do
-      @hc.stub(:is_open).and_return(false)
+      allow(@hc).to receive(:is_open).and_return(false)
       [true, false, true].each do |exp|
-        @hc.stub('validate!').and_return(exp)
-        @hc.is_openable.should == exp
+        allow(@hc).to receive('validate!').and_return(exp)
+        expect(@hc.is_openable).to eq(exp)
       end
     end
 
@@ -177,24 +177,24 @@ describe Hydrus::Collection do
 
   it "is_closeable() should return the value of is_open()" do
     [true, false, true].each do |exp|
-      @hc.stub(:is_open).and_return(exp)
-      @hc.is_closeable.should == exp
+      allow(@hc).to receive(:is_open).and_return(exp)
+      expect(@hc.is_closeable).to eq(exp)
     end
   end
 
   describe "is_assemblable()" do
 
     it "closed collection: should always return false" do
-      @hc.stub(:is_open).and_return(false)
-      @hc.should_not_receive('validate!')
-      @hc.is_assemblable.should == false
+      allow(@hc).to receive(:is_open).and_return(false)
+      expect(@hc).not_to receive('validate!')
+      expect(@hc.is_assemblable).to eq(false)
     end
 
     it "published item: should return value of validate!" do
-      @hc.stub(:is_open).and_return(true)
+      allow(@hc).to receive(:is_open).and_return(true)
       [true, false].each do |exp|
-        @hc.stub('validate!').and_return(exp)
-        @hc.is_assemblable.should == exp
+        allow(@hc).to receive('validate!').and_return(exp)
+        expect(@hc.is_assemblable).to eq(exp)
       end
     end
 
@@ -203,31 +203,31 @@ describe Hydrus::Collection do
   describe "invite email" do
     it "should provide a method to send deposit invites" do
       mail = @hc.send_invitation_email_notification("jdoe")
-      mail.to.should == ["jdoe@stanford.edu"]
-      mail.subject.should =~ /Invitation to deposit in the Stanford Digital Repository/
+      expect(mail.to).to eq(["jdoe@stanford.edu"])
+      expect(mail.subject).to match(/Invitation to deposit in the Stanford Digital Repository/)
     end
     it "should return nil when no recipients are sent in" do
-      @hc.send_invitation_email_notification("").should be_nil
+      expect(@hc.send_invitation_email_notification("")).to be_nil
     end
   end
 
   describe "open/close notification email" do
     it "should provide a method to send open notification emails" do
-      @hc.stub(:recipients_for_collection_update_emails).and_return('jdoe')
+      allow(@hc).to receive(:recipients_for_collection_update_emails).and_return('jdoe')
       mail = @hc.send_publish_email_notification(true)
-      mail.to.should == ["jdoe@stanford.edu"]
-      mail.subject.should =~ /Collection opened for deposit in the Stanford Digital Repository/
+      expect(mail.to).to eq(["jdoe@stanford.edu"])
+      expect(mail.subject).to match(/Collection opened for deposit in the Stanford Digital Repository/)
     end
     it "should provide a method to send close notification emails" do
-      @hc.stub(:recipients_for_collection_update_emails).and_return('jdoe')
+      allow(@hc).to receive(:recipients_for_collection_update_emails).and_return('jdoe')
       mail = @hc.send_publish_email_notification(false)
-      mail.to.should == ["jdoe@stanford.edu"]
-      mail.subject.should =~ /Collection closed for deposit in the Stanford Digital Repository/
+      expect(mail.to).to eq(["jdoe@stanford.edu"])
+      expect(mail.subject).to match(/Collection closed for deposit in the Stanford Digital Repository/)
     end
     it "should return nil when no recipients are set" do
-      @hc.stub(:recipients_for_collection_update_emails).and_return('')
-      @hc.send_publish_email_notification(true).should be_nil
-      @hc.send_publish_email_notification(false).should be_nil
+      allow(@hc).to receive(:recipients_for_collection_update_emails).and_return('')
+      expect(@hc.send_publish_email_notification(true)).to be_nil
+      expect(@hc.send_publish_email_notification(false)).to be_nil
     end
   end
 
@@ -246,15 +246,15 @@ describe Hydrus::Collection do
         </roleMetadata>
       EOF
       @rmdoc = Hydrus::RoleMetadataDS.from_xml(role_xml)
-      apo.stub(:roleMetadata).and_return(@rmdoc)
+      allow(apo).to receive(:roleMetadata).and_return(@rmdoc)
 
       @hc = Hydrus::Collection.new
-      @hc.stub(:apo).and_return(apo)
+      allow(@hc).to receive(:apo).and_return(apo)
     end
 
     it "add_empty_person_to_role should work" do
       @hc.add_empty_person_to_role('hydrus-collection-manager')
-      @rmdoc.ng_xml.should be_equivalent_to <<-EOF
+      expect(@rmdoc.ng_xml).to be_equivalent_to <<-EOF
         <roleMetadata>
           <role type="hydrus-collection-manager">
             <person><identifier type="sunetid">sunetid1</identifier><name/></person>
@@ -267,7 +267,7 @@ describe Hydrus::Collection do
         </roleMetadata>
       EOF
       @hc.add_empty_person_to_role('foo')
-      @rmdoc.ng_xml.should be_equivalent_to <<-EOF
+      expect(@rmdoc.ng_xml).to be_equivalent_to <<-EOF
         <roleMetadata>
           <role type="hydrus-collection-manager">
             <person><identifier type="sunetid">sunetid1</identifier><name/></person>
@@ -289,7 +289,7 @@ describe Hydrus::Collection do
         'hydrus-collection-manager' => 'archivist4, archivist5',
         'hydrus-collection-item-depositor'     => 'archivist6',
       }
-      @rmdoc.ng_xml.should be_equivalent_to <<-EOF
+      expect(@rmdoc.ng_xml).to be_equivalent_to <<-EOF
         <roleMetadata>
           <role type="hydrus-collection-manager">
             <person><identifier type="sunetid">archivist4</identifier><name/></person>
@@ -304,23 +304,23 @@ describe Hydrus::Collection do
 
     it "apo_person_roles should forward to apo.person_roles" do
       apo = Hydrus::AdminPolicyObject.new
-      @hc.stub(:apo).and_return(apo)
-      apo.should_receive(:person_roles)
+      allow(@hc).to receive(:apo).and_return(apo)
+      expect(apo).to receive(:person_roles)
       @hc.apo_person_roles
     end
 
     it "apo_persons_with_role() should delegate to apo.persons_with_role()" do
       role = 'foo_role'
       apo = double('apo')
-      apo.should_receive(:persons_with_role).with(role)
-      @hc.stub(:apo).and_return(apo)
+      expect(apo).to receive(:persons_with_role).with(role)
+      allow(@hc).to receive(:apo).and_return(apo)
       @hc.apo_persons_with_role(role)
     end
 
   end
 
   it "can exercise tracked_fields()" do
-    @hc.tracked_fields.should be_an_instance_of(Hash)
+    expect(@hc.tracked_fields).to be_an_instance_of(Hash)
   end
 
   it "cleaned_usernames() should process the apo_person_roles info as expected" do
@@ -332,8 +332,8 @@ describe Hydrus::Collection do
       'role1' => 'foo,bar,quux',
       'role2' => 'abc,xyz,www',
     }
-    @hc.stub(:apo_person_roles).and_return(apr)
-    @hc.cleaned_usernames.should == exp
+    allow(@hc).to receive(:apo_person_roles).and_return(apr)
+    expect(@hc.cleaned_usernames).to eq(exp)
   end
 
   describe "getters and setters" do
@@ -362,20 +362,20 @@ describe Hydrus::Collection do
           #   VAL           'fixed'
           # Initially, FOO_VAL() returns empty string.
           m = "#{typ}_#{val}".to_sym
-          @hc.send(m).should == ''
+          expect(@hc.send(m)).to eq('')
           # And if FOO_option() returns VAL, then FOO_VAL() will return FOO().
           exp = 'blah blah!!'
-          @hc.stub("#{typ}_option").and_return(val)
-          @hc.stub(att).and_return(exp)
-          @hc.send(m).should == exp
+          allow(@hc).to receive("#{typ}_option").and_return(val)
+          allow(@hc).to receive(att).and_return(exp)
+          expect(@hc.send(m)).to eq(exp)
         end
       end
 
       it "setters should not call FOO= because FOO_option() does not return VAL" do
         @combos.each do |typ, val, att|
           m = "#{typ}="
-          @hc.should_not_receive(m)
-          @hc.stub("#{typ}_option").and_return('')
+          expect(@hc).not_to receive(m)
+          allow(@hc).to receive("#{typ}_option").and_return('')
           @hc.send("#{typ}_#{val}=", 'new_val')
         end
       end
@@ -384,8 +384,8 @@ describe Hydrus::Collection do
         @combos.each do |typ, val, att|
           m   = "#{att}="
           exp = 'new value!'
-          @hc.should_receive(m).with(exp).once
-          @hc.stub("#{typ}_option").and_return(val)
+          expect(@hc).to receive(m).with(exp).once
+          allow(@hc).to receive("#{typ}_option").and_return(val)
           @hc.send("#{typ}_#{val}=", exp)
         end
       end
@@ -395,14 +395,14 @@ describe Hydrus::Collection do
     describe "visibility_option_value getter and setter" do
 
       it "can exercise the getter" do
-        @hc.stub(:visibility_option).and_return('fixed')
-        @hc.stub(:visibility).and_return(['world'])
-        @hc.visibility_option_value.should == 'everyone'
+        allow(@hc).to receive(:visibility_option).and_return('fixed')
+        allow(@hc).to receive(:visibility).and_return(['world'])
+        expect(@hc.visibility_option_value).to eq('everyone')
       end
 
       it "the setter should call the expected setters" do
-        @hc.should_receive('visibility_option=').with('fixed')
-        @hc.should_receive('visibility=').with('world')
+        expect(@hc).to receive('visibility_option=').with('fixed')
+        expect(@hc).to receive('visibility=').with('world')
         @hc.visibility_option_value = 'everyone'
       end
 
@@ -411,21 +411,21 @@ describe Hydrus::Collection do
     describe "visibility getter and setter" do
 
       it "getter should return ['world'] if item is world visible" do
-        @hc.stub_chain(:rightsMetadata, :has_world_read_node).and_return(true)
-        @hc.visibility.should == ['world']
+        allow(@hc).to receive_message_chain(:rightsMetadata, :has_world_read_node).and_return(true)
+        expect(@hc.visibility).to eq(['world'])
       end
 
       it "getter should return groups names if item is not world visible" do
         exp_groups = %w(foo bar)
         mock_nodes = exp_groups.map { |g| double('', :text => g) }
-        @hc.stub_chain(:rightsMetadata, :has_world_read_node).and_return(false)
-        @hc.stub_chain(:rightsMetadata, :group_read_nodes).and_return(mock_nodes)
-        @hc.visibility.should == exp_groups
+        allow(@hc).to receive_message_chain(:rightsMetadata, :has_world_read_node).and_return(false)
+        allow(@hc).to receive_message_chain(:rightsMetadata, :group_read_nodes).and_return(mock_nodes)
+        expect(@hc.visibility).to eq(exp_groups)
       end
 
       it "the setter should call the expected setters" do
-        @hc.should_receive('visibility_option=').with('fixed')
-        @hc.should_receive('visibility=').with('world')
+        expect(@hc).to receive('visibility_option=').with('fixed')
+        expect(@hc).to receive('visibility=').with('world')
         @hc.visibility_option_value = 'everyone'
       end
 
@@ -443,56 +443,56 @@ describe Hydrus::Collection do
     describe "dashboard_stats()" do
 
       it "should return empty hash if there are no APOs involving the user" do
-        @HC.should_receive(:apos_involving_user).and_return([])
-        @HC.should_not_receive(:collections_of_apos)
-        @HC.dashboard_stats(@user_foo).should == {}
+        expect(@HC).to receive(:apos_involving_user).and_return([])
+        expect(@HC).not_to receive(:collections_of_apos)
+        expect(@HC.dashboard_stats(@user_foo)).to eq({})
       end
 
       it "should return empty hash if there are no Collections involving the user" do
-        @HC.should_receive(:apos_involving_user).and_return([1,2,3])
-        @HC.should_receive(:collections_of_apos).and_return([])
-        @HC.should_not_receive(:item_counts_of_collections)
-        @HC.dashboard_stats(@user_foo).should == {}
+        expect(@HC).to receive(:apos_involving_user).and_return([1,2,3])
+        expect(@HC).to receive(:collections_of_apos).and_return([])
+        expect(@HC).not_to receive(:item_counts_of_collections)
+        expect(@HC.dashboard_stats(@user_foo)).to eq({})
       end
 
       it "should return item_counts_of_collections() if there are relevant Collections" do
         exp = {:foo => 1, :bar => 2}
-        @HC.should_receive(:apos_involving_user).and_return([1,2,3])
-        @HC.should_receive(:collections_of_apos).and_return([4,5,6])
-        @HC.should_receive(:item_counts_of_collections).and_return(exp)
-        @HC.dashboard_stats(@user_foo).should == exp
+        expect(@HC).to receive(:apos_involving_user).and_return([1,2,3])
+        expect(@HC).to receive(:collections_of_apos).and_return([4,5,6])
+        expect(@HC).to receive(:item_counts_of_collections).and_return(exp)
+        expect(@HC.dashboard_stats(@user_foo)).to eq(exp)
       end
 
     end
     describe 'dashboard_hash' do
       it 'should send 1 solr query if there are 99 apos' do
         arr=*(1..99)
-        @HC.should_receive(:apos_involving_user).and_return(arr)
-        @HC.should_receive(:squery_collections_of_apos).exactly(1).times
+        expect(@HC).to receive(:apos_involving_user).and_return(arr)
+        expect(@HC).to receive(:squery_collections_of_apos).exactly(1).times
         @HC.dashboard_hash(@user_foo)
       end
     end
     it "can exercise initial_item_counts()" do
       h = @HC.initial_item_counts()
-      h.should be_instance_of(Hash)
-      h.values.should == [0,0,0,0]
+      expect(h).to be_instance_of(Hash)
+      expect(h.values).to eq([0,0,0,0])
     end
 
     it "can exercise methods returning APO and Collection druids" do
       resp = double('mock_response')
       exp  = 12345
-      @HC.stub(:issue_solr_query).and_return([resp, nil])
-      @HC.should_receive(:get_druids_from_response).with(resp).exactly(3).and_return(exp)
-      @HC.apos_involving_user(@user_foo).should == exp
-      @HC.collections_of_apos([1,2,3,4]).should == exp
-      @HC.all_hydrus_collections.should == exp
+      allow(@HC).to receive(:issue_solr_query).and_return([resp, nil])
+      expect(@HC).to receive(:get_druids_from_response).with(resp).exactly(3).and_return(exp)
+      expect(@HC.apos_involving_user(@user_foo)).to eq(exp)
+      expect(@HC.collections_of_apos([1,2,3,4])).to eq(exp)
+      expect(@HC.all_hydrus_collections).to eq(exp)
     end
 
     it "can exercise get_facet_counts_from_response()" do
       exp  = 1234
       fcs  = {'facet_pivot' => {:a => exp}}
       resp = double('resp', :facet_counts => fcs)
-      @HC.get_facet_counts_from_response(resp).should == exp
+      expect(@HC.get_facet_counts_from_response(resp)).to eq(exp)
     end
 
     it "can exercise item_counts_with_labels()" do
@@ -502,14 +502,14 @@ describe Hydrus::Collection do
           "returned"          => 3,
           "published"         => 4,
       }
-      @hc.stub(:item_counts).and_return(cs)
+      allow(@hc).to receive(:item_counts).and_return(cs)
       exp = [
         [1, "draft"],
         [2, "waiting for approval"],
         [3, "item returned"],
         [4, "published"],
       ]
-      @hc.item_counts_with_labels.should == exp
+      expect(@hc.item_counts_with_labels).to eq(exp)
     end
 
     it "item_counts_of_collections()" do
@@ -548,9 +548,9 @@ describe Hydrus::Collection do
           ],
         },
       ]
-      @HC.stub(:issue_solr_query).and_return([nil, nil])
-      @HC.stub(:get_facet_counts_from_response).and_return(fcs)
-      @HC.item_counts_of_collections(coll_pids).should == exp
+      allow(@HC).to receive(:issue_solr_query).and_return([nil, nil])
+      allow(@HC).to receive(:get_facet_counts_from_response).and_return(fcs)
+      expect(@HC.item_counts_of_collections(coll_pids)).to eq(exp)
     end
 
   end

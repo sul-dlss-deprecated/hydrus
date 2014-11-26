@@ -51,7 +51,7 @@ class MockResponsible
 
 end
 
-describe Hydrus::Responsible do
+describe Hydrus::Responsible, :type => :model do
 
   before(:each) do
     @obj = MockResponsible.new
@@ -63,21 +63,21 @@ describe Hydrus::Responsible do
   end
 
   it "person_roles() should return the expected hash" do
-    @obj.person_roles.should == @orig_roles
+    expect(@obj.person_roles).to eq(@orig_roles)
   end
 
   it "persons_with_role() should return expected IDs" do
     @orig_roles.each do |role, ids|
-      @obj.persons_with_role(role).should == ids
+      expect(@obj.persons_with_role(role)).to eq(ids)
     end
   end
 
   it "roles_of_person() should return expected roles" do
-    @obj.roles_of_person('archivist3').should == Set.new(%w(
+    expect(@obj.roles_of_person('archivist3')).to eq(Set.new(%w(
       hydrus-collection-reviewer
       hydrus-collection-item-depositor
-    ))
-    @obj.roles_of_person('xxxxx').should == Set.new
+    )))
+    expect(@obj.roles_of_person('xxxxx')).to eq(Set.new)
   end
 
   it "person_roles= should rewrite the <person> nodes, but not <group> nodes" do
@@ -120,7 +120,7 @@ describe Hydrus::Responsible do
       "hydrus-collection-reviewer"       => "archivist3,ZZZ",
       "hydrus-collection-item-depositor" => "foo,bar,ZZZ",
     }
-    @obj.roleMetadata.ng_xml.should be_equivalent_to(exp)
+    expect(@obj.roleMetadata.ng_xml).to be_equivalent_to(exp)
   end
 
   it "pruned_role_info() should prune out lesser roles" do
@@ -143,7 +143,7 @@ describe Hydrus::Responsible do
       'QQQ' => Set.new(%w(hydrus-collection-viewer)),
       'RRR' => Set.new(%w(hydrus-collection-viewer)),
     }
-    Hydrus::Responsible.pruned_role_info(h).should == exp
+    expect(Hydrus::Responsible.pruned_role_info(h)).to eq(exp)
   end
 
   it "role_labels() should return the expect hash of roles and labels" do
@@ -151,21 +151,21 @@ describe Hydrus::Responsible do
     k2 = 'hydrus-collection-reviewer'
     # Entire hash of hashes.
     h = Hydrus::Responsible.role_labels
-    h[k1][:label].should == 'Item Depositor'
-    h[k1][:help].should  =~ /original depositor/
-    h[k2][:label].should == 'Reviewer'
-    h[k2][:help].should  =~ /can review/
-    h[k2][:lesser].should == %w(hydrus-collection-viewer)
+    expect(h[k1][:label]).to eq('Item Depositor')
+    expect(h[k1][:help]).to  match(/original depositor/)
+    expect(h[k2][:label]).to eq('Reviewer')
+    expect(h[k2][:help]).to  match(/can review/)
+    expect(h[k2][:lesser]).to eq(%w(hydrus-collection-viewer))
     # Just collection-level roles.
-    Hydrus::Responsible.role_labels(:collection_level).keys.size.should == h.keys.size - 2
+    expect(Hydrus::Responsible.role_labels(:collection_level).keys.size).to eq(h.keys.size - 2)
     # Just labels.
     h = Hydrus::Responsible.role_labels(:only_labels)
-    h[k1].should == 'Item Depositor'
-    h[k2].should == 'Reviewer'
+    expect(h[k1]).to eq('Item Depositor')
+    expect(h[k2]).to eq('Reviewer')
     # Just help text.
     h = Hydrus::Responsible.role_labels(:only_help)
-    h[k1].should  =~ /original depositor/
-    h[k2].should  =~ /can review/
+    expect(h[k1]).to  match(/original depositor/)
+    expect(h[k2]).to  match(/can review/)
   end
 
 end

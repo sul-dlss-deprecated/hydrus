@@ -1,30 +1,30 @@
 require 'spec_helper'
 
-describe Hydrus::Contentable do
+describe Hydrus::Contentable, :type => :model do
 
   before(:each) do
     @go       = Hydrus::GenericObject.new
     @pid      = 'oo000oo9999'
     @base_dir = '/oo/000/oo/9999/oo000oo9999'
-    @go.stub(:pid).and_return(@pid)
+    allow(@go).to receive(:pid).and_return(@pid)
   end
 
   it "base_file_directory()" do
-    @go.base_file_directory.should =~ /#{Regexp.escape(@base_dir)}\z/
+    expect(@go.base_file_directory).to match(/#{Regexp.escape(@base_dir)}\z/)
   end
 
   it "content_directory() and metadata_directory()" do
-    @go.stub(:base_file_directory).and_return(@base_dir)
-    @go.content_directory.should  == @base_dir + '/content'
-    @go.metadata_directory.should == @base_dir + '/metadata'
+    allow(@go).to receive(:base_file_directory).and_return(@base_dir)
+    expect(@go.content_directory).to  eq(@base_dir + '/content')
+    expect(@go.metadata_directory).to eq(@base_dir + '/metadata')
   end
 
   describe "create_content_metadata_xml()" do
 
     it "non-item should get blank XML node" do
       exp = ''
-      @go.stub('is_item?').and_return(false)
-      @go.create_content_metadata_xml.should be_equivalent_to(exp)
+      allow(@go).to receive('is_item?').and_return(false)
+      expect(@go.create_content_metadata_xml).to be_equivalent_to(exp)
     end
 
     it "item should get real contentMetadata" do
@@ -44,9 +44,9 @@ describe Hydrus::Contentable do
           </resource>
         </contentMetadata>
       '
-      @go.stub('is_item?').and_return(true)
-      @go.stub(:files).and_return(mock_files)
-      @go.create_content_metadata_xml.should be_equivalent_to(exp)
+      allow(@go).to receive('is_item?').and_return(true)
+      allow(@go).to receive(:files).and_return(mock_files)
+      expect(@go.create_content_metadata_xml).to be_equivalent_to(exp)
     end
 
   end

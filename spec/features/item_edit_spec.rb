@@ -23,11 +23,11 @@ describe("Item edit", :type => :request, :integration => true) do
   it "If not logged in, should be redirected to the login page, then back to our intended page after logging in" do
     logout
     visit edit_polymorphic_path(@hi)
-    current_path.should == new_user_session_path
+    expect(current_path).to eq(new_user_session_path)
     fill_in "Email", :with => 'archivist1@example.com'
     fill_in "Password", :with => login_pw
     click_button "Sign in"
-    current_path.should == edit_polymorphic_path(@hi)
+    expect(current_path).to eq(edit_polymorphic_path(@hi))
   end
 
   it "should be able to edit simple items: abstract, contact, keywords" do
@@ -42,25 +42,25 @@ describe("Item edit", :type => :request, :integration => true) do
     login_as('archivist1')
     should_visit_edit_page(@hi)
     # Make sure the object does not have the new content yet.
-    @hi.abstract.should_not == ni.abstract
-    @hi.contact.should_not  == ni.contact
-    @hi.keywords.should_not == ni.keywords
-    find_field("Abstract").value.should_not include(ni.abstract)
-    find_field("hydrus_item_contact").value.should_not include(ni.contact)
-    find_field("Keywords").value.should_not include(ni.keywords[0])
+    expect(@hi.abstract).not_to eq(ni.abstract)
+    expect(@hi.contact).not_to  eq(ni.contact)
+    expect(@hi.keywords).not_to eq(ni.keywords)
+    expect(find_field("Abstract").value).not_to include(ni.abstract)
+    expect(find_field("hydrus_item_contact").value).not_to include(ni.contact)
+    expect(find_field("Keywords").value).not_to include(ni.keywords[0])
     # Submit some changes.
     fill_in("Abstract", :with => "  #{ni.abstract}  ")
     fill_in("hydrus_item_contact", :with => "  #{ni.contact}  ")
     fill_in("Keywords", :with => "  #{ni.keywords.join(comma_join)}  ")
     click_button(@buttons[:save])
     # Confirm new location and flash message.
-    current_path.should == polymorphic_path(@hi)
-    page.should have_content(@ok_notice)
+    expect(current_path).to eq(polymorphic_path(@hi))
+    expect(page).to have_content(@ok_notice)
     # Confirm new content in fedora.
     @hi = Hydrus::Item.find @druid
-    @hi.abstract.should == ni.abstract
-    @hi.contact.should  == ni.contact
-    @hi.keywords.should == ni.keywords
+    expect(@hi.abstract).to eq(ni.abstract)
+    expect(@hi.contact).to  eq(ni.contact)
+    expect(@hi.keywords).to eq(ni.keywords)
   end
   
   describe "dates" do
@@ -69,7 +69,7 @@ describe("Item edit", :type => :request, :integration => true) do
       login_as('archivist1')
       should_visit_edit_page(@hi)
       date_val = '2004'
-      find_field("hydrus_item[dates[date_created]]").value.should_not include(date_val)
+      expect(find_field("hydrus_item[dates[date_created]]").value).not_to include(date_val)
     
       # Submit some changes.
       fill_in("hydrus_item[dates[date_created]]", :with => date_val)
@@ -77,17 +77,17 @@ describe("Item edit", :type => :request, :integration => true) do
       check "hydrus_item_dates_date_created_approximate"
       click_button(@buttons[:save])
       # Confirm new location and flash message.
-      current_path.should == polymorphic_path(@hi)
-      page.should have_content(@ok_notice)
+      expect(current_path).to eq(polymorphic_path(@hi))
+      expect(page).to have_content(@ok_notice)
       # Confirm new content in fedora.
       @hi = Hydrus::Item.find @druid
-      @hi.descMetadata.originInfo.dateCreated.nodeset.first.text.should == date_val
-      @hi.descMetadata.originInfo.dateCreated.nodeset.first['keyDate'].should == 'yes'
-      @hi.descMetadata.originInfo.dateCreated.nodeset.first['encoding'].should == 'w3cdtf'
-      @hi.descMetadata.originInfo.dateCreated.nodeset.first['qualifier'].should == 'approximate'
+      expect(@hi.descMetadata.originInfo.dateCreated.nodeset.first.text).to eq(date_val)
+      expect(@hi.descMetadata.originInfo.dateCreated.nodeset.first['keyDate']).to eq('yes')
+      expect(@hi.descMetadata.originInfo.dateCreated.nodeset.first['encoding']).to eq('w3cdtf')
+      expect(@hi.descMetadata.originInfo.dateCreated.nodeset.first['qualifier']).to eq('approximate')
       
       #check for duplicate nodes hannah reported
-      @hi.descMetadata.originInfo.length.should == 1
+      expect(@hi.descMetadata.originInfo.length).to eq(1)
     end
     it 'should edit a date range' do
       # Visit edit page.
@@ -95,7 +95,7 @@ describe("Item edit", :type => :request, :integration => true) do
       should_visit_edit_page(@hi)
       date_val = '2004'
       date_val_end = '2005'
-      find_field("hydrus_item[dates[date_start]]").value.should_not include(date_val)
+      expect(find_field("hydrus_item[dates[date_start]]").value).not_to include(date_val)
     
       # Submit some changes.
       fill_in("hydrus_item[dates[date_start]]", :with => date_val)
@@ -104,17 +104,17 @@ describe("Item edit", :type => :request, :integration => true) do
       choose("hydrus_item_dates_date_type_range")
       click_button(@buttons[:save])
       # Confirm new location and flash message.
-      current_path.should == polymorphic_path(@hi)
-      page.should have_content(@ok_notice)
+      expect(current_path).to eq(polymorphic_path(@hi))
+      expect(page).to have_content(@ok_notice)
       # Confirm new content in fedora.
       @hi = Hydrus::Item.find @druid
-      @hi.dates[:date_range_start].should == [date_val]
-      @hi.descMetadata.originInfo.length.should == 1
-      @hi.descMetadata.originInfo.date_range_start.nodeset.first['keyDate'].should == 'yes'
-      @hi.descMetadata.originInfo.date_range_start.nodeset.first['encoding'].should == 'w3cdtf'
-      @hi.descMetadata.originInfo.date_range_start.nodeset.first['qualifier'].should == 'approximate'
-      @hi.dates[:date_range_end].should == [date_val_end]
-      @hi.descMetadata.originInfo.date_range_end.nodeset.first['encoding'].should == 'w3cdtf'
+      expect(@hi.dates[:date_range_start]).to eq([date_val])
+      expect(@hi.descMetadata.originInfo.length).to eq(1)
+      expect(@hi.descMetadata.originInfo.date_range_start.nodeset.first['keyDate']).to eq('yes')
+      expect(@hi.descMetadata.originInfo.date_range_start.nodeset.first['encoding']).to eq('w3cdtf')
+      expect(@hi.descMetadata.originInfo.date_range_start.nodeset.first['qualifier']).to eq('approximate')
+      expect(@hi.dates[:date_range_end]).to eq([date_val_end])
+      expect(@hi.descMetadata.originInfo.date_range_end.nodeset.first['encoding']).to eq('w3cdtf')
     end
   end
   
@@ -132,7 +132,7 @@ describe("Item edit", :type => :request, :integration => true) do
     it "scenario with deletes, edits, and adds" do
       # We should have 5 contributors.
       exp = @hi.contributors.map { |c| c.clone }
-      exp.size.should == 5
+      expect(exp.size).to eq(5)
       # Go to edit page.
       login_as('archivist1')
       should_visit_edit_page(@hi)
@@ -174,17 +174,17 @@ describe("Item edit", :type => :request, :integration => true) do
       vdiv  = find(@css[:view_div])
       roles = vdiv.all('dt').map { |nd| nd.text }
       names = vdiv.all('dd').map { |nd| nd.text }
-      roles.zip(names).should == exp.map { |c| [c.role, c.name] }
+      expect(roles.zip(names)).to eq(exp.map { |c| [c.role, c.name] })
       # Check Fedora objects.
       @hi = Hydrus::Item.find(@hi.pid)
-      @hi.contributors.should == exp
+      expect(@hi.contributors).to eq(exp)
       # Check edit page.
       should_visit_edit_page(@hi)
       exp.each_with_index do |c, i|
         q1 = 'select#' + @css[:role].call(i)
         q2 = 'input#'  + @css[:name].call(i)
-        find(q1).value.should == c.role_key
-        find(q2).value.should == c.name
+        expect(find(q1).value).to eq(c.role_key)
+        expect(find(q2).value).to eq(c.name)
       end
     end
 
@@ -201,17 +201,17 @@ describe("Item edit", :type => :request, :integration => true) do
     login_as('archivist1')
     should_visit_edit_page(@hi)
 
-    find_field(field_link).value.should == orig_link
-    find_field(field_title).value.should == orig_title
+    expect(find_field(field_link).value).to eq(orig_link)
+    expect(find_field(field_title).value).to eq(orig_title)
 
     fill_in(field_link,  :with => new_link)
     fill_in(field_title, :with => new_title)
     click_button(@buttons[:save])
-    page.should have_content(@ok_notice)
+    expect(page).to have_content(@ok_notice)
 
     # Confirm new content in fedora.
     @hi = Hydrus::Item.find(@druid)
-    @hi.descMetadata.relatedItem.titleInfo.title.first.should == new_title
+    expect(@hi.descMetadata.relatedItem.titleInfo.title.first).to eq(new_title)
     @hi.descMetadata.relatedItem.location.url.first == "http://#{new_link}"
   end
 
@@ -226,17 +226,17 @@ describe("Item edit", :type => :request, :integration => true) do
     login_as('archivist1')
     should_visit_edit_page(@hi)
 
-    find_field(field_link).value.should == orig_link
-    find_field(field_title).value.should == orig_title
+    expect(find_field(field_link).value).to eq(orig_link)
+    expect(find_field(field_title).value).to eq(orig_title)
 
     fill_in(field_link,  :with => new_link)
     fill_in(field_title, :with => new_title)
     click_button(@buttons[:save])
-    page.should have_content(@ok_notice)
+    expect(page).to have_content(@ok_notice)
 
     # Confirm new content in fedora.
     @hi = Hydrus::Item.find(@druid)
-    @hi.descMetadata.relatedItem.titleInfo.title.first.should == new_title
+    expect(@hi.descMetadata.relatedItem.titleInfo.title.first).to eq(new_title)
     @hi.descMetadata.relatedItem.location.url.first == new_link
   end
 
@@ -253,39 +253,39 @@ describe("Item edit", :type => :request, :integration => true) do
     should_visit_edit_page(@hi)
     # Check for the related item input fields.
     (0...i).each do |j|
-      page.should have_css("input#hydrus_item_related_item_title_#{j}")
-      page.should have_css("input#hydrus_item_related_item_url_#{j}")
-      page.should have_css("#remove_relatedItem_#{j}")
+      expect(page).to have_css("input#hydrus_item_related_item_title_#{j}")
+      expect(page).to have_css("input#hydrus_item_related_item_url_#{j}")
+      expect(page).to have_css("#remove_relatedItem_#{j}")
     end
-    page.should_not have_css("##{css_new_title}")
-    page.should_not have_css("##{css_new_url}")
-    page.should_not have_css("##{css_delete}")
+    expect(page).not_to have_css("##{css_new_title}")
+    expect(page).not_to have_css("##{css_new_url}")
+    expect(page).not_to have_css("##{css_delete}")
     # Add a new related item
     click_button "add_link"
-    page.should have_css("##{css_new_title}")
-    page.should have_css("##{css_new_url}")
-    page.should have_css("##{css_delete}")
+    expect(page).to have_css("##{css_new_title}")
+    expect(page).to have_css("##{css_new_url}")
+    expect(page).to have_css("##{css_delete}")
     fill_in(css_new_title, :with => title)
     fill_in(css_new_url, :with => url)
     # Save.
     click_button(@buttons[:save])
-    page.should have_content(@ok_notice)
+    expect(page).to have_content(@ok_notice)
     # Make sure the descMetadata has the expected N of relatedItem nodes.
     # At one point we had a bug where the new title and url were added
     # to the first node rather than the new empty node.
     @hi = Hydrus::Item.find(@hi.pid)
-    @hi.descMetadata.find_by_terms(:relatedItem).size.should == i + 1
+    expect(@hi.descMetadata.find_by_terms(:relatedItem).size).to eq(i + 1)
     # Revisit edit page and check for the values we just added.
     should_visit_edit_page(@hi)
-    page.should have_css("##{css_delete}")
-    find_field(css_new_title).value.should == title
-    find_field(css_new_url).value.should == url
+    expect(page).to have_css("##{css_delete}")
+    expect(find_field(css_new_title).value).to eq(title)
+    expect(find_field(css_new_url).value).to eq(url)
     # Delete the item we added.
     click_link css_delete
-    current_path.should == edit_polymorphic_path(@hi)
-    page.should_not have_css("##{css_new_title}")
-    page.should_not have_css("##{css_new_url}")
-    page.should_not have_css("##{css_delete}")
+    expect(current_path).to eq(edit_polymorphic_path(@hi))
+    expect(page).not_to have_css("##{css_new_title}")
+    expect(page).not_to have_css("##{css_new_url}")
+    expect(page).not_to have_css("##{css_delete}")
   end
 
   it "editing related content w/o titles" do
@@ -305,18 +305,18 @@ describe("Item edit", :type => :request, :integration => true) do
     # Make sure the object does not have the new content yet.
     old_title = find_field(ni.title_f).value
     old_url = find_field(ni.url_f).value
-    old_title.should be_blank
-    old_url.should_not == ni.ri_url
+    expect(old_title).to be_blank
+    expect(old_url).not_to eq(ni.ri_url)
     # Submit some changes.
     fill_in ni.title_f, :with => ni.ri_title
     fill_in ni.url_f, :with => ni.ri_url
     click_button(@buttons[:save])
     # Confirm new location and flash message.
-    current_path.should == polymorphic_path(@hi)
-    page.should have_content(@ok_notice)
+    expect(current_path).to eq(polymorphic_path(@hi))
+    expect(page).to have_content(@ok_notice)
     # Confirm new content in fedora.
     @hi = Hydrus::Item.find(@druid)
-    @hi.related_item_title.first.should == ni.ri_title
+    expect(@hi.related_item_title.first).to eq(ni.ri_title)
   end
 
   it "can edit preferred citation field" do
@@ -327,10 +327,10 @@ describe("Item edit", :type => :request, :integration => true) do
     login_as('archivist1')
     should_visit_edit_page(@hi)
 
-    find_field(citation_field).value.strip.should == orig_pref_cit
+    expect(find_field(citation_field).value.strip).to eq(orig_pref_cit)
     fill_in citation_field, :with => new_pref_cit
     click_button(@buttons[:save])
-    page.should have_content(@ok_notice)
+    expect(page).to have_content(@ok_notice)
 
     # Confirm new content in fedora.
     @hi = Hydrus::Item.find(@druid)
@@ -346,34 +346,34 @@ describe("Item edit", :type => :request, :integration => true) do
     login_as('archivist1')
     should_visit_edit_page(@hi)
 
-    page.should have_css("textarea#hydrus_item_related_citation_0")
-    page.should have_css("textarea#hydrus_item_related_citation_1")
+    expect(page).to have_css("textarea#hydrus_item_related_citation_0")
+    expect(page).to have_css("textarea#hydrus_item_related_citation_1")
 
-    page.should_not have_css("textarea##{new_citation}")
-    page.should_not have_css("##{new_delete_button}")
+    expect(page).not_to have_css("textarea##{new_citation}")
+    expect(page).not_to have_css("##{new_delete_button}")
 
     click_button "add_related_citation"
-    current_path.should == edit_polymorphic_path(@hi)
+    expect(current_path).to eq(edit_polymorphic_path(@hi))
 
-    page.should have_css("##{new_citation}")
-    page.should have_css("##{new_delete_button}")
+    expect(page).to have_css("##{new_citation}")
+    expect(page).to have_css("##{new_delete_button}")
 
     fill_in(new_citation, :with => new_citation_text)
 
     click_button(@buttons[:save])
-    page.should have_content(@ok_notice)
+    expect(page).to have_content(@ok_notice)
 
     should_visit_edit_page(@hi)
 
-    page.should have_css("##{new_delete_button}")
-    find_field(new_citation).value.strip.should == new_citation_text.strip
+    expect(page).to have_css("##{new_delete_button}")
+    expect(find_field(new_citation).value.strip).to eq(new_citation_text.strip)
 
     # delete
     click_link new_delete_button
 
-    current_path.should == edit_polymorphic_path(@hi)
-    page.should_not have_css("##{new_citation}")
-    page.should_not have_css("##{new_delete_button}")
+    expect(current_path).to eq(edit_polymorphic_path(@hi))
+    expect(page).not_to have_css("##{new_citation}")
+    expect(page).not_to have_css("##{new_delete_button}")
   end
 
   it "should have editible license information once the parent collection's license is set to varies" do
@@ -395,22 +395,22 @@ describe("Item edit", :type => :request, :integration => true) do
     choose varies_radio
     select(new_collection_license, :from => collection_licenses)
     click_button(@buttons[:save])
-    page.should have_content(@ok_notice)
+    expect(page).to have_content(@ok_notice)
 
     # Item edit page should offer ability to select a license.
     should_visit_edit_page(@hi)
-    page.should have_selector("##{item_licenses}")
+    expect(page).to have_selector("##{item_licenses}")
 
     # Verify that the default license set at the collection-level is selected.
     within("select##{item_licenses}") do
       selected_license = find(css_lic_select).text
-      selected_license.should == new_collection_license
+      expect(selected_license).to eq(new_collection_license)
     end
 
     # Select a different license, and save.
     select(new_item_license, :from => item_licenses)
     click_button(@buttons[:save])
-    page.should have_content(@ok_notice)
+    expect(page).to have_content(@ok_notice)
 
     # Item has expected rights.
     @hi = Hydrus::Item.find @druid
@@ -423,13 +423,13 @@ describe("Item edit", :type => :request, :integration => true) do
     # Verify that the previous license was set.
     within("select##{item_licenses}") do
       selected_license = find(css_lic_select).text
-      selected_license.should == new_item_license
+      expect(selected_license).to eq(new_item_license)
     end
 
     # Select no license, and save.
     select(no_license, :from => item_licenses)
     click_button(@buttons[:save])
-    page.should have_content(@ok_notice)
+    expect(page).to have_content(@ok_notice)
 
     # Back to the edit page.
     should_visit_edit_page(@hi)
@@ -437,13 +437,13 @@ describe("Item edit", :type => :request, :integration => true) do
     # Verify that the previous license was set.
     within("select##{item_licenses}") do
       selected_license = find(css_lic_select).text
-      selected_license.should == no_license
+      expect(selected_license).to eq(no_license)
     end
 
     # Select original license, and save.
     select(new_collection_license, :from => item_licenses)
     click_button(@buttons[:save])
-    page.should have_content(@ok_notice)
+    expect(page).to have_content(@ok_notice)
 
     # Back to the edit page.
     should_visit_edit_page(@hi)
@@ -451,7 +451,7 @@ describe("Item edit", :type => :request, :integration => true) do
     # Verify that the previous license was set.
     within("select##{item_licenses}") do
       selected_license = find(css_lic_select).text
-      selected_license.should == new_collection_license
+      expect(selected_license).to eq(new_collection_license)
     end
 
   end
@@ -479,7 +479,7 @@ describe("Item edit", :type => :request, :integration => true) do
       b = @buttons[:submit_for_approval]
       login_as(viewer)
       should_visit_view_page(hi)
-      page.should_not have_button(b)
+      expect(page).not_to have_button(b)
 
       # But the owner should see the button.
       # Submit it for approval.
@@ -492,7 +492,7 @@ describe("Item edit", :type => :request, :integration => true) do
       b = @buttons[:disapprove]
       login_as(viewer)
       should_visit_view_page(hi)
-      page.should_not have_button(b)
+      expect(page).not_to have_button(b)
 
       # But the reviewer should see the button.
       # Disapprove the item.
@@ -506,7 +506,7 @@ describe("Item edit", :type => :request, :integration => true) do
       b = @buttons[:resubmit]
       login_as(viewer)
       should_visit_view_page(hi)
-      page.should_not have_button(b)
+      expect(page).not_to have_button(b)
 
       # But the owner should see the button.
       # Resubmit the item.
@@ -519,7 +519,7 @@ describe("Item edit", :type => :request, :integration => true) do
       b = @buttons[:approve]
       login_as(viewer)
       should_visit_view_page(hi)
-      page.should_not have_button(b)
+      expect(page).not_to have_button(b)
 
       # But the reviewer should see the button.
       # Disapprove the item.
@@ -535,7 +535,7 @@ describe("Item edit", :type => :request, :integration => true) do
       b = @buttons[:publish_directly]
       login_as(viewer)
       should_visit_view_page(hi)
-      page.should_not have_button(b)
+      expect(page).not_to have_button(b)
 
       # But the owner should see the button.
       # Publish directly.
@@ -589,8 +589,8 @@ describe("Item edit", :type => :request, :integration => true) do
 
       # Save and confirm.
       click_button(@buttons[:save])
-      current_path.should == polymorphic_path(@hi)
-      page.should have_content(@ok_notice)
+      expect(current_path).to eq(polymorphic_path(@hi))
+      expect(page).to have_content(@ok_notice)
 
       # Check embargoMD and rightsMD: after setting an embargo date.
       @hi = Hydrus::Item.find(@hi.pid)
@@ -606,8 +606,8 @@ describe("Item edit", :type => :request, :integration => true) do
 
       # Save and confirm.
       click_button(@buttons[:save])
-      current_path.should == polymorphic_path(@hi)
-      page.should have_content(@ok_notice)
+      expect(current_path).to eq(polymorphic_path(@hi))
+      expect(page).to have_content(@ok_notice)
 
       # Check embargoMD and rightsMD: after removing embargo.
       @hi = Hydrus::Item.find(@hi.pid)
@@ -647,15 +647,15 @@ describe("Item edit", :type => :request, :integration => true) do
           # Check view page.
           lab = fi[:label]
           hid = fi[:hide]
-          find("#{span}.file_label_#{id}").should have_content(lab)
+          expect(find("#{span}.file_label_#{id}")).to have_content(lab)
           txt = find("#{span}.hide_status_#{id}").text
-          txt.include?('[hidden]').should == hid
+          expect(txt.include?('[hidden]')).to eq(hid)
           # Check ObjectFile.
           hof = Hydrus::ObjectFile.find(id)
-          hof.get_file_info.should == fi
+          expect(hof.get_file_info).to eq(fi)
         end
         # Check total N of ObjectFiles.
-        Hydrus::ObjectFile.find_all_by_pid(@hi.pid).size.should == exp.keys.size
+        expect(Hydrus::ObjectFile.find_all_by_pid(@hi.pid).size).to eq(exp.keys.size)
       }
 
       # Login.
@@ -672,8 +672,8 @@ describe("Item edit", :type => :request, :integration => true) do
         # Confirm that form has expected values.
         css_lab = "file_info_#{id}_label"
         css_hid = "file_info_#{id}_hide"
-        find_by_id(css_lab).value.should    == fi[:label]
-        find_by_id(css_hid).checked?.should == (fi[:hide] ? 'checked' : nil)
+        expect(find_by_id(css_lab).value).to    eq(fi[:label])
+        expect(find_by_id(css_hid).checked?).to eq(fi[:hide] ? 'checked' : nil)
         # Modify the values -- in the exp hash.
         lab = 'foo_' + fi[:label]
         hid = (id < 3)
@@ -701,7 +701,7 @@ describe("Item edit", :type => :request, :integration => true) do
 
       # After delete we are still on edit page.
       # It should not have the deleted file.
-      page.has_link?(css_del).should == false
+      expect(page.has_link?(css_del)).to eq(false)
 
       # Visit view page and check file info.
       should_visit_view_page(@hi)
@@ -709,7 +709,7 @@ describe("Item edit", :type => :request, :integration => true) do
 
       # Restore the deleted file.
       restore_upload_file(file_url)
-      File.exists?('public' + file_url).should == true
+      expect(File.exists?('public' + file_url)).to eq(true)
     end
 
   end

@@ -187,12 +187,12 @@ end
 
 def should_visit_view_page(obj)
   visit polymorphic_path(obj)
-  current_path.should == polymorphic_path(obj)
+  expect(current_path).to eq(polymorphic_path(obj))
 end
 
 def should_visit_edit_page(obj)
   visit edit_polymorphic_path(obj)
-  current_path.should == edit_polymorphic_path(obj)
+  expect(current_path).to eq(edit_polymorphic_path(obj))
 end
 
 # Takes a collection.
@@ -201,13 +201,13 @@ end
 def should_visit_new_item_page(coll)
   rgx = Regexp.new('/items/(druid:\w{11})/edit')
   visit new_hydrus_item_path(:collection => coll)
-  current_path.should =~ rgx
+  expect(current_path).to match(rgx)
   druid = rgx.match(current_path)[1]
   return druid
 end
 
 def confirm_rights_metadata_in_apo(obj)
-  obj.apo.defaultObjectRights.ng_xml.should be_equivalent_to obj.rightsMetadata.ng_xml # collection rights metadata should be equal to apo default object rights
+  expect(obj.apo.defaultObjectRights.ng_xml).to be_equivalent_to obj.rightsMetadata.ng_xml # collection rights metadata should be equal to apo default object rights
 end
 
 def check_emb_vis_lic(obj, opts)
@@ -242,28 +242,28 @@ def check_emb_vis_lic(obj, opts)
   is_emb = (obj.class == Hydrus::Item and obj.is_embargoed)
 
   # Consistency between is_embargoed() and testing expectations.
-  opts[:embargo_date].blank?.should == not(is_emb)
+  expect(opts[:embargo_date].blank?).to eq(not(is_emb))
 
   # All objects should be world discoverable.
-  obj.rightsMetadata.ng_xml.xpath("#{di}/world").size.should == 1
-  obj.embargoMetadata.ng_xml.xpath("#{di}/world").size.should == 1 if is_emb
+  expect(obj.rightsMetadata.ng_xml.xpath("#{di}/world").size).to eq(1)
+  expect(obj.embargoMetadata.ng_xml.xpath("#{di}/world").size).to eq(1) if is_emb
 
   # Some checks based on embargo status.
   if is_emb
     # embargoMetadata
-    em.ng_xml.at_xpath('//status').content.should == 'embargoed'
-    em.ng_xml.at_xpath('//releaseDate').content.should == opts[:embargo_date]
+    expect(em.ng_xml.at_xpath('//status').content).to eq('embargoed')
+    expect(em.ng_xml.at_xpath('//releaseDate').content).to eq(opts[:embargo_date])
     # rightsMetadata
-    rm.has_world_read_node.should == false
-    rm.group_read_nodes.size.should == 0
-    rm.ng_xml.at_xpath("#{rd}/embargoReleaseDate").content.should == opts[:embargo_date]
-    rm.ng_xml.xpath("#{rd}/none").size.should == 1
+    expect(rm.has_world_read_node).to eq(false)
+    expect(rm.group_read_nodes.size).to eq(0)
+    expect(rm.ng_xml.at_xpath("#{rd}/embargoReleaseDate").content).to eq(opts[:embargo_date])
+    expect(rm.ng_xml.xpath("#{rd}/none").size).to eq(1)
   else
     # embargoMetadata: should be empty
-    em.ng_xml.content.strip.should be_empty
+    expect(em.ng_xml.content.strip).to be_empty
     # rightsMetadata: should not have an embargoReleaseDate.
-    rm.ng_xml.xpath("#{rd}/embargoReleaseDate").size.should == 0
-    rm.ng_xml.xpath("#{rd}/none").size.should == 0
+    expect(rm.ng_xml.xpath("#{rd}/embargoReleaseDate").size).to eq(0)
+    expect(rm.ng_xml.xpath("#{rd}/none").size).to eq(0)
   end
 
   # Check visibility: (world|stanford) stored in either embargoMetadata or rightsMetadata.
@@ -271,17 +271,17 @@ def check_emb_vis_lic(obj, opts)
   g = datastream.ng_xml.xpath("#{rd}/group")
   w = datastream.ng_xml.xpath("#{rd}/world")
   if opts[:visibility] == "stanford"
-    g.size.should == 1
-    g.first.content.should == 'stanford'
-    w.size.should == 0
+    expect(g.size).to eq(1)
+    expect(g.first.content).to eq('stanford')
+    expect(w.size).to eq(0)
   else # "world"
-    g.size.should == 0
-    w.size.should == 1
+    expect(g.size).to eq(0)
+    expect(w.size).to eq(1)
   end
 
   # Check the license in rightsMetadata.
   u = obj.rightsMetadata.ng_xml.at_xpath('//use/machine')
-  u.content.should == opts[:license_code].sub(/\Acc-/, '')
+  expect(u.content).to eq(opts[:license_code].sub(/\Acc-/, ''))
 end
 
 # Some integration tests requires the minting of a valid druid in
@@ -318,7 +318,7 @@ def create_new_collection(opts = {})
   # Extract the druid from the URL.
   r = Regexp.new('/collections/(druid:\w{11})/edit')
   m = r.match(current_path)
-  m.should_not(be_nil)
+  expect(m).not_to(be_nil)
   druid = m[1]
   # Fill in required fields.
   hc    = 'hydrus_collection'
@@ -331,8 +331,8 @@ def create_new_collection(opts = {})
   choose  "#{hc}_requires_human_approval_" + opts.requires_human_approval
   # Save.
   click_button "save_nojs"
-  current_path.should == "/collections/#{druid}"
-  find('div.alert').should have_content("Your changes have been saved")
+  expect(current_path).to eq("/collections/#{druid}")
+  expect(find('div.alert')).to have_content("Your changes have been saved")
   # Get the collection from Fedora and return it.
   return Hydrus::Collection.find(druid)
 end
@@ -364,7 +364,7 @@ def create_new_item(opts = {})
   # Extract the druid from the URL.
   r = Regexp.new('/items/(druid:\w{11})/edit')
   m = r.match(current_path)
-  m.should_not(be_nil)
+  expect(m).not_to(be_nil)
   druid = m[1]
   # Fill in the required fields.
   click_button('Add Contributor')
@@ -383,8 +383,8 @@ def create_new_item(opts = {})
   f.save
   # Save.
   click_button "save_nojs"
-  current_path.should == "/items/#{druid}"
-  find('div.alert').should have_content("Your changes have been saved")
+  expect(current_path).to eq("/items/#{druid}")
+  expect(find('div.alert')).to have_content("Your changes have been saved")
   # Agree to terms of deposit (hard to do via the UI).
   hi = Hydrus::Item.find(druid)
   hi.accept_terms_of_deposit(opts.user)

@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 
-describe Hydrus::GenericObject do
+describe Hydrus::GenericObject, :type => :model do
 
   before(:each) do
     @cannot_do_regex = /\ACannot perform action/
@@ -10,54 +10,54 @@ describe Hydrus::GenericObject do
   end
 
   it "apo() should return a new blank apo if the apo_pid is nil" do
-    @go.apo.class.should == Hydrus::AdminPolicyObject
+    expect(@go.apo.class).to eq(Hydrus::AdminPolicyObject)
   end
 
   it "dru() should return the druid without the prefix" do
-    @go.stub(:pid).and_return('druid:oo000oo0003')
-    @go.dru.should == 'oo000oo0003'
+    allow(@go).to receive(:pid).and_return('druid:oo000oo0003')
+    expect(@go.dru).to eq('oo000oo0003')
   end
 
   describe "apo" do
     it "should be the admin policy object if it is defined" do
       apo = double(:id => 'xyz')
-      @go.stub(:admin_policy_object).and_return(apo)
+      allow(@go).to receive(:admin_policy_object).and_return(apo)
       expect(@go.apo).to eq apo
     end
 
     it "should default to a new APO object" do
-      @go.stub(:admin_policy_object).and_raise ActiveFedora::ObjectNotFoundError.new
+      allow(@go).to receive(:admin_policy_object).and_raise ActiveFedora::ObjectNotFoundError.new
       expect(@go.apo).to be_a_kind_of Hydrus::AdminPolicyObject
     end
   end
 
   describe "apo_pid" do
     it "should return the pid of the APO" do
-      @go.stub(:admin_policy_object).and_return(double(:id => 'xyz'))
+      allow(@go).to receive(:admin_policy_object).and_return(double(:id => 'xyz'))
       expect(@go.apo_pid).to eq 'xyz'
     end
   end
 
   it "can exercise discover_access()" do
-    @go.discover_access.should == ""
+    expect(@go.discover_access).to eq("")
   end
 
   it "can exercise object_type()" do
     fake_imd = double('fake_imd', :objectType => [123,456])
-    @go.should_receive(:identityMetadata).and_return(fake_imd)
-    @go.object_type.should == 123
+    expect(@go).to receive(:identityMetadata).and_return(fake_imd)
+    expect(@go.object_type).to eq(123)
   end
 
   it "can exercise url()" do
-    @go.purl_url.should == "http://purl.stanford.edu/__DO_NOT_USE__"
+    expect(@go.purl_url).to eq("http://purl.stanford.edu/__DO_NOT_USE__")
   end
 
   it "can exercise related_items()" do
     ris = @go.related_items
-    ris.size.should == 1
+    expect(ris.size).to eq(1)
     ri = ris.first
-    ri.title.should == ''
-    ri.url.should == ''
+    expect(ri.title).to eq('')
+    expect(ri.url).to eq('')
   end
 
   describe "registration" do
@@ -66,20 +66,20 @@ describe Hydrus::GenericObject do
       # Non-APO: hash should include initiate_workflow.
       args = %w(whobar item somePID)
       drp = Hydrus::GenericObject.dor_registration_params(*args)
-      drp.should be_instance_of Hash
-      drp[:admin_policy].should == args.last
-      drp.should include(:initiate_workflow)
+      expect(drp).to be_instance_of Hash
+      expect(drp[:admin_policy]).to eq(args.last)
+      expect(drp).to include(:initiate_workflow)
       # APO: hash should not includes initiate_workflow.
       args = %w(whobar adminPolicy somePID)
       drp = Hydrus::GenericObject.dor_registration_params(*args)
-      drp.should be_instance_of Hash
-      drp.should include(:initiate_workflow)
+      expect(drp).to be_instance_of Hash
+      expect(drp).to include(:initiate_workflow)
     end
 
     it "should be able to exercise register_dor_object(), using stubbed call to Dor" do
       args = %w(whobar item somePID)
       drp = Hydrus::GenericObject.dor_registration_params(*args)
-      expectation = Dor::RegistrationService.should_receive(:register_object)
+      expectation = expect(Dor::RegistrationService).to receive(:register_object)
       expectation.with(hash_including(*drp.keys))
       Hydrus::GenericObject.register_dor_object(nil, nil, nil)
     end
@@ -91,16 +91,16 @@ describe Hydrus::GenericObject do
     describe "license_groups(), license_commons(), and license_group_urls()" do
 
       it "should get expected object types" do
-        Hydrus::GenericObject.license_groups.should be_a Array
-        Hydrus::GenericObject.license_commons.should be_a Hash
-        Hydrus::GenericObject.license_group_urls.should be_a Hash
+        expect(Hydrus::GenericObject.license_groups).to be_a Array
+        expect(Hydrus::GenericObject.license_commons).to be_a Hash
+        expect(Hydrus::GenericObject.license_group_urls).to be_a Hash
       end
 
       it "license_groups() labels should be keys in license_commons()" do
         hgo = Hydrus::GenericObject
         lgs = hgo.license_groups.map(&:first)
         lcs = hgo.license_commons.keys
-        lcs.each { |lc| lgs.should include(lc) }
+        lcs.each { |lc| expect(lgs).to include(lc) }
       end
 
     end
@@ -109,10 +109,10 @@ describe Hydrus::GenericObject do
 
       it "setting license should also set license_text and license_group_code" do
         # Before.
-        @go.license.should == 'none'
-        @go.license_text.should == ''
-        @go.license_group_code.should == nil
-        @go.terms_of_use.should == ''
+        expect(@go.license).to eq('none')
+        expect(@go.license_text).to eq('')
+        expect(@go.license_group_code).to eq(nil)
+        expect(@go.terms_of_use).to eq('')
         # Set a value for terms of use.
         tou = 'blah blah blah'
         @go.terms_of_use = tou
@@ -124,15 +124,15 @@ describe Hydrus::GenericObject do
         ]
         tests.each do |lcode, txt, gcode|
           @go.license = lcode
-          @go.license.should == lcode
-          @go.license_text.should == txt
-          @go.license_group_code.should == gcode
+          expect(@go.license).to eq(lcode)
+          expect(@go.license_text).to eq(txt)
+          expect(@go.license_group_code).to eq(gcode)
           # Terms of use should be unaffected.
-          @go.terms_of_use.should == tou
+          expect(@go.terms_of_use).to eq(tou)
           # License code in rightsMetadata XML should be correct.
           # In particular, the cc-by-nc code should be stored by by-nc.
           nd = @go.rightsMetadata.use.machine.nodeset.first
-          nd.text.should == lcode.sub(/\Acc-/, '') if nd
+          expect(nd.text).to eq(lcode.sub(/\Acc-/, '')) if nd
         end
       end
 
@@ -140,17 +140,17 @@ describe Hydrus::GenericObject do
 
     it "license_human() should return a human readable value for a license code" do
       hgo = Hydrus::GenericObject
-      hgo.license_human("cc-by").should == "CC BY Attribution"
-      hgo.license_human("cc-by-nc-sa").should == "CC BY-NC-SA Attribution-NonCommercial-ShareAlike"
-      hgo.license_human("odc-odbl").should == "ODC-ODbl Open Database License"
-      hgo.license_human('blah!!').should =~ /unknown license/i
+      expect(hgo.license_human("cc-by")).to eq("CC BY Attribution")
+      expect(hgo.license_human("cc-by-nc-sa")).to eq("CC BY-NC-SA Attribution-NonCommercial-ShareAlike")
+      expect(hgo.license_human("odc-odbl")).to eq("ODC-ODbl Open Database License")
+      expect(hgo.license_human('blah!!')).to match(/unknown license/i)
     end
 
     it "terms_of_use: getter and setter" do
       exp = 'foobar'
-      @go.terms_of_use.should == ''
+      expect(@go.terms_of_use).to eq('')
       @go.terms_of_use = exp
-      @go.terms_of_use.should == exp
+      expect(@go.terms_of_use).to eq(exp)
     end
 
   end
@@ -164,9 +164,9 @@ describe Hydrus::GenericObject do
       exp  = "<identityMetadata>#{xml}</identityMetadata>"
       obj  = Hydrus::GenericObject.new
       idmd = Dor::IdentityMetadataDS.new(nil, nil)
-      obj.stub(:identityMetadata).and_return(idmd)
+      allow(obj).to receive(:identityMetadata).and_return(idmd)
       obj.set_item_type(item_type)
-      idmd.ng_xml.should be_equivalent_to exp
+      expect(idmd.ng_xml).to be_equivalent_to exp
     end
   end
   context 'set_item_type' do
@@ -182,85 +182,85 @@ describe Hydrus::GenericObject do
     end 
   it 'set_item_type() should set the correct desc metadata fields for a dataset' do
       @obj.set_item_type('dataset')
-      type_of_resource.should == 'software, multimedia'
-      genre.should == 'dataset'
+      expect(type_of_resource).to eq('software, multimedia')
+      expect(genre).to eq('dataset')
   end
   it 'set_item_type() should set the correct desc metadata fields for a thesis' do
       @obj.set_item_type('thesis')
-      type_of_resource.should == 'text'
-      genre.should == 'thesis'
-      @obj.descMetadata.ng_xml.search('//mods:genre', 'mods' => 'http://www.loc.gov/mods/v3').first['authority'].should == 'marcgt'
+      expect(type_of_resource).to eq('text')
+      expect(genre).to eq('thesis')
+      expect(@obj.descMetadata.ng_xml.search('//mods:genre', 'mods' => 'http://www.loc.gov/mods/v3').first['authority']).to eq('marcgt')
   end
   it 'set_item_type() should set the correct desc metadata fields for a article' do    
       @obj.set_item_type('article')
-      type_of_resource.should == 'text'
-      genre.should == 'article'
-      @obj.descMetadata.ng_xml.search('//mods:genre', 'mods' => 'http://www.loc.gov/mods/v3').first['authority'].should == 'marcgt'
+      expect(type_of_resource).to eq('text')
+      expect(genre).to eq('article')
+      expect(@obj.descMetadata.ng_xml.search('//mods:genre', 'mods' => 'http://www.loc.gov/mods/v3').first['authority']).to eq('marcgt')
   end
   
   it 'set_item_type() should set the correct desc metadata fields for a class project' do
       @obj.set_item_type('class project')
-      type_of_resource.should == 'text'
-      genre.should == 'student project report'
+      expect(type_of_resource).to eq('text')
+      expect(genre).to eq('student project report')
   end
   it 'set_item_type() should set the correct desc metadata fields for a computer game' do
       @obj.set_item_type('computer game')
-      type_of_resource.should == 'software, multimedia'
-      genre.should == 'game'
+      expect(type_of_resource).to eq('software, multimedia')
+      expect(genre).to eq('game')
   end
   it 'set_item_type() should set the correct desc metadata fields for a audio - music' do
       @obj.set_item_type('audio - music')
-      type_of_resource.should == 'sound recording-musical'
-      genre.should == 'sound'
+      expect(type_of_resource).to eq('sound recording-musical')
+      expect(genre).to eq('sound')
   end
   it 'set_item_type() should set the correct desc metadata fields for a audio - spoken' do
       @obj.set_item_type('audio - spoken')
-      type_of_resource.should == 'sound recording-nonmusical'
-      genre.should == 'sound'
+      expect(type_of_resource).to eq('sound recording-nonmusical')
+      expect(genre).to eq('sound')
   end
   it 'set_item_type() should set the correct desc metadata fields for a conference paper / presentation' do
       @obj.set_item_type('conference paper / presentation')
-      type_of_resource.should == 'text'
-      genre.should == 'conference publication'
+      expect(type_of_resource).to eq('text')
+      expect(genre).to eq('conference publication')
   end
   it 'set_item_type() should set the correct desc metadata fields for a technical report' do
       @obj.set_item_type('technical report')
-      type_of_resource.should == 'text'
-      genre.should == 'technical report'
+      expect(type_of_resource).to eq('text')
+      expect(genre).to eq('technical report')
   end
   it 'set_item_type() should set the correct desc metadata fields for a video' do
       @obj.set_item_type('video')
-      type_of_resource.should == 'moving image'
-      genre.should == 'motion picture'
+      expect(type_of_resource).to eq('moving image')
+      expect(genre).to eq('motion picture')
   end
   it 'set_item_type() should set the correct desc metadata fields for a video' do
       @obj.set_item_type('video')
-      type_of_resource.should == 'moving image'
-      genre.should == 'motion picture'
+      expect(type_of_resource).to eq('moving image')
+      expect(genre).to eq('motion picture')
   end
   it 'should set the correct desc metadata fields for an image' do
       @obj.set_item_type('image')
-      type_of_resource.should == 'still image'
+      expect(type_of_resource).to eq('still image')
   end
   it 'set_item_type() should set the correct desc metadata fields for archival mixed material ' do
       @obj.set_item_type('archival mixed material')
-      type_of_resource.should == 'mixed material'
-      @obj.descMetadata.ng_xml.search('//mods:typeOfResource', 'mods' => 'http://www.loc.gov/mods/v3').first['manuscript'].should == 'yes'
+      expect(type_of_resource).to eq('mixed material')
+      expect(@obj.descMetadata.ng_xml.search('//mods:typeOfResource', 'mods' => 'http://www.loc.gov/mods/v3').first['manuscript']).to eq('yes')
   end
   it 'should set the correct desc metadata fields for software' do
       @obj.set_item_type('software')
-      type_of_resource.should == 'software, multimedia'
+      expect(type_of_resource).to eq('software, multimedia')
   end
   it 'should set the correct desc metadata fields for a textbook' do
       @obj.set_item_type('textbook')
-      type_of_resource.should == 'text'
-      genre.should == 'instruction'
+      expect(type_of_resource).to eq('text')
+      expect(genre).to eq('instruction')
   end
   
   it 'set_item_type() should set the correct desc metadata fields for a collection' do
       @obj.set_item_type(:collection)
-      type_of_resource.should == ''
-      @obj.descMetadata.ng_xml.search('//mods:typeOfResource', 'mods' => 'http://www.loc.gov/mods/v3').first['collection'].should == 'yes'
+      expect(type_of_resource).to eq('')
+      expect(@obj.descMetadata.ng_xml.search('//mods:typeOfResource', 'mods' => 'http://www.loc.gov/mods/v3').first['collection']).to eq('yes')
   end
 end
 
@@ -287,30 +287,30 @@ end
       EOXML
       @workflow = Dor::WorkflowDs.from_xml(noko_doc(xml))
       @go = Hydrus::GenericObject.new
-      @go.stub(:workflows).and_return(@workflow)
+      allow(@go).to receive(:workflows).and_return(@workflow)
     end
 
     it "get_workflow_node() should return a node with correct id attribute" do
       node = @go.workflows.get_workflow_node
-      node.should be_instance_of Nokogiri::XML::Element
-      node['id'].should == Dor::Config.hydrus.app_workflow.to_s
+      expect(node).to be_instance_of Nokogiri::XML::Element
+      expect(node['id']).to eq(Dor::Config.hydrus.app_workflow.to_s)
     end
 
     it "get_workflow_step() should return a node with correct name attribute" do
       node = @go.workflows.get_workflow_step('approve')
-      node.should be_instance_of Nokogiri::XML::Element
-      node['name'].should == 'approve'
+      expect(node).to be_instance_of Nokogiri::XML::Element
+      expect(node['name']).to eq('approve')
     end
 
     it "get_workflow_status() should return the current status of a step" do
-      @go.workflows.get_workflow_status('start-deposit').should == 'completed'
-      @go.workflows.get_workflow_status('submit').should        == 'waiting'
-      @go.workflows.get_workflow_status('blort').should         == nil
+      expect(@go.workflows.get_workflow_status('start-deposit')).to eq('completed')
+      expect(@go.workflows.get_workflow_status('submit')).to        eq('waiting')
+      expect(@go.workflows.get_workflow_status('blort')).to         eq(nil)
     end
 
     it "workflow_step_is_done() should return correct value" do
-      @go.workflows.workflow_step_is_done('start-deposit').should == true
-      @go.workflows.workflow_step_is_done('submit').should        == false
+      expect(@go.workflows.workflow_step_is_done('start-deposit')).to eq(true)
+      expect(@go.workflows.workflow_step_is_done('submit')).to        eq(false)
     end
 
     it "is_published() should return true if object status is any flavor of publish" do
@@ -322,8 +322,8 @@ end
         'awaiting_approval' => false,
       }
       tests.each do |status, exp|
-        @go.stub(:object_status).and_return(status)
-        @go.is_published.should == exp
+        allow(@go).to receive(:object_status).and_return(status)
+        expect(@go.is_published).to eq(exp)
       end
     end
 
@@ -337,27 +337,27 @@ end
     end
 
     it "blank slate object (should_validate=false) should include only the :pid error" do
-      @go.stub(:should_validate).and_return(false)
-      @go.valid?.should == false
-      @go.errors.messages.keys.should == [@exp.first]
+      allow(@go).to receive(:should_validate).and_return(false)
+      expect(@go.valid?).to eq(false)
+      expect(@go.errors.messages.keys).to eq([@exp.first])
     end
 
     it "blank slate object should include all validation errors" do
-      @go.valid?.should == false
-      @go.errors.messages.should include(*@exp)
+      expect(@go.valid?).to eq(false)
+      expect(@go.errors.messages).to include(*@exp)
     end
 
     it "fully populated object should not be valid if contact email is invalid" do
       dru = 'druid:ll000ll0001'
-      @exp.each { |e| @go.stub(e).and_return(dru)}
-      @go.valid?.should == false
+      @exp.each { |e| allow(@go).to receive(e).and_return(dru)}
+      expect(@go.valid?).to eq(false)
     end
 
     it "fully populated object should be valid if contact email is valid" do
       dru = 'druid:ll000ll0001'
-      @exp.each { |e| @go.stub(e).and_return(dru) unless e==:contact}
-      @go.stub(:contact).and_return('test@test.com')
-      @go.valid?.should == true
+      @exp.each { |e| allow(@go).to receive(e).and_return(dru) unless e==:contact}
+      allow(@go).to receive(:contact).and_return('test@test.com')
+      expect(@go.valid?).to eq(true)
     end
 
   end
@@ -373,20 +373,20 @@ end
       EOF
       @events = Dor::EventsDS.from_xml(noko_doc(xml))
       @go = Hydrus::GenericObject.new
-      @go.stub(:events).and_return(@events)
+      allow(@go).to receive(:events).and_return(@events)
     end
 
     it "get_workflow_node() should return a node with correct id attribute" do
       es = @go.get_hydrus_events
-      es.size.should == 2
+      expect(es.size).to eq(2)
       e = es.first
-      e.should be_instance_of Hydrus::Event
-      e.type.should == 'hydrus'
-      e.who.should  == 'sunetid:foo'
-      e.when.year.should  == 2012
-      e.when.month.should == 8
-      e.when.day.should   == 15
-      e.text.should == 'blah'
+      expect(e).to be_instance_of Hydrus::Event
+      expect(e.type).to eq('hydrus')
+      expect(e.who).to  eq('sunetid:foo')
+      expect(e.when.year).to  eq(2012)
+      expect(e.when.month).to eq(8)
+      expect(e.when.day).to   eq(15)
+      expect(e.text).to eq('blah')
     end
 
   end
@@ -399,29 +399,29 @@ end
       Dor::EventsDS      => 'Dor::EventsDS',
     }
     tests.each do |cls, exp|
-      @go.stub(:class).and_return(cls)
-      @go.hydrus_class_to_s.should == exp
+      allow(@go).to receive(:class).and_return(cls)
+      expect(@go.hydrus_class_to_s).to eq(exp)
     end
   end
 
   it "publish_metadata() should do nothing if app is not configured to start common assembly" do
-    @go.stub(:should_start_assembly_wf).and_return(false)
-    @go.should_not_receive(:is_assemblable)
+    allow(@go).to receive(:should_start_assembly_wf).and_return(false)
+    expect(@go).not_to receive(:is_assemblable)
     @go.publish_metadata
   end
 
   describe "current_user" do
 
     it "@current_user should be initialized in a lazy fashion" do
-      @go.instance_variable_get('@current_user').should == nil
-      @go.current_user.should == ''
-      @go.instance_variable_get('@current_user').should == ''
+      expect(@go.instance_variable_get('@current_user')).to eq(nil)
+      expect(@go.current_user).to eq('')
+      expect(@go.instance_variable_get('@current_user')).to eq('')
     end
 
     it "can exercise current_user=()" do
-      @go.instance_variable_get('@current_user').should == nil
+      expect(@go.instance_variable_get('@current_user')).to eq(nil)
       @go.current_user = 123
-      @go.instance_variable_get('@current_user').should == 123
+      expect(@go.instance_variable_get('@current_user')).to eq(123)
     end
 
   end
@@ -429,14 +429,14 @@ end
   it "old_self() should call find() with the object's pid" do
     pid = @go.pid
     r = 'blah blah!!'
-    Hydrus::GenericObject.should_receive(:find).with(pid).and_return(r)
-    @go.old_self.should == r
+    expect(Hydrus::GenericObject).to receive(:find).with(pid).and_return(r)
+    expect(@go.old_self).to eq(r)
   end
 
   it "editing_event_message() should return expected string" do
     fs  = [:foo, :bar, :quux]
     exp = "GenericObject modified: foo, bar, quux"
-    @go.editing_event_message(fs).should == exp
+    expect(@go.editing_event_message(fs)).to eq(exp)
   end
 
   it "changed_fields() should return ..." do
@@ -446,17 +446,17 @@ end
       :ccc => [:ca, :cb, :cc],
       :ddd => [:da, :db],
     }
-    @go.stub(:tracked_fields).and_return(tf)
+    allow(@go).to receive(:tracked_fields).and_return(tf)
     old = double('old_self')
     exp_diff = [:a, :ccc]
     tf.each do |k,vs|
       vs.each do |v|
-        old.stub(v).and_return(v.to_s)
-        @go.stub(v).and_return(exp_diff.include?(k) ? 'new_val' : v.to_s)
+        allow(old).to receive(v).and_return(v.to_s)
+        allow(@go).to receive(v).and_return(exp_diff.include?(k) ? 'new_val' : v.to_s)
       end
     end
-    @go.stub(:old_self).and_return(old)
-    @go.changed_fields.should == exp_diff
+    allow(@go).to receive(:old_self).and_return(old)
+    expect(@go.changed_fields).to eq(exp_diff)
   end
 
   it "GenericObject does not implement tracked_fields()" do
@@ -465,33 +465,33 @@ end
 
   describe "object returned email" do
     it "should provide a method to send object returned emails" do
-      @go.stub(:recipients_for_object_returned_email).and_return('jdoe')
-      @go.stub(:object_type=>'item')
+      allow(@go).to receive(:recipients_for_object_returned_email).and_return('jdoe')
+      allow(@go).to receive_messages(:object_type=>'item')
       mail = @go.send_object_returned_email_notification(:item_url=>'/fake/it')
-      mail.to.should == ["jdoe@stanford.edu"]
-      mail.subject.should =~ /Item returned in the Stanford Digital Repository/
+      expect(mail.to).to eq(["jdoe@stanford.edu"])
+      expect(mail.subject).to match(/Item returned in the Stanford Digital Repository/)
     end
     it "should return nil when no recipients are sent in" do
-      @go.stub(:recipients_for_object_returned_email).and_return('')
-      @go.send_object_returned_email_notification.should be_nil
+      allow(@go).to receive(:recipients_for_object_returned_email).and_return('')
+      expect(@go.send_object_returned_email_notification).to be_nil
     end
   end
 
   describe "log_editing_events()" do
 
     it "should do nothing if there are no changed fields" do
-      @go.stub(:changed_fields).and_return([])
-      @go.should_not_receive(:events)
+      allow(@go).to receive(:changed_fields).and_return([])
+      expect(@go).not_to receive(:events)
       @go.log_editing_events
     end
 
     it "should add an editing event if there are changed fields" do
-      @go.stub(:changed_fields).and_return([:aa, :bb])
-      @go.get_hydrus_events.size.should == 0
+      allow(@go).to receive(:changed_fields).and_return([:aa, :bb])
+      expect(@go.get_hydrus_events.size).to eq(0)
       @go.log_editing_events
       es = @go.get_hydrus_events
-      es.size.should == 1
-      es.first.text.should == 'GenericObject modified: aa, bb'
+      expect(es.size).to eq(1)
+      expect(es.first.text).to eq('GenericObject modified: aa, bb')
     end
 
   end
@@ -499,12 +499,12 @@ end
   describe "save()" do
 
     it "should invoke log_editing_events() usually" do
-      @go.should_receive(:log_editing_events).once
+      expect(@go).to receive(:log_editing_events).once
       @go.save(:no_super => true)
     end
 
     it "should not invoke log_editing_events() if no_edit_logging is true" do
-      @go.should_not_receive(:log_editing_events)
+      expect(@go).not_to receive(:log_editing_events)
       @go.save(:no_edit_logging => true, :no_super => true)
     end
 
@@ -514,12 +514,12 @@ end
     hi = Hydrus::Item.new
     hc = Hydrus::Collection.new
     go = @go
-    hi.is_item?.should == true
-    hc.is_item?.should == false
-    go.is_item?.should == false
-    hi.is_collection?.should == false
-    hc.is_collection?.should == true
-    go.is_collection?.should == false
+    expect(hi.is_item?).to eq(true)
+    expect(hc.is_item?).to eq(false)
+    expect(go.is_item?).to eq(false)
+    expect(hi.is_collection?).to eq(false)
+    expect(hc.is_collection?).to eq(true)
+    expect(go.is_collection?).to eq(false)
   end
 
   it "can exercise status_label()" do
@@ -530,15 +530,15 @@ end
       'returned'       => 'item returned',
     }
     tests.each do |status, exp|
-      @go.stub(:object_status).and_return(status)
-      @go.status_label.should == exp
+      allow(@go).to receive(:object_status).and_return(status)
+      expect(@go.status_label).to eq(exp)
     end
   end
 
   it "can exercise Hydrus::GenericObject.status_labels()" do
     tests = [:collection, :item]
     tests.each do |k|
-      Hydrus::GenericObject.status_labels(k).should be_instance_of Hash
+      expect(Hydrus::GenericObject.status_labels(k)).to be_instance_of Hash
     end
   end
 
@@ -566,12 +566,12 @@ end
     end
 
     it "beautified_xml()" do
-      @go.beautified_xml(@orig_xml).should == @exp
+      expect(@go.beautified_xml(@orig_xml)).to eq(@exp)
     end
 
     it "beautify_datastream()" do
-      @go.descMetadata.stub(:content).and_return @orig_xml
-      @go.descMetadata.should_receive(:content=).with(@exp)
+      allow(@go.descMetadata).to receive(:content).and_return @orig_xml
+      expect(@go.descMetadata).to receive(:content=).with(@exp)
       @go.beautify_datastream(:descMetadata)
     end
 
@@ -579,29 +579,29 @@ end
 
   it "related_item_url=() and related_item_title=()" do
     # Initial state.
-    @go.related_item_title.should == ['']
-    @go.related_item_url.should == ['']
+    expect(@go.related_item_title).to eq([''])
+    expect(@go.related_item_url).to eq([''])
     # Assign a single value.
     @go.related_item_title = 'Z'
     @go.related_item_url = 'foo'
-    @go.related_item_title.should == ['Z']
-    @go.related_item_url.should == ['http://foo']
+    expect(@go.related_item_title).to eq(['Z'])
+    expect(@go.related_item_url).to eq(['http://foo'])
     # Add two mode nodes.
     @go.descMetadata.insert_related_item
     @go.descMetadata.insert_related_item
     # Set using hashes.
     @go.related_item_title = {'0' => 'A', '1' => 'B', '2' => 'C'}
     @go.related_item_url   = {'0' => 'boo', '1' => 'bar', '2' => 'ftp://quux'}
-    @go.related_item_title.should == %w(A B C)
-    @go.related_item_url.should == ['http://boo', 'http://bar', 'ftp://quux']
+    expect(@go.related_item_title).to eq(%w(A B C))
+    expect(@go.related_item_url).to eq(['http://boo', 'http://bar', 'ftp://quux'])
     # Also confirm that each title and URL is put in its own relatedItem node.
     # We had bugs causing them to be put all in the first node.
     ri_nodes = @go.descMetadata.find_by_terms(:relatedItem)
-    ri_nodes.size.should == 3
+    expect(ri_nodes.size).to eq(3)
     ri_nodes.each do |nd|
       nd = Nokogiri::XML(nd.to_s, &:noblanks)  # Generic XML w/o namespaces.
-      nd.xpath('//title').size.should == 1
-      nd.xpath('//url').size.should == 1
+      expect(nd.xpath('//title').size).to eq(1)
+      expect(nd.xpath('//url').size).to eq(1)
     end
   end
 
@@ -617,7 +617,7 @@ end
       nil   => nil,
     }
     tests.each do |uri, exp|
-      @go.with_protocol(uri).should == exp
+      expect(@go.with_protocol(uri)).to eq(exp)
     end
   end
 

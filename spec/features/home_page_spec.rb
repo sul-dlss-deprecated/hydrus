@@ -16,17 +16,17 @@ describe("Home page", :type => :request, :integration => true) do
   it "if not logged in, should see intro text, but not other controls" do
     logout
     visit root_path
-    page.should have_content(@sdr)
-    page.should_not have_content(@your_cs)
-    page.should have_no_selector(@search_box)
-    page.should_not have_button(@cc_button)
+    expect(page).to have_content(@sdr)
+    expect(page).not_to have_content(@your_cs)
+    expect(page).to have_no_selector(@search_box)
+    expect(page).not_to have_button(@cc_button)
   end
 
   it "if logged in, should see intro text, search box, and listing of collections" do
     login_as('archivist1')
     visit root_path
-    page.should have_content(@sdr)
-    page.should have_content(@your_cs)
+    expect(page).to have_content(@sdr)
+    expect(page).to have_content(@your_cs)
     # page.should have_selector(@search_box)
   end
 
@@ -40,7 +40,7 @@ describe("Home page", :type => :request, :integration => true) do
       visit root_path
       drus.each do |dru|
         xp = "//a[@href='/collections/druid:#{dru}']"
-        find('div.user-collections').should have_xpath(xp)
+        expect(find('div.user-collections')).to have_xpath(xp)
       end
     end
   end
@@ -53,7 +53,7 @@ describe("Home page", :type => :request, :integration => true) do
     exp.each do |user, exp_n|
       login_as(user)
       visit(@search_url)
-      find('.page_links').should have_content("1 - #{exp_n} of #{exp_n}")
+      expect(find('.page_links')).to have_content("1 - #{exp_n} of #{exp_n}")
     end
   end
 
@@ -61,22 +61,22 @@ describe("Home page", :type => :request, :integration => true) do
     # Logged out
     logout
     visit root_path
-    page.should_not have_css(@breadcrumbs)
+    expect(page).not_to have_css(@breadcrumbs)
     # Logged in
     login_as('archivist1')
     visit root_path
-    page.should_not have_css(@breadcrumbs)
+    expect(page).not_to have_css(@breadcrumbs)
   end
 
   it "should show Create Collection button only if user has authority to create collections" do
     # No
     login_as('archivist3@example.com', login_pw)
     visit root_path
-    page.should_not have_selector(@cc_button)
+    expect(page).not_to have_selector(@cc_button)
     # Yes
     login_as('archivist1')
     visit root_path
-    page.should have_selector(@cc_button)
+    expect(page).to have_selector(@cc_button)
   end
 
   describe "search" do
@@ -84,8 +84,8 @@ describe("Home page", :type => :request, :integration => true) do
     it "should not be able to issue direct-URL search if not logged in" do
       logout
       visit @search_url
-      current_path.should == new_user_session_path
-      find(@alert).should have_content(@sign_in_msg)
+      expect(current_path).to eq(new_user_session_path)
+      expect(find(@alert)).to have_content(@sign_in_msg)
     end
 
   end

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Hydrus::GenericDS do
+describe Hydrus::GenericDS, :type => :model do
 
   before(:all) do
     @rmd_start = '<roleMetadata>'
@@ -43,7 +43,7 @@ describe Hydrus::GenericDS do
         #{@rmd_end}
       EOF
       @rmdoc.remove_nodes(:role, :person)
-      @rmdoc.ng_xml.should be_equivalent_to exp_xml
+      expect(@rmdoc.ng_xml).to be_equivalent_to exp_xml
       # Remove the <role> node for collection manager.
       exp_xml = <<-EOF
         #{@rmd_start}
@@ -52,10 +52,10 @@ describe Hydrus::GenericDS do
       EOF
       @rmdoc.remove_nodes(:collection_manager)
       @rmdoc.remove_nodes(:item_manager)
-      @rmdoc.ng_xml.should be_equivalent_to exp_xml
+      expect(@rmdoc.ng_xml).to be_equivalent_to exp_xml
       # Remove the <role> nodes.
       @rmdoc.remove_nodes(:role)
-      @rmdoc.ng_xml.should be_equivalent_to "#{@rmd_start}#{@rmd_end}"
+      expect(@rmdoc.ng_xml).to be_equivalent_to "#{@rmd_start}#{@rmd_end}"
     end
 
     it "should be able to pass multiple terms into the method" do
@@ -67,12 +67,12 @@ describe Hydrus::GenericDS do
         #{@rmd_end}
       EOF
       @rmdoc.remove_nodes(:role, :person)
-      @rmdoc.ng_xml.should be_equivalent_to exp_xml
+      expect(@rmdoc.ng_xml).to be_equivalent_to exp_xml
     end
 
     it "should do nothing quietly called for nodes that do not exist in xml" do
       @rmdoc.remove_nodes(:collection_reviewer)
-      @rmdoc.ng_xml.should be_equivalent_to @rmd_xml
+      expect(@rmdoc.ng_xml).to be_equivalent_to @rmd_xml
     end
 
   end
@@ -89,7 +89,7 @@ describe Hydrus::GenericDS do
         #{@rmd_end}
       EOF
       @rmdoc.remove_nodes_by_xpath('//role/person')
-      @rmdoc.ng_xml.should be_equivalent_to exp_xml
+      expect(@rmdoc.ng_xml).to be_equivalent_to exp_xml
       # Remove the <role> node for collection manager.
       exp_xml = <<-EOF
         #{@rmd_start}
@@ -98,15 +98,15 @@ describe Hydrus::GenericDS do
         #{@rmd_end}
       EOF
       @rmdoc.remove_nodes_by_xpath('//role[@type="hydrus-collection-manager"]')
-      @rmdoc.ng_xml.should be_equivalent_to exp_xml
+      expect(@rmdoc.ng_xml).to be_equivalent_to exp_xml
       # Remove the <role> nodes.
       @rmdoc.remove_nodes_by_xpath('//role')
-      @rmdoc.ng_xml.should be_equivalent_to "#{@rmd_start}#{@rmd_end}"
+      expect(@rmdoc.ng_xml).to be_equivalent_to "#{@rmd_start}#{@rmd_end}"
     end
 
     it "should do nothing quietly called for nodes that do not exist in xml" do
       @rmdoc.remove_nodes_by_xpath('//foobar')
-      @rmdoc.ng_xml.should be_equivalent_to @rmd_xml
+      expect(@rmdoc.ng_xml).to be_equivalent_to @rmd_xml
     end
 
   end
@@ -127,7 +127,7 @@ describe Hydrus::GenericDS do
           </role>
         #{@rmd_end}
       EOF
-      @rmdoc.ng_xml.should be_equivalent_to(exp)
+      expect(@rmdoc.ng_xml).to be_equivalent_to(exp)
     end
 
   end
@@ -138,25 +138,25 @@ describe Hydrus::GenericDS do
       n = @rmdoc.find_by_terms(:role).size
       @rmdoc.add_hydrus_child_node(@rmdoc.ng_xml.root, :role, 'blah')
       roles = @rmdoc.find_by_terms(:role)
-      roles.size.should == n + 1
-      roles.last['type'].should == 'blah'
+      expect(roles.size).to eq(n + 1)
+      expect(roles.last['type']).to eq('blah')
     end
 
     it "add_hydrus_next_sibling_node(): siblings already exist" do
       n = @rmdoc.find_by_terms(:role).size
       @rmdoc.add_hydrus_next_sibling_node(:role, :role, 'blah')
       roles = @rmdoc.find_by_terms(:role)
-      roles.size.should == n + 1
-      roles.last['type'].should == 'blah'
+      expect(roles.size).to eq(n + 1)
+      expect(roles.last['type']).to eq('blah')
     end
 
     it "add_hydrus_next_sibling_node(): siblings do not exist" do
       @rmdoc.remove_nodes(:role)
-      @rmdoc.find_by_terms(:role).size.should == 0
+      expect(@rmdoc.find_by_terms(:role).size).to eq(0)
       @rmdoc.add_hydrus_next_sibling_node(:role, :role, 'blah')
       roles = @rmdoc.find_by_terms(:role)
-      roles.size.should == 1
-      roles.last['type'].should == 'blah'
+      expect(roles.size).to eq(1)
+      expect(roles.last['type']).to eq('blah')
     end
     
   end

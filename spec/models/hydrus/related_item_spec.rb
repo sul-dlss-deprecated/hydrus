@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Hydrus::RelatedItem do
+describe Hydrus::RelatedItem, :type => :model do
 
   describe "new_from_node()" do
 
@@ -33,20 +33,20 @@ describe Hydrus::RelatedItem do
 
     it "should get title and url as expected" do
       ri = Hydrus::RelatedItem.new_from_node(@ri_nodes[0])
-      ri.title.should == 'TITLE1'
-      ri.url.should   == 'URL1'
+      expect(ri.title).to eq('TITLE1')
+      expect(ri.url).to   eq('URL1')
     end
 
     it "should get title from url if title is missing" do
       ri = Hydrus::RelatedItem.new_from_node(@ri_nodes[1])
-      ri.title.should == 'URL2'
-      ri.url.should   == 'URL2'
+      expect(ri.title).to eq('URL2')
+      expect(ri.url).to   eq('URL2')
     end
 
     it "should get empty strings if all info is missing" do
       ri = Hydrus::RelatedItem.new_from_node(@ri_nodes[2])
-      ri.title.should == ''
-      ri.url.should   == ''
+      expect(ri.title).to eq('')
+      expect(ri.url).to   eq('')
     end
 
   end
@@ -56,11 +56,11 @@ describe Hydrus::RelatedItem do
     subject { Hydrus::RelatedItem.new :title => 'Item Title', :url => 'http://example.com' }
 
     it "should have a #title accessor" do
-      subject.title.should == "Item Title"
+      expect(subject.title).to eq("Item Title")
     end
 
     it "should have a #url accessor" do
-      subject.url.should == "http://example.com"
+      expect(subject.url).to eq("http://example.com")
     end
 
     describe ".new_from_node" do
@@ -80,8 +80,8 @@ describe Hydrus::RelatedItem do
         }
 
         it "should have a title and url" do
-          subject.title.should == "Learn VB in 1 Day"
-          subject.url.should == "http://example.com"
+          expect(subject.title).to eq("Learn VB in 1 Day")
+          expect(subject.url).to eq("http://example.com")
         end
       end
 
@@ -97,8 +97,8 @@ describe Hydrus::RelatedItem do
           eos
         }
         it "should have a title and url" do
-          subject.title.should == subject.url
-          subject.url.should == "http://example.com"
+          expect(subject.title).to eq(subject.url)
+          expect(subject.url).to eq("http://example.com")
         end
       end
 
@@ -114,8 +114,8 @@ describe Hydrus::RelatedItem do
         }
 
         it "should have a title and url" do
-          subject.title.should be_empty
-          subject.url.should be_empty
+          expect(subject.title).to be_empty
+          expect(subject.url).to be_empty
         end
       end
 

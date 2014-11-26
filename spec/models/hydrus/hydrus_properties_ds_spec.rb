@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Hydrus::HydrusPropertiesDS do
+describe Hydrus::HydrusPropertiesDS, :type => :model do
 
   before(:all) do
     @ds_start="<hydrusProperties>"
@@ -62,7 +62,7 @@ describe Hydrus::HydrusPropertiesDS do
       [:object_version,  ["1999.01.01a"]],
     ]
     tests.each do |terms, exp|
-      @dsdoc.term_values(*terms).should == exp
+      expect(@dsdoc.term_values(*terms)).to eq(exp)
     end
   end
 
@@ -73,7 +73,7 @@ describe Hydrus::HydrusPropertiesDS do
     )
     exp_xml = noko_doc(exp_xml)
     dsdoc = Hydrus::HydrusPropertiesDS.new(nil, nil)
-    dsdoc.ng_xml.should be_equivalent_to exp_xml
+    expect(dsdoc.ng_xml).to be_equivalent_to exp_xml
   end
 
   it "accept_terms_of_deposit() should add new user nodes or modify date, as appropriate" do
@@ -89,7 +89,7 @@ describe Hydrus::HydrusPropertiesDS do
     @dsdoc.accept_terms_of_deposit('foo','10-02-2012 00:00:00') # First user.
     @dsdoc.accept_terms_of_deposit('bar','10-02-2012 00:00:44') # Second user.
     @dsdoc.accept_terms_of_deposit('foo','10-02-2012 00:00:33') # First user, new date.
-    @dsdoc.ng_xml.should be_equivalent_to @exp_xml
+    expect(@dsdoc.ng_xml).to be_equivalent_to @exp_xml
   end
 
 end

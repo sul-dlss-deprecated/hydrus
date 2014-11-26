@@ -1,17 +1,17 @@
 require 'spec_helper'
 
-describe HyTime do
+describe HyTime, :type => :model do
 
   it "should be able to exercise HyTime.now" do
-    HyTime.now.should be_kind_of(DateTime)
+    expect(HyTime.now).to be_kind_of(DateTime)
   end
 
   it "should be able to exercise the generated HyTime methods" do
     HyTime::DT_FORMATS.keys.each do |f|
       s1 = HyTime.send(f)
       s2 = HyTime.send("now_#{f}")
-      s1.should be_instance_of(String)
-      s2.should be_instance_of(String)
+      expect(s1).to be_instance_of(String)
+      expect(s2).to be_instance_of(String)
     end
   end
 
@@ -41,23 +41,23 @@ describe HyTime do
       }
       exp.each do |f, e|
         # String, with and without a :parse format.
-        HyTime.formatted(dt1, :parse => pf, :format => f).should == e
-        HyTime.formatted(dt1, :format => f).should == e
+        expect(HyTime.formatted(dt1, :parse => pf, :format => f)).to eq(e)
+        expect(HyTime.formatted(dt1, :format => f)).to eq(e)
         # DateTime.
-        HyTime.formatted(dt2, :format => f).should == e
+        expect(HyTime.formatted(dt2, :format => f)).to eq(e)
       end
     end
 
     it "should use :datetime as the default output format" do
       dt = '2000-01-02T03:04:05Z'
-      HyTime.formatted(dt).should == dt
-      HyTime.formatted(dt, :format => :time_display).should  == '7:04 pm'
-      HyTime.formatted('2000-01-02', :parse => :date).should == '2000-01-02T00:00:00Z'
+      expect(HyTime.formatted(dt)).to eq(dt)
+      expect(HyTime.formatted(dt, :format => :time_display)).to  eq('7:04 pm')
+      expect(HyTime.formatted('2000-01-02', :parse => :date)).to eq('2000-01-02T00:00:00Z')
     end
 
     it "should return empty string if given a blank value" do
-      HyTime.formatted(nil).should == ''
-      HyTime.formatted('').should  == ''
+      expect(HyTime.formatted(nil)).to eq('')
+      expect(HyTime.formatted('')).to  eq('')
     end
 
     it "should convert to UTC if :from_localzone is true" do
@@ -67,7 +67,7 @@ describe HyTime do
         true  => '2000-01-02T0[78]:00:00Z',  # 7 or 8, so test passes during DST.
       }
       tests.each do |fltz, exp|
-        HyTime.formatted(dt, :from_localzone => fltz).should =~ /\A#{exp}\z/
+        expect(HyTime.formatted(dt, :from_localzone => fltz)).to match(/\A#{exp}\z/)
       end
     end
 
@@ -83,7 +83,7 @@ describe HyTime do
       '2000-01-02T07:00:00Z' => true,
     }
     tests.each do |dt, exp|
-      HyTime.is_well_formed_datetime(dt).should == exp
+      expect(HyTime.is_well_formed_datetime(dt)).to eq(exp)
     end
 
   end
