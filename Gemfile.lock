@@ -509,7 +509,7 @@ DEPENDENCIES
   mysql2
   quiet_assets
   rails (~> 3.2.22)
-  rspec-rails (>= 2.9.0)
+  rspec-rails (~> 3.1.0)
   ruby-prof
   sass-rails (~> 3.2.3)
   simplecov

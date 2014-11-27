@@ -39,7 +39,7 @@ end
 group :test do
   gem 'database_cleaner'
   gem 'test-unit', require: false
-  gem 'rspec-rails', '>=2.9.0'
+  gem 'rspec-rails', '~> 3.1.0'
   gem 'capybara'
   gem 'simplecov'
   gem 'simplecov-rcov'
