@@ -23,7 +23,6 @@ gem 'cancan'
 gem 'validates_email_format_of'
 gem 'coderay'
 gem 'whenever', "~> 0.9"
-gem 'turnout'
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'
