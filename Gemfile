@@ -35,18 +35,13 @@ end
 
 # gems only needed for particular environments
 
-group :test do
-  gem 'database_cleaner'
-  gem 'test-unit', require: false
+group :development, :test do
+  gem 'jettywrapper', '1.4.1'
+  gem 'sqlite3'
   gem 'rspec-rails', '~> 3.1.0'
   gem 'capybara'
   gem 'simplecov'
   gem 'simplecov-rcov'
-end
-
-group :development, :test do
-  gem 'jettywrapper', '~> 1.4.1'
-  gem 'sqlite3'
   gem 'awesome_print'
   gem 'launchy'
   gem 'ruby-prof', :platform => 'ruby_19'
@@ -54,10 +49,12 @@ group :development, :test do
   gem 'byebug',    :platform => 'ruby_20'
   gem 'letter_opener'
   gem 'equivalent-xml'
+  gem 'database_cleaner'
 end
 
 group :development do
   gem 'looksee', :platform => 'ruby_19'
+  gem 'quiet_assets'
 end
 
 group :production, :dortest do
@@ -74,4 +71,3 @@ end
 gem 'squash_ruby', :require => 'squash/ruby'
 gem 'squash_rails', ">= 1.3.3", :require => 'squash/rails'
 
-gem 'quiet_assets', :group => :development
