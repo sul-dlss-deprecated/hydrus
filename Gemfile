@@ -42,6 +42,7 @@ group :development, :test do
   gem 'capybara'
   gem 'simplecov'
   gem 'simplecov-rcov'
+  gem 'equivalent-xml', '~> 0.5.1'
   gem 'awesome_print'
   gem 'launchy'
   gem 'ruby-prof', :platform => 'ruby_19'

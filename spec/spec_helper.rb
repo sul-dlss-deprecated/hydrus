@@ -25,7 +25,6 @@ if ENV['COVERAGE'] == "true" and ruby_engine != "jruby"
   end
 end
 
-# This file is copied to spec/ when you run 'rails generate rspec:install'
 ENV["RAILS_ENV"] ||= 'test'
 require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
@@ -40,7 +39,6 @@ require 'equivalent-xml/rspec_matchers'
 Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
 
 Warden.test_mode!
-
 
 RSpec.configure do |config|
 
@@ -207,7 +205,7 @@ def should_visit_new_item_page(coll)
 end
 
 def confirm_rights_metadata_in_apo(obj)
-  expect(obj.apo.defaultObjectRights.ng_xml).to be_equivalent_to obj.rightsMetadata.ng_xml # collection rights metadata should be equal to apo default object rights
+  expect(obj.apo.defaultObjectRights.ng_xml).to be_equivalent_to(obj.rightsMetadata.ng_xml) # collection rights metadata should be equal to apo default object rights
 end
 
 def check_emb_vis_lic(obj, opts)
@@ -318,7 +316,7 @@ def create_new_collection(opts = {})
   # Extract the druid from the URL.
   r = Regexp.new('/collections/(druid:\w{11})/edit')
   m = r.match(current_path)
-  expect(m).not_to(be_nil)
+  expect(m).not_to be_empty
   druid = m[1]
   # Fill in required fields.
   hc    = 'hydrus_collection'
@@ -364,7 +362,7 @@ def create_new_item(opts = {})
   # Extract the druid from the URL.
   r = Regexp.new('/items/(druid:\w{11})/edit')
   m = r.match(current_path)
-  expect(m).not_to(be_nil)
+  expect(m).not_to be_empty
   druid = m[1]
   # Fill in the required fields.
   click_button('Add Contributor')
