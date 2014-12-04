@@ -7,7 +7,7 @@ begin
   end
 
   desc "Run only integration specs"
-  RSpec::Core::RakeTask.new(:rspec_with_integration) do |spec|
+  RSpec::Core::RakeTask.new(:rspec_integration) do |spec|
     spec.rspec_opts = "--tag integration"
   end
 
@@ -23,3 +23,6 @@ task :rspec_all => [:rspec, :rspec_with_integration]
 
 desc 'Alias for rspec'
 task :spec => 'rspec'
+
+desc 'Alias for rspec_integration (deprecated)'
+task :rspec_with_integration => 'rspec_integration'
