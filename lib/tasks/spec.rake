@@ -1,26 +1,14 @@
-DEFAULT_OPTS = [
-  '--color',
-  '--format progress',
-  '--order random',
-  '--require ./spec/spec_helper.rb',
-]
-
 begin
   require 'rspec/core/rake_task'
 
-  desc "Run all specs except integration"
+  desc "Run all specs, excluding integration"
   RSpec::Core::RakeTask.new(:rspec) do |spec|
-    spec.rspec_opts = DEFAULT_OPTS + ["--tag ~integration"]
+    spec.rspec_opts = "--tag ~integration"
   end
 
   desc "Run only integration specs"
   RSpec::Core::RakeTask.new(:rspec_with_integration) do |spec|
-    spec.rspec_opts = DEFAULT_OPTS + ["--tag integration"]
-  end
-
-  desc "Run all specs, including integration"
-  RSpec::Core::RakeTask.new(:rspec_all) do |spec|
-    spec.rspec_opts = DEFAULT_OPTS
+    spec.rspec_opts = "--tag integration"
   end
 
 rescue LoadError
@@ -29,6 +17,9 @@ rescue LoadError
     abort 'Rspec rake task is not available. Install rspec as a gem or plugin.'
   end
 end
+
+desc "Run all specs, including integration"
+task :rspec_all => [:rspec, :rspec_with_integration]
 
 desc 'Alias for rspec'
 task :spec => 'rspec'
