@@ -50,7 +50,6 @@ group :development, :test do
   gem 'debugger',  :platform => 'ruby_19'
   gem 'byebug',    :platform => 'ruby_20'
   gem 'letter_opener'
-  gem 'equivalent-xml'
   gem 'database_cleaner'
 end
 
