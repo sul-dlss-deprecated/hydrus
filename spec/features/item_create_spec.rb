@@ -538,7 +538,7 @@ describe("Item create", :type => :request, :integration => true) do
     it "should indicate that a new item in a collection requires terms acceptance, when the user has not already accepted another item in this collection" do
       u='archivist5'
       allow(Hydrus::Authorizable).to receive(:can_create_items_in).and_return(true)
-      ni=Hydrus::Item.create(subject.pid,mock_authed_user(u))
+      ni=Hydrus::Item.create(subject.pid, mock_authed_user(u))
       expect(ni.requires_terms_acceptance(u,subject)).to eq(true)
       expect(ni.accepted_terms_of_deposit).to eq("false")
       expect(ni.terms_of_deposit_accepted?).to eq(false)
