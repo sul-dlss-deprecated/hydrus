@@ -50,7 +50,8 @@ group :development, :test do
   gem 'debugger',  :platform => 'ruby_19'
   gem 'byebug',    :platform => 'ruby_20'
   gem 'letter_opener'
-  gem 'database_cleaner'
+# gem 'database_cleaner'
+  gem 'pry'
 end
 
 group :development do

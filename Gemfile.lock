@@ -122,9 +122,8 @@ GEM
     coffee-script-source (1.9.1.1)
     columnize (0.9.0)
     confstruct (0.2.7)
-    crass (1.0.2)
+    crass (0.2.1)
     daemons (1.2.3)
-    database_cleaner (1.4.1)
     debugger (1.6.8)
       columnize (>= 0.3.1)
       debugger-linecache (~> 1.2.0)
@@ -260,6 +259,7 @@ GEM
       scrub_rb (>= 1.0.1, < 2)
       unf
     mediashelf-loggable (0.4.10)
+    method_source (0.8.2)
     mime-types (1.25.1)
     mini_exiftool (2.5.0)
     mini_portile (0.6.2)
@@ -308,6 +308,10 @@ GEM
     posix-spawn (0.3.11)
     progressbar (0.21.0)
     quiet_assets (1.1.0)
+    pry (0.10.1)
+      coderay (~> 1.1.0)
+      method_source (~> 0.8.1)
+      slop (~> 3.4)
       railties (>= 3.1, < 5.0)
     rack (1.4.7)
     rack-cache (1.2)
@@ -478,7 +482,6 @@ DEPENDENCIES
   carrierwave (= 0.6.2)
   coderay
   coffee-rails (~> 3.2.1)
-  database_cleaner
   debugger
   devise (~> 2.2.5)
   dor-services (~> 4.21)
@@ -497,6 +500,7 @@ DEPENDENCIES
   lyberteam-capistrano-devel
   moab-versioning (~> 1.4.0)
   mysql2
+  pry
   quiet_assets
   rails (~> 3.2.22)
   rspec-rails (~> 3.1.0)
