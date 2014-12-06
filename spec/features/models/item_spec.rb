@@ -82,7 +82,6 @@ describe(Hydrus::Item, :type => :feature, :integration => true) do
 
     before(:all) do
       @prev_mint_ids = config_mint_ids()
-      allow_any_instance_of(Dor::WorkflowDs).to receive(:current_priority).and_return 0
       @collection = Hydrus::Collection.create mock_authed_user
     end
 
@@ -101,6 +100,7 @@ describe(Hydrus::Item, :type => :feature, :integration => true) do
     end
 
     it "should create an item" do
+      allow_any_instance_of(Dor::WorkflowDs).to receive(:current_priority).and_return 0
       allow(collection).to receive_messages(:visibility_option_value => 'stanford', :license => 'some-license')
       item  = Hydrus::Item.create(collection.pid, mock_authed_user, 'some-type')
       expect(item).to be_instance_of Hydrus::Item
@@ -121,7 +121,6 @@ describe(Hydrus::Item, :type => :feature, :integration => true) do
     it "should create an item" do
       allow_any_instance_of(Dor::WorkflowDs).to receive(:current_priority).and_return 0
       allow(collection).to receive_messages(:users_accepted_terms_of_deposit => { mock_authed_user.to_s => Time.now})
-
       item  = Hydrus::Item.create(collection.pid, mock_authed_user, 'some-type')
       expect(item).to be_instance_of Hydrus::Item
       expect(item).to_not be_new
