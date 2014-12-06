@@ -82,8 +82,7 @@ describe(Hydrus::Item, :type => :feature, :integration => true) do
 
     before(:all) do
       @prev_mint_ids = config_mint_ids()
-      Dor::WorkflowDs.any_instance.stub(:current_priority).and_return 0
-      
+      allow_any_instance_of(Dor::WorkflowDs).to receive(:current_priority).and_return 0
       @collection = Hydrus::Collection.create mock_authed_user
     end
 
@@ -95,7 +94,6 @@ describe(Hydrus::Item, :type => :feature, :integration => true) do
     before(:each) do
       allow(Hydrus::Collection).to receive(:find).with(collection.pid).and_return(collection)
     end
-
 
     let(:collection) do
       allow(@collection).to receive_messages(:is_open => true)
