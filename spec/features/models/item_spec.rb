@@ -118,7 +118,7 @@ describe(Hydrus::Item, :type => :feature, :integration => true) do
       expect(item.accepted_terms_of_deposit).to eq "false"
     end
 
-    it "should create an item" do
+    it "should create another item" do
       allow_any_instance_of(Dor::WorkflowDs).to receive(:current_priority).and_return 0
       allow(collection).to receive_messages(:users_accepted_terms_of_deposit => { mock_authed_user.to_s => Time.now})
       item  = Hydrus::Item.create(collection.pid, mock_authed_user, 'some-type')
