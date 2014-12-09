@@ -15,6 +15,8 @@ describe Hydrus::RightsMetadataDS, :type => :model do
   end
 
   it "blank template should match our expectations" do
+    expect(@doc.ng_xml).not_to be_nil
+    expect(@initial   ).not_to be_nil
     expect(@doc.ng_xml).to be_equivalent_to(@initial)
   end
 
