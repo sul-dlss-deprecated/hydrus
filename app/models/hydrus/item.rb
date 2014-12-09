@@ -86,8 +86,8 @@ class Hydrus::Item < Hydrus::GenericObject
   def self.create(collection_pid, user, itype = Hydrus::Application.config.default_item_type)
     # Make sure user can create items in the parent collection.
     coll = Hydrus::Collection.find(collection_pid)
-    cannot_do(:create) unless coll.is_open()
-    cannot_do(:create) unless Hydrus::Authorizable.can_create_items_in(user, coll)
+    raise "#{cannot_do_message(:create)}\nCollection '#{collection_pid}' is not open" unless coll.is_open()
+    raise "#{cannot_do_message(:create)}\nUser '#{user}' cannot create items in #{coll} #{collection_pid} according to APO #{coll.apo.pid}" unless Hydrus::Authorizable.can_create_items_in(user, coll)
     # Create the object, with the correct model.
     dor_item = Hydrus::GenericObject.register_dor_object(user, 'item', coll.apo_pid)
     item     = Hydrus::Item.find(dor_item.pid)
@@ -136,7 +136,7 @@ class Hydrus::Item < Hydrus::GenericObject
 
   # Publish the Item directly, bypassing human approval.
   def publish_directly
-    cannot_do(:publish_directly) unless is_publishable()
+    raise "#{cannot_do_message(:publish_directly)}\nItem is not publishable" unless is_publishable()
     complete_workflow_step('submit')
     send_item_deposit_email_notification
     do_publish()
@@ -166,7 +166,7 @@ class Hydrus::Item < Hydrus::GenericObject
   # Submit the Item for approval by a reviewer.
   # This method handles the initial submission, not resubmissions.
   def submit_for_approval
-    cannot_do(:submit_for_approval) unless is_submittable_for_approval()
+    raise "#{cannot_do_message(:submit_for_approval)}\nItem is not submittable" unless is_submittable_for_approval()
     self.submit_for_approval_time   = HyTime.now_datetime
     self.object_status = 'awaiting_approval'
     complete_workflow_step('submit')
@@ -176,7 +176,7 @@ class Hydrus::Item < Hydrus::GenericObject
 
   # Approve the Item.
   def approve
-    cannot_do(:approve) unless is_approvable()
+    raise "#{cannot_do_message(:approve)}\nItem is not approvable" unless is_approvable()
     hydrusProperties.remove_nodes(:disapproval_reason)
     events.add_event('hydrus', @current_user, "Item approved")
     do_publish()
@@ -185,7 +185,7 @@ class Hydrus::Item < Hydrus::GenericObject
   # Disapprove the Item -- return it for further editing.
   # Expects to receive a hash with a 'reason' key.
   def disapprove(reason)
-    cannot_do(:disapprove) unless is_disapprovable()
+    raise "#{cannot_do_message(:disapprove)}\nItem is not disapprovable" unless is_disapprovable()
     self.object_status      = 'returned'
     self.disapproval_reason = reason
     events.add_event('hydrus', @current_user, "Item returned")
@@ -194,7 +194,7 @@ class Hydrus::Item < Hydrus::GenericObject
 
   # Resubmits an object after it was disapproved/returned.
   def resubmit
-    cannot_do(:resubmit) unless is_resubmittable()
+    raise "#{cannot_do_message(:resubmit)}\nItem is not resubmittable" unless is_resubmittable()
     self.submit_for_approval_time   = HyTime.now_datetime
     self.object_status = 'awaiting_approval'
     hydrusProperties.remove_nodes(:disapproval_reason)
@@ -213,7 +213,7 @@ class Hydrus::Item < Hydrus::GenericObject
   #   - Other options:
   #       :no_super   Used to prevent super() during testing.
   def open_new_version(opts = {})
-    cannot_do(:open_new_version) unless is_accessioned()
+    raise "#{cannot_do_message(:open_new_version)}\nItem is not accessioned" unless is_accessioned()
     # Store the time when the object was initially published.
     self.initial_publish_time = publish_time() if is_initial_version
     # Call the dor-services method, with a couple of Hydrus-specific options.
@@ -245,7 +245,7 @@ class Hydrus::Item < Hydrus::GenericObject
   # See do_publish(), where all of the Hydrus-specific work is done; here
   # we simply invoke the dor-services method.
   def close_version(opts = {})
-    cannot_do(:close_version) if is_initial_version(:absolute => true)
+    raise "#{cannot_do_message(:close_version)}\nItem is initial version" if is_initial_version(:absolute => true)
     # We want to start accessioning only if ...
     sa = !! opts[:is_remediation]              # ... we are running a remediation and
     sa = false if should_treat_as_accessioned  # ... we are not in development or test
@@ -430,7 +430,7 @@ class Hydrus::Item < Hydrus::GenericObject
   # At the item level we store true/false.
   # At the colleciton level we store user name and datetime.
   def accept_terms_of_deposit(user)
-    cannot_do(:accept_terms_of_deposit) unless Hydrus::Authorizable.can_edit_item(user, self)
+    raise "#{cannot_do_message(:accept_terms_of_deposit)}\nUser #{user} cannot edit item" unless Hydrus::Authorizable.can_edit_item(user, self)
     self.accepted_terms_of_deposit = "true"
     collection.accept_terms_of_deposit(user, HyTime.now_datetime, self)
     events.add_event('hydrus', user, 'Terms of deposit accepted')
@@ -874,7 +874,7 @@ class Hydrus::Item < Hydrus::GenericObject
 
   # Deletes an Item.
   def delete
-    cannot_do(:delete) unless is_destroyable
+    raise "#{cannot_do_message(:delete)}\nItem is not destroyable" unless is_destroyable
     d = parent_directory
     FileUtils.rm_rf(d)            # Uploaded files.
     files.each { |f| f.destroy }  # The corresponding DB entries.
