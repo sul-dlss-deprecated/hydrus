@@ -1,5 +1,53 @@
 namespace :hydrus do
 
+  desc "associate DOR item with Hydrus"
+  # associates a non-hydrus DOR item with the Hydrus app by adding datastreams and indexing into Hydrus solr
+  # need to pass in druid of object to associated, collection druid of Hydrus collection to associate with, and type of hydrus object (e.g. dataset)
+  # run with RAILS_ENV=dortest rake hydrus:index_object druid=druid:oo000oo0001 collection=druid:oo00oo002 type=dataset
+  task :index_object => :environment do |t, args|
+  
+    druid = ENV['druid'] # druid to index (full druid, including druid: prefix)
+    collection = ENV['collection'] # druid of collection to associate with  (full druid, including druid: prefix)
+    item_type = ENV['type'] # type of hydrus item
+  
+    item=Hydrus::Item.find(druid) # get druid
+  
+    coll = Hydrus::Collection.find(collection)
+
+    # Add the Item to the Collection.
+    item.collections << coll
+  
+    # change item type in RELS-EXT to be a hydrus item
+    item.datastreams['RELS-EXT'].content.gsub!("<fedora-model:hasModel rdf:resource=\"info:fedora/afmodel:Dor_Item\"></fedora-model:hasModel>","<fedora-model:hasModel rdf:resource=\"info:fedora/afmodel:Hydrus_Item\"/>")
+    item.remove_relationship :has_model, 'info:fedora/afmodel:Dor_Item'
+    item.assert_content_model
+  
+    # ruby black magic: redefine should_validate and another method so we can save this hydrus item without going through all of the UI validations
+    item.define_singleton_method :should_validate, lambda {false}
+    item.define_singleton_method :check_version_if_license_changed, lambda {return}
+    
+    # create hydrusProperties datastream and set values
+    item.item_type=item_type
+    item.accepted_terms_of_deposit="true"
+    item.reviewed_release_settings="true"
+    item.hydrusProperties.requires_human_approval="false"
+    item.object_status='published'
+    item.hydrusProperties.last_modify_time=Time.now.to_s
+    item.hydrusProperties.submit_for_approval_time=Time.now.to_s
+    item.hydrusProperties.initial_publish_time=Time.now.to_s
+    item.hydrusProperties.initial_submitted_for_publish_time=Time.now.to_s
+    item.hydrusProperties.submitted_for_publish_time=Time.now.to_s
+
+    # save item
+    item.save
+
+    # index into solr
+    solr=Dor::SearchService.solr
+    solr_doc = item.to_solr
+    solr.add(solr_doc, :add_attributes => {:commitWithin => 5000})
+  
+  end
+  
   desc "Hydrus Configurations"
   task :config do
     files = %w(
@@ -24,6 +72,7 @@ namespace :hydrus do
   end
 
 end
+
 
 desc "rails server with suppressed output"
 task :server => :environment do
