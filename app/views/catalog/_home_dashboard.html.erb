@@ -5,7 +5,7 @@
   <%- else -%>
     <p>Your Active Collections (<%=@collections.size%>).</p>
      <%= render :partial=>'collection_dashboard',
-        :locals=>{:collections=>@collections,:show_roles=>true}%>
+        :locals=>{:collections=>@collections,:show_roles=>false}%>
   <% end %>
 </div>
 
