@@ -1,17 +1,17 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~> 3.2.21'
-gem "druid-tools", "~> 0.3.0"
+gem 'rails', '~> 3.2.22'
+gem "druid-tools", "~> 0.4.0"
 gem 'dor-workflow-service'
 gem 'addressable', '2.3.5'
-gem "moab-versioning", "=1.3.1"
-gem 'dor-services', "~> 4.8"
+gem "moab-versioning", "~> 1.4"
+gem 'dor-services', "~> 4.21"
 gem 'sul_chrome', '~> 0.1.0'
 gem 'about_page'
 gem 'is_it_working-cbeer', "~> 1.0.13"
 gem 'assembly-objectfile', "1.5.0"
 gem 'blacklight', '~>4.4'
-gem 'hydra-head', '~> 5.1'
+gem 'hydra-head', '~> 5.1', '>= 5.4.1'
 gem 'active-fedora', "~> 5.7.1"
 gem 'solrizer', '~> 2.2'
 gem 'devise', '~> 2.2.5'
@@ -37,6 +37,7 @@ end
 
 group :test do
   gem 'database_cleaner'
+  gem 'test-unit', require: false
   gem 'rspec-rails', '>=2.9.0'
   gem 'capybara'
   gem 'simplecov'
@@ -52,6 +53,7 @@ group :development, :test do
   gem 'debugger', :platform => 'ruby_19'
   gem 'byebug', :platform => 'ruby_20'
   gem 'letter_opener'
+  gem 'equivalent-xml'
 end
 
 group :development do
