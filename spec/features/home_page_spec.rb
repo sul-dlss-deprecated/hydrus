@@ -7,7 +7,7 @@ describe("Home page", :type => :request, :integration => true) do
     @sdr         = "Stanford Digital Repository"
     @your_cs     = "Your Active Collections"
     @breadcrumbs = "ul.breadcrumb li a"
-    @cc_button   = 'a.btn [href="/collections/new"]'
+    @cc_button   = 'a.btn[href="/collections/new"]'
     @alert       = 'div.alert'
     @search_url  = '/catalog?q=&search_field=text&commit=search'
     @sign_in_msg = 'You must sign in'
