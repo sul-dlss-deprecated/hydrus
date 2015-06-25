@@ -45,19 +45,9 @@ set :linked_dirs, %w{log config/certs tmp/pids tmp/cache tmp/sockets vendor/bund
 
 
 set :bundle_without, %w{development test deployment}.join(' ')
+set :bundle_audit_ignore, %w{CVE-2015-3226}
 
 namespace :deploy do
-
-  desc 'Restart application'
-  task :restart do
-    on roles(:app), in: :sequence, wait: 5 do
-      # Your restart mechanism here, for example:
-      execute :touch, release_path.join('tmp/restart.txt')
-    end
-  end
-
-  after :publishing, :restart
-  
   after :restart, :clear_tmp do
     on roles(:web), in: :groups, limit: 3, wait: 10 do
       # Here we can do anything such as:
