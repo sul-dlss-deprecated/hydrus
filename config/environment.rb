@@ -23,17 +23,17 @@ Hydrus::Application.configure do
 
 end
 
+load_yaml_config = lambda { |yaml_file|
+  full_path = File.expand_path(File.join(current_path, yaml_file))
+  yaml      = YAML.load(File.read full_path)
+  return yaml[Rails.env]
+}
+
 Dor::Config.configure do
 
   cert_dir File.join(current_path, "certs")
 
   app_version File.read File.join(current_path, '..','VERSION')
-
-  load_yaml_config = lambda { |yaml_file|
-    full_path = File.expand_path(File.join(current_path, yaml_file))
-    yaml      = YAML.load(File.read full_path)
-    return yaml[Rails.env]
-  }
 
   fedora do
     # Set the fedora URL with user and password info.
