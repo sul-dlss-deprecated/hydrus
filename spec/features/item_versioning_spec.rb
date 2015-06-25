@@ -60,6 +60,7 @@ describe("Item versioning", :type => :request, :integration => true) do
   end
 
   it "should be able to open a new version" do
+    pending
     # Before-assertions.
     @hi.is_initial_version.should == true
     @hi.version_tag.should == 'v1.0.0'
@@ -143,6 +144,7 @@ describe("Item versioning", :type => :request, :integration => true) do
   end
 
   it "changing license should force user to select :major version" do
+    pending
     # Set the item's collection to license-varies mode.
     orig_lic = 'cc-by'
     coll = @hi.collection
@@ -205,6 +207,7 @@ describe("Item versioning", :type => :request, :integration => true) do
     describe "subsequent version" do
 
       it "prior visibility = world: do not offer drop-down" do
+        pending
         # Set visibility to world.
         @hi.visibility = 'world'
         @hi.save
@@ -218,6 +221,7 @@ describe("Item versioning", :type => :request, :integration => true) do
       end
 
       it "prior visibility = stanford: offer drop-down" do
+        pending
         # Set visibility to world.
         @hi.visibility = 'stanford'
         @hi.save
@@ -249,6 +253,7 @@ describe("Item versioning", :type => :request, :integration => true) do
     end
 
     it "initial version never embargoed: should not be able to add an embargo" do
+      pending
       # Open new version.
       login_as('archivist1')
       should_visit_view_page(@hi)
@@ -259,6 +264,7 @@ describe("Item versioning", :type => :request, :integration => true) do
     end
 
     it "should be able to modify existing embargo (with valid dates) or even remove it" do
+      pending
       # Confirm initial status.
       @hi.is_embargoed.should == false
       @hi.visibility.should == ['world']
@@ -324,6 +330,7 @@ describe("Item versioning", :type => :request, :integration => true) do
     end
 
     it "should not be able to modify embargo if the embargo window has passed" do
+      pending
       # Confirm initial status.
       @hi.is_embargoed.should == false
       @hi.visibility.should == ['world']
