@@ -18,7 +18,7 @@ class Hydrus::GenericObject < Dor::Item
   def check_contact_email_format
     problems = ValidatesEmailFormatOf::validate_email_format(contact)
     return if problems.nil?
-    errors.add(:contact, "is not a valid email address")
+    errors.add(:contact, "must contain a single valid email address")
   end
 
   def is_item?
