@@ -47,6 +47,8 @@ set :linked_dirs, %w{log config/certs tmp/pids tmp/cache tmp/sockets vendor/bund
 set :bundle_without, %w{development test deployment}.join(' ')
 set :bundle_audit_ignore, %w{CVE-2015-3226}
 
+before 'deploy:compile_assets', 'squash:write_revision'
+
 namespace :deploy do
   after :restart, :clear_tmp do
     on roles(:web), in: :groups, limit: 3, wait: 10 do
