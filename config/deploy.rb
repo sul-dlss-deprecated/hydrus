@@ -27,6 +27,7 @@ set :linked_files, %w(
   config/dor_services.yml
   config/solr.yml
   config/fedora.yml
+  config/sdr.yml
   config/suri.yml
   config/ur_apo_druid.yml
   config/workflow.yml
