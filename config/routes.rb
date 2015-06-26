@@ -55,8 +55,10 @@ Hydrus::Application.routes.draw do
   match "contact" => "application#contact", :as=>"contact"
 
   # Actions for the HydrusSolrController.
-  match "hydrus_solr/reindex/:id"           => "hydrus_solr#reindex",           :as => 'reindex'
-  match "hydrus_solr/delete_from_index/:id" => "hydrus_solr#delete_from_index", :as => 'delete_from_index'
+  match "hydrus_solr/reindex/:id"           => "hydrus_solr#reindex"
+  match "hydrus_solr/delete_from_index/:id" => "hydrus_solr#delete_from_index"
+  match "dor/reindex/:id"           => "hydrus_solr#reindex",           :as => 'reindex'
+  match "dor/delete_from_index/:id" => "hydrus_solr#delete_from_index", :as => 'delete_from_index'
 
 
    match '/404', :to => "exceptions#render_404"
