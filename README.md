@@ -127,11 +127,11 @@ The general framework, and the front-end.  See the code for more details on how 
 Remediation scripts:
 - Stored in the remediations subdirectory.
 - Naming following the application version naming convention:
-    2013.02.25a.rb
-    2013.02.27a.rb
-    2013.02.27b.rb
-    etc.
-- See remediations/archive/0000.00.00a.rb for a schematic example.
+  - 2013.02.25a.rb
+  - 2013.02.27a.rb
+  - 2013.02.27b.rb
+  - etc.
+- See `remediations/archive/0000.00.00a.rb` for a schematic example.
 - After remediations are run on all deployed environments, they typically won't be needed in the future, so they can be moved in the Git repo into the remediations/archive directory.
 
 Running remediations (using dortest environment as the example):
@@ -181,16 +181,16 @@ nohup java -Djetty.port=8983 \
 
 If you update the text, you should change the following:
 
-#### Headings.
+#### Headings
 
-  app/views/hydrus_items/terms_of_deposit.html.erb
-  app/views/hydrus_items/_terms_of_deposit_popup.html.erb
+* app/views/hydrus_items/terms_of_deposit.html.erb
+* app/views/hydrus_items/_terms_of_deposit_popup.html.erb
 
-#### Text and headings.
+#### Text and headings
 
-  app/views/hydrus_items/_terms_of_deposit_text.html.erb
-  doc/SDRSelfDepositTerms.doc
-  public/SDRSelfDepositTerms.pdf
+* app/views/hydrus_items/_terms_of_deposit_text.html.erb
+* doc/SDRSelfDepositTerms.doc
+* public/SDRSelfDepositTerms.pdf
 
 ## Workflow steps and object_status
 
@@ -276,7 +276,6 @@ hi = Hydrus::Item.create(hc.pid, u)
 ## Manually Adding a File to an Existing Object
 
 1. Move the file(s) to the `/data/hydrus-files/tmp` folder on the hydrus-prod server using sftp or some other mechanism
-
 2. SSH into the hydrus-prod server, go to the app directory and start a console
 ```bash
 cd hydrus/current
@@ -284,17 +283,14 @@ bundle exec rails console production
 ```
 3. Now from the Rails console add your file(s) to the object by creating new ObjectFile(s)
 ```ruby
-hof = Hydrus::ObjectFile.new 	hof.pid='druid:XX111YY2222' # set this to the
-druid of the hydrus object 	hof.hide=false   # set this to true if the file
-should be hidden (defaults to false if not set) 	hof.label="Description" #
-optional description of file, can be left blank
-hof.file=File.open('/data/hydrus-files/tmp/YOURFILENAME')  # add your file
-here using the filename 	hof.save  # should true if it succeeded
+hof = Hydrus::ObjectFile.new
+hof.pid   = 'druid:XX111YY2222'
+hof.hide  = false               # set this to true if the file should be hidden (default: false)
+hof.label = "Description"       # optional description of file, can be left blank
+hof.file  = File.open('/data/hydrus-files/tmp/YOURFILENAME')  # add your file here by path
+hof.save  # should return true if it succeeded
 ```
 4. Repeat step 3 for any additional files
-
 5. Refresh the object page in hydrus to confirm the files are listed.  You can also double-check that the files were placed in the correct location, `/data/hydrus-files/DRUID/TREE/PATH/DRUID/content`
-
-e.g. `/data/hydrus-files/xx/111/yy/2222/xx111yy2222/content`
-
+    e.g. `/data/hydrus-files/xx/111/yy/2222/xx111yy2222/content`
 6. Delete the files from the */data/hydrus-files/tmp* directory
