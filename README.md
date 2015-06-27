@@ -181,16 +181,16 @@ nohup java -Djetty.port=8983 \
 
 If you update the text, you should change the following:
 
-#### Headings
+Headings:
 
-* app/views/hydrus_items/terms_of_deposit.html.erb
-* app/views/hydrus_items/_terms_of_deposit_popup.html.erb
+* `app/views/hydrus_items/terms_of_deposit.html.erb`
+* `app/views/hydrus_items/_terms_of_deposit_popup.html.erb`
 
-#### Text and headings
+Text and headings:
 
-* app/views/hydrus_items/_terms_of_deposit_text.html.erb
-* doc/SDRSelfDepositTerms.doc
-* public/SDRSelfDepositTerms.pdf
+* `app/views/hydrus_items/_terms_of_deposit_text.html.erb`
+* `doc/SDRSelfDepositTerms.doc`
+* `$public/SDRSelfDepositTerms.pdf`
 
 ## Workflow steps and object_status
 
@@ -232,7 +232,7 @@ Notes:
   and closed states, but the collection cannot be unpublished and the
   workflow steps do not move backward.
 - Typically the application is configured not to start assembly in local
-  development mode. Thus the object remains as the "approve' workflow step
+  development mode. Thus the object remains as the "approve" workflow step
   rather than "start-assembly".
 
 Relationship between object_status and workflow steps for items:
@@ -255,10 +255,8 @@ Relationship between object_status and workflow steps for items:
     published                  approve --> start-assembly
     ----------------------------------------------------
 
-Notes:
-- Items can toggle back and forth between awaiting_approval and returned
-  during the edit-and-review process. During that time, the workflow remains
-  at the submit step.
+Note: Items can toggle back and forth between awaiting_approval and returned
+during the edit-and-review process. During that time, the workflow remains at the submit step.
 
 ## Creating a Hydrus Item with a particular PID
 
@@ -294,3 +292,4 @@ hof.save  # should return true if it succeeded
 5. Refresh the object page in hydrus to confirm the files are listed.  You can also double-check that the files were placed in the correct location, `/data/hydrus-files/DRUID/TREE/PATH/DRUID/content`
     e.g. `/data/hydrus-files/xx/111/yy/2222/xx111yy2222/content`
 6. Delete the files from the */data/hydrus-files/tmp* directory
+
