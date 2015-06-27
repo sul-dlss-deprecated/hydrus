@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/sul-dlss/hydrus.png?branch=master)](https://travis-ci.org/sul-dlss/hydrus)
+
 # Hydrus
 
 ## Overview
@@ -7,10 +9,8 @@ Digital Repository for preservation and access.
 
 ## Dependencies on non-public code
 
-*   Stanford's dor-services gem.
-*   Stanford's sul-chrome gem.
-*   Dor certificates for client authentication.
-
+* Stanford's sul-chrome gem.
+* Dor certificates for client authentication.
 
 ## Setting up your environment
 
@@ -55,23 +55,18 @@ Start the Jetty server:
 Run the Hydrus application in either of these ways:
 
 ```bash
-    rails server
-    rake  server   # Filters some of the logging noise.
+rails server
+rake  server   # Filters some logging noise
 ```
 
 ## Useful URLs during development
 
-### Hydrus
-
-*   http://localhost:3000
-*   http://localhost:3000/about
-
-### Jetty server, Fedora, and SOLR
-
-*   http://localhost:8983
-*   http://localhost:8983/fedora/admin
-*   http://localhost:8983/fedora/objects
-*   http://localhost:8983/solr
+* [![Hydrus](http://localhost:3000)](http://localhost:3000)
+* [![Hydrus about](http://localhost:3000/about)](http://localhost:3000/about)
+* [![Jetty](http://localhost:8983)](http://localhost:8983)
+* [![Fedora admin](http://localhost:8983/fedora/admin)](http://localhost:8983/fedora/admin)
+* [![Fedora objects](http://localhost:8983/fedora/objects)](http://localhost:8983/fedora/objects)
+* [![Solr](http://localhost:8983/solr)](http://localhost:8983/solr)
 
 ## User accounts used during development
 
@@ -80,7 +75,7 @@ Default user:
     username: archivist1@example.com
     password: beatcal
 
-Federa admin user:
+Fedora admin user:
 
     username: fedoraAdmin
     password: fedoraAdmin
@@ -148,9 +143,11 @@ grep -i warn log/remediation.log  #Then search for problems.
 ## Useful commands
 
 List the Hydrus rake tasks.
+
     rake -T hydrus
 
 Some handy scripts during development.
+
     rails runner devel/create_test_item.rb help
     rails runner script/experiment.rb         # See comments in script.
     rails runner devel/get_datastreams.rb
@@ -165,13 +162,13 @@ run this:
 
 If you want to enable or disable login via email address and password (as
 opposed to webauth), look at the appropriate environment file in
-config/environments/ Set the config parameter "show_standard_login" to either
+`config/environments/`. Set the config parameter "show_standard_login" to either
 true or false.
 
 ## Starting Jetty on deployment servers
 
-    # Run this from the jetty directory.
-    # Note that dortest and production don't rely on Jetty.
+Run this from the jetty directory.
+Note that dortest and production don't rely on Jetty.
 ```bash
 nohup java -Djetty.port=8983 \
            -Dsolr.solr.home=/home/lyberadmin/hydrus/shared/jetty/solr \
@@ -197,22 +194,22 @@ If you update the text, you should change the following:
 
 General points:
 
-*   The Hydrus application advances an object through the steps of the
-    hydrusAssemblyWF. However, the application does not consult the
-    hydrusAssemblyWF for information.
-*   Instead, the application consults hydrusProperty for all information
-    related to the status of an object and its flow through the steps in the
-    Hydrus deposit process.
-*   Because they have somewhat different purposes, the hydrusAssemblyWF steps
-    and the Hydrus object_status values do not have a one-to-one
-    correspondence.
-*   Whereas a workflow is designed to move only in the forward direction as
-    various steps are accomplished, Hydrus object_status can toggle back and
-    forth between various states during the edit-and-review and
-    collection-open-and-close processes.
-*   Hydrus does consult the workflow service when it needs information about
-    the status of an object in assemblyWF and accessionWF. The primary
-    examples are in the is_accessioned() and publish_time() methods.
+* The Hydrus application advances an object through the steps of the
+  hydrusAssemblyWF. However, the application does not consult the
+  hydrusAssemblyWF for information.
+* Instead, the application consults hydrusProperty for all information
+  related to the status of an object and its flow through the steps in the
+  Hydrus deposit process.
+* Because they have somewhat different purposes, the hydrusAssemblyWF steps
+  and the Hydrus object_status values do not have a one-to-one
+  correspondence.
+* Whereas a workflow is designed to move only in the forward direction as
+  various steps are accomplished, Hydrus object_status can toggle back and
+  forth between various states during the edit-and-review and
+  collection-open-and-close processes.
+* Hydrus does consult the workflow service when it needs information about
+  the status of an object in assemblyWF and accessionWF. The primary
+  examples are in the is_accessioned() and publish_time() methods.
 
 
 Relationship between object_status and workflow steps for collections:
@@ -263,37 +260,39 @@ Notes:
 
 ## Creating a Hydrus Item with a particular PID
 
-  # Temporarily edit register_dor_object().
-  params[:pid] = 'ITEM_PID' if args.last == 'APO_PID'
+```ruby
+# Temporarily edit register_dor_object().
+params[:pid] = 'ITEM_PID' if args.last == 'APO_PID'
 
-  # Run this in the Rails console.
-  bundle exec rails c ENV
-  hc = Hydrus::Collection.find 'COLL_PID'
-  u  = User.new(:email => 'EMAIL')
-  hi = Hydrus::Item.create(hc.pid, u)
+# Run this in the Rails console.
+bundle exec rails c ENV
+hc = Hydrus::Collection.find 'COLL_PID'
+u  = User.new(:email => 'EMAIL')
+hi = Hydrus::Item.create(hc.pid, u)
+```
 
 ## Manually Adding a File to an Existing Object
 
-  1. Move the file(s) to the /data/hydrus-files/tmp folder on the hydrus-prod server using sftp or some other mechanism
+1. Move the file(s) to the `/data/hydrus-files/tmp` folder on the hydrus-prod server using sftp or some other mechanism
 
-  2. SSH into the hydrus-prod server, go to the app directory and start a console
-
-    cd hydrus/current
-    bundle exec rails console production
-
-  3. Now from the Rails console add your file(s) to the object by creating new ObjectFile(s)
-
+2. SSH into the hydrus-prod server, go to the app directory and start a console
+```bash
+cd hydrus/current
+bundle exec rails console production
+```
+3. Now from the Rails console add your file(s) to the object by creating new ObjectFile(s)
+```ruby
 hof = Hydrus::ObjectFile.new 	hof.pid='druid:XX111YY2222' # set this to the
 druid of the hydrus object 	hof.hide=false   # set this to true if the file
 should be hidden (defaults to false if not set) 	hof.label="Description" #
 optional description of file, can be left blank
 hof.file=File.open('/data/hydrus-files/tmp/YOURFILENAME')  # add your file
 here using the filename 	hof.save  # should true if it succeeded
+```
+4. Repeat step 3 for any additional files
 
-  4. Repeat step 3 for any additional files
-
-  5. Refresh the object page in hydrus to confirm the files are listed.  You can also double-check that the files were placed in the correct location, +/data/hydrus-files/DRUID/TREE/PATH/DRUID/content+
+5. Refresh the object page in hydrus to confirm the files are listed.  You can also double-check that the files were placed in the correct location, `/data/hydrus-files/DRUID/TREE/PATH/DRUID/content`
 
 e.g. `/data/hydrus-files/xx/111/yy/2222/xx111yy2222/content`
 
-  6. Delete the files from the +/data/hydrus-files/tmp+ directory
+6. Delete the files from the */data/hydrus-files/tmp* directory
