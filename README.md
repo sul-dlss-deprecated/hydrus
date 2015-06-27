@@ -50,7 +50,9 @@ rake hydrus:refresh_upload_files
 
 Start the Jetty server:
 
-`rake jetty:start`
+```
+rake jetty:start
+```
 
 Run the Hydrus application in either of these ways:
 
@@ -61,12 +63,12 @@ rake  server   # Filters some logging noise
 
 ## Useful URLs during development
 
-* [![Hydrus](http://localhost:3000)](http://localhost:3000)
-* [![Hydrus about](http://localhost:3000/about)](http://localhost:3000/about)
-* [![Jetty](http://localhost:8983)](http://localhost:8983)
-* [![Fedora admin](http://localhost:8983/fedora/admin)](http://localhost:8983/fedora/admin)
-* [![Fedora objects](http://localhost:8983/fedora/objects)](http://localhost:8983/fedora/objects)
-* [![Solr](http://localhost:8983/solr)](http://localhost:8983/solr)
+* Hydrus - [http://localhost:3000](http://localhost:3000)
+* Hydrus about - [http://localhost:3000/about](http://localhost:3000/about)
+* Jetty - [http://localhost:8983](http://localhost:8983)
+* Fedora admin - [http://localhost:8983/fedora/admin](http://localhost:8983/fedora/admin)
+* Fedora objects - [http://localhost:8983/fedora/objects](http://localhost:8983/fedora/objects)
+* Solr - [http://localhost:8983/solr](http://localhost:8983/solr)
 
 ## User accounts used during development
 
