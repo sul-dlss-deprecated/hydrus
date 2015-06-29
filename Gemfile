@@ -30,6 +30,7 @@ group :assets do
   gem 'coffee-rails', '~> 3.2.1'
   gem "bootstrap-sass", '2.3.2.1'
   gem 'therubyracer'
+  gem 'libv8', '=3.16.14.7'  # dep of therubyracer fails to compile (bad C code) in '3.16.14.9'
   gem 'uglifier', '>= 1.0.3'
 end
 
@@ -45,7 +46,7 @@ group :test do
 end
 
 group :development, :test do
-  gem 'jettywrapper', '1.4.1'
+  gem 'jettywrapper', '~> 1.4.1'
   gem 'sqlite3'
   gem 'awesome_print'
   gem 'launchy'

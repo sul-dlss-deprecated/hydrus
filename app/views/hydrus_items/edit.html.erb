@@ -22,7 +22,7 @@
   <%= hidden_field_tag("object_id", params[:id]) -%>
 
   <%= hydrus_form_header(:required=>true, :first=>true) {"Title and contact"} %>
-	<p>Enter the item title and a contact email address to be published with the item.</p>
+	<p>Enter the item title and a single contact email address to be published with the item.</p>
   <div class="row field-group">
     <%= hydrus_form_label do %>
       <%= f.label :title, "Title of #{object_type}" %>
@@ -46,7 +46,7 @@
   <div class="row field-group">
     <div class="span9 contributor-select destroy-group">
       <p>
-        Enter the name(s) of people, organizations or events responsible for producing the item.  For personal names, please enter them as LAST, FIRST.
+        Enter the name(s) of people, organizations or events responsible for producing the item.  Enter a personal name as &quot;LastName, FirstName&quot; or &quot;LastName, FirstName MiddleName&quot;. For example: &quot;Stanford, Jane Lathrop&quot;.
       </p>
       <%= render "contributors" %>
     </div>
