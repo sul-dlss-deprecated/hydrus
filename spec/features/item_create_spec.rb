@@ -48,8 +48,8 @@ describe("Item create", :type => :request, :integration => true) do
         visit hydrus_collection_path(:id=>@hc_druid)
         select "data set", :from => "type"
         click_button("Add new item")
-        current_path.should_not == hydrus_collection_path(:id=>@hc_druid)
-        current_path.should =~ @edit_path_regex
+        expect(current_path).not_to eq(hydrus_collection_path(:id=>@hc_druid))
+        expect(current_path).to match(@edit_path_regex)
       end
 
       it "should be able to access create-new-Item screen via the Collection view page" do
@@ -58,7 +58,7 @@ describe("Item create", :type => :request, :integration => true) do
         collection = Hydrus::Collection.find(@hc_druid)
         visit polymorphic_path(collection)
         click_link 'data set'
-        current_path.should =~ @edit_path_regex
+        expect(current_path).to match(@edit_path_regex)
         Capybara.ignore_hidden_elements = true
       end
     end
@@ -67,42 +67,42 @@ describe("Item create", :type => :request, :integration => true) do
     # Login, go to new Item page, and store the druid of the new Item.
     login_as('archivist1')
     visit new_hydrus_item_path(:collection => @hc_druid)
-    current_path.should =~ @edit_path_regex
+    expect(current_path).to match(@edit_path_regex)
     druid = @edit_path_regex.match(current_path)[1]
     # Fill in form and save.
     fill_in "Title of item", :with => 'title_foo'
     fill_in "hydrus_item_contributors_0_name", :with => 'contributor_foo'
     fill_in "Abstract", :with => 'abstract_foo'
     click_button(@buttons[:save])
-    find(@div_alert).should have_content(@notices[:save])
+    expect(find(@div_alert)).to have_content(@notices[:save])
     # Get Item out of fedora and confirm that our edits were persisted.
     item = Hydrus::Item.find(druid)
-    item.title.should == 'title_foo'
-    item.contributors.first.name.should == 'contributor_foo'
-    item.abstract.should == 'abstract_foo'
-    item.should be_instance_of Hydrus::Item
-    item.create_date.should_not be_blank
-    item.item_type.should == 'dataset'
-    item.descMetadata.typeOfResource.should == ['software, multimedia']
+    expect(item.title).to eq('title_foo')
+    expect(item.contributors.first.name).to eq('contributor_foo')
+    expect(item.abstract).to eq('abstract_foo')
+    expect(item).to be_instance_of Hydrus::Item
+    expect(item.create_date).not_to be_blank
+    expect(item.item_type).to eq('dataset')
+    expect(item.descMetadata.typeOfResource).to eq(['software, multimedia'])
     # Check workflow of Item.
     wf_nodes = item.workflows.find_by_terms(:workflow)
-    wf_nodes.size.should == 1
-    wf_nodes.first[:id].should == Dor::Config.hydrus.app_workflow.to_s
+    expect(wf_nodes.size).to eq(1)
+    expect(wf_nodes.first[:id]).to eq(Dor::Config.hydrus.app_workflow.to_s)
     # Check identityMetadata of Item.
-    item.identityMetadata.tag.should include("Project : Hydrus")
+    expect(item.identityMetadata.tag).to include("Project : Hydrus")
     # Check roles of the Item.
-    item.person_roles.should == { "hydrus-item-depositor" => Set.new(["archivist1"]) }
+    expect(item.person_roles).to eq({ "hydrus-item-depositor" => Set.new(["archivist1"]) })
     # Check events.
     exp = [
       /\AItem created/,
       /\AItem modified/,
     ]
     es = item.get_hydrus_events
-    es.size.should == exp.size
+    expect(es.size).to eq(exp.size)
     es[0...exp.size].zip(exp).each do |e, exp|
-      e.text.should =~ exp
-      e.who.should == 'archivist1'
-      e.type.should == 'hydrus'
+      expect(e.text).to match(exp)
+      expect(e.who).to eq('archivist1')
+      expect(e.type).to eq('hydrus')
     end
   end
 
@@ -110,31 +110,31 @@ describe("Item create", :type => :request, :integration => true) do
     # Login, go to new Item page, and store the druid of the new Item.
     login_as('archivist1')
     visit new_hydrus_item_path(:collection => @hc_druid, :type=>'article')
-    current_path.should =~ @edit_path_regex
+    expect(current_path).to match(@edit_path_regex)
     druid = @edit_path_regex.match(current_path)[1]
     # Fill in form and save.
     fill_in "Title of item", :with => 'title_article'
     fill_in "hydrus_item_contributors_0_name", :with => 'contributor_article'
     fill_in "Abstract", :with => 'abstract_article'
     click_button(@buttons[:save])
-    find(@div_alert).should have_content(@notices[:save])
+    expect(find(@div_alert)).to have_content(@notices[:save])
     # Get Item out of fedora and confirm that our edits were persisted.
     item = Hydrus::Item.find(druid)
-    item.title.should == 'title_article'
-    item.contributors.first.name.should == 'contributor_article'
-    item.abstract.should == 'abstract_article'
-    item.should be_instance_of Hydrus::Item
-    item.create_date.should_not be_blank
-    item.item_type.should == 'article'
-    item.descMetadata.typeOfResource.should == ['text']
-    item.descMetadata.genre.should == ['article']
+    expect(item.title).to eq('title_article')
+    expect(item.contributors.first.name).to eq('contributor_article')
+    expect(item.abstract).to eq('abstract_article')
+    expect(item).to be_instance_of Hydrus::Item
+    expect(item.create_date).not_to be_blank
+    expect(item.item_type).to eq('article')
+    expect(item.descMetadata.typeOfResource).to eq(['text'])
+    expect(item.descMetadata.genre).to eq(['article'])
   end
   
   it "should be able to create a new class project Item, with expected datastreams" do
     # Login, go to new Item page, and store the druid of the new Item.
     login_as('archivist1')
     visit new_hydrus_item_path(:collection => @hc_druid, :type=>'class project')
-    current_path.should =~ @edit_path_regex
+    expect(current_path).to match(@edit_path_regex)
     druid = @edit_path_regex.match(current_path)[1]
     # Fill in form and save.
     fill_in "Title of item", :with => 'title_article'
@@ -142,17 +142,17 @@ describe("Item create", :type => :request, :integration => true) do
     fill_in "Abstract", :with => 'abstract_article'
     click_button(@buttons[:save])
 
-    find(@div_alert).should have_content(@notices[:save])
+    expect(find(@div_alert)).to have_content(@notices[:save])
     # Get Item out of fedora and confirm that our edits were persisted.
     item = Hydrus::Item.find(druid)
-    item.title.should == 'title_article'
-    item.contributors.first.name.should == 'contributor_article'
-    item.abstract.should == 'abstract_article'
-    item.should be_instance_of Hydrus::Item
-    item.create_date.should_not be_blank
-    item.item_type.should == 'class project'
-    item.descMetadata.typeOfResource.should == ['text']
-    item.descMetadata.genre.should == ['student project report']
+    expect(item.title).to eq('title_article')
+    expect(item.contributors.first.name).to eq('contributor_article')
+    expect(item.abstract).to eq('abstract_article')
+    expect(item).to be_instance_of Hydrus::Item
+    expect(item.create_date).not_to be_blank
+    expect(item.item_type).to eq('class project')
+    expect(item.descMetadata.typeOfResource).to eq(['text'])
+    expect(item.descMetadata.genre).to eq(['student project report'])
   end
 
 
@@ -177,33 +177,33 @@ describe("Item create", :type => :request, :integration => true) do
     # store the druid of the new Item.
     login_as('archivist6')
     visit new_hydrus_item_path(:collection => @hc_druid)
-    page.should have_content('Welcome archivist6!')
-    current_path.should =~ @edit_path_regex
+    expect(page).to have_content('Welcome archivist6!')
+    expect(current_path).to match(@edit_path_regex)
     druid = @edit_path_regex.match(current_path)[1]
 
     # Fill in form and save.
     fill_in "hydrus_item_contributors_0_name", :with => ni.contributor
     fill_in "Title of item", :with => ni.title
     click_button(@buttons[:save])
-    find(@div_alert).should have_content(@notices[:save])
+    expect(find(@div_alert)).to have_content(@notices[:save])
 
     # The view page should display some validation error messages, and should
     # not offer the Submit for approval button.
-    find(@div_actions).should_not have_button(@buttons[:submit_for_approval])
-    find(@span_status).should have_content(@status_msgs[:draft])
+    expect(find(@div_actions)).not_to have_button(@buttons[:submit_for_approval])
+    expect(find(@span_status)).to have_content(@status_msgs[:draft])
 
     # Check various Item attributes and methods.
     item = Hydrus::Item.find(druid)
-    item.object_status.should == 'draft'
+    expect(item.object_status).to eq('draft')
     item.is_draft == true
-    item.is_awaiting_approval.should == false
-    item.is_publishable.should == false
-    item.is_published.should == false
-    item.is_returned.should == false
-    item.is_destroyable.should == true
-    item.submitted_for_publish_time.should be_blank
-    item.accepted_terms_of_deposit.should == "false"
-    item.valid?.should == true  # Because unpublished, so validation is limited.
+    expect(item.is_awaiting_approval).to eq(false)
+    expect(item.is_publishable).to eq(false)
+    expect(item.is_published).to eq(false)
+    expect(item.is_returned).to eq(false)
+    expect(item.is_destroyable).to eq(true)
+    expect(item.submitted_for_publish_time).to be_blank
+    expect(item.accepted_terms_of_deposit).to eq("false")
+    expect(item.valid?).to eq(true)  # Because unpublished, so validation is limited.
 
     # Go back to edit page and fill in required elements.
     should_visit_edit_page(item)
@@ -217,11 +217,11 @@ describe("Item create", :type => :request, :integration => true) do
     f.file = Tempfile.new('mock_HydrusObjectFile_')
     f.save
     click_button(@buttons[:save])
-    find(@div_alert).should have_content(@notices[:save])
+    expect(find(@div_alert)).to have_content(@notices[:save])
 
     # The view page should still not offer the Submit for approval button since
     # we haven't accepted the terms.
-    find(@div_actions).should_not have_button(@buttons[:submit_for_approval])
+    expect(find(@div_actions)).not_to have_button(@buttons[:submit_for_approval])
 
     # Accept terms of deposit
     should_visit_edit_page(item)
@@ -231,126 +231,126 @@ describe("Item create", :type => :request, :integration => true) do
     # The view page should now offer the Submit for approval button (but no publish button) since we
     # have accepted the terms.
     visit hydrus_item_path(:id=>item.pid)
-    find(@div_actions).should have_button(@buttons[:submit_for_approval])
-    find(@div_actions).should_not have_button(@buttons[:publish_directly])
+    expect(find(@div_actions)).to have_button(@buttons[:submit_for_approval])
+    expect(find(@div_actions)).not_to have_button(@buttons[:publish_directly])
 
     # Check various Item attributes and methods.
     item = Hydrus::Item.find(druid)
-    item.object_status.should == 'draft'
-    item.is_draft.should == true
-    item.is_awaiting_approval.should == false
-    item.is_publishable_directly.should == false    
-    item.is_publishable.should == false
-    item.is_submittable_for_approval.should == true
-    item.submit_for_approval_time.should be_blank
-    item.is_published.should == false
-    item.is_returned.should == false
-    item.is_destroyable.should == true
-    item.valid?.should == true
+    expect(item.object_status).to eq('draft')
+    expect(item.is_draft).to eq(true)
+    expect(item.is_awaiting_approval).to eq(false)
+    expect(item.is_publishable_directly).to eq(false)    
+    expect(item.is_publishable).to eq(false)
+    expect(item.is_submittable_for_approval).to eq(true)
+    expect(item.submit_for_approval_time).to be_blank
+    expect(item.is_published).to eq(false)
+    expect(item.is_returned).to eq(false)
+    expect(item.is_destroyable).to eq(true)
+    expect(item.valid?).to eq(true)
 
     # Submit the Item for approval.
     click_button(@buttons[:submit_for_approval])
-    find(@div_alert).should have_content(@notices[:submit_for_approval])
+    expect(find(@div_alert)).to have_content(@notices[:submit_for_approval])
 
     # The view page should not offer the Submit for approval button or the publish button
-    find(@div_actions).should_not have_button(@buttons[:submit_for_approval])
-    find(@div_actions).should_not have_button(@buttons[:publish_directly])
-    find(@span_status).should have_content(@status_msgs[:awaiting_approval])
+    expect(find(@div_actions)).not_to have_button(@buttons[:submit_for_approval])
+    expect(find(@div_actions)).not_to have_button(@buttons[:publish_directly])
+    expect(find(@span_status)).to have_content(@status_msgs[:awaiting_approval])
 
     # Check various Item attributes and methods.
     item = Hydrus::Item.find(druid)
-    item.object_status.should == 'awaiting_approval'
-    item.is_publishable.should == true
-    item.is_publishable_directly.should == false
-    item.requires_human_approval.should == "yes"
-    item.is_published.should == false
-    item.is_returned.should == false
-    item.is_destroyable.should == true
-    item.submitted_for_publish_time.should be_blank
-    item.submit_for_approval_time.should_not be_blank
-    item.valid?.should == true
+    expect(item.object_status).to eq('awaiting_approval')
+    expect(item.is_publishable).to eq(true)
+    expect(item.is_publishable_directly).to eq(false)
+    expect(item.requires_human_approval).to eq("yes")
+    expect(item.is_published).to eq(false)
+    expect(item.is_returned).to eq(false)
+    expect(item.is_destroyable).to eq(true)
+    expect(item.submitted_for_publish_time).to be_blank
+    expect(item.submit_for_approval_time).not_to be_blank
+    expect(item.valid?).to eq(true)
 
     # Return to edit page, and try to save Item with an empty title.
     click_link "Edit Draft"
     fill_in "hydrus_item_title", :with => ''
     click_button(@buttons[:save])
-    find(@div_alert).should_not have_content(@notices[:save])
-    find(@div_alert).should have_content('Title cannot be blank')
+    expect(find(@div_alert)).not_to have_content(@notices[:save])
+    expect(find(@div_alert)).to have_content('Title cannot be blank')
 
     # Fill in the title and save.
     fill_in "hydrus_item_title", :with => ni.title
     click_button(@buttons[:save])
-    find(@div_alert).should have_content(@notices[:save])
+    expect(find(@div_alert)).to have_content(@notices[:save])
 
     # now login as archivist 1 (collection manager) and Disapprove the Item.
     login_as('archivist1')
     visit hydrus_item_path(:id=>item.pid)
-    page.should have_content('Welcome archivist1!')
+    expect(page).to have_content('Welcome archivist1!')
     fill_in "hydrus_item_disapproval_reason", :with => ni.reason
     e = expect { click_button(@buttons[:disapprove]) }
     e.to change { ActionMailer::Base.deliveries.count }.by(1)
 
-    find(@div_alert).should have_content(@notices[:disapprove])
+    expect(find(@div_alert)).to have_content(@notices[:disapprove])
 
     # Check various Item attributes and methods.
     item = Hydrus::Item.find(druid)
-    item.object_status.should == 'returned'
-    item.is_publishable.should == false
-    item.is_publishable_directly.should == false
-    item.is_published.should == false
-    item.is_returned.should == true
-    item.is_destroyable.should == true
-    item.valid?.should == true
-    item.disapproval_reason.should == ni.reason
+    expect(item.object_status).to eq('returned')
+    expect(item.is_publishable).to eq(false)
+    expect(item.is_publishable_directly).to eq(false)
+    expect(item.is_published).to eq(false)
+    expect(item.is_returned).to eq(true)
+    expect(item.is_destroyable).to eq(true)
+    expect(item.valid?).to eq(true)
+    expect(item.disapproval_reason).to eq(ni.reason)
     visit hydrus_item_path(:id=>item.pid)
-    find(@span_status).should have_content(@status_msgs[:returned])
+    expect(find(@span_status)).to have_content(@status_msgs[:returned])
 
     # now login as archivist 6 (depositor) and resubmit the Item.
     login_as('archivist6')
     visit hydrus_item_path(:id=>item.pid)
-    page.should have_content('Welcome archivist6!')
-    page.should have_content(ni.reason)
-    find(@span_status).should have_content(@status_msgs[:returned])
+    expect(page).to have_content('Welcome archivist6!')
+    expect(page).to have_content(ni.reason)
+    expect(find(@span_status)).to have_content(@status_msgs[:returned])
     click_button(@buttons[:resubmit])
-    find(@div_alert).should have_content(@notices[:resubmit])
+    expect(find(@div_alert)).to have_content(@notices[:resubmit])
 
     # Check various Item attributes and methods.
     item = Hydrus::Item.find(druid)
-    item.object_status.should == 'awaiting_approval'
-    item.is_publishable.should == true
-    item.is_publishable_directly.should == false
-    item.is_published.should == false
-    item.is_returned.should == false
-    item.is_destroyable.should == true
-    item.valid?.should == true
-    item.disapproval_reason.should == nil
-    find(@span_status).should have_content(@status_msgs[:awaiting_approval])
+    expect(item.object_status).to eq('awaiting_approval')
+    expect(item.is_publishable).to eq(true)
+    expect(item.is_publishable_directly).to eq(false)
+    expect(item.is_published).to eq(false)
+    expect(item.is_returned).to eq(false)
+    expect(item.is_destroyable).to eq(true)
+    expect(item.valid?).to eq(true)
+    expect(item.disapproval_reason).to eq(nil)
+    expect(find(@span_status)).to have_content(@status_msgs[:awaiting_approval])
 
     # Now login as archivist 1 and approve the item.
     login_as('archivist1')
     visit hydrus_item_path(:id=>item.pid)
     click_button(@buttons[:approve])
-    find(@div_alert).should have_content(@notices[:approve])
+    expect(find(@div_alert)).to have_content(@notices[:approve])
 
     # The view page should not offer the Publish, Approve, or Disapprove buttons.
     div_cs = find(@div_actions)
-    div_cs.should_not have_button(@buttons[:submit_for_approval])
-    div_cs.should_not have_button(@buttons[:approve])
-    div_cs.should_not have_button(@buttons[:disapprove])
-    find(@span_status).should have_content(@status_msgs[:published])
+    expect(div_cs).not_to have_button(@buttons[:submit_for_approval])
+    expect(div_cs).not_to have_button(@buttons[:approve])
+    expect(div_cs).not_to have_button(@buttons[:disapprove])
+    expect(find(@span_status)).to have_content(@status_msgs[:published])
 
     # Check various Item attributes and methods.
     item = Hydrus::Item.find(druid)
-    item.object_status.should == 'published'
-    item.is_publishable.should == false
-    item.is_published.should == true
-    item.is_returned.should == false
-    item.is_destroyable.should == false
-    item.valid?.should == true
-    item.disapproval_reason.should == nil
-    item.is_embargoed.should == false
-    item.submitted_for_publish_time.should_not be_blank
-    item.visibility.should == ["stanford"]
+    expect(item.object_status).to eq('published')
+    expect(item.is_publishable).to eq(false)
+    expect(item.is_published).to eq(true)
+    expect(item.is_returned).to eq(false)
+    expect(item.is_destroyable).to eq(false)
+    expect(item.valid?).to eq(true)
+    expect(item.disapproval_reason).to eq(nil)
+    expect(item.is_embargoed).to eq(false)
+    expect(item.submitted_for_publish_time).not_to be_blank
+    expect(item.visibility).to eq(["stanford"])
     ps={:visibility=>'stanford',:license_code=>'cc-by',:embargo_date=>''}
     check_emb_vis_lic(item,ps)
 
@@ -367,7 +367,7 @@ describe("Item create", :type => :request, :integration => true) do
       /\AItem published/,
     ]
     es = item.get_hydrus_events
-    es[0...exp.size].zip(exp).each { |e, exp| e.text.should =~ exp  }
+    es[0...exp.size].zip(exp).each { |e, exp| expect(e.text).to match(exp)  }
   end
 
   it "Does not require approval: should be able to publish directly, with world visible rights and a different license than collection" do
@@ -391,7 +391,7 @@ describe("Item create", :type => :request, :integration => true) do
     # Login as a item depositor for this collection, go to new Item page, and store the druid of the new Item.
     login_as('archivist1')
     visit new_hydrus_item_path(:collection => @hc_druid)
-    current_path.should =~ @edit_path_regex
+    expect(current_path).to match(@edit_path_regex)
     druid = @edit_path_regex.match(current_path)[1]
     # Fill in form and save.
     fill_in "hydrus_item_contributors_0_name", :with => ni.contributor
@@ -399,20 +399,20 @@ describe("Item create", :type => :request, :integration => true) do
     select "everyone", :from => "hydrus_item_embarg_visib_visibility"
     select "CC BY-ND Attribution-NoDerivs", :from=>"hydrus_item_license"
     click_button(@buttons[:save])
-    find(@div_alert).should have_content(@notices[:save])
+    expect(find(@div_alert)).to have_content(@notices[:save])
     # The view page should display some validation error messages, and should not
     # offer the Publish button.
-    find(@div_actions).should_not have_button(@buttons[:publish_directly])
-    find(@span_status).should have_content(@status_msgs[:draft])
+    expect(find(@div_actions)).not_to have_button(@buttons[:publish_directly])
+    expect(find(@span_status)).to have_content(@status_msgs[:draft])
     # Check various Item attributes and methods.
     item = Hydrus::Item.find(druid)
-    item.object_status.should == 'draft'
-    item.is_publishable.should == false
-    item.is_published.should == false
-    item.is_returned.should == false
-    item.is_destroyable.should == true
-    item.accepted_terms_of_deposit.should == "false"
-    item.valid?.should == true  # Because unpublished, so validation is limited.
+    expect(item.object_status).to eq('draft')
+    expect(item.is_publishable).to eq(false)
+    expect(item.is_published).to eq(false)
+    expect(item.is_returned).to eq(false)
+    expect(item.is_destroyable).to eq(true)
+    expect(item.accepted_terms_of_deposit).to eq("false")
+    expect(item.valid?).to eq(true)  # Because unpublished, so validation is limited.
 
     # Go back to edit page and fill in required elements.
     should_visit_edit_page(item)
@@ -426,9 +426,9 @@ describe("Item create", :type => :request, :integration => true) do
     f.file = Tempfile.new('mock_HydrusObjectFile_')
     f.save
     click_button(@buttons[:save])
-    find(@div_alert).should have_content(@notices[:save])
+    expect(find(@div_alert)).to have_content(@notices[:save])
     # The view page should not offer the Publish button since we haven't accepted the terms yet
-    find(@div_actions).should_not have_button(@buttons[:publish_directly])
+    expect(find(@div_actions)).not_to have_button(@buttons[:publish_directly])
 
     # Accept terms of deposit
     should_visit_edit_page(item)
@@ -437,32 +437,32 @@ describe("Item create", :type => :request, :integration => true) do
 
     visit hydrus_item_path(:id=>item.pid)
     # now we should have the publish button
-    find(@div_actions).should have_button(@buttons[:publish_directly])
+    expect(find(@div_actions)).to have_button(@buttons[:publish_directly])
     # Check various Item attributes and methods.
     item = Hydrus::Item.find(druid)
-    item.object_status.should == 'draft'
-    item.is_publishable.should == true
-    item.is_publishable_directly.should == true
-    item.requires_human_approval.should == "no"
-    item.is_submittable_for_approval.should == false
-    item.is_published.should == false
-    item.is_returned.should == false
-    item.is_destroyable.should == true
-    item.valid?.should == true
+    expect(item.object_status).to eq('draft')
+    expect(item.is_publishable).to eq(true)
+    expect(item.is_publishable_directly).to eq(true)
+    expect(item.requires_human_approval).to eq("no")
+    expect(item.is_submittable_for_approval).to eq(false)
+    expect(item.is_published).to eq(false)
+    expect(item.is_returned).to eq(false)
+    expect(item.is_destroyable).to eq(true)
+    expect(item.valid?).to eq(true)
     # Publish thte item
     click_button(@buttons[:publish_directly])
-    find(@div_alert).should have_content(@notices[:publish_directly])
+    expect(find(@div_alert)).to have_content(@notices[:publish_directly])
     # The view page should not offer the Publish button.
-    find(@div_actions).should_not have_button(@buttons[:publish_directly])
-    find(@span_status).should have_content(@status_msgs[:published])
+    expect(find(@div_actions)).not_to have_button(@buttons[:publish_directly])
+    expect(find(@span_status)).to have_content(@status_msgs[:published])
     # Check various Item attributes and methods.
     item = Hydrus::Item.find(druid)
-    item.object_status.should == 'published'
-    item.is_publishable.should == false
-    item.is_published.should == true
-    item.is_returned.should == false
-    item.is_destroyable.should == false
-    item.valid?.should == true
+    expect(item.object_status).to eq('published')
+    expect(item.is_publishable).to eq(false)
+    expect(item.is_published).to eq(true)
+    expect(item.is_returned).to eq(false)
+    expect(item.is_destroyable).to eq(false)
+    expect(item.valid?).to eq(true)
     ps={:visibility=>'world',:license_code=>'cc-by-nd',:embargo_date=>''}
     check_emb_vis_lic(item,ps)
 
@@ -470,12 +470,12 @@ describe("Item create", :type => :request, :integration => true) do
     should_visit_edit_page(item)
     fill_in "hydrus_item_title", :with => ''
     click_button(@buttons[:save])
-    find(@div_alert).should_not have_content(@notices[:save])
-    find(@div_alert).should have_content('Title cannot be blank')
+    expect(find(@div_alert)).not_to have_content(@notices[:save])
+    expect(find(@div_alert)).to have_content('Title cannot be blank')
     # Fill in the title and save.
     fill_in "hydrus_item_title", :with => ni.title
     click_button(@buttons[:save])
-    find(@div_alert).should have_content(@notices[:save])
+    expect(find(@div_alert)).to have_content(@notices[:save])
 
     # Check events.
     exp = [
@@ -486,7 +486,7 @@ describe("Item create", :type => :request, :integration => true) do
       /\AItem published/,
     ]
     es = item.get_hydrus_events
-    es[0...exp.size].zip(exp).each { |e, exp| e.text.should =~ exp  }
+    es[0...exp.size].zip(exp).each { |e, exp| expect(e.text).to match(exp)  }
   end
 
   describe("terms of acceptance for an existing item", :integration => true)  do
@@ -494,18 +494,18 @@ describe("Item create", :type => :request, :integration => true) do
     subject { Hydrus::Item.find('druid:oo000oo0001') }
 
     it "should indicate if the item has had terms accepted already" do
-      subject.accepted_terms_of_deposit.should == "true"
-      subject.terms_of_deposit_accepted?.should == true
+      expect(subject.accepted_terms_of_deposit).to eq("true")
+      expect(subject.terms_of_deposit_accepted?).to eq(true)
     end
 
     it "should indicate the users who have accepted the terms of deposit for this collection in a hash and should returns dates accepted" do
       users=subject.collection.users_accepted_terms_of_deposit
-      users.class.should == Hash
-      users.size.should == 2
-      users.keys.include?('archivist1').should == true
-      users['archivist1'].should == '2011-09-02T09:02:32Z'
-      users.keys.include?('archivist3').should == true
-      users['archivist3'].should == '2012-05-02T20:02:44Z'
+      expect(users.class).to eq(Hash)
+      expect(users.size).to eq(2)
+      expect(users.keys.include?('archivist1')).to eq(true)
+      expect(users['archivist1']).to eq('2011-09-02T09:02:32Z')
+      expect(users.keys.include?('archivist3')).to eq(true)
+      expect(users['archivist3']).to eq('2012-05-02T20:02:44Z')
     end
 
   end
@@ -516,49 +516,49 @@ describe("Item create", :type => :request, :integration => true) do
 
     it "should indicate that a new item in a collection requires terms acceptance, if the user has already accepted another item in this collection but it was more than 1 year ago" do
       u ='archivist1' # this user accepted more than 1 year ago
-      subject.users_accepted_terms_of_deposit.keys.include?(u).should == true
+      expect(subject.users_accepted_terms_of_deposit.keys.include?(u)).to eq(true)
       ni=Hydrus::Item.create(subject.pid, mock_authed_user(u))
-      ni.requires_terms_acceptance(u,subject).should == true
-      ni.accepted_terms_of_deposit.should == "false"
-      ni.terms_of_deposit_accepted?.should == false
+      expect(ni.requires_terms_acceptance(u,subject)).to eq(true)
+      expect(ni.accepted_terms_of_deposit).to eq("false")
+      expect(ni.terms_of_deposit_accepted?).to eq(false)
     end
 
     it "should indicate that a new item in a collection does not require terms acceptance, if the user has already accepted another item in this collection less than 1 year ago" do
       u='archivist3'
       dt = HyTime.now - 1.month # force this user to have accepted 1 month ago.
-      subject.users_accepted_terms_of_deposit.keys.include?(u).should == true
+      expect(subject.users_accepted_terms_of_deposit.keys.include?(u)).to eq(true)
       subject.hydrusProperties.accept_terms_of_deposit(u,HyTime.datetime(dt))
       subject.save
       ni=Hydrus::Item.create(subject.pid, mock_authed_user(u))
-      ni.requires_terms_acceptance(u,subject).should == false
-      ni.accepted_terms_of_deposit.should == "true"
-      ni.terms_of_deposit_accepted?.should == true
+      expect(ni.requires_terms_acceptance(u,subject)).to eq(false)
+      expect(ni.accepted_terms_of_deposit).to eq("true")
+      expect(ni.terms_of_deposit_accepted?).to eq(true)
     end
 
     it "should indicate that a new item in a collection requires terms acceptance, when the user has not already accepted another item in this collection" do
       u='archivist5'
-      Hydrus::Authorizable.stub(:can_create_items_in).and_return(true)
-      ni=Hydrus::Item.create(subject.pid,mock_authed_user(u))
-      ni.requires_terms_acceptance(u,subject).should == true
-      ni.accepted_terms_of_deposit.should == "false"
-      ni.terms_of_deposit_accepted?.should == false
+      allow(Hydrus::Authorizable).to receive(:can_create_items_in).and_return(true)
+      ni=Hydrus::Item.create(subject.pid, mock_authed_user(u))
+      expect(ni.requires_terms_acceptance(u,subject)).to eq(true)
+      expect(ni.accepted_terms_of_deposit).to eq("false")
+      expect(ni.terms_of_deposit_accepted?).to eq(false)
     end
 
     it "should accept the terms for an item, updating the appropriate hydrusProperties metadata in item and collection" do
       u    = 'archivist5'
       user = mock_authed_user(u)
-      Hydrus::Authorizable.stub(:can_create_items_in).and_return(true)
-      Hydrus::Authorizable.stub(:can_edit_item).and_return(true)
+      allow(Hydrus::Authorizable).to receive(:can_create_items_in).and_return(true)
+      allow(Hydrus::Authorizable).to receive(:can_edit_item).and_return(true)
       ni=Hydrus::Item.create(subject.pid, user)
-      ni.requires_terms_acceptance(u,subject).should == true
-      ni.accepted_terms_of_deposit.should == "false"
-      subject.users_accepted_terms_of_deposit.keys.include?(u).should == false
+      expect(ni.requires_terms_acceptance(u,subject)).to eq(true)
+      expect(ni.accepted_terms_of_deposit).to eq("false")
+      expect(subject.users_accepted_terms_of_deposit.keys.include?(u)).to eq(false)
       ni.accept_terms_of_deposit(user)
-      ni.accepted_terms_of_deposit.should == "true"
-      ni.terms_of_deposit_accepted?.should == true
+      expect(ni.accepted_terms_of_deposit).to eq("true")
+      expect(ni.terms_of_deposit_accepted?).to eq(true)
       coll=Hydrus::Collection.find('druid:oo000oo0003')
-      coll.users_accepted_terms_of_deposit.keys.include?(u).should == true
-      coll.users_accepted_terms_of_deposit[u].nil?.should == false
+      expect(coll.users_accepted_terms_of_deposit.keys.include?(u)).to eq(true)
+      expect(coll.users_accepted_terms_of_deposit[u].nil?).to eq(false)
     end
 
   end
@@ -578,8 +578,8 @@ describe("Item create", :type => :request, :integration => true) do
       coll.save
       # Create a new item: page should not offer the license selector.
       druid = should_visit_new_item_page(@hc_druid)
-      page.should_not have_css(@lic_select)
-      page.should have_content('No license')
+      expect(page).not_to have_css(@lic_select)
+      expect(page).to have_content('No license')
     end
 
     it "collection: fixed license: new items should have that license" do
@@ -591,8 +591,8 @@ describe("Item create", :type => :request, :integration => true) do
       coll.save
       # Create a new item: page should not offer the license selector.
       druid = should_visit_new_item_page(@hc_druid)
-      page.should_not have_css(@lic_select)
-      page.should have_content('CC BY-ND Attribution-NoDerivs')
+      expect(page).not_to have_css(@lic_select)
+      expect(page).to have_content('CC BY-ND Attribution-NoDerivs')
     end
 
     describe "collection: variable license" do
@@ -606,11 +606,11 @@ describe("Item create", :type => :request, :integration => true) do
         coll.save
         # Create a new item: page should offer the license selector.
         druid = should_visit_new_item_page(@hc_druid)
-        page.should have_css(@lic_select)
+        expect(page).to have_css(@lic_select)
         within(@lic_select) {
           nodes = all('option[selected]')
-          nodes.size.should == 1
-          nodes.first.text.should == "ODC-By Attribution License"
+          expect(nodes.size).to eq(1)
+          expect(nodes.first.text).to eq("ODC-By Attribution License")
         }
       end
 
@@ -623,11 +623,11 @@ describe("Item create", :type => :request, :integration => true) do
         coll.save
         # Create a new item: page should offer the license selector.
         druid = should_visit_new_item_page(@hc_druid)
-        page.should have_css(@lic_select)
+        expect(page).to have_css(@lic_select)
         within(@lic_select) {
           nodes = all('option[selected]')
-          nodes.size.should == 1
-          nodes.first.text.should == "No license"
+          expect(nodes.size).to eq(1)
+          expect(nodes.first.text).to eq("No license")
         }
       end
 
@@ -639,7 +639,7 @@ describe("Item create", :type => :request, :integration => true) do
 
     it "should raise error if object is not destroyable" do
       hi = Hydrus::Item.find('druid:oo000oo0001')
-      hi.is_destroyable.should == false
+      expect(hi.is_destroyable).to eq(false)
       expect { hi.delete }.to raise_error(RuntimeError)
     end
 
@@ -658,15 +658,15 @@ describe("Item create", :type => :request, :integration => true) do
       #   - in Fedora
       #   - in SOLR
       #   - in workflows
-      hi.class.should == hyi
-      hyc.all_hydrus_objects(:models => [hyi], :pids_only => true).should include(pid)
-      wfs.get_workflows(pid).should == [hwf]
+      expect(hi.class).to eq(hyi)
+      expect(hyc.all_hydrus_objects(:models => [hyi], :pids_only => true)).to include(pid)
+      expect(wfs.get_workflows(pid)).to eq([hwf])
       #   - with an uploaded file
       #   - and a corresponding entry in DB table
-      Dir.glob(dir + "/*").size.should == 1
-      Hydrus::ObjectFile.find_all_by_pid(pid).size.should == 1
+      expect(Dir.glob(dir + "/*").size).to eq(1)
+      expect(Hydrus::ObjectFile.find_all_by_pid(pid).size).to eq(1)
       # Delete the Item.
-      hi.is_destroyable.should == true
+      expect(hi.is_destroyable).to eq(true)
       first(:link, "Discard this item").click
       click_button "Discard"
       hi = nil
@@ -675,12 +675,12 @@ describe("Item create", :type => :request, :integration => true) do
       #   - from SOLR
       #   - from workflows
       expect { hyi.find(pid) }.to raise_error(afe)
-      hyc.all_hydrus_objects(:models => [hyi], :pids_only => true).should_not include(pid)
-      wfs.get_workflows(pid).should == []
+      expect(hyc.all_hydrus_objects(:models => [hyi], :pids_only => true)).not_to include(pid)
+      expect(wfs.get_workflows(pid)).to eq([])
       #   - with no upload directory
       #   - and no DB entries
-      File.directory?(dir).should == false
-      Hydrus::ObjectFile.find_all_by_pid(pid).size.should == 0
+      expect(File.directory?(dir)).to eq(false)
+      expect(Hydrus::ObjectFile.find_all_by_pid(pid).size).to eq(0)
     end
 
   end

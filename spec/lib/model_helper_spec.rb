@@ -15,7 +15,7 @@ describe Hydrus::AccessControlsEnforcement do
       'blah'  => false,
       123     => false,
     }
-    tests.each { |inp, exp| to_bool(inp).should == exp }
+    tests.each { |inp, exp| expect(to_bool(inp)).to eq(exp) }
   end
 
   it "parse_delimited() should work as expected" do
@@ -29,7 +29,7 @@ describe Hydrus::AccessControlsEnforcement do
       '  '                      => [],
       "  a,,; b \n\r  , c\nd  " => %w(a b c d),
     }
-    tests.each { |inp, exp| Hydrus::ModelHelper.parse_delimited(inp).should == exp }
+    tests.each { |inp, exp| expect(Hydrus::ModelHelper.parse_delimited(inp)).to eq(exp) }
   end
 
   it "equal_when_stripped?" do
@@ -40,7 +40,7 @@ describe Hydrus::AccessControlsEnforcement do
       [['hi'], ['hi '], false],
     ]
     tests.each do |v1, v2, exp|
-      equal_when_stripped?(v1, v2).should == exp
+      expect(equal_when_stripped?(v1, v2)).to eq(exp)
     end
   end
 

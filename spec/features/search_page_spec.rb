@@ -8,8 +8,8 @@ describe("Search page", :type => :request, :integration => true) do
     login_as('archivist1')
     click_button("search")
     docs = find 'div#documents'
-    docs.should have_content 'How Couples Meet'
-    docs.should have_content 'SSDS Social Science Data Collection'
+    expect(docs).to have_content 'How Couples Meet'
+    expect(docs).to have_content 'SSDS Social Science Data Collection'
   end
 
 end

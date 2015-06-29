@@ -19,11 +19,11 @@ describe("Collection edit", :type => :request, :integration => true) do
   it "if not logged in, should be redirected to the login page, then back to our intended page after logging in" do
     logout
     visit edit_polymorphic_path(@hc)
-    current_path.should == new_user_session_path
+    expect(current_path).to eq(new_user_session_path)
     fill_in "Email", :with => 'archivist1@example.com'
     fill_in "Password", :with => login_pw
     click_button "Sign in"
-    current_path.should == edit_polymorphic_path(@hc)
+    expect(current_path).to eq(edit_polymorphic_path(@hc))
   end
 
   it "can edit Collection descMetadata content" do
@@ -36,31 +36,31 @@ describe("Collection edit", :type => :request, :integration => true) do
     login_as('archivist1')
     should_visit_edit_page(@hc)
 
-    page.should have_content(orig_abstract)
-    page.should have_xpath("//input[@value='#{orig_contact}']")
+    expect(page).to have_content(orig_abstract)
+    expect(page).to have_xpath("//input[@value='#{orig_contact}']")
 
-    page.should_not have_content(new_abstract)
-    page.should have_no_xpath("//input[@value='#{new_contact}']")
+    expect(page).not_to have_content(new_abstract)
+    expect(page).to have_no_xpath("//input[@value='#{new_contact}']")
     fill_in "Description", :with => new_abstract
     fill_in "hydrus_collection_contact", :with => new_contact
     click_button "save_nojs"
 
-    current_path.should == polymorphic_path(@hc)
+    expect(current_path).to eq(polymorphic_path(@hc))
     visit polymorphic_path(@hc)
-    page.should have_content(new_abstract.strip)
+    expect(page).to have_content(new_abstract.strip)
   end
 
   it "does not shows deletion link for a collection if it has any items in it" do
     login_as('archivist1')
     should_visit_edit_page(@hc)
-    page.should_not have_css(".discard-item")
+    expect(page).not_to have_css(".discard-item")
   end
 
   it "does not shows deletion link for a collection if has no items but is stil open" do
     login_as('archivist1')
     @hc = Hydrus::Collection.find(@druid_no_files)
     should_visit_edit_page(@hc)
-    page.should_not have_css(".discard-item")
+    expect(page).not_to have_css(".discard-item")
   end
 
   it "can edit and delete multi-valued fields" do
@@ -75,44 +75,44 @@ describe("Collection edit", :type => :request, :integration => true) do
     login_as('archivist1')
     should_visit_edit_page(@hc)
 
-    page.should_not have_css("##{new_url_field}")
-    page.should_not have_css("##{new_label_field}")
-    page.should_not have_css("##{new_delete_link}")
+    expect(page).not_to have_css("##{new_url_field}")
+    expect(page).not_to have_css("##{new_label_field}")
+    expect(page).not_to have_css("##{new_delete_link}")
 
-    page.should have_css("##{original_url_field}")
-    page.should have_css("##{original_label_field}")
+    expect(page).to have_css("##{original_url_field}")
+    expect(page).to have_css("##{original_label_field}")
 
-    page.should_not have_content new_url
-    page.should_not have_content new_label
+    expect(page).not_to have_content new_url
+    expect(page).not_to have_content new_label
 
     click_button "Add another link"
-    current_path.should == edit_polymorphic_path(@hc)
+    expect(current_path).to eq(edit_polymorphic_path(@hc))
 
-    page.should have_css("##{new_url_field}")
-    page.should have_css("##{new_label_field}")
-    page.should have_css("##{new_delete_link}")
+    expect(page).to have_css("##{new_url_field}")
+    expect(page).to have_css("##{new_label_field}")
+    expect(page).to have_css("##{new_delete_link}")
 
     fill_in("hydrus_collection_related_item_url_2", :with => new_url)
     fill_in("hydrus_collection_related_item_title_2", :with => new_label)
 
     click_button "save_nojs"
-    current_path.should == polymorphic_path(@hc)
+    expect(current_path).to eq(polymorphic_path(@hc))
 
-    page.should have_content(new_label)
+    expect(page).to have_content(new_label)
 
     should_visit_edit_page(@hc)
 
-    page.should have_css("##{new_url_field}")
-    page.should have_css("##{new_label_field}")
-    page.should have_css("##{new_delete_link}")
+    expect(page).to have_css("##{new_url_field}")
+    expect(page).to have_css("##{new_label_field}")
+    expect(page).to have_css("##{new_delete_link}")
 
     click_link new_delete_link
 
-    current_path.should == edit_polymorphic_path(@hc)
+    expect(current_path).to eq(edit_polymorphic_path(@hc))
 
-    page.should_not have_css("##{new_url_field}")
-    page.should_not have_css("##{new_label_field}")
-    page.should_not have_css("##{new_delete_link}")
+    expect(page).not_to have_css("##{new_url_field}")
+    expect(page).not_to have_css("##{new_label_field}")
+    expect(page).not_to have_css("##{new_delete_link}")
 
   end
 
@@ -132,15 +132,15 @@ describe("Collection edit", :type => :request, :integration => true) do
     login_as('archivist1')
     # Visit edit page, and confirm content.
     should_visit_edit_page(@hc)
-    page.should have_checked_field(orig_check_field)
-    page.has_select?("license_option_#{orig_license_option}", :selected => orig_license_label).should == true
-    find_field("license_option_#{orig_license_option}").value.should == 'cc-by'
-    page.has_select?("license_option_#{new_license_option}", :selected => []).should == true
+    expect(page).to have_checked_field(orig_check_field)
+    expect(page.has_select?("license_option_#{orig_license_option}", :selected => orig_license_label)).to eq(true)
+    expect(find_field("license_option_#{orig_license_option}").value).to eq('cc-by')
+    expect(page.has_select?("license_option_#{new_license_option}", :selected => [])).to eq(true)
     # Make changes, save, and confirm redirect.
     choose(new_check_field)
     select(new_license_label, :from => "license_option_#{new_license_option}")
     click_button "save_nojs"
-    current_path.should == polymorphic_path(@hc)
+    expect(current_path).to eq(polymorphic_path(@hc))
     # Visit view page, and confirm that changes occured.
     visit polymorphic_path(@hc)
     @hc = Hydrus::Collection.find @druid
@@ -165,36 +165,36 @@ describe("Collection edit", :type => :request, :integration => true) do
     login_as('archivist1')
     # Visit edit page, and confirm content.
     should_visit_edit_page(@hc)
-    page.should have_checked_field(orig_check_field)
-    page.has_select?('embargo_option_varies').should == true
-    page.has_select?('embargo_option_varies', :selected => "#{orig_embargo} after deposit").should == true
-    page.has_select?('embargo_option_fixed', :selected => []).should == true
+    expect(page).to have_checked_field(orig_check_field)
+    expect(page.has_select?('embargo_option_varies')).to eq(true)
+    expect(page.has_select?('embargo_option_varies', :selected => "#{orig_embargo} after deposit")).to eq(true)
+    expect(page.has_select?('embargo_option_fixed', :selected => [])).to eq(true)
     # Make changes, save, and confirm redirect.
     choose(new_check_field)
     select(new_embargo, :from => "embargo_option_#{new_embargo_option}")
     click_button "save_nojs"
-    current_path.should == polymorphic_path(@hc)
+    expect(current_path).to eq(polymorphic_path(@hc))
     # Visit view-page, and confirm that changes occured.
     visit polymorphic_path(@hc)
     # Undo changes, and confirm.
     should_visit_edit_page(@hc)
-    page.has_select?('embargo_option_varies', :selected => []).should == true
-    page.has_select?('embargo_option_fixed', :selected => "#{new_embargo} after deposit").should == true
+    expect(page.has_select?('embargo_option_varies', :selected => [])).to eq(true)
+    expect(page.has_select?('embargo_option_fixed', :selected => "#{new_embargo} after deposit")).to eq(true)
     choose(orig_check_field)
     select(orig_embargo, :from => "embargo_option_#{orig_embargo_option}")
     click_button "save_nojs"
-    current_path.should == polymorphic_path(@hc)
+    expect(current_path).to eq(polymorphic_path(@hc))
     # Set to no embargo after embargo was previously set and ensure there is no longer an embargo period set.
     should_visit_edit_page(@hc)
-    page.has_select?('embargo_option_varies', :selected => "#{orig_embargo} after deposit").should == true
+    expect(page.has_select?('embargo_option_varies', :selected => "#{orig_embargo} after deposit")).to eq(true)
     choose(no_embargo_check_field)
     click_button "save_nojs"
-    current_path.should == polymorphic_path(@hc)
-    find("div.collection-settings").should_not have_content(orig_embargo)
+    expect(current_path).to eq(polymorphic_path(@hc))
+    expect(find("div.collection-settings")).not_to have_content(orig_embargo)
     # verify embargo is now 'none' and terms are not set
     @hc = Hydrus::Collection.find @druid
-    @hc.embargo_option.should == 'none'
-    @hc.embargo_terms.should == ''
+    expect(@hc.embargo_option).to eq('none')
+    expect(@hc.embargo_terms).to eq('')
     confirm_rights_metadata_in_apo(@hc)
   end
 
@@ -212,7 +212,7 @@ describe("Collection edit", :type => :request, :integration => true) do
         ids = Hydrus::ModelHelper.parse_delimited(ids)
         got[role] = Set.new(ids) if ids.length > 0
       end
-      got.should == role_info
+      expect(got).to eq(role_info)
     end
 
     it "should be able to add/remove persons with various roles" do
@@ -241,7 +241,7 @@ describe("Collection edit", :type => :request, :integration => true) do
       check_role_management_div(role_info)
       # Confirm new content in fedora.
       @hc = Hydrus::Collection.find @druid
-      @hc.apo_person_roles.should == role_info
+      expect(@hc.apo_person_roles).to eq(role_info)
       confirm_rights_metadata_in_apo(@hc)
     end
 
@@ -278,7 +278,7 @@ describe("Collection edit", :type => :request, :integration => true) do
       check_role_management_div(role_info_stripped)
       # Confirm new content in fedora.
       @hc = Hydrus::Collection.find @druid
-      @hc.apo_person_roles.should == role_info_stripped
+      expect(@hc.apo_person_roles).to eq(role_info_stripped)
       confirm_rights_metadata_in_apo(@hc)
     end
 
@@ -297,8 +297,8 @@ describe("Collection edit", :type => :request, :integration => true) do
         e = expect { @coll.send_publish_email_notification(true) }
         e.to change { ActionMailer::Base.deliveries.count }.by(1)
         email = ActionMailer::Base.deliveries.last
-        email.to.should == ["jdoe@stanford.edu"]
-        email.subject.should =~ /^Collection opened for deposit/
+        expect(email.to).to eq(["jdoe@stanford.edu"])
+        expect(email.subject).to match(/^Collection opened for deposit/)
       end
 
       it "should send close email when there are item depositors" do
@@ -306,8 +306,8 @@ describe("Collection edit", :type => :request, :integration => true) do
         e = expect { @coll.send_publish_email_notification(false) }
         e.to change { ActionMailer::Base.deliveries.count }.by(1)
         email = ActionMailer::Base.deliveries.last
-        email.to.should == ["jdoe@stanford.edu"]
-        email.subject.should =~ /Collection closed for deposit/
+        expect(email.to).to eq(["jdoe@stanford.edu"])
+        expect(email.subject).to match(/Collection closed for deposit/)
       end
 
       it "should not send an email when there are no item depositors" do
@@ -336,13 +336,13 @@ describe("Collection edit", :type => :request, :integration => true) do
         fill_in "hydrus_collection_abstract", :with => "Summary of my content"
         fill_in "hydrus_collection_contact", :with => "jdoe@example.com"
         click_button("save_nojs")
-        page.should have_content("Your changes have been saved.")
+        expect(page).to have_content("Your changes have been saved.")
 
         expect {click_button("Open Collection")}.to change { ActionMailer::Base.deliveries.count }.by(1)
 
         email = ActionMailer::Base.deliveries.last
-        email.to.should == ["archivist1@stanford.edu"]
-        email.subject.should == "Collection opened for deposit in the Stanford Digital Repository"
+        expect(email.to).to eq(["archivist1@stanford.edu"])
+        expect(email.subject).to eq("Collection opened for deposit in the Stanford Digital Repository")
         
         click_link("Edit Collection")
 
@@ -350,8 +350,8 @@ describe("Collection edit", :type => :request, :integration => true) do
         
         expect {click_button("save_nojs")}.to change { ActionMailer::Base.deliveries.count }.by(1)
         email = ActionMailer::Base.deliveries.last
-        email.to.should == ["jdoe@stanford.edu"]
-        email.subject.should == "Invitation to deposit in the Stanford Digital Repository"       
+        expect(email.to).to eq(["jdoe@stanford.edu"])
+        expect(email.subject).to eq("Invitation to deposit in the Stanford Digital Repository")       
       end
 
       it "should not send an email to new depositors when we're updating a collection if user does not check the send email checkbox" do
@@ -361,7 +361,7 @@ describe("Collection edit", :type => :request, :integration => true) do
         fill_in "hydrus_collection_abstract", :with => "Summary of my content"
         fill_in "hydrus_collection_contact", :with => "jdoe@example.com"
         click_button("save_nojs")
-        page.should have_content("Your changes have been saved.")
+        expect(page).to have_content("Your changes have been saved.")
         click_button("Open Collection")
         click_link("Edit Collection")
 
@@ -379,15 +379,15 @@ describe("Collection edit", :type => :request, :integration => true) do
         fill_in "hydrus_collection_contact", :with => "jdoe@example.com"
         fill_in "hydrus_collection_apo_person_roles[hydrus-collection-item-depositor]", :with => "jdoe, leland, janedoe"
         click_button("save_nojs")
-        page.should have_content("Your changes have been saved.")
+        expect(page).to have_content("Your changes have been saved.")
         click_button("Open Collection")
         click_link("Edit Collection")
 
         fill_in "hydrus_collection_apo_person_roles[hydrus-collection-item-depositor]", :with => "jandoe, leland, jondoe"
         expect {click_button("save_nojs")}.to change { ActionMailer::Base.deliveries.count }.by(2) # a removal notice for jdoe,jandoe and an invitation notice jandoe and jondoe
         email = ActionMailer::Base.deliveries.last
-        email.to.should == ["jdoe@stanford.edu", "janedoe@stanford.edu"]
-        email.subject.should == "Removed as a depositor in the Stanford Digital Repository"
+        expect(email.to).to eq(["jdoe@stanford.edu", "janedoe@stanford.edu"])
+        expect(email.subject).to eq("Removed as a depositor in the Stanford Digital Repository")
       end
 
       it "should not send an email if the collection is closed" do
@@ -422,20 +422,20 @@ describe("Collection edit", :type => :request, :integration => true) do
       # Should see the open collection button.
       login_as(owner)
       should_visit_view_page(hc)
-      page.should have_button(@buttons[:open])
+      expect(page).to have_button(@buttons[:open])
       # But another user should not see the button.
       login_as(viewer)
       should_visit_view_page(hc)
-      page.should_not have_button(@buttons[:open])
+      expect(page).not_to have_button(@buttons[:open])
       # Open the collection. Should see close button.
       login_as(owner)
       should_visit_view_page(hc)
       click_button(@buttons[:open])
-      page.should have_button(@buttons[:close])
+      expect(page).to have_button(@buttons[:close])
       # But another user should not see the button.
       login_as(viewer)
       should_visit_view_page(hc)
-      page.should_not have_button(@buttons[:close])
+      expect(page).not_to have_button(@buttons[:close])
     end
 
   end
@@ -461,12 +461,12 @@ describe("Collection edit", :type => :request, :integration => true) do
       choose(vs[:radio])
       click_button(@buttons[:save])
       # We should still be on edit page, with a flash error.
-      page.should have_css("input#" + vs[:radio])
-      find(vs[:alert]).should have_content(vs[:msg_err])
+      expect(page).to have_css("input#" + vs[:radio])
+      expect(find(vs[:alert])).to have_content(vs[:msg_err])
       # Select a license and save -- much success.
       select(vs[:lic_txt], :from => vs[:select])
       click_button(@buttons[:save])
-      find(vs[:alert]).should have_content(vs[:msg_save])
+      expect(find(vs[:alert])).to have_content(vs[:msg_save])
     end
   end
 

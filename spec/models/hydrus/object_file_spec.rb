@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'rake'
 
-describe Hydrus::ObjectFile do
+describe Hydrus::ObjectFile, :type => :model do
 
   before(:each) do
     @nm = 'mock_uploaded_file_'
@@ -10,17 +10,17 @@ describe Hydrus::ObjectFile do
   end
 
   it "can exercise getters" do
-    @hof.size.should == 0
-    @hof.url.should =~ /\/#{@nm}/
-    @hof.current_path.should =~ /\/#{@nm}/
-    @hof.filename.should =~ /\A#{@nm}/
+    expect(@hof.size).to eq(0)
+    expect(@hof.url).to match(/\/#{@nm}/)
+    expect(@hof.current_path).to match(/\/#{@nm}/)
+    expect(@hof.filename).to match(/\A#{@nm}/)
   end
 
   describe "set_file_info()" do
 
     it "should make no changes if given nil" do
-      @hof.should_not_receive('label=')
-      @hof.set_file_info(nil).should == false
+      expect(@hof).not_to receive('label=')
+      expect(@hof.set_file_info(nil)).to eq(false)
     end
 
     it "should make no changes if passed new values equivalent to current values" do
@@ -30,12 +30,12 @@ describe Hydrus::ObjectFile do
       @hof.label = lab
       @hof.hide = hid
       # Call setter with equivalent values.
-      @hof.should_not_receive('label=')
-      @hof.set_file_info('label' => lab, 'hide' => 'no').should == false
-      @hof.set_file_info('label' => lab).should == false
+      expect(@hof).not_to receive('label=')
+      expect(@hof.set_file_info('label' => lab, 'hide' => 'no')).to eq(false)
+      expect(@hof.set_file_info('label' => lab)).to eq(false)
       # Final check.
-      @hof.label.should == lab
-      @hof.hide.should == hid
+      expect(@hof.label).to eq(lab)
+      expect(@hof.hide).to eq(hid)
     end
 
     it "should make changes if passed new values that differ from current values" do
@@ -45,13 +45,13 @@ describe Hydrus::ObjectFile do
       @hof.label = lab
       @hof.hide = hid
       # Call setter with equivalent values.
-      @hof.set_file_info('label' => 'foo', 'hide' => 'yes').should == true
-      @hof.set_file_info('label' => 'foo').should == true
-      @hof.set_file_info('hide' => 'yes').should == true
-      @hof.set_file_info('label' => 'bar', 'hide' => 'yes').should == true
+      expect(@hof.set_file_info('label' => 'foo', 'hide' => 'yes')).to eq(true)
+      expect(@hof.set_file_info('label' => 'foo')).to eq(true)
+      expect(@hof.set_file_info('hide' => 'yes')).to eq(true)
+      expect(@hof.set_file_info('label' => 'bar', 'hide' => 'yes')).to eq(true)
       # Final check.
-      @hof.label.should == 'bar'
-      @hof.hide.should == true
+      expect(@hof.label).to eq('bar')
+      expect(@hof.hide).to eq(true)
     end
 
   end

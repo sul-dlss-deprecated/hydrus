@@ -18,8 +18,8 @@ describe("Collection create", :type => :request, :integration => true) do
   it "should not be able to visit new collection URL if user lacks authority to create collections" do
     login_as('archivist99')
     visit new_hydrus_collection_path
-    current_path.should == root_path
-    find(@alert).should have_content("You do not have sufficient privileges")
+    expect(current_path).to eq(root_path)
+    expect(find(@alert)).to have_content("You do not have sufficient privileges")
   end
 
   it "should be able to create a new Collection, with APO, and with expected datastreams" do
@@ -31,56 +31,56 @@ describe("Collection create", :type => :request, :integration => true) do
     # Login, go to new Collection page, and store the druid of the new Collection.
     login_as('archivist1')
     visit new_hydrus_collection_path()
-    current_path.should =~ @edit_path_regex
+    expect(current_path).to match(@edit_path_regex)
     druid = @edit_path_regex.match(current_path)[1]
     # Fill in form and save.
     fill_in "hydrus_collection_title",    :with => ni.title
     fill_in "hydrus_collection_abstract", :with => ni.abstract
     fill_in "hydrus_collection_contact",  :with => ni.contact
     click_button "save_nojs"
-    find(@alert).should have_content(@notice_save)
+    expect(find(@alert)).to have_content(@notice_save)
     # Get Collection from fedora and confirm that our edits were persisted.
     coll = Hydrus::Collection.find(druid)
-    coll.title.should    == ni.title
-    coll.abstract.should == ni.abstract
-    coll.contact.should  == ni.contact
-    coll.should be_instance_of Hydrus::Collection
-    coll.create_date.should_not be_blank
-    coll.item_type.should == 'collection'
+    expect(coll.title).to    eq(ni.title)
+    expect(coll.abstract).to eq(ni.abstract)
+    expect(coll.contact).to  eq(ni.contact)
+    expect(coll).to be_instance_of Hydrus::Collection
+    expect(coll.create_date).not_to be_blank
+    expect(coll.item_type).to eq('collection')
     # Get the APO of the Collection.
     apo = coll.apo
-    apo.should be_instance_of Hydrus::AdminPolicyObject
-    apo.defaultObjectRights.ng_xml.should be_equivalent_to coll.rightsMetadata.ng_xml # collection rights metadata should be equal to apo default object rights
+    expect(apo).to be_instance_of Hydrus::AdminPolicyObject
+    expect(apo.defaultObjectRights.ng_xml).to be_equivalent_to coll.rightsMetadata.ng_xml # collection rights metadata should be equal to apo default object rights
     # Check workflow of Collection.
     wf_nodes = coll.workflows.find_by_terms(:workflow)
-    wf_nodes.size.should == 1
-    wf_nodes.first[:id].should == Dor::Config.hydrus.app_workflow.to_s
+    expect(wf_nodes.size).to eq(1)
+    expect(wf_nodes.first[:id]).to eq(Dor::Config.hydrus.app_workflow.to_s)
     # Check identityMetadata of Collection.
-    coll.identityMetadata.tag.should include("Project : Hydrus")
-    coll.identityMetadata.objectType.should include('collection', 'set')
+    expect(coll.identityMetadata.tag).to include("Project : Hydrus")
+    expect(coll.identityMetadata.objectType).to include('collection', 'set')
     # Check the typeOfResource of the collection
-    coll.descMetadata.ng_xml.search('//mods:typeOfResource', 'mods' => 'http://www.loc.gov/mods/v3').first['collection'].should == 'yes'
-    coll.descMetadata.ng_xml.search('//mods:typeOfResource', 'mods' => 'http://www.loc.gov/mods/v3').first.text.should == 'mixed material'
+    expect(coll.descMetadata.ng_xml.search('//mods:typeOfResource', 'mods' => 'http://www.loc.gov/mods/v3').first['collection']).to eq('yes')
+    expect(coll.descMetadata.ng_xml.search('//mods:typeOfResource', 'mods' => 'http://www.loc.gov/mods/v3').first.text).to eq('mixed material')
     # Check person roles of the roleMetadata in APO
-    coll.apo_person_roles.should == {
+    expect(coll.apo_person_roles).to eq({
       "hydrus-collection-manager"   => Set.new([ "archivist1" ]),
       "hydrus-collection-depositor" => Set.new([ "archivist1" ]),
-    }
-    coll.collection_depositor.should == 'archivist1'
+    })
+    expect(coll.collection_depositor).to eq('archivist1')
     # Check APO.descMetadata.
-    apo.title.should == "APO for #{ni.title}"
-    apo.label.should == "APO for #{ni.title}"
+    expect(apo.title).to eq("APO for #{ni.title}")
+    expect(apo.label).to eq("APO for #{ni.title}")
     # Check events.
     exp = [
       /\ACollection created/,
       /\ACollection modified/,
     ]
     es = coll.get_hydrus_events
-    es.size.should == exp.size
+    expect(es.size).to eq(exp.size)
     es[0...exp.size].zip(exp).each { |e, exp|
-      e.text.should =~ exp
-      e.who.should == 'archivist1'
-      e.type.should == 'hydrus'
+      expect(e.text).to match(exp)
+      expect(e.who).to eq('archivist1')
+      expect(e.type).to eq('hydrus')
     }
   end
 
@@ -95,107 +95,107 @@ describe("Collection create", :type => :request, :integration => true) do
     # Login, go to new Collection page, and store the druid of the new Collection.
     login_as('archivist1')
     visit new_hydrus_collection_path()
-    current_path.should =~ @edit_path_regex
+    expect(current_path).to match(@edit_path_regex)
     druid = @edit_path_regex.match(current_path)[1]
     # Fill in form and save.
     fill_in "hydrus_collection_title", :with => ni.title
     choose "hydrus_collection_requires_human_approval_yes"
     click_button "save_nojs"
-    find(@alert).should have_content(@notice_save)
+    expect(find(@alert)).to have_content(@notice_save)
     # The view page should display some validation error messages, and should not
     # offer the Open Collection button.
     div_cs = find("div.collection-actions")
-    div_cs.should_not have_button(open_button)
+    expect(div_cs).not_to have_button(open_button)
     # Get the Collection and APO objects from fedora.
     coll = Hydrus::Collection.find(druid)
     apo = coll.apo
     # Check various Collection attributes and methods.
-    coll.object_status.should == 'draft'
-    coll.is_openable.should == false
-    coll.is_published.should == false
-    coll.is_destroyable.should == true
-    coll.submitted_for_publish_time.should be_blank
-    coll.valid?.should == true  # Because unpublished, so validation is limited.
-    coll.is_open.should == false
+    expect(coll.object_status).to eq('draft')
+    expect(coll.is_openable).to eq(false)
+    expect(coll.is_published).to eq(false)
+    expect(coll.is_destroyable).to eq(true)
+    expect(coll.submitted_for_publish_time).to be_blank
+    expect(coll.valid?).to eq(true)  # Because unpublished, so validation is limited.
+    expect(coll.is_open).to eq(false)
     # Go back to edit page and fill in required elements.
     should_visit_edit_page(coll)
     fill_in "hydrus_collection_abstract", :with => ni.abstract
     fill_in "hydrus_collection_contact",  :with => ni.contact
     click_button "save_nojs"
-    find(@alert).should have_content(@notice_save)
+    expect(find(@alert)).to have_content(@notice_save)
     # The view page should now offer the Open Collection button.
-    page.should have_button(open_button)
+    expect(page).to have_button(open_button)
     # Get the Collection and APO objects from fedora.
     coll = Hydrus::Collection.find(druid)
     apo = coll.apo
     # Check various Collection attributes and methods.
-    coll.object_status.should == 'draft'
-    coll.is_openable.should == true
-    coll.is_published.should == false
-    coll.is_destroyable.should == true
-    coll.valid?.should == true
-    coll.is_open.should == false
+    expect(coll.object_status).to eq('draft')
+    expect(coll.is_openable).to eq(true)
+    expect(coll.is_published).to eq(false)
+    expect(coll.is_destroyable).to eq(true)
+    expect(coll.valid?).to eq(true)
+    expect(coll.is_open).to eq(false)
     # Open the Collection.
     click_button(open_button)
-    find(@alert).should have_content(@notice_open)
+    expect(find(@alert)).to have_content(@notice_open)
     # The view page should now offer the Close Collection button.
-    page.should have_button(close_button)
+    expect(page).to have_button(close_button)
     # Get the Collection and APO objects from fedora.
     coll = Hydrus::Collection.find(druid)
     apo = coll.apo
     # Check various Collection attributes and methods.
-    coll.object_status.should == 'published_open'
-    coll.is_openable.should == false
-    coll.is_published.should == true
-    coll.is_destroyable.should == false
-    coll.submitted_for_publish_time.should_not be_blank
-    coll.valid?.should == true
-    coll.is_open.should == true
+    expect(coll.object_status).to eq('published_open')
+    expect(coll.is_openable).to eq(false)
+    expect(coll.is_published).to eq(true)
+    expect(coll.is_destroyable).to eq(false)
+    expect(coll.submitted_for_publish_time).not_to be_blank
+    expect(coll.valid?).to eq(true)
+    expect(coll.is_open).to eq(true)
     # The workflow steps of both the collection and apo should be completed.
     Dor::Config.hydrus.app_workflow_steps.each do |step|
-      coll.workflows.workflow_step_is_done(step).should == true
-      apo.workflows.workflow_step_is_done(step).should == true
+      expect(coll.workflows.workflow_step_is_done(step)).to eq(true)
+      expect(apo.workflows.workflow_step_is_done(step)).to eq(true)
     end
     # Close the Collection.
     click_button(close_button)
-    find(@alert).should have_content(@notice_close)
+    expect(find(@alert)).to have_content(@notice_close)
     # The view page should now offer the Open Collection button.
-    page.should have_button(open_button)
+    expect(page).to have_button(open_button)
     # Get the Collection and APO objects from fedora.
     coll = Hydrus::Collection.find(druid)
     apo = coll.apo
     # Check various Collection attributes and methods.
-    coll.object_status.should == 'published_closed'
-    coll.is_openable.should == true
-    coll.is_published.should == true
-    coll.is_destroyable.should == false
-    coll.valid?.should == true
-    coll.is_open.should == false
+    expect(coll.object_status).to eq('published_closed')
+    expect(coll.is_openable).to eq(true)
+    expect(coll.is_published).to eq(true)
+    expect(coll.is_destroyable).to eq(false)
+    expect(coll.valid?).to eq(true)
+    expect(coll.is_open).to eq(false)
     # Return to edit page, and try to save Collection with an empty title.
     click_link "Edit Collection"
     fill_in "hydrus_collection_title", :with => ''
     click_button "save_nojs"
-    page.should_not have_content(@notice_save)
-    find('div.alert').should have_content('Title cannot be blank')
+    expect(page).not_to have_content(@notice_save)
+    expect(find('div.alert')).to have_content('Title cannot be blank')
     # Fill in the title and save.
     fill_in "hydrus_collection_title", :with => ni.title
     click_button "save_nojs"
-    find(@alert).should have_content(@notice_save)
+    expect(find(@alert)).to have_content(@notice_save)
     # Open the Collection.
     click_button(open_button)
-    find(@alert).should have_content(@notice_open)
+    expect(find(@alert)).to have_content(@notice_open)
     # The view page should now offer the Close Collection button.
-    page.should have_button(close_button)
+    expect(page).to have_button(close_button)
     # Get the Collection and APO objects from fedora.
     coll = Hydrus::Collection.find(druid)
     apo = coll.apo
     # Check various Collection attributes and methods.
-    coll.object_status.should == 'published_open'
-    coll.is_openable.should == false
-    coll.is_published.should == true
-    coll.is_destroyable.should == false
-    coll.valid?.should == true
-    coll.is_open.should == true
+    expect(coll.object_status).to eq('published_open')
+    expect(coll.is_openable).to eq(false)
+    expect(coll.is_published).to eq(true)
+    expect(coll.is_destroyable).to eq(false)
+    expect(coll.valid?).to eq(true)
+    expect(coll.is_open).to eq(true)
     # Check events.
     exp = [
       /\ACollection created/,
@@ -206,14 +206,14 @@ describe("Collection create", :type => :request, :integration => true) do
       /\ACollection opened/,
     ]
     es = coll.get_hydrus_events
-    es[0...exp.size].zip(exp).each { |e, exp| e.text.should =~ exp  }
+    es[0...exp.size].zip(exp).each { |e, exp| expect(e.text).to match(exp)  }
   end
 
   describe "delete()" do
 
     it "should raise error if object is not destroyable" do
       hc = Hydrus::Collection.find('druid:oo000oo0004')
-      hc.is_destroyable.should == false
+      expect(hc.is_destroyable).to eq(false)
       expect { hc.delete }.to raise_error(RuntimeError)
     end
 
@@ -231,16 +231,16 @@ describe("Collection create", :type => :request, :integration => true) do
       cpid = hc.pid
       # Confirm existence of objects:
       #   - in Fedora
-      apo.class.should == hya
-      hc.class.should  == hyc
+      expect(apo.class).to eq(hya)
+      expect(hc.class).to  eq(hyc)
       #   - in SOLR
-      hyc.all_hydrus_objects(:models => [hya], :pids_only => true).should include(apid)
-      hyc.all_hydrus_objects(:models => [hyc], :pids_only => true).should include(cpid)
+      expect(hyc.all_hydrus_objects(:models => [hya], :pids_only => true)).to include(apid)
+      expect(hyc.all_hydrus_objects(:models => [hyc], :pids_only => true)).to include(cpid)
       #   - in workflows
-      wfs.get_workflows(apid).should == [hwf]
-      wfs.get_workflows(cpid).should == [hwf]
+      expect(wfs.get_workflows(apid)).to eq([hwf])
+      expect(wfs.get_workflows(cpid)).to eq([hwf])
       # Delete the collection and its APO.
-      hc.is_destroyable.should == true
+      expect(hc.is_destroyable).to eq(true)
       click_link "Discard this collection"
       click_button "Discard"
       hc = nil
@@ -249,11 +249,11 @@ describe("Collection create", :type => :request, :integration => true) do
       expect { hya.find(apid) }.to raise_error(afe)
       expect { hyc.find(cpid) }.to raise_error(afe)
       #   - from SOLR
-      hyc.all_hydrus_objects(:models => [hya], :pids_only => true).should_not include(apid)
-      hyc.all_hydrus_objects(:models => [hyc], :pids_only => true).should_not include(cpid)
+      expect(hyc.all_hydrus_objects(:models => [hya], :pids_only => true)).not_to include(apid)
+      expect(hyc.all_hydrus_objects(:models => [hyc], :pids_only => true)).not_to include(cpid)
       #   - from workflows
-      wfs.get_workflows(apid).should == []
-      wfs.get_workflows(cpid).should == []
+      expect(wfs.get_workflows(apid)).to eq([])
+      expect(wfs.get_workflows(cpid)).to eq([])
     end
 
   end

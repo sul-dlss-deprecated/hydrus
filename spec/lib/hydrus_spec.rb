@@ -8,10 +8,10 @@ describe "ap_dump()" do
     file_handle = StringIO.new
     Hydrus.ap_dump(data, file_handle)
     s = file_handle.string
-    s.should include('hydrus_spec.rb')
-    s.should =~ /\A========/
-    data.each { |d| s.should include(d.to_s) }
-    s.should =~ /========\n\z/
+    expect(s).to include('hydrus_spec.rb')
+    expect(s).to match(/\A========/)
+    data.each { |d| expect(s).to include(d.to_s) }
+    expect(s).to match(/========\n\z/)
   end
 
 end

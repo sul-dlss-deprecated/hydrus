@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Hydrus::DescMetadataDS do
+describe Hydrus::DescMetadataDS, :type => :model do
 
   before(:all) do
     sloc = "http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-3.xsd"
@@ -60,7 +60,7 @@ describe Hydrus::DescMetadataDS do
         [[:contact],                         %w(foo@bar.com blah@bar.com)],
       ]
       tests.each do |terms, exp|
-        @dsdoc.term_values(*terms).should == exp
+        expect(@dsdoc.term_values(*terms)).to eq(exp)
       end
     end
 
@@ -90,7 +90,7 @@ describe Hydrus::DescMetadataDS do
       @dsdoc.insert_related_citation
       @dsdoc.insert_related_item
       @dsdoc.insert_topic('foo')
-      @dsdoc.ng_xml.should be_equivalent_to @exp_xml
+      expect(@dsdoc.ng_xml).to be_equivalent_to @exp_xml
     end
 
   end
@@ -132,7 +132,7 @@ describe Hydrus::DescMetadataDS do
       )
       exp_xml = noko_doc(exp_xml)
       @dsdoc = Hydrus::DescMetadataDS.new(nil, nil)
-      @dsdoc.ng_xml.should be_equivalent_to exp_xml
+      expect(@dsdoc.ng_xml).to be_equivalent_to exp_xml
     end
 
   end

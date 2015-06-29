@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe User do
+describe User, :type => :model do
 
   before(:each) do
     @id    = 'somebody'
@@ -9,11 +9,11 @@ describe User do
   end
 
   it "should return false to is_webauth?" do
-    @u.is_webauth?.should be_false
+    expect(@u.is_webauth?).to be_falsey
   end
 
   it "to_s() should return the user ID portion of the email" do
-    @u.to_s.should == @id
+    expect(@u.to_s).to eq(@id)
   end
 
 end

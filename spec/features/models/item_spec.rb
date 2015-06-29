@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe(Hydrus::Item, :integration => true) do
+describe(Hydrus::Item, :type => :feature, :integration => true) do
 
   describe("Content metadata generation") do
 
@@ -8,15 +8,15 @@ describe(Hydrus::Item, :integration => true) do
       xml = "<contentMetadata objectId=\"__DO_NOT_USE__\" type=\"file\"/>"
       hi = Hydrus::Item.new
       hi.update_content_metadata
-      hi.datastreams['contentMetadata'].content.should be_equivalent_to(xml)
+      expect(hi.datastreams['contentMetadata'].content).to be_equivalent_to(xml)
     end
 
     it "should be able to generate content metadata, returning and setting correct cm when files exist" do
       item = Hydrus::Item.find('druid:oo000oo0001')
-      item.files.size.should == 4
-      item.datastreams['contentMetadata'].content.should be_equivalent_to "<contentMetadata></contentMetadata>"
+      expect(item.files.size).to eq(4)
+      expect(item.datastreams['contentMetadata'].content).to be_equivalent_to "<contentMetadata></contentMetadata>"
       item.update_content_metadata
-      item.datastreams['contentMetadata'].content.should be_equivalent_to <<-EOF
+      expect(item.datastreams['contentMetadata'].content).to be_equivalent_to <<-EOF
       <contentMetadata objectId="oo000oo0001" type="file">
         <resource id="oo000oo0001_1" sequence="1" type="file">
           <label>Main survey -- formatted in HTML</label>
@@ -61,15 +61,15 @@ describe(Hydrus::Item, :integration => true) do
       check_statuses = lambda {
         hi = Hydrus::Item.find(hi.pid)  # A refreshed copy of object.
         statuses = steps.map { |s| [s, hi.workflows.get_workflow_status(s)] }
-        Hash[statuses].should == exp
+        expect(Hash[statuses]).to eq(exp)
       }
       # Initial statuses.
       exp['start-deposit'] = 'completed'
       check_statuses.call()
       # After running do_publish, with start_assembly_wf=true.
-      hi.stub(:should_start_assembly_wf).and_return(true)
-      hi.stub(:is_assemblable).and_return(true)
-      Dor::WorkflowService.should_receive(:create_workflow).once
+      allow(hi).to receive(:should_start_assembly_wf).and_return(true)
+      allow(hi).to receive(:is_assemblable).and_return(true)
+      expect(Dor::WorkflowService).to receive(:create_workflow).once
       hi.do_publish()
       exp['approve'] = 'completed'
       exp['start-assembly'] = 'completed'
@@ -82,8 +82,6 @@ describe(Hydrus::Item, :integration => true) do
 
     before(:all) do
       @prev_mint_ids = config_mint_ids()
-      Dor::WorkflowDs.any_instance.stub(:current_priority).and_return 0
-      
       @collection = Hydrus::Collection.create mock_authed_user
     end
 
@@ -93,23 +91,23 @@ describe(Hydrus::Item, :integration => true) do
     end
 
     before(:each) do
-      Hydrus::Collection.stub(:find).with(collection.pid).and_return(collection)
+      allow(Hydrus::Collection).to receive(:find).with(collection.pid).and_return(collection)
     end
 
-
     let(:collection) do
-      @collection.stub(:is_open => true)
+      allow(@collection).to receive_messages(:is_open => true)
       @collection
     end
 
     it "should create an item" do
-      collection.stub(:visibility_option_value => 'stanford', :license => 'some-license')
+      allow_any_instance_of(Dor::WorkflowDs).to receive(:current_priority).and_return 0
+      allow(collection).to receive_messages(:visibility_option_value => 'stanford', :license => 'some-license')
       item  = Hydrus::Item.create(collection.pid, mock_authed_user, 'some-type')
-      item.should be_instance_of Hydrus::Item
+      expect(item).to be_instance_of Hydrus::Item
       expect(item).to_not be_new
       expect(item.visibility).to include 'stanford'
       expect(item.item_type).to eq 'some-type'
-      expect(item.events.event.val).to have(1).item
+      expect(item.events.event.val.size).to eq(1)
       expect(item.events.event).to include "Item created"
       expect(item.object_status).to eq 'draft'
       expect(item.versionMetadata).to_not be_new
@@ -120,12 +118,11 @@ describe(Hydrus::Item, :integration => true) do
       expect(item.accepted_terms_of_deposit).to eq "false"
     end
 
-    it "should create an item" do
-      Dor::WorkflowDs.any_instance.stub(:current_priority).and_return 0
-      collection.stub(:users_accepted_terms_of_deposit => { mock_authed_user.to_s => Time.now})
-
+    it "should create another item" do
+      allow_any_instance_of(Dor::WorkflowDs).to receive(:current_priority).and_return 0
+      allow(collection).to receive_messages(:users_accepted_terms_of_deposit => { mock_authed_user.to_s => Time.now})
       item  = Hydrus::Item.create(collection.pid, mock_authed_user, 'some-type')
-      item.should be_instance_of Hydrus::Item
+      expect(item).to be_instance_of Hydrus::Item
       expect(item).to_not be_new
       expect(item.item_type).to eq 'some-type'
       expect(item.events.event).to include "Terms of deposit accepted due to previous item acceptance in collection"

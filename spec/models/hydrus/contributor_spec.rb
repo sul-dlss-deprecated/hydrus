@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Hydrus::Contributor do
+describe Hydrus::Contributor, :type => :model do
 
   before(:each) do
     @hc = Hydrus::Contributor.new(:name => 'Angus', :role => 'guitar')
@@ -8,17 +8,17 @@ describe Hydrus::Contributor do
 
   it "default_contributor()" do
     @hc = Hydrus::Contributor.default_contributor
-    @hc.should be_instance_of(Hydrus::Contributor)
-    @hc.name.should == ''
-    @hc.role.should == 'Author'
-    @hc.name_type.should == 'personal'
-    @hc.role_key.should == 'personal_author'
+    expect(@hc).to be_instance_of(Hydrus::Contributor)
+    expect(@hc.name).to eq('')
+    expect(@hc.role).to eq('Author')
+    expect(@hc.name_type).to eq('personal')
+    expect(@hc.role_key).to eq('personal_author')
   end
 
   it "groups_for_select(): can exercise" do
     cgs = Hydrus::Contributor.groups_for_select
-    cgs.should be_instance_of(Array)
-    cgs.size.should == 3
+    expect(cgs).to be_instance_of(Array)
+    expect(cgs.size).to eq(3)
   end
 
   it "lookup_with_role_key()" do
@@ -30,7 +30,7 @@ describe Hydrus::Contributor do
       'blah blah'                     => ['personal', 'Author'],
     }
     tests.each do |role_key, exp|
-      Hydrus::Contributor.lookup_with_role_key(role_key).should == exp
+      expect(Hydrus::Contributor.lookup_with_role_key(role_key)).to eq(exp)
     end
 
   end
@@ -41,16 +41,16 @@ describe Hydrus::Contributor do
     c1.name = 'Los Pollos Hermanos'
     c2 = c1.clone
     # Should be equal but not the same object.
-    c1.should == c2
-    c1.object_id.should_not == c2.object_id
+    expect(c1).to eq(c2)
+    expect(c1.object_id).not_to eq(c2.object_id)
     # Should be unequal if any single attribute differs.
     [:name, :role, :name_type].each do |getter|
       setter   = "#{getter}="
       orig_val = c2.send(getter)
       c2.send(setter, 'foobar')
-      c1.should_not == c2
+      expect(c1).not_to eq(c2)
       c2.send(setter, orig_val)
-      c1.should == c2
+      expect(c1).to eq(c2)
     end
   end
 

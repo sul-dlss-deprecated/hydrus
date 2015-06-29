@@ -5,7 +5,7 @@ class MockSolrQueryable
   include Hydrus::SolrQueryable
 end
 
-describe Hydrus::SolrQueryable do
+describe Hydrus::SolrQueryable, :type => :model do
 
   before(:each) do
     @msq  = MockSolrQueryable.new
@@ -18,7 +18,7 @@ describe Hydrus::SolrQueryable do
     it "should OR the facets for objects that involve the user and are governed by APOs the user has access to " do
       h = {}
       @hsq.add_gated_discovery(h, ['aaa', 'bbb'], @user)
-      expect(h[:fq]).to have(1).item
+      expect(h[:fq].size).to eq(1)
 
       expect(h[:fq].first).to eq 'is_governed_by_s:("info:fedora/aaa" OR "info:fedora/bbb") OR ' + @role_md_clause
     end
@@ -29,7 +29,7 @@ describe Hydrus::SolrQueryable do
     it "should do nothing if there is no user" do
       h = {}
       @hsq.add_involved_user_filter(h, nil)
-      h[:fq].should == nil
+      expect(h[:fq]).to eq(nil)
     end
 
     it "should add the expected :fq clause" do
@@ -40,7 +40,7 @@ describe Hydrus::SolrQueryable do
       ]
       tests.each do |h, exp|
         @hsq.add_involved_user_filter(h, @user)
-        h[:fq].should == exp
+        expect(h[:fq]).to eq(exp)
       end
     end
 
@@ -51,7 +51,7 @@ describe Hydrus::SolrQueryable do
     it "should do nothing if no druids are supplied" do
       h = {}
       @hsq.add_governed_by_filter(h, [])
-      h[:fq].should == nil
+      expect(h[:fq]).to eq(nil)
     end
 
     it "should add the expected :fq clause" do
@@ -64,7 +64,7 @@ describe Hydrus::SolrQueryable do
       ]
       tests.each do |h, exp|
         @hsq.add_governed_by_filter(h, druids)
-        h[:fq].should == exp
+        expect(h[:fq]).to eq(exp)
       end
     end
 
@@ -75,7 +75,7 @@ describe Hydrus::SolrQueryable do
     it "should do nothing if no models are supplied" do
       h = {}
       @hsq.add_model_filter(h)
-      h[:fq].should == nil
+      expect(h[:fq]).to eq(nil)
     end
 
     it "should add the expected :fq clause" do
@@ -88,7 +88,7 @@ describe Hydrus::SolrQueryable do
       ]
       tests.each do |h, exp|
         @hsq.add_model_filter(h, *models)
-        h[:fq].should == exp
+        expect(h[:fq]).to eq(exp)
       end
     end
 
@@ -98,13 +98,13 @@ describe Hydrus::SolrQueryable do
     # No need to check in greater details, because all of the detailed
     # work is done by methods already tested.
     h = @msq.squery_apos_involving_user(@user)
-    Set.new(h.keys).should == Set.new([:rows, :fl, :q, :fq])
+    expect(Set.new(h.keys)).to eq(Set.new([:rows, :fl, :q, :fq]))
     h = @msq.squery_collections_of_apos(['a', 'b'])
-    Set.new(h.keys).should == Set.new([:rows, :fl, :q, :fq])
+    expect(Set.new(h.keys)).to eq(Set.new([:rows, :fl, :q, :fq]))
     h = @msq.squery_item_counts_of_collections(['c', 'd'])
-    Set.new(h.keys).should == Set.new([:rows, :fl, :q, :facet, :'facet.pivot', :fq])
+    expect(Set.new(h.keys)).to eq(Set.new([:rows, :fl, :q, :facet, :'facet.pivot', :fq]))
     h = @msq.squery_all_hydrus_collections()
-    Set.new(h.keys).should == Set.new([:rows, :fl, :q, :fq])
+    expect(Set.new(h.keys)).to eq(Set.new([:rows, :fl, :q, :fq]))
   end
 
   it "can exercise get_druids_from_response()" do
@@ -112,7 +112,7 @@ describe Hydrus::SolrQueryable do
     exp  = [12, 34, 56]
     docs = exp.map { |n| {k => [n]} }
     resp = double('resp', :docs => docs)
-    @msq.get_druids_from_response(resp).should == exp
+    expect(@msq.get_druids_from_response(resp)).to eq(exp)
   end
 
   # Note: These are integration tests.
@@ -138,20 +138,20 @@ describe Hydrus::SolrQueryable do
 
     it "should get all Hydrus objects, with the correct info" do
       got = @msq.all_hydrus_objects.sort_by { |h| h[:pid] }
-      got.should == @all_objects
+      expect(got).to eq(@all_objects)
     end
 
     it "should get all Hydrus objects -- but only an array of PIDs" do
       got = @msq.all_hydrus_objects(:pids_only => true).sort
       exp = @all_objects.map { |h| h[:pid] }
-      got.should == exp
+      expect(got).to eq(exp)
     end
 
     it "should all Items and Collections, with the correct info" do
       ms = [Hydrus::Collection, Hydrus::Item]
       got = @msq.all_hydrus_objects(:models => ms).sort_by { |h| h[:pid] }
       exp = @all_objects.reject { |h| h[:object_type] == 'AdminPolicyObject' }
-      got.should == exp
+      expect(got).to eq(exp)
     end
 
   end
@@ -163,7 +163,7 @@ describe Hydrus::SolrQueryable do
       end
       h = @msq.squery_item_counts_of_collections(fake_pids)
       #this raises an exception due to receiving a 413 error from solr unless the parameters are posted
-      lambda{resp, sdocs = @msq.issue_solr_query(h)}.should_not raise_error
+      expect{resp, sdocs = @msq.issue_solr_query(h)}.not_to raise_error
     end
   end
 
