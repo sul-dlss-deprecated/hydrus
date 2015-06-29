@@ -44,7 +44,7 @@ group :test do
 end
 
 group :development, :test do
-  gem 'jettywrapper', '1.4.1'
+  gem 'jettywrapper', '~> 1.4.1'
   gem 'sqlite3'
   gem 'awesome_print'
   gem 'launchy'

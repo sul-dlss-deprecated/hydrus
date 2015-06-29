@@ -112,7 +112,7 @@ GEM
     carrierwave (0.6.2)
       activemodel (>= 3.2.0)
       activesupport (>= 3.2.0)
-    childprocess (0.5.5)
+    childprocess (0.5.6)
       ffi (~> 1.0, >= 1.0.11)
     chronic (0.10.2)
     coderay (1.1.0)
@@ -185,7 +185,7 @@ GEM
     faraday (0.9.0)
       multipart-post (>= 1.2, < 3)
     fastercsv (1.5.5)
-    ffi (1.9.6)
+    ffi (1.9.9)
     grit (2.5.0)
       diff-lcs (~> 1.1)
       mime-types (~> 1.15)
@@ -220,10 +220,10 @@ GEM
       rails (>= 3.2.6)
     hydra-mods (0.0.6)
       active-fedora (> 4.1)
-    i18n (0.6.11)
+    i18n (0.7.0)
     is_it_working-cbeer (1.0.16)
     iso-639 (0.2.5)
-    jettywrapper (1.4.1)
+    jettywrapper (1.4.2)
       activesupport (>= 3.0.0)
       childprocess
       i18n
@@ -277,7 +277,7 @@ GEM
       iso-639
       nokogiri
       nom-xml
-    multi_json (1.10.1)
+    multi_json (1.11.1)
     multipart-post (2.0.0)
     mysql (2.9.1)
     mysql2 (0.3.17)
@@ -489,7 +489,7 @@ DEPENDENCIES
   dynamic_form
   hydra-head (~> 5.1)
   is_it_working-cbeer (~> 1.0.13)
-  jettywrapper (= 1.4.1)
+  jettywrapper (~> 1.4.1)
   jquery-rails
   launchy
   letter_opener
