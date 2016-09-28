@@ -49,7 +49,7 @@ describe Hydrus::GenericObject, :type => :model do
   end
 
   it "can exercise url()" do
-    expect(@go.purl_url).to eq("http://purl.stanford.edu/__DO_NOT_USE__")
+    expect(@go.purl_url).to eq("https://purl.stanford.edu/__DO_NOT_USE__")
   end
 
   it "can exercise related_items()" do
