@@ -72,7 +72,7 @@ end
 Dor::Config.configure do
 
    purl do
-     base_url 'http://purl.stanford.edu/'
+     base_url 'https://purl.stanford.edu/'
    end
 
    workflow do
