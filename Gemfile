@@ -30,7 +30,7 @@ group :assets do
   gem 'coffee-rails',   '~> 3.2.1'
   gem 'bootstrap-sass', '2.3.2.1'
   gem 'therubyracer'
-  gem 'libv8', '=3.16.14.7'  # dep of therubyracer fails to compile (bad C code) in '3.16.14.9'
+  gem 'libv8', '=3.16.14.17' # dep of therubyracer
   gem 'uglifier', '>= 1.0.3'
 end
 
