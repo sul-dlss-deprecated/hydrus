@@ -75,6 +75,10 @@ group :deployment do
   gem 'lyberteam-capistrano-devel'
 end
 
+group :test do
+  gem 'test-unit'
+end
+
 gem 'squash_ruby', :require => 'squash/ruby'
 gem 'squash_rails', '>= 1.3.3', :require => 'squash/rails'
 
