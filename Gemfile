@@ -77,6 +77,7 @@ end
 
 group :test do
   gem 'test-unit'
+  gem 'webmock'
 end
 
 gem 'squash_ruby', :require => 'squash/ruby'

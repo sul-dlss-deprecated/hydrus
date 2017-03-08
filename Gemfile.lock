@@ -122,6 +122,8 @@ GEM
     coffee-script-source (1.9.1.1)
     columnize (0.9.0)
     confstruct (0.2.7)
+    crack (0.4.3)
+      safe_yaml (~> 1.0.0)
     crass (1.0.2)
     daemons (1.2.3)
     debugger (1.6.8)
@@ -190,6 +192,7 @@ GEM
       diff-lcs (~> 1.1)
       mime-types (~> 1.15)
       posix-spawn (~> 0.3.6)
+    hashdiff (0.3.2)
     hike (1.2.3)
     hooks (0.3.6)
       uber (~> 0.0.4)
@@ -386,6 +389,7 @@ GEM
       mime-types
       nokogiri
       rest-client
+    safe_yaml (1.0.4)
     sanitize (4.0.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.4.4)
@@ -460,6 +464,10 @@ GEM
       i18n
     warden (1.2.3)
       rack (>= 1.0)
+    webmock (1.22.5)
+      addressable (< 2.4.0)
+      crack (>= 0.3.2)
+      hashdiff
     whenever (0.9.4)
       chronic (>= 0.6.3)
     xml-simple (1.1.5)
@@ -522,6 +530,7 @@ DEPENDENCIES
   therubyracer
   uglifier (>= 1.0.3)
   validates_email_format_of
+  webmock
   whenever (~> 0.9)
 
 BUNDLED WITH
