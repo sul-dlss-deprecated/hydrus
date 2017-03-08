@@ -4,6 +4,8 @@ require 'simplecov'
 SimpleCov.start 'rails'
 
 ENV['RAILS_ENV'] ||= 'test'
+require 'webmock/rspec'
+WebMock.disable_net_connect!(allow: ['127.0.0.1', 'localhost'])
 require File.expand_path('../../config/environment', __FILE__)
 require 'rspec/rails'
 require 'capybara/rspec'
