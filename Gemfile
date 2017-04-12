@@ -67,9 +67,8 @@ end
 group :deployment do
   gem 'capistrano', '~> 3.3'
   gem 'capistrano-rails'
-  gem 'lyberteam-capistrano-devel'
+  gem 'dlss-capistrano'
 end
 
 gem 'squash_ruby', :require => 'squash/ruby'
 gem 'squash_rails', '>= 1.3.3', :require => 'squash/rails'
-
