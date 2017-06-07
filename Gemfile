@@ -37,7 +37,7 @@ end
 # gems only needed for particular environments
 
 group :development, :test do
-  gem 'jettywrapper', '1.4.1'
+  gem 'jettywrapper', '1.4.2'
   gem 'sqlite3'
   gem 'rspec-rails', '~> 3.1.0'
   gem 'capybara'
