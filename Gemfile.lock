@@ -496,6 +496,7 @@ DEPENDENCIES
   jquery-rails
   launchy
   letter_opener
+  libv8 (~> 3.16.14.19)
   looksee
   lyberteam-capistrano-devel
   moab-versioning (~> 1.4.0)
