@@ -17,6 +17,7 @@ gem 'active-fedora', '~> 5.7.1'
 gem 'assembly-objectfile', '1.5.0'
 gem 'blacklight',   '~> 4.4'
 gem 'dor-services', '~> 4.21'
+gem 'bagit', '0.3.2' # > 0.3.2 requires ruby 2
 gem 'dor-workflow-service'
 gem 'druid-tools', '~> 0.4.0'
 gem 'hydra-head',  '~> 5.1', '>= 5.4.1'
