@@ -56,6 +56,8 @@ RSpec.configure do |config|
   # config.mock_with :flexmock
   # config.mock_with :rr
 
+  config.full_backtrace = true
+
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/test/fixtures"
 
@@ -319,7 +321,7 @@ def create_new_collection(opts = {})
   # Extract the druid from the URL.
   r = Regexp.new('/collections/(druid:\w{11})/edit')
   m = r.match(current_path)
-  expect(m).not_to be_empty
+  expect(m).not_to be_nil
   druid = m[1]
   # Fill in required fields.
   hc    = 'hydrus_collection'
@@ -365,7 +367,7 @@ def create_new_item(opts = {})
   # Extract the druid from the URL.
   r = Regexp.new('/items/(druid:\w{11})/edit')
   m = r.match(current_path)
-  expect(m).not_to be_empty
+  expect(m).not_to be_nil
   druid = m[1]
   # Fill in the required fields.
   click_button('Add Contributor')

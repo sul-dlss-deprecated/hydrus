@@ -89,7 +89,7 @@ describe("Item create", :type => :request, :integration => true) do
     expect(wf_nodes.size).to eq(1)
     expect(wf_nodes.first[:id]).to eq(Dor::Config.hydrus.app_workflow.to_s)
     # Check identityMetadata of Item.
-    expect(item.identityMetadata.tag).to include("Project : Hydrus")
+    expect(item.identityMetadata.tag.to_a).to include("Project : Hydrus")
     # Check roles of the Item.
     expect(item.person_roles).to eq({ "hydrus-item-depositor" => Set.new(["archivist1"]) })
     # Check events.
@@ -129,7 +129,7 @@ describe("Item create", :type => :request, :integration => true) do
     expect(item.descMetadata.typeOfResource).to eq(['text'])
     expect(item.descMetadata.genre).to eq(['article'])
   end
-  
+
   it "should be able to create a new class project Item, with expected datastreams" do
     # Login, go to new Item page, and store the druid of the new Item.
     login_as('archivist1')
@@ -211,7 +211,7 @@ describe("Item create", :type => :request, :integration => true) do
     fill_in "hydrus_item_abstract", :with => ni.abstract
     fill_in "hydrus_item_contact",  :with => ni.contact
     fill_in "hydrus_item_keywords", :with => ni.keywords
-    fill_in "hydrus_item_dates_date_created", :with => ni.date_created 
+    fill_in "hydrus_item_dates_date_created", :with => ni.date_created
     f = Hydrus::ObjectFile.new
     f.pid = druid
     f.file = Tempfile.new('mock_HydrusObjectFile_')
@@ -239,7 +239,7 @@ describe("Item create", :type => :request, :integration => true) do
     expect(item.object_status).to eq('draft')
     expect(item.is_draft).to eq(true)
     expect(item.is_awaiting_approval).to eq(false)
-    expect(item.is_publishable_directly).to eq(false)    
+    expect(item.is_publishable_directly).to eq(false)
     expect(item.is_publishable).to eq(false)
     expect(item.is_submittable_for_approval).to eq(true)
     expect(item.submit_for_approval_time).to be_blank

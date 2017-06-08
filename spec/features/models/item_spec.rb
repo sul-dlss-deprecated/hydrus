@@ -108,11 +108,11 @@ describe(Hydrus::Item, :type => :feature, :integration => true) do
       expect(item.visibility).to include 'stanford'
       expect(item.item_type).to eq 'some-type'
       expect(item.events.event.val.size).to eq(1)
-      expect(item.events.event).to include "Item created"
+      expect(item.events.event.to_a).to include "Item created"
       expect(item.object_status).to eq 'draft'
       expect(item.versionMetadata).to_not be_new
       expect(item.license).to eq "some-license"
-      expect(item.roleMetadata.item_depositor).to include mock_authed_user.sunetid
+      expect(item.roleMetadata.item_depositor.to_a).to include mock_authed_user.sunetid
       expect(item.relationships(:has_model)).to_not include 'info:fedora/afmodel:Dor_Item'
       expect(item.relationships(:has_model)).to include 'info:fedora/afmodel:Hydrus_Item'
       expect(item.accepted_terms_of_deposit).to eq "false"
@@ -125,7 +125,7 @@ describe(Hydrus::Item, :type => :feature, :integration => true) do
       expect(item).to be_instance_of Hydrus::Item
       expect(item).to_not be_new
       expect(item.item_type).to eq 'some-type'
-      expect(item.events.event).to include "Terms of deposit accepted due to previous item acceptance in collection"
+      expect(item.events.event.to_a).to include "Terms of deposit accepted due to previous item acceptance in collection"
       expect(item.accepted_terms_of_deposit).to eq "true"
     end
   end

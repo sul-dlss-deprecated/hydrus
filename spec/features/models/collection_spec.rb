@@ -33,7 +33,7 @@ describe(Hydrus::Collection, :type => :feature, :integration => true) do
     expect(coll.apo.roleMetadata.collection_manager.val.first.strip).to include mock_authed_user.sunetid
     expect(coll.item_type).to eq 'collection'
     expect(coll.events.event.val.size).to eq(1)
-    expect(coll.events.event).to include "Collection created"
+    expect(coll.events.event.to_a).to include "Collection created"
     expect(coll.object_status).to eq 'draft'
     expect(coll.title).to be_empty
     expect(coll.relationships(:has_model)).to_not include 'info:fedora/afmodel:Dor_Collection'
