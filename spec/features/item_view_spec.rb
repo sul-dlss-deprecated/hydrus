@@ -107,7 +107,7 @@ describe("Item view", :type => :request, :integration => true) do
     # Our fixture object is not on PURL.
     expect(@hi.purl_page_ready?).to eq(false)
     # But this pid does exist on purl-test.
-    allow(@hi).to receive(:purl_url).and_return('http://purl-test.stanford.edu/pf182cd5962.xml')
+    allow(@hi).to receive(:purl_url).and_return('https://purl-test.stanford.edu/pf182cd5962.xml')
     expect(@hi.purl_page_ready?).to eq(true)
   end
 

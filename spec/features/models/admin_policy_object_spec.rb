@@ -15,8 +15,8 @@ describe(Hydrus::AdminPolicyObject, :type => :feature, :integration => true) do
     expect(apo.title).to eq Dor::Config.hydrus.initial_apo_title
     expect(apo.label).to eq apo.title
     expect(apo.roleMetadata).to_not be_new
-    expect(apo.roleMetadata.collection_manager).to include user
-    expect(apo.roleMetadata.collection_depositor).to include user
+    expect(apo.roleMetadata.collection_manager.to_a).to include user
+    expect(apo.roleMetadata.collection_depositor.to_a).to include user
 
     expect(apo.defaultObjectRights).to_not be_new
     expect(apo.relationships(:references_agreement)).to include "info:fedora/druid:mc322hh4254"
