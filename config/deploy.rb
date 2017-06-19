@@ -1,5 +1,3 @@
-lock '3.4.0'
-
 set :application, 'hydrus'
 set :repo_url, 'https://github.com/sul-dlss/hydrus.git'
 
