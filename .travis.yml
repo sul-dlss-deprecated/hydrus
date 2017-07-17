@@ -1,3 +1,11 @@
+env:
+  global:
+    - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
+
+sudo: false
+language: ruby
+cache: bundler
+
 notifications:
   email: false
 

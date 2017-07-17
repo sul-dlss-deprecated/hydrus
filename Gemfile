@@ -1,6 +1,11 @@
 source 'https://rubygems.org'
 
 gem 'rails', '~> 3.2.22'
+
+# Rails 3.2 isn't ready for rake 12.
+# Raises: NoMethodError: undefined method `last_comment' for #<Rake::Application:0x007f8ce8826000>
+gem 'rake', '~> 11.0'
+
 gem 'devise', '~> 2.2.5'
 gem 'jquery-rails'
 gem 'dynamic_form'
@@ -68,6 +73,11 @@ group :deployment do
   gem 'capistrano', '~> 3.3'
   gem 'capistrano-rails'
   gem 'dlss-capistrano'
+end
+
+group :test do
+  gem 'test-unit'
+  gem 'webmock'
 end
 
 gem 'squash_ruby', :require => 'squash/ruby'

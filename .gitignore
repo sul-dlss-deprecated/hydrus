@@ -38,11 +38,11 @@ pkg
 db/schema.rb
 db/*.sqlite3
 *.sqlite3
-log/*
-*.log
-tmp
-nohup.out
-*~
+
+# Ignore all logfiles and tempfiles.
+/log/*.log
+/tmp
+
 tags
 jetty/
 
