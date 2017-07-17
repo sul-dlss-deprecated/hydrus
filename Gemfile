@@ -52,16 +52,13 @@ group :development, :test do
   gem 'equivalent-xml', '~> 0.5.1'
   gem 'awesome_print'
   gem 'launchy'
-  gem 'ruby-prof', :platform => 'ruby_19'
-  gem 'debugger',  :platform => 'ruby_19'
-  gem 'byebug',    :platform => 'ruby_20'
+  gem 'byebug'
   gem 'letter_opener'
 # gem 'database_cleaner'
   gem 'pry'
 end
 
 group :development do
-  gem 'looksee', :platform => 'ruby_19'
   gem 'quiet_assets'
 end
 
