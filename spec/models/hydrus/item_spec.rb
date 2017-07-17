@@ -369,6 +369,8 @@ describe Hydrus::Item, :type => :model do
 
     before(:each) do
       @edate = '2012-02-28T08:00:00Z'
+      # This enables the tests to run in a timezone other than Pacific.
+      allow(HyTime).to receive(:datetime).with("2012-02-28", :from_localzone => true).and_return(@edate)
       # XML snippets for various <access> nodes.
       ed       = "<embargoReleaseDate>#{@edate}</embargoReleaseDate><none/>"
 
@@ -451,11 +453,14 @@ describe Hydrus::Item, :type => :model do
       end
 
       describe "setter: with valid date" do
+        let(:rd_dt) { "2012-08-30T08:00:00Z" }
+        before do
+          # This enables the tests to run in a timezone other than Pacific.
+          allow(HyTime).to receive(:datetime).with("2012-08-30", :from_localzone => true).and_return(rd_dt)
+        end
 
         it "store date in UTC in both embargoMD and rightsMD" do
-          rd = '2012-08-30'
-          rd_dt = HyTime.datetime("#{rd}T08:00:00Z")
-          @hi.embargo_date = rd
+          @hi.embargo_date = '2012-08-30'
           expect(@hi.embargo_date).to eq(rd_dt)
           expect(@hi.rmd_embargo_release_date).to eq(rd_dt)
           expect(@hi.embargoMetadata.status).to eq('embargoed')

@@ -60,17 +60,24 @@ describe HyTime, :type => :model do
       expect(HyTime.formatted('')).to  eq('')
     end
 
-    it "should convert to UTC if :from_localzone is true" do
-      dt = '2000-01-02'
-      tests = {
-        false => '2000-01-02T00:00:00Z',
-        true  => '2000-01-02T0[78]:00:00Z',  # 7 or 8, so test passes during DST.
-      }
-      tests.each do |fltz, exp|
-        expect(HyTime.formatted(dt, :from_localzone => fltz)).to match(/\A#{exp}\z/)
+    context "when :from_localzone is set" do
+      let(:dt) { '2000-01-02' }
+      before do
+        # Force Pacific time
+        allow(DateTime).to receive(:local_offset).and_return((-8 * 60 * 60).to_r/86400)
+      end
+      subject { HyTime.formatted(dt, :from_localzone => fltz) }
+
+      context "when false" do
+        let(:fltz) { false }
+        it { is_expected.to eq('2000-01-02T00:00:00Z') }
+      end
+
+      context "when true" do
+        let(:fltz) { true }
+        it { is_expected.to eq('2000-01-02T08:00:00Z') }
       end
     end
-
   end
 
   it "is_well_formed_datetime()" do
