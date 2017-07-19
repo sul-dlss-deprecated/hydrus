@@ -53,7 +53,7 @@ Dor::Config.configure do
   end
 
   dor_services.url Settings.dor_services.url
-  solrizer.url     Settings.solr.url
+  solr.url     Settings.solr.url
   sdr.url          Settings.sdr.url
 
   hydrus do

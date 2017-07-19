@@ -1,9 +1,7 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.22.5'
+gem 'rails', '~> 4.2.9'
 
-# Rails 3.2 isn't ready for rake 12.
-# Raises: NoMethodError: undefined method `last_comment' for #<Rake::Application:0x007f8ce8826000>
 gem 'rake', '~> 11.0'
 
 gem 'config'
@@ -21,21 +19,20 @@ gem 'whenever', '~> 0.9'
 
 # Stanford stuff
 gem 'about_page'
-gem 'active-fedora', '~> 5.7.1'
 gem 'assembly-objectfile', '1.5.0'
 gem 'blacklight',   '~> 4.4'
-gem 'dor-services', '~> 4.21'
+gem 'dor-services', '~> 5.24'
 gem 'bagit', '0.3.2' # > 0.3.2 requires ruby 2
 gem 'dor-workflow-service'
+gem 'net-http-persistent', '~> 2.9' # https://github.com/sul-dlss/dor-workflow-service/issues/44
 gem 'druid-tools', '~> 0.4.0'
-gem 'hydra-head',  '~> 5.1', '>= 5.4.1'
+gem 'hydra-head',  '~> 6.5'
 # Use okcomputer to monitor the application
 gem 'okcomputer'
-gem 'solrizer',   '~> 2.2'
 gem 'sul_chrome', '~> 0.1.0'
 
-gem 'sass-rails',     '~> 3.2.3'
-gem 'coffee-rails',   '~> 3.2.1'
+gem 'sass-rails',     '~> 4.0'
+gem 'coffee-rails',   '~> 4.2'
 gem 'bootstrap-sass', '2.3.2.1'
 gem 'therubyracer'
 gem 'libv8', '~> 3.16.14.19'  # dep of therubyracer
@@ -50,7 +47,7 @@ group :development, :test do
   gem 'capybara'
   gem 'simplecov'
   gem 'simplecov-rcov'
-  gem 'equivalent-xml', '~> 0.5.1'
+  gem 'equivalent-xml'
   gem 'awesome_print'
   gem 'launchy'
   gem 'byebug'

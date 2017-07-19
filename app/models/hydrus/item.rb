@@ -2,9 +2,10 @@ class Hydrus::Item < Hydrus::GenericObject
 
   include Hydrus::Responsible
   include Hydrus::EmbargoMetadataDsExtension
-  
+
   REQUIRED_FIELDS = [:title, :abstract, :contact, :keywords, :version_description, :date_created]
 
+  belongs_to :collection, property: :isMemberOfCollection
   after_validation :strip_whitespace
   attr_accessor :dates
   validates :title,               :not_empty => true, :if => :should_validate
@@ -17,7 +18,7 @@ class Hydrus::Item < Hydrus::GenericObject
   }
 
   validate  :enforce_collection_is_open, :on => :create
-  
+
   validates :contributors, :at_least_one => true,  :if => :should_validate
   validate  :contributors_not_all_blank,           :if => :should_validate
   validates :files, :at_least_one => true,         :if => :should_validate
@@ -86,7 +87,7 @@ class Hydrus::Item < Hydrus::GenericObject
   # the calling code can pass in the needed value.
   def self.create(collection_pid, user, itype = Hydrus::Application.config.default_item_type)
     # Make sure user can create items in the parent collection.
-    coll = Hydrus::Collection.find(collection_pid)
+    g = Hydrus::Collection.find(collection_pid)
     raise "#{cannot_do_message(:create)}\nCollection '#{collection_pid}' is not open" unless coll.is_open()
     raise "#{cannot_do_message(:create)}\nUser '#{user}' cannot create items in #{coll} #{collection_pid} according to APO #{coll.apo.pid}" unless Hydrus::Authorizable.can_create_items_in(user, coll)
     # Create the object, with the correct model.
@@ -100,7 +101,7 @@ class Hydrus::Item < Hydrus::GenericObject
     #item.rightsMetadata.content = coll.rightsMetadata.ng_xml.to_s
     # Set the item_type, and add some Hydrus-specific info to identityMetadata.
     item.set_item_type(itype)
-    
+
     # Add roleMetadata with current user as hydrus-item-depositor.
     item.roleMetadata.add_person_with_role(user, 'hydrus-item-depositor')
     # Set default license, embargo, and visibility.
@@ -128,7 +129,7 @@ class Hydrus::Item < Hydrus::GenericObject
     else
       item.accepted_terms_of_deposit="false"
     end
-    
+
     # Save and return.
     item.save(:no_edit_logging => true, :no_beautify => true)
     item.send_new_deposit_email_notification
@@ -288,7 +289,7 @@ class Hydrus::Item < Hydrus::GenericObject
     email = HydrusMailer.send("item_deposit", :object => self)
     email.deliver unless email.to.blank?
   end
-  
+
   def send_deposit_review_email_notification
     return if recipients_for_review_deposit_emails.blank?
     email = HydrusMailer.send("new_item_for_review", :object => self)
@@ -300,7 +301,7 @@ class Hydrus::Item < Hydrus::GenericObject
     typ=self.class.item_types.key(self.item_type)
     typ.blank? ? self.class.item_types.key(Hydrus::Application.config.default_item_type) : typ
   end
-    
+
   # Returns true if the object can be submitted for approval:
   # a valid draft object that actually requires human approval.
   # Note: returned is not a valid object_status here, because this
@@ -353,7 +354,7 @@ class Hydrus::Item < Hydrus::GenericObject
     return (validate! ? is_draft : false)
   end
 
-  
+
   # Returns true if the object is ready for common assembly.
   # It's not strictly necessary to involve validate!, but it provides extra insurance.
   def is_assemblable
@@ -421,7 +422,7 @@ class Hydrus::Item < Hydrus::GenericObject
       errors.add(:release_settings, "must be reviewed")
     end
   end
-  
+
   # the date_created must be of format YYYY or YYYY-MM or YYYY-MM-DD
   def ensure_date_created_format
     if not date_created =~ /^\d{4}$/ and not date_created =~ /^\d{4}-\d{2}$/ and not date_created =~ /^\d{4}-\d{2}-\d{2}$/
@@ -433,7 +434,7 @@ class Hydrus::Item < Hydrus::GenericObject
   def terms_of_deposit_checkbox=(value)
     accept_terms_of_deposit(@current_user) if value
   end
-  
+
   # Accepts terms of deposit for the given user.
   # At the item level we store true/false.
   # At the colleciton level we store user name and datetime.
@@ -654,14 +655,14 @@ class Hydrus::Item < Hydrus::GenericObject
   def contributors
     return descMetadata.contributors
   end
-  
+
   def dates
     h={}
     #raise descMetadata.ng_xml.to_s
-    h[:date_created] = single_date? ? descMetadata.date_created : '' 
+    h[:date_created] = single_date? ? descMetadata.date_created : ''
     #raise descMetadata.date_created.inspect
-    begin 
-      h[:date_created_approximate] = (descMetadata.originInfo.dateCreated.respond_to?(:nodeset) and single_date?) ? descMetadata.originInfo.dateCreated.nodeset.first['qualifier'] == "approximate" : false 
+    begin
+      h[:date_created_approximate] = (descMetadata.originInfo.dateCreated.respond_to?(:nodeset) and single_date?) ? descMetadata.originInfo.dateCreated.nodeset.first['qualifier'] == "approximate" : false
     rescue
       h[:date_created_approximate] = false
     end
@@ -733,20 +734,20 @@ class Hydrus::Item < Hydrus::GenericObject
   def date_range?
     descMetadata.originInfo.date_range_start.length == 1
   end
-  
+
   def single_date?
     !date_range? and !undated?
   end
-  
+
   def undated?
     !date_range? and date_created == 'Undated'
   end
-  
+
   #check whether a string that we think is a date matches our expected date format
   def valid_date_string? str
     str =~ /^\d{4}$/ or str =~ /^\d{4}-\d{2}$/ or str =~ /^\d{4}-\d{2}-\d{2}$/
   end
-   
+
   def has_specified_a_valid_date
     if single_date?
       if not valid_date_string? date_created
@@ -799,7 +800,7 @@ class Hydrus::Item < Hydrus::GenericObject
   def recipients_for_item_deposit_emails
     self.item_depositor_id
   end
-  
+
   # the users who will receive email notifications when a new item is created
   def recipients_for_new_deposit_emails
     managers=apo.persons_with_role("hydrus-collection-manager").to_a
@@ -816,7 +817,7 @@ class Hydrus::Item < Hydrus::GenericObject
     managers.delete(self.item_depositor_id)
     return managers.join(', ')
   end
-  
+
   # See GenericObject#changed_fields for discussion.
   def tracked_fields
     return {

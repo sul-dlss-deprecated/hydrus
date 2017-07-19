@@ -5,7 +5,7 @@ class Hydrus::Collection < Dor::Collection
   include Dor::Embargoable
 
   before_save :save_apo
-  
+
   REQUIRED_FIELDS = [:title, :abstract, :contact]
 
   before_validation :remove_values_for_associated_attribute_with_value_none
@@ -20,7 +20,7 @@ class Hydrus::Collection < Dor::Collection
   validates :license_option, :presence => true, :if => :should_validate
   validate  :check_embargo_options
   validate  :check_license_options
-  
+
   def check_embargo_options
     return if embargo_option == 'none'
     return unless embargo_terms.blank?
@@ -48,8 +48,8 @@ class Hydrus::Collection < Dor::Collection
   ],
   )
 
-  has_relationship 'hydrus_items', :is_member_of_collection, :inbound => true
-  
+  has_many 'hydrus_items', property: :is_member_of_collection
+
 
   # Notes:
   #   - We override save() so we can control whether editing events are logged.
@@ -68,11 +68,11 @@ class Hydrus::Collection < Dor::Collection
   # get all of the items in this collection
   # this method is used instead of the "has_relationship" above, since we cannot specify the number of rows via has_relationship
   # this will hopefully be fixed when upgrading to ActiveFedora
-  # TODO upgrade to ActiveFedora to avoid doing this manual load_inbound_relationship 
+  # TODO upgrade to ActiveFedora to avoid doing this manual load_inbound_relationship
   def items
-    load_inbound_relationship('hydrus_items',:is_member_of_collection, :rows=>1000)  
+    load_inbound_relationship('hydrus_items',:is_member_of_collection, :rows=>1000)
   end
-  
+
   # get solr documents for all items in this collection; return all solr docs and a helper array of hashes with just some basic info
   # this allows us to build the item listing view without having to go to Fedora at all and is much faster
   def items_from_solr
@@ -81,11 +81,11 @@ class Hydrus::Collection < Dor::Collection
     return sdocs
   end
 
-  # return a helper array of hashes with just some basic info to build the items list -this allows us to build the item listing view without having to go to Fedora at all and is much faster  
+  # return a helper array of hashes with just some basic info to build the items list -this allows us to build the item listing view without having to go to Fedora at all and is much faster
   def items_list(opts={})
-    
+
     get_num_files=opts[:num_files] || true
-    
+
     items=[]
     items_from_solr.each do |solr_doc|
       id=solr_doc['id']
@@ -98,9 +98,9 @@ class Hydrus::Collection < Dor::Collection
       items << {:pid=>id,:num_files=>num_files,:object_type=>object_type,:title=>title,:status_label=>status,:item_depositor_id=>depositor,:create_date=>create_date}
     end
     return items
-    
+
   end
-  
+
   # Creates a new Collection, sets up various defaults, saves and
   # returns the object.
   def self.create(user)
@@ -136,7 +136,7 @@ class Hydrus::Collection < Dor::Collection
     self.hydrusProperties.item_type='collection'
     identityMetadata.add_value(:objectType, 'set')
     identityMetadata.content_will_change!
-    descMetadata.ng_xml.search('//mods:mods/mods:typeOfResource', 'mods' => 'http://www.loc.gov/mods/v3').each do |node|        
+    descMetadata.ng_xml.search('//mods:mods/mods:typeOfResource', 'mods' => 'http://www.loc.gov/mods/v3').each do |node|
       node['collection']='yes'
       node.content="mixed material"
       descMetadata.content_will_change!
@@ -274,7 +274,7 @@ class Hydrus::Collection < Dor::Collection
     new_depositors = (depositors_after_update - depositors_before_update).to_a.join(", ")
     removed_depositors = (depositors_before_update - depositors_after_update).to_a.join(", ")
     if self.is_open
-      self.send_invitation_email_notification(new_depositors) if new_depositors.size > 0 
+      self.send_invitation_email_notification(new_depositors) if new_depositors.size > 0
       self.send_remove_invitation_email_notification(removed_depositors) if removed_depositors.size > 0
     end
 
@@ -289,21 +289,21 @@ class Hydrus::Collection < Dor::Collection
     viewers_before_update = old_self.apo.persons_with_role("hydrus-collection-viewer")
     viewers_after_update = self.apo.persons_with_role("hydrus-collection-viewer")
     self.send_role_change_email((self.apo.persons_with_role("hydrus-collection-manager")+self.apo.persons_with_role("hydrus-collection-reviewer")).to_a.join(',')) if (reviewers_before_update != reviewers_after_update) || (viewers_before_update != viewers_after_update)
-        
+
   end
 
   def send_role_change_email(recipients)
     return if recipients.blank?
     email=HydrusMailer.role_change(:to =>  recipients, :object =>  self)
-    email.deliver unless email.to.blank?    
+    email.deliver unless email.to.blank?
   end
-  
+
   def send_remove_invitation_email_notification(recipients)
     return if recipients.blank?
     email=HydrusMailer.invitation_removed(:to =>  recipients, :object =>  self)
     email.deliver unless email.to.blank?
   end
-    
+
   def send_invitation_email_notification(recipients)
     return if recipients.blank?
     email=HydrusMailer.invitation(:to =>  recipients, :object =>  self)
@@ -527,27 +527,27 @@ class Hydrus::Collection < Dor::Collection
   # Returns a hash of item counts (broken down by object status) for
   # collections in which the USER plays a role.
   def self.dashboard_stats(user=nil)
-    
+
     if user.nil? # if we don't specify a user, we want everything (for an admin), so we can skip APO lookups and go directly to all collections
-      
+
       coll_pids = all_hydrus_collections
-    
-    else   # Get PIDs of the APOs in which USER plays a role 
-    
-      apo_pids = apos_involving_user(user)   
+
+    else   # Get PIDs of the APOs in which USER plays a role
+
+      apo_pids = apos_involving_user(user)
       return {} if apo_pids.size == 0
 
       # Get PIDs of the Collections governed by those APOs.
       coll_pids = collections_of_apos(apo_pids)
     end
-    
+
     return {} if coll_pids.size == 0
 
     # Returns the item counts for those collections.
     return item_counts_of_collections(coll_pids)
-  
+
   end
-  
+
   # Takes a user name
   # Returns a hash of solr documents, one for each collection (if no user is supplied, you will get everything)
   def self.dashboard_hash user=nil
@@ -558,7 +558,7 @@ class Hydrus::Collection < Dor::Collection
     if user.nil? # if we don't specify a user, we want everything (for an admin), so we can skip APO lookups and go directly to all collections
       h = squery_all_hydrus_collections
     else # for a specific user, get PIDs of the APOs in which USER plays a role, then use that to construct query to get just those collections
-      apo_pids = apos_involving_user(user)   
+      apo_pids = apos_involving_user(user)
       return {} if apo_pids.size == 0
       h = squery_collections_of_apos(apo_pids)
     end
@@ -571,10 +571,10 @@ class Hydrus::Collection < Dor::Collection
 
     toret
   end
-  
+
   # Takes a username, and returns an array of collection hashes suitable for building the dashboard (if no user is supplied, you will get everything)
   def self.collections_hash(current_user=nil)
-    
+
     stats = Hydrus::Collection.dashboard_stats(current_user)
     solr = Hydrus::Collection.dashboard_hash(current_user)
 
@@ -582,8 +582,8 @@ class Hydrus::Collection < Dor::Collection
     collections = stats.keys.map { |coll_dru|
       hash={}
       hash[:pid]=coll_dru
-      hash[:item_counts]=stats[coll_dru] || {}            
-      hash[:title]=self.object_title(solr[coll_dru][:solr]) 
+      hash[:item_counts]=stats[coll_dru] || {}
+      hash[:title]=self.object_title(solr[coll_dru][:solr])
       hash[:roles]=Hydrus::Responsible.roles_of_person current_user.to_s, solr[coll_dru][:solr]['is_governed_by_s'].first.gsub('info:fedora/','')
       count=0
       stats[coll_dru].keys.each do |key|
@@ -595,7 +595,7 @@ class Hydrus::Collection < Dor::Collection
     }
     collections
   end
-  
+
   # given a solr document, try a few places to get the title, starting with objectlabel, then dc_title, and finally just untitled
   def self.object_title(solr_doc)
     mods_title=solr_doc['mods_titleInfo_title_t']
@@ -607,12 +607,12 @@ class Hydrus::Collection < Dor::Collection
     end
     return "Untitled"
   end
-  
+
   # given a solr doc field that might be an array, extract the first value if not nil, otherwise return blank
   def self.array_to_single(solr_doc_value)
     solr_doc_value.blank? ? '' : solr_doc_value.first
   end
-  
+
   # Returns an array collection druids for all APOs
   def self.all_hydrus_collections
     h           = squery_all_hydrus_collections(   )
@@ -620,13 +620,13 @@ class Hydrus::Collection < Dor::Collection
     return get_druids_from_response(resp)
   end
 
-  # Returns an array of all APO druids 
+  # Returns an array of all APO druids
   def self.all_hydrus_apos
     h           = squery_all_hydrus_apos(   )
     resp, sdocs = issue_solr_query(h)
     return get_druids_from_response(resp)
   end
-  
+
   # Takes a user name.
   # Returns an array druids for the APOs in which USER plays a role.
   def self.apos_involving_user(user)
@@ -700,7 +700,7 @@ class Hydrus::Collection < Dor::Collection
   # Returns an array-of-arrays containing the collection's @item_counts
   # information. Instead of using object_status values, the info
   # uses human readable labels for the UI. See unit test for an example.
-  def item_counts_with_labels 
+  def item_counts_with_labels
     return item_counts.map { |s, n| [n, Hydrus::GenericObject.status_label(:item, s)] }
   end
 
