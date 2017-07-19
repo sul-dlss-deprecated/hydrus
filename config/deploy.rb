@@ -30,7 +30,7 @@ set :linked_files, %w(
   config/ur_apo_druid.yml
   config/workflow.yml
   config/ssl_certs.yml
-  config/initializers/squash.rb
+  config/honeybadger.yml
 )
 
 # Default value for linked_dirs is []
@@ -46,7 +46,8 @@ set :linked_dirs, %w{log config/certs tmp/pids tmp/cache tmp/sockets vendor/bund
 set :bundle_without, %w{development test deployment}.join(' ')
 set :bundle_audit_ignore, %w{CVE-2015-3226}
 
-before 'deploy:compile_assets', 'squash:write_revision'
+# honeybadger_env otherwise defaults to rails_env
+set :honeybadger_env, fetch(:stage)
 
 namespace :deploy do
   after :restart, :clear_tmp do

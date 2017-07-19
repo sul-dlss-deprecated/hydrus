@@ -3,11 +3,6 @@ class ApplicationController < ActionController::Base
   include Blacklight::Controller
   include Hydra::Controller::ControllerBehavior
   include Hydrus::ModelHelper
-  
-  if Rails.env.production?
-    include Squash::Ruby::ControllerMethods
-    enable_squash_client
-  end
 
   check_authorization :unless => :devise_controller?
   skip_authorization_check :only => [:contact]
@@ -30,14 +25,14 @@ class ApplicationController < ActionController::Base
     @name=params[:name]
     @email=params[:email]
     @message=params[:message]
-    
+
     if request.post?
       unless @message.blank?
-        HydrusMailer.contact_message(:params=>params,:request=>request,:user=>current_user).deliver 
+        HydrusMailer.contact_message(:params=>params,:request=>request,:user=>current_user).deliver
         flash[:notice]="Your message has been sent."
         @message=nil
         @name=nil
-        @email=nil        
+        @email=nil
         unless @from.blank?
           redirect_to(@from)
           return
@@ -48,7 +43,7 @@ class ApplicationController < ActionController::Base
     end
     render 'contact'
   end
-  
+
   # Used to determine if we should show beta message in UI.
   def is_production?
     return (Rails.env.production? and (
