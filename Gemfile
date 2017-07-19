@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~> 3.2.22'
+gem 'rails', '3.2.22.5'
 
 # Rails 3.2 isn't ready for rake 12.
 # Raises: NoMethodError: undefined method `last_comment' for #<Rake::Application:0x007f8ce8826000>
