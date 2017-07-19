@@ -31,7 +31,7 @@ module ServiceMocks
 
   def self.workflow(id)
     stub_request(:get, "http://sul-lyberservices-dev.stanford.edu/workflow/dor/objects/druid:#{id}/workflows/").
-    with(:headers => {'Accept'=>'*/*; q=0.5, application/xml', 'Accept-Encoding'=>'gzip, deflate', 'User-Agent'=>'Ruby'}).
+    #with(:headers => {'Accept'=>'*/*; q=0.5, application/xml', 'Accept-Encoding'=>'gzip, deflate', 'User-Agent'=>'Ruby'}).
     to_return(:status => 200, :body => '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <workflows objectId="druid:oo000oo0000">
   <workflow repository="dor" objectId="druid:oo000oo0000" id="hydrusAssemblyWF">
@@ -43,6 +43,7 @@ module ServiceMocks
 </workflows>
 '                , :headers => {})
   end
+
 
   def self.lifecycle(id)
     stub_request(:get, "http://sul-lyberservices-dev.stanford.edu/workflow/dor/objects/druid:#{id}/lifecycle").
@@ -63,6 +64,11 @@ module ServiceMocks
       # with(:body => "<?xml version=\"1.0\"?>\n<workflow>\n  <process name=\"start-deposit\" status=\"completed\" lifecycle=\"registered\" laneId=\"default\"/>\n  <process name=\"submit\" status=\"completed\" laneId=\"default\"/>\n  <process name=\"approve\" status=\"completed\" laneId=\"default\"/>\n  <process name=\"start-assembly\" status=\"waiting\" laneId=\"default\"/>\n</workflow>\n",
       #      :headers => {'Accept'=>'*/*; q=0.5, application/xml', 'Accept-Encoding'=>'gzip, deflate', 'Content-Length'=>'334', 'Content-Type'=>'application/xml', 'User-Agent'=>'Ruby'}).
       to_return(:status => 200, :body => "", :headers => {})
+    stub_request(:put, "http://sul-lyberservices-dev.stanford.edu/workflow/dor/objects/druid:#{id}/workflows/hydrusAssemblyWF?create-ds=false").
+      # 0005 had status = "waiting"
+      # with(:body => "<?xml version=\"1.0\"?>\n<workflow>\n  <process name=\"start-deposit\" status=\"completed\" lifecycle=\"registered\" laneId=\"default\"/>\n  <process name=\"submit\" status=\"completed\" laneId=\"default\"/>\n  <process name=\"approve\" status=\"completed\" laneId=\"default\"/>\n  <process name=\"start-assembly\" status=\"waiting\" laneId=\"default\"/>\n</workflow>\n",
+      #      :headers => {'Accept'=>'*/*; q=0.5, application/xml', 'Accept-Encoding'=>'gzip, deflate', 'Content-Length'=>'334', 'Content-Type'=>'application/xml', 'User-Agent'=>'Ruby'}).
+      to_return(:status => 200, :body => "", :headers => {})
   end
 
   def self.destroy_versioning_workflow(id)
@@ -72,12 +78,12 @@ module ServiceMocks
   end
 
   def self.suri
-    @@identifier ||= 10000
+    @@identifier ||= 1000
     @@identifier += 1
     stub_request(:post, "http://labware:lyberteam@sul-lyberservices-dev.stanford.edu/suri2/namespaces/druid/identifiers?quantity=1").
       with(:headers => {'Accept'=>'*/*; q=0.5, application/xml', 'Accept-Encoding'=>'gzip, deflate', 'Content-Length'=>'0', 'User-Agent'=>'Ruby'}).
       to_return do |_request|
-        id = "nr846y#{@@identifier}"
+        id = "nr846yr#{@@identifier}"
         object_mocks(id)
         { status: 200, body: id }
       end
