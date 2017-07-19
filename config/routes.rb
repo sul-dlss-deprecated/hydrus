@@ -39,24 +39,24 @@ Hydrus::Application.routes.draw do
     resources :datastreams, :only=>:index
   end
 
-  match "items/:id/destroy_value" => "hydrus_items#destroy_value", :as => 'destroy_hydrus_item_value', :via => "get"
-  match "items/:id/create_file" => "hydrus_items#create_file", :as => 'create_hydrus_item_file', :via => "post"
-  match "items/:id/destroy_file" => "hydrus_items#destroy_file", :as => 'destroy_hydrus_item_file', :via => "get"
-  match "collections/:id/destroy_value" => "hydrus_collections#destroy_value", :as => 'destroy_hydrus_collection_value', :via => "get"
+  get "items/:id/destroy_value" => "hydrus_items#destroy_value", :as => 'destroy_hydrus_item_value'
+  post "items/:id/create_file" => "hydrus_items#create_file", :as => 'create_hydrus_item_file'
+  get "items/:id/destroy_file" => "hydrus_items#destroy_file", :as => 'destroy_hydrus_item_file'
+  get "collections/:id/destroy_value" => "hydrus_collections#destroy_value", :as => 'destroy_hydrus_collection_value'
   devise_scope :user do
-    match "users/auth/webauth" => "sessions#new", :as => "webauth_login"
-    match "users/auth/webauth/logout" => "sessions#destroy_webauth", :as => "webauth_logout"
+    get "users/auth/webauth" => "sessions#new", :as => "webauth_login"
+    get "users/auth/webauth/logout" => "sessions#destroy_webauth", :as => "webauth_logout"
   end
-  match "error" => "signin#error", :as => "error"
-  match "contact" => "application#contact", :as=>"contact"
+  get "error" => "signin#error", :as => "error"
+  get "contact" => "application#contact", :as=>"contact"
 
   # Actions for the HydrusSolrController.
-  match "hydrus_solr/reindex/:id"           => "hydrus_solr#reindex"
-  match "hydrus_solr/delete_from_index/:id" => "hydrus_solr#delete_from_index"
-  match "dor/reindex/:id"           => "hydrus_solr#reindex",           :as => 'reindex'
-  match "dor/delete_from_index/:id" => "hydrus_solr#delete_from_index", :as => 'delete_from_index'
+  get "hydrus_solr/reindex/:id"           => "hydrus_solr#reindex"
+  get "hydrus_solr/delete_from_index/:id" => "hydrus_solr#delete_from_index"
+  get "dor/reindex/:id"           => "hydrus_solr#reindex",           :as => 'reindex'
+  get "dor/delete_from_index/:id" => "hydrus_solr#delete_from_index", :as => 'delete_from_index'
 
 
-   match '/404', :to => "exceptions#render_404"
-   match '/500', :to => "exceptions#render_500"
+   get '/404', :to => "exceptions#render_404"
+   get '/500', :to => "exceptions#render_500"
 end

@@ -64,7 +64,6 @@ Hydrus::Application.configure do
   # this is the path from the root of the public folder into which file uploads will be stored
   config.file_upload_path = 'uploads'
 
-  # Log the query plan for queries taking more than this (works
-  # with SQLite, MySQL, and PostgreSQL)
-  # config.active_record.auto_explain_threshold_in_seconds = 0.5
+  config.eager_load = true
+
 end
