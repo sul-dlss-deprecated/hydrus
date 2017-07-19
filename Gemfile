@@ -74,8 +74,8 @@ group :deployment do
   gem 'dlss-capistrano'
 end
 
-group :test do
-  gem 'test-unit'
-end
+# Ruby 2.2+ has removed test/unit from the core library. Rails requires this as a dependency
+# Rails 3.2 uses ActiveSupport::Test case in lib/rails/console/app.rb, so we need it in all groups
+gem 'test-unit'
 
 gem 'honeybadger'
