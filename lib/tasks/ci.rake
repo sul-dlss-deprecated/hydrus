@@ -22,7 +22,6 @@ task :ci => ['jetty:clean', 'jetty:config'] do
     ENV['COVERAGE'] = original_coverage || 'false'
   end
   raise "TEST FAILURES: #{error}" if error
-  Rake::Task["doc:reapp"].invoke
 end
 
 desc "Run only unit tests with coverage report, assumes jetty is running already and no fixture refreshes"
