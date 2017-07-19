@@ -11,13 +11,15 @@ OkComputer.check_in_parallel = true
 OkComputer::Registry.register 'ruby_version', OkComputer::RubyVersionCheck.new
 
 # Solr
-OkComputer::Registry.register 'solr_url', OkComputer::HttpCheck.new(Dor::Config.solrizer.url)
+solr_url = Dor::Config.solrizer.url + "/select"
+OkComputer::Registry.register 'solr_url', OkComputer::HttpCheck.new(solr_url)
 
 # fedora
 OkComputer::Registry.register 'fedora_url', OkComputer::HttpCheck.new(Dor::Config.fedora.url)
 
 # suri
-OkComputer::Registry.register 'fedora_url', OkComputer::HttpCheck.new(Dor::Config.suri.url)
+suri_url = Dor::Config.suri.url + '/suri2/namespaces'
+OkComputer::Registry.register 'suri_url', OkComputer::HttpCheck.new(suri_url)
 
 # dor-services-app
 about_url = Dor::Config.dor_services.url + '/v1/about'
