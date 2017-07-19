@@ -44,7 +44,8 @@ set :linked_dirs, %w{log config/certs tmp/pids tmp/cache tmp/sockets vendor/bund
 
 
 set :bundle_without, %w{development test deployment}.join(' ')
-set :bundle_audit_ignore, %w{CVE-2015-3226}
+set :bundle_audit_ignore, %w{CVE-2015-8314} # Devise issue with rememberable -- instead of upgrading devise from 2 to 3, just disabled remember me token
+                                            # devise is only used in development -- webauth used exclusively in prod anyway
 
 # honeybadger_env otherwise defaults to rails_env
 set :honeybadger_env, fetch(:stage)
