@@ -26,7 +26,8 @@ gem 'bagit', '0.3.2' # > 0.3.2 requires ruby 2
 gem 'dor-workflow-service'
 gem 'druid-tools', '~> 0.4.0'
 gem 'hydra-head',  '~> 5.1', '>= 5.4.1'
-gem 'is_it_working-cbeer', '~> 1.0.13'
+# Use okcomputer to monitor the application
+gem 'okcomputer'
 gem 'moab-versioning',     '~> 1.4.0'
 gem 'solrizer',   '~> 2.2'
 gem 'sul_chrome', '~> 0.1.0'
