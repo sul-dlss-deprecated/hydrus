@@ -220,7 +220,6 @@ GEM
     hydra-mods (0.0.6)
       active-fedora (> 4.1)
     i18n (0.8.6)
-    is_it_working-cbeer (1.0.16)
     iso-639 (0.2.8)
     jettywrapper (1.4.2)
       activesupport (>= 3.0.0)
@@ -288,6 +287,7 @@ GEM
       activesupport (>= 3.2.18)
       i18n
       nokogiri
+    okcomputer (1.16.0)
     om (1.8.1)
       activemodel
       activesupport
@@ -487,7 +487,6 @@ DEPENDENCIES
   equivalent-xml (~> 0.5.1)
   honeybadger
   hydra-head (~> 5.1, >= 5.4.1)
-  is_it_working-cbeer (~> 1.0.13)
   jettywrapper (= 1.4.2)
   jquery-rails
   launchy
@@ -495,6 +494,7 @@ DEPENDENCIES
   libv8 (~> 3.16.14.19)
   moab-versioning (~> 1.4.0)
   mysql2
+  okcomputer
   pry
   quiet_assets
   rails (= 3.2.22.5)
