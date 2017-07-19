@@ -106,6 +106,39 @@ describe("Item create", :type => :request, :integration => true) do
     end
   end
 
+  it "should not be able to publish an item if there are no contributors" do
+    # Login, go to new Item page, and store the druid of the new Item.
+    login_as('archivist1')
+    visit new_hydrus_item_path(:collection => @hc_druid, :type=>'article')
+    expect(current_path).to match(@edit_path_regex)
+    druid = @edit_path_regex.match(current_path)[1]
+    # Fill in form with all required fields (except contributor) and save.
+    fill_in "Title of item", :with => 'title_article'
+    fill_in "hydrus_item_contact", :with => 'bogus_email@test.com'
+    fill_in "Abstract", :with => 'abstract_article'
+    fill_in "Keywords", :with => 'keyword'
+    fill_in "hydrus_item_dates_date_created", :with => '2017'
+    check "terms_of_deposit_checkbox"
+    check "release_settings"
+    f = Hydrus::ObjectFile.new
+    f.pid = druid
+    f.file = Tempfile.new('mock_HydrusObjectFile_')
+    f.save
+    click_button(@buttons[:save])
+
+    # confirm validation message is shown and publish button is not available
+    expect(find(@div_alert)).to have_content(@notices[:save])
+    expect(find(@div_alert)).to have_content("Contributors must be entered")
+    expect(page).to_not have_button('Publish')
+
+    # add in a contributor and confirm validation message goes away and publish button appears
+    visit edit_hydrus_item_path(druid)
+    fill_in "hydrus_item_contributors_0_name", :with => 'Some, person' # nonblank contributor
+    click_button(@buttons[:save])
+    expect(find(@div_alert)).to_not have_content("Contributors must be entered")
+    expect(page).to have_button('Publish')
+  end
+
   it "should be able to create a new article type Item, with expected datastreams" do
     # Login, go to new Item page, and store the druid of the new Item.
     login_as('archivist1')

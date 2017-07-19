@@ -41,7 +41,7 @@ end
 Dor::Config.configure do
 
   purl do
-    base_url 'https://purl-dev.stanford.edu/'
+    base_url 'https://purl-test.stanford.edu/'
   end
 
   hydrus do
