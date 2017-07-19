@@ -32,14 +32,12 @@ gem 'moab-versioning',     '~> 1.4.0'
 gem 'solrizer',   '~> 2.2'
 gem 'sul_chrome', '~> 0.1.0'
 
-group :assets do
-  gem 'sass-rails',     '~> 3.2.3'
-  gem 'coffee-rails',   '~> 3.2.1'
-  gem 'bootstrap-sass', '2.3.2.1'
-  gem 'therubyracer'
-  gem 'libv8', '~> 3.16.14.19'  # dep of therubyracer
-  gem 'uglifier', '>= 1.0.3'
-end
+gem 'sass-rails',     '~> 3.2.3'
+gem 'coffee-rails',   '~> 3.2.1'
+gem 'bootstrap-sass', '2.3.2.1'
+gem 'therubyracer'
+gem 'libv8', '~> 3.16.14.19'  # dep of therubyracer
+gem 'uglifier', '>= 1.0.3'
 
 # gems only needed for particular environments
 
