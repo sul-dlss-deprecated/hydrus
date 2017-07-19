@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~> 3.2.22'
+gem 'rails', '3.2.22.5'
 
 # Rails 3.2 isn't ready for rake 12.
 # Raises: NoMethodError: undefined method `last_comment' for #<Rake::Application:0x007f8ce8826000>
@@ -52,16 +52,13 @@ group :development, :test do
   gem 'equivalent-xml', '~> 0.5.1'
   gem 'awesome_print'
   gem 'launchy'
-  gem 'ruby-prof', :platform => 'ruby_19'
-  gem 'debugger',  :platform => 'ruby_19'
-  gem 'byebug',    :platform => 'ruby_20'
+  gem 'byebug'
   gem 'letter_opener'
 # gem 'database_cleaner'
   gem 'pry'
 end
 
 group :development do
-  gem 'looksee', :platform => 'ruby_19'
   gem 'quiet_assets'
 end
 
@@ -74,6 +71,10 @@ group :deployment do
   gem 'capistrano', '~> 3.3'
   gem 'capistrano-rails'
   gem 'dlss-capistrano'
+end
+
+group :test do
+  gem 'test-unit'
 end
 
 gem 'squash_ruby', :require => 'squash/ruby'

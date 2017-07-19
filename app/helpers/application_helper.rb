@@ -140,14 +140,7 @@ module ApplicationHelper
 
   # this checks to see if the object passed in has attributes that are all blank
   def hydrus_is_object_empty?(obj)
-    !get_attributes(obj).collect{|attribute| obj.send(attribute).blank?}.include?(false)
-  end
-
-  # this returns an array of the attributes that have setter methods on any
-  # arbitrary object (stripping out attribures you don't want), "=" stripped
-  # out as well
-  def get_attributes(obj)
-    obj.methods.grep(/\w=$/).collect{|method| method.to_s.gsub('=','')}-['validation_context','_validate_callbacks','_validators']
+    !obj.attribute_names.collect { |attribute| obj.send(attribute).blank? }.include?(false)
   end
 
   def render_contextual_navigation(model)
