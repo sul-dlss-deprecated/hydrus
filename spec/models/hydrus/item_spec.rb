@@ -673,6 +673,7 @@ describe Hydrus::Item, :type => :model do
       allow(@hi).to receive(:reviewed_release_settings).and_return(true)
       @exp.each { |e| allow(@hi).to receive(e).and_return(dru) unless e==:contact }
       allow(@hi).to receive(:contact).and_return('test@test.com') # we need a valid email address
+      allow(@hi).to receive(:contributors).and_return([Hydrus::Contributor.new(:name=>'Some, person')]) # need at least one non-blank contributor
       allow(@hi).to receive(:keywords).and_return(%w(aaa bbb))
       allow(@hi).to receive(:dates).and_return({:date_created => '2011'})
       allow(@hi).to receive(:date_created).and_return('2011')

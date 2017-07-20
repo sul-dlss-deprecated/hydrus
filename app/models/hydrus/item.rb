@@ -19,6 +19,7 @@ class Hydrus::Item < Hydrus::GenericObject
   validate  :enforce_collection_is_open, :on => :create
   
   validates :contributors, :at_least_one => true,  :if => :should_validate
+  validate  :contributors_not_all_blank,           :if => :should_validate
   validates :files, :at_least_one => true,         :if => :should_validate
   validate  :must_accept_terms_of_deposit,         :if => :should_validate
   validate  :must_review_release_settings,         :if => :should_validate
@@ -398,6 +399,13 @@ class Hydrus::Item < Hydrus::GenericObject
     return true if c && c.is_open
     errors.add(:collection, "must be open to have new items added")
     return false
+  end
+
+  # you must have at least one non-blank contributor
+  def contributors_not_all_blank
+    if (contributors.all? {|contributor| contributor.name.blank?})
+      errors.add(:contributors, "must be entered")
+    end
   end
 
   # the user must accept the terms of deposit to publish
