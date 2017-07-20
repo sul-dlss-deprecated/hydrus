@@ -23,9 +23,11 @@ node {
   }
 
   stage('Test') {
-    sh '''#!/bin/bash -l
-    rvm use 2.3.4@hydrus
-    bundle exec rake ci
-    '''
+    lock('port-8983') {
+      sh '''#!/bin/bash -l
+      rvm use 2.3.4@hydrus
+      bundle exec rake ci
+      '''
+    }
   }
 }
