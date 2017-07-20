@@ -1,5 +1,10 @@
 node {
   env.RAILS_ENV = 'test'
+
+  stage ('Clean') {
+    deleteDir()
+  }
+
   stage('Build') {
     checkout scm
 
