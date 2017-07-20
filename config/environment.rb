@@ -30,9 +30,6 @@ load_yaml_config = lambda { |yaml_file|
 }
 
 Dor::Config.configure do
-
-  cert_dir File.join(current_path, "certs")
-
   app_version File.read File.join(current_path, '..','VERSION')
 
   fedora do
@@ -55,13 +52,6 @@ Dor::Config.configure do
     url yaml['url']
     user yaml['user']
     pass yaml['password']
-  end
-
-  ssl do
-    yaml = load_yaml_config.call('ssl_certs.yml')
-    key_file File.join(Dor::Config.cert_dir,yaml['key_file']) if yaml['key_file']
-    cert_file File.join(Dor::Config.cert_dir,yaml['cert_file']) if yaml['cert_file']
-    key_pass yaml['key_pass']
   end
 
   workflow.url     load_yaml_config.call('workflow.yml')['url']

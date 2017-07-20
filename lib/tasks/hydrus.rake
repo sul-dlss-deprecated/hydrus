@@ -5,27 +5,27 @@ namespace :hydrus do
   # need to pass in druid of object to associated, collection druid of Hydrus collection to associate with, and type of hydrus object (e.g. dataset)
   # run with RAILS_ENV=dortest rake hydrus:index_object druid=druid:oo000oo0001 collection=druid:oo00oo002 type=dataset
   task :index_object => :environment do |t, args|
-  
+
     druid = ENV['druid'] # druid to index (full druid, including druid: prefix)
     collection = ENV['collection'] # druid of collection to associate with  (full druid, including druid: prefix)
     item_type = ENV['type'] # type of hydrus item
-  
+
     item=Hydrus::Item.find(druid) # get druid
-  
+
     coll = Hydrus::Collection.find(collection)
 
     # Add the Item to the Collection.
     item.collections << coll
-  
+
     # change item type in RELS-EXT to be a hydrus item
     item.datastreams['RELS-EXT'].content.gsub!("<fedora-model:hasModel rdf:resource=\"info:fedora/afmodel:Dor_Item\"></fedora-model:hasModel>","<fedora-model:hasModel rdf:resource=\"info:fedora/afmodel:Hydrus_Item\"/>")
     item.remove_relationship :has_model, 'info:fedora/afmodel:Dor_Item'
     item.assert_content_model
-  
+
     # ruby black magic: redefine should_validate and another method so we can save this hydrus item without going through all of the UI validations
     item.define_singleton_method :should_validate, lambda {false}
     item.define_singleton_method :check_version_if_license_changed, lambda {return}
-    
+
     # create hydrusProperties datastream and set values
     item.item_type=item_type
     item.accepted_terms_of_deposit="true"
@@ -45,17 +45,16 @@ namespace :hydrus do
     solr=Dor::SearchService.solr
     solr_doc = item.to_solr
     solr.add(solr_doc, :add_attributes => {:commitWithin => 5000})
-  
+
   end
-  
-  desc "Hydrus Configurations"
+
+  desc "Copy example configs to a local instance (for development)"
   task :config do
     files = %w(
       database.yml
       dor_services.yml
       fedora.yml
       solr.yml
-      ssl_certs.yml
       suri.yml
       ur_apo_druid.yml
       workflow.yml
@@ -65,7 +64,7 @@ namespace :hydrus do
       cp("#{f}.example", f) unless File.exists?(f)
     end
   end
-  
+
   desc "Cleanup file upload temp files"
   task :cleanup_tmp => :environment do
     CarrierWave.clean_cached_files!
@@ -92,4 +91,3 @@ task :server => :environment do
   ].join(' | ')
   system(cmd)
 end
-
