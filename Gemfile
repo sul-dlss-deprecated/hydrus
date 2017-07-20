@@ -6,7 +6,9 @@ gem 'rails', '3.2.22.5'
 # Raises: NoMethodError: undefined method `last_comment' for #<Rake::Application:0x007f8ce8826000>
 gem 'rake', '~> 11.0'
 
-gem 'devise', '~> 2.2.5'
+# Devise updated for http://blog.plataformatec.com.br/2016/01/improve-remember-me-cookie-expiration-in-devise/
+gem 'devise', '~> 3.5.4'
+gem 'rails-secrets' # Needed until we upgrade to Rails 4.1+
 gem 'jquery-rails'
 gem 'dynamic_form'
 gem 'bootstrap-datepicker-rails'
@@ -28,7 +30,6 @@ gem 'druid-tools', '~> 0.4.0'
 gem 'hydra-head',  '~> 5.1', '>= 5.4.1'
 # Use okcomputer to monitor the application
 gem 'okcomputer'
-gem 'moab-versioning',     '~> 1.4.0'
 gem 'solrizer',   '~> 2.2'
 gem 'sul_chrome', '~> 0.1.0'
 

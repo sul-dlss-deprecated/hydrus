@@ -59,9 +59,7 @@ GEM
     bagit (0.3.2)
       docopt (~> 0.5.0)
       validatable (~> 1.6)
-    bcrypt (3.1.10)
-    bcrypt-ruby (3.1.5)
-      bcrypt (>= 3.1.3)
+    bcrypt (3.1.11)
     blacklight (4.7.0)
       bootstrap-sass (>= 2.2.0, < 2.4)
       deprecation (~> 0.1)
@@ -126,11 +124,13 @@ GEM
     daemons (1.2.4)
     deprecation (0.99.0)
       activesupport
-    devise (2.2.8)
-      bcrypt-ruby (~> 3.0)
+    devise (3.5.10)
+      bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
-      railties (~> 3.1)
-      warden (~> 1.2.1)
+      railties (>= 3.2.6, < 5)
+      responders
+      thread_safe (~> 0.1)
+      warden (~> 1.2.3)
     diff-lcs (1.3)
     dlss-capistrano (3.4.1)
       capistrano (~> 3.0)
@@ -141,7 +141,7 @@ GEM
     docopt (0.5.0)
     domain_name (0.5.20170404)
       unf (>= 0.0.5, < 1.0.0)
-    dor-services (4.25.0)
+    dor-services (4.25.1)
       active-fedora (~> 5.7.1)
       activesupport (~> 3.2, >= 3.2.18)
       addressable (~> 2.3)
@@ -151,7 +151,7 @@ GEM
       equivalent-xml (~> 0.5, >= 0.5.1)
       json (~> 1.8.1)
       lyber-utils (~> 0.1.2)
-      moab-versioning (~> 1.4.4)
+      moab-versioning (~> 1.5)
       net-sftp (~> 2.1.2)
       net-ssh (~> 2.6.5)
       nokogiri (~> 1.6)
@@ -257,7 +257,7 @@ GEM
     mime-types (1.25.1)
     mini_exiftool (2.5.0)
     mini_portile2 (2.2.0)
-    moab-versioning (1.4.4)
+    moab-versioning (1.5.0)
       confstruct
       json
       nokogiri
@@ -325,6 +325,8 @@ GEM
       activesupport (= 3.2.22.5)
       bundler (~> 1.0)
       railties (= 3.2.22.5)
+    rails-secrets (1.0.2)
+      rails (>= 3.2.0, <= 4.1.0)
     railties (3.2.22.5)
       actionpack (= 3.2.22.5)
       activesupport (= 3.2.22.5)
@@ -344,6 +346,8 @@ GEM
     rdoc (3.12.2)
       json (~> 1.4)
     ref (1.0.5)
+    responders (1.1.2)
+      railties (>= 3.2, < 4.2)
     rest-client (1.8.0)
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 3.0)
@@ -432,6 +436,7 @@ GEM
       libv8 (~> 3.16.14.0)
       ref
     thor (0.19.4)
+    thread_safe (0.3.6)
     tilt (1.4.1)
     tins (1.5.4)
     treetop (1.4.15)
@@ -448,7 +453,7 @@ GEM
     validatable (1.6.7)
     validates_email_format_of (1.6.2)
       i18n
-    warden (1.2.3)
+    warden (1.2.7)
       rack (>= 1.0)
     whenever (0.9.4)
       chronic (>= 0.6.3)
@@ -477,7 +482,7 @@ DEPENDENCIES
   carrierwave (= 0.6.2)
   coderay
   coffee-rails (~> 3.2.1)
-  devise (~> 2.2.5)
+  devise (~> 3.5.4)
   dlss-capistrano
   dor-services (~> 4.21)
   dor-workflow-service
@@ -491,12 +496,12 @@ DEPENDENCIES
   launchy
   letter_opener
   libv8 (~> 3.16.14.19)
-  moab-versioning (~> 1.4.0)
   mysql2
   okcomputer
   pry
   quiet_assets
   rails (= 3.2.22.5)
+  rails-secrets
   rake (~> 11.0)
   rspec-rails (~> 3.1.0)
   sass-rails (~> 3.2.3)
