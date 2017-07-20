@@ -31,6 +31,7 @@ set :linked_files, %w(
   config/workflow.yml
   config/ssl_certs.yml
   config/honeybadger.yml
+  config/secrets.yml
 )
 
 # Default value for linked_dirs is []
