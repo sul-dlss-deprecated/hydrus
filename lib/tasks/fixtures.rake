@@ -196,12 +196,9 @@ namespace :hydrus do
   desc "restore jetty to initial state"
   task :jetty_nuke do
     puts "Nuking jetty"
-    # Restore jetty submodule to initial state.
+    # Restore jetty to initial state.
     Rake::Task['jetty:stop'].invoke
-    Dir.chdir('jetty') {
-      system('git reset --hard HEAD') or exit
-      system('git clean -dfx')        or exit
-    }
+    Rake::Task['jetty:clean'].invoke
     Rake::Task['hydra:jetty:config'].invoke
     Rake::Task['jetty:start'].invoke
     Rake::Task['hydrus:clear_upload_files'].invoke
