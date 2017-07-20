@@ -8,6 +8,15 @@ node {
   stage('Build') {
     checkout scm
 
+    withCredentials([zip(credentialsId: 'hydrus-config.zip', variable: 'CONFIG_DIR')]) {
+      sh '''#!/bin/bash -l
+      rvm use 2.3.4@hydrus
+      echo $CONFIG_DIR
+      ls $CONFIG_DIR
+      cp $CONFIG_DIR/* config
+      '''
+    }
+
     sh '''#!/bin/bash -l
     rvm use 2.3.4@hydrus --create
 
