@@ -15,7 +15,7 @@ Digital Repository for preservation and access.
 ## Setting up your environment
 
 ```bash
-rvm install 1.9.3
+rvm install 2.3.4
 
 brew install exiftool
 
@@ -25,8 +25,6 @@ cd hydrus
 
 cp ./.rvmrc{.example,}
 cp ./deploy/.rvmrc{.example,}
-
-git submodule update --init
 
 bundle install
 
