@@ -10,7 +10,6 @@ Digital Repository for preservation and access.
 ## Dependencies on non-public code
 
 * Stanford's sul-chrome gem.
-* Dor certificates for client authentication.
 
 ## Setting up your environment
 
@@ -22,9 +21,6 @@ brew install exiftool
 git clone git@github.com:sul-dlss/hydrus.git
 
 cd hydrus
-
-cp ./.rvmrc{.example,}
-cp ./deploy/.rvmrc{.example,}
 
 bundle install
 
@@ -105,7 +101,7 @@ open coverage/index.html
 
 
 ```bash
-cap stage deploy
+cap [stage_name] deploy
 ```
 
 Run remediations the objects in the deployed environment require changes to be consistent with the new code.
