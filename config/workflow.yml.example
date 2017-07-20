@@ -1,8 +1,8 @@
 development:
-  url: http://sul-lyberservices-dev.stanford.edu/workflow/
+  url: https://sul-lyberservices-dev.stanford.edu/workflow/
 
 test:
-  url: http://sul-lyberservices-dev.stanford.edu/workflow/
+  url: https://sul-lyberservices-dev.stanford.edu/workflow/
 
 dortest:
   url: https://sul-lyberservices-test.stanford.edu/workflow/

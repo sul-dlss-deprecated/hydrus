@@ -1,19 +1,19 @@
 development:
-  url: http://sul-lyberservices-dev.stanford.edu
+  url: https://sul-lyberservices-dev.stanford.edu
   user: ~
   password: ~
 
 test:
-  url: http://sul-lyberservices-test.stanford.edu
+  url: https://sul-lyberservices-test.stanford.edu
   user: ~
   password: ~
 
 dortest:
-  url: http://sul-lyberservices-test.stanford.edu
+  url: https://sul-lyberservices-test.stanford.edu
   user: ~
   password: ~
 
 production:
-  url: http://sul-lyberservices-prod.stanford.edu
+  url: https://sul-lyberservices-prod.stanford.edu
   user: ~
   password: ~
