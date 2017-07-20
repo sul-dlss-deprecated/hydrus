@@ -25,10 +25,6 @@
           <%= f.password_field :password, :tabindex => '2' %>
         </fieldset>
         <%= f.submit "Sign in", :class=>"btn signin-submit", :tabindex => '3' %>
-        <fieldset class="remember-me">
-          <%= f.check_box :remember_me, :tabindex => '4' %>
-          <%= f.label :remember_me %>
-        </fieldset>
       </div>
       <div class="webauth">
         <%= link_to("Sign in via WebAuth", webauth_login_path(:referrer => params[:referrer]), :class => 'btn', :tabindex => '5') %>

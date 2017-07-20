@@ -4,9 +4,9 @@ class User < ActiveRecord::Base
   include Blacklight::User
 
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable
+         :recoverable, :trackable, :validatable
 
-  attr_accessible :email, :password, :password_confirmation, :remember_me
+  attr_accessible :email, :password, :password_confirmation
 
   # Blacklight uses #to_s on your user class to get
   # a user-displayable login/identifier for the account.
