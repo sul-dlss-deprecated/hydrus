@@ -5,7 +5,7 @@ describe IsDruidValidator do
   describe "validate_each()" do
 
     before(:each) do
-      @validator = IsDruidValidator.new({:attributes => {}})
+      @validator = IsDruidValidator.new({:attributes => {pid: true}})
       @mock_record = double('mock_record', :errors => {})
       allow(@mock_record.errors).to receive('[]').and_return([])
     end
