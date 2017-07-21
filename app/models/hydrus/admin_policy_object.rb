@@ -5,6 +5,7 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
   include Hydrus::Validatable
   include Hydrus::Processable
   include Hydrus::Contentable
+  include Dor::Publishable
   extend  Hydrus::Delegatable
 
   has_metadata(
