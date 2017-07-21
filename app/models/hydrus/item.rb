@@ -64,7 +64,7 @@ class Hydrus::Item < Hydrus::GenericObject
       [:related_citation,          false  ],
     ],
     "roleMetadata" => [
-      [:item_depositor_id,         true,  :item_depositor, :person, :identifier],
+    #  [:item_depositor_id,         true,  :item_depositor, :person, :identifier],
       [:item_depositor_name,       true,  :item_depositor, :person, :name],
     ],
     "hydrusProperties" => [
@@ -82,6 +82,9 @@ class Hydrus::Item < Hydrus::GenericObject
     :label => 'Role Metadata',
     :control_group => 'M')
 
+  def item_depositor_id
+    roleMetadata.item_depositor.person.identifier
+  end
 
   # Note: currently all items of of type :item. In the future,
   # the calling code can pass in the needed value.
