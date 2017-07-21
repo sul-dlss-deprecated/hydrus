@@ -68,32 +68,3 @@ Hydrus::Application.configure do
   # with SQLite, MySQL, and PostgreSQL)
   # config.active_record.auto_explain_threshold_in_seconds = 0.5
 end
-
-Dor::Config.configure do
-
-  purl do
-    base_url 'https://purl-test.stanford.edu/'
-  end
-  
-  workflow do
-    timeout 120
-  end
-
-  hydrus do
-    show_standard_login   false   # if true, the user has the option to login via a username/password as well as webauth; if false; only webauth is allowed    
-    exception_error_page   true     # if true, a generic error page will be shown with no exception messages; if false, standard Rails exceptions are shown directly to the user
-    exception_error_panel  true     # if true and exception_error_page is also set to true, a collapsible exception error panel is shown on the friendly error page
-    exception_recipients  ''        # list of email addresses, comma separated, that will be notified when an exception occurs - leave blank for no emails
-    host 'hydrus-test.stanford.edu' # server host, used in emails
-    start_assembly_wf(true)         # determines if assembly workflow is started when publishing
-
-    # complete list of all workflow objects defined in this environment
-    workflow_object_druids [
-      'druid:oo000oo0099',  # hydrusAssemblyWF
-      'druid:rs056hz6024',  # assemblyWF
-      'druid:yp220bx1022',  # versioningWF
-    ]
-
-  end
-
-end

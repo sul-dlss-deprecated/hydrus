@@ -119,9 +119,13 @@ GEM
       execjs
     coffee-script-source (1.9.1.1)
     columnize (0.9.0)
+    config (1.4.0)
+      activesupport (>= 3.0)
+      deep_merge (~> 1.1.1)
     confstruct (0.2.7)
     crass (1.0.2)
     daemons (1.2.4)
+    deep_merge (1.1.1)
     deprecation (0.99.0)
       activesupport
     devise (3.5.10)
@@ -482,6 +486,7 @@ DEPENDENCIES
   carrierwave (= 0.6.2)
   coderay
   coffee-rails (~> 3.2.1)
+  config
   devise (~> 3.5.4)
   dlss-capistrano
   dor-services (~> 4.21)
@@ -517,4 +522,4 @@ DEPENDENCIES
   whenever (~> 0.9)
 
 BUNDLED WITH
-   1.15.1
+   1.15.2

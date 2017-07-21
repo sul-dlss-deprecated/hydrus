@@ -3,7 +3,6 @@ ZIP_FILE = 'https://github.com/projecthydra/hydra-jetty/archive/v5.2.0.zip'
 desc "Run Continuous Integration Suite (tests, coverage, docs)"
 task :ci => ['jetty:clean', 'jetty:config'] do
   Rails.env = "test"
-  Rake::Task["hydrus:config"].invoke
   Rake::Task["db:migrate"].invoke
 
   require 'jettywrapper'

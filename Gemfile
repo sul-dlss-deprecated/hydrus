@@ -6,6 +6,7 @@ gem 'rails', '3.2.22.5'
 # Raises: NoMethodError: undefined method `last_comment' for #<Rake::Application:0x007f8ce8826000>
 gem 'rake', '~> 11.0'
 
+gem 'config'
 # Devise updated for http://blog.plataformatec.com.br/2016/01/improve-remember-me-cookie-expiration-in-devise/
 gem 'devise', '~> 3.5.4'
 gem 'rails-secrets' # Needed until we upgrade to Rails 4.1+
