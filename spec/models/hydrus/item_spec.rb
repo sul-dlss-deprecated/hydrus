@@ -25,9 +25,10 @@ describe Hydrus::Item, :type => :model do
     subject { Hydrus::Item.new }
 
     it "should retrieve ObjectFiles from the database" do
-      m = double()
-      expect(Hydrus::ObjectFile).to receive(:find_all_by_pid).with(subject.pid, hash_including({:order=>"weight ASC,label ASC,file ASC"})).and_return(m)
-      expect(subject.files).to eq(m)
+      relation = subject.files
+      expect(relation).to be_a ActiveRecord::Relation
+      expect(relation.where_values_hash).to eq 'pid' => subject.pid
+      expect(relation.order_values).to eq ['weight ASC,label ASC,file ASC']
     end
   end
 

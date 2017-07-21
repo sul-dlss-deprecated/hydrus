@@ -157,7 +157,7 @@ def noko_doc(x)
 end
 
 def mock_user
-  User.find_or_create_by_email("some-user@example.com") do |u|
+  User.find_or_create_by(email: "some-user@example.com") do |u|
     u.password = "test12345"
     u.password_confirmation = u.password
     u.save
