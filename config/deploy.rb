@@ -26,12 +26,13 @@ set :linked_files, %w(
   config/suri.yml
   config/ur_apo_druid.yml
   config/workflow.yml
+  config/ssl_certs.yml
   config/honeybadger.yml
   config/secrets.yml
 )
 
 # Default value for linked_dirs is []
-set :linked_dirs, %w{log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system public/uploads}
+set :linked_dirs, %w{log config/certs tmp/pids tmp/cache tmp/sockets vendor/bundle public/system public/uploads}
 
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }

@@ -22,6 +22,8 @@ config/fedora.yml
 config/solr.yml
 config/ur_apo_druid.yml
 config/workflow.yml
+config/ssl_certs.yml
+config/certs/*
 
 ## coverage
 coverage.data
