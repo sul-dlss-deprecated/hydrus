@@ -25,12 +25,12 @@ class CatalogController < ApplicationController
 
     # solr field configuration for search results/index views
     config.index.show_link = 'id'
-    config.index.record_display_type = 'has_model_s'
+    config.index.record_display_type = 'has_model_ssim'
 
     # solr field configuration for document/show views
     config.show.html_title = 'id'
     config.show.heading = 'id'
-    config.show.display_type = 'has_model_s'
+    config.show.display_type = 'has_model_ssim'
 
     # solr fields that will be treated as facets by the blacklight application
     #   The ordering of the field names is the order of the display

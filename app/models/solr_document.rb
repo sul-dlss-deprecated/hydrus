@@ -32,7 +32,7 @@ class SolrDocument
                          )
 
   def route_key
-    get('has_model_s').split(':').last.downcase.sub(/^dor_/, 'hydrus_')
+    get('has_model_ssim').split(':').last.downcase.sub(/^dor_/, 'hydrus_')
   end
 
   def to_model
@@ -48,7 +48,7 @@ class SolrDocument
   end
 
   def object_type
-    return get('has_model_s').gsub(/.+:Hydrus_/, '').downcase
+    return get('has_model_ssim').gsub(/.+:Hydrus_/, '').downcase
   end
 
   def object_status

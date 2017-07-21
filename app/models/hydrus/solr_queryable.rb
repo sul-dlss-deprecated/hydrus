@@ -47,7 +47,7 @@ module Hydrus::SolrQueryable
     return unless models.size > 0
     h[:fq] ||= []
     hms = models.map { |m| %Q<"info:fedora/afmodel:#{m}"> }.join(' OR ')
-    h[:fq] << %Q<has_model_s:(#{hms})>
+    h[:fq] << %Q<has_model_ssim:(#{hms})>
   end
 
   # Returns a default hash of query params, used by a few methods.
@@ -135,7 +135,7 @@ module Hydrus::SolrQueryable
       :fl            => '',
       :facet         => false,
       :q             => '*',
-      :fq            => [ %Q<is_member_of_collection_s:(#{imo})> ],
+      :fq            => [ %Q<is_member_of_collection_ssim:(#{imo})> ],
     }
     HSQ.add_model_filter(h, 'Hydrus_Item')
     return h
@@ -150,9 +150,9 @@ module Hydrus::SolrQueryable
       :rows          => 0,
       :fl            => '',
       :facet         => true,
-      :'facet.pivot' => 'is_member_of_collection_s,object_status_facet',
+      :'facet.pivot' => 'is_member_of_collection_ssim,object_status_facet',
       :q             => '*',
-      :fq            => [ %Q<is_member_of_collection_s:(#{imo})> ],
+      :fq            => [ %Q<is_member_of_collection_ssim:(#{imo})> ],
     }
     HSQ.add_model_filter(h, 'Hydrus_Item')
     return h
@@ -171,7 +171,7 @@ module Hydrus::SolrQueryable
     # Define SOLR query with the desired fields.
     fields = {
       'identityMetadata_objectId_t' => :pid,
-      'has_model_s'                 => :object_type,
+      'has_model_ssim'                 => :object_type,
       'object_version_t'            => :object_version,
     }
     h = squery_all_hydrus_objects(models, :fields => fields.keys)

@@ -158,7 +158,7 @@ describe Hydrus::AccessControlsEnforcement do
         '"info:fedora/afmodel:Hydrus_Collection"',
         '"info:fedora/afmodel:Hydrus_Item"',
       ].join(' OR ')
-      @has_model_clause = %Q<has_model_s:(#{hmc})>
+      @has_model_clause = %Q<has_model_ssim:(#{hmc})>
     end
 
     it "hash should include expected clauses for the normal use case" do
@@ -188,7 +188,7 @@ describe Hydrus::AccessControlsEnforcement do
       allow(@mc).to receive(:current_user).and_return(nil)
       parts = {
         :hm1 => @has_model_clause,
-        :hm2 => %Q<has_model_s:("info:fedora/afmodel:____USER_IS_NOT_LOGGED_IN____")>,
+        :hm2 => %Q<has_model_ssim:("info:fedora/afmodel:____USER_IS_NOT_LOGGED_IN____")>,
       }
       exp = { :fq => [ parts[:hm1], parts[:hm2] ] }
       solr_params = {}

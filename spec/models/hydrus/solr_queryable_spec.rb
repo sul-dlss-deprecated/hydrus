@@ -80,7 +80,7 @@ describe Hydrus::SolrQueryable, :type => :model do
 
     it "should add the expected :fq clause" do
       models = %w(xxx yyy)
-      hms    = 'has_model_s:("info:fedora/afmodel:xxx" OR "info:fedora/afmodel:yyy")'
+      hms    = 'has_model_ssim:("info:fedora/afmodel:xxx" OR "info:fedora/afmodel:yyy")'
       tests  = [
         [ {},                [hms] ],
         [ {:fq => []},       [hms] ],

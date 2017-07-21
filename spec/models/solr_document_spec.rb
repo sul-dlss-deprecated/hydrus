@@ -7,8 +7,8 @@ describe SolrDocument, :type => :model do
       [ 'info:fedora/afmodel:Dor_Collection', 'hydrus_collection'],
       [ 'info:fedora/afmodel:Dor_Item',       'hydrus_item'],
     ]
-    tests.each do |has_model_s, exp|
-      h = { :has_model_s => has_model_s }
+    tests.each do |has_model_ssim, exp|
+      h = { :has_model_ssim => has_model_ssim }
       sdoc = SolrDocument.new h
       expect(sdoc.route_key).to eq(exp)
     end
@@ -26,7 +26,7 @@ describe SolrDocument, :type => :model do
     h = {
       'main_title_t'                => 'foo title',
       'identityMetadata_objectId_t' => 'foo:pid',
-      'has_model_s'                 => 'info:fedora/afmodel:Hydrus_Item',
+      'has_model_ssim'                 => 'info:fedora/afmodel:Hydrus_Item',
       'object_status_t'             => 'awaiting_approval',
       "roleMetadata_item_depositor_person_identifier_t" => 'foo_user',
     }
