@@ -21,18 +21,6 @@ class Hydrus::GenericObject < Dor::Item
     errors.add(:contact, "must contain a single valid email address")
   end
 
-  def is_item?
-    self.class == Hydrus::Item
-  end
-
-  def is_collection?
-    self.class == Hydrus::Collection
-  end
-
-  def is_apo?
-    false
-  end
-
   # the pid without the druid: prefix
   def dru
     pid.gsub('druid:','')

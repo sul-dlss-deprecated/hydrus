@@ -124,6 +124,14 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
     true
   end
 
+  def is_item?
+    false
+  end
+
+  def is_collection?
+    false
+  end
+
   def is_assemblable
     true
   end
