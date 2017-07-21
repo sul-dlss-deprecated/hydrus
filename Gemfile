@@ -51,7 +51,7 @@ group :development, :test do
   gem 'pry'
 end
 
-group :production, :dortest do
+group :production do
   gem 'mysql2'
 end
 
