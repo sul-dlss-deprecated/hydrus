@@ -49,6 +49,7 @@ describe Hydrus::GenericObject, :type => :model do
   end
 
   it "can exercise url()" do
+    allow(@go).to receive(:pid).and_return('__DO_NOT_USE__')
     expect(@go.purl_url).to eq("https://purl.stanford.edu/__DO_NOT_USE__")
   end
 
