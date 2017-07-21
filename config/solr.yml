@@ -3,9 +3,3 @@ development:
 
 test:
   url: http://localhost:8983/solr/test
-
-dortest:
-  url: http://localhost:8080/solr
-
-production:
-  url: http://localhost:8080/solr

@@ -1,0 +1,20 @@
+hydrus:
+  show_standard_login: true
+  exception_error_panel: false
+  exception_error_page: false
+  host: localhost:3000
+  start_assembly_wf: false
+  workflow_object_druids:
+    - 'druid:oo000oo0099' # hydrusAssemblyWF
+    - 'druid:oo000oo0098' # versioningWF
+
+fedora:
+  url: http://fedoraAdmin:fedoraAdmin@127.0.0.1:8983/fedora
+
+suri:
+  url: 'https://sul-lyberservices-dev.stanford.edu'
+  user: ~
+  password: ~
+
+solr:
+  url: http://localhost:8983/solr/development

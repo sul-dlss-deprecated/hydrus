@@ -23,69 +23,68 @@ Hydrus::Application.configure do
 
 end
 
-load_yaml_config = lambda { |yaml_file|
-  full_path = File.expand_path(File.join(current_path, yaml_file))
-  yaml      = YAML.load(File.read full_path)
-  return yaml[Rails.env]
-}
-
 Dor::Config.configure do
-
-  cert_dir File.join(current_path, "certs")
-
   app_version File.read File.join(current_path, '..','VERSION')
 
   fedora do
-    # Set the fedora URL with user and password info.
-    yaml = load_yaml_config.call('fedora.yml')
-    user = yaml['user']
-    pw   = yaml['password']
-    fedora_url = yaml['url']
-    if !(user.blank? || pw.blank?)
-      url fedora_url.sub /:\/\//, "://#{user}:#{pw}@"
-    else
-      url fedora_url
-    end
+    url Settings.fedora.url
   end
 
   suri do
     mint_ids true
     id_namespace('druid')
-    yaml = load_yaml_config.call('suri.yml')
-    url yaml['url']
-    user yaml['user']
-    pass yaml['password']
+    url Settings.suri.url
+    user Settings.suri.user
+    pass Settings.suri.password
   end
 
-  ssl do
-    yaml = load_yaml_config.call('ssl_certs.yml')
-    key_file File.join(Dor::Config.cert_dir,yaml['key_file']) if yaml['key_file']
-    cert_file File.join(Dor::Config.cert_dir,yaml['cert_file']) if yaml['cert_file']
-    key_pass yaml['key_pass']
+  # Using client certificates for connections is optional
+  if Settings.ssl
+    ssl do
+      key_file Settings.ssl.key_file if Settings.ssl.key_file
+      cert_file Settings.ssl.cert_file if Settings.ssl.cert_file
+      key_pass Settings.ssl.key_pass if Settings.ssl.key_pass
+    end
   end
 
-  workflow.url     load_yaml_config.call('workflow.yml')['url']
-  dor_services.url load_yaml_config.call('dor_services.yml')['url']
-  solrizer.url     load_yaml_config.call('solr.yml')['url']
-  sdr.url     load_yaml_config.call('sdr.yml')['url']
+  workflow do
+    url     Settings.workflow.url
+    timeout Settings.workflow.timeout
+  end
+
+  dor_services.url Settings.dor_services.url
+  solrizer.url     Settings.solr.url
+  sdr.url          Settings.sdr.url
 
   hydrus do
-    initial_apo_title('Intial Hydrus APO title')
-    app_workflow(:hydrusAssemblyWF)
-    app_workflow_steps %w(start-deposit submit approve start-assembly)
-    ur_apo_druid(load_yaml_config.call('ur_apo_druid.yml')['druid'])
-    assembly_wf_xml(File.read(File.join(current_path, "assemblyWF_hydrus.xml")))
+    initial_apo_title      'Intial Hydrus APO title'
+    app_workflow           :hydrusAssemblyWF
+    app_workflow_steps     %w(start-deposit submit approve start-assembly)
+    ur_apo_druid           Settings.hydrus.ur_apo_druid
+    assembly_wf_xml        File.read(File.join(current_path, "assemblyWF_hydrus.xml"))
+    show_standard_login    Settings.hydrus.show_standard_login   # if true, the user has the option to login via a username/password as well as webauth; if false; only webauth is allowed
+    exception_error_page   Settings.hydrus.exception_error_page  # if true, a generic error page will be shown with no exception messages; if false, standard Rails exceptions are shown directly to the user
+    exception_error_panel  Settings.hydrus.exception_error_panel # if true and exception_error_page is also set to true, a collapsible exception error panel is shown on the friendly error page
+    exception_recipients   Settings.hydrus.exception_recipients  # list of email addresses, comma separated, that will be notified when an exception occurs - leave blank for no emails
+    host                   Settings.hydrus.host                  # server host, used in emails
+    start_assembly_wf      Settings.hydrus.start_assembly_wf     # determines if assembly workflow is started when publishing
+
+    # complete list of all workflow objects defined in this environment
+    workflow_object_druids Settings.hydrus.workflow_object_druids
   end
 
-  yaml = load_yaml_config.call('dor_services.yml')['stacks']
+  purl do
+    base_url Settings.purl.base_url
+  end
+
   stacks do
-    document_cache_storage_root(yaml['document_cache_storage_root'])
-    document_cache_host(yaml['document_cache_host'])
-    document_cache_user(yaml['document_cache_user'])
-    local_workspace_root(yaml['local_workspace_root'])
-    storage_root(yaml['storage_root'])
-    host(yaml['host'])
-    user(yaml['user'])
+    document_cache_storage_root Settings.stacks.document_cache_storage_root
+    document_cache_host         Settings.stacks.document_cache_host
+    document_cache_user         Settings.stacks.document_cache_user
+    local_workspace_root        Settings.stacks.local_workspace_root
+    storage_root                Settings.stacks.storage_root
+    host                        Settings.stacks.host
+    user                        Settings.stacks.user
   end
 
 end

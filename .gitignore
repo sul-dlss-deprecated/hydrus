@@ -14,15 +14,7 @@ tmtags
 *.swp
 *.swo
 
-# config files
-config/suri.yml
-config/database.yml
-config/dor_services.yml
-config/fedora.yml
-config/solr.yml
-config/ur_apo_druid.yml
-config/workflow.yml
-config/ssl_certs.yml
+# SSL client certificates
 config/certs/*
 
 ## coverage

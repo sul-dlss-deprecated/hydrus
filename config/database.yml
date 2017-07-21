@@ -9,17 +9,3 @@ test:
   database: db/test.sqlite3
   pool: 5
   timeout: 5000
-
-dortest:
-  adapter: mysql
-  database: ~
-  username: ~
-  password: ~
-  socket: ~
-
-production:
-  adapter: mysql
-  database: ~
-  username: ~
-  password: ~
-  socket: ~

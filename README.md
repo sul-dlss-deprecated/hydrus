@@ -25,9 +25,8 @@ cd hydrus
 bundle install
 
 rake hydra:jetty:config
-rake hydrus:config
 
-# Edit config/*.yml files, adding passwords, etc.
+# Create a config/settings.local.yml file, adding passwords, etc.
 
 rake jetty:start
 

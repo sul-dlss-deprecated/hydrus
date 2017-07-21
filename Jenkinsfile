@@ -1,6 +1,6 @@
 node {
   env.RAILS_ENV = 'test'
-  
+
   lock('hydrus') {
     stage ('Clean') {
       deleteDir()
@@ -25,7 +25,6 @@ node {
       bundle install
       bundle exec rake jetty:clean
       bundle exec rake hydra:jetty:config
-      bundle exec rake hydrus:config
       bundle exec rake db:drop
       bundle exec rake db:migrate
       bundle exec rake db:test:prepare

@@ -1,0 +1,52 @@
+hydrus:
+  show_standard_login:  false   # if true, the user has the option to login via a username/password as well as webauth; if false; only webauth is allowed
+  exception_error_page:   true  # if true, a generic error page will be shown with no exception messages; if false, standard Rails exceptions are shown directly to the user
+  exception_error_panel:  false
+  host: 'hydrus-test.stanford.edu'
+  exception_recipients: ''
+  ur_apo_druid: 'druid:oo000oo0000'
+  workflow_object_druids:
+    - 'druid:oo000oo0099' # hydrusAssemblyWF
+    - 'druid:rs056hz6024' # assemblyWF
+    - 'druid:yp220bx1022' # versioningWF
+
+purl:
+  base_url: 'https://purl-test.stanford.edu/'
+
+workflow:
+  url: 'https://workflow.example.com/workflow'
+
+dor_services:
+  url: 'https://user:password@dor-services.example.com'
+
+stacks:
+  document_cache_storage_root: ~
+  document_cache_host: ~
+  document_cache_user: ~
+  local_workspace_root: ~
+  storage_root: ~
+  host: ~
+  user: ~
+
+solr:
+  url: 'https://solr.example.com/solr/collection'
+
+sdr:
+  url: 'https://sdr.example.com/solr/collection'
+
+suri:
+  url: 'https://sul-lyberservices-test.stanford.edu'
+  user: ~
+  password: ~
+
+fedora:
+  url: 'https://user:password@fedora.example.com:1000/fedora'
+
+# ssl:
+#   cert_file: "<%= Rails.root + 'config/certs/dlss-dev-test.crt' %>"
+#   key_file: "<%= Rails.root + 'config/certs/dlss-dev-test.key' %>"
+#   key_pass: ''
+
+workflow:
+  url: https://sul-lyberservices-dev.stanford.edu/workflow/
+  timeout: 120
