@@ -370,6 +370,8 @@ GEM
       rubyzip (~> 1.1, < 2.0.0)
     rsolr (1.0.13)
       builder (>= 2.1.2)
+    rsolr-ext (1.0.3)
+      rsolr (>= 1.0.2)
     rspec-core (3.1.7)
       rspec-support (~> 3.1.0)
     rspec-expectations (3.1.2)
@@ -509,6 +511,7 @@ DEPENDENCIES
   quiet_assets
   rails (~> 4.2.9)
   rake (~> 11.0)
+  rsolr-ext
   rspec-rails (~> 3.1.0)
   sass-rails (~> 4.0)
   simplecov

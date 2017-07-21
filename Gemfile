@@ -75,3 +75,4 @@ end
 gem 'test-unit'
 
 gem 'honeybadger'
+gem 'rsolr-ext'
