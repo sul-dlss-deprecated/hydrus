@@ -564,7 +564,7 @@ class Hydrus::Collection < Dor::Collection
     end
 
     resp, sdocs = issue_solr_query(h)
-    resp.docs.each do |doc|
+    sdocs.each do |doc|
       pid = doc['identityMetadata_objectId_t'].first unless doc['identityMetadata_objectId_t'].nil?
       toret[pid] = {:solr => doc} if pid
     end

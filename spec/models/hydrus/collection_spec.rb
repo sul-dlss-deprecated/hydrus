@@ -468,7 +468,7 @@ describe Hydrus::Collection, :type => :model do
       it 'should send 1 solr query if there are 99 apos' do
         arr=*(1..99)
         expect(@HC).to receive(:apos_involving_user).and_return(arr)
-        expect(@HC).to receive(:squery_collections_of_apos).exactly(1).times
+        expect(@HC).to receive(:squery_collections_of_apos).exactly(1).times.and_return({})
         @HC.dashboard_hash(@user_foo)
       end
     end
