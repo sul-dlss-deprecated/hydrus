@@ -630,7 +630,7 @@ class Hydrus::Item < Hydrus::GenericObject
   end
 
   def files
-    Hydrus::ObjectFile.find_all_by_pid(pid,:order=>'weight ASC,label ASC,file ASC')
+    Hydrus::ObjectFile.where(pid: pid).order('weight ASC,label ASC,file ASC')
   end
 
   def strip_whitespace
