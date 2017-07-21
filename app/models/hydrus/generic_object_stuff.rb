@@ -135,4 +135,16 @@ module Hydrus::GenericObjectStuff
     return "#{hydrus_class_to_s()} modified: #{fs}"
   end
 
+  def is_item?
+    self.class == Hydrus::Item
+  end
+
+  def is_collection?
+    self.class == Hydrus::Collection
+  end
+
+  def is_apo?
+    false
+  end
+
 end
