@@ -65,7 +65,6 @@ describe ApplicationHelper, :type => :helper do
   end
 
   it "license_image()" do
-    puts license_image('cc-by')
     expect(license_image('cc-by')).to have_selector 'img[@src="/images/licenses/cc_by.png"][@alt="Cc by"]'
     expect(license_image('pddl')).to eq('')
     expect(license_image('none')).to eq('')
