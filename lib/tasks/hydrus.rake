@@ -48,6 +48,15 @@ namespace :hydrus do
 
   end
 
+  desc "Index all DOR defined workflow objects into Hydrus solr instance" 
+  task :index_all_workflows => :environment do
+    # get all workflow objects using risearch (sparql on fedora) since we don't have a direct connection to argo solr
+    model_type = "<#{Dor::WorkflowObject.to_class_uri}>"
+    solr = Dor::SearchService.solr
+    pids = Dor::SearchService.risearch 'select $object from <#ri> where $object ' "<fedora-model:hasModel> #{model_type}", { :limit => nil }
+    pids.each { |pid| solr.add(Dor.find(pid).to_solr, :add_attributes => {:commitWithin => 5000}) }     # index into hydrus solr
+  end
+
   desc "Cleanup file upload temp files"
   task :cleanup_tmp => :environment do
     CarrierWave.clean_cached_files!
