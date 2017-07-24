@@ -653,7 +653,7 @@ describe('Item edit', type: :request, integration: true) do
       # Visit edit page: delete a file.
       # Make corresponding changes in the exp hash.
       i = 1
-      file_url = Hydrus::ObjectFile.find(i).url
+      object_file = Hydrus::ObjectFile.find(i)
       should_visit_edit_page(@hi)
       css_del = "delete_file_#{i}"
       click_link(css_del)
@@ -668,8 +668,8 @@ describe('Item edit', type: :request, integration: true) do
       check_file_info.call(exp)
 
       # Restore the deleted file.
-      restore_upload_file(file_url)
-      expect(File.exists?('public' + file_url)).to eq(true)
+      restore_upload_file(object_file)
+      expect(File.exists?(object_file.current_path)).to eq(true)
     end
   end
 end

@@ -25,7 +25,7 @@ set :linked_files, %w(
 )
 
 # Default value for linked_dirs is []
-set :linked_dirs, %w{log config/certs config/settings tmp/pids tmp/cache tmp/sockets vendor/bundle public/system public/uploads}
+set :linked_dirs, %w{log config/certs config/settings tmp/pids tmp/cache tmp/sockets vendor/bundle public/system public/uploads uploads}
 
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }

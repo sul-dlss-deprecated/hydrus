@@ -24,7 +24,6 @@ RSpec.describe Hydrus::ObjectFile, type: :feature, integration: true do
     files = @hi.files
     expect(files.size).to eq(4)
     file = files.first
-
     file_url = file.url
     full_file_path = file.current_path
     expect(File.exists?(full_file_path)).to be_truthy
@@ -36,7 +35,7 @@ RSpec.describe Hydrus::ObjectFile, type: :feature, integration: true do
     expect(File.exists?(full_file_path)).to be_falsey
 
     # restore original file and stream from fixtures
-    restore_upload_file(file_url)
+    restore_upload_file(file)
     expect(File.exists?(full_file_path)).to be_truthy
   end
 end
