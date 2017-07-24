@@ -23,7 +23,8 @@ Hydrus::Application.configure do
 
 end
 
-Dor::Config.configure do
+require 'dor-services'
+Dor.configure do
   app_version File.read File.join(current_path, '..','VERSION')
 
   fedora do
