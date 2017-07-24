@@ -125,7 +125,6 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.12.2)
-    columnize (0.9.0)
     config (1.4.0)
       activesupport (>= 3.0)
       deep_merge (~> 1.1.1)
@@ -534,4 +533,4 @@ DEPENDENCIES
   whenever (~> 0.9)
 
 BUNDLED WITH
-   1.15.2
+   1.15.3

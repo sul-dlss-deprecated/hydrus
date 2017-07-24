@@ -7,7 +7,6 @@ gem 'rake', '~> 11.0'
 gem 'config'
 # Devise updated for http://blog.plataformatec.com.br/2016/01/improve-remember-me-cookie-expiration-in-devise/
 gem 'devise', '~> 3.5.4'
-gem 'rails-secrets' # Needed until we upgrade to Rails 4.1+
 gem 'jquery-rails'
 gem 'dynamic_form'
 gem 'bootstrap-datepicker-rails'
@@ -27,6 +26,7 @@ gem 'dor-workflow-service'
 gem 'net-http-persistent', '~> 2.9' # https://github.com/sul-dlss/dor-workflow-service/issues/44
 gem 'druid-tools', '~> 0.4.0'
 gem 'hydra-head',  '~> 6.5'
+
 # Use okcomputer to monitor the application
 gem 'okcomputer'
 gem 'sul_chrome', '~> 0.1.0'
