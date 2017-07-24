@@ -6,12 +6,10 @@ module Hydrus::Delegatable
   def setup_delegations(delegations)
     delegations.each do |datastream, delegate_these|
       delegate_these.each do |method_name, is_uniq, *at_fields|
-        h = {:to => datastream}
-        h.merge!(:at => at_fields) if at_fields.size > 0
-        h.merge!(:unique => true)  if is_uniq
-        delegate(method_name, h)
+        h = { datastream: datastream, multiple: !is_uniq }
+        h[:at] = at_fields if at_fields.size > 0
+        has_attributes(method_name, h)
       end
     end
   end
-
 end
