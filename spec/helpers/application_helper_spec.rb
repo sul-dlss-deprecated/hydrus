@@ -124,8 +124,8 @@ describe ApplicationHelper, :type => :helper do
       hi2=Hydrus::Item.find('druid:oo000oo0001')
       expect(helper.title_text(hi)).to eq('Untitled')
       expect(helper.title_text(hi2)).to eq('How Couples Meet and Stay Together')
-      expect(helper.title_link(hi)).to eq('<a href="/items" disable_after_click="true">Untitled</a>')
-      expect(helper.title_link(hi2)).to eq('<a href="/items/druid:oo000oo0001" disable_after_click="true">How Couples Meet and Stay Together</a>')
+      expect(helper.title_link(hi)).to have_selector 'a[href="/items"][disable_after_click="true"]', text: 'Untitled'
+      expect(helper.title_link(hi2)).to have_selector 'a[href="/items/druid:oo000oo0001"][disable_after_click="true"]', text: 'How Couples Meet and Stay Together'
     end
 
   end
