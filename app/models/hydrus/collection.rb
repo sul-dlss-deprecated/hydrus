@@ -295,26 +295,26 @@ class Hydrus::Collection < Dor::Collection
   def send_role_change_email(recipients)
     return if recipients.blank?
     email=HydrusMailer.role_change(:to =>  recipients, :object =>  self)
-    email.deliver unless email.to.blank?
+    email.deliver_now unless email.to.blank?
   end
 
   def send_remove_invitation_email_notification(recipients)
     return if recipients.blank?
     email=HydrusMailer.invitation_removed(:to =>  recipients, :object =>  self)
-    email.deliver unless email.to.blank?
+    email.deliver_now unless email.to.blank?
   end
 
   def send_invitation_email_notification(recipients)
     return if recipients.blank?
     email=HydrusMailer.invitation(:to =>  recipients, :object =>  self)
-    email.deliver unless email.to.blank?
+    email.deliver_now unless email.to.blank?
   end
 
   def send_publish_email_notification(value)
     return if recipients_for_collection_update_emails.blank?
     meth = value ? 'open' : 'close'
     email = HydrusMailer.send("#{meth}_notification", :object => self)
-    email.deliver unless email.to.blank?
+    email.deliver_now unless email.to.blank?
   end
 
   # returns a hash of depositors for this collection that have accepted the terms of deposit for an item in that collection
