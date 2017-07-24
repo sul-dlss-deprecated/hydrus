@@ -1,4 +1,4 @@
-class Hydrus::DescMetadataDS < ActiveFedora::NokogiriDatastream
+class Hydrus::DescMetadataDS < ActiveFedora::OmDatastream
 
   include SolrDocHelper
   include Hydrus::GenericDS
@@ -32,17 +32,17 @@ class Hydrus::DescMetadataDS < ActiveFedora::NokogiriDatastream
         t.roleTerm IA
       end
     end
-    
+
     t.originInfo IANS do
       t.date_range_start :path => 'dateCreated', :attributes => { :point => "start"}
       t.date_range_end :path => 'dateCreated', :attributes => { :point => "end"}
       t.dateCreated IA
       t.dateIssued IA
     end
-    t.typeOfResource IA 
-    
-    t.genre 
-    
+    t.typeOfResource IA
+
+    t.genre
+
     t.abstract IA
     t.preferred_citation :path => 'note',  :attributes => { :type => "preferred citation" }
     t.related_citation   :path => 'note',  :attributes => { :type => "citation/reference" }
@@ -65,7 +65,7 @@ class Hydrus::DescMetadataDS < ActiveFedora::NokogiriDatastream
     t.date_issued(
       :proxy => [:mods, :originInfo,:dateIssued]
       )
-        
+
     t.main_title(
       :proxy => [:mods, :titleInfo, :title],
       :index_as => [:searchable, :displayable]
@@ -100,7 +100,7 @@ class Hydrus::DescMetadataDS < ActiveFedora::NokogiriDatastream
       }
     }
   end
-  
+
   define_template :genre do |xml|
     xml.genre
   end
