@@ -158,7 +158,7 @@ class Hydrus::Item < Hydrus::GenericObject
     t = title()
     identityMetadata.objectLabel = t
     self.label = t
-    dc.title = [t]
+    datastreams['DC'].title = [t]
     # Update object status and advance workflow.
     self.object_status = 'published'
     complete_workflow_step('approve')
