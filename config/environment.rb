@@ -59,7 +59,7 @@ Dor.configure do
 
   hydrus do
     initial_apo_title      'Intial Hydrus APO title'
-    app_workflow           :hydrusAssemblyWF
+    app_workflow           'hydrusAssemblyWF'
     app_workflow_steps     %w(start-deposit submit approve start-assembly)
     ur_apo_druid           Settings.hydrus.ur_apo_druid
     assembly_wf_xml        File.read(File.join(current_path, "assemblyWF_hydrus.xml"))

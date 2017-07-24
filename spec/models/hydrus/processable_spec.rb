@@ -11,7 +11,7 @@ describe Hydrus::Processable, :type => :model do
 
     it "can exercise the method, stubbing out call to WF service" do
       step = 'submit'
-      args = ['dor', @go.pid, kind_of(Symbol), step, 'completed']
+      args = ['dor', @go.pid, 'hydrusAssemblyWF', step, 'completed']
       expect(Dor::WorkflowService).to receive(:update_workflow_status).with(*args)
       allow(@go).to receive_message_chain(:workflows, :workflow_step_is_done).and_return(false)
       expect(@go).to receive(:workflows_content_is_stale)
