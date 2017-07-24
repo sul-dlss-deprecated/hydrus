@@ -91,10 +91,10 @@ class Hydrus::Collection < Dor::Collection
       id=solr_doc['id']
       title=self.class.object_title(solr_doc)
       num_files=(get_num_files ? Hydrus::ObjectFile.count(:conditions=>['pid=?',id]) : -1)
-      status=self.class.array_to_single(solr_doc['hydrusProperties_object_status_t'])
-      object_type=self.class.array_to_single(solr_doc['mods_typeOfResource_t'])
-      depositor=self.class.array_to_single(solr_doc['item_depositor_person_identifier_display'])
-      create_date=solr_doc['system_create_dt']
+      status=self.class.array_to_single(solr_doc['object_status_sim'])
+      object_type=self.class.array_to_single(solr_doc['mods_typeOfResource_ssim'])
+      depositor=self.class.array_to_single(solr_doc['item_depositor_person_identifier_ssm'])
+      create_date=solr_doc['system_create_dtsi']
       items << {:pid=>id,:num_files=>num_files,:object_type=>object_type,:title=>title,:status_label=>status,:item_depositor_id=>depositor,:create_date=>create_date}
     end
     return items
@@ -565,7 +565,7 @@ class Hydrus::Collection < Dor::Collection
 
     resp, sdocs = issue_solr_query(h)
     sdocs.each do |doc|
-      pid = doc['identityMetadata_objectId_t'].first unless doc['identityMetadata_objectId_t'].nil?
+      pid = doc['objectId_ssim'].first unless doc['objectId_ssim'].nil?
       toret[pid] = {:solr => doc} if pid
     end
 
@@ -584,7 +584,7 @@ class Hydrus::Collection < Dor::Collection
       hash[:pid]=coll_dru
       hash[:item_counts]=stats[coll_dru] || {}
       hash[:title]=self.object_title(solr[coll_dru][:solr])
-      hash[:roles]=Hydrus::Responsible.roles_of_person current_user.to_s, solr[coll_dru][:solr]['is_governed_by_s'].first.gsub('info:fedora/','')
+      hash[:roles]=Hydrus::Responsible.roles_of_person current_user.to_s, solr[coll_dru][:solr]['is_governed_by_ssim'].first.gsub('info:fedora/','')
       count=0
       stats[coll_dru].keys.each do |key|
         count += stats[coll_dru][key].to_i
@@ -598,8 +598,8 @@ class Hydrus::Collection < Dor::Collection
 
   # given a solr document, try a few places to get the title, starting with objectlabel, then dc_title, and finally just untitled
   def self.object_title(solr_doc)
-    mods_title=solr_doc['mods_titleInfo_title_t']
-    dc_title=solr_doc['dc_title_t']
+    mods_title=solr_doc['titleInfo_title_ssm']
+    dc_title=solr_doc['title_tesim']
     if !mods_title.nil?
       return mods_title.first
     elsif !dc_title.nil?

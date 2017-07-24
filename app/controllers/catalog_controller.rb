@@ -52,8 +52,8 @@ class CatalogController < ApplicationController
     # :show may be set to false if you don't want the facet to be drawn in the
     # facet bar
     # config.add_facet_field 'object_profile_display', :label => 'Object Profile'
-    # config.add_facet_field 'is_governed_by_s', :label => 'APOs'
-    # config.add_facet_field 'conforms_to_s', :label => 'Model Type (?)'
+    # config.add_facet_field 'is_governed_by_ssim', :label => 'APOs'
+    # config.add_facet_field 'conforms_to_ssim', :label => 'Model Type (?)'
 
     # Have BL send all facet field names to Solr, which has been the default
     # previously. Simply remove these lines if you'd rather use Solr request
@@ -117,10 +117,10 @@ class CatalogController < ApplicationController
     # Issue some SOLR queries to get Collections involving the user,
     # along with counts of Items in those Collections, broken down by
     # their workflow status.
-    
+
     if current_user
       @collections = Hydrus::Collection.collections_hash(current_user)
-    
+
       # administrators get a full list of collections, but not as detailed to save on a big SOLR query
       @all_collections = Hydrus::Collection.dashboard_hash if Hydrus::Authorizable.can_act_as_administrator(current_user)
     end
@@ -134,16 +134,16 @@ class CatalogController < ApplicationController
     # Issue some SOLR queries to get Collections involving the user,
     # along with counts of Items in those Collections, broken down by
     # their workflow status.
-    
+
     if current_user
       @collections = Hydrus::Collection.collections_hash(current_user)
-    
+
       # administrators get a full list of collections, but not as detailed to save on a big SOLR query
       @all_collections = Hydrus::Collection.dashboard_hash if Hydrus::Authorizable.can_act_as_administrator(current_user)
     end
-    
+
     super
-    
+
   end
 
   private
@@ -155,7 +155,7 @@ class CatalogController < ApplicationController
       redirect_to(new_user_session_path)
     end
   end
-  
+
   def has_search_parameters?
     true
   end

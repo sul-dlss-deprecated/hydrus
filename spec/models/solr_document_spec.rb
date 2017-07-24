@@ -24,15 +24,15 @@ describe SolrDocument, :type => :model do
 
   it "can exercise simple getters" do
     h = {
-      'main_title_t'                => 'foo title',
-      'identityMetadata_objectId_t' => 'foo:pid',
+      'main_title_ssm'                => 'foo title',
+      'objectId_ssim' => 'foo:pid',
       'has_model_ssim'                 => 'info:fedora/afmodel:Hydrus_Item',
-      'object_status_t'             => 'awaiting_approval',
-      "roleMetadata_item_depositor_person_identifier_t" => 'foo_user',
+      'object_status_sim'             => 'awaiting_approval',
+      "item_depositor_person_identifier_ssm" => 'foo_user',
     }
     sdoc = SolrDocument.new h
-    expect(sdoc.main_title).to    eq(h['main_title_t'])
-    expect(sdoc.pid).to           eq(h['identityMetadata_objectId_t'])
+    expect(sdoc.main_title).to    eq(h['main_title_ssm'])
+    expect(sdoc.pid).to           eq(h['objectId_ssim'])
     expect(sdoc.object_type).to   eq('item')
     expect(sdoc.object_status).to eq('waiting for approval')
     expect(sdoc.depositor).to     eq('foo_user')
