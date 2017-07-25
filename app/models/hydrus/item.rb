@@ -90,7 +90,7 @@ class Hydrus::Item < Hydrus::GenericObject
   # the calling code can pass in the needed value.
   def self.create(collection_pid, user, itype = Hydrus::Application.config.default_item_type)
     # Make sure user can create items in the parent collection.
-    g = Hydrus::Collection.find(collection_pid)
+    coll = Hydrus::Collection.find(collection_pid)
     raise "#{cannot_do_message(:create)}\nCollection '#{collection_pid}' is not open" unless coll.is_open()
     raise "#{cannot_do_message(:create)}\nUser '#{user}' cannot create items in #{coll} #{collection_pid} according to APO #{coll.apo.pid}" unless Hydrus::Authorizable.can_create_items_in(user, coll)
     # Create the object, with the correct model.
