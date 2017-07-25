@@ -30,6 +30,8 @@ class Hydrus::Item < Hydrus::GenericObject
   validate  :check_visibility_not_reduced
   validate  :has_specified_a_valid_date,          :if => :should_validate
 
+  belongs_to :collection, property: :is_member_of_collection, class_name: 'Hydrus::Collection'
+
   # During subsequent versions the user is allowed to change the license,
   # but only if the new version is designated as a major version change.
   def check_version_if_license_changed
@@ -368,11 +370,6 @@ class Hydrus::Item < Hydrus::GenericObject
   # Returns true only if the Item is unpublished and is on the first version.
   def is_destroyable
     return not(is_published) && is_initial_version
-  end
-
-  # Returns the Item's Collection.
-  def collection
-    @collection ||= collections.first
   end
 
   def requires_human_approval
