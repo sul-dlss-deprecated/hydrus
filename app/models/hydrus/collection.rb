@@ -65,12 +65,17 @@ class Hydrus::Collection < Dor::Collection
   #     during Hydrus remediations.
   #   - The :no_super is used to prevent the super() call during unit tests.
   def save(opts = {})
-    unless opts[:is_remediation]
-      self.last_modify_time = HyTime.now_datetime
-      log_editing_events() unless opts[:no_edit_logging]
+    if new_record?
+      # dor-services calls save before any metadata is applied, so don't create a log
+      super(validate: false) unless opts[:no_super]
+    else
+      unless opts[:is_remediation]
+        self.last_modify_time = HyTime.now_datetime
+        log_editing_events() unless opts[:no_edit_logging]
+      end
+      publish_metadata() if is_published && is_open
+      super() unless opts[:no_super]
     end
-    publish_metadata() if is_published && is_open
-    super() unless opts[:no_super]
   end
 
   # get all of the items in this collection
