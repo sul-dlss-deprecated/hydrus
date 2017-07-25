@@ -697,7 +697,7 @@ describe("Item create", :type => :request, :integration => true) do
       #   - with an uploaded file
       #   - and a corresponding entry in DB table
       expect(Dir.glob(dir + "/*").size).to eq(1)
-      expect(Hydrus::ObjectFile.find_all_by_pid(pid).size).to eq(1)
+      expect(Hydrus::ObjectFile.where(pid: pid).size).to eq(1)
       # Delete the Item.
       expect(hi.is_destroyable).to eq(true)
       first(:link, "Discard this item").click
@@ -713,7 +713,7 @@ describe("Item create", :type => :request, :integration => true) do
       #   - with no upload directory
       #   - and no DB entries
       expect(File.directory?(dir)).to eq(false)
-      expect(Hydrus::ObjectFile.find_all_by_pid(pid).size).to eq(0)
+      expect(Hydrus::ObjectFile.where(pid: pid).size).to eq(0)
     end
 
   end

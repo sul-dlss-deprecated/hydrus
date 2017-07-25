@@ -7,7 +7,7 @@ describe Hydrus::ObjectFile, :type => :feature, :integration=>true do
 
   it "should find four files associated with the first item and it should grab the url of a given file" do
     pid = 'druid:oo000oo0001'
-    files = Hydrus::ObjectFile.find_all_by_pid(pid)
+    files = Hydrus::ObjectFile.where(pid: pid)
     expect(files.size).to eq(4)
     f = files[0]
     exp_url = '/uploads/oo/000/oo/0001/oo000oo0001/content/pinocchio.htm'
