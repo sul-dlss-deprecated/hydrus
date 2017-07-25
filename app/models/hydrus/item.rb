@@ -286,19 +286,19 @@ class Hydrus::Item < Hydrus::GenericObject
   def send_new_deposit_email_notification
     return if recipients_for_new_deposit_emails.blank?
     email = HydrusMailer.send("new_deposit", :object => self)
-    email.deliver unless email.to.blank?
+    email.deliver_now unless email.to.blank?
   end
 
   def send_item_deposit_email_notification
     return if recipients_for_item_deposit_emails.blank?
     email = HydrusMailer.send("item_deposit", :object => self)
-    email.deliver unless email.to.blank?
+    email.deliver_now unless email.to.blank?
   end
 
   def send_deposit_review_email_notification
     return if recipients_for_review_deposit_emails.blank?
     email = HydrusMailer.send("new_item_for_review", :object => self)
-    email.deliver unless email.to.blank?
+    email.deliver_now unless email.to.blank?
   end
 
   # get the friendly display name for the current item type
