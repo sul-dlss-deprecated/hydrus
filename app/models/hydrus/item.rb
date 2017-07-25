@@ -5,7 +5,6 @@ class Hydrus::Item < Hydrus::GenericObject
 
   REQUIRED_FIELDS = [:title, :abstract, :contact, :keywords, :version_description, :date_created]
 
-  belongs_to :collection, property: :isMemberOfCollection
   after_validation :strip_whitespace
   attr_accessor :dates
   validates :title,               :not_empty => true, :if => :should_validate
@@ -372,7 +371,7 @@ class Hydrus::Item < Hydrus::GenericObject
 
   # Returns the Item's Collection.
   def collection
-    @collection ||= collections.first       # Get all collections.
+    @collection ||= collections.first
   end
 
   def requires_human_approval
