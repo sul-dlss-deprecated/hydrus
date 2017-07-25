@@ -27,7 +27,7 @@ describe SolrDocument, :type => :model do
       'main_title_ssm'                => 'foo title',
       'objectId_ssim' => 'foo:pid',
       'has_model_ssim'                 => 'info:fedora/afmodel:Hydrus_Item',
-      'object_status_sim'             => 'awaiting_approval',
+      'object_status_ssim'             => 'awaiting_approval',
       "item_depositor_person_identifier_ssm" => 'foo_user',
     }
     sdoc = SolrDocument.new h

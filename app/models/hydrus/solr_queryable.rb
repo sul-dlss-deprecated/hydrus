@@ -150,7 +150,7 @@ module Hydrus::SolrQueryable
       :rows          => 0,
       :fl            => '',
       :facet         => true,
-      :'facet.pivot' => 'is_member_of_collection_ssim,object_status_sim',
+      :'facet.pivot' => 'is_member_of_collection_ssim,object_status_ssim',
       :q             => '*',
       :fq            => [ %Q<is_member_of_collection_ssim:(#{imo})> ],
     }
