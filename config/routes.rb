@@ -59,6 +59,6 @@ Rails.application.routes.draw do
     get '/file/:id/:filename' => 'object_files#show', :as => 'file_upload'
   end
 
-   get '/404', :to => "exceptions#render_404"
-   get '/500', :to => "exceptions#render_500"
+  get '/404', to: 'exceptions#render_404'
+  get '/500', to: 'exceptions#render_500'
 end

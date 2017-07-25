@@ -5,7 +5,6 @@ require_relative 'application'
 Rails.application.initialize!
 
 Hydrus::Application.configure do
-
   # file attributes by mimetype, including defaults, to use when generating content metadata
   config.cm_file_attributes = {
     'default' => { publish: 'yes', preserve: 'yes', shelve: 'yes' }

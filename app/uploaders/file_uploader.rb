@@ -47,7 +47,7 @@ class FileUploader < CarrierWave::Uploader::Base
   def base_dir
     File.join(Rails.root, Settings.hydrus.file_upload_path, DruidTools::Druid.new(model.pid).path)
   end
-    
+
   # Set the directory where uploaded files will be stored.
   def store_dir
     File.join(base_dir, 'content')
@@ -55,7 +55,7 @@ class FileUploader < CarrierWave::Uploader::Base
 
   # temp directory where files are stored before they are uploaded
   def cache_dir
-    File.join(Rails.root,'tmp')
+    File.join(Rails.root, Settings.hydrus.file_upload_path, 'tmp')
   end
 
   # Provide a default URL as a default if there hasn't been a file uploaded:

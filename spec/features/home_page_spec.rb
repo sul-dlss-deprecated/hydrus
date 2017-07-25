@@ -69,7 +69,7 @@ RSpec.describe 'Home page', type: :request, integration: true do
 
   it 'breadcrumbs should not be displayed' do
     # Logged out
-    logout
+    sign_out
     visit root_path
     expect(page).not_to have_css(@breadcrumbs)
   end

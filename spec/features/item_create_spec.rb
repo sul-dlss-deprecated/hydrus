@@ -125,7 +125,6 @@ describe('Item create', type: :request, integration: true) do
     f.file = Tempfile.new('mock_HydrusObjectFile_')
     f.save
     click_button(@buttons[:save])
-
     # confirm validation message is shown and publish button is not available
     expect(find(@div_alert)).to have_content(@notices[:save])
     expect(find(@div_alert)).to have_content('Contributors must be entered')

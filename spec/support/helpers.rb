@@ -220,7 +220,7 @@ end
 # Helper method to restore a file to the uploads directory
 # after it was deleted in a integration test.
 def restore_upload_file(object_file)
-   src = File.join('spec/fixtures/files', DruidTools::Druid.new(object_file.pid).id, object_file.filename)
-   dst = object_file.current_path
-   FileUtils.cp(src, dst)
+  src = File.join('spec/fixtures/files', DruidTools::Druid.new(object_file.pid).id, object_file.filename)
+  dst = object_file.current_path
+  FileUtils.cp(src, dst)
 end

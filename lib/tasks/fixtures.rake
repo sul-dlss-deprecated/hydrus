@@ -97,7 +97,7 @@ namespace :hydrus do
     end
   end
 
-  desc "reload test uploaded files to upload directory"
+  desc 'reload test uploaded files to upload directory'
   task :refresh_upload_files do
     # Copies fixture files from source control to the app's public area:
     #   source: spec/fixtures/files/DRUID/*
@@ -119,7 +119,7 @@ namespace :hydrus do
     end
   end
 
-  desc "clear uploaded files upload directory"
+  desc 'clear uploaded files upload directory'
   task :clear_upload_files do
     puts 'clearing upload files directory'
     require File.expand_path('config/environment')

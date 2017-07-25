@@ -67,8 +67,8 @@ module Hydrus::Contentable
   end
 
   def base_file_directory
-    file_object = Hydrus::ObjectFile.new(:pid=>DruidTools::Druid.new(pid).druid)
-    file_location = File.join(file_object.file.base_dir)
+    file_object = Hydrus::ObjectFile.new(pid: DruidTools::Druid.new(pid).druid)
+    File.join(file_object.file.base_dir)
   end
 
   def content_directory

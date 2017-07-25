@@ -10,9 +10,9 @@ RSpec.describe Hydrus::ObjectFile, type: :feature, integration: true do
     it 'finds four files associated with the first item and it grabs the url of a given file' do
       expect(files.size).to eq(4)
       f = files[0]
-      exp_url = '/uploads/bb/123/bb/1234/bb123bb1234/content/pinocchio.htm'
+      exp_url = '/file/druid:bb123bb1234/pinocchio.htm'
       expect(f.url).to eq(exp_url)
-      expect(f.current_path).to eq("#{Rails.root}/public#{exp_url}")
+      expect(f.current_path).to eq("#{Rails.root}/uploads/bb/123/bb/1234/bb123bb1234/content/pinocchio.htm")
       expect(files[1].filename).to eq(%q{pinocchio characters tc in file name.pdf})
       expect(files[1].size).to be > 0
     end
@@ -24,7 +24,6 @@ RSpec.describe Hydrus::ObjectFile, type: :feature, integration: true do
     files = @hi.files
     expect(files.size).to eq(4)
     file = files.first
-    file_url = file.url
     full_file_path = file.current_path
     expect(File.exists?(full_file_path)).to be_truthy
 
