@@ -7,16 +7,21 @@ describe Hydrus::Collection, :type => :model do
   end
 
   describe "save()" do
-    it "should invoke log_editing_events() if no_edit_logging is false" do
-      expect(@hc).to receive(:log_editing_events).once
-      expect(@hc).to receive(:publish_metadata).once
-      allow(@hc).to receive('is_collection?').and_return(true)
-      allow(@hc).to receive(:is_published).and_return(true)
-      allow(@hc).to receive(:is_open).and_return(true)
-      @hc.save(:no_super => true)
+    context "on an existing object when no_edit_logging is false" do
+      before do
+        allow(@hc).to receive('is_collection?').and_return(true)
+        allow(@hc).to receive(:is_published).and_return(true)
+        allow(@hc).to receive(:is_open).and_return(true)
+        allow(@hc).to receive(:new_record?).and_return(false)
+      end
+      it "invokes log_editing_events()" do
+        expect(@hc).to receive(:log_editing_events).once
+        expect(@hc).to receive(:publish_metadata).once
+        @hc.save(:no_super => true)
+      end
     end
-
   end
+
   describe "open() and close()" do
 
     # More substantive testing is done at integration level.
