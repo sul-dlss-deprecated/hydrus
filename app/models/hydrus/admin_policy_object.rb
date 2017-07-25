@@ -62,12 +62,6 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
     super
   end
 
-  # Overriding this to prevent dor-services from casting all Hydrus::AdminPolicyObjects
-  # to Dor::AdminPolicyObjects
-  def adapt_to_cmodel
-    self
-  end
-
   def identityMetadata
     if defined?(super)
       super
