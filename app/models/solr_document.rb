@@ -53,7 +53,7 @@ class SolrDocument
 
   def object_status
     typ    = object_type.to_sym
-    status = get('object_status_sim') # stored?
+    status = get('object_status_ssim')
     return Hydrus::GenericObject.status_label(typ, status)
   end
 
