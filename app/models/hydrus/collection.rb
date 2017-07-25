@@ -6,6 +6,8 @@ class Hydrus::Collection < Dor::Collection
 
   before_save :save_apo
 
+  # Override Dor::Governable so that we look for Hydrus::AdminPolicyObjects
+  belongs_to :admin_policy_object, property: :is_governed_by, class_name: 'Hydrus::AdminPolicyObject'
   REQUIRED_FIELDS = [:title, :abstract, :contact]
 
   before_validation :remove_values_for_associated_attribute_with_value_none
