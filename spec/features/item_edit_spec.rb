@@ -62,7 +62,7 @@ describe("Item edit", :type => :request, :integration => true) do
     expect(@hi.contact).to  eq(ni.contact)
     expect(@hi.keywords).to eq(ni.keywords)
   end
-  
+
   describe "dates" do
     it 'should edit a single date' do
       # Visit edit page.
@@ -70,7 +70,7 @@ describe("Item edit", :type => :request, :integration => true) do
       should_visit_edit_page(@hi)
       date_val = '2004'
       expect(find_field("hydrus_item[dates[date_created]]").value).not_to include(date_val)
-    
+
       # Submit some changes.
       fill_in("hydrus_item[dates[date_created]]", :with => date_val)
       choose("hydrus_item_dates_date_type_single")
@@ -85,7 +85,7 @@ describe("Item edit", :type => :request, :integration => true) do
       expect(@hi.descMetadata.originInfo.dateCreated.nodeset.first['keyDate']).to eq('yes')
       expect(@hi.descMetadata.originInfo.dateCreated.nodeset.first['encoding']).to eq('w3cdtf')
       expect(@hi.descMetadata.originInfo.dateCreated.nodeset.first['qualifier']).to eq('approximate')
-      
+
       #check for duplicate nodes hannah reported
       expect(@hi.descMetadata.originInfo.length).to eq(1)
     end
@@ -96,7 +96,7 @@ describe("Item edit", :type => :request, :integration => true) do
       date_val = '2004'
       date_val_end = '2005'
       expect(find_field("hydrus_item[dates[date_start]]").value).not_to include(date_val)
-    
+
       # Submit some changes.
       fill_in("hydrus_item[dates[date_start]]", :with => date_val)
       check "hydrus_item_dates_date_range_start_approximate"
@@ -117,7 +117,7 @@ describe("Item edit", :type => :request, :integration => true) do
       expect(@hi.descMetadata.originInfo.date_range_end.nodeset.first['encoding']).to eq('w3cdtf')
     end
   end
-  
+
   describe "contributors" do
 
     before(:each) do
@@ -655,7 +655,7 @@ describe("Item edit", :type => :request, :integration => true) do
           expect(hof.get_file_info).to eq(fi)
         end
         # Check total N of ObjectFiles.
-        expect(Hydrus::ObjectFile.find_all_by_pid(@hi.pid).size).to eq(exp.keys.size)
+        expect(Hydrus::ObjectFile.where(pid: @hi.pid).size).to eq(exp.keys.size)
       }
 
       # Login.
