@@ -32,15 +32,15 @@ class Hydrus::GenericObject < Dor::Item
   #     during Hydrus remediations.
   #   - The :no_super is used to prevent the super() call during unit tests.
   def save(opts = {})
-    # beautify_datastream(:descMetadata) unless opts[:no_beautify]
-    unless opts[:is_remediation]
-      self.last_modify_time = HyTime.now_datetime
-      log_editing_events() unless opts[:no_edit_logging]
-    end
     if new_record?
       # dor-services calls save before any metadata is applied, so don't validate
       super(validate: false) unless opts[:no_super]
     else
+      # beautify_datastream(:descMetadata) unless opts[:no_beautify]
+      unless opts[:is_remediation]
+        self.last_modify_time = HyTime.now_datetime
+        log_editing_events() unless opts[:no_edit_logging]
+      end
       super() unless opts[:no_super]
     end
   end
