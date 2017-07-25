@@ -1,15 +1,9 @@
-[![Build Status](https://travis-ci.org/sul-dlss/hydrus.png?branch=master)](https://travis-ci.org/sul-dlss/hydrus)
-
 # Hydrus
 
 ## Overview
 
 A Hydra application enabling deposit of digital objects into the Stanford
 Digital Repository for preservation and access.
-
-## Dependencies on non-public code
-
-* Stanford's sul-chrome gem.
 
 ## Setting up your environment
 
