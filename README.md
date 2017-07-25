@@ -7,37 +7,40 @@ Digital Repository for preservation and access.
 
 ## Setting up your environment
 
+First, you need a Java runtime so you can have a local Solr and Fedora instance for development/testing.
+One way to install Solr/Fedora is by using hydra-jetty, which is what the instructions below assume
+
 ```bash
 rvm install 2.3.4
 
 brew install exiftool
 
-git clone git@github.com:sul-dlss/hydrus.git
+git clone https://github.com/sul-dlss/hydrus.git
 
 cd hydrus
 
 bundle install
 
-rake hydra:jetty:config
+rake jetty:clean # download hydra-jetty
+rake hydra:jetty:config # configure hydra-jetty
 
-# Create a config/settings.local.yml file, adding passwords, etc.
+# Create a config/settings.local.yml file, adding passwords, etc.  Talk to another developer to see what is needed here.
 
-rake jetty:start
+rake jetty:start # start your local solr/fedora
 
 rake db:migrate
 rake db:test:prepare
 rake db:migrate RAILS_ENV=test
 
-rake hydrus:refreshfix
+rake hydrus:refreshfix # load all fedora and database fixtures, and get sample uploaded files
 rake hydrus:refreshfix RAILS_ENV=test
-rake hydrus:refresh_upload_files
 ```
 
 ## Running the application
 
-Start the Jetty server:
+Assuming you are using hydra-jetty for solr/fedora, start the Jetty server:
 
-```
+```bash
 rake jetty:start
 ```
 
@@ -77,9 +80,9 @@ Also see:
 
 ```bash
 # Preferred
-$ rake
-
-# Run all the tests without automatically starting jetty.
+$ rake # Run all tests. 
+  
+# Run all the tests including starting/stopping jetty and refreshing all fixtures.
 $ rake local_ci
 
 # Coverage reports
