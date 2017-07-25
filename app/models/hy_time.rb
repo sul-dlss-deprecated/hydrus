@@ -87,9 +87,12 @@ module HyTime
 
     # Return string in the requested format, after adjusting to
     # the local timezone if caller requested a display format.
-    f = opts[:format] || :datetime
-    dt = dt.in_time_zone(LOCAL_TIMEZONE) if f.to_s[-8..-1] == '_display'
-    return dt.strftime(DT_FORMATS[f])
+    if f = opts[:format]
+      dt = dt.in_time_zone(LOCAL_TIMEZONE) if f.to_s[-8..-1] == '_display'
+      dt.strftime(DT_FORMATS[f])
+    else
+      dt.utc.strftime(DT_FORMATS[:datetime])
+    end
   end
 
   # For each Hydrus datetime format, generate two HyTime methods, which
