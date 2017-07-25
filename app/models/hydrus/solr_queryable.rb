@@ -172,7 +172,7 @@ module Hydrus::SolrQueryable
     fields = {
       'objectId_ssim' => :pid,
       'has_model_ssim'                 => :object_type,
-      'object_version_teim'            => :object_version,
+      'object_version_ssim'            => :object_version,
     }
     h = squery_all_hydrus_objects(models, :fields => fields.keys)
     # Run query and return either a list of PIDs if that's all the caller wanted.
