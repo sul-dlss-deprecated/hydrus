@@ -37,7 +37,12 @@ class Hydrus::GenericObject < Dor::Item
       self.last_modify_time = HyTime.now_datetime
       log_editing_events() unless opts[:no_edit_logging]
     end
-    super() unless opts[:no_super]
+    if new_record?
+      # dor-services calls save before any metadata is applied, so don't validate
+      super(validate: false) unless opts[:no_super]
+    else
+      super() unless opts[:no_super]
+    end
   end
 
   # Takes a datastream name, such as :descMetadata or 'rightsMetadata'.
