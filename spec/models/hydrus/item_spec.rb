@@ -20,7 +20,7 @@ describe Hydrus::Item, :type => :model do
     END
     @workflow_xml = noko_doc(@workflow_xml)
   end
-  
+
   describe "#files" do
     subject { Hydrus::Item.new }
 
@@ -122,12 +122,12 @@ describe Hydrus::Item, :type => :model do
         <titleInfo>
           <title>Commencement addresses</title>
         </titleInfo>
-  
+
         <abstract>Transcripts of addresses delivered at Stanford commencement ceremonies.</abstract>
         <note type="preferred citation" displayLabel="Preferred Citation">Stanford University Commencement Collection (1892- ). Stanford Digital Repository. Available at http://purl.stanford.edu/mp840zw9344.</note>
         <note type="citation/reference" displayLabel="Related Publication"/>
         <note type="contact" displayLabel="Contact">archivesref@stanford.edu</note>
-  
+
         <relatedItem>
           <titleInfo>
             <title>Finding Aid</title>
@@ -136,7 +136,7 @@ describe Hydrus::Item, :type => :model do
             <url>http://www.oac.cdlib.org/findaid/ark:/13030/c8vq322c</url>
           </location>
         </relatedItem><relatedItem><titleInfo><title>List of commencement speakers</title></titleInfo><location><url>http://library.stanford.edu/spc/university-archives/stanford-history/commencement-addresses</url></location></relatedItem>
-      <name type="corporate"><namePart>Stanford University.</namePart><role><roleTerm authority="marcrelator" type="text">Sponsor</roleTerm></role></name><subject><topic>Stanford University--Commencement</topic></subject><subject><topic>Stanford University--Invited speakers</topic></subject></mods>      
+      <name type="corporate"><namePart>Stanford University.</namePart><role><roleTerm authority="marcrelator" type="text">Sponsor</roleTerm></role></name><subject><topic>Stanford University--Commencement</topic></subject><subject><topic>Stanford University--Invited speakers</topic></subject></mods>
       eos
       allow(@hi).to receive(:descMetadata).and_return(Hydrus::DescMetadataDS.from_xml(@xml))
       expect(@hi.dates[:date_created_approximate]).to be_falsey
@@ -145,8 +145,8 @@ describe Hydrus::Item, :type => :model do
       @xml = <<-eos
         <mods xmlns="http://www.loc.gov/mods/v3">
           <originInfo>
-          <dateCreated encoding="w3cdtf" point="start" keyDate="yes">2005-04</dateCreated> 
-          <dateCreated encoding="w3cdtf" point="end">2005-05</dateCreated> 
+          <dateCreated encoding="w3cdtf" point="start" keyDate="yes">2005-04</dateCreated>
+          <dateCreated encoding="w3cdtf" point="end">2005-05</dateCreated>
           </originInfo>
         </mods>
       eos
@@ -171,8 +171,8 @@ describe Hydrus::Item, :type => :model do
       @xml = <<-eos
         <mods xmlns="http://www.loc.gov/mods/v3">
           <originInfo>
-          <dateCreated encoding="w3cdtf" point="start" keyDate="yes" qualifier="approximate">2005-04</dateCreated> 
-          <dateCreated encoding="w3cdtf" point="end">2005-05</dateCreated> 
+          <dateCreated encoding="w3cdtf" point="start" keyDate="yes" qualifier="approximate">2005-04</dateCreated>
+          <dateCreated encoding="w3cdtf" point="end">2005-05</dateCreated>
           </originInfo>
         </mods>
       eos
@@ -231,54 +231,54 @@ describe Hydrus::Item, :type => :model do
     end
   end
   describe 'date_display' do
-    it 'should render a date range with approximate dates' do 
+    it 'should render a date range with approximate dates' do
       @xml = <<-eos
         <mods xmlns="http://www.loc.gov/mods/v3">
           <originInfo>
-          <dateCreated encoding="w3cdtf" point="start" keyDate="yes" qualifier="approximate">2005-04</dateCreated> 
-          <dateCreated encoding="w3cdtf" point="end" qualifier="approximate">2005-05</dateCreated> 
+          <dateCreated encoding="w3cdtf" point="start" keyDate="yes" qualifier="approximate">2005-04</dateCreated>
+          <dateCreated encoding="w3cdtf" point="end" qualifier="approximate">2005-05</dateCreated>
           </originInfo>
         </mods>
       eos
       allow(@hi).to receive(:descMetadata).and_return(Hydrus::DescMetadataDS.from_xml(@xml))
       expect(@hi.date_display).to eq('[ca. 2005-04 - ca. 2005-05]')
     end
-    it 'should render a date range with one approximate date' do 
+    it 'should render a date range with one approximate date' do
       @xml = <<-eos
         <mods xmlns="http://www.loc.gov/mods/v3">
           <originInfo>
-          <dateCreated encoding="w3cdtf" point="start" keyDate="yes" qualifier="approximate">2005-04</dateCreated> 
-          <dateCreated encoding="w3cdtf" point="end">2005-05</dateCreated> 
+          <dateCreated encoding="w3cdtf" point="start" keyDate="yes" qualifier="approximate">2005-04</dateCreated>
+          <dateCreated encoding="w3cdtf" point="end">2005-05</dateCreated>
           </originInfo>
         </mods>
       eos
       allow(@hi).to receive(:descMetadata).and_return(Hydrus::DescMetadataDS.from_xml(@xml))
       expect(@hi.date_display).to eq('[ca. 2005-04] to 2005-05')
     end
-    it 'should render a date range with approximate dates' do 
+    it 'should render a date range with approximate dates' do
       @xml = <<-eos
         <mods xmlns="http://www.loc.gov/mods/v3">
           <originInfo>
-          <dateCreated encoding="w3cdtf" keyDate="yes" qualifier="approximate">2005-04</dateCreated> 
+          <dateCreated encoding="w3cdtf" keyDate="yes" qualifier="approximate">2005-04</dateCreated>
           </originInfo>
         </mods>
       eos
       allow(@hi).to receive(:descMetadata).and_return(Hydrus::DescMetadataDS.from_xml(@xml))
       expect(@hi.date_display).to eq('[ca. 2005-04]')
     end
-    it 'should work with no date present' do 
+    it 'should work with no date present' do
       @xml = <<-eos
         <mods xmlns="http://www.loc.gov/mods/v3">
           <originInfo>
-          <dateCreated></dateCreated> 
+          <dateCreated></dateCreated>
           </originInfo>
         </mods>
       eos
       allow(@hi).to receive(:descMetadata).and_return(Hydrus::DescMetadataDS.from_xml(@xml))
       expect(@hi.date_display).to eq('')
     end
-    
-    
+
+
   end
   describe "roleMetadata in the item", :integration=>true do
     subject { Hydrus::Item.find('druid:oo000oo0001') }
@@ -369,7 +369,7 @@ describe Hydrus::Item, :type => :model do
   describe "embarg_visib=()" do
 
     before(:each) do
-      @edate = '2012-02-28T08:00:00Z'
+      @edate = '2012-02-28T08:00:00+00:00'
       # This enables the tests to run in a timezone other than Pacific.
       allow(HyTime).to receive(:datetime).with("2012-02-28", :from_localzone => true).and_return(@edate)
       # XML snippets for various <access> nodes.
@@ -454,7 +454,7 @@ describe Hydrus::Item, :type => :model do
       end
 
       describe "setter: with valid date" do
-        let(:rd_dt) { "2012-08-30T08:00:00Z" }
+        let(:rd_dt) { "2012-08-30T08:00:00+00:00" }
         before do
           # This enables the tests to run in a timezone other than Pacific.
           allow(HyTime).to receive(:datetime).with("2012-08-30", :from_localzone => true).and_return(rd_dt)
@@ -680,7 +680,7 @@ describe Hydrus::Item, :type => :model do
       allow(@hi).to receive(:date_created).and_return('2011')
       allow(@hi).to receive(:single_date?).and_return true
       allow(@hi).to receive_message_chain([:collection, :embargo_option]).and_return("varies")
-      if not @hi.valid? 
+      if not @hi.valid?
         msg=@hi.errors.messages.map { |field, error|
         "#{field.to_s.humanize.capitalize} #{error.join(', ')}"
         }
@@ -955,7 +955,7 @@ describe Hydrus::Item, :type => :model do
     end
 
   end
-  
+
   describe "is_assemblable()" do
 
     it "unpublished item: should always return false" do
