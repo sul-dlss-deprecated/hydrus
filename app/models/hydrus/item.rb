@@ -81,8 +81,9 @@ class Hydrus::Item < Hydrus::GenericObject
     :label => 'Role Metadata',
     :control_group => 'M')
 
+  # @return [String] the identifier of the object's depositor
   def item_depositor_id
-    roleMetadata.item_depositor.person.identifier
+    roleMetadata.item_depositor.person.identifier.first
   end
 
   # Note: currently all items of of type :item. In the future,
