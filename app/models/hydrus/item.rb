@@ -502,7 +502,7 @@ class Hydrus::Item < Hydrus::GenericObject
     d  = opts['date']
     v  = opts['visibility'] || visibility.first
     dt = to_bool(e) ? d : ''
-    self.embargo_date = dt unless e.nil?
+    self.embargo_date = Time.zone.parse(dt) unless e.nil?
     self.visibility   = v
   end
 
