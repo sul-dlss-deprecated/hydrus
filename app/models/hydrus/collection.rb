@@ -21,6 +21,12 @@ class Hydrus::Collection < Dor::Collection
   validate  :check_embargo_options
   validate  :check_license_options
 
+  # Overriding this to prevent dor-services from casting all Hydrus::Collections
+  # to Dor::collections
+  def adapt_to_cmodel
+    self
+  end
+
   def check_embargo_options
     return if embargo_option == 'none'
     return unless embargo_terms.blank?
