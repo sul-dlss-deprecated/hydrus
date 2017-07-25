@@ -3,6 +3,8 @@ class Hydrus::Item < Hydrus::GenericObject
   include Hydrus::Responsible
   include Hydrus::EmbargoMetadataDsExtension
 
+  # Override Dor::Governable so that we look for Hydrus::AdminPolicyObjects
+  belongs_to :admin_policy_object, property: :is_governed_by, class_name: 'Hydrus::AdminPolicyObject'
   REQUIRED_FIELDS = [:title, :abstract, :contact, :keywords, :version_description, :date_created]
 
   after_validation :strip_whitespace
