@@ -5,6 +5,8 @@ class Hydrus::Item < Hydrus::GenericObject
 
   # Override Dor::Governable so that we look for Hydrus::AdminPolicyObjects
   belongs_to :admin_policy_object, property: :is_governed_by, class_name: 'Hydrus::AdminPolicyObject'
+  has_and_belongs_to_many :collections, :property => :is_member_of_collection, :class_name => 'Hydrus::Collection'
+
   REQUIRED_FIELDS = [:title, :abstract, :contact, :keywords, :version_description, :date_created]
 
   after_validation :strip_whitespace
