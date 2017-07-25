@@ -56,8 +56,9 @@ class Hydrus::Collection < Dor::Collection
   ],
   )
 
-  has_many 'hydrus_items', property: :is_member_of_collection
-
+  has_many :hydrus_items, property: :is_member_of_collection, class_name: 'Hydrus::Item'
+  # TODO: Perhaps we should deprecate one of these usages
+  alias items hydrus_items
 
   # Notes:
   #   - We override save() so we can control whether editing events are logged.
@@ -76,14 +77,6 @@ class Hydrus::Collection < Dor::Collection
       publish_metadata() if is_published && is_open
       super() unless opts[:no_super]
     end
-  end
-
-  # get all of the items in this collection
-  # this method is used instead of the "has_relationship" above, since we cannot specify the number of rows via has_relationship
-  # this will hopefully be fixed when upgrading to ActiveFedora
-  # TODO upgrade to ActiveFedora to avoid doing this manual load_inbound_relationship
-  def items
-    load_inbound_relationship('hydrus_items',:is_member_of_collection, :rows=>1000)
   end
 
   # get solr documents for all items in this collection; return all solr docs and a helper array of hashes with just some basic info
