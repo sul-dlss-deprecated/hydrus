@@ -673,7 +673,13 @@ describe("Item edit", :type => :request, :integration => true) do
         css_lab = "file_info_#{id}_label"
         css_hid = "file_info_#{id}_hide"
         expect(find_by_id(css_lab).value).to    eq(fi[:label])
-        expect(find_by_id(css_hid).checked?).to eq(fi[:hide] ? 'checked' : nil)
+
+        if fi[:hide]
+          expect(find_by_id(css_hid)).to be_checked
+        else
+          expect(find_by_id(css_hid)).to_not be_checked
+        end
+
         # Modify the values -- in the exp hash.
         lab = 'foo_' + fi[:label]
         hid = (id < 3)
