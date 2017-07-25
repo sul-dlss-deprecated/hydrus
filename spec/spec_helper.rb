@@ -258,7 +258,7 @@ def check_emb_vis_lic(obj, opts)
   if is_emb
     # embargoMetadata
     expect(em.ng_xml.at_xpath('//status').content).to eq('embargoed')
-    expect(em.ng_xml.at_xpath('//releaseDate').content).to eq(opts[:embargo_date])
+    expect(Time.zone.parse(em.ng_xml.at_xpath('//releaseDate').content)).to eq(Time.zone.parse(opts[:embargo_date]))
     # rightsMetadata
     expect(rm.has_world_read_node).to eq(false)
     expect(rm.group_read_nodes.size).to eq(0)
