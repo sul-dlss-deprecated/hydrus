@@ -79,7 +79,12 @@ module HyTime
     end
     # If the DateTime is coming from user-entered input in their local time
     # zone, adjust it to UTC.
-    dt = dt - DateTime.local_offset if opts[:from_localzone]
+    if opts[:from_localzone]
+      offset_seconds = ActiveSupport::TimeZone[LOCAL_TIMEZONE].utc_offset
+      offset = ActiveSupport::TimeZone.seconds_to_utc_offset(offset_seconds)
+      dt = dt.change(offset: offset)
+    end
+
     # Return string in the requested format, after adjusting to
     # the local timezone if caller requested a display format.
     f = opts[:format] || :datetime
