@@ -5,6 +5,9 @@ class MockValidatable
   def initialize(sv = nil)
     @should_validate = sv
   end
+
+  def is_draft; end
+  def valid?; end
 end
 
 describe Hydrus::Validatable, :type => :model do
