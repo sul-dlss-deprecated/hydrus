@@ -20,7 +20,6 @@ gem 'validates_email_format_of'
 gem 'whenever', '~> 0.9'
 
 # Stanford stuff
-gem 'about_page'
 gem 'active-fedora', '~> 5.7.1'
 gem 'assembly-objectfile', '1.5.0'
 gem 'blacklight',   '~> 4.4'

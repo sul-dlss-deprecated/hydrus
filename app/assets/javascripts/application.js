@@ -16,7 +16,6 @@
 //
 // Required by Blacklight
 //= require blacklight/blacklight
-//= require about_page
 // Required by Hydrus:
 //= require jquery.truncator
 // Required by SULChrome:

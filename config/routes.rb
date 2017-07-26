@@ -1,8 +1,4 @@
 Hydrus::Application.routes.draw do
-
-  mount AboutPage::Engine => '/about(.:format)'
-
-  #Blacklight.add_routes(self)
   HydraHead.add_routes(self)
 
   root :to => "catalog#home"
@@ -14,7 +10,7 @@ Hydrus::Application.routes.draw do
   post "collections/open/:id"  => "hydrus_collections#open",     :as => 'open_collection'
   post "collections/close/:id" => "hydrus_collections#close",    :as => 'close_collection'
   get  "collections/list_all"  => "hydrus_collections#list_all", :as => 'list_all'
-  
+
   # Actions to advance Items through the Hydrus process.
   post "items/publish_directly/:id"    => "hydrus_items#publish_directly",    :as => 'publish_directly_item'
   post "items/submit_for_approval/:id" => "hydrus_items#submit_for_approval", :as => 'submit_for_approval_item'
