@@ -35,7 +35,7 @@
 			              approve_item_path(@fobj),
 			              :id    => 'hydrus_item_approve',
 			              :class => 'btn btn-small save-edits',
-										:confirm => 'You are about to deposit this item to the Stanford Digital Repository. While the deposit is in process, you will not be able to edit the item. Are you sure you want to proceed?',
+										:confirm => 'You are about to approve this item for deposit to the Stanford Digital Repository. While the deposit is in process, you will not be able to edit the item. Are you sure you want to proceed?',
 			 							:disable_with => "Please wait...") %>
 			      </p>
 
@@ -51,6 +51,7 @@
               resubmit_item_path(@fobj),
               :id    => 'hydrus_item_resubmit',
               :class => 'btn btn-small save-edits',
+              :confirm => 'You are about to submit an item for approval in the Stanford Digital Repository. This item cannot be edited while it is under review or, if approved, while the deposit is in progress. Are you sure you want to proceed?',
               :disable_with => "Please wait...",
   						:show_loading_indicator=>"true") %>
       </p>
@@ -63,7 +64,7 @@
               submit_for_approval_item_path(@fobj),
               :id    => 'hydrus_item_submit_for_approval',
               :class => 'btn btn-small save-edits',
-							:confirm => 'You are about to deposit this item to the Stanford Digital Repository. While the deposit is in process, you will not be able to edit the item. Are you sure you want to proceed?',
+							:confirm => 'You are about to submit an item for approval in the Stanford Digital Repository. This item cannot be edited while it is under review or, if approved, while the deposit is in progress. Are you sure you want to proceed?',
               :disable_with => "Please wait...") %>
       </p>
 
