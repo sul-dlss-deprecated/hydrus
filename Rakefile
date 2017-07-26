@@ -6,4 +6,8 @@ require File.expand_path('../config/application', __FILE__)
 
 Hydrus::Application.load_tasks
 
+# clear the default task injected by rspec
+task(:default).clear
+
+# and replace it with our own
 task :default => [:ci]

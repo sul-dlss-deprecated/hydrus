@@ -32,7 +32,7 @@ Dor.configure do
   end
 
   suri do
-    mint_ids true
+    mint_ids Settings.suri.mint_ids
     id_namespace('druid')
     url Settings.suri.url
     user Settings.suri.user
