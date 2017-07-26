@@ -12,7 +12,7 @@ class ApplicationController < ActionController::Base
   end
 
   helper_method :to_bool
-  helper_method :is_production?, :current_user
+  helper_method :current_user
 
   def layout_name
    'sul_chrome/application'
@@ -42,16 +42,6 @@ class ApplicationController < ActionController::Base
       end
     end
     render 'contact'
-  end
-
-  # Used to determine if we should show beta message in UI.
-  def is_production?
-    return (Rails.env.production? and (
-      !request.env["HTTP_HOST"].nil? and
-      !request.env["HTTP_HOST"].include?("-test") and
-      !request.env["HTTP_HOST"].include?("-dev") and
-      !request.env["HTTP_HOST"].include?("-stage")
-    ))
   end
 
   # When on an item/collection page, check druid against object type

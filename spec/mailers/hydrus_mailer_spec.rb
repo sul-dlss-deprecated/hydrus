@@ -18,9 +18,7 @@ describe HydrusMailer, :type => :mailer do
       expect(@mail.subject).to eq("Collection opened for deposit in the Stanford Digital Repository")
     end
     it "should have the correct recipients" do
-      ["jdoe1@stanford.edu", "jdoe2@stanford.edu"].each do |address|
-        expect(@mail.to).to include(address)
-      end
+      expect(@mail.to).to include('jdoe1@stanford.edu', 'jdoe2@stanford.edu')
     end
     it "should have the correct text in the body" do
       body = Capybara.string(@mail.body.to_s)
@@ -37,9 +35,7 @@ describe HydrusMailer, :type => :mailer do
       expect(@mail.subject).to eq("Collection closed for deposit in the Stanford Digital Repository")
     end
     it "should have the correct recipients" do
-      ["jdoe1@stanford.edu", "jdoe2@stanford.edu"].each do |address|
-        expect(@mail.to).to include(address)
-      end
+      expect(@mail.to).to include('jdoe1@stanford.edu', 'jdoe2@stanford.edu')
     end
     it "should have the correct text in the body" do
       body = Capybara.string(@mail.body.to_s)
@@ -55,9 +51,7 @@ describe HydrusMailer, :type => :mailer do
       expect(@mail.subject).to eq("Invitation to deposit in the Stanford Digital Repository")
     end
     it "should have the correct recipients" do
-      ["jdoe1@stanford.edu", "jdoe2@stanford.edu"].each do |address|
-        expect(@mail.to).to include(address)
-      end
+      expect(@mail.to).to include('jdoe1@stanford.edu', 'jdoe2@stanford.edu')
     end
     it "should have the correct text in the body" do
       body = Capybara.string(@mail.body.to_s)
@@ -74,9 +68,7 @@ describe HydrusMailer, :type => :mailer do
       expect(@mail.subject).to eq("Collection returned in the Stanford Digital Repository")
     end
     it "should have the correct recipients" do
-      ["jdoe1@stanford.edu", "jdoe2@stanford.edu"].each do |address|
-        expect(@mail.to).to include(address)
-      end
+      expect(@mail.to).to include('jdoe1@stanford.edu', 'jdoe2@stanford.edu')
     end
     it "should have the correct text in the body" do
       body = Capybara.string(@mail.body.to_s)

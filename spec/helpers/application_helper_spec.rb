@@ -38,11 +38,14 @@ describe ApplicationHelper, :type => :helper do
     expect(hydrus_is_empty?(Hydrus::Contributor.new(:name=>'peter',:role=>'el jefe'))).to be false
   end
 
-  it "should show the item edit tab appropriately" do
-    [false, true].each do |exp|
-      item = double(Hydrus::Item, :is_published => !exp)
-      expect(show_item_edit(item)).to eq(exp)
-    end
+  it 'should show the item edit tab if the item is not published' do
+    item = double(Hydrus::Item, :is_published => true)
+    expect(show_item_edit(item)).to eq(false)
+  end
+
+  it 'should not show the item edit tab if the item is published' do
+    item = double(Hydrus::Item, :is_published => false)
+    expect(show_item_edit(item)).to eq(true)
   end
 
   it "should render the correct contextual layout" do

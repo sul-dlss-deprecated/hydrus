@@ -22,17 +22,11 @@ describe Hydrus::Contributor, :type => :model do
   end
 
   it "lookup_with_role_key()" do
-    tests = {
-      'personal_author'               => ['personal', 'Author'],
-      'corporate_author'              => ['corporate', 'Author'],
-      'corporate_contributing_author' => ['corporate', 'Contributing author'],
-      'conference_conference'         => ['conference', 'Conference'],
-      'blah blah'                     => ['personal', 'Author'],
-    }
-    tests.each do |role_key, exp|
-      expect(Hydrus::Contributor.lookup_with_role_key(role_key)).to eq(exp)
-    end
-
+    expect(Hydrus::Contributor.lookup_with_role_key('personal_author')).to eq(['personal', 'Author'])
+    expect(Hydrus::Contributor.lookup_with_role_key('corporate_author')).to eq(['corporate', 'Author'])
+    expect(Hydrus::Contributor.lookup_with_role_key('corporate_contributing_author')).to eq(['corporate', 'Contributing author'])
+    expect(Hydrus::Contributor.lookup_with_role_key('conference_conference')).to eq(['conference', 'Conference'])
+    expect(Hydrus::Contributor.lookup_with_role_key('blah blah')).to eq(['personal', 'Author'])
   end
 
   it "clone() and ==()" do
@@ -44,14 +38,23 @@ describe Hydrus::Contributor, :type => :model do
     expect(c1).to eq(c2)
     expect(c1.object_id).not_to eq(c2.object_id)
     # Should be unequal if any single attribute differs.
-    [:name, :role, :name_type].each do |getter|
-      setter   = "#{getter}="
-      orig_val = c2.send(getter)
-      c2.send(setter, 'foobar')
-      expect(c1).not_to eq(c2)
-      c2.send(setter, orig_val)
-      expect(c1).to eq(c2)
-    end
+    orig_val = c2.name
+    c2.name = 'foobar'
+    expect(c1).not_to eq c2
+    c2.name = orig_val
+    expect(c1).to eq c2
+
+    orig_val = c2.role
+    c2.role = 'foobar'
+    expect(c1).not_to eq c2
+    c2.role = orig_val
+    expect(c1).to eq c2
+
+    orig_val = c2.name_type
+    c2.name_type = 'foobar'
+    expect(c1).not_to eq c2
+    c2.name_type = orig_val
+    expect(c1).to eq c2
   end
 
 end

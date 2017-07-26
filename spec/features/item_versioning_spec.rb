@@ -71,8 +71,8 @@ describe("Item versioning", :type => :request, :integration => true) do
     expect(@hi.prior_license).to eq(nil)
     expect(@hi.is_destroyable).to eq(false) # cannot destroy a published version
     n_events = @hi.get_hydrus_events.size
-    wf_steps = %w(submit approve)
-    wf_steps.each { |s| expect(@hi.workflows.workflow_step_is_done(s)).to eq(true) }
+    expect(@hi.workflows.workflow_step_is_done('submit')).to eq(true)
+    expect(@hi.workflows.workflow_step_is_done('approve')).to eq(true)
 
     # Open new version.
     login_as('archivist1')
@@ -94,7 +94,8 @@ describe("Item versioning", :type => :request, :integration => true) do
     es = @hi.get_hydrus_events
     expect(es.size).to eq(n_events + 1)
     expect(es.last.text).to eq('New version opened')
-    wf_steps.each { |s| expect(@hi.workflows.workflow_step_is_done(s)).to eq(false) }
+    expect(@hi.workflows.workflow_step_is_done('submit')).to eq(false)
+    expect(@hi.workflows.workflow_step_is_done('approve')).to eq(false)
 
     # View page should not offer the Publish button, because the user
     # needs to fill in a version description.  It should also not offer a discard button since this is v2 and is unpublished
@@ -124,7 +125,8 @@ describe("Item versioning", :type => :request, :integration => true) do
 
     # Assertions after adding version description.
     @hi = Hydrus::Item.find(@hi.pid)
-    wf_steps.each { |s| expect(@hi.workflows.workflow_step_is_done(s)).to eq(true) }
+    expect(@hi.workflows.workflow_step_is_done('submit')).to eq(true)
+    expect(@hi.workflows.workflow_step_is_done('approve')).to eq(true)
     expect(@hi.object_status).to eq('published')
 
     # View page should offer open version button.

@@ -23,7 +23,7 @@ describe("Collection create", :type => :request, :integration => true) do
   end
 
   it "should be able to create a new Collection, with APO, and with expected datastreams" do
-    ni = hash2struct(
+    ni = OpenStruct.new(
       :title    => 'title_foo',
       :abstract => 'abstract_foo',
       :contact  => 'ozzy@hell.com',
@@ -71,21 +71,19 @@ describe("Collection create", :type => :request, :integration => true) do
     expect(apo.title).to eq("APO for #{ni.title}")
     expect(apo.label).to eq("APO for #{ni.title}")
     # Check events.
-    exp = [
-      /\ACollection created/,
-      /\ACollection modified/,
-    ]
     es = coll.get_hydrus_events
-    expect(es.size).to eq(exp.size)
-    es[0...exp.size].zip(exp).each { |e, exp|
-      expect(e.text).to match(exp)
-      expect(e.who).to eq('archivist1')
-      expect(e.type).to eq('hydrus')
-    }
+    expect(es.size).to eq(2)
+
+    expect(es.first.text).to match /\ACollection created/
+    expect(es.first.who).to eq 'archivist1'
+    expect(es.first.type).to eq 'hydrus'
+    expect(es.last.text).to match /\ACollection modified/
+    expect(es.last.who).to eq 'archivist1'
+    expect(es.last.type).to eq 'hydrus'
   end
 
   it "should be able to create a new Collection, publish, close, etc" do
-    ni = hash2struct(
+    ni = OpenStruct.new(
       :title    => 'title_foo',
       :abstract => 'abstract_foo',
       :contact  => 'ozzy@hell.com',
@@ -196,8 +194,11 @@ describe("Collection create", :type => :request, :integration => true) do
     expect(coll.is_destroyable).to eq(false)
     expect(coll.valid?).to eq(true)
     expect(coll.is_open).to eq(true)
+
     # Check events.
-    exp = [
+    es = coll.get_hydrus_events
+
+    expect(es.map(&:text)).to match_array [
       /\ACollection created/,
       /\ACollection modified/,
       /\ACollection modified/,
@@ -205,8 +206,6 @@ describe("Collection create", :type => :request, :integration => true) do
       /\ACollection closed/,
       /\ACollection opened/,
     ]
-    es = coll.get_hydrus_events
-    es[0...exp.size].zip(exp).each { |e, exp| expect(e.text).to match(exp)  }
   end
 
   describe "delete()" do

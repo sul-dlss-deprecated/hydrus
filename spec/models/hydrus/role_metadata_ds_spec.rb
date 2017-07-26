@@ -46,19 +46,14 @@ describe Hydrus::RoleMetadataDS, :type => :model do
     end
 
     it "should get expected values from OM terminology" do
-      tests = [
-        [[:role, :person, :identifier], %w(archivist4 archivist5 archivist3 archivist6)],
-        [:person_id, %w(archivist4 archivist5 archivist3 archivist6)],
-        [[:role, :person, :name], ["Archivist, Four", "Archivist, Five", "Archivist, Three", "Archivist, Six"]],
-        [[:collection_manager, :person, :identifier], %w(archivist4 archivist5)],
-        [[:collection_depositor, :person, :identifier], %w(archivist3)],
-        [[:collection_reviewer, :person, :identifier], %w(archivist6)],
-        [[:collection_viewer, :person, :identifier], %w()],
-        [[:role, :type], %w(hydrus-collection-manager hydrus-collection-depositor hydrus-collection-reviewer)],
-      ]
-      tests.each do |terms, exp|
-        expect(@rmdoc.term_values(*terms)).to eq(exp)
-      end
+      expect(@rmdoc.term_values(:role, :person, :identifier)).to eq(%w(archivist4 archivist5 archivist3 archivist6))
+      expect(@rmdoc.term_values(:person_id)).to eq(%w(archivist4 archivist5 archivist3 archivist6))
+      expect(@rmdoc.term_values(:role, :person, :name)).to eq(["Archivist, Four", "Archivist, Five", "Archivist, Three", "Archivist, Six"])
+      expect(@rmdoc.term_values(:collection_manager, :person, :identifier)).to eq(%w(archivist4 archivist5))
+      expect(@rmdoc.term_values(:collection_depositor, :person, :identifier)).to eq(%w(archivist3))
+      expect(@rmdoc.term_values(:collection_reviewer, :person, :identifier)).to eq(%w(archivist6))
+      expect(@rmdoc.term_values(:collection_viewer, :person, :identifier)).to eq(%w())
+      expect(@rmdoc.term_values(:role, :type)).to eq(%w(hydrus-collection-manager hydrus-collection-depositor hydrus-collection-reviewer))
     end
 
   end
@@ -80,15 +75,10 @@ describe Hydrus::RoleMetadataDS, :type => :model do
     end
 
     it "should get expected values from OM terminology" do
-      tests = [
-        [[:role, :person, :identifier], ['vviolet']],
-        [[:role, :person, :name], ["Violet, Viola"]],
-        [[:item_depositor, :person, :identifier], ['vviolet']],
-        [[:role, :type], ['hydrus-item-depositor']],
-      ]
-      tests.each do |terms, exp|
-        expect(@rmdoc.term_values(*terms)).to eq(exp)
-      end
+      expect(@rmdoc.term_values(:role, :person, :identifier)).to eq(['vviolet'])
+      expect(@rmdoc.term_values(:role, :person, :name)).to eq(["Violet, Viola"])
+      expect(@rmdoc.term_values(:item_depositor, :person, :identifier)).to eq(['vviolet'])
+      expect(@rmdoc.term_values(:role, :type)).to eq(['hydrus-item-depositor'])
     end
 
     it "Should be able to insert new hydrus-item-depositor role with person node" do
@@ -105,27 +95,6 @@ describe Hydrus::RoleMetadataDS, :type => :model do
       expect(rmdoc.ng_xml).to be_equivalent_to exp_xml
     end
 
-  end
-
-  it "toggle_hyphen_underscore() should work correctly" do
-    rmdoc = Hydrus::RoleMetadataDS.from_xml('')
-    tests = {
-      # Should change.
-      'hydrus-item-foo'       => 'hydrus_item_foo',
-      'hydrus_item_foo'       => 'hydrus-item-foo',
-      'hydrus-collection-foo' => 'hydrus_collection_foo',
-      'hydrus_collection_foo' => 'hydrus-collection-foo',
-      'hydrus_collection_Foo' => 'hydrus-collection-Foo',
-      # No changes.
-      'item-'                 => 'item-',
-      'hydrus-item-'          => 'hydrus-item-',
-      'xcollection_foo'       => 'xcollection_foo',
-      'blah'                  => 'blah',
-      ''                      => '',
-    }
-    tests.each do |input, exp|
-      expect(rmdoc.toggle_hyphen_underscore(input)).to eq(exp)
-    end
   end
 
   context "inserting nodes" do
