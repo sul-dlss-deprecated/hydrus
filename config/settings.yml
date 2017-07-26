@@ -38,6 +38,7 @@ suri:
   url: 'https://sul-lyberservices-test.stanford.edu'
   user: ~
   password: ~
+  mint_ids: true
 
 fedora:
   url: 'https://user:password@fedora.example.com:1000/fedora'
