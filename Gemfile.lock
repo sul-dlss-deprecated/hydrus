@@ -267,7 +267,7 @@ GEM
     mime-types (1.25.1)
     mini_exiftool (2.8.0)
     mini_portile2 (2.2.0)
-    minitest (5.10.2)
+    minitest (5.10.3)
     moab-versioning (2.0.0)
       confstruct
       json
@@ -316,8 +316,6 @@ GEM
       method_source (~> 0.8.1)
       slop (~> 3.4)
     public_suffix (2.0.5)
-    quiet_assets (1.1.0)
-      railties (>= 3.1, < 5.0)
     rack (1.6.8)
     rack-test (0.6.3)
       rack (>= 1.0)
@@ -379,22 +377,23 @@ GEM
       builder (>= 2.1.2)
     rsolr-ext (1.0.3)
       rsolr (>= 1.0.2)
-    rspec-core (3.1.7)
-      rspec-support (~> 3.1.0)
-    rspec-expectations (3.1.2)
+    rspec-core (3.6.0)
+      rspec-support (~> 3.6.0)
+    rspec-expectations (3.6.0)
       diff-lcs (>= 1.2.0, < 2.0)
-      rspec-support (~> 3.1.0)
-    rspec-mocks (3.1.3)
-      rspec-support (~> 3.1.0)
-    rspec-rails (3.1.0)
+      rspec-support (~> 3.6.0)
+    rspec-mocks (3.6.0)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.6.0)
+    rspec-rails (3.6.0)
       actionpack (>= 3.0)
       activesupport (>= 3.0)
       railties (>= 3.0)
-      rspec-core (~> 3.1.0)
-      rspec-expectations (~> 3.1.0)
-      rspec-mocks (~> 3.1.0)
-      rspec-support (~> 3.1.0)
-    rspec-support (3.1.2)
+      rspec-core (~> 3.6.0)
+      rspec-expectations (~> 3.6.0)
+      rspec-mocks (~> 3.6.0)
+      rspec-support (~> 3.6.0)
+    rspec-support (3.6.0)
     ruby-cache (0.3.0)
     ruby-graphviz (1.2.3)
     rubydora (1.9.1)
@@ -419,8 +418,6 @@ GEM
       json (>= 1.8, < 3)
       simplecov-html (~> 0.10.0)
     simplecov-html (0.10.1)
-    simplecov-rcov (0.2.3)
-      simplecov (>= 0.4.1)
     slop (3.6.0)
     solrizer (3.4.1)
       activesupport
@@ -516,14 +513,12 @@ DEPENDENCIES
   net-http-persistent (~> 2.9)
   okcomputer
   pry
-  quiet_assets
   rails (~> 4.2.9)
   rake (~> 11.0)
   rsolr-ext
-  rspec-rails (~> 3.1.0)
+  rspec-rails (~> 3.1)
   sass-rails (~> 4.0)
   simplecov
-  simplecov-rcov
   sqlite3
   sul_chrome (~> 0.1.0)
   test-unit

@@ -43,10 +43,9 @@ gem 'uglifier', '>= 1.0.3'
 group :development, :test do
   gem 'jettywrapper', '1.4.2'
   gem 'sqlite3'
-  gem 'rspec-rails', '~> 3.1.0'
+  gem 'rspec-rails', '~> 3.1'
   gem 'capybara'
   gem 'simplecov'
-  gem 'simplecov-rcov'
   gem 'equivalent-xml'
   gem 'awesome_print'
   gem 'launchy'
@@ -54,10 +53,6 @@ group :development, :test do
   gem 'letter_opener'
 # gem 'database_cleaner'
   gem 'pry'
-end
-
-group :development do
-  gem 'quiet_assets'
 end
 
 group :production, :dortest do
