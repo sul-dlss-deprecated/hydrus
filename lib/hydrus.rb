@@ -55,13 +55,6 @@ module Hydrus
     return IO.read(f)
   end
 
-  # A pretty-printing method used during debugging.
-  # Takes an argument and prints it with aweseome_print.
-  def self.ap_dump(arg, file_handle = STDOUT)
-    d = '=' * 80
-    file_handle.puts(d, caller[0], arg.ai(:plain => true), d)
-  end
-
   # To use this profiling method, wrap the code you want to profile like this,
   # setting the desired value for :min_percent.
   #

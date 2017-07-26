@@ -85,7 +85,7 @@ puts apo.rels_ext.to_rels_ext
 __END__
 
 puts hi.descMetadata.ng_xml
-Hydrus.ap_dump([hi.title, hi.collection.title])
+puts [hi.title, hi.collection.title].inspect
 puts hi.generate_dublin_core
 
 __END__
@@ -144,4 +144,3 @@ node = builder.doc.root
 puts node
 
 __END__
-
