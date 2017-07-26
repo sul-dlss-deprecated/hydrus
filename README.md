@@ -76,17 +76,14 @@ Also see:
 ## Running tests
 
 ```bash
-# Run unit tests, integration tests, or everything.
-rake unit_tests
-rake integration_tests
-rake local_ci
+# Preferred
+$ rake
 
-# Run test suite using a different Jetty port, so you can keep working.
-rake ci_alt
+# Run all the tests without automatically starting jetty.
+$ rake local_ci
 
-# Coverage reports -- two flavors.
-open coverage/rcov/index.html
-open coverage/index.html
+# Coverage reports
+$ open coverage/index.html
 ```
 
 ## Deployment
