@@ -30,30 +30,44 @@ describe("Home page", :type => :request, :integration => true) do
     # page.should have_selector(@search_box)
   end
 
-  it "dashboard: collections shown should vary by user and their roles" do
-    exp = {
-      'archivist1' => %w(oo000oo0003 oo000oo0004 oo000oo0010),
-      'archivist2' => %w(oo000oo0010),
-    }
-    exp.each do |user, drus|
-      login_as(user)
+  context 'as archivist1' do
+    before do
+      login_as('archivist1')
+    end
+
+    it 'shows collections' do
       visit root_path
-      drus.each do |dru|
-        xp = "//a[@href='/collections/druid:#{dru}']"
-        expect(find('div.user-collections')).to have_xpath(xp)
-      end
+      expect(find('div.user-collections')).to have_xpath("//a[@href='/collections/druid:oo000oo0003']")
+      expect(find('div.user-collections')).to have_xpath("//a[@href='/collections/druid:oo000oo0004']")
+      expect(find('div.user-collections')).to have_xpath("//a[@href='/collections/druid:oo000oo0010']")
+    end
+
+    it 'restricts search results' do
+      visit(@search_url)
+      expect(find('.page_links')).to have_content("1 - 10 of 10")
+    end
+
+    it 'has a button to create a new collection' do
+      visit root_path
+      expect(page).to have_selector(@cc_button)
     end
   end
 
-  it "search results should vary by user and their roles" do
-    exp = {
-      'archivist1' => 10,
-      'archivist2' => 9,
-    }
-    exp.each do |user, exp_n|
-      login_as(user)
+  context 'as archivist2' do
+    before do
+      login_as('archivist2')
+    end
+
+    it 'shows the collections they have access to' do
+      visit root_path
+      expect(find('div.user-collections')).to have_xpath("//a[@href='/collections/druid:oo000oo0003']")
+      expect(find('div.user-collections')).not_to have_xpath("//a[@href='/collections/druid:oo000oo0004']")
+      expect(find('div.user-collections')).to have_xpath("//a[@href='/collections/druid:oo000oo0010']")
+    end
+
+    it 'restricts search results' do
       visit(@search_url)
-      expect(find('.page_links')).to have_content("1 - #{exp_n} of #{exp_n}")
+      expect(find('.page_links')).to have_content("1 - 9 of 9")
     end
   end
 
@@ -62,21 +76,13 @@ describe("Home page", :type => :request, :integration => true) do
     logout
     visit root_path
     expect(page).not_to have_css(@breadcrumbs)
-    # Logged in
-    login_as('archivist1')
-    visit root_path
-    expect(page).not_to have_css(@breadcrumbs)
   end
 
-  it "should show Create Collection button only if user has authority to create collections" do
+  it "should not show Create Collection button if user has no authority to create collections" do
     # No
     login_as('archivist3@example.com', login_pw)
     visit root_path
     expect(page).not_to have_selector(@cc_button)
-    # Yes
-    login_as('archivist1')
-    visit root_path
-    expect(page).to have_selector(@cc_button)
   end
 
   describe "search" do

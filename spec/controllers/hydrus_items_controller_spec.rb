@@ -19,19 +19,20 @@ describe HydrusItemsController, :type => :controller do
         :id         => 'abc')
     end
 
-    it "custom post actions should route correctly" do
-      pid = 'abc123'
-      actions = %w(
-        publish_directly
-        submit_for_approval
-        approve
-        disapprove
-        open_new_version
-      )
-      actions.each do |a|
-        h = { :post => "/items/#{a}/#{pid}" }
-        expect(h).to route_to(:controller => 'hydrus_items', :action => a, :id => pid)
-      end
+    it 'routes publish_directly action correctly' do
+      expect(post: '/items/publish_directly/abc123').to route_to(controller: 'hydrus_items', action: 'publish_directly', id: 'abc123')
+    end
+    it 'routes submit_for_approval action correctly' do
+      expect(post: '/items/submit_for_approval/abc123').to route_to(controller: 'hydrus_items', action: 'submit_for_approval', id: 'abc123')
+    end
+    it 'routes approve action correctly' do
+      expect(post: '/items/approve/abc123').to route_to(controller: 'hydrus_items', action: 'approve', id: 'abc123')
+    end
+    it 'routes disapprove action correctly' do
+      expect(post: '/items/disapprove/abc123').to route_to(controller: 'hydrus_items', action: 'disapprove', id: 'abc123')
+    end
+    it 'routes open_new_version action correctly' do
+      expect(post: '/items/open_new_version/abc123').to route_to(controller: 'hydrus_items', action: 'open_new_version', id: 'abc123')
     end
 
     it "should have the destroy_hydrus_item_value convenience url" do
@@ -126,27 +127,57 @@ describe HydrusItemsController, :type => :controller do
 
   end
 
-  describe "custom actions: publish_directly, et al", :integration => true do
-
-    it "should raise exception if user lacks required permissions" do
-      pid = "druid:oo000oo0001"
-      err_msg = /\ACannot perform action:/
+  describe '#publish_directly', integration: true do
+    it 'raises an exception if the user lacks the required permissions' do
       sign_in(mock_user)
-      actions = [
-        :publish_directly,
-        :submit_for_approval,
-        :approve,
-        :disapprove,
-        :resubmit,
-        :open_new_version,
-      ]
-      actions.each do |action|
-        post(action, :id => pid)
-        expect(flash[:alert]).to eq("You are not authorized to access this page.")
-        expect(response).to redirect_to(root_path)
-      end
+      post(:publish_directly, id: 'druid:oo000oo0001')
+      expect(flash[:alert]).to eq('You are not authorized to access this page.')
+      expect(response).to redirect_to(root_path)
     end
-
   end
 
+  describe '#submit_for_approval', integration: true do
+    it 'raises an exception if the user lacks the required permissions' do
+      sign_in(mock_user)
+      post(:submit_for_approval, id: 'druid:oo000oo0001')
+      expect(flash[:alert]).to eq('You are not authorized to access this page.')
+      expect(response).to redirect_to(root_path)
+    end
+  end
+
+  describe '#approve', integration: true do
+    it 'raises an exception if the user lacks the required permissions' do
+      sign_in(mock_user)
+      post(:approve, id: 'druid:oo000oo0001')
+      expect(flash[:alert]).to eq('You are not authorized to access this page.')
+      expect(response).to redirect_to(root_path)
+    end
+  end
+
+  describe '#disapprove', integration: true do
+    it 'raises an exception if the user lacks the required permissions' do
+      sign_in(mock_user)
+      post(:disapprove, id: 'druid:oo000oo0001')
+      expect(flash[:alert]).to eq('You are not authorized to access this page.')
+      expect(response).to redirect_to(root_path)
+    end
+  end
+
+  describe '#resubmit', integration: true do
+    it 'raises an exception if the user lacks the required permissions' do
+      sign_in(mock_user)
+      post(:resubmit, id: 'druid:oo000oo0001')
+      expect(flash[:alert]).to eq('You are not authorized to access this page.')
+      expect(response).to redirect_to(root_path)
+    end
+  end
+
+  describe '#open_new_version', integration: true do
+    it 'raises an exception if the user lacks the required permissions' do
+      sign_in(mock_user)
+      post(:open_new_version, id: 'druid:oo000oo0001')
+      expect(flash[:alert]).to eq('You are not authorized to access this page.')
+      expect(response).to redirect_to(root_path)
+    end
+  end
 end

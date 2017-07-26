@@ -5,43 +5,32 @@ describe Hydrus::AccessControlsEnforcement do
   include Hydrus::ModelHelper
 
   it "to_bool() should convert true-like things to true" do
-    tests = {
-      'true'  => true,
-      'yes'   => true,
-      true    => true,
-      false   => false,
-      'false' => false,
-      'no'    => false,
-      'blah'  => false,
-      123     => false,
-    }
-    tests.each { |inp, exp| expect(to_bool(inp)).to eq(exp) }
+    expect(to_bool('true')).to eq(true)
+    expect(to_bool('yes')).to eq(true)
+    expect(to_bool(true)).to eq(true)
+    expect(to_bool(false)).to eq(false)
+    expect(to_bool('false')).to eq(false)
+    expect(to_bool('no')).to eq(false)
+    expect(to_bool('blah')).to eq(false)
+    expect(to_bool(123)).to eq(false)
   end
 
   it "parse_delimited() should work as expected" do
-    tests = {
-      '  a  , b, c  '           => %w(a b c),
-      'a,b,c;'                  => %w(a b c),
-      "  a  \n b \n c  "        => %w(a b c),
-      ' a b  , c, d e  f  '     => ['a b', 'c', 'd e  f'],
-      ' a b '                   => ['a b'],
-      ' foo '                   => ['foo'],
-      '  '                      => [],
-      "  a,,; b \n\r  , c\nd  " => %w(a b c d),
-    }
-    tests.each { |inp, exp| expect(Hydrus::ModelHelper.parse_delimited(inp)).to eq(exp) }
+    expect(Hydrus::ModelHelper.parse_delimited('  a  , b, c  ')).to eq(%w(a b c))
+    expect(Hydrus::ModelHelper.parse_delimited('a,b,c;')).to eq(%w(a b c))
+    expect(Hydrus::ModelHelper.parse_delimited("  a  \n b \n c  ")).to eq(%w(a b c))
+    expect(Hydrus::ModelHelper.parse_delimited(' a b  , c, d e  f  ')).to eq(['a b', 'c', 'd e  f'])
+    expect(Hydrus::ModelHelper.parse_delimited(' a b ')).to eq(['a b'])
+    expect(Hydrus::ModelHelper.parse_delimited(' foo ')).to eq(['foo'])
+    expect(Hydrus::ModelHelper.parse_delimited('  ')).to eq([])
+    expect(Hydrus::ModelHelper.parse_delimited("  a,,; b \n\r  , c\nd  ")).to eq(%w(a b c d))
   end
 
   it "equal_when_stripped?" do
-    tests = [
-      [' hi ', 'hi', true],
-      [' hi ', 'HI', false],
-      [[1,2], [1,2], true],
-      [['hi'], ['hi '], false],
-    ]
-    tests.each do |v1, v2, exp|
-      expect(equal_when_stripped?(v1, v2)).to eq(exp)
-    end
+    expect(equal_when_stripped?(' hi ', 'hi')).to eq(true)
+    expect(equal_when_stripped?(' hi ', 'HI')).to eq(false)
+    expect(equal_when_stripped?([1,2], [1,2])).to eq(true)
+    expect(equal_when_stripped?(['hi'], ['hi '])).to eq(false)
   end
 
 end
