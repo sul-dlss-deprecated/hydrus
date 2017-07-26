@@ -190,7 +190,7 @@ describe("Item create", :type => :request, :integration => true) do
 
   it "Requires approval: should be able to submit, disapprove, resubmit, approve, etc" do
     # Setup.
-    ni = hash2struct(
+    ni = OpenStruct.new(
       :title       => 'title_foo',
       :abstract    => 'abstract_foo',
       :contact     => 'ozzy@hell.com',
@@ -402,7 +402,7 @@ describe("Item create", :type => :request, :integration => true) do
   end
 
   it "Does not require approval: should be able to publish directly, with world visible rights and a different license than collection" do
-    ni = hash2struct(
+    ni = OpenStruct.new(
       :title       => 'title_foo',
       :abstract    => 'abstract_foo',
       :contact     => 'ozzy@hell.com',

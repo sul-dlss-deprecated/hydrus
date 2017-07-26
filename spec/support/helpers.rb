@@ -34,11 +34,6 @@ def logout
   visit destroy_user_session_path
 end
 
-# Takes a hash and returns a corresponding Struct.
-def hash2struct(h)
-  return Struct.new(*h.keys).new(*h.values)
-end
-
 def should_visit_view_page(obj)
   visit polymorphic_path(obj)
   expect(current_path).to eq(polymorphic_path(obj))
@@ -165,7 +160,7 @@ def create_new_collection(opts = {})
     :requires_human_approval => 'yes',
     :viewers                 => '',
   }
-  opts = hash2struct(default_opts.merge opts)
+  opts = OpenStruct.new(default_opts.merge opts)
   # Login and create new collection.
   login_as(opts.user)
   visit(new_hydrus_collection_path)
@@ -207,7 +202,7 @@ def create_new_item(opts = {})
     :requires_human_approval => 'yes',
     :date_created            => '2011',
   }
-  opts = hash2struct(default_opts.merge opts)
+  opts = OpenStruct.new(default_opts.merge opts)
   # Set the Collection's require_human_approval value.
   hc = Hydrus::Collection.find(opts.collection_pid)
   hc.requires_human_approval = opts.requires_human_approval

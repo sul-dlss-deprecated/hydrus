@@ -32,7 +32,7 @@ describe("Item edit", :type => :request, :integration => true) do
 
   it "should be able to edit simple items: abstract, contact, keywords" do
     # Set up the new values for the fields we will edit.
-    ni = hash2struct(
+    ni = OpenStruct.new(
       :abstract => 'abcxyz123',
       :contact  => 'ozzy@hell.com',
       :keywords => %w(foo bar fubb),
@@ -276,7 +276,7 @@ describe("Item edit", :type => :request, :integration => true) do
     @druid = "druid:oo000oo0005"
     @hi    = Hydrus::Item.find(@druid)
     # Set up the new values for the fields we will edit.
-    ni = hash2struct(
+    ni = OpenStruct.new(
       :ri_title => 'My URL title',
       :ri_url   => 'http://stanford.and.son',
       :title_f  => "hydrus_item_related_item_title_0",

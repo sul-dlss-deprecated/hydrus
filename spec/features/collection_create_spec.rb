@@ -23,7 +23,7 @@ describe("Collection create", :type => :request, :integration => true) do
   end
 
   it "should be able to create a new Collection, with APO, and with expected datastreams" do
-    ni = hash2struct(
+    ni = OpenStruct.new(
       :title    => 'title_foo',
       :abstract => 'abstract_foo',
       :contact  => 'ozzy@hell.com',
@@ -83,7 +83,7 @@ describe("Collection create", :type => :request, :integration => true) do
   end
 
   it "should be able to create a new Collection, publish, close, etc" do
-    ni = hash2struct(
+    ni = OpenStruct.new(
       :title    => 'title_foo',
       :abstract => 'abstract_foo',
       :contact  => 'ozzy@hell.com',
