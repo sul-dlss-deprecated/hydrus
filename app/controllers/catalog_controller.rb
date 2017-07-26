@@ -11,9 +11,9 @@ class CatalogController < ApplicationController
   before_filter :enforce_index_permissions, :only => :index
   before_filter :enforce_viewing_context_for_show_requests, :only=>:show
   # This applies appropriate access controls to all solr queries
-  CatalogController.solr_search_params_logic << :add_access_controls_to_solr_params
+  CatalogController.solr_search_params_logic += [:add_access_controls_to_solr_params]
   # This filters out objects that you want to exclude from search results, like FileAssets
-  CatalogController.solr_search_params_logic << :exclude_unwanted_models
+  CatalogController.solr_search_params_logic += [:exclude_unwanted_models]
 
   helper_method :has_search_parameters?
 
@@ -120,7 +120,6 @@ class CatalogController < ApplicationController
 
     if current_user
       @collections = Hydrus::Collection.collections_hash(current_user)
-
       # administrators get a full list of collections, but not as detailed to save on a big SOLR query
       @all_collections = Hydrus::Collection.dashboard_hash if Hydrus::Authorizable.can_act_as_administrator(current_user)
     end
@@ -160,4 +159,11 @@ class CatalogController < ApplicationController
     true
   end
 
+  # This filters out objects that you want to exclude from search results.  By default it only excludes FileAssets
+  # @param solr_parameters the current solr parameters
+  # @param user_parameters the current user-subitted parameters
+  def exclude_unwanted_models(solr_parameters, user_parameters)
+    solr_parameters[:fq] ||= []
+    solr_parameters[:fq] << "-#{ActiveFedora::SolrService.solr_name("has_model", :symbol)}:\"info:fedora/afmodel:FileAsset\""
+  end
 end

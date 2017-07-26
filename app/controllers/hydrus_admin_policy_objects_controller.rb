@@ -1,7 +1,6 @@
 class HydrusAdminPolicyObjectsController < ApplicationController
 
   include Hydra::Controller::ControllerBehavior
-  include Hydra::Controller::UploadBehavior
 
   before_filter :authenticate_user!
   

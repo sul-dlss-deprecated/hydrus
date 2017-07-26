@@ -65,7 +65,7 @@ class Hydrus::Item < Hydrus::GenericObject
     # [:METHOD_NAME,               :uniq, :at... ]
     "descMetadata" => [
       [:preferred_citation,        true   ],
-      [:date_created,              true   ],
+      # [:date_created,              true   ],
       [:related_citation,          false  ],
     ],
     "roleMetadata" => [
@@ -91,6 +91,11 @@ class Hydrus::Item < Hydrus::GenericObject
   def item_depositor_id
     roleMetadata.item_depositor.person.identifier.first
   end
+  
+  def date_created
+    descMetadata.date_created.try(:first)
+  end
+    
 
   # Note: currently all items of of type :item. In the future,
   # the calling code can pass in the needed value.

@@ -2,6 +2,10 @@ require 'spec_helper'
 
 class MockController
   include Hydrus::AccessControlsEnforcement
+  
+  def logger
+    Rails.logger
+  end
 
   attr_accessor(:flash, :params, :root_path)
 

@@ -590,7 +590,7 @@ class Hydrus::Collection < Dor::Collection
       hash[:pid]=coll_dru
       hash[:item_counts]=stats[coll_dru] || {}
       hash[:title]=self.object_title(solr[coll_dru][:solr])
-      hash[:roles]=Hydrus::Responsible.roles_of_person current_user.to_s, solr[coll_dru][:solr]['is_governed_by_ssim'].first.gsub('info:fedora/','')
+      hash[:roles]=Hydrus::Responsible.roles_of_person current_user.to_s, (solr[coll_dru][:solr].fetch('is_governed_by_ssim', []).first || '').gsub('info:fedora/','')
       count=0
       stats[coll_dru].keys.each do |key|
         count += stats[coll_dru][key].to_i
@@ -700,7 +700,7 @@ class Hydrus::Collection < Dor::Collection
   # Returns an array of hashes containing the needed facet counts.
   # Written as a separate method for testing purposes.
   def self.get_facet_counts_from_response(resp)
-    return resp.facet_counts['facet_pivot'].values.first
+    return (resp['facet_counts']['facet_pivot'] || {}).values.first || {}
   end
 
   # Returns an array-of-arrays containing the collection's @item_counts

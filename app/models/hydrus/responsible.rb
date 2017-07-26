@@ -65,7 +65,7 @@ module Hydrus::Responsible
     h[:fl]='*'
     resp, sdocs = Hydrus::SolrQueryable.issue_solr_query(h)
     #only 1 doc
-    doc=resp.docs.first
+    doc=resp['response']['docs'].first
     roles.keys.each do |key|
       #the solr field is based on the role name, but doesnt match it precisely
       field_name=key.gsub('hydrus-','').gsub('-','_')+'_person_identifier_t'

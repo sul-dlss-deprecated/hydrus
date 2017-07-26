@@ -1,7 +1,6 @@
 class HydrusCollectionsController < ApplicationController
 
   include Hydra::Controller::ControllerBehavior
-  include Hydra::Controller::UploadBehavior
 
   before_filter :authenticate_user!
   before_filter :setup_attributes, :except => [:index, :new, :list_all]
