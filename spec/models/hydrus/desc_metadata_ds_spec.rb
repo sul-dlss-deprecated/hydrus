@@ -47,21 +47,16 @@ describe Hydrus::DescMetadataDS, :type => :model do
     end
 
     it "should get correct values from OM terminology" do
-      tests = [
-        [[:abstract],                        ['abstract content']],
-        [[:main_title],                      ['Learn VB in 21 Days']],
-        [[:name, :namePart],                 ['Angus']],
-        [[:name, :role, :roleTerm],          ['guitar']],
-        [[:relatedItem, :titleInfo, :title], ['Learn VB in 1 Day']],
-        [[:relatedItem, :location, :url],    ['http://example.com']],
-        [[:subject, :topic],                 ['divorce', 'marriage']],
-        [[:preferred_citation],              ['pref_cite outer']],
-        [[:related_citation],                ['related_cite outer']],
-        [[:contact],                         %w(foo@bar.com blah@bar.com)],
-      ]
-      tests.each do |terms, exp|
-        expect(@dsdoc.term_values(*terms)).to eq(exp)
-      end
+      expect(@dsdoc.term_values(:abstract)).to eq(['abstract content'])
+      expect(@dsdoc.term_values(:main_title)).to eq(['Learn VB in 21 Days'])
+      expect(@dsdoc.term_values(:name, :namePart)).to eq(['Angus'])
+      expect(@dsdoc.term_values(:name, :role, :roleTerm)).to eq(['guitar'])
+      expect(@dsdoc.term_values(:relatedItem, :titleInfo, :title)).to eq(['Learn VB in 1 Day'])
+      expect(@dsdoc.term_values(:relatedItem, :location, :url)).to eq(['http://example.com'])
+      expect(@dsdoc.term_values(:subject, :topic)).to eq(['divorce', 'marriage'])
+      expect(@dsdoc.term_values(:preferred_citation)).to eq(['pref_cite outer'])
+      expect(@dsdoc.term_values(:related_citation)).to eq(['related_cite outer'])
+      expect(@dsdoc.term_values(:contact)).to eq(%w(foo@bar.com blah@bar.com))
     end
 
   end

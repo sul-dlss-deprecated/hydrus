@@ -328,42 +328,44 @@ describe Hydrus::Item, :type => :model do
   end
 
   describe "visibility()" do
-
+    let(:mock_groups) { [double(text: 'foo'), double(text: 'bar')] }
     it "should return [] for initial visibility" do
-      tests = [true, false]
-      tests.each do |is_emb|
-        allow(@hi).to receive(:is_embargoed).and_return(is_emb)
-        expect(@hi.visibility).to eq([])
-      end
+      expect(@hi.visibility).to eq([])
     end
 
-    it "should return ['world'] if item is world visible" do
-      tests = {
-        true  => :embargoMetadata,
-        false => :rightsMetadata,
-      }
-      tests.each do |is_emb, ds|
-        allow(@hi).to receive(:is_embargoed).and_return(is_emb)
-        allow(@hi).to receive_message_chain(ds, :has_world_read_node).and_return(true)
+    context 'for an embargoed item' do
+      before do
+        allow(@hi).to receive(:is_embargoed).and_return(true)
+      end
+
+      it 'returns ["world"] when the item is world visible' do
+        allow(@hi).to receive_message_chain('embargoMetadata', :has_world_read_node).and_return(true)
         expect(@hi.visibility).to eq(['world'])
       end
-    end
 
-    it "should return array of groups if item is visible to specific groups" do
-      tests = {
-        true  => :embargoMetadata,
-        false => :rightsMetadata,
-      }
-      exp_groups = %w(foo bar)  # Typically, just ['stanford']
-      mock_nodes = exp_groups.map { |g| double('', :text => g) }
-      tests.each do |is_emb, ds|
-        allow(@hi).to receive(:is_embargoed).and_return(is_emb)
-        allow(@hi).to receive_message_chain(ds, :has_world_read_node).and_return(false)
-        allow(@hi).to receive_message_chain(ds, :group_read_nodes).and_return(mock_nodes)
-        expect(@hi.visibility).to eq(exp_groups)
+      it 'returns an array of groups if the item is visible to specific groups' do
+        allow(@hi).to receive_message_chain('embargoMetadata', :has_world_read_node).and_return(false)
+        allow(@hi).to receive_message_chain('embargoMetadata', :group_read_nodes).and_return(mock_groups)
+        expect(@hi.visibility).to eq %w(foo bar)
       end
     end
 
+    context 'for an unembargoed item' do
+      before do
+        allow(@hi).to receive(:is_embargoed).and_return(false)
+      end
+
+      it 'returns ["world"] when the item is world visible' do
+        allow(@hi).to receive_message_chain('rightsMetadata', :has_world_read_node).and_return(true)
+        expect(@hi.visibility).to eq(['world'])
+      end
+
+      it 'returns an array of groups if the item is visible to specific groups' do
+        allow(@hi).to receive_message_chain('rightsMetadata', :has_world_read_node).and_return(false)
+        allow(@hi).to receive_message_chain('rightsMetadata', :group_read_nodes).and_return(mock_groups)
+        expect(@hi.visibility).to eq %w(foo bar)
+      end
+    end
   end
 
   describe "embarg_visib=()" do
@@ -964,14 +966,17 @@ describe Hydrus::Item, :type => :model do
       expect(@hi.is_assemblable).to eq(false)
     end
 
-    it "published item: should return value of validate!" do
+    it "is assemblable if it validates" do
       allow(@hi).to receive(:is_published).and_return(true)
-      [true, false].each do |exp|
-        allow(@hi).to receive('validate!').and_return(exp)
-        expect(@hi.is_assemblable).to eq(exp)
-      end
+      allow(@hi).to receive('validate!').and_return(true)
+      expect(@hi.is_assemblable).to eq(true)
     end
 
+    it "is not assemblable if it does not validate" do
+      allow(@hi).to receive(:is_published).and_return(true)
+      allow(@hi).to receive('validate!').and_return(false)
+      expect(@hi.is_assemblable).to eq(false)
+    end
   end
 
   describe "publish_directly()" do
@@ -1191,11 +1196,14 @@ describe Hydrus::Item, :type => :model do
 
   end
 
-  it "requires_human_approval() should delegate to the collection" do
-    ["yes", "no", "yes"].each { |exp|
-      allow(@hi).to receive_message_chain(:collection, :requires_human_approval).and_return(exp)
-      expect(@hi.requires_human_approval).to eq(exp)
-    }
+  it "requires_human_approval() if the collection does" do
+    allow(@hi).to receive_message_chain(:collection, :requires_human_approval).and_return('yes')
+    expect(@hi.requires_human_approval).to eq('yes')
+  end
+
+  it "does not requires_human_approval() if the collection does not" do
+    allow(@hi).to receive_message_chain(:collection, :requires_human_approval).and_return('no')
+    expect(@hi.requires_human_approval).to eq('no')
   end
 
   describe "version getters and setters" do

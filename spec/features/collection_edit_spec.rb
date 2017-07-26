@@ -440,34 +440,43 @@ describe("Collection edit", :type => :request, :integration => true) do
 
   end
 
-  it "form should enforce license selection for license options varies and fixed" do
-    %w(varies fixed).each do |opt|
+  describe 'license options' do
+    before do
       # Set collection to no-license mode.
       @hc.license_option = 'none'
       @hc.license = 'none'
       @hc.save
-      # Some values we need.
-      vs = {
-        :radio    => "hydrus_collection_license_option_#{opt}",
-        :select   => "license_option_#{opt}",
-        :lic_txt  => "ODC-ODbl Open Database License",
-        :alert    => "div.alert",
-        :msg_err  => 'License must be specified',
-        :msg_save => 'Your changes have been saved',
-      }
+    end
+
+    it 'enforces license selection' do
+      login_as('archivist1')
+      should_visit_edit_page(@hc)
+      choose('hydrus_collection_license_option_varies')
+      click_button(@buttons[:save])
+      # We should still be on edit page, with a flash error.
+      expect(page).to have_css("input#hydrus_collection_license_option_varies")
+      expect(page).to have_selector 'div.alert', text: 'License must be specified'
+    end
+
+    it "form should enforce license selection for license options varies" do
       # Edit collection, but forget to choose a license.
       login_as('archivist1')
       should_visit_edit_page(@hc)
-      choose(vs[:radio])
+      choose('hydrus_collection_license_option_varies')
+      select('ODC-ODbl Open Database License', :from => 'license_option_varies')
       click_button(@buttons[:save])
-      # We should still be on edit page, with a flash error.
-      expect(page).to have_css("input#" + vs[:radio])
-      expect(find(vs[:alert])).to have_content(vs[:msg_err])
-      # Select a license and save -- much success.
-      select(vs[:lic_txt], :from => vs[:select])
+      expect(page).to have_selector 'div.alert', text: 'Your changes have been saved'
+    end
+
+    it "form should enforce license selection for license options fixed" do
+      # Edit collection, but forget to choose a license.
+      login_as('archivist1')
+      should_visit_edit_page(@hc)
+      choose('hydrus_collection_license_option_fixed')
       click_button(@buttons[:save])
-      expect(find(vs[:alert])).to have_content(vs[:msg_save])
+      select('ODC-ODbl Open Database License', :from => 'license_option_fixed')
+      click_button(@buttons[:save])
+      expect(page).to have_selector 'div.alert', text: 'Your changes have been saved'
     end
   end
-
 end

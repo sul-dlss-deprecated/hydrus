@@ -35,25 +35,20 @@ describe("Item view", :type => :request, :integration => true) do
   end
 
   it "Some of the expected info is displayed, and disappers if blank" do
-    exp_content = [
-      'archivist1@example.com', # contact email
-      "How Couples Meet and Stay Together", # title
-      "The story of Pinocchio", #abstract
-      @druid,
-      'Contributing author', # label for contributor
-      'Frisbee, Hanna', # contributor
-      'Sponsor', # label for contributor
-      'US National Science Foundation, award SES-0751613', # contributor
-      'wooden boys', # keyword
-      'Keywords', # keywords label
-      'pinocchio.htm', # file
-    ]
     login_as('archivist1')
     visit polymorphic_path(@hi)
     expect(current_path).to eq(polymorphic_path(@hi))
-    exp_content.each do |exp|
-      expect(page).to have_content(exp)
-    end
+    expect(page).to have_content('archivist1@example.com')
+    expect(page).to have_content('How Couples Meet and Stay Together')
+    expect(page).to have_content('The story of Pinocchio')
+    expect(page).to have_content('druid:oo000oo0001')
+    expect(page).to have_content('Contributing author')
+    expect(page).to have_content('Frisbee, Hanna')
+    expect(page).to have_content('Sponsor')
+    expect(page).to have_content('US National Science Foundation, award SES-0751613')
+    expect(page).to have_content('wooden boys')
+    expect(page).to have_content('Keywords')
+    expect(page).to have_content('pinocchio.htm')
 
     # Now let's delete the related items and go back to the
     # view page and make sure those fields don't show up.
@@ -68,29 +63,19 @@ describe("Item view", :type => :request, :integration => true) do
 
   it "should apply the active class to the active tab" do
     login_as('archivist1')
-    tests = {
-      "Published Version" => @hi,
-      "History"           => [@hi, :events],
-    }
-    tests.each do |exp, arg|
-      should_visit_view_page(arg)
-      es = all('ul.nav li.active')
-      expect(es.size).to eq(1)
-      expect(es.first).to have_content(exp)
-    end
+    should_visit_view_page(@hi)
+    expect(page).to have_selector('ul.nav li.active', text: 'Published Version')
+
+    should_visit_view_page([@hi, :events])
+    expect(page).to have_selector('ul.nav li.active', text: 'History')
   end
 
   it "should show the events in a history tab" do
-    exp_content = [
-      "How Couples Meet and Stay Together",
-      'Event History for this Item',
-      'Item created'
-    ]
     login_as('archivist1')
     should_visit_view_page([@hi, :events])
-    exp_content.each do |exp|
-      expect(page).to have_content(exp)
-    end
+    expect(page).to have_content('How Couples Meet and Stay Together')
+    expect(page).to have_content('Event History for this Item')
+    expect(page).to have_content('Item created')
   end
 
   it "redirect_if_not_correct_object_type()" do

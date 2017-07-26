@@ -2,15 +2,15 @@ require 'spec_helper'
 
 describe SolrDocument, :type => :model do
 
-  it "route_key() should behave as expected" do
-    tests = [
-      [ 'info:fedora/afmodel:Dor_Collection', 'hydrus_collection'],
-      [ 'info:fedora/afmodel:Dor_Item',       'hydrus_item'],
-    ]
-    tests.each do |has_model_ssim, exp|
-      h = { :has_model_ssim => has_model_ssim }
-      sdoc = SolrDocument.new h
-      expect(sdoc.route_key).to eq(exp)
+  describe '#route_key' do
+    it 'should be hydrus_collection for a Dor::Collection' do
+      sdoc = SolrDocument.new has_model_ssim: 'info:fedora/afmodel:Dor_Collection'
+      expect(sdoc.route_key).to eq('hydrus_collection')
+    end
+
+    it 'should be hydrus_item for a Dor::Item' do
+      sdoc = SolrDocument.new has_model_ssim: 'info:fedora/afmodel:Dor_Item'
+      expect(sdoc.route_key).to eq('hydrus_item')
     end
   end
 
