@@ -6,7 +6,7 @@ task :ci => ['jetty:clean', 'jetty:config'] do
     # force any CI sub-tasks to run in the test environment (e.g. to ensure
     # fixtures get loaded into the right places)
     system('RAILS_ENV=test rake ci')
-    break
+    next
   end
 
   Rake::Task["db:migrate"].invoke
