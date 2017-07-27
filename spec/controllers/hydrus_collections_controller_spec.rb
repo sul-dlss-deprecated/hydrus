@@ -37,13 +37,12 @@ describe HydrusCollectionsController, :type => :controller do
         :action     => 'list_all')
     end
 
-    it "custom post actions should route correctly" do
-      pid = 'abc123'
-      actions = %w(open close)
-      actions.each do |a|
-        h = { :post => "/collections/#{a}/#{pid}" }
-        expect(h).to route_to(:controller => 'hydrus_collections', :action => a, :id => pid)
-      end
+    it "routes open action correctly" do
+      expect(post: '/collections/open/abc123').to route_to(:controller => 'hydrus_collections', :action => 'open', :id => 'abc123')
+    end
+
+    it "routes close action correctly" do
+      expect(post: '/collections/close/abc123').to route_to(:controller => 'hydrus_collections', :action => 'close', :id => 'abc123')
     end
 
   end
@@ -74,19 +73,24 @@ describe HydrusCollectionsController, :type => :controller do
 
   end
 
-  describe "open/close", :integration => true do
-
+  describe "open", :integration => true do
     it "should raise exception if user lacks required permissions" do
-      pid = "druid:oo000oo0003"
       sign_in(mock_user)
-      [:open, :close].each do |action|
-        post(action, :id => pid)
+      post(:open, :id => 'druid:oo000oo0003')
 
-        expect(flash[:alert]).to eq("You are not authorized to access this page.")
-      end
+      expect(flash[:alert]).to eq("You are not authorized to access this page.")
     end
-
   end
+
+  describe "close", :integration => true do
+    it "should raise exception if user lacks required permissions" do
+      sign_in(mock_user)
+      post(:close, :id => 'druid:oo000oo0003')
+
+      expect(flash[:alert]).to eq("You are not authorized to access this page.")
+    end
+  end
+
 
   describe "list_all", :integration => true do
 

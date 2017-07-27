@@ -55,21 +55,18 @@ describe Hydrus::Responsible, :type => :model do
 
   before(:each) do
     @obj = MockResponsible.new
-    @orig_roles = {
-      "hydrus-collection-manager"        => Set.new(["archivist4", "archivist5"]),
-      "hydrus-collection-reviewer"       => Set.new(["archivist3"]),
-      "hydrus-collection-item-depositor" => Set.new(["archivist6", "archivist3"]),
-    }
   end
 
   it "person_roles() should return the expected hash" do
-    expect(@obj.person_roles).to eq(@orig_roles)
+    expect(@obj.person_roles['hydrus-collection-manager']).to match_array(["archivist4", "archivist5"])
+    expect(@obj.person_roles['hydrus-collection-reviewer']).to match_array(["archivist3"])
+    expect(@obj.person_roles['hydrus-collection-item-depositor']).to match_array(["archivist6", "archivist3"])
   end
 
   it "persons_with_role() should return expected IDs" do
-    @orig_roles.each do |role, ids|
-      expect(@obj.persons_with_role(role)).to eq(ids)
-    end
+    expect(@obj.persons_with_role('hydrus-collection-manager')).to match_array(["archivist4", "archivist5"])
+    expect(@obj.persons_with_role('hydrus-collection-reviewer')).to match_array(["archivist3"])
+    expect(@obj.persons_with_role('hydrus-collection-item-depositor')).to match_array(["archivist6", "archivist3"])
   end
 
   it "roles_of_person() should return expected roles" do

@@ -49,6 +49,7 @@ describe Hydrus::GenericObject, :type => :model do
   end
 
   it "can exercise url()" do
+    allow(@go).to receive(:pid).and_return('__DO_NOT_USE__')
     expect(@go.purl_url).to eq("https://purl.stanford.edu/__DO_NOT_USE__")
   end
 
@@ -170,7 +171,7 @@ describe Hydrus::GenericObject, :type => :model do
     end
   end
   context 'set_item_type' do
-    before :each do 
+    before :each do
       @obj  = Hydrus::GenericObject.new
       @descMD = Dor::DescMetadataDS.new(nil, nil)
     end
@@ -179,7 +180,7 @@ describe Hydrus::GenericObject, :type => :model do
     end
     def genre
       @obj.descMetadata.ng_xml.search('//mods:genre', 'mods' => 'http://www.loc.gov/mods/v3').first.text
-    end 
+    end
   it 'set_item_type() should set the correct desc metadata fields for a dataset' do
       @obj.set_item_type('dataset')
       expect(type_of_resource).to eq('software, multimedia')
@@ -191,13 +192,13 @@ describe Hydrus::GenericObject, :type => :model do
       expect(genre).to eq('thesis')
       expect(@obj.descMetadata.ng_xml.search('//mods:genre', 'mods' => 'http://www.loc.gov/mods/v3').first['authority']).to eq('marcgt')
   end
-  it 'set_item_type() should set the correct desc metadata fields for a article' do    
+  it 'set_item_type() should set the correct desc metadata fields for a article' do
       @obj.set_item_type('article')
       expect(type_of_resource).to eq('text')
       expect(genre).to eq('article')
       expect(@obj.descMetadata.ng_xml.search('//mods:genre', 'mods' => 'http://www.loc.gov/mods/v3').first['authority']).to eq('marcgt')
   end
-  
+
   it 'set_item_type() should set the correct desc metadata fields for a class project' do
       @obj.set_item_type('class project')
       expect(type_of_resource).to eq('text')
@@ -256,7 +257,7 @@ describe Hydrus::GenericObject, :type => :model do
       expect(type_of_resource).to eq('text')
       expect(genre).to eq('instruction')
   end
-  
+
   it 'set_item_type() should set the correct desc metadata fields for a collection' do
       @obj.set_item_type(:collection)
       expect(type_of_resource).to eq('')
@@ -497,17 +498,22 @@ end
   end
 
   describe "save()" do
+    context "on an existing object" do
+      before do
+        allow(@go).to receive(:new_record?).and_return(false)
+      end
+      it "invokes log_editing_events()" do
+        expect(@go).to receive(:log_editing_events).once
+        @go.save(:no_super => true)
+      end
 
-    it "should invoke log_editing_events() usually" do
-      expect(@go).to receive(:log_editing_events).once
-      @go.save(:no_super => true)
+      context "when no_edit_logging is false" do
+        it "should not invoke log_editing_events() if no_edit_logging is true" do
+          expect(@go).not_to receive(:log_editing_events)
+          @go.save(:no_edit_logging => true, :no_super => true)
+        end
+      end
     end
-
-    it "should not invoke log_editing_events() if no_edit_logging is true" do
-      expect(@go).not_to receive(:log_editing_events)
-      @go.save(:no_edit_logging => true, :no_super => true)
-    end
-
   end
 
   it "is_item? and is_collection? should work" do

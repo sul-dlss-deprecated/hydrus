@@ -5,6 +5,7 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
   include Hydrus::Validatable
   include Hydrus::Processable
   include Hydrus::Contentable
+  include Dor::Publishable
   extend  Hydrus::Delegatable
 
   has_metadata(
@@ -121,6 +122,14 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
 
   def is_apo?
     true
+  end
+
+  def is_item?
+    false
+  end
+
+  def is_collection?
+    false
   end
 
   def is_assemblable

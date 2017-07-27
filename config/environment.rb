@@ -23,7 +23,8 @@ Hydrus::Application.configure do
 
 end
 
-Dor::Config.configure do
+require 'dor-services'
+Dor.configure do
   app_version File.read File.join(current_path, '..','VERSION')
 
   fedora do
@@ -31,7 +32,7 @@ Dor::Config.configure do
   end
 
   suri do
-    mint_ids true
+    mint_ids Settings.suri.mint_ids
     id_namespace('druid')
     url Settings.suri.url
     user Settings.suri.user
@@ -53,12 +54,12 @@ Dor::Config.configure do
   end
 
   dor_services.url Settings.dor_services.url
-  solrizer.url     Settings.solr.url
+  solr.url     Settings.solr.url
   sdr.url          Settings.sdr.url
 
   hydrus do
     initial_apo_title      'Intial Hydrus APO title'
-    app_workflow           :hydrusAssemblyWF
+    app_workflow           'hydrusAssemblyWF'
     app_workflow_steps     %w(start-deposit submit approve start-assembly)
     ur_apo_druid           Settings.hydrus.ur_apo_druid
     assembly_wf_xml        File.read(File.join(current_path, "assemblyWF_hydrus.xml"))

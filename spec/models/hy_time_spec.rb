@@ -6,17 +6,12 @@ describe HyTime, :type => :model do
     expect(HyTime.now).to be_kind_of(DateTime)
   end
 
-  it "should be able to exercise the generated HyTime methods" do
-    HyTime::DT_FORMATS.keys.each do |f|
+  HyTime::DT_FORMATS.keys.each do |f|
+    it "should be able to exercise the generated #{f} method" do
       s1 = HyTime.send(f)
       s2 = HyTime.send("now_#{f}")
       expect(s1).to be_instance_of(String)
       expect(s2).to be_instance_of(String)
-    end
-  end
-
-  it "should be able to exercise the generated HyTime.* methods" do
-    HyTime::DT_FORMATS.keys.each do |f|
     end
   end
 
@@ -80,19 +75,14 @@ describe HyTime, :type => :model do
     end
   end
 
-  it "is_well_formed_datetime()" do
-    tests = {
-      nil                    => false,
-      ''                     => false,
-      '  '                   => false,
-      '2000-01-01'           => true,
-      '2000-02-31'           => false,
-      '2000-01-02T07:00:00Z' => true,
-    }
-    tests.each do |dt, exp|
-      expect(HyTime.is_well_formed_datetime(dt)).to eq(exp)
+  describe '#is_well_formed_datetime' do
+    it 'validates whether the string is formatted like a valid timestamp' do
+      expect(HyTime.is_well_formed_datetime(nil)).to eq(false)
+      expect(HyTime.is_well_formed_datetime('')).to eq(false)
+      expect(HyTime.is_well_formed_datetime('  ')).to eq(false)
+      expect(HyTime.is_well_formed_datetime('2000-01-01')).to eq(true)
+      expect(HyTime.is_well_formed_datetime('2000-02-31')).to eq(false)
+      expect(HyTime.is_well_formed_datetime('2000-01-02T07:00:00Z')).to eq(true)
     end
-
   end
-
 end

@@ -23,7 +23,7 @@ describe ApplicationHelper, :type => :helper do
 
   it "should show the signin link" do
     allow(controller.request).to receive(:fullpath).and_return('/items/oo000oo0001')
-    expect(helper.hydrus_signin_link).to eq("<a href=\"/users/sign_in?referrer=%2Fitems%2Foo000oo0001\" class=\"signin_link\">Sign in</a>")
+    expect(helper.hydrus_signin_link).to have_link 'Sign in', href: "/users/sign_in?referrer=%2Fitems%2Foo000oo0001"
   end
 
   it "should indicate if an object is empty" do
@@ -38,16 +38,24 @@ describe ApplicationHelper, :type => :helper do
     expect(hydrus_is_empty?(Hydrus::Contributor.new(:name=>'peter',:role=>'el jefe'))).to be false
   end
 
-  it "should show the item edit tab appropriately" do
-    [false, true].each do |exp|
-      item = double(Hydrus::Item, :is_published => !exp)
-      expect(show_item_edit(item)).to eq(exp)
-    end
+  it 'should show the item edit tab if the item is not published' do
+    item = double(Hydrus::Item, :is_published => true)
+    expect(show_item_edit(item)).to eq(false)
+  end
+
+  it 'should not show the item edit tab if the item is published' do
+    item = double(Hydrus::Item, :is_published => false)
+    expect(show_item_edit(item)).to eq(true)
   end
 
   it "should render the correct contextual layout" do
     controller=double("HydrusCollectionsController")
-    expect(render_contextual_layout).to eq("<ul class=\"breadcrumb\">\n  <li><a href=\"/\" disable_after_click=\"true\">Home</a></li>\n</ul>\n\n\n<div class=\"row\">\n  <div class=\"span9\" id=\"main\"></div>\n  <div class=\"span3\" id=\"sidebar\"></div>\n</div>\n")
+    rendered = helper.render_contextual_layout
+
+    expect(rendered).to have_selector 'ul.breadcrumb'
+    expect(rendered).to have_link 'Home', '/'
+    expect(rendered).to have_selector '.row #main'
+    expect(rendered).to have_selector '.row #sidebar'
   end
 
   it "should set the correct text for empty objects" do
@@ -60,7 +68,7 @@ describe ApplicationHelper, :type => :helper do
   end
 
   it "license_image()" do
-    expect(license_image('cc-by')).to eq('<img alt="Cc_by" src="/images/licenses/cc_by.png" />')
+    expect(license_image('cc-by')).to have_selector 'img[@src="/images/licenses/cc_by.png"][@alt="Cc by"]'
     expect(license_image('pddl')).to eq('')
     expect(license_image('none')).to eq('')
   end
@@ -119,8 +127,8 @@ describe ApplicationHelper, :type => :helper do
       hi2=Hydrus::Item.find('druid:oo000oo0001')
       expect(helper.title_text(hi)).to eq('Untitled')
       expect(helper.title_text(hi2)).to eq('How Couples Meet and Stay Together')
-      expect(helper.title_link(hi)).to eq('<a href="/items" disable_after_click="true">Untitled</a>')
-      expect(helper.title_link(hi2)).to eq('<a href="/items/druid:oo000oo0001" disable_after_click="true">How Couples Meet and Stay Together</a>')
+      expect(helper.title_link(hi)).to have_selector 'a[href="/items"][disable_after_click="true"]', text: 'Untitled'
+      expect(helper.title_link(hi2)).to have_selector 'a[href="/items/druid:oo000oo0001"][disable_after_click="true"]', text: 'How Couples Meet and Stay Together'
     end
 
   end

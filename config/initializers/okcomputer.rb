@@ -11,7 +11,7 @@ OkComputer.check_in_parallel = true
 OkComputer::Registry.register 'ruby_version', OkComputer::RubyVersionCheck.new
 
 # Solr
-solr_url = Dor::Config.solrizer.url + "/select"
+solr_url = Dor::Config.solr.url + "/select"
 OkComputer::Registry.register 'solr_url', OkComputer::HttpCheck.new(solr_url)
 
 # fedora

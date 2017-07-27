@@ -1,4 +1,4 @@
-<% unless is_production? %>
+<% if Settings.show_test_banner? %>
   <a rel="tooltip" data-placement='bottom' title="This website is in development and any data you add will be deleted."><span class="label label-warning">Test Site</span></a> |
   <%= render(:partial => 'shared/beta_dialog')  unless seen_beta_dialog?%>
 <% end %>

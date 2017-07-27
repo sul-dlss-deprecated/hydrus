@@ -20,14 +20,15 @@ describe Hydrus::Item, :type => :model do
     END
     @workflow_xml = noko_doc(@workflow_xml)
   end
-  
+
   describe "#files" do
     subject { Hydrus::Item.new }
 
     it "should retrieve ObjectFiles from the database" do
-      m = double()
-      expect(Hydrus::ObjectFile).to receive(:find_all_by_pid).with(subject.pid, hash_including({:order=>"weight ASC,label ASC,file ASC"})).and_return(m)
-      expect(subject.files).to eq(m)
+      relation = subject.files
+      expect(relation).to be_a ActiveRecord::Relation
+      expect(relation.where_values_hash).to eq 'pid' => subject.pid
+      expect(relation.order_values).to eq ['weight ASC,label ASC,file ASC']
     end
   end
 
@@ -121,12 +122,12 @@ describe Hydrus::Item, :type => :model do
         <titleInfo>
           <title>Commencement addresses</title>
         </titleInfo>
-  
+
         <abstract>Transcripts of addresses delivered at Stanford commencement ceremonies.</abstract>
         <note type="preferred citation" displayLabel="Preferred Citation">Stanford University Commencement Collection (1892- ). Stanford Digital Repository. Available at http://purl.stanford.edu/mp840zw9344.</note>
         <note type="citation/reference" displayLabel="Related Publication"/>
         <note type="contact" displayLabel="Contact">archivesref@stanford.edu</note>
-  
+
         <relatedItem>
           <titleInfo>
             <title>Finding Aid</title>
@@ -135,7 +136,7 @@ describe Hydrus::Item, :type => :model do
             <url>http://www.oac.cdlib.org/findaid/ark:/13030/c8vq322c</url>
           </location>
         </relatedItem><relatedItem><titleInfo><title>List of commencement speakers</title></titleInfo><location><url>http://library.stanford.edu/spc/university-archives/stanford-history/commencement-addresses</url></location></relatedItem>
-      <name type="corporate"><namePart>Stanford University.</namePart><role><roleTerm authority="marcrelator" type="text">Sponsor</roleTerm></role></name><subject><topic>Stanford University--Commencement</topic></subject><subject><topic>Stanford University--Invited speakers</topic></subject></mods>      
+      <name type="corporate"><namePart>Stanford University.</namePart><role><roleTerm authority="marcrelator" type="text">Sponsor</roleTerm></role></name><subject><topic>Stanford University--Commencement</topic></subject><subject><topic>Stanford University--Invited speakers</topic></subject></mods>
       eos
       allow(@hi).to receive(:descMetadata).and_return(Hydrus::DescMetadataDS.from_xml(@xml))
       expect(@hi.dates[:date_created_approximate]).to be_falsey
@@ -144,8 +145,8 @@ describe Hydrus::Item, :type => :model do
       @xml = <<-eos
         <mods xmlns="http://www.loc.gov/mods/v3">
           <originInfo>
-          <dateCreated encoding="w3cdtf" point="start" keyDate="yes">2005-04</dateCreated> 
-          <dateCreated encoding="w3cdtf" point="end">2005-05</dateCreated> 
+          <dateCreated encoding="w3cdtf" point="start" keyDate="yes">2005-04</dateCreated>
+          <dateCreated encoding="w3cdtf" point="end">2005-05</dateCreated>
           </originInfo>
         </mods>
       eos
@@ -170,8 +171,8 @@ describe Hydrus::Item, :type => :model do
       @xml = <<-eos
         <mods xmlns="http://www.loc.gov/mods/v3">
           <originInfo>
-          <dateCreated encoding="w3cdtf" point="start" keyDate="yes" qualifier="approximate">2005-04</dateCreated> 
-          <dateCreated encoding="w3cdtf" point="end">2005-05</dateCreated> 
+          <dateCreated encoding="w3cdtf" point="start" keyDate="yes" qualifier="approximate">2005-04</dateCreated>
+          <dateCreated encoding="w3cdtf" point="end">2005-05</dateCreated>
           </originInfo>
         </mods>
       eos
@@ -230,54 +231,54 @@ describe Hydrus::Item, :type => :model do
     end
   end
   describe 'date_display' do
-    it 'should render a date range with approximate dates' do 
+    it 'should render a date range with approximate dates' do
       @xml = <<-eos
         <mods xmlns="http://www.loc.gov/mods/v3">
           <originInfo>
-          <dateCreated encoding="w3cdtf" point="start" keyDate="yes" qualifier="approximate">2005-04</dateCreated> 
-          <dateCreated encoding="w3cdtf" point="end" qualifier="approximate">2005-05</dateCreated> 
+          <dateCreated encoding="w3cdtf" point="start" keyDate="yes" qualifier="approximate">2005-04</dateCreated>
+          <dateCreated encoding="w3cdtf" point="end" qualifier="approximate">2005-05</dateCreated>
           </originInfo>
         </mods>
       eos
       allow(@hi).to receive(:descMetadata).and_return(Hydrus::DescMetadataDS.from_xml(@xml))
       expect(@hi.date_display).to eq('[ca. 2005-04 - ca. 2005-05]')
     end
-    it 'should render a date range with one approximate date' do 
+    it 'should render a date range with one approximate date' do
       @xml = <<-eos
         <mods xmlns="http://www.loc.gov/mods/v3">
           <originInfo>
-          <dateCreated encoding="w3cdtf" point="start" keyDate="yes" qualifier="approximate">2005-04</dateCreated> 
-          <dateCreated encoding="w3cdtf" point="end">2005-05</dateCreated> 
+          <dateCreated encoding="w3cdtf" point="start" keyDate="yes" qualifier="approximate">2005-04</dateCreated>
+          <dateCreated encoding="w3cdtf" point="end">2005-05</dateCreated>
           </originInfo>
         </mods>
       eos
       allow(@hi).to receive(:descMetadata).and_return(Hydrus::DescMetadataDS.from_xml(@xml))
       expect(@hi.date_display).to eq('[ca. 2005-04] to 2005-05')
     end
-    it 'should render a date range with approximate dates' do 
+    it 'should render a date range with approximate dates' do
       @xml = <<-eos
         <mods xmlns="http://www.loc.gov/mods/v3">
           <originInfo>
-          <dateCreated encoding="w3cdtf" keyDate="yes" qualifier="approximate">2005-04</dateCreated> 
+          <dateCreated encoding="w3cdtf" keyDate="yes" qualifier="approximate">2005-04</dateCreated>
           </originInfo>
         </mods>
       eos
       allow(@hi).to receive(:descMetadata).and_return(Hydrus::DescMetadataDS.from_xml(@xml))
       expect(@hi.date_display).to eq('[ca. 2005-04]')
     end
-    it 'should work with no date present' do 
+    it 'should work with no date present' do
       @xml = <<-eos
         <mods xmlns="http://www.loc.gov/mods/v3">
           <originInfo>
-          <dateCreated></dateCreated> 
+          <dateCreated></dateCreated>
           </originInfo>
         </mods>
       eos
       allow(@hi).to receive(:descMetadata).and_return(Hydrus::DescMetadataDS.from_xml(@xml))
       expect(@hi.date_display).to eq('')
     end
-    
-    
+
+
   end
   describe "roleMetadata in the item", :integration=>true do
     subject { Hydrus::Item.find('druid:oo000oo0001') }
@@ -327,48 +328,50 @@ describe Hydrus::Item, :type => :model do
   end
 
   describe "visibility()" do
-
+    let(:mock_groups) { [double(text: 'foo'), double(text: 'bar')] }
     it "should return [] for initial visibility" do
-      tests = [true, false]
-      tests.each do |is_emb|
-        allow(@hi).to receive(:is_embargoed).and_return(is_emb)
-        expect(@hi.visibility).to eq([])
-      end
+      expect(@hi.visibility).to eq([])
     end
 
-    it "should return ['world'] if item is world visible" do
-      tests = {
-        true  => :embargoMetadata,
-        false => :rightsMetadata,
-      }
-      tests.each do |is_emb, ds|
-        allow(@hi).to receive(:is_embargoed).and_return(is_emb)
-        allow(@hi).to receive_message_chain(ds, :has_world_read_node).and_return(true)
+    context 'for an embargoed item' do
+      before do
+        allow(@hi).to receive(:is_embargoed).and_return(true)
+      end
+
+      it 'returns ["world"] when the item is world visible' do
+        allow(@hi).to receive_message_chain('embargoMetadata', :has_world_read_node).and_return(true)
         expect(@hi.visibility).to eq(['world'])
       end
-    end
 
-    it "should return array of groups if item is visible to specific groups" do
-      tests = {
-        true  => :embargoMetadata,
-        false => :rightsMetadata,
-      }
-      exp_groups = %w(foo bar)  # Typically, just ['stanford']
-      mock_nodes = exp_groups.map { |g| double('', :text => g) }
-      tests.each do |is_emb, ds|
-        allow(@hi).to receive(:is_embargoed).and_return(is_emb)
-        allow(@hi).to receive_message_chain(ds, :has_world_read_node).and_return(false)
-        allow(@hi).to receive_message_chain(ds, :group_read_nodes).and_return(mock_nodes)
-        expect(@hi.visibility).to eq(exp_groups)
+      it 'returns an array of groups if the item is visible to specific groups' do
+        allow(@hi).to receive_message_chain('embargoMetadata', :has_world_read_node).and_return(false)
+        allow(@hi).to receive_message_chain('embargoMetadata', :group_read_nodes).and_return(mock_groups)
+        expect(@hi.visibility).to eq %w(foo bar)
       end
     end
 
+    context 'for an unembargoed item' do
+      before do
+        allow(@hi).to receive(:is_embargoed).and_return(false)
+      end
+
+      it 'returns ["world"] when the item is world visible' do
+        allow(@hi).to receive_message_chain('rightsMetadata', :has_world_read_node).and_return(true)
+        expect(@hi.visibility).to eq(['world'])
+      end
+
+      it 'returns an array of groups if the item is visible to specific groups' do
+        allow(@hi).to receive_message_chain('rightsMetadata', :has_world_read_node).and_return(false)
+        allow(@hi).to receive_message_chain('rightsMetadata', :group_read_nodes).and_return(mock_groups)
+        expect(@hi.visibility).to eq %w(foo bar)
+      end
+    end
   end
 
   describe "embarg_visib=()" do
 
     before(:each) do
-      @edate = '2012-02-28T08:00:00Z'
+      @edate = '2012-02-28T08:00:00+00:00'
       # This enables the tests to run in a timezone other than Pacific.
       allow(HyTime).to receive(:datetime).with("2012-02-28", :from_localzone => true).and_return(@edate)
       # XML snippets for various <access> nodes.
@@ -453,7 +456,7 @@ describe Hydrus::Item, :type => :model do
       end
 
       describe "setter: with valid date" do
-        let(:rd_dt) { "2012-08-30T08:00:00Z" }
+        let(:rd_dt) { "2012-08-30T08:00:00+00:00" }
         before do
           # This enables the tests to run in a timezone other than Pacific.
           allow(HyTime).to receive(:datetime).with("2012-08-30", :from_localzone => true).and_return(rd_dt)
@@ -679,7 +682,7 @@ describe Hydrus::Item, :type => :model do
       allow(@hi).to receive(:date_created).and_return('2011')
       allow(@hi).to receive(:single_date?).and_return true
       allow(@hi).to receive_message_chain([:collection, :embargo_option]).and_return("varies")
-      if not @hi.valid? 
+      if not @hi.valid?
         msg=@hi.errors.messages.map { |field, error|
         "#{field.to_s.humanize.capitalize} #{error.join(', ')}"
         }
@@ -954,7 +957,7 @@ describe Hydrus::Item, :type => :model do
     end
 
   end
-  
+
   describe "is_assemblable()" do
 
     it "unpublished item: should always return false" do
@@ -963,14 +966,17 @@ describe Hydrus::Item, :type => :model do
       expect(@hi.is_assemblable).to eq(false)
     end
 
-    it "published item: should return value of validate!" do
+    it "is assemblable if it validates" do
       allow(@hi).to receive(:is_published).and_return(true)
-      [true, false].each do |exp|
-        allow(@hi).to receive('validate!').and_return(exp)
-        expect(@hi.is_assemblable).to eq(exp)
-      end
+      allow(@hi).to receive('validate!').and_return(true)
+      expect(@hi.is_assemblable).to eq(true)
     end
 
+    it "is not assemblable if it does not validate" do
+      allow(@hi).to receive(:is_published).and_return(true)
+      allow(@hi).to receive('validate!').and_return(false)
+      expect(@hi.is_assemblable).to eq(false)
+    end
   end
 
   describe "publish_directly()" do
@@ -1190,11 +1196,14 @@ describe Hydrus::Item, :type => :model do
 
   end
 
-  it "requires_human_approval() should delegate to the collection" do
-    ["yes", "no", "yes"].each { |exp|
-      allow(@hi).to receive_message_chain(:collection, :requires_human_approval).and_return(exp)
-      expect(@hi.requires_human_approval).to eq(exp)
-    }
+  it "requires_human_approval() if the collection does" do
+    allow(@hi).to receive_message_chain(:collection, :requires_human_approval).and_return('yes')
+    expect(@hi.requires_human_approval).to eq('yes')
+  end
+
+  it "does not requires_human_approval() if the collection does not" do
+    allow(@hi).to receive_message_chain(:collection, :requires_human_approval).and_return('no')
+    expect(@hi.requires_human_approval).to eq('no')
   end
 
   describe "version getters and setters" do

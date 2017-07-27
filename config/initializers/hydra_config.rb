@@ -1,1 +1,1 @@
-require 'hydra'
+require 'hydra/head'

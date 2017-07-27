@@ -1,4 +1,4 @@
-class Hydrus::RoleMetadataDS < ActiveFedora::NokogiriDatastream
+class Hydrus::RoleMetadataDS < ActiveFedora::OmDatastream
 
   include SolrDocHelper
   include Hydrus::GenericDS
@@ -112,16 +112,6 @@ class Hydrus::RoleMetadataDS < ActiveFedora::NokogiriDatastream
   ####
   # Other.
   ####
-
-  # Takes a string       (eg, hydrus-item-foo or hydrus_collection_bar)
-  # Returns a new string (eg, hydrus_item_foo or hydrus-collection-bar).
-  # Was used in our old implementation. Might not be needed in future.
-  TOGGLE_HYPHEN_REGEX = / \A (hydrus) ([_\-]) (collection|item) \2 ([a-z]) /ix
-  def toggle_hyphen_underscore(role_type)
-    role_type.sub(TOGGLE_HYPHEN_REGEX) {
-      [$1, $3, $4].join($2 == '_' ? '-' : '_')
-    }
-  end
 
   def to_solr(solr_doc = {}, *args)
     super(solr_doc, *args)

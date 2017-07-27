@@ -21,18 +21,6 @@ class Hydrus::GenericObject < Dor::Item
     errors.add(:contact, "must contain a single valid email address")
   end
 
-  def is_item?
-    self.class == Hydrus::Item
-  end
-
-  def is_collection?
-    self.class == Hydrus::Collection
-  end
-
-  def is_apo?
-    false
-  end
-
   # the pid without the druid: prefix
   def dru
     pid.gsub('druid:','')
@@ -44,12 +32,17 @@ class Hydrus::GenericObject < Dor::Item
   #     during Hydrus remediations.
   #   - The :no_super is used to prevent the super() call during unit tests.
   def save(opts = {})
-    # beautify_datastream(:descMetadata) unless opts[:no_beautify]
-    unless opts[:is_remediation]
-      self.last_modify_time = HyTime.now_datetime
-      log_editing_events() unless opts[:no_edit_logging]
+    if new_record?
+      # dor-services calls save before any metadata is applied, so don't validate
+      super(validate: false) unless opts[:no_super]
+    else
+      # beautify_datastream(:descMetadata) unless opts[:no_beautify]
+      unless opts[:is_remediation]
+        self.last_modify_time = HyTime.now_datetime
+        log_editing_events() unless opts[:no_edit_logging]
+      end
+      super() unless opts[:no_super]
     end
-    super() unless opts[:no_super]
   end
 
   # Takes a datastream name, such as :descMetadata or 'rightsMetadata'.
@@ -95,7 +88,7 @@ class Hydrus::GenericObject < Dor::Item
         # DEPRECATED. MAYBE DEAD CODE?
         identityMetadata.add_value(:objectType, 'set')
         identityMetadata.content_will_change!
-        descMetadata.ng_xml.search('//mods:mods/mods:typeOfResource', 'mods' => 'http://www.loc.gov/mods/v3').each do |node|				
+        descMetadata.ng_xml.search('//mods:mods/mods:typeOfResource', 'mods' => 'http://www.loc.gov/mods/v3').each do |node|
   				node['collection']='yes'
         end
       end
@@ -164,37 +157,37 @@ class Hydrus::GenericObject < Dor::Item
     node = descMetadata.ng_xml.search('//mods:genre', 'mods' => 'http://www.loc.gov/mods/v3').first
     node.remove_attribute('authority') if node
   end
-  
+
   def set_type_of_resource_collection(descMetadata)
     descMetadata.ng_xml.search('//mods:typeOfResource', 'mods' => 'http://www.loc.gov/mods/v3').first['manuscript'] = 'yes'
   end
-  
+
   def remove_type_of_resource_collection(descMetadata)
      node = descMetadata.ng_xml.search('//mods:typeOfResource', 'mods' => 'http://www.loc.gov/mods/v3').first
      node.remove_attribute('manuscript') if node
   end
-  
+
   # the possible types of items that can be created, hash of display value (keys) and values to store in object (value)
   def self.item_types
     {
       "archival mixed material" => "archival mixed material",
       "article"       => "article",
-      "audio - music" => "audio - music",   
-      "audio - spoken" => "audio - spoken",   
+      "audio - music" => "audio - music",
+      "audio - spoken" => "audio - spoken",
       "class project" => "class project",
       "computer game" => "computer game",
-      "conference paper / presentation" => "conference paper / presentation",  
+      "conference paper / presentation" => "conference paper / presentation",
       "data set"      => "dataset",
       "image"         => "image",
       "software"      => "software",
-      "other"         => "other",      
+      "other"         => "other",
       "technical report" => "technical report",
       "textbook"      => "textbook",
       "thesis"        => "thesis",
-      "video" => "video"    
+      "video" => "video"
     }
   end
-  
+
   # Returns a data structure intended to be passed into
   # grouped_options_for_select(). This is an awkward approach (too
   # view-centric), leading to some minor data duplication in other
@@ -326,7 +319,7 @@ class Hydrus::GenericObject < Dor::Item
   def send_object_returned_email_notification(opts={})
     return if recipients_for_object_returned_email.blank?
     email=HydrusMailer.object_returned(:returned_by => @current_user, :object => self, :item_url=>opts[:item_url])
-    email.deliver unless email.blank?
+    email.deliver_now unless email.blank?
   end
 
   def purl_page_ready?

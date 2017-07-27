@@ -32,7 +32,7 @@ describe("Item edit", :type => :request, :integration => true) do
 
   it "should be able to edit simple items: abstract, contact, keywords" do
     # Set up the new values for the fields we will edit.
-    ni = hash2struct(
+    ni = OpenStruct.new(
       :abstract => 'abcxyz123',
       :contact  => 'ozzy@hell.com',
       :keywords => %w(foo bar fubb),
@@ -62,7 +62,7 @@ describe("Item edit", :type => :request, :integration => true) do
     expect(@hi.contact).to  eq(ni.contact)
     expect(@hi.keywords).to eq(ni.keywords)
   end
-  
+
   describe "dates" do
     it 'should edit a single date' do
       # Visit edit page.
@@ -70,7 +70,7 @@ describe("Item edit", :type => :request, :integration => true) do
       should_visit_edit_page(@hi)
       date_val = '2004'
       expect(find_field("hydrus_item[dates[date_created]]").value).not_to include(date_val)
-    
+
       # Submit some changes.
       fill_in("hydrus_item[dates[date_created]]", :with => date_val)
       choose("hydrus_item_dates_date_type_single")
@@ -85,7 +85,7 @@ describe("Item edit", :type => :request, :integration => true) do
       expect(@hi.descMetadata.originInfo.dateCreated.nodeset.first['keyDate']).to eq('yes')
       expect(@hi.descMetadata.originInfo.dateCreated.nodeset.first['encoding']).to eq('w3cdtf')
       expect(@hi.descMetadata.originInfo.dateCreated.nodeset.first['qualifier']).to eq('approximate')
-      
+
       #check for duplicate nodes hannah reported
       expect(@hi.descMetadata.originInfo.length).to eq(1)
     end
@@ -96,7 +96,7 @@ describe("Item edit", :type => :request, :integration => true) do
       date_val = '2004'
       date_val_end = '2005'
       expect(find_field("hydrus_item[dates[date_start]]").value).not_to include(date_val)
-    
+
       # Submit some changes.
       fill_in("hydrus_item[dates[date_start]]", :with => date_val)
       check "hydrus_item_dates_date_range_start_approximate"
@@ -117,18 +117,8 @@ describe("Item edit", :type => :request, :integration => true) do
       expect(@hi.descMetadata.originInfo.date_range_end.nodeset.first['encoding']).to eq('w3cdtf')
     end
   end
-  
+
   describe "contributors" do
-
-    before(:each) do
-      @css = {
-        :name     => lambda { |i| "hydrus_item_contributors_#{i}_name" },
-        :role     => lambda { |i| "hydrus_item_contributors_#{i}_role_key" },
-        :remove   => lambda { |i| "remove_name_#{i}" },
-        :view_div => 'div.contributors-list',
-      }
-    end
-
     it "scenario with deletes, edits, and adds" do
       # We should have 5 contributors.
       exp = @hi.contributors.map { |c| c.clone }
@@ -138,54 +128,52 @@ describe("Item edit", :type => :request, :integration => true) do
       should_visit_edit_page(@hi)
       # Delete some contributors.
       # Note: [3,1,1] corresponds to elements 3, 1, 2 from original list.
-      [3,1,1].each do |i|
-        exp.delete_at(i)
-        click_link(@css[:remove].call(i))
-      end
+      click_link("remove_name_3")
+      click_link("remove_name_1")
+      click_link("remove_name_1")
       # Edit a contributor name.
-      nm = 'Herr Finkelstein'
-      fill_in(@css[:name].call(0), :with => nm)
-      exp[0].name = nm
+      fill_in('hydrus_item_contributors_0_name', :with => 'Herr Finkelstein')
       # Add some contributors.
       new_contributors = [
         [ 'Foo Conference',  'conference', 'Conference' ],
         [ 'Bar Corp Author', 'corporate',  'Author' ],
         [ 'Quux Author',     'personal',   'Author' ],
       ]
-      new_contributors.each do |name, name_type, role|
-        # Add a new contributor to exp list.
-        c = Hydrus::Contributor.new(
-          :name      => name,
-          :role      => role,
-          :name_type => name_type
-        )
-        exp << c
-        i = exp.size - 1
-        # Add the same contributor via the UI.
-        q1 = 'select#' + @css[:role].call(i)
-        q2 = "option[value='#{c.role_key}']"
-        click_button(@buttons[:add_contributor])
-        fill_in(@css[:name].call(i), :with => name)
-        find(q1).find(q2).select_option
-      end
+      click_button('Add Contributor')
+      select 'Conference', from: 'hydrus_item_contributors_2_role_key'
+      fill_in('hydrus_item_contributors_2_name', with: 'Foo Conference')
+      click_button('Add Contributor')
+      find('select#hydrus_item_contributors_3_role_key').find('option[value="corporate_author"]').select_option
+      fill_in('hydrus_item_contributors_3_name', with: 'Bar Corp Author')
+      click_button('Add Contributor')
+      find('select#hydrus_item_contributors_4_role_key').find('option[value="personal_author"]').select_option
+      fill_in('hydrus_item_contributors_4_name', with: 'Quux Author')
       # Save.
       click_button(@buttons[:save])
       # Check view page.
-      vdiv  = find(@css[:view_div])
+      vdiv  = find('div.contributors-list')
       roles = vdiv.all('dt').map { |nd| nd.text }
       names = vdiv.all('dd').map { |nd| nd.text }
-      expect(roles.zip(names)).to eq(exp.map { |c| [c.role, c.name] })
-      # Check Fedora objects.
-      @hi = Hydrus::Item.find(@hi.pid)
-      expect(@hi.contributors).to eq(exp)
+      expect(roles.zip(names)).to eq [
+        ['Principal investigator', 'Herr Finkelstein'],
+        ['Sponsor', 'UPS endowment at Stanford University'],
+        ['Conference', 'Foo Conference'],
+        ['Author', 'Bar Corp Author'],
+        ['Author', 'Quux Author'],
+      ]
       # Check edit page.
       should_visit_edit_page(@hi)
-      exp.each_with_index do |c, i|
-        q1 = 'select#' + @css[:role].call(i)
-        q2 = 'input#'  + @css[:name].call(i)
-        expect(find(q1).value).to eq(c.role_key)
-        expect(find(q2).value).to eq(c.name)
-      end
+      expect(page).to have_select('hydrus_item_contributors_0_role_key', selected: 'Principal investigator')
+      expect(page).to have_select('hydrus_item_contributors_1_role_key', selected: 'Sponsor')
+      expect(page).to have_select('hydrus_item_contributors_2_role_key', selected: 'Conference')
+      expect(page).to have_select('hydrus_item_contributors_3_role_key', selected: 'Author')
+      expect(page).to have_select('hydrus_item_contributors_4_role_key', selected: 'Author')
+
+      expect(page).to have_field('hydrus_item_contributors_0_name', with: 'Herr Finkelstein')
+      expect(page).to have_field('hydrus_item_contributors_1_name', with: 'UPS endowment at Stanford University')
+      expect(page).to have_field('hydrus_item_contributors_2_name', with: 'Foo Conference')
+      expect(page).to have_field('hydrus_item_contributors_3_name', with: 'Bar Corp Author')
+      expect(page).to have_field('hydrus_item_contributors_4_name', with: 'Quux Author')
     end
 
   end
@@ -242,31 +230,26 @@ describe("Item edit", :type => :request, :integration => true) do
 
 
   it "Related Content adding and deleting" do
-    i             = @hi.related_item_title.size
-    css_new_title = "hydrus_item_related_item_title_#{i}"
-    css_new_url   = "hydrus_item_related_item_url_#{i}"
-    css_delete    = "remove_relatedItem_#{i}"
-    url           = "http://library.stanford.edu"
-    title         = "Library Website"
     # Got to edit page.
     login_as('archivist1')
     should_visit_edit_page(@hi)
     # Check for the related item input fields.
-    (0...i).each do |j|
-      expect(page).to have_css("input#hydrus_item_related_item_title_#{j}")
-      expect(page).to have_css("input#hydrus_item_related_item_url_#{j}")
-      expect(page).to have_css("#remove_relatedItem_#{j}")
-    end
-    expect(page).not_to have_css("##{css_new_title}")
-    expect(page).not_to have_css("##{css_new_url}")
-    expect(page).not_to have_css("##{css_delete}")
+    expect(page).to have_css("input#hydrus_item_related_item_title_0")
+    expect(page).to have_css("input#hydrus_item_related_item_url_0")
+    expect(page).to have_css("#remove_relatedItem_0")
+    expect(page).to have_css("input#hydrus_item_related_item_title_1")
+    expect(page).to have_css("input#hydrus_item_related_item_url_1")
+    expect(page).to have_css("#remove_relatedItem_1")
+    expect(page).not_to have_css("#hydrus_item_related_item_title_2")
+    expect(page).not_to have_css("#hydrus_item_related_item_url_2")
+    expect(page).not_to have_css("#remove_relatedItem_2")
     # Add a new related item
     click_button "add_link"
-    expect(page).to have_css("##{css_new_title}")
-    expect(page).to have_css("##{css_new_url}")
-    expect(page).to have_css("##{css_delete}")
-    fill_in(css_new_title, :with => title)
-    fill_in(css_new_url, :with => url)
+    expect(page).to have_css("#hydrus_item_related_item_title_2")
+    expect(page).to have_css("#hydrus_item_related_item_url_2")
+    expect(page).to have_css("#remove_relatedItem_2")
+    fill_in('hydrus_item_related_item_title_2', :with => 'Library Website')
+    fill_in('hydrus_item_related_item_url_2', :with => 'http://library.stanford.edu')
     # Save.
     click_button(@buttons[:save])
     expect(page).to have_content(@ok_notice)
@@ -274,18 +257,18 @@ describe("Item edit", :type => :request, :integration => true) do
     # At one point we had a bug where the new title and url were added
     # to the first node rather than the new empty node.
     @hi = Hydrus::Item.find(@hi.pid)
-    expect(@hi.descMetadata.find_by_terms(:relatedItem).size).to eq(i + 1)
+    expect(@hi.descMetadata.find_by_terms(:relatedItem).size).to eq(3)
     # Revisit edit page and check for the values we just added.
     should_visit_edit_page(@hi)
-    expect(page).to have_css("##{css_delete}")
-    expect(find_field(css_new_title).value).to eq(title)
-    expect(find_field(css_new_url).value).to eq(url)
+    expect(page).to have_css("#remove_relatedItem_2")
+    expect(find_field('hydrus_item_related_item_title_2').value).to eq('Library Website')
+    expect(find_field('hydrus_item_related_item_url_2').value).to eq('http://library.stanford.edu')
     # Delete the item we added.
-    click_link css_delete
+    click_link 'remove_relatedItem_2'
     expect(current_path).to eq(edit_polymorphic_path(@hi))
-    expect(page).not_to have_css("##{css_new_title}")
-    expect(page).not_to have_css("##{css_new_url}")
-    expect(page).not_to have_css("##{css_delete}")
+    expect(page).not_to have_css("#hydrus_item_related_item_title_2")
+    expect(page).not_to have_css("#hydrus_item_related_item_url_2")
+    expect(page).not_to have_css("#remove_relatedItem_2")
   end
 
   it "editing related content w/o titles" do
@@ -293,7 +276,7 @@ describe("Item edit", :type => :request, :integration => true) do
     @druid = "druid:oo000oo0005"
     @hi    = Hydrus::Item.find(@druid)
     # Set up the new values for the fields we will edit.
-    ni = hash2struct(
+    ni = OpenStruct.new(
       :ri_title => 'My URL title',
       :ri_url   => 'http://stanford.and.son',
       :title_f  => "hydrus_item_related_item_title_0",
@@ -655,7 +638,7 @@ describe("Item edit", :type => :request, :integration => true) do
           expect(hof.get_file_info).to eq(fi)
         end
         # Check total N of ObjectFiles.
-        expect(Hydrus::ObjectFile.find_all_by_pid(@hi.pid).size).to eq(exp.keys.size)
+        expect(Hydrus::ObjectFile.where(pid: @hi.pid).size).to eq(exp.keys.size)
       }
 
       # Login.
@@ -673,7 +656,13 @@ describe("Item edit", :type => :request, :integration => true) do
         css_lab = "file_info_#{id}_label"
         css_hid = "file_info_#{id}_hide"
         expect(find_by_id(css_lab).value).to    eq(fi[:label])
-        expect(find_by_id(css_hid).checked?).to eq(fi[:hide] ? 'checked' : nil)
+
+        if fi[:hide]
+          expect(find_by_id(css_hid)).to be_checked
+        else
+          expect(find_by_id(css_hid)).to_not be_checked
+        end
+
         # Modify the values -- in the exp hash.
         lab = 'foo_' + fi[:label]
         hid = (id < 3)

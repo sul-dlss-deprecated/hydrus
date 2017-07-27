@@ -1,8 +1,14 @@
-ZIP_FILE = 'https://github.com/projecthydra/hydra-jetty/archive/v5.2.0.zip'
+ZIP_FILE = 'https://github.com/projecthydra/hydra-jetty/archive/v7.3.1.zip'
 
 desc "Run Continuous Integration Suite (tests, coverage, docs)"
 task :ci => ['jetty:clean', 'jetty:config'] do
-  Rails.env = "test"
+  unless Rails.env.test?
+    # force any CI sub-tasks to run in the test environment (e.g. to ensure
+    # fixtures get loaded into the right places)
+    system('RAILS_ENV=test rake ci')
+    break
+  end
+
   Rake::Task["db:migrate"].invoke
 
   require 'jettywrapper'
@@ -14,29 +20,10 @@ task :ci => ['jetty:clean', 'jetty:config'] do
 
   error = nil
   error = Jettywrapper.wrap(jetty_params) do
-    original_coverage = ENV['COVERAGE']
     Rake::Task['hydrus:refreshfix'].invoke
-    ENV['COVERAGE'] ||= 'true'
-    Rake::Task['rspec_all'].invoke
-    ENV['COVERAGE'] = original_coverage || 'false'
+    Rake::Task['spec'].invoke
   end
   raise "TEST FAILURES: #{error}" if error
-end
-
-desc "Run only unit tests with coverage report, assumes jetty is running already and no fixture refreshes"
-task :unit_tests do
-  ENV['RAILS_ENV'] = 'test'
-  Rails.env = 'test'
-  ENV['COVERAGE'] = 'true'
-  Rake::Task['rspec'].invoke
-end
-
-desc "Run only integrations tests with coverage report, assumes jetty is running already and no fixture refreshes"
-task :integration_tests do
-  ENV['RAILS_ENV'] = 'test'
-  Rails.env = 'test'
-  ENV['COVERAGE'] = 'true'
-  Rake::Task['rspec_with_integration'].invoke
 end
 
 desc "Stop jetty, db:migrate, run all Hydrus tests, start jetty."
@@ -45,19 +32,4 @@ task :local_ci do
   Rails.env = 'test'
   sub_tasks = %w(jetty:stop db:migrate ci jetty:start)
   sub_tasks.each { |st| Rake::Task[st].invoke }
-end
-
-desc "Runs ci task in another directory on another jetty port, so you can keep working"
-task :ci_alt do
-  src   = File.absolute_path('.')
-  dst   = File.absolute_path(ENV['DEST'] || '../alt_hydrus')
-  files = "lib/tasks/ci.rake config/fedora.yml config/solr.yml"
-  cmds = [
-    "rsync --archive --delete --quiet #{src}/ #{dst}/",
-    "cd #{dst}",
-    "perl -p -i -e 's/8983/8984/g' #{files}",
-    "rake ci",
-  ]
-  puts "Will run `rake ci` on port 8984 in #{dst}."
-  system cmds.join(' && ')
 end

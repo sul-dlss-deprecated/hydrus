@@ -1,4 +1,4 @@
-class Hydrus::RightsMetadataDS < ActiveFedora::NokogiriDatastream
+class Hydrus::RightsMetadataDS < ActiveFedora::OmDatastream
 
   include Hydrus::GenericDS
   include Hydrus::Accessible
@@ -29,6 +29,18 @@ class Hydrus::RightsMetadataDS < ActiveFedora::NokogiriDatastream
 
     t.terms_of_use :ref => [:use, :human], :attributes => { :type => "useAndReproduction" }
 
+    # the remaining statements are accessors for dor-services and not used by hydrus
+    t.copyright :path => 'copyright/human', :index_as => [:symbol]
+    t.use_statement :path => '/use/human[@type=\'useAndReproduction\']', :index_as => [:symbol]
+
+    t.creative_commons :path => '/use/machine[@type=\'creativeCommons\']', :type => 'creativeCommons' do
+      t.uri :path => '@uri'
+    end
+    t.creative_commons_human :path => '/use/human[@type=\'creativeCommons\']'
+    t.open_data_commons :path => '/use/machine[@type=\'openDataCommons\']', :type => 'openDataCommons' do
+      t.uri :path => '@uri'
+    end
+    t.open_data_commons_human :path => '/use/human[@type=\'openDataCommons\']'
   end
 
   # Template to do the work of insert_license().

@@ -27,7 +27,7 @@ describe Hydrus::AdminPolicyObject, :type => :model do
   end
 
   it "blank-slate APO should include the :pid error" do
-    expect(@apo.valid?).to eq(false)
+    expect(@apo).not_to be_valid
     expect(@apo.errors.messages.keys).to eq([:pid])
   end
 

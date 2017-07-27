@@ -11,7 +11,7 @@ describe Hydrus::SolrQueryable, :type => :model do
     @msq  = MockSolrQueryable.new
     @hsq  = Hydrus::SolrQueryable
     @user = 'userFoo'
-    @role_md_clause = %Q<roleMetadata_role_person_identifier_facet:"#{@user}">
+    @role_md_clause = %Q<role_person_identifier_sim:"#{@user}">
   end
 
   describe ".add_gated_discovery" do
@@ -20,7 +20,7 @@ describe Hydrus::SolrQueryable, :type => :model do
       @hsq.add_gated_discovery(h, ['aaa', 'bbb'], @user)
       expect(h[:fq].size).to eq(1)
 
-      expect(h[:fq].first).to eq 'is_governed_by_s:("info:fedora/aaa" OR "info:fedora/bbb") OR ' + @role_md_clause
+      expect(h[:fq].first).to eq 'is_governed_by_ssim:("info:fedora/aaa" OR "info:fedora/bbb") OR ' + @role_md_clause
     end
   end
 
@@ -56,7 +56,7 @@ describe Hydrus::SolrQueryable, :type => :model do
 
     it "should add the expected :fq clause" do
       druids = %w(aaa bbb)
-      igb    = 'is_governed_by_s:("info:fedora/aaa" OR "info:fedora/bbb")'
+      igb    = 'is_governed_by_ssim:("info:fedora/aaa" OR "info:fedora/bbb")'
       tests  = [
         [ {},                [igb] ],
         [ {:fq => []},       [igb] ],
@@ -80,7 +80,7 @@ describe Hydrus::SolrQueryable, :type => :model do
 
     it "should add the expected :fq clause" do
       models = %w(xxx yyy)
-      hms    = 'has_model_s:("info:fedora/afmodel:xxx" OR "info:fedora/afmodel:yyy")'
+      hms    = 'has_model_ssim:("info:fedora/afmodel:xxx" OR "info:fedora/afmodel:yyy")'
       tests  = [
         [ {},                [hms] ],
         [ {:fq => []},       [hms] ],
@@ -108,7 +108,7 @@ describe Hydrus::SolrQueryable, :type => :model do
   end
 
   it "can exercise get_druids_from_response()" do
-    k    = 'identityMetadata_objectId_t'
+    k    = 'objectId_ssim'
     exp  = [12, 34, 56]
     docs = exp.map { |n| {k => [n]} }
     resp = double('resp', :docs => docs)
@@ -158,7 +158,7 @@ describe Hydrus::SolrQueryable, :type => :model do
   describe "queries should send their parameters via post" do
     it 'should not fail if the query is very long' do
       fake_pids=[]
-      1000.times do 
+      1000.times do
         fake_pids << 'fake_pid'
       end
       h = @msq.squery_item_counts_of_collections(fake_pids)

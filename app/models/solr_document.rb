@@ -25,14 +25,14 @@ class SolrDocument
   # Recommendation: Use field names from Dublin Core
   use_extension( Blacklight::Solr::Document::DublinCore)
   field_semantics.merge!(
-                         :title => "title_display",
+                         :title => "title_tesim",
                          :author => "author_display",
                          :language => "language_facet",
                          :format => "format"
                          )
 
   def route_key
-    get('has_model_s').split(':').last.downcase.sub(/^dor_/, 'hydrus_')
+    get('has_model_ssim').split(':').last.downcase.sub(/^dor_/, 'hydrus_')
   end
 
   def to_model
@@ -40,25 +40,25 @@ class SolrDocument
   end
 
   def main_title
-    return get('main_title_t')
+    return get('main_title_ssm')
   end
 
   def pid
-    return get('identityMetadata_objectId_t')
+    return get('objectId_ssim')
   end
 
   def object_type
-    return get('has_model_s').gsub(/.+:Hydrus_/, '').downcase
+    return get('has_model_ssim').gsub(/.+:Hydrus_/, '').downcase
   end
 
   def object_status
     typ    = object_type.to_sym
-    status = get('object_status_t')
+    status = get('object_status_ssim')
     return Hydrus::GenericObject.status_label(typ, status)
   end
 
   def depositor
-    return get("roleMetadata_#{object_type}_depositor_person_identifier_t")
+    return get("#{object_type}_depositor_person_identifier_ssm")
   end
 
   def path

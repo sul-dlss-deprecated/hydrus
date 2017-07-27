@@ -79,12 +79,20 @@ module HyTime
     end
     # If the DateTime is coming from user-entered input in their local time
     # zone, adjust it to UTC.
-    dt = dt - DateTime.local_offset if opts[:from_localzone]
+    if opts[:from_localzone]
+      offset_seconds = ActiveSupport::TimeZone[LOCAL_TIMEZONE].utc_offset
+      offset = ActiveSupport::TimeZone.seconds_to_utc_offset(offset_seconds)
+      dt = dt.change(offset: offset)
+    end
+
     # Return string in the requested format, after adjusting to
     # the local timezone if caller requested a display format.
-    f = opts[:format] || :datetime
-    dt = dt.in_time_zone(LOCAL_TIMEZONE) if f.to_s[-8..-1] == '_display'
-    return dt.strftime(DT_FORMATS[f])
+    if f = opts[:format]
+      dt = dt.in_time_zone(LOCAL_TIMEZONE) if f.to_s[-8..-1] == '_display'
+      dt.strftime(DT_FORMATS[f])
+    else
+      dt.utc.strftime(DT_FORMATS[:datetime])
+    end
   end
 
   # For each Hydrus datetime format, generate two HyTime methods, which

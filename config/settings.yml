@@ -1,5 +1,6 @@
 hydrus:
   show_standard_login:  false   # if true, the user has the option to login via a username/password as well as webauth; if false; only webauth is allowed
+  show_test_banner: false
   exception_error_page:   true  # if true, a generic error page will be shown with no exception messages; if false, standard Rails exceptions are shown directly to the user
   exception_error_panel:  false
   host: 'hydrus-test.stanford.edu'
@@ -38,6 +39,7 @@ suri:
   url: 'https://sul-lyberservices-test.stanford.edu'
   user: ~
   password: ~
+  mint_ids: true
 
 fedora:
   url: 'https://user:password@fedora.example.com:1000/fedora'

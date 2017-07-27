@@ -92,18 +92,17 @@ describe("Item create", :type => :request, :integration => true) do
     expect(item.identityMetadata.tag.to_a).to include("Project : Hydrus")
     # Check roles of the Item.
     expect(item.person_roles).to eq({ "hydrus-item-depositor" => Set.new(["archivist1"]) })
+
     # Check events.
-    exp = [
-      /\AItem created/,
-      /\AItem modified/,
-    ]
     es = item.get_hydrus_events
-    expect(es.size).to eq(exp.size)
-    es[0...exp.size].zip(exp).each do |e, exp|
-      expect(e.text).to match(exp)
-      expect(e.who).to eq('archivist1')
-      expect(e.type).to eq('hydrus')
-    end
+    expect(es.size).to eq(2)
+    expect(es.first.text).to match(/\AItem created/)
+    expect(es.first.who).to eq('archivist1')
+    expect(es.first.type).to eq('hydrus')
+
+    expect(es.last.text).to match(/\AItem modified/)
+    expect(es.last.who).to eq('archivist1')
+    expect(es.last.type).to eq('hydrus')
   end
 
   it "should not be able to publish an item if there are no contributors" do
@@ -191,7 +190,7 @@ describe("Item create", :type => :request, :integration => true) do
 
   it "Requires approval: should be able to submit, disapprove, resubmit, approve, etc" do
     # Setup.
-    ni = hash2struct(
+    ni = OpenStruct.new(
       :title       => 'title_foo',
       :abstract    => 'abstract_foo',
       :contact     => 'ozzy@hell.com',
@@ -388,7 +387,8 @@ describe("Item create", :type => :request, :integration => true) do
     check_emb_vis_lic(item,ps)
 
     # Check events.
-    exp = [
+    es = item.get_hydrus_events
+    expect(es.map(&:text)).to match_array [
       /\AItem created/,
       /\AItem modified/,
       /\AItem modified/,
@@ -399,12 +399,10 @@ describe("Item create", :type => :request, :integration => true) do
       /\AItem approved/,
       /\AItem published/,
     ]
-    es = item.get_hydrus_events
-    es[0...exp.size].zip(exp).each { |e, exp| expect(e.text).to match(exp)  }
   end
 
   it "Does not require approval: should be able to publish directly, with world visible rights and a different license than collection" do
-    ni = hash2struct(
+    ni = OpenStruct.new(
       :title       => 'title_foo',
       :abstract    => 'abstract_foo',
       :contact     => 'ozzy@hell.com',
@@ -511,15 +509,14 @@ describe("Item create", :type => :request, :integration => true) do
     expect(find(@div_alert)).to have_content(@notices[:save])
 
     # Check events.
-    exp = [
+    es = item.get_hydrus_events
+    expect(es.map(&:text)).to match_array [
       /\AItem created/,
       /\AItem modified/,
       /\AItem modified/,
       /\ATerms of deposit accepted/,
       /\AItem published/,
     ]
-    es = item.get_hydrus_events
-    es[0...exp.size].zip(exp).each { |e, exp| expect(e.text).to match(exp)  }
   end
 
   describe("terms of acceptance for an existing item", :integration => true)  do
@@ -697,7 +694,7 @@ describe("Item create", :type => :request, :integration => true) do
       #   - with an uploaded file
       #   - and a corresponding entry in DB table
       expect(Dir.glob(dir + "/*").size).to eq(1)
-      expect(Hydrus::ObjectFile.find_all_by_pid(pid).size).to eq(1)
+      expect(Hydrus::ObjectFile.where(pid: pid).size).to eq(1)
       # Delete the Item.
       expect(hi.is_destroyable).to eq(true)
       first(:link, "Discard this item").click
@@ -713,7 +710,7 @@ describe("Item create", :type => :request, :integration => true) do
       #   - with no upload directory
       #   - and no DB entries
       expect(File.directory?(dir)).to eq(false)
-      expect(Hydrus::ObjectFile.find_all_by_pid(pid).size).to eq(0)
+      expect(Hydrus::ObjectFile.where(pid: pid).size).to eq(0)
     end
 
   end

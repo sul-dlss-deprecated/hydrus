@@ -23,7 +23,7 @@ end
 def solr_query(*args)
   h = {
     :q    => '*.*',
-    :fl   => 'identityMetadata_objectId_t',
+    :fl   => 'objectId_ssim',
   }
   resp, sdocs = issue_solr_query(h)
   ap resp['response']['numFound']

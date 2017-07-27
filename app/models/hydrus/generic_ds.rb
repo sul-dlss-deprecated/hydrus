@@ -4,7 +4,7 @@ module Hydrus::GenericDS
 
   def add_hydrus_child_node(*args)
     node = add_child_node(*args)
-    content_will_change!
+    ng_xml_will_change!
     return node
   end
 
@@ -16,7 +16,7 @@ module Hydrus::GenericDS
     sibling = find_by_terms(sib_term).last
     node = sibling ? add_next_sibling_node(sibling, *args) :
                      add_child_node(ng_xml.root, *args)
-    content_will_change!
+    ng_xml_will_change!
     return node
   end
 
@@ -24,7 +24,7 @@ module Hydrus::GenericDS
     node = find_by_terms(term.to_sym => index.to_i).first
     unless node.nil?
       node.remove
-      content_will_change!
+      ng_xml_will_change!
     end
   end
 
@@ -33,7 +33,7 @@ module Hydrus::GenericDS
     nodes = find_by_terms(*terms)
     if nodes.size > 0
       nodes.each { |n| n.remove }
-      content_will_change!
+      ng_xml_will_change!
     end
   end
 
@@ -41,7 +41,7 @@ module Hydrus::GenericDS
     nodes = find_by_xpath(query)
     if nodes.size > 0
       nodes.each { |n| n.remove }
-      content_will_change!
+      ng_xml_will_change!
     end
   end
 
