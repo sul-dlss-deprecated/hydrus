@@ -79,11 +79,7 @@ Also see:
 ## Running tests
 
 ```bash
-# Preferred
-$ rake # Run all tests. 
-  
-# Run all the tests including starting/stopping jetty and refreshing all fixtures.
-$ rake local_ci
+$ rake # Starts jetty and runs all tests.
 
 # Coverage reports
 $ open coverage/index.html

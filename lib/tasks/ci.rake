@@ -25,11 +25,3 @@ task :ci => ['jetty:clean', 'jetty:config'] do
   end
   raise "TEST FAILURES: #{error}" if error
 end
-
-desc "Stop jetty, db:migrate, run all Hydrus tests, start jetty."
-task :local_ci do
-  ENV['RAILS_ENV'] = 'test'
-  Rails.env = 'test'
-  sub_tasks = %w(jetty:stop db:migrate ci jetty:start)
-  sub_tasks.each { |st| Rake::Task[st].invoke }
-end
