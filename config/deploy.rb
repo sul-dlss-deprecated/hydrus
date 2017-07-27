@@ -5,7 +5,11 @@ set :repo_url, 'https://github.com/sul-dlss/hydrus.git'
 ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
 
 # Default deploy_to directory is /var/www/my_app
-set :deploy_to, '/var/home/lyberadmin/hydrus'
+
+# We need the Capistrano config to match the path where Passenger is configured for
+# otherwise it won't be able to restart. We need to use /home/lyberadmin even though
+# /home is a symlink to /var/home
+set :deploy_to, '/home/lyberadmin/hydrus'
 
 # Default value for :format is :pretty
 # set :format, :pretty
