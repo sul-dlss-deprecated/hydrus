@@ -110,9 +110,10 @@ GEM
       rack (>= 1.0.0)
       rack-test (>= 0.5.4)
       xpath (~> 2.0)
-    carrierwave (0.6.2)
-      activemodel (>= 3.2.0)
-      activesupport (>= 3.2.0)
+    carrierwave (1.1.0)
+      activemodel (>= 4.0.0)
+      activesupport (>= 4.0.0)
+      mime-types (>= 1.16)
     childprocess (0.7.1)
       ffi (~> 1.0, >= 1.0.11)
     chronic (0.10.2)
@@ -485,7 +486,7 @@ DEPENDENCIES
   capistrano-passenger
   capistrano-rails
   capybara
-  carrierwave (= 0.6.2)
+  carrierwave (~> 1.0)
   coderay
   coffee-rails (~> 4.2)
   config
