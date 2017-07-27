@@ -894,8 +894,4 @@ class Hydrus::Item < Hydrus::GenericObject
     delete_hydrus_workflow        # Hydrus workflow.
     super                         # Fedora object and SOLR entries.
   end
-
-end
-
-class Hydrus::ItemWithoutCollectionError < StandardError
 end
