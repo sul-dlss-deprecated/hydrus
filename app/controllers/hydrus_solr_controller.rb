@@ -75,8 +75,7 @@ class HydrusSolrController < ApplicationController
   # Private method to determine if the given object belongs to
   # one of the Hydrus classes.
   def is_hydrus_object(obj)
-    cs = [ Hydrus::AdminPolicyObject, Hydrus::Collection, Hydrus::Item ]
-    return cs.include?(obj.class)
+    obj.respond_to?(:tags) && obj.tags.include?(Settings.hydrus.project_tag)
   end
 
   # Private method to return the application's SOLR connection.
