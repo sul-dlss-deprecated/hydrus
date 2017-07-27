@@ -300,14 +300,12 @@ class Hydrus::GenericObject < Dor::Item
 
   # Returns a hash of info needed to register a Dor object.
   def self.dor_registration_params(user_string, obj_typ, apo_pid)
-    proj = 'Hydrus'
-    tm   = HyTime.now_datetime_full
     return {
       :object_type       => obj_typ,
       :admin_policy      => apo_pid,
-      :source_id         => { proj => "#{obj_typ}-#{user_string}-#{tm}" },
-      :label             => proj,
-      :tags              => ["Project : #{proj}"],
+      :source_id         => { 'Hydrus' => "#{obj_typ}-#{user_string}-#{HyTime.now_datetime_full}" },
+      :label             => 'Hydrus',
+      :tags              => [Settings.hydrus.project_tag],
       :initiate_workflow => [Dor::Config.hydrus.app_workflow],
     }
   end
