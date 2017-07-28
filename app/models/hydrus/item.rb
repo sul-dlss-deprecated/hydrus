@@ -318,7 +318,7 @@ class Hydrus::Item < Hydrus::GenericObject
 
   # Returns true only if the Item is unpublished and is on the first version.
   def is_destroyable
-    not(is_published) && is_initial_version
+    !(is_published) && is_initial_version
   end
 
   def requires_human_approval
@@ -374,7 +374,7 @@ class Hydrus::Item < Hydrus::GenericObject
 
   # the date_created must be of format YYYY or YYYY-MM or YYYY-MM-DD
   def ensure_date_created_format
-    if (not date_created =~ /^\d{4}$/) && (not date_created =~ /^\d{4}-\d{2}$/) && (not date_created =~ /^\d{4}-\d{2}-\d{2}$/)
+    if (!(date_created =~ /^\d{4}$/)) && (!(date_created =~ /^\d{4}-\d{2}$/)) && (!(date_created =~ /^\d{4}-\d{2}-\d{2}$/))
       errors.add(:date_created, 'Incorrect date format')
     end
   end
@@ -457,7 +457,7 @@ class Hydrus::Item < Hydrus::GenericObject
 
   # Returns true if the Item is embargoed.
   def is_embargoed
-    not(embargo_date.blank?)
+    !(embargo_date.blank?)
   end
 
   # Returns the embargo date from the embargoMetadata, not the rightsMetadata.
@@ -656,8 +656,8 @@ class Hydrus::Item < Hydrus::GenericObject
   def date_display
     disp = ''
     if date_range?
-      start_only = true if dates[:date_range_start_approximate] && (not dates[:date_range_end_approximate])
-      end_only =  true if dates[:date_range_end_approximate] && (not dates[:date_range_start_approximate])
+      start_only = true if dates[:date_range_start_approximate] && (!(dates[:date_range_end_approximate]))
+      end_only =  true if dates[:date_range_end_approximate] && (!(dates[:date_range_start_approximate]))
       both = true if dates[:date_range_start_approximate] && dates[:date_range_end_approximate]
       disp += '[ca. ' if start_only || both
       disp += "#{dates[:date_range_start].first}"
@@ -699,16 +699,16 @@ class Hydrus::Item < Hydrus::GenericObject
 
   def has_specified_a_valid_date
     if single_date?
-      if not valid_date_string? date_created
+      if !valid_date_string? date_created
         errors.add(:dates, 'Incorrect date format or missing date.')
       end
     else
       if date_range?
-        if (not valid_date_string?(descMetadata.originInfo.date_range_start.first)) || (not valid_date_string?(descMetadata.originInfo.date_range_end.first))
+        if (!valid_date_string?(descMetadata.originInfo.date_range_start.first)) || (!valid_date_string?(descMetadata.originInfo.date_range_end.first))
           errors.add(:dates, 'Incorrect date formats or missing dates.')
         end
       else
-        if not undated?
+        if !undated?
           errors.add(:dates, 'No date type selected.')
         end
       end

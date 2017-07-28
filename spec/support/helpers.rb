@@ -91,7 +91,7 @@ def check_emb_vis_lic(obj, opts)
   is_emb = (obj.class ==(Hydrus::Item) && obj.is_embargoed)
 
   # Consistency between is_embargoed() and testing expectations.
-  expect(opts[:embargo_date].blank?).to eq(not(is_emb))
+  expect(opts[:embargo_date].blank?).to eq(!(is_emb))
 
   # All objects should be world discoverable.
   expect(obj.rightsMetadata.ng_xml.xpath("#{di}/world").size).to eq(1)

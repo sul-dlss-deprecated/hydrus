@@ -652,7 +652,7 @@ describe Hydrus::Item, type: :model do
       allow(@hi).to receive(:date_created).and_return('2011')
       allow(@hi).to receive(:single_date?).and_return true
       allow(@hi).to receive_message_chain([:collection, :embargo_option]).and_return('varies')
-      if not @hi.valid?
+      if !@hi.valid?
         msg = @hi.errors.messages.map { |field, error|
         "#{field.to_s.humanize.capitalize} #{error.join(', ')}"
         }
@@ -665,7 +665,7 @@ describe Hydrus::Item, type: :model do
       n = 0
       [true, false, nil].each do |stub_val|
         c    = double('collection', is_open: stub_val)
-        exp  = not(not(stub_val))
+        exp  = !(!(stub_val))
         n   += 1 unless exp
         allow(@hi).to receive(:collection).and_return(c)
         expect(@hi.enforce_collection_is_open).to eq(exp)

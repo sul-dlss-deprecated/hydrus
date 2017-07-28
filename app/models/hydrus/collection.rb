@@ -171,7 +171,7 @@ class Hydrus::Collection < Dor::Collection
 
   # Returns true only if the Collection is unpublished and has no Items.
   def is_destroyable
-    not(is_published || has_items)
+    !((is_published || has_items))
   end
 
   # Returns true only if the Collection has items.
@@ -680,7 +680,7 @@ class Hydrus::Collection < Dor::Collection
       fc['pivot'].each { |p|
         status = p['value']
         n      = p['count']
-        if not counts[druid]
+        if !(counts[druid])
           raise 'adding ' + druid
         end
         counts[druid] ||= initial_item_counts()
