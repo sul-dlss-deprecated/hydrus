@@ -1,5 +1,4 @@
 class HydrusCollectionsController < ApplicationController
-
   include Hydra::Controller::ControllerBehavior
   include Hydra::Controller::UploadBehavior
 
@@ -155,5 +154,4 @@ class HydrusCollectionsController < ApplicationController
     @fobj = Hydrus::Collection.find(params[:id])
     @fobj.current_user = current_user
   end
-
 end

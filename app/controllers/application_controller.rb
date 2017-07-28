@@ -108,5 +108,4 @@ class ApplicationController < ActionController::Base
     end
     v
   end
-
 end

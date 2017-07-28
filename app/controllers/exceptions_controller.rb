@@ -1,5 +1,4 @@
 class ExceptionsController < ApplicationController
-
   skip_authorization_check
 
   def render_404

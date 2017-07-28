@@ -2,7 +2,6 @@ require 'spec_helper'
 
 # A mock class to use while testing the mixin.
 class MockAccessible
-
   include Hydrus::Accessible
 
   attr_reader(:embargoMetadata, :rightsMetadata)
@@ -11,7 +10,6 @@ class MockAccessible
     @embargoMetadata = Dor::EmbargoMetadataDS.from_xml(emd)
     @rightsMetadata  = Hydrus::RightsMetadataDS.from_xml(rmd)
   end
-
 end
 
 describe Hydrus::Accessible, type: :model do

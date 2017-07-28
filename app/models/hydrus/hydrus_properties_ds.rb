@@ -1,5 +1,4 @@
 class Hydrus::HydrusPropertiesDS < ActiveFedora::OmDatastream
-
   include Hydrus::GenericDS
   include SolrDocHelper
 
@@ -88,5 +87,4 @@ class Hydrus::HydrusPropertiesDS < ActiveFedora::OmDatastream
     parent = add_hydrus_child_node(ng_xml.root, k) if parent.nil?
     add_hydrus_child_node(parent, :user, user, datetime_accepted)
   end
-
 end

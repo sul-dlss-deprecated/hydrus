@@ -1,5 +1,4 @@
 class Hydrus::GenericObject < Dor::Item
-
   include Hydrus::GenericObjectStuff
 
   attr_accessor :files_were_changed
@@ -323,5 +322,4 @@ class Hydrus::GenericObject < Dor::Item
   def purl_page_ready?
     RestClient.get(purl_url) { |resp, req, res| resp }.code == 200
   end
-
 end

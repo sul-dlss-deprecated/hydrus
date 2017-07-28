@@ -1,5 +1,4 @@
 class Hydrus::ObjectFile < ActiveRecord::Base
-
   include Hydrus::ModelHelper
 
   #attr_accessible :label, :pid, :hide
@@ -68,5 +67,4 @@ class Hydrus::ObjectFile < ActiveRecord::Base
       hide: hide,
     }
   end
-
 end

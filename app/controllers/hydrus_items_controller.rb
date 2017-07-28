@@ -1,5 +1,4 @@
 class HydrusItemsController < ApplicationController
-
   include Hydra::Controller::ControllerBehavior
   include Hydra::Controller::UploadBehavior
 
@@ -314,5 +313,4 @@ class HydrusItemsController < ApplicationController
       redirect_to root_path
     end
   end
-
 end

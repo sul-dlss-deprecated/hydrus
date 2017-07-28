@@ -1,5 +1,4 @@
 class Hydrus::RemediationRunner
-
   include Hydrus::SolrQueryable
 
   attr_accessor(
@@ -172,5 +171,4 @@ class Hydrus::RemediationRunner
     problems.add(pid)
     log.warn(msg)
   end
-
 end

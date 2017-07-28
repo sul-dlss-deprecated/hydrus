@@ -1,5 +1,4 @@
 class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
-
   include Hydrus::ModelHelper
   include Hydrus::Responsible
   include Hydrus::Validatable
@@ -169,5 +168,4 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
      '2 years after deposit'  => '2 years',
      '3 years after deposit'  => '3 years' }
   end
-
 end

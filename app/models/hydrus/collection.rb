@@ -1,5 +1,4 @@
 class Hydrus::Collection < Dor::Collection
-
   include Hydrus::GenericObjectStuff
   extend Hydrus::SolrQueryable
   include Dor::Embargoable
@@ -728,5 +727,4 @@ class Hydrus::Collection < Dor::Collection
   def item_types
     Hydrus::GenericObject.item_types
   end
-
 end

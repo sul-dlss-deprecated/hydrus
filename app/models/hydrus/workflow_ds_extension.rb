@@ -2,7 +2,6 @@ module Hydrus::WorkflowDsExtension
 end
 
 class Dor::WorkflowDs
-
   # Note: unit tests are in generic_object_spec.rb.
 
   # Returns the hydrusAssemblyWF node from the object's workflows.
@@ -31,5 +30,4 @@ class Dor::WorkflowDs
   def workflow_step_is_done(step)
     get_workflow_status(step) == 'completed'
   end
-
 end

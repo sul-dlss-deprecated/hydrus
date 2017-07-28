@@ -1,5 +1,4 @@
 class Hydrus::RoleMetadataDS < ActiveFedora::OmDatastream
-
   include SolrDocHelper
   include Hydrus::GenericDS
 
@@ -125,5 +124,4 @@ class Hydrus::RoleMetadataDS < ActiveFedora::OmDatastream
     # Return the solr doc.
     solr_doc
   end
-
 end

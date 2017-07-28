@@ -1,5 +1,4 @@
 class HydrusMailer < ActionMailer::Base
-
   helper ApplicationHelper
 
   default from: 'no-reply@sdr.stanford.edu'
@@ -93,5 +92,4 @@ class HydrusMailer < ActionMailer::Base
       user =~ /.+@.+\..+/ ? user.strip : "#{user.strip}@stanford.edu"
     end
   end
-
 end

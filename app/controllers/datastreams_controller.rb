@@ -19,5 +19,4 @@ class DatastreamsController < ApplicationController
   def contextual_id
     @contextual_id ||= params.select { |k, v| k.to_s =~ /^hydrus_.*_id/ }.each_value.first
   end
-
 end

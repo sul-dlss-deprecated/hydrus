@@ -1,5 +1,4 @@
 class Hydrus::Contributor < Hydrus::GenericModel
-
   ####
   # Setup contributor groups data.
   ####
@@ -117,5 +116,4 @@ class Hydrus::Contributor < Hydrus::GenericModel
   def clone
     Hydrus::Contributor.new(name: name, role: role, name_type: name_type)
   end
-
 end

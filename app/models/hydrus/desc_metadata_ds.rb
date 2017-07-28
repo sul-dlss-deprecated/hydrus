@@ -1,5 +1,4 @@
 class Hydrus::DescMetadataDS < ActiveFedora::OmDatastream
-
   include SolrDocHelper
   include Hydrus::GenericDS
 
@@ -189,5 +188,4 @@ class Hydrus::DescMetadataDS < ActiveFedora::OmDatastream
     end
     cs
   end
-
 end

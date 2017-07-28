@@ -34,5 +34,4 @@ class WebAuthUser
   def is_global_viewer?
     is_administrator? || groups.include?('dlss:hydrus-app-global-viewers')
   end
-
 end

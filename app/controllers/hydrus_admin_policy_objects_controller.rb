@@ -1,5 +1,4 @@
 class HydrusAdminPolicyObjectsController < ApplicationController
-
   include Hydra::Controller::ControllerBehavior
   include Hydra::Controller::UploadBehavior
 
@@ -10,5 +9,4 @@ class HydrusAdminPolicyObjectsController < ApplicationController
     authorize! :read, @fobj
     redirect_to hydrus_admin_policy_object_datastreams_path(@fobj)
   end
-
 end

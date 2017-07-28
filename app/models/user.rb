@@ -1,5 +1,4 @@
 class User < ActiveRecord::Base
-
   include Hydra::User
   include Blacklight::User
 

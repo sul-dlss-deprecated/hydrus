@@ -5,7 +5,6 @@
 # Not sure what the two run_hook() calls do or whether they are needed;
 # just copied the approach used in Rubydora's rollback().
 class Rubydora::Transaction
-
     # Roll-back transactions by restoring the repository to its
     # original state, based on fixtures that are passed in as a
     # hash, with PIDs and keys and foxml as values.
@@ -54,5 +53,4 @@ class Rubydora::Transaction
     def all_pids
       repository.transactions_log.map { |entry| entry.last[:pid] }.uniq
     end
-
 end

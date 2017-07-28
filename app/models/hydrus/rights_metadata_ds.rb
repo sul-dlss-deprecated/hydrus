@@ -1,5 +1,4 @@
 class Hydrus::RightsMetadataDS < ActiveFedora::OmDatastream
-
   include Hydrus::GenericDS
   include Hydrus::Accessible
 
@@ -79,5 +78,4 @@ class Hydrus::RightsMetadataDS < ActiveFedora::OmDatastream
       }
     end.doc
   end
-
 end

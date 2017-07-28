@@ -57,7 +57,6 @@ module Hydrus
     config.assets.version = '1.0'
 
     config.exceptions_app = self.routes
-
   end
 end
 

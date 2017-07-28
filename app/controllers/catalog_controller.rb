@@ -2,7 +2,6 @@
 require 'blacklight/catalog'
 
 class CatalogController < ApplicationController
-
   skip_authorization_check only: [:home, :index]
 
   include Blacklight::Catalog
@@ -159,5 +158,4 @@ class CatalogController < ApplicationController
   def has_search_parameters?
     true
   end
-
 end

@@ -8,5 +8,4 @@ class CreateSuperusers < ActiveRecord::Migration
   def self.down
     drop_table :superusers
   end
-
 end

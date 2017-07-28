@@ -1,6 +1,5 @@
 # -*- encoding : utf-8 -*-
 class SolrDocument
-
   include Blacklight::Solr::Document
 
   # self.unique_key = 'id'
@@ -64,5 +63,4 @@ class SolrDocument
   def path
     "/#{object_type}s/#{pid}"
   end
-
 end

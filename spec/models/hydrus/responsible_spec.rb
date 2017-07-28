@@ -2,7 +2,6 @@ require 'spec_helper'
 
 # A mock class to use while testing out mixin.
 class MockResponsible
-
   include Hydrus::Responsible
   include Hydrus::ModelHelper
 
@@ -48,7 +47,6 @@ class MockResponsible
       </roleMetadata>
     EOF
   end
-
 end
 
 describe Hydrus::Responsible, type: :model do

@@ -87,5 +87,4 @@ class HydrusSolrController < ApplicationController
   def index_logger
     @@index_logger ||= Logger.new("#{Rails.root}/log/indexer.log", 10, 10240000)
   end
-
 end

@@ -10,7 +10,6 @@ class MockController
     @params    = ps
     @root_path = '/users/signin'
   end
-
 end
 
 describe Hydrus::AccessControlsEnforcement do
