@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Be sure to restart your server when you modify this file.# Mime Types Added By Hydra Head:
 
 # Mime::Type.register "text/html", :html

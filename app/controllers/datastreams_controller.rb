@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class DatastreamsController < ApplicationController
   before_filter do
     if contextual_id.blank?

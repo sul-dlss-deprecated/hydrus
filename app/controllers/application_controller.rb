@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class ApplicationController < ActionController::Base
   include SulChrome::Controller
   include Blacklight::Controller

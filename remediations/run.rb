@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Runs remediation even if the object doesn't need it according to its object_version.
 force = !! ARGV.delete('--force')
 

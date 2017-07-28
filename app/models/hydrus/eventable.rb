@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Hydrus::Eventable
   # Lazy initializers for instance variables.
   # We cannot set these value within a constructor, because

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Hydrus::RemediationRunner
 
   def remediation_2013_02_28e(opts)

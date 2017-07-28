@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Hydrus::RelatedItem < Hydrus::GenericModel
 
   # TODO We would like to validate related_items, but we can't if we need to create

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # A mixin for contentMetadata stuff.
 
 module Hydrus::Contentable

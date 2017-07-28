@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # A script used to generate new collections and items
 # on a developer's machine.
 

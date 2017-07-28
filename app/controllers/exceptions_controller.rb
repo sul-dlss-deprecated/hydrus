@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class ExceptionsController < ApplicationController
   
   skip_authorization_check

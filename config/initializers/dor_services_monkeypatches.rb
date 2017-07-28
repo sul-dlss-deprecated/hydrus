@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # It would be best if we could find an alternative way doing this.
 # Monkeypatches are rarely a good idea.
 

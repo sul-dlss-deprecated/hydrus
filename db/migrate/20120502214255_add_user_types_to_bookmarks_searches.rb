@@ -1,4 +1,5 @@
 # -*- encoding : utf-8 -*-
+# frozen_string_literal: true
 class AddUserTypesToBookmarksSearches < ActiveRecord::Migration
   def self.up
     add_column :searches, :user_type, :string

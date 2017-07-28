@@ -1,4 +1,5 @@
 
+# frozen_string_literal: true
 # TODO: incorporate this into Rubydora.
 # Relative to rollback() it Rubydora v0.5.0, it reduced
 # test suite runtime from 32 min down to about 8 min.

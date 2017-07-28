@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Hydrus::RoleMetadataDS < ActiveFedora::OmDatastream
 
   include SolrDocHelper

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class AddRMetzToAdmin < ActiveRecord::Migration
   def change
     admins=UserRole.where(role: 'administrators').first

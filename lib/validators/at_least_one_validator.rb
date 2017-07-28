@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # we need a custom validator to check for the existence of at least one associated model in multi-value fields -- also confirm they are valid
 class AtLeastOneValidator < ActiveModel::EachValidator
   def validate_each(record, attribute, value)

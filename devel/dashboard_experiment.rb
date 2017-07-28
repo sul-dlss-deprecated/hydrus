@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 def dashboard(*args)
   # Controller: get the stats.
   user  = args.first

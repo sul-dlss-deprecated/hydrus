@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module HydrusFormHelper
 
   def hydrus_form_label(opts={}, &block)

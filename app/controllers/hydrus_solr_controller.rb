@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 ####
 # Although Hydrus objects will be stored in the main DOR Fedora repository,
 # the Hydrus application will have its own SOLR index, independent of

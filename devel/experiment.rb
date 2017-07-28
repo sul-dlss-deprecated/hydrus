@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
 # A script for IRB-style experimentation, using a script.
 #

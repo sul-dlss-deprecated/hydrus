@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # A script used to print all Hydrus objects, with their PIDs and titles.
 
 def main()
