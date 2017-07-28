@@ -180,7 +180,7 @@ describe Hydrus::AccessControlsEnforcement do
         hm1: @has_model_clause,
         hm2: %Q<has_model_ssim:("info:fedora/afmodel:____USER_IS_NOT_LOGGED_IN____")>,
       }
-      exp = { fq: [ parts[:hm1], parts[:hm2] ] }
+      exp = { fq: [parts[:hm1], parts[:hm2]] }
       solr_params = {}
       @mc.apply_gated_discovery(solr_params, {})
       expect(solr_params).to eq(exp)

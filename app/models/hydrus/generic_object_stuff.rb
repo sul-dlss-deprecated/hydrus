@@ -35,25 +35,25 @@ module Hydrus::GenericObjectStuff
   setup_delegations(
     # [:METHOD_NAME,              :uniq, :at... ]
     'descMetadata' => [
-      [:title,                    true,  :main_title ],
-      [:abstract,                 true   ],
+      [:title,                    true,  :main_title],
+      [:abstract,                 true],
       [:related_item_title,       false, :relatedItem, :titleInfo, :title],
-      [:contact,                  true   ],
+      [:contact,                  true],
     ],
     'hydrusProperties' => [
-      [:disapproval_reason,                 true   ],
-      [:object_status,                      true   ],
-      [:submitted_for_publish_time,         true   ],
-      [:initial_submitted_for_publish_time, true   ],
-      [:initial_publish_time,               true   ],
-      [:submit_for_approval_time,           true   ],
-      [:last_modify_time,                   true   ],
-      [:item_type,                          true   ],
-      [:object_version,                     true   ],
+      [:disapproval_reason,                 true],
+      [:object_status,                      true],
+      [:submitted_for_publish_time,         true],
+      [:initial_submitted_for_publish_time, true],
+      [:initial_publish_time,               true],
+      [:submit_for_approval_time,           true],
+      [:last_modify_time,                   true],
+      [:item_type,                          true],
+      [:object_version,                     true],
     ],
     'rightsMetadata' => [
       [:rmd_embargo_release_date, true,  :read_access, :machine, :embargo_release_date],
-      [:terms_of_use,             true,  ],
+      [:terms_of_use,             true,],
     ],
   )
   end

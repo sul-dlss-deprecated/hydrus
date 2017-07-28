@@ -45,16 +45,16 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
   setup_delegations(
     # [:METHOD_NAME,          :uniq, :at... ]
     'descMetadata' => [
-      [:title,                true,  :main_title ],
+      [:title,                true,  :main_title],
     ],
     'roleMetadata' => [
       [:person_id,            false, :role, :person, :identifier],
       [:collection_depositor, true, :collection_depositor, :person, :identifier],
     ],
     'hydrusProperties' => [
-      [:reviewed_release_settings, true   ],
-      [:accepted_terms_of_deposit, true   ],
-      [:object_version,            true   ],
+      [:reviewed_release_settings, true],
+      [:accepted_terms_of_deposit, true],
+      [:object_version,            true],
     ]
   )
 

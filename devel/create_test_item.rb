@@ -3,7 +3,7 @@
 
 def parse_do_opts(args, *ks)
   opts = ks.map { |k| args.delete("--#{k}") }
-  Hash[ ks.zip(opts) ]
+  Hash[ks.zip(opts)]
 end
 
 def create_test_collection(*args)

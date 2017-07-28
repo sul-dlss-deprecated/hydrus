@@ -93,7 +93,7 @@ class Hydrus::Contributor < Hydrus::GenericModel
       glab  = cg[:group_label]
       roles = cg[:roles]
       rks   = cg[:role_keys]
-      [ glab, roles.zip(rks).map { |r, k| [r, k] } ]
+      [glab, roles.zip(rks).map { |r, k| [r, k] }]
     }
   end
 

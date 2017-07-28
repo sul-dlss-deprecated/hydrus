@@ -48,11 +48,11 @@ class Hydrus::Collection < Dor::Collection
   setup_delegations(
   # [:METHOD_NAME,             :uniq,  :at... ]
   'hydrusProperties' => [
-    [:requires_human_approval, true   ],
-    [:embargo_option,          true,  ],
-    [:embargo_terms,           true,  ],
-    [:license_option,          true,  ],
-    [:visibility_option,       true,  ],
+    [:requires_human_approval, true],
+    [:embargo_option,          true,],
+    [:embargo_terms,           true,],
+    [:license_option,          true,],
+    [:visibility_option,       true,],
   ],
   )
 
@@ -653,7 +653,7 @@ class Hydrus::Collection < Dor::Collection
   # Returns a hash with all Item object_status values as the
   # keys and zeros as the values.
   def self.initial_item_counts
-    Hash[ Hydrus::GenericObject.status_labels(:item).keys.map { |s| [s,0] } ]
+    Hash[Hydrus::GenericObject.status_labels(:item).keys.map { |s| [s,0] }]
   end
 
   # Takes an array of Collection druids.
@@ -661,7 +661,7 @@ class Hydrus::Collection < Dor::Collection
   # See unit test for an example.
   def self.item_counts_of_collections(coll_pids)
     # Initalize the hash of item counts.
-    counts = Hash[ coll_pids.map { |cp| [cp, initial_item_counts()] } ]
+    counts = Hash[coll_pids.map { |cp| [cp, initial_item_counts()] }]
     # Run SOLR query to get items counts.
     h = squery_item_counts_of_collections(counts.keys)
     resp, sdocs = issue_solr_query(h)

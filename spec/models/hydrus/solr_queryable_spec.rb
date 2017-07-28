@@ -32,9 +32,9 @@ describe Hydrus::SolrQueryable, type: :model do
 
     it 'should add the expected :fq clause' do
       tests = [
-        [ {}, [@role_md_clause] ],
-        [ { fq: [] },       [@role_md_clause] ],
-        [ { fq: ['blah'] }, ['blah', @role_md_clause] ],
+        [{}, [@role_md_clause]],
+        [{ fq: [] },       [@role_md_clause]],
+        [{ fq: ['blah'] }, ['blah', @role_md_clause]],
       ]
       tests.each do |h, exp|
         @hsq.add_involved_user_filter(h, @user)
@@ -54,9 +54,9 @@ describe Hydrus::SolrQueryable, type: :model do
       druids = %w(aaa bbb)
       igb    = 'is_governed_by_ssim:("info:fedora/aaa" OR "info:fedora/bbb")'
       tests  = [
-        [ {}, [igb] ],
-        [ { fq: [] },       [igb] ],
-        [ { fq: ['blah'] }, ['blah', igb] ],
+        [{}, [igb]],
+        [{ fq: [] },       [igb]],
+        [{ fq: ['blah'] }, ['blah', igb]],
       ]
       tests.each do |h, exp|
         @hsq.add_governed_by_filter(h, druids)
@@ -76,9 +76,9 @@ describe Hydrus::SolrQueryable, type: :model do
       models = %w(xxx yyy)
       hms    = 'has_model_ssim:("info:fedora/afmodel:xxx" OR "info:fedora/afmodel:yyy")'
       tests  = [
-        [ {}, [hms] ],
-        [ { fq: [] },       [hms] ],
-        [ { fq: ['blah'] }, ['blah', hms] ],
+        [{}, [hms]],
+        [{ fq: [] },       [hms]],
+        [{ fq: ['blah'] }, ['blah', hms]],
       ]
       tests.each do |h, exp|
         @hsq.add_model_filter(h, *models)

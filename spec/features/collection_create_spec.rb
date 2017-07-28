@@ -62,8 +62,8 @@ describe('Collection create', type: :request, integration: true) do
     expect(coll.descMetadata.ng_xml.search('//mods:typeOfResource', 'mods' => 'http://www.loc.gov/mods/v3').first.text).to eq('mixed material')
     # Check person roles of the roleMetadata in APO
     expect(coll.apo_person_roles).to eq({
-      'hydrus-collection-manager'   => Set.new([ 'archivist1' ]),
-      'hydrus-collection-depositor' => Set.new([ 'archivist1' ]),
+      'hydrus-collection-manager'   => Set.new(['archivist1']),
+      'hydrus-collection-depositor' => Set.new(['archivist1']),
     })
     expect(coll.collection_depositor).to eq('archivist1')
     # Check APO.descMetadata.

@@ -40,7 +40,7 @@ module Hydrus
   def self.all_fixture_foxml
     pids = fixture_pids()
     xmls = pids.map { |p| fixture_foxml(p) }
-    Hash[ pids.zip(xmls) ]
+    Hash[pids.zip(xmls)]
   end
 
   # Takes a PID for a Hydrus fixtures, and an optional hash with the :is_wf

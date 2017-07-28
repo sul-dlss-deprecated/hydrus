@@ -62,20 +62,20 @@ class Hydrus::Item < Hydrus::GenericObject
   setup_delegations(
     # [:METHOD_NAME,               :uniq, :at... ]
     'descMetadata' => [
-      [:preferred_citation,        true   ],
-      [:date_created,              true   ],
-      [:related_citation,          false  ],
+      [:preferred_citation,        true],
+      [:date_created,              true],
+      [:related_citation,          false],
     ],
     'roleMetadata' => [
     #  [:item_depositor_id,         true,  :item_depositor, :person, :identifier],
       [:item_depositor_name,       true,  :item_depositor, :person, :name],
     ],
     'hydrusProperties' => [
-      [:reviewed_release_settings, true   ],
-      [:accepted_terms_of_deposit, true   ],
-      [:version_started_time,      true   ],
-      [:prior_license,             true   ],
-      [:prior_visibility,          true   ],
+      [:reviewed_release_settings, true],
+      [:accepted_terms_of_deposit, true],
+      [:version_started_time,      true],
+      [:prior_license,             true],
+      [:prior_visibility,          true],
     ]
   )
 

@@ -83,7 +83,7 @@ describe(Hydrus::Item, type: :feature, integration: true) do
       hi    = ItemService.create(druid, mock_authed_user)
       wf    = Dor::Config.hydrus.app_workflow
       steps = Dor::Config.hydrus.app_workflow_steps
-      exp   = Hash[ steps.map { |s| [s, 'waiting'] } ]
+      exp   = Hash[steps.map { |s| [s, 'waiting'] }]
       # Code to check workflow statuses.
       check_statuses = lambda {
         hi = Hydrus::Item.find(hi.pid) # A refreshed copy of object.

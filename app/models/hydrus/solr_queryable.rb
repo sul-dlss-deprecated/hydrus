@@ -135,7 +135,7 @@ module Hydrus::SolrQueryable
       fl: '',
       facet: false,
       q: '*',
-      fq: [ %Q<is_member_of_collection_ssim:(#{imo})> ],
+      fq: [%Q<is_member_of_collection_ssim:(#{imo})>],
     }
     HSQ.add_model_filter(h, 'Hydrus_Item')
     h
@@ -153,7 +153,7 @@ module Hydrus::SolrQueryable
       facet: true,
       'facet.pivot': 'is_member_of_collection_ssim,object_status_ssim',
       q: '*',
-      fq: [ %Q<is_member_of_collection_ssim:(#{imo})> ],
+      fq: [%Q<is_member_of_collection_ssim:(#{imo})>],
     }
     HSQ.add_model_filter(h, 'Hydrus_Item')
     h

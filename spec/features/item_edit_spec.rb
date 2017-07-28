@@ -135,9 +135,9 @@ describe('Item edit', type: :request, integration: true) do
       fill_in('hydrus_item_contributors_0_name', with: 'Herr Finkelstein')
       # Add some contributors.
       new_contributors = [
-        [ 'Foo Conference',  'conference', 'Conference' ],
-        [ 'Bar Corp Author', 'corporate',  'Author' ],
-        [ 'Quux Author',     'personal',   'Author' ],
+        ['Foo Conference',  'conference', 'Conference'],
+        ['Bar Corp Author', 'corporate',  'Author'],
+        ['Quux Author',     'personal',   'Author'],
       ]
       click_button('Add Contributor')
       select 'Conference', from: 'hydrus_item_contributors_2_role_key'
