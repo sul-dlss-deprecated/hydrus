@@ -11,7 +11,7 @@ module Hydrus::SolrQueryable
 
   def self.add_gated_discovery(solr_parameters, apo_pids, user)
 
-    h = { :fq => []}
+    h = { fq: []}
     add_governed_by_filter(h, apo_pids)
     add_involved_user_filter(h, user)
     solr_parameters[:fq] ||= []
@@ -53,9 +53,9 @@ module Hydrus::SolrQueryable
   # Returns a default hash of query params, used by a few methods.
   def self.default_query_params
     {
-      :rows => 9999,
-      :fl   => 'objectId_ssim',
-      :q    => '*',
+      rows: 9999,
+      fl: 'objectId_ssim',
+      q: '*',
     }
   end
 
@@ -92,7 +92,7 @@ module Hydrus::SolrQueryable
   # Returns a hash of SOLR query parameters.
   # The query: get all Hydrus Collections.
   def squery_all_hydrus_collections
-    squery_all_hydrus_objects(['Hydrus_Collection'],:fields=>['*'])
+    squery_all_hydrus_objects(['Hydrus_Collection'],fields: ['*'])
   end
 
   # Returns a hash of SOLR query parameters.
@@ -131,11 +131,11 @@ module Hydrus::SolrQueryable
   def squery_items_in_collection(druid)
     imo = %Q<"info:fedora/#{druid}">
     h = {
-      :rows          => 1000,
-      :fl            => '',
-      :facet         => false,
-      :q             => '*',
-      :fq            => [ %Q<is_member_of_collection_ssim:(#{imo})> ],
+      rows: 1000,
+      fl: '',
+      facet: false,
+      q: '*',
+      fq: [ %Q<is_member_of_collection_ssim:(#{imo})> ],
     }
     HSQ.add_model_filter(h, 'Hydrus_Item')
     h
@@ -147,12 +147,12 @@ module Hydrus::SolrQueryable
   def squery_item_counts_of_collections(druids)
     imo = druids.map { |d| %Q<"info:fedora/#{d}"> }.join(' OR ')
     h = {
-      :rows          => 0,
-      :fl            => '',
-      :facet         => true,
-      :'facet.pivot' => 'is_member_of_collection_ssim,object_status_ssim',
-      :q             => '*',
-      :fq            => [ %Q<is_member_of_collection_ssim:(#{imo})> ],
+      rows: 0,
+      fl: '',
+      facet: true,
+      'facet.pivot': 'is_member_of_collection_ssim,object_status_ssim',
+      q: '*',
+      fq: [ %Q<is_member_of_collection_ssim:(#{imo})> ],
     }
     HSQ.add_model_filter(h, 'Hydrus_Item')
     h
@@ -174,7 +174,7 @@ module Hydrus::SolrQueryable
       'has_model_ssim'                 => :object_type,
       'object_version_ssim'            => :object_version,
     }
-    h = squery_all_hydrus_objects(models, :fields => fields.keys)
+    h = squery_all_hydrus_objects(models, fields: fields.keys)
     # Run query and return either a list of PIDs if that's all the caller wanted.
     resp, sdocs = issue_solr_query(h)
     return get_druids_from_response(resp) if opts[:pids_only]

@@ -24,10 +24,10 @@ describe Hydrus::AccessControlsEnforcement do
   describe "enforce_show_permissions" do
 
     before(:each) do
-      @mc = MockController.new(:id => @dru)
+      @mc = MockController.new(id: @dru)
       allow(@mc).to receive('current_user').and_return(nil)
       allow(@mc).to receive('session').and_return({})
-      allow(@mc).to receive('request').and_return(OpenStruct.new(:full_path=>'some/fake/path'))
+      allow(@mc).to receive('request').and_return(OpenStruct.new(full_path: 'some/fake/path'))
       allow(@mc).to receive('new_user_session_path').and_return('/users/signin')
     end
 
@@ -63,9 +63,9 @@ describe Hydrus::AccessControlsEnforcement do
   describe "enforce_edit_permissions" do
 
     before(:each) do
-      @mc = MockController.new(:id => @dru)
+      @mc = MockController.new(id: @dru)
       allow(@mc).to receive('session').and_return({})
-      allow(@mc).to receive('request').and_return(OpenStruct.new(:full_path=>'some/fake/path'))
+      allow(@mc).to receive('request').and_return(OpenStruct.new(full_path: 'some/fake/path'))
       allow(@mc).to receive('new_user_session_path').and_return('/users/signin')
     end
 
@@ -94,10 +94,10 @@ describe Hydrus::AccessControlsEnforcement do
   describe "enforce_create_permissions: create items in collections" do
 
     before(:each) do
-      @mc = MockController.new(:id => @dru)
+      @mc = MockController.new(id: @dru)
       allow(@mc).to receive('current_user').and_return(OpenStruct.new)
       allow(@mc).to receive('session').and_return({})
-      allow(@mc).to receive('request').and_return(OpenStruct.new(:full_path=>'some/fake/path'))
+      allow(@mc).to receive('request').and_return(OpenStruct.new(full_path: 'some/fake/path'))
       allow(@mc).to receive('new_user_session_path').and_return('/users/signin')
     end
 
@@ -111,7 +111,7 @@ describe Hydrus::AccessControlsEnforcement do
     it "should redirect to home page if user cannot do it" do
       allow(@mc).to receive('can?').and_return(false)
       allow(@mc).to receive(:root_url).and_return('/')
-      allow(@mc).to receive('params').and_return({:collection=>'druid:oo000oo0003'})
+      allow(@mc).to receive('params').and_return({collection: 'druid:oo000oo0003'})
       allow(@mc).to receive(:root_path).and_return(@exp_rp)
       expect(@mc).to receive(:redirect_to).with(@exp_rp)
       @mc.enforce_create_permissions
@@ -128,7 +128,7 @@ describe Hydrus::AccessControlsEnforcement do
       @mc = MockController.new()
       allow(@mc).to receive('current_user').and_return(nil)
       allow(@mc).to receive('session').and_return({})
-      allow(@mc).to receive('request').and_return(OpenStruct.new(:full_path=>'some/fake/path'))
+      allow(@mc).to receive('request').and_return(OpenStruct.new(full_path: 'some/fake/path'))
       allow(@mc).to receive('new_user_session_path').and_return('/users/signin')
     end
 
@@ -167,18 +167,18 @@ describe Hydrus::AccessControlsEnforcement do
       apo_pids = %w(aaa bbb)
       allow(Hydrus::Collection).to receive(:apos_involving_user).and_return(apo_pids)
       parts = {
-        :igb => %Q<is_governed_by_ssim:("info:fedora/aaa" OR "info:fedora/bbb")>,
-        :rmd => %Q<role_person_identifier_sim:"userFoo">,
-        :hm  => @has_model_clause,
+        igb: %Q<is_governed_by_ssim:("info:fedora/aaa" OR "info:fedora/bbb")>,
+        rmd: %Q<role_person_identifier_sim:"userFoo">,
+        hm: @has_model_clause,
       }
       exp = {
-        :a  => 'blah',
-        :fq => [
+        a: 'blah',
+        fq: [
           "#{parts[:igb]} OR #{parts[:rmd]}",
           "#{parts[:hm]}",
         ],
       }
-      solr_params = {:a => 'blah'}
+      solr_params = {a: 'blah'}
       @mc.apply_gated_discovery(solr_params, {})
       expect(solr_params).to eq(exp)
     end
@@ -187,10 +187,10 @@ describe Hydrus::AccessControlsEnforcement do
       @mc = MockController.new()
       allow(@mc).to receive(:current_user).and_return(nil)
       parts = {
-        :hm1 => @has_model_clause,
-        :hm2 => %Q<has_model_ssim:("info:fedora/afmodel:____USER_IS_NOT_LOGGED_IN____")>,
+        hm1: @has_model_clause,
+        hm2: %Q<has_model_ssim:("info:fedora/afmodel:____USER_IS_NOT_LOGGED_IN____")>,
       }
-      exp = { :fq => [ parts[:hm1], parts[:hm2] ] }
+      exp = { fq: [ parts[:hm1], parts[:hm2] ] }
       solr_params = {}
       @mc.apply_gated_discovery(solr_params, {})
       expect(solr_params).to eq(exp)

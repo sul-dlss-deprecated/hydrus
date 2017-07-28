@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Hydrus::Collection, :type => :model do
+describe Hydrus::Collection, type: :model do
 
   before(:each) do
     @hc = Hydrus::Collection.new
@@ -17,7 +17,7 @@ describe Hydrus::Collection, :type => :model do
       it "invokes log_editing_events()" do
         expect(@hc).to receive(:log_editing_events).once
         expect(@hc).to receive(:publish_metadata).once
-        @hc.save(:no_super => true)
+        @hc.save(no_super: true)
       end
     end
   end
@@ -28,7 +28,7 @@ describe Hydrus::Collection, :type => :model do
 
     before(:each) do
       apo_druid = 'druid:oo000oo9991'
-      apo = Hydrus::AdminPolicyObject.new(:pid => apo_druid)
+      apo = Hydrus::AdminPolicyObject.new(pid: apo_druid)
       allow(@hc).to receive(:apo).and_return(apo)
     end
 
@@ -67,8 +67,8 @@ describe Hydrus::Collection, :type => :model do
 
     it "should raise exceptions if the object cannot be opened/closed" do
       tests = {
-        :open  => :is_openable,
-        :close => :is_closeable,
+        open: :is_openable,
+        close: :is_closeable,
       }
       tests.each do |meth, predicate|
         allow(@hc).to receive(predicate).and_return(false)
@@ -422,7 +422,7 @@ describe Hydrus::Collection, :type => :model do
 
       it "getter should return groups names if item is not world visible" do
         exp_groups = %w(foo bar)
-        mock_nodes = exp_groups.map { |g| double('', :text => g) }
+        mock_nodes = exp_groups.map { |g| double('', text: g) }
         allow(@hc).to receive_message_chain(:rightsMetadata, :has_world_read_node).and_return(false)
         allow(@hc).to receive_message_chain(:rightsMetadata, :group_read_nodes).and_return(mock_nodes)
         expect(@hc.visibility).to eq(exp_groups)
@@ -461,7 +461,7 @@ describe Hydrus::Collection, :type => :model do
       end
 
       it "should return item_counts_of_collections() if there are relevant Collections" do
-        exp = {:foo => 1, :bar => 2}
+        exp = {foo: 1, bar: 2}
         expect(@HC).to receive(:apos_involving_user).and_return([1,2,3])
         expect(@HC).to receive(:collections_of_apos).and_return([4,5,6])
         expect(@HC).to receive(:item_counts_of_collections).and_return(exp)
@@ -495,8 +495,8 @@ describe Hydrus::Collection, :type => :model do
 
     it "can exercise get_facet_counts_from_response()" do
       exp  = 1234
-      fcs  = {'facet_pivot' => {:a => exp}}
-      resp = double('resp', :facet_counts => fcs)
+      fcs  = {'facet_pivot' => {a: exp}}
+      resp = double('resp', facet_counts: fcs)
       expect(@HC.get_facet_counts_from_response(resp)).to eq(exp)
     end
 

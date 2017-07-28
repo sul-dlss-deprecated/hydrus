@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Hydrus::RelatedItem, :type => :model do
+describe Hydrus::RelatedItem, type: :model do
 
   describe "new_from_node()" do
 
@@ -53,7 +53,7 @@ describe Hydrus::RelatedItem, :type => :model do
 
   describe "other..." do
 
-    subject { Hydrus::RelatedItem.new :title => 'Item Title', :url => 'http://example.com' }
+    subject { Hydrus::RelatedItem.new title: 'Item Title', url: 'http://example.com' }
 
     it "should have a #title accessor" do
       expect(subject.title).to eq("Item Title")

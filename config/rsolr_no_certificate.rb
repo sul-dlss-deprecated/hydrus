@@ -26,7 +26,7 @@ class RSolr::Connection
     begin
       response = h.request request
       charset = response.type_params["charset"]
-      {:status => response.code.to_i, :headers => response.to_hash, :body => force_charset(response.body, charset)}
+      {status: response.code.to_i, headers: response.to_hash, body: force_charset(response.body, charset)}
     rescue Errno::ECONNREFUSED => e
       raise(Errno::ECONNREFUSED.new(request_context.inspect))
     # catch the undefined closed? exception -- this is a confirmed ruby bug

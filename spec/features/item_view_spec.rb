@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe("Item view", :type => :request, :integration => true) do
+describe("Item view", type: :request, integration: true) do
 
   fixtures :users
 
@@ -13,8 +13,8 @@ describe("Item view", :type => :request, :integration => true) do
     logout
     visit "/items/#{@druid}"
     expect(current_path).to eq(new_user_session_path)
-    fill_in "Email", :with => 'archivist1@example.com'
-    fill_in "Password", :with => login_pw
+    fill_in "Email", with: 'archivist1@example.com'
+    fill_in "Password", with: login_pw
     click_button "Sign in"
     expect(current_path).to eq(polymorphic_path(@hi))
   end
@@ -22,9 +22,9 @@ describe("Item view", :type => :request, :integration => true) do
   it "Breadcrumbs should be displayed with home link, linked trucated collection name, and unlinked item name with state" do
     login_as('archivist1')
     visit polymorphic_path(@hi)
-    expect(page).to have_selector("ul.breadcrumb li a", :text => "Home")
-    expect(page).to have_selector("ul.breadcrumb li a", :text => "SSDS Social Science Data Co...")
-    expect(page).to have_selector("ul.breadcrumb li", :text => "How Couples Meet and Stay T... (published)")
+    expect(page).to have_selector("ul.breadcrumb li a", text: "Home")
+    expect(page).to have_selector("ul.breadcrumb li a", text: "SSDS Social Science Data Co...")
+    expect(page).to have_selector("ul.breadcrumb li", text: "How Couples Meet and Stay T... (published)")
   end
 
   it "should redirect to the item page if the requested druid is an item but is visited at the collection page URL" do

@@ -51,7 +51,7 @@ class MockResponsible
 
 end
 
-describe Hydrus::Responsible, :type => :model do
+describe Hydrus::Responsible, type: :model do
 
   before(:each) do
     @obj = MockResponsible.new

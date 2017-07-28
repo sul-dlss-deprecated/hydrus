@@ -10,7 +10,7 @@ def create_test_collection(*args)
   # Create a new Collection and set all required values.
   do_opts           = parse_do_opts(args, :open)
   user              = args.shift || 'archivist1'
-  user              = User.new(:email => "#{user}@example.com")
+  user              = User.new(email: "#{user}@example.com")
   hc                = Hydrus::Collection.create(user)
   hc.title          = "Title for: #{hc.pid}"
   hc.abstract       = 'abstract'
@@ -33,7 +33,7 @@ def create_test_item(*args)
   do_opts        = parse_do_opts(args, :submit_for_approval, :disapprove, :approve)
   hc_pid         = args.shift
   user           = args.shift || 'archivist1'
-  user           = User.new(:email => "#{user}@example.com")
+  user           = User.new(email: "#{user}@example.com")
   hc_pid         = "druid:#{hc_pid}" unless hc_pid =~ /^druid:/
   hi             = Hydrus::Item.create(hc_pid, user)
   hi.title       = "Title for: #{hi.pid}"
@@ -93,12 +93,12 @@ def parse_batch_opts(arg)
   # Takes a string and returns the corresponding array of options
   # that will be passed to one of the create_*() methods.
   opts = {
-    :c  => %w(c),
-    :co => %w(c --open),
-    :i  => %w(i),
-    :is => %w(i --submit_for_approval),
-    :ia => %w(i --submit_for_approval --approve),
-    :id => %w(i --submit_for_approval --disapprove),
+    c: %w(c),
+    co: %w(c --open),
+    i: %w(i),
+    is: %w(i --submit_for_approval),
+    ia: %w(i --submit_for_approval --approve),
+    id: %w(i --submit_for_approval --disapprove),
   }
   opts = opts[arg.to_sym]
   return opts if opts
@@ -126,9 +126,9 @@ def main
   args = ARGV.dup
   m    = (args.shift || 'NONE').to_sym
   ms   = {
-    :collection => method(:create_test_collection),
-    :item       => method(:create_test_item),
-    :batch      => method(:create_test_batch),
+    collection: method(:create_test_collection),
+    item: method(:create_test_item),
+    batch: method(:create_test_batch),
   }
   help() unless ms.has_key?(m)
   ms[m].call(*args)

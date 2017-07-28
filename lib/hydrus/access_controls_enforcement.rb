@@ -19,7 +19,7 @@ module Hydrus::AccessControlsEnforcement
     request_url = request.fullpath # try to get the path the user is currently only before redirecting them
     request_url = root_url if (request_url.blank? || request_url==new_user_session_path || request_url==new_user_session_path) # force the redirect page to be the home page if no return page found or the return page is the login page
     session['user_return_to']=request_url
-    current_user.nil? ? redirect_to(new_user_session_path(:referrer => request_url)) : redirect_to(url)
+    current_user.nil? ? redirect_to(new_user_session_path(referrer: request_url)) : redirect_to(url)
   end
 
   # Redirects to the Item/Collection view page with a flash error

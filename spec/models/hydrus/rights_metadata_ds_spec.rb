@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Hydrus::RightsMetadataDS, :type => :model do
+describe Hydrus::RightsMetadataDS, type: :model do
 
   before(:each) do
     xml = %Q(

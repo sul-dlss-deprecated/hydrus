@@ -4,11 +4,11 @@ class ApplicationController < ActionController::Base
   include Hydra::Controller::ControllerBehavior
   include Hydrus::ModelHelper
 
-  check_authorization :unless => :devise_controller?
-  skip_authorization_check :only => [:contact]
+  check_authorization unless: :devise_controller?
+  skip_authorization_check only: [:contact]
 
   rescue_from CanCan::AccessDenied do |exception|
-    redirect_to root_url, :alert => exception.message
+    redirect_to root_url, alert: exception.message
   end
 
   helper_method :to_bool
@@ -28,7 +28,7 @@ class ApplicationController < ActionController::Base
 
     if request.post?
       unless @message.blank?
-        HydrusMailer.contact_message(:params=>params,:request=>request,:user=>current_user).deliver
+        HydrusMailer.contact_message(params: params,request: request,user: current_user).deliver
         flash[:notice]="Your message has been sent."
         @message=nil
         @name=nil

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe SessionsController, :type => :controller do
+describe SessionsController, type: :controller do
 
   before(:each) do
     @request.env["devise.mapping"] = Devise.mappings[:user]
@@ -10,13 +10,13 @@ describe SessionsController, :type => :controller do
     it "should properly define login" do
       pending
       expect(webauth_login_path).to eq("/users/auth/webauth")
-      assert_routing({ :path => "users/auth/webauth", :method => :get },
-        { :controller => "sessions", :action => "new" })
+      assert_routing({ path: "users/auth/webauth", method: :get },
+        { controller: "sessions", action: "new" })
     end
     it "should properly define logout" do
       expect(webauth_logout_path).to eq("/users/auth/webauth/logout")
-      assert_routing({ :path => "users/auth/webauth/logout", :method => :get },
-        { :controller => "sessions", :action => "destroy_webauth" })
+      assert_routing({ path: "users/auth/webauth/logout", method: :get },
+        { controller: "sessions", action: "destroy_webauth" })
     end
   end
 

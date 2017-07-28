@@ -14,7 +14,7 @@ class MockAccessible
 
 end
 
-describe Hydrus::Accessible, :type => :model do
+describe Hydrus::Accessible, type: :model do
 
   before(:each) do
     # XML snippets for various <access> nodes.
@@ -39,14 +39,14 @@ describe Hydrus::Accessible, :type => :model do
     rm_end    = '<use><human/><machine/></use></rightsMetadata>'
     # Assemble Nokogiri XML for embargoMetadata and rightsMetadata.
     @xml = {
-      :em_initial => noko_doc([em_start, em_blank, em_end].join),
-      :em_world   => noko_doc([em_start, em_world, em_end].join),
-      :em_stanf   => noko_doc([em_start, em_stanf, em_end].join),
-      :em_embargo => noko_doc([em_start, embe,     em_end].join),
-      :rm_initial => noko_doc([rm_start, di_world, rd_blank, rm_end].join),
-      :rm_world   => noko_doc([rm_start, di_world, rd_world, rm_end].join),
-      :rm_stanf   => noko_doc([rm_start, di_world, rd_stanf, rm_end].join),
-      :rm_embargo => noko_doc([rm_start, di_world, rd_embr,  rm_end].join),
+      em_initial: noko_doc([em_start, em_blank, em_end].join),
+      em_world: noko_doc([em_start, em_world, em_end].join),
+      em_stanf: noko_doc([em_start, em_stanf, em_end].join),
+      em_embargo: noko_doc([em_start, embe,     em_end].join),
+      rm_initial: noko_doc([rm_start, di_world, rd_blank, rm_end].join),
+      rm_world: noko_doc([rm_start, di_world, rd_world, rm_end].join),
+      rm_stanf: noko_doc([rm_start, di_world, rd_stanf, rm_end].join),
+      rm_embargo: noko_doc([rm_start, di_world, rd_embr,  rm_end].join),
     }
   end
 

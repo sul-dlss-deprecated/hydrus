@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Hydrus::Contentable, :type => :model do
+describe Hydrus::Contentable, type: :model do
 
   before(:each) do
     @go       = Hydrus::GenericObject.new
@@ -29,8 +29,8 @@ describe Hydrus::Contentable, :type => :model do
 
     it "item should get real contentMetadata" do
       mock_files = [
-        double('fileA', :current_path => 'Rakefile', :label => 'fileA', :hide => false),
-        double('fileB', :current_path => 'Gemfile',  :label => 'fileB', :hide => true),
+        double('fileA', current_path: 'Rakefile', label: 'fileA', hide: false),
+        double('fileB', current_path: 'Gemfile',  label: 'fileB', hide: true),
       ]
       exp = '
         <contentMetadata objectId="oo000oo9999" type="file">

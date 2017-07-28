@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Ability, :type => :model do
+describe Ability, type: :model do
 
   before(:all) do
     @af = ActiveFedora::Base.new

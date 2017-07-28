@@ -3,34 +3,34 @@ class Hydrus::Item < Hydrus::GenericObject
 
   # Override Dor::Governable so that we look for Hydrus::AdminPolicyObjects
   belongs_to :admin_policy_object, property: :is_governed_by, class_name: 'Hydrus::AdminPolicyObject'
-  has_and_belongs_to_many :collections, :property => :is_member_of_collection, :class_name => 'Hydrus::Collection'
+  has_and_belongs_to_many :collections, property: :is_member_of_collection, class_name: 'Hydrus::Collection'
 
   REQUIRED_FIELDS = [:title, :abstract, :contact, :keywords, :version_description, :date_created]
 
   after_validation :strip_whitespace
   attr_accessor :dates
-  validates :title,               :not_empty => true, :if => :should_validate
-  validates :abstract,            :not_empty => true, :if => :should_validate
-  validates :contact,             :not_empty => true, :if => :should_validate
-  validates :keywords,            :not_empty => true, :if => :should_validate
+  validates :title,               not_empty: true, if: :should_validate
+  validates :abstract,            not_empty: true, if: :should_validate
+  validates :contact,             not_empty: true, if: :should_validate
+  validates :keywords,            not_empty: true, if: :should_validate
   #validates :date_created,        :not_empty => true, :if => :should_validate
-  validates :version_description, :not_empty => true, :if => lambda {
+  validates :version_description, not_empty: true, if: lambda {
     should_validate() && ! is_initial_version()
   }
 
-  validate  :enforce_collection_is_open, :on => :create
+  validate  :enforce_collection_is_open, on: :create
 
-  validates :contributors, :at_least_one => true,  :if => :should_validate
-  validate  :contributors_not_all_blank,           :if => :should_validate
-  validates :files, :at_least_one => true,         :if => :should_validate
-  validate  :must_accept_terms_of_deposit,         :if => :should_validate
-  validate  :must_review_release_settings,         :if => :should_validate
+  validates :contributors, at_least_one: true,  if: :should_validate
+  validate  :contributors_not_all_blank,           if: :should_validate
+  validates :files, at_least_one: true,         if: :should_validate
+  validate  :must_accept_terms_of_deposit,         if: :should_validate
+  validate  :must_review_release_settings,         if: :should_validate
 
   validate  :embargo_date_is_well_formed
   validate  :embargo_date_in_range
   validate  :check_version_if_license_changed
   validate  :check_visibility_not_reduced
-  validate  :has_specified_a_valid_date,          :if => :should_validate
+  validate  :has_specified_a_valid_date,          if: :should_validate
 
   belongs_to :collection, property: :is_member_of_collection, class_name: 'Hydrus::Collection'
 
@@ -80,10 +80,10 @@ class Hydrus::Item < Hydrus::GenericObject
   )
 
   has_metadata(
-    :name => "roleMetadata",
-    :type => Hydrus::RoleMetadataDS,
-    :label => 'Role Metadata',
-    :control_group => 'M')
+    name: "roleMetadata",
+    type: Hydrus::RoleMetadataDS,
+    label: 'Role Metadata',
+    control_group: 'M')
 
   # @return [String] the identifier of the object's depositor
   def item_depositor_id
@@ -138,7 +138,7 @@ class Hydrus::Item < Hydrus::GenericObject
     end
 
     # Save and return.
-    item.save(:no_edit_logging => true, :no_beautify => true)
+    item.save(no_edit_logging: true, no_beautify: true)
     item.send_new_deposit_email_notification
     item
   end
@@ -226,11 +226,11 @@ class Hydrus::Item < Hydrus::GenericObject
     # Store the time when the object was initially published.
     self.initial_publish_time = publish_time() if is_initial_version
     # Call the dor-services method, with a couple of Hydrus-specific options.
-    super(:assume_accessioned => should_treat_as_accessioned(), :create_workflows_ds => false)
+    super(assume_accessioned: should_treat_as_accessioned(), create_workflows_ds: false)
     # Set some version metadata that the Hydrus app uses.
     sig  = opts[:significance] || :major
     desc = opts[:description]  || ''
-    versionMetadata.update_current_version(:description => desc, :significance => sig)
+    versionMetadata.update_current_version(description: desc, significance: sig)
     # Varying behavior: remediations vs ordinary user edits.
     if opts[:is_remediation]
       # Just log the event.
@@ -254,11 +254,11 @@ class Hydrus::Item < Hydrus::GenericObject
   # See do_publish(), where all of the Hydrus-specific work is done; here
   # we simply invoke the dor-services method.
   def close_version(opts = {})
-    raise "#{cannot_do_message(:close_version)}\nItem is initial version" if is_initial_version(:absolute => true)
+    raise "#{cannot_do_message(:close_version)}\nItem is initial version" if is_initial_version(absolute: true)
     # We want to start accessioning only if ...
     sa = !! opts[:is_remediation]              # ... we are running a remediation and
     sa = false if should_treat_as_accessioned  # ... we are not in development or test
-    super(:version_num => version_id, :start_accession => sa)
+    super(version_num: version_id, start_accession: sa)
   end
 
   # indicates if this item has an accepted terms of deposit, or if the supplied
@@ -287,19 +287,19 @@ class Hydrus::Item < Hydrus::GenericObject
 
   def send_new_deposit_email_notification
     return if recipients_for_new_deposit_emails.blank?
-    email = HydrusMailer.send("new_deposit", :object => self)
+    email = HydrusMailer.send("new_deposit", object: self)
     email.deliver_now unless email.to.blank?
   end
 
   def send_item_deposit_email_notification
     return if recipients_for_item_deposit_emails.blank?
-    email = HydrusMailer.send("item_deposit", :object => self)
+    email = HydrusMailer.send("item_deposit", object: self)
     email.deliver_now unless email.to.blank?
   end
 
   def send_deposit_review_email_notification
     return if recipients_for_review_deposit_emails.blank?
-    email = HydrusMailer.send("new_item_for_review", :object => self)
+    email = HydrusMailer.send("new_item_for_review", object: self)
     email.deliver_now unless email.to.blank?
   end
 
@@ -537,7 +537,7 @@ class Hydrus::Item < Hydrus::GenericObject
   #     be avoided if we simplify the UI, removing the embargo radio button.
   def embargo_date= val
     if HyTime.is_well_formed_datetime(val)
-      ed = HyTime.datetime(val, :from_localzone => true)
+      ed = HyTime.datetime(val, from_localzone: true)
     elsif val.blank?
       ed = nil
     else
@@ -823,12 +823,12 @@ class Hydrus::Item < Hydrus::GenericObject
   # See GenericObject#changed_fields for discussion.
   def tracked_fields
     {
-      :title      => [:title],
-      :abstract   => [:abstract],
-      :files      => [:files_were_changed],
-      :embargo    => [:embargo_date],
-      :visibility => [:visibility],
-      :license    => [:license],
+      title: [:title],
+      abstract: [:abstract],
+      files: [:files_were_changed],
+      embargo: [:embargo_date],
+      visibility: [:visibility],
+      license: [:license],
     }
   end
 
@@ -862,13 +862,13 @@ class Hydrus::Item < Hydrus::GenericObject
   # Takes a string.
   # Sets the description of the current version.
   def version_description=(val)
-    versionMetadata.update_current_version(:description => val)
+    versionMetadata.update_current_version(description: val)
   end
 
   # Takes a string or symbol: major, minor, admin.
   # Sets the significance of the current version.
   def version_significance=(val)
-    versionMetadata.update_current_version(:significance => val.to_sym)
+    versionMetadata.update_current_version(significance: val.to_sym)
   end
 
   # Returns the significance (major, minor, or admin) of the current version.

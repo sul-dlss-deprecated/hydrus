@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe("Collection view", :type => :request, :integration => true) do
+describe("Collection view", type: :request, integration: true) do
   fixtures :users
 
   before :each do
@@ -14,8 +14,8 @@ describe("Collection view", :type => :request, :integration => true) do
     logout
     visit "/collections/#{@druid}"
     expect(current_path).to eq(new_user_session_path)
-    fill_in "Email", :with => 'archivist1@example.com'
-    fill_in "Password", :with => login_pw
+    fill_in "Email", with: 'archivist1@example.com'
+    fill_in "Password", with: login_pw
     click_button "Sign in"
     expect(current_path).to eq("/collections/#{@druid}")
   end
@@ -23,8 +23,8 @@ describe("Collection view", :type => :request, :integration => true) do
   it "Breadcrumbs should be displayed with home link and unlinked trucated collection name" do
     login_as('archivist1')
     visit polymorphic_path(@hc)
-    expect(page).to have_selector("ul.breadcrumb li a", :text => "Home")
-    expect(page).to have_selector("ul.breadcrumb li", :text => "SSDS Social Science Data Co...")
+    expect(page).to have_selector("ul.breadcrumb li a", text: "Home")
+    expect(page).to have_selector("ul.breadcrumb li", text: "SSDS Social Science Data Co...")
   end
 
   it "should redirect to the collection page if the requested druid is a collection but is visited at the item page URL" do

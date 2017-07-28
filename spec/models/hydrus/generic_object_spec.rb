@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 
-describe Hydrus::GenericObject, :type => :model do
+describe Hydrus::GenericObject, type: :model do
 
   before(:each) do
     @cannot_do_regex = /\ACannot perform action/
@@ -20,7 +20,7 @@ describe Hydrus::GenericObject, :type => :model do
 
   describe "apo" do
     it "should be the admin policy object if it is defined" do
-      apo = double(:id => 'xyz')
+      apo = double(id: 'xyz')
       allow(@go).to receive(:admin_policy_object).and_return(apo)
       expect(@go.apo).to eq apo
     end
@@ -33,7 +33,7 @@ describe Hydrus::GenericObject, :type => :model do
 
   describe "apo_pid" do
     it "should return the pid of the APO" do
-      allow(@go).to receive(:admin_policy_object).and_return(double(:id => 'xyz'))
+      allow(@go).to receive(:admin_policy_object).and_return(double(id: 'xyz'))
       expect(@go.apo_pid).to eq 'xyz'
     end
   end
@@ -43,7 +43,7 @@ describe Hydrus::GenericObject, :type => :model do
   end
 
   it "can exercise object_type()" do
-    fake_imd = double('fake_imd', :objectType => [123,456])
+    fake_imd = double('fake_imd', objectType: [123,456])
     expect(@go).to receive(:identityMetadata).and_return(fake_imd)
     expect(@go.object_type).to eq(123)
   end
@@ -158,8 +158,8 @@ describe Hydrus::GenericObject, :type => :model do
 
   it "set_item_type() should add correct tags" do
     tests = {
-      :collection => '<objectType>set</objectType>',
-      :dataset    => '',
+      collection: '<objectType>set</objectType>',
+      dataset: '',
     }
     tests.each do |item_type, xml|
       exp  = "<identityMetadata>#{xml}</identityMetadata>"
@@ -442,10 +442,10 @@ end
 
   it "changed_fields() should return ..." do
     tf = {
-      :a   => [:aa],
-      :bb  => [:ba, :bb],
-      :ccc => [:ca, :cb, :cc],
-      :ddd => [:da, :db],
+      a: [:aa],
+      bb: [:ba, :bb],
+      ccc: [:ca, :cb, :cc],
+      ddd: [:da, :db],
     }
     allow(@go).to receive(:tracked_fields).and_return(tf)
     old = double('old_self')
@@ -467,8 +467,8 @@ end
   describe "object returned email" do
     it "should provide a method to send object returned emails" do
       allow(@go).to receive(:recipients_for_object_returned_email).and_return('jdoe')
-      allow(@go).to receive_messages(:object_type=>'item')
-      mail = @go.send_object_returned_email_notification(:item_url=>'/fake/it')
+      allow(@go).to receive_messages(object_type: 'item')
+      mail = @go.send_object_returned_email_notification(item_url: '/fake/it')
       expect(mail.to).to eq(["jdoe@stanford.edu"])
       expect(mail.subject).to match(/Item returned in the Stanford Digital Repository/)
     end
@@ -504,13 +504,13 @@ end
       end
       it "invokes log_editing_events()" do
         expect(@go).to receive(:log_editing_events).once
-        @go.save(:no_super => true)
+        @go.save(no_super: true)
       end
 
       context "when no_edit_logging is false" do
         it "should not invoke log_editing_events() if no_edit_logging is true" do
           expect(@go).not_to receive(:log_editing_events)
-          @go.save(:no_edit_logging => true, :no_super => true)
+          @go.save(no_edit_logging: true, no_super: true)
         end
       end
     end

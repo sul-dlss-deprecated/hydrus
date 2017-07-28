@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'rake'
 
-describe Hydrus::ObjectFile, :type => :feature, :integration=>true do
+describe Hydrus::ObjectFile, type: :feature, integration: true do
 
   fixtures :object_files
 

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe SolrDocument, :type => :model do
+describe SolrDocument, type: :model do
 
   describe '#route_key' do
     it 'should be hydrus_collection for a Dor::Collection' do

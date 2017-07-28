@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe("Collection create", :type => :request, :integration => true) do
+describe("Collection create", type: :request, integration: true) do
 
   before(:each) do
     @alert           = 'div.alert'
@@ -24,9 +24,9 @@ describe("Collection create", :type => :request, :integration => true) do
 
   it "should be able to create a new Collection, with APO, and with expected datastreams" do
     ni = OpenStruct.new(
-      :title    => 'title_foo',
-      :abstract => 'abstract_foo',
-      :contact  => 'ozzy@hell.com',
+      title: 'title_foo',
+      abstract: 'abstract_foo',
+      contact: 'ozzy@hell.com',
     )
     # Login, go to new Collection page, and store the druid of the new Collection.
     login_as('archivist1')
@@ -34,9 +34,9 @@ describe("Collection create", :type => :request, :integration => true) do
     expect(current_path).to match(@edit_path_regex)
     druid = @edit_path_regex.match(current_path)[1]
     # Fill in form and save.
-    fill_in "hydrus_collection_title",    :with => ni.title
-    fill_in "hydrus_collection_abstract", :with => ni.abstract
-    fill_in "hydrus_collection_contact",  :with => ni.contact
+    fill_in "hydrus_collection_title",    with: ni.title
+    fill_in "hydrus_collection_abstract", with: ni.abstract
+    fill_in "hydrus_collection_contact",  with: ni.contact
     click_button "save_nojs"
     expect(find(@alert)).to have_content(@notice_save)
     # Get Collection from fedora and confirm that our edits were persisted.
@@ -84,9 +84,9 @@ describe("Collection create", :type => :request, :integration => true) do
 
   it "should be able to create a new Collection, publish, close, etc" do
     ni = OpenStruct.new(
-      :title    => 'title_foo',
-      :abstract => 'abstract_foo',
-      :contact  => 'ozzy@hell.com',
+      title: 'title_foo',
+      abstract: 'abstract_foo',
+      contact: 'ozzy@hell.com',
     )
     open_button    = "Open Collection"
     close_button   = "Close Collection"
@@ -96,7 +96,7 @@ describe("Collection create", :type => :request, :integration => true) do
     expect(current_path).to match(@edit_path_regex)
     druid = @edit_path_regex.match(current_path)[1]
     # Fill in form and save.
-    fill_in "hydrus_collection_title", :with => ni.title
+    fill_in "hydrus_collection_title", with: ni.title
     choose "hydrus_collection_requires_human_approval_yes"
     click_button "save_nojs"
     expect(find(@alert)).to have_content(@notice_save)
@@ -117,8 +117,8 @@ describe("Collection create", :type => :request, :integration => true) do
     expect(coll.is_open).to eq(false)
     # Go back to edit page and fill in required elements.
     should_visit_edit_page(coll)
-    fill_in "hydrus_collection_abstract", :with => ni.abstract
-    fill_in "hydrus_collection_contact",  :with => ni.contact
+    fill_in "hydrus_collection_abstract", with: ni.abstract
+    fill_in "hydrus_collection_contact",  with: ni.contact
     click_button "save_nojs"
     expect(find(@alert)).to have_content(@notice_save)
     # The view page should now offer the Open Collection button.
@@ -171,12 +171,12 @@ describe("Collection create", :type => :request, :integration => true) do
     expect(coll.is_open).to eq(false)
     # Return to edit page, and try to save Collection with an empty title.
     click_link "Edit Collection"
-    fill_in "hydrus_collection_title", :with => ''
+    fill_in "hydrus_collection_title", with: ''
     click_button "save_nojs"
     expect(page).not_to have_content(@notice_save)
     expect(find('div.alert')).to have_content('Title cannot be blank')
     # Fill in the title and save.
-    fill_in "hydrus_collection_title", :with => ni.title
+    fill_in "hydrus_collection_title", with: ni.title
     click_button "save_nojs"
     expect(find(@alert)).to have_content(@notice_save)
     # Open the Collection.
@@ -233,8 +233,8 @@ describe("Collection create", :type => :request, :integration => true) do
       expect(apo.class).to eq(hya)
       expect(hc.class).to  eq(hyc)
       #   - in SOLR
-      expect(hyc.all_hydrus_objects(:models => [hya], :pids_only => true)).to include(apid)
-      expect(hyc.all_hydrus_objects(:models => [hyc], :pids_only => true)).to include(cpid)
+      expect(hyc.all_hydrus_objects(models: [hya], pids_only: true)).to include(apid)
+      expect(hyc.all_hydrus_objects(models: [hyc], pids_only: true)).to include(cpid)
       #   - in workflows
       expect(wfs.get_workflows(apid)).to eq([hwf])
       expect(wfs.get_workflows(cpid)).to eq([hwf])
@@ -248,8 +248,8 @@ describe("Collection create", :type => :request, :integration => true) do
       expect { hya.find(apid) }.to raise_error(afe)
       expect { hyc.find(cpid) }.to raise_error(afe)
       #   - from SOLR
-      expect(hyc.all_hydrus_objects(:models => [hya], :pids_only => true)).not_to include(apid)
-      expect(hyc.all_hydrus_objects(:models => [hyc], :pids_only => true)).not_to include(cpid)
+      expect(hyc.all_hydrus_objects(models: [hya], pids_only: true)).not_to include(apid)
+      expect(hyc.all_hydrus_objects(models: [hyc], pids_only: true)).not_to include(cpid)
       #   - from workflows
       expect(wfs.get_workflows(apid)).to eq([])
       expect(wfs.get_workflows(cpid)).to eq([])

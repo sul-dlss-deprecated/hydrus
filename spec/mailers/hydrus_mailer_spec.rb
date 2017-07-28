@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe HydrusMailer, :type => :mailer do
+describe HydrusMailer, type: :mailer do
 
   before(:each) do
     @fobj = Hydrus::Collection.new
@@ -12,7 +12,7 @@ describe HydrusMailer, :type => :mailer do
   describe "open notification" do
     before(:each) do
       allow(@fobj).to receive('recipients_for_collection_update_emails').and_return('jdoe1, jdoe2')
-      @mail = HydrusMailer.open_notification(:object => @fobj)
+      @mail = HydrusMailer.open_notification(object: @fobj)
     end
     it "should have the correct subject" do
       expect(@mail.subject).to eq("Collection opened for deposit in the Stanford Digital Repository")
@@ -29,7 +29,7 @@ describe HydrusMailer, :type => :mailer do
   describe "close notification" do
     before(:each) do
       allow(@fobj).to receive('recipients_for_collection_update_emails').and_return('jdoe1, jdoe2')
-      @mail = HydrusMailer.close_notification(:object => @fobj)
+      @mail = HydrusMailer.close_notification(object: @fobj)
     end
     it "should have the correct subject" do
       expect(@mail.subject).to eq("Collection closed for deposit in the Stanford Digital Repository")
@@ -45,7 +45,7 @@ describe HydrusMailer, :type => :mailer do
 
   describe "invitation" do
     before(:each) do
-      @mail = HydrusMailer.invitation(:to => "jdoe1, jdoe2", :object => @fobj)
+      @mail = HydrusMailer.invitation(to: "jdoe1, jdoe2", object: @fobj)
     end
     it "should have the correct subject" do
       expect(@mail.subject).to eq("Invitation to deposit in the Stanford Digital Repository")
@@ -62,7 +62,7 @@ describe HydrusMailer, :type => :mailer do
   describe "object_returned" do
     before(:each) do
       allow(@fobj).to receive('recipients_for_object_returned_email').and_return('jdoe1, jdoe2')
-      @mail = HydrusMailer.object_returned(:object => @fobj, :returned_by=>'archivist1')
+      @mail = HydrusMailer.object_returned(object: @fobj, returned_by: 'archivist1')
     end
     it "should have the correct subject" do
       expect(@mail.subject).to eq("Collection returned in the Stanford Digital Repository")

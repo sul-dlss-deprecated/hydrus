@@ -1,10 +1,10 @@
 Hydrus::Application.routes.draw do
   HydraHead.add_routes(self)
 
-  root :to => "catalog#home"
+  root to: "catalog#home"
   get "catalog" => "catalog#index", :as => :catalog_index
 
-  devise_for :users, :controllers => { :sessions => "sessions" }
+  devise_for :users, controllers: { sessions: "sessions" }
 
   # Actions to advance Collections through the Hydrus process.
   post "collections/open/:id"  => "hydrus_collections#open",     :as => 'open_collection'
@@ -22,21 +22,21 @@ Hydrus::Application.routes.draw do
   get  "items/discard_confirmation/:id"       => "hydrus_items#discard_confirmation",       :as => 'discard_item_confirmation'
   get  "collections/discard_confirmation/:id" => "hydrus_collections#discard_confirmation", :as => 'discard_collection_confirmation'
 
-  resources :collections, :controller => 'hydrus_collections', :as => 'hydrus_collections' do
-    resources :events, :only=>:index
-    resources :datastreams, :only=>:index
-    resources :items, :only=>:index, :controller=>"hydrus_items"
+  resources :collections, controller: 'hydrus_collections', as: 'hydrus_collections' do
+    resources :events, only: :index
+    resources :datastreams, only: :index
+    resources :items, only: :index, controller: "hydrus_items"
   end
 
-  resources :items, :controller => 'hydrus_items', :as => 'hydrus_items' do
-    resources :events, :only=>:index
-    resources :datastreams, :only=>:index
-    get 'terms_of_deposit', :as =>'terms_of_deposit', :on=>:collection
-    get 'agree_to_terms_of_deposit', :as =>'agree_to_terms_of_deposit', :on=>:collection
+  resources :items, controller: 'hydrus_items', as: 'hydrus_items' do
+    resources :events, only: :index
+    resources :datastreams, only: :index
+    get 'terms_of_deposit', as: 'terms_of_deposit', on: :collection
+    get 'agree_to_terms_of_deposit', as: 'agree_to_terms_of_deposit', on: :collection
   end
 
-  resources :admin_policy_objects, :controller => 'hydrus_admin_policy_objects', :as => 'hydrus_admin_policy_objects' do
-    resources :datastreams, :only=>:index
+  resources :admin_policy_objects, controller: 'hydrus_admin_policy_objects', as: 'hydrus_admin_policy_objects' do
+    resources :datastreams, only: :index
   end
 
   get "items/:id/destroy_value" => "hydrus_items#destroy_value", :as => 'destroy_hydrus_item_value'
@@ -57,6 +57,6 @@ Hydrus::Application.routes.draw do
   match "dor/delete_from_index/:id" => "hydrus_solr#delete_from_index", :as => 'delete_from_index', via: [:get, :post]
 
 
-   get '/404', :to => "exceptions#render_404"
-   get '/500', :to => "exceptions#render_500"
+   get '/404', to: "exceptions#render_404"
+   get '/500', to: "exceptions#render_500"
 end

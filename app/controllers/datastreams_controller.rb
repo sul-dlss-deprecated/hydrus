@@ -10,7 +10,7 @@ class DatastreamsController < ApplicationController
   def index
     pid = contextual_id()
     authorize! :view_datastreams, pid
-    @fobj = ActiveFedora::Base.find(pid, :cast=>true)
+    @fobj = ActiveFedora::Base.find(pid, cast: true)
     @fobj.current_user = current_user
   end
 

@@ -64,8 +64,8 @@ class Hydrus::ObjectFile < ActiveRecord::Base
   # Written mainly to facilitate testing.
   def get_file_info
     {
-      :label => label,
-      :hide  => hide,
+      label: label,
+      hide: hide,
     }
   end
 
