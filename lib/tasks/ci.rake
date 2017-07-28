@@ -1,7 +1,7 @@
 ZIP_FILE = 'https://github.com/projecthydra/hydra-jetty/archive/v7.3.1.zip'
 
 desc 'Run Continuous Integration Suite (tests, coverage, docs)'
-task ci: ['jetty:clean', 'jetty:config'] do
+task ci: [:rubocop, 'jetty:clean', 'jetty:config'] do
   unless Rails.env.test?
     # force any CI sub-tasks to run in the test environment (e.g. to ensure
     # fixtures get loaded into the right places)

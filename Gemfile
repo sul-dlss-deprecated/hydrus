@@ -47,8 +47,9 @@ group :development, :test do
   gem 'launchy'
   gem 'byebug'
   gem 'letter_opener'
-# gem 'database_cleaner'
   gem 'pry'
+  gem 'rubocop', '~> 0.49.1'
+  # gem 'rubocop-rspec', '~> 1.5'
 end
 
 group :production do
