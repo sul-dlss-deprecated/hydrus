@@ -2,9 +2,12 @@
 
 module Hydrus::Processable
 
-  WFS  = Dor::WorkflowService
   HWF  = Dor::Config.hydrus.app_workflow  # 'hydrusAssemblyWF'
   REPO = 'dor'
+
+  def workflow_client
+    Dor::Config.workflow.client
+  end
 
   # Takes the name of a step in the Hydrus workflow.
   # Calls the workflow service to mark that step as completed.
@@ -22,13 +25,13 @@ module Hydrus::Processable
   # Takes the name of a step in the Hydrus workflow.
   # Calls the workflow service to mark that step as completed.
   def update_workflow_status(step, status)
-    WFS.update_workflow_status(REPO, pid, HWF, step, status)
+    workflow_client.update_workflow_status(REPO, pid, HWF, step, status)
     workflows_content_is_stale
   end
 
   # Deletes an objects hydrus workflow.
   def delete_hydrus_workflow
-    WFS.delete_workflow(REPO, pid, HWF)
+    workflow_client.delete_workflow(REPO, pid, HWF)
   end
 
   # Resets two instance variables of the workflow datastream. By resorting to
@@ -58,7 +61,7 @@ module Hydrus::Processable
   def start_assembly_wf
     return unless should_start_assembly_wf
     xml = Dor::Config.hydrus.assembly_wf_xml
-    WFS.create_workflow(REPO, pid, 'assemblyWF', xml)
+    workflow_client.create_workflow(REPO, pid, 'assemblyWF', xml)
   end
 
   # Returns value of Dor::Config.hydrus.start_assembly_wf.
@@ -90,13 +93,13 @@ module Hydrus::Processable
 
     # Never accessioned.
     # This query check both active and archived rows.
-    return false unless WFS.get_lifecycle(REPO, p, 'accessioned')
+    return false unless workflow_client.get_lifecycle(REPO, p, 'accessioned')
 
     # Actively in the middle of assemblyWF or accessionWF.
     # We don't want to treat an object as fully accessioned until
     # the robots are finished and the archiver has run.
-    return false if WFS.get_active_lifecycle(REPO, p, 'pipelined')
-    return false if WFS.get_active_lifecycle(REPO, p, 'submitted')
+    return false if workflow_client.get_active_lifecycle(REPO, p, 'pipelined')
+    return false if workflow_client.get_active_lifecycle(REPO, p, 'submitted')
 
     # Accessioned and archived.
     return true
@@ -109,7 +112,7 @@ module Hydrus::Processable
       # In development and test mode, simulated a publish_time of 1 day later.
       pt = submitted_for_publish_time.to_datetime + 1.day
     else
-      pt = WFS.get_lifecycle(REPO, pid, 'published')
+      pt = workflow_client.get_lifecycle(REPO, pid, 'published')
     end
     return HyTime.datetime(pt)
   end
