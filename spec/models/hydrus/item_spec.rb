@@ -654,7 +654,7 @@ describe Hydrus::Item, type: :model do
       allow(@hi).to receive_message_chain([:collection, :embargo_option]).and_return('varies')
       if !@hi.valid?
         msg = @hi.errors.messages.map { |field, error|
-        "#{field.to_s.humanize.capitalize} #{error.join(', ')}"
+          "#{field.to_s.humanize.capitalize} #{error.join(', ')}"
         }
         raise msg.join ', \n'
       end

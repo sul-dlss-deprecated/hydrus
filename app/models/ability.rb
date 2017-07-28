@@ -92,6 +92,6 @@ class Ability
       obj
     end
   rescue ActiveFedora::ObjectNotFoundError
-      return nil
+    return nil
   end
 end

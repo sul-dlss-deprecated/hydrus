@@ -2,7 +2,7 @@ class RSolr::Connection
   def execute client, request_context
     if request_context[:method] != :post
       #if this is not a POST, take all of the parameters in the query string and put them into a POST body to avoid queryies with the query string being too long
-    uri = URI.parse(request_context[:uri].to_s)
+      uri = URI.parse(request_context[:uri].to_s)
     body = uri.query
     uri.query = nil
     request_context[:uri] = uri

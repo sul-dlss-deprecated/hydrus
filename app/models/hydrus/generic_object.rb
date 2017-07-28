@@ -73,7 +73,7 @@ class Hydrus::GenericObject < Dor::Item
   end
 
   def purl_url
-   "#{Dor::Config.purl.base_url}#{dru}"
+    "#{Dor::Config.purl.base_url}#{dru}"
   end
 
   # Takes an item_type: :dataset, etc. for items, or just :collection for collections.
@@ -88,7 +88,7 @@ class Hydrus::GenericObject < Dor::Item
         identityMetadata.add_value(:objectType, 'set')
         identityMetadata.content_will_change!
         descMetadata.ng_xml.search('//mods:mods/mods:typeOfResource', 'mods' => 'http://www.loc.gov/mods/v3').each do |node|
-  				node['collection'] = 'yes'
+  				    node['collection'] = 'yes'
         end
       end
     else
@@ -162,7 +162,7 @@ class Hydrus::GenericObject < Dor::Item
   end
 
   def remove_type_of_resource_collection(descMetadata)
-     node = descMetadata.ng_xml.search('//mods:typeOfResource', 'mods' => 'http://www.loc.gov/mods/v3').first
+    node = descMetadata.ng_xml.search('//mods:typeOfResource', 'mods' => 'http://www.loc.gov/mods/v3').first
      node.remove_attribute('manuscript') if node
   end
 

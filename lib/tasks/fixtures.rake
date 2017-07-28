@@ -160,7 +160,7 @@ namespace :hydrus do
     puts "Removing all folders in #{dst_base}"
     all_folders = Dir.glob("#{dst_base}/*")
     all_folders.each do |folder|
-       FileUtils.rm_rf folder
+      FileUtils.rm_rf folder
     end
   end
 

@@ -16,7 +16,7 @@ class ApplicationController < ActionController::Base
   helper_method :current_user
 
   def layout_name
-   'sul_chrome/application'
+    'sul_chrome/application'
   end
 
   def contact

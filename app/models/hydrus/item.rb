@@ -360,9 +360,9 @@ class Hydrus::Item < Hydrus::GenericObject
 
   # the user must accept the terms of deposit to publish
   def must_accept_terms_of_deposit
-     if to_bool(accepted_terms_of_deposit) != true
-       errors.add(:terms_of_deposit, 'must be accepted')
-     end
+    if to_bool(accepted_terms_of_deposit) != true
+      errors.add(:terms_of_deposit, 'must be accepted')
+    end
   end
 
   # the user must have reviewed the release and visibility settings

@@ -162,10 +162,10 @@ describe Hydrus::GenericObject, type: :model do
     end
   end
   context 'set_item_type' do
-    before :each do
-      @obj = Hydrus::GenericObject.new
-      @descMD = Dor::DescMetadataDS.new(nil, nil)
-    end
+  before :each do
+    @obj = Hydrus::GenericObject.new
+    @descMD = Dor::DescMetadataDS.new(nil, nil)
+  end
     def type_of_resource
       @obj.descMetadata.ng_xml.search('//mods:typeOfResource', 'mods' => 'http://www.loc.gov/mods/v3').first.text
     end
@@ -173,84 +173,84 @@ describe Hydrus::GenericObject, type: :model do
       @obj.descMetadata.ng_xml.search('//mods:genre', 'mods' => 'http://www.loc.gov/mods/v3').first.text
     end
   it 'set_item_type() should set the correct desc metadata fields for a dataset' do
-      @obj.set_item_type('dataset')
+    @obj.set_item_type('dataset')
       expect(type_of_resource).to eq('software, multimedia')
       expect(genre).to eq('dataset')
   end
   it 'set_item_type() should set the correct desc metadata fields for a thesis' do
-      @obj.set_item_type('thesis')
+    @obj.set_item_type('thesis')
       expect(type_of_resource).to eq('text')
       expect(genre).to eq('thesis')
       expect(@obj.descMetadata.ng_xml.search('//mods:genre', 'mods' => 'http://www.loc.gov/mods/v3').first['authority']).to eq('marcgt')
   end
   it 'set_item_type() should set the correct desc metadata fields for a article' do
-      @obj.set_item_type('article')
+    @obj.set_item_type('article')
       expect(type_of_resource).to eq('text')
       expect(genre).to eq('article')
       expect(@obj.descMetadata.ng_xml.search('//mods:genre', 'mods' => 'http://www.loc.gov/mods/v3').first['authority']).to eq('marcgt')
   end
 
   it 'set_item_type() should set the correct desc metadata fields for a class project' do
-      @obj.set_item_type('class project')
+    @obj.set_item_type('class project')
       expect(type_of_resource).to eq('text')
       expect(genre).to eq('student project report')
   end
   it 'set_item_type() should set the correct desc metadata fields for a computer game' do
-      @obj.set_item_type('computer game')
+    @obj.set_item_type('computer game')
       expect(type_of_resource).to eq('software, multimedia')
       expect(genre).to eq('game')
   end
   it 'set_item_type() should set the correct desc metadata fields for a audio - music' do
-      @obj.set_item_type('audio - music')
+    @obj.set_item_type('audio - music')
       expect(type_of_resource).to eq('sound recording-musical')
       expect(genre).to eq('sound')
   end
   it 'set_item_type() should set the correct desc metadata fields for a audio - spoken' do
-      @obj.set_item_type('audio - spoken')
+    @obj.set_item_type('audio - spoken')
       expect(type_of_resource).to eq('sound recording-nonmusical')
       expect(genre).to eq('sound')
   end
   it 'set_item_type() should set the correct desc metadata fields for a conference paper / presentation' do
-      @obj.set_item_type('conference paper / presentation')
+    @obj.set_item_type('conference paper / presentation')
       expect(type_of_resource).to eq('text')
       expect(genre).to eq('conference publication')
   end
   it 'set_item_type() should set the correct desc metadata fields for a technical report' do
-      @obj.set_item_type('technical report')
+    @obj.set_item_type('technical report')
       expect(type_of_resource).to eq('text')
       expect(genre).to eq('technical report')
   end
   it 'set_item_type() should set the correct desc metadata fields for a video' do
-      @obj.set_item_type('video')
+    @obj.set_item_type('video')
       expect(type_of_resource).to eq('moving image')
       expect(genre).to eq('motion picture')
   end
   it 'set_item_type() should set the correct desc metadata fields for a video' do
-      @obj.set_item_type('video')
+    @obj.set_item_type('video')
       expect(type_of_resource).to eq('moving image')
       expect(genre).to eq('motion picture')
   end
   it 'should set the correct desc metadata fields for an image' do
-      @obj.set_item_type('image')
+    @obj.set_item_type('image')
       expect(type_of_resource).to eq('still image')
   end
   it 'set_item_type() should set the correct desc metadata fields for archival mixed material ' do
-      @obj.set_item_type('archival mixed material')
+    @obj.set_item_type('archival mixed material')
       expect(type_of_resource).to eq('mixed material')
       expect(@obj.descMetadata.ng_xml.search('//mods:typeOfResource', 'mods' => 'http://www.loc.gov/mods/v3').first['manuscript']).to eq('yes')
   end
   it 'should set the correct desc metadata fields for software' do
-      @obj.set_item_type('software')
+    @obj.set_item_type('software')
       expect(type_of_resource).to eq('software, multimedia')
   end
   it 'should set the correct desc metadata fields for a textbook' do
-      @obj.set_item_type('textbook')
+    @obj.set_item_type('textbook')
       expect(type_of_resource).to eq('text')
       expect(genre).to eq('instruction')
   end
 
   it 'set_item_type() should set the correct desc metadata fields for a collection' do
-      @obj.set_item_type(:collection)
+    @obj.set_item_type(:collection)
       expect(type_of_resource).to eq('')
       expect(@obj.descMetadata.ng_xml.search('//mods:typeOfResource', 'mods' => 'http://www.loc.gov/mods/v3').first['collection']).to eq('yes')
   end
