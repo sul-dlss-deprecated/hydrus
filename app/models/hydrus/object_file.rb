@@ -25,7 +25,7 @@ class Hydrus::ObjectFile < ActiveRecord::Base
   end
 
   def filename
-    file.file.nil? ? "" : file.file.identifier # don't throw exception if file is blank so the page doesn't show an exception
+    file.file.nil? ? '' : file.file.identifier # don't throw exception if file is blank so the page doesn't show an exception
   end
 
   def is_dupe?(new_filename)

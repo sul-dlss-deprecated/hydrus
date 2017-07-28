@@ -18,7 +18,7 @@ class Hydrus::GenericObject < Dor::Item
   def check_contact_email_format
     problems = ValidatesEmailFormatOf::validate_email_format(contact)
     return if problems.nil?
-    errors.add(:contact, "must contain a single valid email address")
+    errors.add(:contact, 'must contain a single valid email address')
   end
 
   # the pid without the druid: prefix
@@ -95,54 +95,54 @@ class Hydrus::GenericObject < Dor::Item
     else
       case typ
       when 'dataset'
-        descMetadata.typeOfResource="software, multimedia"
-        descMetadata.genre="dataset"
+        descMetadata.typeOfResource='software, multimedia'
+        descMetadata.genre='dataset'
       when 'thesis'
-        descMetadata.typeOfResource="text"
+        descMetadata.typeOfResource='text'
         descMetadata.insert_genre
-        descMetadata.genre="thesis"
+        descMetadata.genre='thesis'
         #this is messy but I couldnt get OM to do what I needed it to
         set_genre_authority_to_marc descMetadata
       when 'article'
-        descMetadata.typeOfResource="text"
-        descMetadata.genre="article"
+        descMetadata.typeOfResource='text'
+        descMetadata.genre='article'
         set_genre_authority_to_marc descMetadata
       when 'class project'
-        descMetadata.typeOfResource="text"
-        descMetadata.genre="student project report"
+        descMetadata.typeOfResource='text'
+        descMetadata.genre='student project report'
       when 'computer game'
-        descMetadata.typeOfResource="software, multimedia"
-        descMetadata.genre="game"
+        descMetadata.typeOfResource='software, multimedia'
+        descMetadata.genre='game'
       when 'audio - music'
-        descMetadata.typeOfResource="sound recording-musical"
-        descMetadata.genre="sound"
+        descMetadata.typeOfResource='sound recording-musical'
+        descMetadata.genre='sound'
         set_genre_authority_to_marc descMetadata
       when 'audio - spoken'
-        descMetadata.typeOfResource="sound recording-nonmusical"
-        descMetadata.genre="sound"
+        descMetadata.typeOfResource='sound recording-nonmusical'
+        descMetadata.genre='sound'
         set_genre_authority_to_marc descMetadata
       when 'video'
-        descMetadata.typeOfResource="moving image"
-        descMetadata.genre="motion picture"
+        descMetadata.typeOfResource='moving image'
+        descMetadata.genre='motion picture'
         set_genre_authority_to_marc descMetadata
       when 'conference paper / presentation'
-        descMetadata.typeOfResource="text"
-        descMetadata.genre="conference publication"
+        descMetadata.typeOfResource='text'
+        descMetadata.genre='conference publication'
         set_genre_authority_to_marc descMetadata
       when 'technical report'
-        descMetadata.typeOfResource="text"
-        descMetadata.genre="technical report"
+        descMetadata.typeOfResource='text'
+        descMetadata.genre='technical report'
         set_genre_authority_to_marc descMetadata
       when 'archival mixed material'
-        descMetadata.typeOfResource="mixed material"
+        descMetadata.typeOfResource='mixed material'
         set_type_of_resource_collection descMetadata
       when 'image'
-        descMetadata.typeOfResource="still image"
+        descMetadata.typeOfResource='still image'
       when 'software'
-        descMetadata.typeOfResource="software, multimedia"
+        descMetadata.typeOfResource='software, multimedia'
       when 'textbook'
-        descMetadata.typeOfResource="text"
-        descMetadata.genre="instruction"
+        descMetadata.typeOfResource='text'
+        descMetadata.genre='instruction'
         set_genre_authority_to_marc descMetadata
       else
         descMetadata.typeOfResource=typ.to_s
@@ -170,21 +170,21 @@ class Hydrus::GenericObject < Dor::Item
   # the possible types of items that can be created, hash of display value (keys) and values to store in object (value)
   def self.item_types
     {
-      "archival mixed material" => "archival mixed material",
-      "article"       => "article",
-      "audio - music" => "audio - music",
-      "audio - spoken" => "audio - spoken",
-      "class project" => "class project",
-      "computer game" => "computer game",
-      "conference paper / presentation" => "conference paper / presentation",
-      "data set"      => "dataset",
-      "image"         => "image",
-      "software"      => "software",
-      "other"         => "other",
-      "technical report" => "technical report",
-      "textbook"      => "textbook",
-      "thesis"        => "thesis",
-      "video" => "video"
+      'archival mixed material' => 'archival mixed material',
+      'article'       => 'article',
+      'audio - music' => 'audio - music',
+      'audio - spoken' => 'audio - spoken',
+      'class project' => 'class project',
+      'computer game' => 'computer game',
+      'conference paper / presentation' => 'conference paper / presentation',
+      'data set'      => 'dataset',
+      'image'         => 'image',
+      'software'      => 'software',
+      'other'         => 'other',
+      'technical report' => 'technical report',
+      'textbook'      => 'textbook',
+      'thesis'        => 'thesis',
+      'video' => 'video'
     }
   end
 
@@ -216,16 +216,16 @@ class Hydrus::GenericObject < Dor::Item
   # Should consolidate with info in license_groups().
   def self.license_commons
     {
-      'Creative Commons Licenses'  => "creativeCommons",
-      'Open Data Commons Licenses' => "openDataCommons",
+      'Creative Commons Licenses'  => 'creativeCommons',
+      'Open Data Commons Licenses' => 'openDataCommons',
     }
   end
 
   # Should consolidate with info in license_groups().
   def self.license_group_urls
     {
-      "creativeCommons" => 'http://creativecommons.org/licenses/',
-      "openDataCommons" => 'http://opendatacommons.org/licenses/',
+      'creativeCommons' => 'http://creativecommons.org/licenses/',
+      'openDataCommons' => 'http://opendatacommons.org/licenses/',
     }
   end
 
@@ -234,7 +234,7 @@ class Hydrus::GenericObject < Dor::Item
   def self.license_human(code)
     code = 'none' if code.blank?
     lic = license_groups.map(&:last).flatten(1).find { |txt, c| c == code }
-    lic ? lic.first : "Unknown license"
+    lic ? lic.first : 'Unknown license'
   end
 
   # Takes a license code: cc-by, pddl, none, ...
@@ -255,15 +255,15 @@ class Hydrus::GenericObject < Dor::Item
   def self.status_labels(typ, status = nil)
     h = {
       collection: {
-        'draft'             => "draft",
-        'published_open'    => "published",
-        'published_closed'  => "published",
+        'draft'             => 'draft',
+        'published_open'    => 'published',
+        'published_closed'  => 'published',
       },
       item: {
-        'draft'             => "draft",
-        'awaiting_approval' => "waiting for approval",
-        'returned'          => "item returned",
-        'published'         => "published",
+        'draft'             => 'draft',
+        'awaiting_approval' => 'waiting for approval',
+        'returned'          => 'item returned',
+        'published'         => 'published',
       },
     }
     status ? h[typ] : h[typ]

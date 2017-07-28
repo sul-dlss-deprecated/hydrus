@@ -9,32 +9,32 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
   extend  Hydrus::Delegatable
 
   has_metadata(
-    name: "descMetadata",
+    name: 'descMetadata',
     type: Hydrus::DescMetadataDS,
     label: 'Descriptive Metadata',
     control_group: 'M')
 
   has_metadata(
-    name: "roleMetadata",
+    name: 'roleMetadata',
     type: Hydrus::RoleMetadataDS,
     label: 'Role Metadata',
     control_group: 'M')
 
   has_metadata(
-    name: "defaultObjectRights",
+    name: 'defaultObjectRights',
     type: Hydrus::RightsMetadataDS,
     label: 'Default Object Rights',
     control_group: 'M',
     autocreate: true)
 
   has_metadata(
-    name: "contentMetadata",
+    name: 'contentMetadata',
     type: Dor::ContentMetadataDS,
     label: 'Content Metadata',
     control_group: 'M')
 
   has_metadata(
-    name: "hydrusProperties",
+    name: 'hydrusProperties',
     type: Hydrus::HydrusPropertiesDS,
     label: 'Hydrus Properties',
     control_group: 'X')
@@ -44,14 +44,14 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
 
   setup_delegations(
     # [:METHOD_NAME,          :uniq, :at... ]
-    "descMetadata" => [
+    'descMetadata' => [
       [:title,                true,  :main_title ],
     ],
-    "roleMetadata" => [
+    'roleMetadata' => [
       [:person_id,            false, :role, :person, :identifier],
       [:collection_depositor, true, :collection_depositor, :person, :identifier],
     ],
-    "hydrusProperties" => [
+    'hydrusProperties' => [
       [:reviewed_release_settings, true   ],
       [:accepted_terms_of_deposit, true   ],
       [:object_version,            true   ],
@@ -93,12 +93,12 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
     rmd = apo.roleMetadata
     rmd.add_person_with_role(user, 'hydrus-collection-manager')
     rmd.add_person_with_role(user, 'hydrus-collection-depositor')
-    rmd.add_group_with_role("dlss:pmag-staff", "dor-apo-manager")
-    rmd.add_group_with_role("dlss:developers", "dor-apo-manager")
+    rmd.add_group_with_role('dlss:pmag-staff', 'dor-apo-manager')
+    rmd.add_group_with_role('dlss:developers', 'dor-apo-manager')
     # Create defaultObjectRights datastream ... by mentioning it.
     apo.defaultObjectRights.content_will_change!
     # Add the references agreement to the APO's RELS-EXT.
-    apo.add_relationship(:references_agreement, "info:fedora/druid:mc322hh4254")
+    apo.add_relationship(:references_agreement, 'info:fedora/druid:mc322hh4254')
     # Save and return.
     apo.save!
     apo
@@ -117,7 +117,7 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
   end
 
   def hydrus_class_to_s
-    "apo"
+    'apo'
   end
 
   def is_apo?

@@ -15,32 +15,32 @@ module Hydrus::GenericObjectStuff
   extend  Hydrus::Delegatable
 
   has_metadata(
-    name: "rightsMetadata",
+    name: 'rightsMetadata',
     type: Hydrus::RightsMetadataDS,
     label: 'Rights Metadata',
-    control_group: "M")
+    control_group: 'M')
 
   has_metadata(
-    name: "descMetadata",
+    name: 'descMetadata',
     type: Hydrus::DescMetadataDS,
     label: 'Descriptive Metadata',
     control_group: 'M')
 
   has_metadata(
-    name: "hydrusProperties",
+    name: 'hydrusProperties',
     type: Hydrus::HydrusPropertiesDS,
     label: 'Hydrus Properties',
     control_group: 'X')
 
   setup_delegations(
     # [:METHOD_NAME,              :uniq, :at... ]
-    "descMetadata" => [
+    'descMetadata' => [
       [:title,                    true,  :main_title ],
       [:abstract,                 true   ],
       [:related_item_title,       false, :relatedItem, :titleInfo, :title],
       [:contact,                  true   ],
     ],
-    "hydrusProperties" => [
+    'hydrusProperties' => [
       [:disapproval_reason,                 true   ],
       [:object_status,                      true   ],
       [:submitted_for_publish_time,         true   ],
@@ -51,7 +51,7 @@ module Hydrus::GenericObjectStuff
       [:item_type,                          true   ],
       [:object_version,                     true   ],
     ],
-    "rightsMetadata" => [
+    'rightsMetadata' => [
       [:rmd_embargo_release_date, true,  :read_access, :machine, :embargo_release_date],
       [:terms_of_use,             true,  ],
     ],
@@ -98,7 +98,7 @@ module Hydrus::GenericObjectStuff
   def with_protocol(uri)
     return uri if uri.blank?
     return uri if uri =~ /\A (http|https|ftp|sftp):\/\/ /x
-    "http://" + uri
+    'http://' + uri
   end
   
   # Returns string representation of the class, minus the Hydrus:: prefix.

@@ -14,13 +14,13 @@ describe Hydrus::RightsMetadataDS, type: :model do
     @doc = Hydrus::RightsMetadataDS.new(nil, nil)
   end
 
-  it "blank template should match our expectations" do
+  it 'blank template should match our expectations' do
     expect(@doc.ng_xml).not_to be_nil
     expect(@initial   ).not_to be_nil
     expect(@doc.ng_xml).to be_equivalent_to(@initial)
   end
 
-  it "should be able to add and remove license (and not molest terms-of-use)" do
+  it 'should be able to add and remove license (and not molest terms-of-use)' do
     # Initial: only a use-and-repro statement.
     ns = @doc.use.human.nodeset
     expect(ns.size).to eq(1)

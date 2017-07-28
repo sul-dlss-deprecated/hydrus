@@ -55,22 +55,22 @@ class Hydrus::Item < Hydrus::GenericObject
     #   :prior_visibility   => prior_visibility,
     #   :embargo_date       => embargo_date,
     # })
-    msg = "cannot be reduced in subsequent versions"
+    msg = 'cannot be reduced in subsequent versions'
     errors.add(:visibility, msg)
   end
 
   setup_delegations(
     # [:METHOD_NAME,               :uniq, :at... ]
-    "descMetadata" => [
+    'descMetadata' => [
       [:preferred_citation,        true   ],
       [:date_created,              true   ],
       [:related_citation,          false  ],
     ],
-    "roleMetadata" => [
+    'roleMetadata' => [
     #  [:item_depositor_id,         true,  :item_depositor, :person, :identifier],
       [:item_depositor_name,       true,  :item_depositor, :person, :name],
     ],
-    "hydrusProperties" => [
+    'hydrusProperties' => [
       [:reviewed_release_settings, true   ],
       [:accepted_terms_of_deposit, true   ],
       [:version_started_time,      true   ],
@@ -80,7 +80,7 @@ class Hydrus::Item < Hydrus::GenericObject
   )
 
   has_metadata(
-    name: "roleMetadata",
+    name: 'roleMetadata',
     type: Hydrus::RoleMetadataDS,
     label: 'Role Metadata',
     control_group: 'M')
@@ -126,7 +126,7 @@ class Hydrus::Item < Hydrus::GenericObject
     self.submit_for_approval_time   = HyTime.now_datetime
     self.object_status = 'awaiting_approval'
     complete_workflow_step('submit')
-    events.add_event('hydrus', @current_user, "Item submitted for approval")
+    events.add_event('hydrus', @current_user, 'Item submitted for approval')
     send_deposit_review_email_notification
   end
 
@@ -134,7 +134,7 @@ class Hydrus::Item < Hydrus::GenericObject
   def approve
     raise "#{cannot_do_message(:approve)}\nItem is not approvable" unless is_approvable()
     hydrusProperties.remove_nodes(:disapproval_reason)
-    events.add_event('hydrus', @current_user, "Item approved")
+    events.add_event('hydrus', @current_user, 'Item approved')
     do_publish()
   end
 
@@ -144,7 +144,7 @@ class Hydrus::Item < Hydrus::GenericObject
     raise "#{cannot_do_message(:disapprove)}\nItem is not disapprovable" unless is_disapprovable()
     self.object_status      = 'returned'
     self.disapproval_reason = reason
-    events.add_event('hydrus', @current_user, "Item returned")
+    events.add_event('hydrus', @current_user, 'Item returned')
     send_object_returned_email_notification
   end
 
@@ -154,7 +154,7 @@ class Hydrus::Item < Hydrus::GenericObject
     self.submit_for_approval_time   = HyTime.now_datetime
     self.object_status = 'awaiting_approval'
     hydrusProperties.remove_nodes(:disapproval_reason)
-    events.add_event('hydrus', @current_user, "Item resubmitted for approval")
+    events.add_event('hydrus', @current_user, 'Item resubmitted for approval')
     send_deposit_review_email_notification
   end
 
@@ -181,7 +181,7 @@ class Hydrus::Item < Hydrus::GenericObject
     # Varying behavior: remediations vs ordinary user edits.
     if opts[:is_remediation]
       # Just log the event.
-      events.add_event('hydrus', 'admin', "Object remediated")
+      events.add_event('hydrus', 'admin', 'Object remediated')
     else
       self.version_started_time = HyTime.now_datetime
       # Put the object back in the draft state.
@@ -192,7 +192,7 @@ class Hydrus::Item < Hydrus::GenericObject
       self.prior_license = license
       self.prior_visibility = visibility
       # Log the event.
-      events.add_event('hydrus', @current_user, "New version opened")
+      events.add_event('hydrus', @current_user, 'New version opened')
     end
   end
 
@@ -234,19 +234,19 @@ class Hydrus::Item < Hydrus::GenericObject
 
   def send_new_deposit_email_notification
     return if recipients_for_new_deposit_emails.blank?
-    email = HydrusMailer.send("new_deposit", object: self)
+    email = HydrusMailer.send('new_deposit', object: self)
     email.deliver_now unless email.to.blank?
   end
 
   def send_item_deposit_email_notification
     return if recipients_for_item_deposit_emails.blank?
-    email = HydrusMailer.send("item_deposit", object: self)
+    email = HydrusMailer.send('item_deposit', object: self)
     email.deliver_now unless email.to.blank?
   end
 
   def send_deposit_review_email_notification
     return if recipients_for_review_deposit_emails.blank?
-    email = HydrusMailer.send("new_item_for_review", object: self)
+    email = HydrusMailer.send('new_item_for_review', object: self)
     email.deliver_now unless email.to.blank?
   end
 
@@ -347,28 +347,28 @@ class Hydrus::Item < Hydrus::GenericObject
   def enforce_collection_is_open
     c = collection
     return true if c && c.is_open
-    errors.add(:collection, "must be open to have new items added")
+    errors.add(:collection, 'must be open to have new items added')
     false
   end
 
   # you must have at least one non-blank contributor
   def contributors_not_all_blank
     if (contributors.all? {|contributor| contributor.name.blank?})
-      errors.add(:contributors, "must be entered")
+      errors.add(:contributors, 'must be entered')
     end
   end
 
   # the user must accept the terms of deposit to publish
   def must_accept_terms_of_deposit
      if to_bool(accepted_terms_of_deposit) != true
-       errors.add(:terms_of_deposit, "must be accepted")
+       errors.add(:terms_of_deposit, 'must be accepted')
      end
   end
 
   # the user must have reviewed the release and visibility settings
   def must_review_release_settings
     if to_bool(reviewed_release_settings) != true
-      errors.add(:release_settings, "must be reviewed")
+      errors.add(:release_settings, 'must be reviewed')
     end
   end
 
@@ -389,7 +389,7 @@ class Hydrus::Item < Hydrus::GenericObject
   # At the colleciton level we store user name and datetime.
   def accept_terms_of_deposit(user)
     raise "#{cannot_do_message(:accept_terms_of_deposit)}\nUser #{user} cannot edit item" unless Hydrus::Authorizable.can_edit_item(user, self)
-    self.accepted_terms_of_deposit = "true"
+    self.accepted_terms_of_deposit = 'true'
     collection.accept_terms_of_deposit(user, HyTime.now_datetime, self)
     events.add_event('hydrus', user, 'Terms of deposit accepted')
   end
@@ -556,7 +556,7 @@ class Hydrus::Item < Hydrus::GenericObject
   # Embargo status determines which datastream is used to obtain the information.
   def visibility
     ds = is_embargoed ? embargoMetadata : rightsMetadata
-    return ["world"] if ds.has_world_read_node
+    return ['world'] if ds.has_world_read_node
     ds.group_read_nodes.map { |n| n.text }
   end
 
@@ -611,14 +611,14 @@ class Hydrus::Item < Hydrus::GenericObject
     h[:date_created] = single_date? ? descMetadata.date_created : ''
     #raise descMetadata.date_created.inspect
     begin
-      h[:date_created_approximate] = (descMetadata.originInfo.dateCreated.respond_to?(:nodeset) and single_date?) ? descMetadata.originInfo.dateCreated.nodeset.first['qualifier'] == "approximate" : false
+      h[:date_created_approximate] = (descMetadata.originInfo.dateCreated.respond_to?(:nodeset) and single_date?) ? descMetadata.originInfo.dateCreated.nodeset.first['qualifier'] == 'approximate' : false
     rescue
       h[:date_created_approximate] = false
     end
     h[:date_range_start] = descMetadata.originInfo.date_range_start ? descMetadata.originInfo.date_range_start : ''
-    h[:date_range_start_approximate] = descMetadata.originInfo.date_range_start.first ? descMetadata.ng_xml.search("//mods:originInfo/mods:dateCreated[@point='start']", 'mods' => 'http://www.loc.gov/mods/v3').first['qualifier'] == "approximate" : false
+    h[:date_range_start_approximate] = descMetadata.originInfo.date_range_start.first ? descMetadata.ng_xml.search("//mods:originInfo/mods:dateCreated[@point='start']", 'mods' => 'http://www.loc.gov/mods/v3').first['qualifier'] == 'approximate' : false
     h[:date_range_end] = descMetadata.originInfo.date_range_end ? descMetadata.originInfo.date_range_end : ''
-    h[:date_range_end_approximate] = descMetadata.originInfo.date_range_end.first ? descMetadata.ng_xml.search("//mods:originInfo/mods:dateCreated[@point='end']", 'mods' => 'http://www.loc.gov/mods/v3').first['qualifier'] == "approximate" : false
+    h[:date_range_end_approximate] = descMetadata.originInfo.date_range_end.first ? descMetadata.ng_xml.search("//mods:originInfo/mods:dateCreated[@point='end']", 'mods' => 'http://www.loc.gov/mods/v3').first['qualifier'] == 'approximate' : false
     h[:undated] = undated?
     h[:range] = date_range?
     h[:single] = single_date?
@@ -630,22 +630,22 @@ class Hydrus::Item < Hydrus::GenericObject
       descMetadata.originInfo.dateCreated = h[:date_created]
       #the if respond to is for initial item creation
       if descMetadata.originInfo.dateCreated and descMetadata.originInfo.dateCreated.respond_to? :nodeset
-        descMetadata.originInfo.dateCreated.nodeset.first['qualifier'] = "approximate" if h[:date_created_approximate]
-        descMetadata.originInfo.dateCreated.nodeset.first['keyDate']="yes"
-        descMetadata.originInfo.dateCreated.nodeset.first['encoding']="w3cdtf"
+        descMetadata.originInfo.dateCreated.nodeset.first['qualifier'] = 'approximate' if h[:date_created_approximate]
+        descMetadata.originInfo.dateCreated.nodeset.first['keyDate']='yes'
+        descMetadata.originInfo.dateCreated.nodeset.first['encoding']='w3cdtf'
       end
     end
     if h[:date_type] == 'range'
       descMetadata.originInfo.date_range_start = h[:date_start]
       if descMetadata.originInfo.date_range_start.respond_to? :nodeset
-        descMetadata.originInfo.date_range_start.nodeset.first['qualifier'] = "approximate" if h[:date_range_start_approximate] == "hi"
-        descMetadata.originInfo.date_range_start.nodeset.first['keyDate']="yes"
-        descMetadata.originInfo.date_range_start.nodeset.first['encoding']="w3cdtf"
+        descMetadata.originInfo.date_range_start.nodeset.first['qualifier'] = 'approximate' if h[:date_range_start_approximate] == 'hi'
+        descMetadata.originInfo.date_range_start.nodeset.first['keyDate']='yes'
+        descMetadata.originInfo.date_range_start.nodeset.first['encoding']='w3cdtf'
       end
       descMetadata.originInfo.date_range_end = h[:date_range_end]
       if descMetadata.originInfo.date_range_end.respond_to? :nodeset
-        descMetadata.originInfo.date_range_end.nodeset.first['qualifier'] = "approximate" if h[:date_range_end_approximate] == "hi"
-        descMetadata.originInfo.date_range_end.nodeset.first['encoding']="w3cdtf"
+        descMetadata.originInfo.date_range_end.nodeset.first['qualifier'] = 'approximate' if h[:date_range_end_approximate] == 'hi'
+        descMetadata.originInfo.date_range_end.nodeset.first['encoding']='w3cdtf'
       end
     end
     if h[:date_type] == 'undated'
@@ -740,8 +740,8 @@ class Hydrus::Item < Hydrus::GenericObject
 
   def self.discovery_roles
     {
-      "everyone"      => "world",
-      "Stanford only" => "stanford",
+      'everyone'      => 'world',
+      'Stanford only' => 'stanford',
     }
   end
 
@@ -752,7 +752,7 @@ class Hydrus::Item < Hydrus::GenericObject
 
   # the users who will receive email notifications when a new item is created
   def recipients_for_new_deposit_emails
-    managers=apo.persons_with_role("hydrus-collection-manager").to_a
+    managers=apo.persons_with_role('hydrus-collection-manager').to_a
     managers.delete(self.item_depositor_id)
     managers.join(', ')
   end
@@ -760,8 +760,8 @@ class Hydrus::Item < Hydrus::GenericObject
   # the users who will receive email notifications when an item is submitted for review
   def recipients_for_review_deposit_emails
     managers=(
-      apo.persons_with_role("hydrus-collection-manager") +
-      apo.persons_with_role("hydrus-collection-reviewer")
+      apo.persons_with_role('hydrus-collection-manager') +
+      apo.persons_with_role('hydrus-collection-reviewer')
     ).to_a
     managers.delete(self.item_depositor_id)
     managers.join(', ')

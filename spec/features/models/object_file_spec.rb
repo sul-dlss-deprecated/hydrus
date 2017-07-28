@@ -5,7 +5,7 @@ describe Hydrus::ObjectFile, type: :feature, integration: true do
 
   fixtures :object_files
 
-  it "should find four files associated with the first item and it should grab the url of a given file" do
+  it 'should find four files associated with the first item and it should grab the url of a given file' do
     pid = 'druid:oo000oo0001'
     files = Hydrus::ObjectFile.where(pid: pid)
     expect(files.size).to eq(4)
@@ -17,7 +17,7 @@ describe Hydrus::ObjectFile, type: :feature, integration: true do
     expect(files[1].size).to be > 0
   end
 
-  it "should delete a file from the file system and disassociate from item when called" do
+  it 'should delete a file from the file system and disassociate from item when called' do
     pid = 'druid:oo000oo0001'
     @hi=Hydrus::Item.find(pid)
 

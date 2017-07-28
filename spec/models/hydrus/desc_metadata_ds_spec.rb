@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Hydrus::DescMetadataDS, type: :model do
 
   before(:all) do
-    sloc = "http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-3.xsd"
+    sloc = 'http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-3.xsd'
     @mods_start = <<-EOF
       <mods xmlns="http://www.loc.gov/mods/v3"
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -12,7 +12,7 @@ describe Hydrus::DescMetadataDS, type: :model do
     EOF
   end
 
-  context "Marshalling to and from a Fedora Datastream" do
+  context 'Marshalling to and from a Fedora Datastream' do
 
     before(:each) do
       dsxml = <<-EOF
@@ -46,7 +46,7 @@ describe Hydrus::DescMetadataDS, type: :model do
       @dsdoc = Hydrus::DescMetadataDS.from_xml(dsxml)
     end
 
-    it "should get correct values from OM terminology" do
+    it 'should get correct values from OM terminology' do
       expect(@dsdoc.term_values(:abstract)).to eq(['abstract content'])
       expect(@dsdoc.term_values(:main_title)).to eq(['Learn VB in 21 Days'])
       expect(@dsdoc.term_values(:name, :namePart)).to eq(['Angus'])
@@ -61,9 +61,9 @@ describe Hydrus::DescMetadataDS, type: :model do
 
   end
 
-  context "Inserting new nodes" do
+  context 'Inserting new nodes' do
 
-    it "Should be able to insert new XML nodes" do
+    it 'Should be able to insert new XML nodes' do
       nm = '<name type="personal"><namePart>NAME</namePart><role><roleTerm authority="marcrelator" type="text">ROLE</roleTerm></role></name>'
       ri = '<relatedItem><titleInfo><title/></titleInfo><location><url/></location></relatedItem>'
       rc = '<note type="citation/reference" displayLabel="Related Publication"></note>'
@@ -90,9 +90,9 @@ describe Hydrus::DescMetadataDS, type: :model do
 
   end
 
-  context "Blank template" do
+  context 'Blank template' do
 
-    it "should match our expectations" do
+    it 'should match our expectations' do
       exp_xml = %Q(
         #{@mods_start}
           <abstract/>

@@ -20,7 +20,7 @@ class ApplicationController < ActionController::Base
   end
 
   def contact
-    @page_title="Contact Us"
+    @page_title='Contact Us'
     @from=params[:from]
     @subject=params[:subject]
     @name=params[:name]
@@ -30,7 +30,7 @@ class ApplicationController < ActionController::Base
     if request.post?
       unless @message.blank?
         HydrusMailer.contact_message(params: params,request: request,user: current_user).deliver
-        flash[:notice]="Your message has been sent."
+        flash[:notice]='Your message has been sent.'
         @message=nil
         @name=nil
         @email=nil
@@ -39,7 +39,7 @@ class ApplicationController < ActionController::Base
           return
         end
       else
-        flash.now[:error]="Please enter message text."
+        flash.now[:error]='Please enter message text.'
       end
     end
     render 'contact'
@@ -58,7 +58,7 @@ class ApplicationController < ActionController::Base
     else
       # Don't think this will ever be reached.
       # Currently, exceptions occur if the PID is not a Hydrus Item or Collection.
-      msg = "You do not have sufficient privileges to view the requested item."
+      msg = 'You do not have sufficient privileges to view the requested item.'
       flash[:error] = msg
       redirect_to root_url
     end
@@ -72,15 +72,15 @@ class ApplicationController < ActionController::Base
   protected
 
   def current_user
-    if request.env["WEBAUTH_USER"]
-      WebAuthUser.new(request.env["WEBAUTH_USER"], request.env)
+    if request.env['WEBAUTH_USER']
+      WebAuthUser.new(request.env['WEBAUTH_USER'], request.env)
     else
       super
     end
   end
 
   def authenticate_user! *args
-    unless request.env["WEBAUTH_USER"]
+    unless request.env['WEBAUTH_USER']
       super
     end
   end

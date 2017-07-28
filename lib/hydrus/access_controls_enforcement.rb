@@ -51,7 +51,7 @@ module Hydrus::AccessControlsEnforcement
       else
         # User wants to create a Collection.
         return if can?(:create_collections, Hydrus::Collection)
-        msg = "to create new collections"
+        msg = 'to create new collections'
       end
       flash[:error] = "You do not have sufficient privileges #{msg}."
       redirect_to_correct_page(root_path)

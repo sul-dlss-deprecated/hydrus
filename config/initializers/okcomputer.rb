@@ -41,7 +41,7 @@ class HttpWithClientKeyCheck < OkComputer::Check
   # Public: Return the status of the HTTP check
   def check
     if resource.status == 200
-      mark_message "HTTP check successful"
+      mark_message 'HTTP check successful'
     else
       mark_message "Error: Status code is #{resource.status}"
       mark_failure
@@ -63,7 +63,7 @@ OkComputer.check_in_parallel = true
 OkComputer::Registry.register 'ruby_version', OkComputer::RubyVersionCheck.new
 
 # Solr
-solr_url = Dor::Config.solr.url + "/select"
+solr_url = Dor::Config.solr.url + '/select'
 OkComputer::Registry.register 'solr_url', OkComputer::HttpCheck.new(solr_url)
 
 # fedora

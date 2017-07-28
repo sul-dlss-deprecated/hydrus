@@ -41,7 +41,7 @@ module Hydrus::Contentable
 
   # Generates and returns a string of contentMetadata XML for the object.
   def create_content_metadata_xml
-    return "" unless is_item? # only need contentMetadata for item types
+    return '' unless is_item? # only need contentMetadata for item types
     conf = Hydrus::Application.config
     objects = []
     if is_item?
@@ -67,16 +67,16 @@ module Hydrus::Contentable
   end
 
   def base_file_directory
-    f = File.join(Rails.root, "public", Hydrus::Application.config.file_upload_path)
+    f = File.join(Rails.root, 'public', Hydrus::Application.config.file_upload_path)
     DruidTools::Druid.new(pid, f).path
   end
 
   def content_directory
-    File.join(base_file_directory, "content")
+    File.join(base_file_directory, 'content')
   end
 
   def metadata_directory
-    File.join(base_file_directory, "metadata")
+    File.join(base_file_directory, 'metadata')
   end
 
 end

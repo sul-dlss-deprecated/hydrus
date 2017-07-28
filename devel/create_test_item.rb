@@ -40,11 +40,11 @@ def create_test_item(*args)
   hi.abstract    = 'abstract'
   hi.contact     = 'foo@bar.com'
   hi.license     = 'cc-by-nc'
-  hi.keywords    = "foo,bar"
+  hi.keywords    = 'foo,bar'
   hi.visibility  = 'stanford'
   hi.contributors = {
-    "0" => {"name"=>"Nugent, Ted", "role_key"=>"personal_author"},
-    "1" => {"name"=>"EMI",         "role_key"=>"corporate_sponsor"},
+    '0' => {'name'=>'Nugent, Ted', 'role_key'=>'personal_author'},
+    '1' => {'name'=>'EMI',         'role_key'=>'corporate_sponsor'},
   }
   hi.accepted_terms_of_deposit = 'yes'
   hi.reviewed_release_settings = 'yes'
@@ -83,7 +83,7 @@ def create_test_batch(*args)
       if hc && hc.is_open
         hi = create_test_item(hc.pid, 'archivist1', *opts)
       else
-        help("Cannot create item without opening collection first")
+        help('Cannot create item without opening collection first')
       end
     end
   end

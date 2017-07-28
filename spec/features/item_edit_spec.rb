@@ -1,12 +1,12 @@
 require 'spec_helper'
 
-describe("Item edit", type: :request, integration: true) do
+describe('Item edit', type: :request, integration: true) do
   fixtures :users
 
   before :each do
     @druid = 'druid:oo000oo0001'
     @hi    = Hydrus::Item.find @druid
-    @ok_notice = "Your changes have been saved."
+    @ok_notice = 'Your changes have been saved.'
     @buttons = {
       add: 'Add',
       save: 'save_nojs',
@@ -20,17 +20,17 @@ describe("Item edit", type: :request, integration: true) do
     }
   end
 
-  it "If not logged in, should be redirected to the login page, then back to our intended page after logging in" do
+  it 'If not logged in, should be redirected to the login page, then back to our intended page after logging in' do
     logout
     visit edit_polymorphic_path(@hi)
     expect(current_path).to eq(new_user_session_path)
-    fill_in "Email", with: 'archivist1@example.com'
-    fill_in "Password", with: login_pw
-    click_button "Sign in"
+    fill_in 'Email', with: 'archivist1@example.com'
+    fill_in 'Password', with: login_pw
+    click_button 'Sign in'
     expect(current_path).to eq(edit_polymorphic_path(@hi))
   end
 
-  it "should be able to edit simple items: abstract, contact, keywords" do
+  it 'should be able to edit simple items: abstract, contact, keywords' do
     # Set up the new values for the fields we will edit.
     ni = OpenStruct.new(
       abstract: 'abcxyz123',
@@ -45,13 +45,13 @@ describe("Item edit", type: :request, integration: true) do
     expect(@hi.abstract).not_to eq(ni.abstract)
     expect(@hi.contact).not_to  eq(ni.contact)
     expect(@hi.keywords).not_to eq(ni.keywords)
-    expect(find_field("Abstract").value).not_to include(ni.abstract)
-    expect(find_field("hydrus_item_contact").value).not_to include(ni.contact)
-    expect(find_field("Keywords").value).not_to include(ni.keywords[0])
+    expect(find_field('Abstract').value).not_to include(ni.abstract)
+    expect(find_field('hydrus_item_contact').value).not_to include(ni.contact)
+    expect(find_field('Keywords').value).not_to include(ni.keywords[0])
     # Submit some changes.
-    fill_in("Abstract", with: "  #{ni.abstract}  ")
-    fill_in("hydrus_item_contact", with: "  #{ni.contact}  ")
-    fill_in("Keywords", with: "  #{ni.keywords.join(comma_join)}  ")
+    fill_in('Abstract', with: "  #{ni.abstract}  ")
+    fill_in('hydrus_item_contact', with: "  #{ni.contact}  ")
+    fill_in('Keywords', with: "  #{ni.keywords.join(comma_join)}  ")
     click_button(@buttons[:save])
     # Confirm new location and flash message.
     expect(current_path).to eq(polymorphic_path(@hi))
@@ -63,18 +63,18 @@ describe("Item edit", type: :request, integration: true) do
     expect(@hi.keywords).to eq(ni.keywords)
   end
 
-  describe "dates" do
+  describe 'dates' do
     it 'should edit a single date' do
       # Visit edit page.
       login_as('archivist1')
       should_visit_edit_page(@hi)
       date_val = '2004'
-      expect(find_field("hydrus_item[dates[date_created]]").value).not_to include(date_val)
+      expect(find_field('hydrus_item[dates[date_created]]').value).not_to include(date_val)
 
       # Submit some changes.
-      fill_in("hydrus_item[dates[date_created]]", with: date_val)
-      choose("hydrus_item_dates_date_type_single")
-      check "hydrus_item_dates_date_created_approximate"
+      fill_in('hydrus_item[dates[date_created]]', with: date_val)
+      choose('hydrus_item_dates_date_type_single')
+      check 'hydrus_item_dates_date_created_approximate'
       click_button(@buttons[:save])
       # Confirm new location and flash message.
       expect(current_path).to eq(polymorphic_path(@hi))
@@ -95,13 +95,13 @@ describe("Item edit", type: :request, integration: true) do
       should_visit_edit_page(@hi)
       date_val = '2004'
       date_val_end = '2005'
-      expect(find_field("hydrus_item[dates[date_start]]").value).not_to include(date_val)
+      expect(find_field('hydrus_item[dates[date_start]]').value).not_to include(date_val)
 
       # Submit some changes.
-      fill_in("hydrus_item[dates[date_start]]", with: date_val)
-      check "hydrus_item_dates_date_range_start_approximate"
-      fill_in("hydrus_item[dates[date_range_end]]", with: date_val_end)
-      choose("hydrus_item_dates_date_type_range")
+      fill_in('hydrus_item[dates[date_start]]', with: date_val)
+      check 'hydrus_item_dates_date_range_start_approximate'
+      fill_in('hydrus_item[dates[date_range_end]]', with: date_val_end)
+      choose('hydrus_item_dates_date_type_range')
       click_button(@buttons[:save])
       # Confirm new location and flash message.
       expect(current_path).to eq(polymorphic_path(@hi))
@@ -118,8 +118,8 @@ describe("Item edit", type: :request, integration: true) do
     end
   end
 
-  describe "contributors" do
-    it "scenario with deletes, edits, and adds" do
+  describe 'contributors' do
+    it 'scenario with deletes, edits, and adds' do
       # We should have 5 contributors.
       exp = @hi.contributors.map { |c| c.clone }
       expect(exp.size).to eq(5)
@@ -128,9 +128,9 @@ describe("Item edit", type: :request, integration: true) do
       should_visit_edit_page(@hi)
       # Delete some contributors.
       # Note: [3,1,1] corresponds to elements 3, 1, 2 from original list.
-      click_link("remove_name_3")
-      click_link("remove_name_1")
-      click_link("remove_name_1")
+      click_link('remove_name_3')
+      click_link('remove_name_1')
+      click_link('remove_name_1')
       # Edit a contributor name.
       fill_in('hydrus_item_contributors_0_name', with: 'Herr Finkelstein')
       # Add some contributors.
@@ -178,13 +178,13 @@ describe("Item edit", type: :request, integration: true) do
 
   end
 
-  it "Related Content editing with adding protocol if it is missing" do
+  it 'Related Content editing with adding protocol if it is missing' do
     orig_link   = @hi.descMetadata.relatedItem.location.url.first
-    new_link    = "foo_LINK_bar"
-    field_link  = "hydrus_item_related_item_url_0"
+    new_link    = 'foo_LINK_bar'
+    field_link  = 'hydrus_item_related_item_url_0'
     orig_title  = @hi.descMetadata.relatedItem.titleInfo.title.first
-    new_title   = "foo_TITLE_bar"
-    field_title = "hydrus_item_related_item_title_0"
+    new_title   = 'foo_TITLE_bar'
+    field_title = 'hydrus_item_related_item_title_0'
 
     login_as('archivist1')
     should_visit_edit_page(@hi)
@@ -203,13 +203,13 @@ describe("Item edit", type: :request, integration: true) do
     @hi.descMetadata.relatedItem.location.url.first == "http://#{new_link}"
   end
 
-  it "Related Content editing" do
+  it 'Related Content editing' do
     orig_link   = @hi.descMetadata.relatedItem.location.url.first
-    new_link    = "https://foo_LINK_bar"
-    field_link  = "hydrus_item_related_item_url_0"
+    new_link    = 'https://foo_LINK_bar'
+    field_link  = 'hydrus_item_related_item_url_0'
     orig_title  = @hi.descMetadata.relatedItem.titleInfo.title.first
-    new_title   = "foo_TITLE_bar"
-    field_title = "hydrus_item_related_item_title_0"
+    new_title   = 'foo_TITLE_bar'
+    field_title = 'hydrus_item_related_item_title_0'
 
     login_as('archivist1')
     should_visit_edit_page(@hi)
@@ -229,25 +229,25 @@ describe("Item edit", type: :request, integration: true) do
   end
 
 
-  it "Related Content adding and deleting" do
+  it 'Related Content adding and deleting' do
     # Got to edit page.
     login_as('archivist1')
     should_visit_edit_page(@hi)
     # Check for the related item input fields.
-    expect(page).to have_css("input#hydrus_item_related_item_title_0")
-    expect(page).to have_css("input#hydrus_item_related_item_url_0")
-    expect(page).to have_css("#remove_relatedItem_0")
-    expect(page).to have_css("input#hydrus_item_related_item_title_1")
-    expect(page).to have_css("input#hydrus_item_related_item_url_1")
-    expect(page).to have_css("#remove_relatedItem_1")
-    expect(page).not_to have_css("#hydrus_item_related_item_title_2")
-    expect(page).not_to have_css("#hydrus_item_related_item_url_2")
-    expect(page).not_to have_css("#remove_relatedItem_2")
+    expect(page).to have_css('input#hydrus_item_related_item_title_0')
+    expect(page).to have_css('input#hydrus_item_related_item_url_0')
+    expect(page).to have_css('#remove_relatedItem_0')
+    expect(page).to have_css('input#hydrus_item_related_item_title_1')
+    expect(page).to have_css('input#hydrus_item_related_item_url_1')
+    expect(page).to have_css('#remove_relatedItem_1')
+    expect(page).not_to have_css('#hydrus_item_related_item_title_2')
+    expect(page).not_to have_css('#hydrus_item_related_item_url_2')
+    expect(page).not_to have_css('#remove_relatedItem_2')
     # Add a new related item
-    click_button "add_link"
-    expect(page).to have_css("#hydrus_item_related_item_title_2")
-    expect(page).to have_css("#hydrus_item_related_item_url_2")
-    expect(page).to have_css("#remove_relatedItem_2")
+    click_button 'add_link'
+    expect(page).to have_css('#hydrus_item_related_item_title_2')
+    expect(page).to have_css('#hydrus_item_related_item_url_2')
+    expect(page).to have_css('#remove_relatedItem_2')
     fill_in('hydrus_item_related_item_title_2', with: 'Library Website')
     fill_in('hydrus_item_related_item_url_2', with: 'http://library.stanford.edu')
     # Save.
@@ -260,27 +260,27 @@ describe("Item edit", type: :request, integration: true) do
     expect(@hi.descMetadata.find_by_terms(:relatedItem).size).to eq(3)
     # Revisit edit page and check for the values we just added.
     should_visit_edit_page(@hi)
-    expect(page).to have_css("#remove_relatedItem_2")
+    expect(page).to have_css('#remove_relatedItem_2')
     expect(find_field('hydrus_item_related_item_title_2').value).to eq('Library Website')
     expect(find_field('hydrus_item_related_item_url_2').value).to eq('http://library.stanford.edu')
     # Delete the item we added.
     click_link 'remove_relatedItem_2'
     expect(current_path).to eq(edit_polymorphic_path(@hi))
-    expect(page).not_to have_css("#hydrus_item_related_item_title_2")
-    expect(page).not_to have_css("#hydrus_item_related_item_url_2")
-    expect(page).not_to have_css("#remove_relatedItem_2")
+    expect(page).not_to have_css('#hydrus_item_related_item_title_2')
+    expect(page).not_to have_css('#hydrus_item_related_item_url_2')
+    expect(page).not_to have_css('#remove_relatedItem_2')
   end
 
-  it "editing related content w/o titles" do
+  it 'editing related content w/o titles' do
     # Save copy of the original datastreams.
-    @druid = "druid:oo000oo0005"
+    @druid = 'druid:oo000oo0005'
     @hi    = Hydrus::Item.find(@druid)
     # Set up the new values for the fields we will edit.
     ni = OpenStruct.new(
       ri_title: 'My URL title',
       ri_url: 'http://stanford.and.son',
-      title_f: "hydrus_item_related_item_title_0",
-      url_f: "hydrus_item_related_item_url_0",
+      title_f: 'hydrus_item_related_item_title_0',
+      url_f: 'hydrus_item_related_item_url_0',
     )
     # Visit edit page.
     login_as('archivist1')
@@ -302,9 +302,9 @@ describe("Item edit", type: :request, integration: true) do
     expect(@hi.related_item_title.first).to eq(ni.ri_title)
   end
 
-  it "can edit preferred citation field" do
-    citation_field = "hydrus_item_preferred_citation"
-    new_pref_cit  = "new_citation_FOO"
+  it 'can edit preferred citation field' do
+    citation_field = 'hydrus_item_preferred_citation'
+    new_pref_cit  = 'new_citation_FOO'
     orig_pref_cit = @hi.preferred_citation
 
     login_as('archivist1')
@@ -320,22 +320,22 @@ describe("Item edit", type: :request, integration: true) do
     @hi.preferred_citation == new_pref_cit
   end
 
-  it "Related citation adding and deleting" do
+  it 'Related citation adding and deleting' do
 
-    new_citation         = "hydrus_item_related_citation_2"
-    new_delete_button    = "remove_related_citation_2"
-    new_citation_text    = " This is a citation for a related item! "
+    new_citation         = 'hydrus_item_related_citation_2'
+    new_delete_button    = 'remove_related_citation_2'
+    new_citation_text    = ' This is a citation for a related item! '
 
     login_as('archivist1')
     should_visit_edit_page(@hi)
 
-    expect(page).to have_css("textarea#hydrus_item_related_citation_0")
-    expect(page).to have_css("textarea#hydrus_item_related_citation_1")
+    expect(page).to have_css('textarea#hydrus_item_related_citation_0')
+    expect(page).to have_css('textarea#hydrus_item_related_citation_1')
 
     expect(page).not_to have_css("textarea##{new_citation}")
     expect(page).not_to have_css("##{new_delete_button}")
 
-    click_button "add_related_citation"
+    click_button 'add_related_citation'
     expect(current_path).to eq(edit_polymorphic_path(@hi))
 
     expect(page).to have_css("##{new_citation}")
@@ -360,12 +360,12 @@ describe("Item edit", type: :request, integration: true) do
   end
 
   it "should have editible license information once the parent collection's license is set to varies" do
-    varies_radio           = "hydrus_collection_license_option_varies"
-    collection_licenses    = "license_option_varies"
-    new_collection_license = "CC BY Attribution"
-    item_licenses          = "hydrus_item_license"
-    new_item_license       = "PDDL Public Domain Dedication and License"
-    no_license             = "No license"
+    varies_radio           = 'hydrus_collection_license_option_varies'
+    collection_licenses    = 'license_option_varies'
+    new_collection_license = 'CC BY Attribution'
+    item_licenses          = 'hydrus_item_license'
+    new_item_license       = 'PDDL Public Domain Dedication and License'
+    no_license             = 'No license'
     css_lic_select         = "optgroup/option[@selected='selected']"
 
     # Item has expected rights.
@@ -374,7 +374,7 @@ describe("Item edit", type: :request, integration: true) do
 
     # Modify the collection to allow varying license.
     login_as('archivist1')
-    should_visit_edit_page(Hydrus::Collection.find("druid:oo000oo0003"))
+    should_visit_edit_page(Hydrus::Collection.find('druid:oo000oo0003'))
     choose varies_radio
     select(new_collection_license, from: collection_licenses)
     click_button(@buttons[:save])
@@ -439,7 +439,7 @@ describe("Item edit", type: :request, integration: true) do
 
   end
 
-  describe "role-protection" do
+  describe 'role-protection' do
 
     before(:each) do
       @prev_mint_ids = config_mint_ids()
@@ -449,7 +449,7 @@ describe("Item edit", type: :request, integration: true) do
       config_mint_ids(@prev_mint_ids)
     end
 
-    it "action buttons should not be accessible to users with insufficient powers" do
+    it 'action buttons should not be accessible to users with insufficient powers' do
 
       # Create an item.
       owner    = 'archivist1'
@@ -481,7 +481,7 @@ describe("Item edit", type: :request, integration: true) do
       # Disapprove the item.
       login_as(reviewer)
       should_visit_view_page(hi)
-      fill_in "hydrus_item_disapproval_reason", with: "Doh!"
+      fill_in 'hydrus_item_disapproval_reason', with: 'Doh!'
       click_button(b)
 
       # Resubmit item.
@@ -530,9 +530,9 @@ describe("Item edit", type: :request, integration: true) do
 
   end
 
-  describe "embargo and visibility" do
+  describe 'embargo and visibility' do
 
-    it "setting/removing embargo date modifies embargoMD and rightsMD as expected" do
+    it 'setting/removing embargo date modifies embargoMD and rightsMD as expected' do
       css = {
         emb_yes: 'hydrus_item_embarg_visib_embargoed_yes',
         emb_no: 'hydrus_item_embarg_visib_embargoed_no',
@@ -603,9 +603,9 @@ describe("Item edit", type: :request, integration: true) do
 
   end
 
-  describe "uploaded files" do
+  describe 'uploaded files' do
 
-    it "hide indicator on view page" do
+    it 'hide indicator on view page' do
       # Setup:
       #   - Object has 4 uploaded files, with IDs 1 - 4.
       #   - Files with odd IDs will be hidden.

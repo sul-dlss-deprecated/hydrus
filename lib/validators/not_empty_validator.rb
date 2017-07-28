@@ -2,7 +2,7 @@
 class NotEmptyValidator < ActiveModel::EachValidator
   def validate_each(record, attribute, value)
     if value.blank? || (value.class == Array && value.delete_if{|x| x.empty?}.size == 0)
-      record.errors[attribute] << (options[:message] || "cannot be blank")
+      record.errors[attribute] << (options[:message] || 'cannot be blank')
     end
   end
 end

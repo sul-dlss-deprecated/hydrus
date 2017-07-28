@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe("Collection edit", type: :request, integration: true) do
+describe('Collection edit', type: :request, integration: true) do
   fixtures :users
 
   before :each do
@@ -16,17 +16,17 @@ describe("Collection edit", type: :request, integration: true) do
     }
   end
 
-  it "if not logged in, should be redirected to the login page, then back to our intended page after logging in" do
+  it 'if not logged in, should be redirected to the login page, then back to our intended page after logging in' do
     logout
     visit edit_polymorphic_path(@hc)
     expect(current_path).to eq(new_user_session_path)
-    fill_in "Email", with: 'archivist1@example.com'
-    fill_in "Password", with: login_pw
-    click_button "Sign in"
+    fill_in 'Email', with: 'archivist1@example.com'
+    fill_in 'Password', with: login_pw
+    click_button 'Sign in'
     expect(current_path).to eq(edit_polymorphic_path(@hc))
   end
 
-  it "can edit Collection descMetadata content" do
+  it 'can edit Collection descMetadata content' do
 
     new_abstract  = '  foobarfubb '
     orig_abstract = @hc.abstract
@@ -41,36 +41,36 @@ describe("Collection edit", type: :request, integration: true) do
 
     expect(page).not_to have_content(new_abstract)
     expect(page).to have_no_xpath("//input[@value='#{new_contact}']")
-    fill_in "Description", with: new_abstract
-    fill_in "hydrus_collection_contact", with: new_contact
-    click_button "save_nojs"
+    fill_in 'Description', with: new_abstract
+    fill_in 'hydrus_collection_contact', with: new_contact
+    click_button 'save_nojs'
 
     expect(current_path).to eq(polymorphic_path(@hc))
     visit polymorphic_path(@hc)
     expect(page).to have_content(new_abstract.strip)
   end
 
-  it "does not shows deletion link for a collection if it has any items in it" do
+  it 'does not shows deletion link for a collection if it has any items in it' do
     login_as('archivist1')
     should_visit_edit_page(@hc)
-    expect(page).not_to have_css(".discard-item")
+    expect(page).not_to have_css('.discard-item')
   end
 
-  it "does not shows deletion link for a collection if has no items but is stil open" do
+  it 'does not shows deletion link for a collection if has no items but is stil open' do
     login_as('archivist1')
     @hc = Hydrus::Collection.find(@druid_no_files)
     should_visit_edit_page(@hc)
-    expect(page).not_to have_css(".discard-item")
+    expect(page).not_to have_css('.discard-item')
   end
 
-  it "can edit and delete multi-valued fields" do
-    new_url = "http://library.stanford.edu"
-    new_label = "Library Website"
-    new_url_field = "hydrus_collection_related_item_url_2"
-    new_label_field = "hydrus_collection_related_item_title_2"
-    new_delete_link = "remove_relatedItem_2"
-    original_url_field = "hydrus_collection_related_item_url_1"
-    original_label_field = "hydrus_collection_related_item_title_1"
+  it 'can edit and delete multi-valued fields' do
+    new_url = 'http://library.stanford.edu'
+    new_label = 'Library Website'
+    new_url_field = 'hydrus_collection_related_item_url_2'
+    new_label_field = 'hydrus_collection_related_item_title_2'
+    new_delete_link = 'remove_relatedItem_2'
+    original_url_field = 'hydrus_collection_related_item_url_1'
+    original_label_field = 'hydrus_collection_related_item_title_1'
 
     login_as('archivist1')
     should_visit_edit_page(@hc)
@@ -85,17 +85,17 @@ describe("Collection edit", type: :request, integration: true) do
     expect(page).not_to have_content new_url
     expect(page).not_to have_content new_label
 
-    click_button "Add another link"
+    click_button 'Add another link'
     expect(current_path).to eq(edit_polymorphic_path(@hc))
 
     expect(page).to have_css("##{new_url_field}")
     expect(page).to have_css("##{new_label_field}")
     expect(page).to have_css("##{new_delete_link}")
 
-    fill_in("hydrus_collection_related_item_url_2", with: new_url)
-    fill_in("hydrus_collection_related_item_title_2", with: new_label)
+    fill_in('hydrus_collection_related_item_url_2', with: new_url)
+    fill_in('hydrus_collection_related_item_title_2', with: new_label)
 
-    click_button "save_nojs"
+    click_button 'save_nojs'
     expect(current_path).to eq(polymorphic_path(@hc))
 
     expect(page).to have_content(new_label)
@@ -116,10 +116,10 @@ describe("Collection edit", type: :request, integration: true) do
 
   end
 
-  it "can edit license content" do
+  it 'can edit license content' do
     # Setup and login.
     orig_license        = @hc.license         # original value = cc-by, will set to: odc-odbl
-    orig_license_label  = "CC BY Attribution"
+    orig_license_label  = 'CC BY Attribution'
     orig_license_option = @hc.license_option  # original value = fixed, will set to: varies
     orig_check_field    = "hydrus_collection_license_option_#{orig_license_option}"
     new_license         = 'odc-odbl'
@@ -139,7 +139,7 @@ describe("Collection edit", type: :request, integration: true) do
     # Make changes, save, and confirm redirect.
     choose(new_check_field)
     select(new_license_label, from: "license_option_#{new_license_option}")
-    click_button "save_nojs"
+    click_button 'save_nojs'
     expect(current_path).to eq(polymorphic_path(@hc))
     # Visit view page, and confirm that changes occured.
     visit polymorphic_path(@hc)
@@ -149,7 +149,7 @@ describe("Collection edit", type: :request, integration: true) do
     confirm_rights_metadata_in_apo(@hc)
   end
 
-  it "can edit embargo content" do
+  it 'can edit embargo content' do
     # Setup and login.
     orig_embargo        = @hc.embargo_terms   # original value = 1 year, will set to 3 years
     orig_embargo_option = @hc.embargo_option  # original value = varies, will set to fixed
@@ -172,7 +172,7 @@ describe("Collection edit", type: :request, integration: true) do
     # Make changes, save, and confirm redirect.
     choose(new_check_field)
     select(new_embargo, from: "embargo_option_#{new_embargo_option}")
-    click_button "save_nojs"
+    click_button 'save_nojs'
     expect(current_path).to eq(polymorphic_path(@hc))
     # Visit view-page, and confirm that changes occured.
     visit polymorphic_path(@hc)
@@ -182,15 +182,15 @@ describe("Collection edit", type: :request, integration: true) do
     expect(page.has_select?('embargo_option_fixed', selected: "#{new_embargo} after deposit")).to eq(true)
     choose(orig_check_field)
     select(orig_embargo, from: "embargo_option_#{orig_embargo_option}")
-    click_button "save_nojs"
+    click_button 'save_nojs'
     expect(current_path).to eq(polymorphic_path(@hc))
     # Set to no embargo after embargo was previously set and ensure there is no longer an embargo period set.
     should_visit_edit_page(@hc)
     expect(page.has_select?('embargo_option_varies', selected: "#{orig_embargo} after deposit")).to eq(true)
     choose(no_embargo_check_field)
-    click_button "save_nojs"
+    click_button 'save_nojs'
     expect(current_path).to eq(polymorphic_path(@hc))
-    expect(find("div.collection-settings")).not_to have_content(orig_embargo)
+    expect(find('div.collection-settings')).not_to have_content(orig_embargo)
     # verify embargo is now 'none' and terms are not set
     @hc = Hydrus::Collection.find @druid
     expect(@hc.embargo_option).to eq('none')
@@ -198,7 +198,7 @@ describe("Collection edit", type: :request, integration: true) do
     confirm_rights_metadata_in_apo(@hc)
   end
 
-  context "modifying persons and roles" do
+  context 'modifying persons and roles' do
 
     def check_role_management_div(role_info)
       # Takes a role info hash, like that returned by apo_person_roles().
@@ -215,7 +215,7 @@ describe("Collection edit", type: :request, integration: true) do
       expect(got).to eq(role_info)
     end
 
-    it "should be able to add/remove persons with various roles" do
+    it 'should be able to add/remove persons with various roles' do
       # Visit edit page.
       login_as('archivist1')
       should_visit_edit_page(@hc)
@@ -236,7 +236,7 @@ describe("Collection edit", type: :request, integration: true) do
         rmdiv.fill_in("#{dk}[#{role}]", with: ids.to_a.join(', '))
       end
       # Check role-management section after additions.
-      click_button "save_nojs"
+      click_button 'save_nojs'
       should_visit_edit_page(@hc)
       check_role_management_div(role_info)
       # Confirm new content in fedora.
@@ -245,7 +245,7 @@ describe("Collection edit", type: :request, integration: true) do
       confirm_rights_metadata_in_apo(@hc)
     end
 
-    it "should be able to strip email addresses to leave just sunetIDs from persons with various roles" do
+    it 'should be able to strip email addresses to leave just sunetIDs from persons with various roles' do
       # Visit edit page.
       login_as('archivist1')
       should_visit_edit_page(@hc)
@@ -273,7 +273,7 @@ describe("Collection edit", type: :request, integration: true) do
         rmdiv.fill_in("#{dk}[#{role}]", with: ids.to_a.join(', '))
       end
       # Check role-management section after additions.
-      click_button "save_nojs"
+      click_button 'save_nojs'
       should_visit_edit_page(@hc)
       check_role_management_div(role_info_stripped)
       # Confirm new content in fedora.
@@ -284,33 +284,33 @@ describe("Collection edit", type: :request, integration: true) do
 
   end
 
-  describe "emails" do
+  describe 'emails' do
 
-    describe "send_publish_email_notification()" do
+    describe 'send_publish_email_notification()' do
 
       before(:each) do
         @coll = Hydrus::Collection.new
       end
 
-      it "should send open email when there are item depositors" do
-        @coll.apo_person_roles = {"hydrus-collection-item-depositor": "jdoe"}
+      it 'should send open email when there are item depositors' do
+        @coll.apo_person_roles = {"hydrus-collection-item-depositor": 'jdoe'}
         e = expect { @coll.send_publish_email_notification(true) }
         e.to change { ActionMailer::Base.deliveries.count }.by(1)
         email = ActionMailer::Base.deliveries.last
-        expect(email.to).to eq(["jdoe@stanford.edu"])
+        expect(email.to).to eq(['jdoe@stanford.edu'])
         expect(email.subject).to match(/^Collection opened for deposit/)
       end
 
-      it "should send close email when there are item depositors" do
-        @coll.apo_person_roles = {"hydrus-collection-item-depositor": "jdoe"}
+      it 'should send close email when there are item depositors' do
+        @coll.apo_person_roles = {"hydrus-collection-item-depositor": 'jdoe'}
         e = expect { @coll.send_publish_email_notification(false) }
         e.to change { ActionMailer::Base.deliveries.count }.by(1)
         email = ActionMailer::Base.deliveries.last
-        expect(email.to).to eq(["jdoe@stanford.edu"])
+        expect(email.to).to eq(['jdoe@stanford.edu'])
         expect(email.subject).to match(/Collection closed for deposit/)
       end
 
-      it "should not send an email when there are no item depositors" do
+      it 'should not send an email when there are no item depositors' do
         e = expect {@coll.send_publish_email_notification(true)}
         e.to change { ActionMailer::Base.deliveries.count }.by(0)
         e = expect {@coll.send_publish_email_notification(false)}
@@ -319,7 +319,7 @@ describe("Collection edit", type: :request, integration: true) do
 
     end
 
-    describe "when updating a collection" do
+    describe 'when updating a collection' do
 
       before(:each) do
         @prev_mint_ids = config_mint_ids()
@@ -332,75 +332,75 @@ describe("Collection edit", type: :request, integration: true) do
       it "should send an email to managers when we're opening a collection and to a depositor when we add them" do
         login_as('archivist1')
         visit new_hydrus_collection_path()
-        fill_in "hydrus_collection_title", with: "TestingTitle"
-        fill_in "hydrus_collection_abstract", with: "Summary of my content"
-        fill_in "hydrus_collection_contact", with: "jdoe@example.com"
-        click_button("save_nojs")
-        expect(page).to have_content("Your changes have been saved.")
+        fill_in 'hydrus_collection_title', with: 'TestingTitle'
+        fill_in 'hydrus_collection_abstract', with: 'Summary of my content'
+        fill_in 'hydrus_collection_contact', with: 'jdoe@example.com'
+        click_button('save_nojs')
+        expect(page).to have_content('Your changes have been saved.')
 
-        expect {click_button("Open Collection")}.to change { ActionMailer::Base.deliveries.count }.by(1)
+        expect {click_button('Open Collection')}.to change { ActionMailer::Base.deliveries.count }.by(1)
 
         email = ActionMailer::Base.deliveries.last
-        expect(email.to).to eq(["archivist1@stanford.edu"])
-        expect(email.subject).to eq("Collection opened for deposit in the Stanford Digital Repository")
+        expect(email.to).to eq(['archivist1@stanford.edu'])
+        expect(email.subject).to eq('Collection opened for deposit in the Stanford Digital Repository')
         
-        click_link("Edit Collection")
+        click_link('Edit Collection')
 
-        fill_in "hydrus_collection_apo_person_roles[hydrus-collection-item-depositor]", with: "jdoe"
+        fill_in 'hydrus_collection_apo_person_roles[hydrus-collection-item-depositor]', with: 'jdoe'
         
-        expect {click_button("save_nojs")}.to change { ActionMailer::Base.deliveries.count }.by(1)
+        expect {click_button('save_nojs')}.to change { ActionMailer::Base.deliveries.count }.by(1)
         email = ActionMailer::Base.deliveries.last
-        expect(email.to).to eq(["jdoe@stanford.edu"])
-        expect(email.subject).to eq("Invitation to deposit in the Stanford Digital Repository")       
+        expect(email.to).to eq(['jdoe@stanford.edu'])
+        expect(email.subject).to eq('Invitation to deposit in the Stanford Digital Repository')       
       end
 
       it "should not send an email to new depositors when we're updating a collection if user does not check the send email checkbox" do
         login_as('archivist1')
         visit new_hydrus_collection_path()
-        fill_in "hydrus_collection_title", with: "TestingTitle"
-        fill_in "hydrus_collection_abstract", with: "Summary of my content"
-        fill_in "hydrus_collection_contact", with: "jdoe@example.com"
-        click_button("save_nojs")
-        expect(page).to have_content("Your changes have been saved.")
-        click_button("Open Collection")
-        click_link("Edit Collection")
+        fill_in 'hydrus_collection_title', with: 'TestingTitle'
+        fill_in 'hydrus_collection_abstract', with: 'Summary of my content'
+        fill_in 'hydrus_collection_contact', with: 'jdoe@example.com'
+        click_button('save_nojs')
+        expect(page).to have_content('Your changes have been saved.')
+        click_button('Open Collection')
+        click_link('Edit Collection')
 
-        fill_in "hydrus_collection_apo_person_roles[hydrus-collection-item-depositor]", with: "jdoe"
-        uncheck("should_send_role_change_emails")
+        fill_in 'hydrus_collection_apo_person_roles[hydrus-collection-item-depositor]', with: 'jdoe'
+        uncheck('should_send_role_change_emails')
         
-        expect {click_button("save_nojs")}.to change { ActionMailer::Base.deliveries.count }.by(0)
+        expect {click_button('save_nojs')}.to change { ActionMailer::Base.deliveries.count }.by(0)
       end
       
-      it "should handle complex changes to depositors" do
+      it 'should handle complex changes to depositors' do
         login_as('archivist1')
         visit new_hydrus_collection_path()
-        fill_in "hydrus_collection_title", with: "TestingTitle"
-        fill_in "hydrus_collection_abstract", with: "Summary of my content"
-        fill_in "hydrus_collection_contact", with: "jdoe@example.com"
-        fill_in "hydrus_collection_apo_person_roles[hydrus-collection-item-depositor]", with: "jdoe, leland, janedoe"
-        click_button("save_nojs")
-        expect(page).to have_content("Your changes have been saved.")
-        click_button("Open Collection")
-        click_link("Edit Collection")
+        fill_in 'hydrus_collection_title', with: 'TestingTitle'
+        fill_in 'hydrus_collection_abstract', with: 'Summary of my content'
+        fill_in 'hydrus_collection_contact', with: 'jdoe@example.com'
+        fill_in 'hydrus_collection_apo_person_roles[hydrus-collection-item-depositor]', with: 'jdoe, leland, janedoe'
+        click_button('save_nojs')
+        expect(page).to have_content('Your changes have been saved.')
+        click_button('Open Collection')
+        click_link('Edit Collection')
 
-        fill_in "hydrus_collection_apo_person_roles[hydrus-collection-item-depositor]", with: "jandoe, leland, jondoe"
-        expect {click_button("save_nojs")}.to change { ActionMailer::Base.deliveries.count }.by(2) # a removal notice for jdoe,jandoe and an invitation notice jandoe and jondoe
+        fill_in 'hydrus_collection_apo_person_roles[hydrus-collection-item-depositor]', with: 'jandoe, leland, jondoe'
+        expect {click_button('save_nojs')}.to change { ActionMailer::Base.deliveries.count }.by(2) # a removal notice for jdoe,jandoe and an invitation notice jandoe and jondoe
         email = ActionMailer::Base.deliveries.last
-        expect(email.to).to eq(["jdoe@stanford.edu", "janedoe@stanford.edu"])
-        expect(email.subject).to eq("Removed as a depositor in the Stanford Digital Repository")
+        expect(email.to).to eq(['jdoe@stanford.edu', 'janedoe@stanford.edu'])
+        expect(email.subject).to eq('Removed as a depositor in the Stanford Digital Repository')
       end
 
-      it "should not send an email if the collection is closed" do
+      it 'should not send an email if the collection is closed' do
         login_as('archivist1')
         visit new_hydrus_collection_path()
-        fill_in "hydrus_collection_apo_person_roles[hydrus-collection-item-depositor]", with: "jdoe"
-        expect {click_button("save_nojs")}.to change { ActionMailer::Base.deliveries.count }.by(0)
+        fill_in 'hydrus_collection_apo_person_roles[hydrus-collection-item-depositor]', with: 'jdoe'
+        expect {click_button('save_nojs')}.to change { ActionMailer::Base.deliveries.count }.by(0)
       end
 
     end
   end
 
-  describe "role-protection" do
+  describe 'role-protection' do
 
     before(:each) do
       @prev_mint_ids = config_mint_ids()
@@ -410,7 +410,7 @@ describe("Collection edit", type: :request, integration: true) do
       config_mint_ids(@prev_mint_ids)
     end
 
-    it "action buttons should not be accessible to users with insufficient powers" do
+    it 'action buttons should not be accessible to users with insufficient powers' do
       # Create a collection.
       owner  = 'archivist2'
       viewer = 'archivist6'
@@ -454,11 +454,11 @@ describe("Collection edit", type: :request, integration: true) do
       choose('hydrus_collection_license_option_varies')
       click_button(@buttons[:save])
       # We should still be on edit page, with a flash error.
-      expect(page).to have_css("input#hydrus_collection_license_option_varies")
+      expect(page).to have_css('input#hydrus_collection_license_option_varies')
       expect(page).to have_selector 'div.alert', text: 'License must be specified'
     end
 
-    it "form should enforce license selection for license options varies" do
+    it 'form should enforce license selection for license options varies' do
       # Edit collection, but forget to choose a license.
       login_as('archivist1')
       should_visit_edit_page(@hc)
@@ -468,7 +468,7 @@ describe("Collection edit", type: :request, integration: true) do
       expect(page).to have_selector 'div.alert', text: 'Your changes have been saved'
     end
 
-    it "form should enforce license selection for license options fixed" do
+    it 'form should enforce license selection for license options fixed' do
       # Edit collection, but forget to choose a license.
       login_as('archivist1')
       should_visit_edit_page(@hc)

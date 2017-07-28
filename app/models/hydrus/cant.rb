@@ -9,7 +9,7 @@ module Hydrus::Cant
   end
 
   def cannot_do_message(action)
-    "Cannot perform action: " <<
+    'Cannot perform action: ' <<
           (self.class == Class ?
           "object_type=#{self}, action=#{action}, pid=none." :
           "object_type=#{hydrus_class_to_s}, action=#{action}, pid=#{pid}.")

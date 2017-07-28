@@ -2,7 +2,7 @@ class HydrusMailer < ActionMailer::Base
 
   helper ApplicationHelper
 
-  default from: "no-reply@sdr.stanford.edu"
+  default from: 'no-reply@sdr.stanford.edu'
 
   def contact_message(opts={})
     params=opts[:params]
@@ -21,19 +21,19 @@ class HydrusMailer < ActionMailer::Base
   def invitation(opts={})
     @fobj = opts[:object]
     @collection_url = root_url(host: host)
-    mail(to: HydrusMailer.process_user_list(opts[:to]), subject: "Invitation to deposit in the Stanford Digital Repository") unless ignore?(@fobj.pid)
+    mail(to: HydrusMailer.process_user_list(opts[:to]), subject: 'Invitation to deposit in the Stanford Digital Repository') unless ignore?(@fobj.pid)
   end
 
   def invitation_removed(opts={})
     @fobj = opts[:object]
     @collection_url = polymorphic_url(@fobj, host: host)
-    mail(to: HydrusMailer.process_user_list(opts[:to]), subject: "Removed as a depositor in the Stanford Digital Repository") unless ignore?(@fobj.pid)
+    mail(to: HydrusMailer.process_user_list(opts[:to]), subject: 'Removed as a depositor in the Stanford Digital Repository') unless ignore?(@fobj.pid)
   end
   
   def role_change(opts={})
     @fobj = opts[:object]
     @collection_url = polymorphic_url(@fobj, host: host)
-    mail(to: HydrusMailer.process_user_list(opts[:to]), subject: "Collection member updates in the Stanford Digital Repository") unless ignore?(@fobj.pid)
+    mail(to: HydrusMailer.process_user_list(opts[:to]), subject: 'Collection member updates in the Stanford Digital Repository') unless ignore?(@fobj.pid)
   end
   
   def object_returned(opts={})
@@ -64,18 +64,18 @@ class HydrusMailer < ActionMailer::Base
   def open_notification(opts={})
     @fobj = opts[:object]
     @collection_url = root_url(host: host)
-    mail(to: HydrusMailer.process_user_list(@fobj.recipients_for_collection_update_emails), subject: "Collection opened for deposit in the Stanford Digital Repository")  unless ignore?(@fobj.pid)
+    mail(to: HydrusMailer.process_user_list(@fobj.recipients_for_collection_update_emails), subject: 'Collection opened for deposit in the Stanford Digital Repository')  unless ignore?(@fobj.pid)
   end
 
   def close_notification(opts={})
     @fobj = opts[:object]
-    mail(to: HydrusMailer.process_user_list(@fobj.recipients_for_collection_update_emails), subject: "Collection closed for deposit in the Stanford Digital Repository") unless ignore?(@fobj.pid)
+    mail(to: HydrusMailer.process_user_list(@fobj.recipients_for_collection_update_emails), subject: 'Collection closed for deposit in the Stanford Digital Repository') unless ignore?(@fobj.pid)
   end
 
   def send_purl(opts={})
     @current_user=opts[:current_user]
     @fobj = opts[:object]
-    mail(to: opts[:recipients], subject: "PURL page shared from the Stanford Digital Repository")
+    mail(to: opts[:recipients], subject: 'PURL page shared from the Stanford Digital Repository')
   end
 
   protected
@@ -89,7 +89,7 @@ class HydrusMailer < ActionMailer::Base
   end
 
   def self.process_user_list(users)
-    users.split(",").map do |user|
+    users.split(',').map do |user|
       user =~ /.+@.+\..+/ ? user.strip : "#{user.strip}@stanford.edu"
     end
   end
