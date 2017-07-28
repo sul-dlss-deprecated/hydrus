@@ -1,9 +1,7 @@
 require 'spec_helper'
 
 describe HydrusCollectionsController, type: :controller do
-
   describe 'Index action' do
-
     it "should redirect with a flash message when we're not dealing w/ a nested resource" do
       get :index
       expect(flash[:alert]).to eq('You need to sign in or sign up before continuing.')
@@ -12,7 +10,6 @@ describe HydrusCollectionsController, type: :controller do
   end
 
   describe 'Routes and Mapping' do
-
     it 'should map collections show correctly' do
       expect({ get: '/collections/abc' }).to route_to(
         controller: 'hydrus_collections',
@@ -44,22 +41,17 @@ describe HydrusCollectionsController, type: :controller do
     it 'routes close action correctly' do
       expect(post: '/collections/close/abc123').to route_to(controller: 'hydrus_collections', action: 'close', id: 'abc123')
     end
-
   end
 
   describe 'Show Action', integration: true do
-
     it 'should redirect the user when not logged in' do
       @pid = 'druid:oo000oo0003'
       get :show, id: @pid
       expect(response).to redirect_to new_user_session_path
     end
-
-
   end
 
   describe 'Update Action', integration: true do
-
     before(:all) do
       @pid = 'druid:oo000oo0003'
     end
@@ -70,7 +62,6 @@ describe HydrusCollectionsController, type: :controller do
       expect(response).to redirect_to(root_path)
       expect(flash[:alert]).to eq('You are not authorized to access this page.')
     end
-
   end
 
   describe 'open', integration: true do
@@ -93,7 +84,6 @@ describe HydrusCollectionsController, type: :controller do
 
 
   describe 'list_all', integration: true do
-
     it 'should redirect to root url for non-admins when not in development mode' do
       sign_in(mock_authed_user)
       get(:list_all)
@@ -114,7 +104,5 @@ describe HydrusCollectionsController, type: :controller do
       expect(assigns[:all_collections]).not_to eq(nil)
       expect(response).to render_template(:list_all)
     end
-
   end
-
 end

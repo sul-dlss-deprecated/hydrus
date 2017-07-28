@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe HydrusMailer, type: :mailer do
-
   before(:each) do
     @fobj = Hydrus::Collection.new
     @fobj.title='Collection Title'
@@ -77,7 +76,6 @@ describe HydrusMailer, type: :mailer do
   end
 
   describe 'private methods' do
-
     describe 'process user list' do
       it 'should turn all user strings into email addresses' do
         expect(HydrusMailer.process_user_list('jdoe1, jdoe2,jdoe3,  jdoe4 ')).to eq(['jdoe1@stanford.edu', 'jdoe2@stanford.edu', 'jdoe3@stanford.edu', 'jdoe4@stanford.edu'])
@@ -86,7 +84,5 @@ describe HydrusMailer, type: :mailer do
         expect(HydrusMailer.process_user_list('jdoe1, archivist1@example.com,jdoe2')).to eq(['jdoe1@stanford.edu', 'archivist1@example.com', 'jdoe2@stanford.edu'])
       end
     end
-
   end
-
 end

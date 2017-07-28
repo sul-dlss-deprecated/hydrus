@@ -15,7 +15,6 @@ class MockAccessible
 end
 
 describe Hydrus::Accessible, type: :model do
-
   before(:each) do
     # XML snippets for various <access> nodes.
     @emb_date = 99999999
@@ -151,5 +150,4 @@ describe Hydrus::Accessible, type: :model do
     ds1.initialize_release_access_node()
     expect(ds1.ng_xml).to be_equivalent_to(obj0.embargoMetadata.ng_xml)
   end
-
 end

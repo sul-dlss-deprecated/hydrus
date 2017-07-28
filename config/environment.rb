@@ -8,7 +8,6 @@ no_solr_cert=(%w{development dortest test prod_w_local_dor}.include?(Rails.env))
 require File.expand_path(File.join(current_path, 'rsolr_no_certificate'))
 
 Hydrus::Application.configure do
-
   # this is the path from the root of the public folder into which file uploads will be stored
   config.file_upload_path = 'uploads'
 
@@ -20,7 +19,6 @@ Hydrus::Application.configure do
 
   # style of content metadata to generate
   config.cm_style = :file
-
 end
 
 require 'dor-services'
@@ -87,7 +85,6 @@ Dor.configure do
     host                        Settings.stacks.host
     user                        Settings.stacks.user
   end
-
 end
 
 Encoding.default_external = Encoding::UTF_8

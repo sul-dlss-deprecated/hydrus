@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe EventsController, type: :controller do
-
   before :each do
     @ability = Object.new
     @ability.extend(CanCan::Ability)
@@ -33,7 +32,6 @@ context 'as an authenticated user' do
   end
 
   it 'should assign the given object for the given ID as the fobj instance variable' do
-
     mock_coll = double('HydrusCollection', hydrus_class_to_s: 'Collection')
     expect(mock_coll).to receive(:"current_user=")
     allow(ActiveFedora::Base).to receive(:find).and_return(mock_coll)
@@ -45,5 +43,4 @@ context 'as an authenticated user' do
     expect(assigns(:fobj)).to eq(mock_coll)
   end
 end
-
 end

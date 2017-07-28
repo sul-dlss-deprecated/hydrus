@@ -1,9 +1,7 @@
 require 'spec_helper'
 
 describe(Hydrus::Item, type: :feature, integration: true) do
-
   describe('Content metadata generation') do
-
     it 'should be able to generate content metadata, returning blank CM when no files exist and setting content metadata stream to a blank template' do
       xml = '<contentMetadata objectId="__DO_NOT_USE__" type="file"/>'
       hi = Hydrus::Item.new pid: '__DO_NOT_USE__'
@@ -37,11 +35,9 @@ describe(Hydrus::Item, type: :feature, integration: true) do
       </contentMetadata>
       EOF
     end
-
   end
 
   describe 'do_publish()' do
-
     before(:each) do
       @prev_mint_ids = config_mint_ids()
     end
@@ -75,11 +71,9 @@ describe(Hydrus::Item, type: :feature, integration: true) do
       exp['start-assembly'] = 'completed'
       check_statuses.call()
     end
-
   end
 
   describe 'create()' do
-
     before(:all) do
       @prev_mint_ids = config_mint_ids()
       @collection = Hydrus::Collection.create mock_authed_user
@@ -129,5 +123,4 @@ describe(Hydrus::Item, type: :feature, integration: true) do
       expect(item.accepted_terms_of_deposit).to eq 'true'
     end
   end
-
 end

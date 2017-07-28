@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe Hydrus::HydrusPropertiesDS, type: :model do
-
   before(:all) do
     @ds_start='<hydrusProperties>'
     @ds_end='</hydrusProperties>'
@@ -75,5 +74,4 @@ describe Hydrus::HydrusPropertiesDS, type: :model do
     @dsdoc.accept_terms_of_deposit('foo','10-02-2012 00:00:33') # First user, new date.
     expect(@dsdoc.ng_xml).to be_equivalent_to @exp_xml
   end
-
 end

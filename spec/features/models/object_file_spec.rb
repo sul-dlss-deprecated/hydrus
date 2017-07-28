@@ -2,7 +2,6 @@ require 'spec_helper'
 require 'rake'
 
 describe Hydrus::ObjectFile, type: :feature, integration: true do
-
   fixtures :object_files
 
   it 'should find four files associated with the first item and it should grab the url of a given file' do
@@ -39,5 +38,4 @@ describe Hydrus::ObjectFile, type: :feature, integration: true do
     restore_upload_file(file_url)
     expect(File.exists?(full_file_path)).to be_truthy
   end
-
 end

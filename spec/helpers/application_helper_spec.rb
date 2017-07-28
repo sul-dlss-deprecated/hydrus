@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe ApplicationHelper, type: :helper do
-
   include ApplicationHelper
 
   # fake out some methods to make our tests pass
@@ -121,7 +120,6 @@ describe ApplicationHelper, type: :helper do
   end
 
   describe 'item title link helpers', integration: true do
-
     it 'should return item title links, showing special text when blank' do
       hi=Hydrus::Item.new
       hi2=Hydrus::Item.find('druid:oo000oo0001')
@@ -130,7 +128,6 @@ describe ApplicationHelper, type: :helper do
       expect(helper.title_link(hi)).to have_selector 'a[href="/items"][disable_after_click="true"]', text: 'Untitled'
       expect(helper.title_link(hi2)).to have_selector 'a[href="/items/druid:oo000oo0001"][disable_after_click="true"]', text: 'How Couples Meet and Stay Together'
     end
-
   end
 
   it 'show_line_breaks()' do
@@ -151,5 +148,4 @@ describe ApplicationHelper, type: :helper do
     ].join
     expect(helper.show_line_breaks(txt)).to eq(exp)
   end
-
 end

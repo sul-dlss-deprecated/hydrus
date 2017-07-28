@@ -1,9 +1,7 @@
 require 'spec_helper'
 
 describe Hydrus::RelatedItem, type: :model do
-
   describe 'new_from_node()' do
-
     before(:all) do
       xml = <<-END
         <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
@@ -48,11 +46,9 @@ describe Hydrus::RelatedItem, type: :model do
       expect(ri.title).to eq('')
       expect(ri.url).to   eq('')
     end
-
   end
 
   describe 'other...' do
-
     subject { Hydrus::RelatedItem.new title: 'Item Title', url: 'http://example.com' }
 
     it 'should have a #title accessor' do
@@ -64,7 +60,6 @@ describe Hydrus::RelatedItem, type: :model do
     end
 
     describe '.new_from_node' do
-
       subject { Hydrus::RelatedItem.new_from_node(related_item_node) }
       context 'Complete record' do
         let(:related_item_node) { Nokogiri::XML <<-eos
@@ -118,9 +113,6 @@ describe Hydrus::RelatedItem, type: :model do
           expect(subject.url).to be_empty
         end
       end
-
     end
-
   end
-
 end

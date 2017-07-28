@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe('Item create', type: :request, integration: true) do
-
   before(:all) do
     @div_alert   = '#flash-notices div.alert'
     @span_status = 'span#status-label'
@@ -520,7 +519,6 @@ describe('Item create', type: :request, integration: true) do
   end
 
   describe('terms of acceptance for an existing item', integration: true)  do
-
     subject { Hydrus::Item.find('druid:oo000oo0001') }
 
     it 'should indicate if the item has had terms accepted already' do
@@ -537,11 +535,9 @@ describe('Item create', type: :request, integration: true) do
       expect(users.keys.include?('archivist3')).to eq(true)
       expect(users['archivist3']).to eq('2012-05-02T20:02:44Z')
     end
-
   end
 
   describe('terms of acceptance for a new item',integration: true)  do
-
     subject { Hydrus::Collection.find('druid:oo000oo0003') }
 
     it 'should indicate that a new item in a collection requires terms acceptance, if the user has already accepted another item in this collection but it was more than 1 year ago' do
@@ -590,11 +586,9 @@ describe('Item create', type: :request, integration: true) do
       expect(coll.users_accepted_terms_of_deposit.keys.include?(u)).to eq(true)
       expect(coll.users_accepted_terms_of_deposit[u].nil?).to eq(false)
     end
-
   end
 
   describe 'licenses' do
-
     before(:each) do
       @lic_select = 'select#hydrus_item_license'
     end
@@ -626,7 +620,6 @@ describe('Item create', type: :request, integration: true) do
     end
 
     describe 'collection: variable license' do
-
       it 'with a license: new items offer selector, with default selected' do
         login_as('archivist1')
         # Set collection to variable-license mode.
@@ -660,13 +653,10 @@ describe('Item create', type: :request, integration: true) do
           expect(nodes.first.text).to eq('No license')
         }
       end
-
     end
-
   end
 
   describe 'delete()' do
-
     it 'should raise error if object is not destroyable' do
       hi = Hydrus::Item.find('druid:oo000oo0001')
       expect(hi.is_destroyable).to eq(false)
@@ -712,7 +702,5 @@ describe('Item create', type: :request, integration: true) do
       expect(File.directory?(dir)).to eq(false)
       expect(Hydrus::ObjectFile.where(pid: pid).size).to eq(0)
     end
-
   end
-
 end

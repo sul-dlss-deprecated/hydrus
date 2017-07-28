@@ -2,7 +2,6 @@ require 'spec_helper'
 
 
 describe Hydrus::GenericObject, type: :model do
-
   before(:each) do
     @cannot_do_regex = /\ACannot perform action/
     @go      = Hydrus::GenericObject.new
@@ -62,7 +61,6 @@ describe Hydrus::GenericObject, type: :model do
   end
 
   describe 'registration' do
-
     it 'dor_registration_params() should return the expected hash' do
       # Non-APO: hash should include initiate_workflow.
       args = %w(whobar item somePID)
@@ -84,13 +82,10 @@ describe Hydrus::GenericObject, type: :model do
       expectation.with(hash_including(*drp.keys))
       Hydrus::GenericObject.register_dor_object(nil, nil, nil)
     end
-
   end
 
   describe 'license and terms of use' do
-
     describe 'license_groups(), license_commons(), and license_group_urls()' do
-
       it 'should get expected object types' do
         expect(Hydrus::GenericObject.license_groups).to be_a Array
         expect(Hydrus::GenericObject.license_commons).to be_a Hash
@@ -103,11 +98,9 @@ describe Hydrus::GenericObject, type: :model do
         lcs = hgo.license_commons.keys
         lcs.each { |lc| expect(lgs).to include(lc) }
       end
-
     end
 
     describe 'license() license=(), license_text(), and license_group_code()' do
-
       it 'setting license should also set license_text and license_group_code' do
         # Before.
         expect(@go.license).to eq('none')
@@ -136,7 +129,6 @@ describe Hydrus::GenericObject, type: :model do
           expect(nd.text).to eq(lcode.sub(/\Acc-/, '')) if nd
         end
       end
-
     end
 
     it 'license_human() should return a human readable value for a license code' do
@@ -153,7 +145,6 @@ describe Hydrus::GenericObject, type: :model do
       @go.terms_of_use = exp
       expect(@go.terms_of_use).to eq(exp)
     end
-
   end
 
   it 'set_item_type() should add correct tags' do
@@ -266,7 +257,6 @@ describe Hydrus::GenericObject, type: :model do
 end
 
   describe 'workflow stuff' do
-
     before(:each) do
       xml = <<-EOXML
         <workflows>
@@ -327,11 +317,9 @@ end
         expect(@go.is_published).to eq(exp)
       end
     end
-
   end
 
   describe 'validations' do
-
     before(:each) do
       @exp = [:pid, :contact]
       @go.instance_variable_set('@should_validate', true)
@@ -360,11 +348,9 @@ end
       allow(@go).to receive(:contact).and_return('test@test.com')
       expect(@go.valid?).to eq(true)
     end
-
   end
 
   describe 'events stuff' do
-
     before(:each) do
       xml = <<-EOF
         <events>
@@ -389,7 +375,6 @@ end
       expect(e.when.day).to   eq(15)
       expect(e.text).to eq('blah')
     end
-
   end
 
   it 'hydrus_class_to_s() should work as expected' do
@@ -412,7 +397,6 @@ end
   end
 
   describe 'current_user' do
-
     it '@current_user should be initialized in a lazy fashion' do
       expect(@go.instance_variable_get('@current_user')).to eq(nil)
       expect(@go.current_user).to eq('')
@@ -424,7 +408,6 @@ end
       @go.current_user = 123
       expect(@go.instance_variable_get('@current_user')).to eq(123)
     end
-
   end
 
   it "old_self() should call find() with the object's pid" do
@@ -479,7 +462,6 @@ end
   end
 
   describe 'log_editing_events()' do
-
     it 'should do nothing if there are no changed fields' do
       allow(@go).to receive(:changed_fields).and_return([])
       expect(@go).not_to receive(:events)
@@ -494,7 +476,6 @@ end
       expect(es.size).to eq(1)
       expect(es.first.text).to eq('GenericObject modified: aa, bb')
     end
-
   end
 
   describe 'save()' do
@@ -553,7 +534,6 @@ end
   end
 
   describe 'XML beautification' do
-
     before(:each) do
       @orig_xml = '
         <foo>
@@ -580,7 +560,6 @@ end
       expect(@go.descMetadata).to receive(:content=).with(@exp)
       @go.beautify_datastream(:descMetadata)
     end
-
   end
 
   it 'related_item_url=() and related_item_title=()' do
@@ -626,5 +605,4 @@ end
       expect(@go.with_protocol(uri)).to eq(exp)
     end
   end
-
 end

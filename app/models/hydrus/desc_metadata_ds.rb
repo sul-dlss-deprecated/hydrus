@@ -70,7 +70,6 @@ class Hydrus::DescMetadataDS < ActiveFedora::OmDatastream
       proxy: [:mods, :titleInfo, :title],
       index_as: [:searchable, :displayable]
     )
-
   end
 
   # Blocks to pass into Nokogiri::XML::Builder.new()

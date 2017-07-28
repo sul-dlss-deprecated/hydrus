@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe SessionsController, type: :controller do
-
   before(:each) do
     @request.env['devise.mapping'] = Devise.mappings[:user]
   end
@@ -40,5 +39,4 @@ describe SessionsController, type: :controller do
       expect(response).to redirect_to('/')
     end
   end
-
 end

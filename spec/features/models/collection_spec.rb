@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe(Hydrus::Collection, type: :feature, integration: true) do
-
   before(:all) do
     @prev_mint_ids = config_mint_ids()
   end
@@ -39,6 +38,4 @@ describe(Hydrus::Collection, type: :feature, integration: true) do
     expect(coll.relationships(:has_model)).to_not include 'info:fedora/afmodel:Dor_Collection'
     expect(coll.relationships(:has_model)).to include 'info:fedora/afmodel:Hydrus_Collection'
   end
-
-
 end

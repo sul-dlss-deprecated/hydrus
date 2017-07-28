@@ -175,7 +175,6 @@ describe('Item edit', type: :request, integration: true) do
       expect(page).to have_field('hydrus_item_contributors_3_name', with: 'Bar Corp Author')
       expect(page).to have_field('hydrus_item_contributors_4_name', with: 'Quux Author')
     end
-
   end
 
   it 'Related Content editing with adding protocol if it is missing' do
@@ -321,7 +320,6 @@ describe('Item edit', type: :request, integration: true) do
   end
 
   it 'Related citation adding and deleting' do
-
     new_citation         = 'hydrus_item_related_citation_2'
     new_delete_button    = 'remove_related_citation_2'
     new_citation_text    = ' This is a citation for a related item! '
@@ -436,11 +434,9 @@ describe('Item edit', type: :request, integration: true) do
       selected_license = find(css_lic_select).text
       expect(selected_license).to eq(new_collection_license)
     end
-
   end
 
   describe 'role-protection' do
-
     before(:each) do
       @prev_mint_ids = config_mint_ids()
     end
@@ -450,7 +446,6 @@ describe('Item edit', type: :request, integration: true) do
     end
 
     it 'action buttons should not be accessible to users with insufficient powers' do
-
       # Create an item.
       owner    = 'archivist1'
       reviewer = 'archivist5'
@@ -525,13 +520,10 @@ describe('Item edit', type: :request, integration: true) do
       login_as(owner)
       should_visit_view_page(hi)
       click_button(b)
-
     end
-
   end
 
   describe 'embargo and visibility' do
-
     it 'setting/removing embargo date modifies embargoMD and rightsMD as expected' do
       css = {
         emb_yes: 'hydrus_item_embarg_visib_embargoed_yes',
@@ -600,11 +592,9 @@ describe('Item edit', type: :request, integration: true) do
         license_code: lic,
       )
     end
-
   end
 
   describe 'uploaded files' do
-
     it 'hide indicator on view page' do
       # Setup:
       #   - Object has 4 uploaded files, with IDs 1 - 4.
@@ -700,7 +690,5 @@ describe('Item edit', type: :request, integration: true) do
       restore_upload_file(file_url)
       expect(File.exists?('public' + file_url)).to eq(true)
     end
-
   end
-
 end

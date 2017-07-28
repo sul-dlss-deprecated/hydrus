@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe('Collection create', type: :request, integration: true) do
-
   before(:each) do
     @alert           = 'div.alert'
     @notice_save     = 'Your changes have been saved'
@@ -209,7 +208,6 @@ describe('Collection create', type: :request, integration: true) do
   end
 
   describe 'delete()' do
-
     it 'should raise error if object is not destroyable' do
       hc = Hydrus::Collection.find('druid:oo000oo0004')
       expect(hc.is_destroyable).to eq(false)
@@ -254,7 +252,5 @@ describe('Collection create', type: :request, integration: true) do
       expect(wfs.get_workflows(apid)).to eq([])
       expect(wfs.get_workflows(cpid)).to eq([])
     end
-
   end
-
 end

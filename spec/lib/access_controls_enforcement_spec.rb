@@ -14,7 +14,6 @@ class MockController
 end
 
 describe Hydrus::AccessControlsEnforcement do
-
   before(:each) do
     @mc     = MockController.new
     @dru    = 'druid:oo000oo9999'
@@ -22,7 +21,6 @@ describe Hydrus::AccessControlsEnforcement do
   end
 
   describe 'enforce_show_permissions' do
-
     before(:each) do
       @mc = MockController.new(id: @dru)
       allow(@mc).to receive('current_user').and_return(nil)
@@ -57,11 +55,9 @@ describe Hydrus::AccessControlsEnforcement do
       expect(f).to include(:error)
       expect(f[:error]).to eq('Please sign in below and you will be directed to the requested item: \'druid:oo000oo9999\'.')
     end
-
   end
 
   describe 'enforce_edit_permissions' do
-
     before(:each) do
       @mc = MockController.new(id: @dru)
       allow(@mc).to receive('session').and_return({})
@@ -88,11 +84,9 @@ describe Hydrus::AccessControlsEnforcement do
       expect(f).to include(:error)
       expect(f[:error]).to match(/privileges.+edit/)
     end
-
   end
 
   describe 'enforce_create_permissions: create items in collections' do
-
     before(:each) do
       @mc = MockController.new(id: @dru)
       allow(@mc).to receive('current_user').and_return(OpenStruct.new)
@@ -119,11 +113,9 @@ describe Hydrus::AccessControlsEnforcement do
       expect(f).to include(:error)
       expect(f[:error]).to match(/privileges.+create items in/)
     end
-
   end
 
   describe 'enforce_create_permissions: create collections' do
-
     before(:each) do
       @mc = MockController.new()
       allow(@mc).to receive('current_user').and_return(nil)
@@ -148,11 +140,9 @@ describe Hydrus::AccessControlsEnforcement do
       expect(f).to include(:error)
       expect(f[:error]).to match(/privileges.+create new collections/)
     end
-
   end
 
   describe 'apply_gated_discovery modifies the SOLR :fq parameters hash' do
-
     before(:each) do
       hmc = [
         '"info:fedora/afmodel:Hydrus_Collection"',
@@ -195,7 +185,5 @@ describe Hydrus::AccessControlsEnforcement do
       @mc.apply_gated_discovery(solr_params, {})
       expect(solr_params).to eq(exp)
     end
-
   end
-
 end

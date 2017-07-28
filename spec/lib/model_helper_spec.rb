@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe Hydrus::AccessControlsEnforcement do
-
   include Hydrus::ModelHelper
 
   it 'to_bool() should convert true-like things to true' do
@@ -32,5 +31,4 @@ describe Hydrus::AccessControlsEnforcement do
     expect(equal_when_stripped?([1,2], [1,2])).to eq(true)
     expect(equal_when_stripped?(['hi'], ['hi '])).to eq(false)
   end
-
 end

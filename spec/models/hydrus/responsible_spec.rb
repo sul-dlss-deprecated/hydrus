@@ -52,7 +52,6 @@ class MockResponsible
 end
 
 describe Hydrus::Responsible, type: :model do
-
   before(:each) do
     @obj = MockResponsible.new
   end
@@ -164,5 +163,4 @@ describe Hydrus::Responsible, type: :model do
     expect(h[k1]).to  match(/original depositor/)
     expect(h[k2]).to  match(/can review/)
   end
-
 end

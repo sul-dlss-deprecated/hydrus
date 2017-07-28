@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe Hydrus::Contributor, type: :model do
-
   before(:each) do
     @hc = Hydrus::Contributor.new(name: 'Angus', role: 'guitar')
   end
@@ -56,5 +55,4 @@ describe Hydrus::Contributor, type: :model do
     c2.name_type = orig_val
     expect(c1).to eq c2
   end
-
 end

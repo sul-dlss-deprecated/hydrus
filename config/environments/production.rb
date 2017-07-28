@@ -65,5 +65,4 @@ Hydrus::Application.configure do
   config.file_upload_path = 'uploads'
 
   config.eager_load = true
-
 end

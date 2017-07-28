@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe Hydrus::DescMetadataDS, type: :model do
-
   before(:all) do
     sloc = 'http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-3.xsd'
     @mods_start = <<-EOF
@@ -13,7 +12,6 @@ describe Hydrus::DescMetadataDS, type: :model do
   end
 
   context 'Marshalling to and from a Fedora Datastream' do
-
     before(:each) do
       dsxml = <<-EOF
         #{@mods_start}
@@ -58,11 +56,9 @@ describe Hydrus::DescMetadataDS, type: :model do
       expect(@dsdoc.term_values(:related_citation)).to eq(['related_cite outer'])
       expect(@dsdoc.term_values(:contact)).to eq(%w(foo@bar.com blah@bar.com))
     end
-
   end
 
   context 'Inserting new nodes' do
-
     it 'Should be able to insert new XML nodes' do
       nm = '<name type="personal"><namePart>NAME</namePart><role><roleTerm authority="marcrelator" type="text">ROLE</roleTerm></role></name>'
       ri = '<relatedItem><titleInfo><title/></titleInfo><location><url/></location></relatedItem>'
@@ -87,11 +83,9 @@ describe Hydrus::DescMetadataDS, type: :model do
       @dsdoc.insert_topic('foo')
       expect(@dsdoc.ng_xml).to be_equivalent_to @exp_xml
     end
-
   end
 
   context 'Blank template' do
-
     it 'should match our expectations' do
       exp_xml = %Q(
         #{@mods_start}
@@ -129,7 +123,5 @@ describe Hydrus::DescMetadataDS, type: :model do
       @dsdoc = Hydrus::DescMetadataDS.new(nil, nil)
       expect(@dsdoc.ng_xml).to be_equivalent_to exp_xml
     end
-
   end
-
 end
