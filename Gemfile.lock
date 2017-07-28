@@ -55,7 +55,7 @@ GEM
       mini_exiftool
       nokogiri
     awesome_print (1.8.0)
-    bagit (0.3.2)
+    bagit (0.4.0)
       docopt (~> 0.5.0)
       validatable (~> 1.6)
     bcrypt (3.1.11)
@@ -466,7 +466,7 @@ PLATFORMS
 DEPENDENCIES
   assembly-objectfile (= 1.5.0)
   awesome_print
-  bagit (= 0.3.2)
+  bagit (~> 0.4)
   blacklight (~> 4.4)
   bootstrap-datepicker-rails
   bootstrap-sass (= 2.3.2.1)
