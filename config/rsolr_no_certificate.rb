@@ -3,17 +3,17 @@ class RSolr::Connection
     if request_context[:method] != :post
       #if this is not a POST, take all of the parameters in the query string and put them into a POST body to avoid queryies with the query string being too long
       uri = URI.parse(request_context[:uri].to_s)
-    body = uri.query
-    uri.query = nil
-    request_context[:uri] = uri
-    body = Rack::Utils.parse_query(body)
+      body = uri.query
+      uri.query = nil
+      request_context[:uri] = uri
+      body = Rack::Utils.parse_query(body)
     #move qt to post body
 
-    h = http request_context[:uri], request_context[:proxy], request_context[:read_timeout], request_context[:open_timeout]
+      h = http request_context[:uri], request_context[:proxy], request_context[:read_timeout], request_context[:open_timeout]
 
-    request_context[:method] = :post
-    request = setup_raw_request request_context
-    request.set_form_data(body)
+      request_context[:method] = :post
+      request = setup_raw_request request_context
+      request.set_form_data(body)
   else
 
     h = http request_context[:uri], request_context[:proxy], request_context[:read_timeout], request_context[:open_timeout]

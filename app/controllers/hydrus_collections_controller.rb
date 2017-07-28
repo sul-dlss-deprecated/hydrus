@@ -24,7 +24,7 @@ class HydrusCollectionsController < ApplicationController
     authorize! :edit, @fobj
     if @fobj.is_destroyable
       @fobj.delete
-       flash[:notice] = 'The collection was deleted.'
+      flash[:notice] = 'The collection was deleted.'
     else
       flash[:error] = 'You do not have permissions to delete this collection.'
     end

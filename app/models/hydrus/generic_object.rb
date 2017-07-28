@@ -163,7 +163,7 @@ class Hydrus::GenericObject < Dor::Item
 
   def remove_type_of_resource_collection(descMetadata)
     node = descMetadata.ng_xml.search('//mods:typeOfResource', 'mods' => 'http://www.loc.gov/mods/v3').first
-     node.remove_attribute('manuscript') if node
+    node.remove_attribute('manuscript') if node
   end
 
   # the possible types of items that can be created, hash of display value (keys) and values to store in object (value)

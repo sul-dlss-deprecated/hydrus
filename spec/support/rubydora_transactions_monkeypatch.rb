@@ -50,7 +50,7 @@ class Rubydora::Transaction
   end
 
     # Returns the pids of all objects modified in any way during the transaction.
-    def all_pids
-      repository.transactions_log.map { |entry| entry.last[:pid] }.uniq
-    end
+  def all_pids
+    repository.transactions_log.map { |entry| entry.last[:pid] }.uniq
+  end
 end

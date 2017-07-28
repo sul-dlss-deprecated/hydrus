@@ -2,60 +2,60 @@ module Hydrus::GenericObjectStuff
   extend ActiveSupport::Concern
   included do
     include ActiveModel::Validations
-  include Hydrus::ModelHelper
-  include Hydrus::Validatable
-  include Hydrus::Processable
-  include Hydrus::Contentable
-  include Hydrus::WorkflowDsExtension
-  include Hydrus::Licenseable
-  include Hydrus::UserWorkflowable
-  include Hydrus::Eventable
-  include Hydrus::Cant
-  extend  Hydrus::Cant
-  extend  Hydrus::Delegatable
+    include Hydrus::ModelHelper
+    include Hydrus::Validatable
+    include Hydrus::Processable
+    include Hydrus::Contentable
+    include Hydrus::WorkflowDsExtension
+    include Hydrus::Licenseable
+    include Hydrus::UserWorkflowable
+    include Hydrus::Eventable
+    include Hydrus::Cant
+    extend  Hydrus::Cant
+    extend  Hydrus::Delegatable
 
-  has_metadata(
-    name: 'rightsMetadata',
-    type: Hydrus::RightsMetadataDS,
-    label: 'Rights Metadata',
-    control_group: 'M')
+    has_metadata(
+      name: 'rightsMetadata',
+      type: Hydrus::RightsMetadataDS,
+      label: 'Rights Metadata',
+      control_group: 'M')
 
-  has_metadata(
-    name: 'descMetadata',
-    type: Hydrus::DescMetadataDS,
-    label: 'Descriptive Metadata',
-    control_group: 'M')
+    has_metadata(
+      name: 'descMetadata',
+      type: Hydrus::DescMetadataDS,
+      label: 'Descriptive Metadata',
+      control_group: 'M')
 
-  has_metadata(
-    name: 'hydrusProperties',
-    type: Hydrus::HydrusPropertiesDS,
-    label: 'Hydrus Properties',
-    control_group: 'X')
+    has_metadata(
+      name: 'hydrusProperties',
+      type: Hydrus::HydrusPropertiesDS,
+      label: 'Hydrus Properties',
+      control_group: 'X')
 
-  setup_delegations(
-    # [:METHOD_NAME,              :uniq, :at... ]
-    'descMetadata' => [
-      [:title,                    true,  :main_title],
-      [:abstract,                 true],
-      [:related_item_title,       false, :relatedItem, :titleInfo, :title],
-      [:contact,                  true],
-    ],
-    'hydrusProperties' => [
-      [:disapproval_reason,                 true],
-      [:object_status,                      true],
-      [:submitted_for_publish_time,         true],
-      [:initial_submitted_for_publish_time, true],
-      [:initial_publish_time,               true],
-      [:submit_for_approval_time,           true],
-      [:last_modify_time,                   true],
-      [:item_type,                          true],
-      [:object_version,                     true],
-    ],
-    'rightsMetadata' => [
-      [:rmd_embargo_release_date, true,  :read_access, :machine, :embargo_release_date],
-      [:terms_of_use,             true,],
-    ],
-  )
+    setup_delegations(
+      # [:METHOD_NAME,              :uniq, :at... ]
+      'descMetadata' => [
+        [:title,                    true,  :main_title],
+        [:abstract,                 true],
+        [:related_item_title,       false, :relatedItem, :titleInfo, :title],
+        [:contact,                  true],
+      ],
+      'hydrusProperties' => [
+        [:disapproval_reason,                 true],
+        [:object_status,                      true],
+        [:submitted_for_publish_time,         true],
+        [:initial_submitted_for_publish_time, true],
+        [:initial_publish_time,               true],
+        [:submit_for_approval_time,           true],
+        [:last_modify_time,                   true],
+        [:item_type,                          true],
+        [:object_version,                     true],
+      ],
+      'rightsMetadata' => [
+        [:rmd_embargo_release_date, true,  :read_access, :machine, :embargo_release_date],
+        [:terms_of_use,             true,],
+      ],
+    )
   end
 
   def apo
