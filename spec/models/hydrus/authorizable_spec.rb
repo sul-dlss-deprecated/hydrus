@@ -15,9 +15,9 @@ describe Hydrus::Authorizable, type: :model do
     @hi   = double('mock_item')
   end
 
-  let(:admin_user) { double('mock_admin', is_administrator?: true ) }
-  let(:creator_user) { double('mock_creator', is_collection_creator?: true ) }
-  let(:viewer_user) { double('mock_viewer', is_global_viewer?: true ) }
+  let(:admin_user) { double('mock_admin', is_administrator?: true) }
+  let(:creator_user) { double('mock_creator', is_collection_creator?: true) }
+  let(:viewer_user) { double('mock_viewer', is_global_viewer?: true) }
 
   it 'should be able to exercise the methods returning fixed Sets' do
     methods = [

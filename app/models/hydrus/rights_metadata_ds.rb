@@ -44,7 +44,7 @@ class Hydrus::RightsMetadataDS < ActiveFedora::OmDatastream
 
   # Template to do the work of insert_license().
   define_template :license do |xml, gcode, code, txt|
-    xml.human(  type: gcode) { xml.text(txt) }
+    xml.human(type: gcode) { xml.text(txt) }
     xml.machine(type: gcode) { xml.text(code) }
   end
 

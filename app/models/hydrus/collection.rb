@@ -620,14 +620,14 @@ class Hydrus::Collection < Dor::Collection
 
   # Returns an array collection druids for all APOs
   def self.all_hydrus_collections
-    h           = squery_all_hydrus_collections( )
+    h           = squery_all_hydrus_collections()
     resp, sdocs = issue_solr_query(h)
     get_druids_from_response(resp)
   end
 
   # Returns an array of all APO druids
   def self.all_hydrus_apos
-    h           = squery_all_hydrus_apos( )
+    h           = squery_all_hydrus_apos()
     resp, sdocs = issue_solr_query(h)
     get_druids_from_response(resp)
   end
