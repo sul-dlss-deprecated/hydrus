@@ -1,7 +1,7 @@
 # Load the rails application
 require File.expand_path('../application', __FILE__)
 
-current_path=File.dirname(__FILE__)
+current_path = File.dirname(__FILE__)
 
 # Override make_solr_connection() so that we use POST for solr queries
 require File.expand_path(File.join(current_path, 'rsolr_no_certificate'))

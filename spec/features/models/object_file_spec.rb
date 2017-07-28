@@ -18,7 +18,7 @@ describe Hydrus::ObjectFile, type: :feature, integration: true do
 
   it 'should delete a file from the file system and disassociate from item when called' do
     pid = 'druid:oo000oo0001'
-    @hi=Hydrus::Item.find(pid)
+    @hi = Hydrus::Item.find(pid)
 
     files = @hi.files
     expect(files.size).to eq(4)
@@ -30,7 +30,7 @@ describe Hydrus::ObjectFile, type: :feature, integration: true do
 
     file.destroy
 
-    @hi=Hydrus::Item.find(pid)
+    @hi = Hydrus::Item.find(pid)
     expect(@hi.files.size).to eq(3)
     expect(File.exists?(full_file_path)).to be_falsey
 

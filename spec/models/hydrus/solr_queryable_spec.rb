@@ -148,7 +148,7 @@ describe Hydrus::SolrQueryable, type: :model do
   end
   describe 'queries should send their parameters via post' do
     it 'should not fail if the query is very long' do
-      fake_pids=[]
+      fake_pids = []
       1000.times do
         fake_pids << 'fake_pid'
       end

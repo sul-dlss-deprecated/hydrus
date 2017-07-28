@@ -57,7 +57,7 @@ describe HyTime, type: :model do
       let(:dt) { '2000-01-02' }
       before do
         # Force Pacific time
-        allow(DateTime).to receive(:local_offset).and_return((-8 * 60 * 60).to_r/86400)
+        allow(DateTime).to receive(:local_offset).and_return((-8 * 60 * 60).to_r / 86400)
       end
       subject { HyTime.formatted(dt, from_localzone: fltz) }
 

@@ -80,7 +80,7 @@ class Hydrus::GenericObject < Dor::Item
   # Takes an item_type: :dataset, etc. for items, or just :collection for collections.
   # Adds some Hydrus-specific information to the identityMetadata.
   def set_item_type(typ)
-    self.hydrusProperties.item_type=typ.to_s
+    self.hydrusProperties.item_type = typ.to_s
     if typ == :collection
       if respond_to? :set_collection_type
         set_collection_type
@@ -89,63 +89,63 @@ class Hydrus::GenericObject < Dor::Item
         identityMetadata.add_value(:objectType, 'set')
         identityMetadata.content_will_change!
         descMetadata.ng_xml.search('//mods:mods/mods:typeOfResource', 'mods' => 'http://www.loc.gov/mods/v3').each do |node|
-  				node['collection']='yes'
+  				node['collection'] = 'yes'
         end
       end
     else
       case typ
       when 'dataset'
-        descMetadata.typeOfResource='software, multimedia'
-        descMetadata.genre='dataset'
+        descMetadata.typeOfResource = 'software, multimedia'
+        descMetadata.genre = 'dataset'
       when 'thesis'
-        descMetadata.typeOfResource='text'
+        descMetadata.typeOfResource = 'text'
         descMetadata.insert_genre
-        descMetadata.genre='thesis'
+        descMetadata.genre = 'thesis'
         #this is messy but I couldnt get OM to do what I needed it to
         set_genre_authority_to_marc descMetadata
       when 'article'
-        descMetadata.typeOfResource='text'
-        descMetadata.genre='article'
+        descMetadata.typeOfResource = 'text'
+        descMetadata.genre = 'article'
         set_genre_authority_to_marc descMetadata
       when 'class project'
-        descMetadata.typeOfResource='text'
-        descMetadata.genre='student project report'
+        descMetadata.typeOfResource = 'text'
+        descMetadata.genre = 'student project report'
       when 'computer game'
-        descMetadata.typeOfResource='software, multimedia'
-        descMetadata.genre='game'
+        descMetadata.typeOfResource = 'software, multimedia'
+        descMetadata.genre = 'game'
       when 'audio - music'
-        descMetadata.typeOfResource='sound recording-musical'
-        descMetadata.genre='sound'
+        descMetadata.typeOfResource = 'sound recording-musical'
+        descMetadata.genre = 'sound'
         set_genre_authority_to_marc descMetadata
       when 'audio - spoken'
-        descMetadata.typeOfResource='sound recording-nonmusical'
-        descMetadata.genre='sound'
+        descMetadata.typeOfResource = 'sound recording-nonmusical'
+        descMetadata.genre = 'sound'
         set_genre_authority_to_marc descMetadata
       when 'video'
-        descMetadata.typeOfResource='moving image'
-        descMetadata.genre='motion picture'
+        descMetadata.typeOfResource = 'moving image'
+        descMetadata.genre = 'motion picture'
         set_genre_authority_to_marc descMetadata
       when 'conference paper / presentation'
-        descMetadata.typeOfResource='text'
-        descMetadata.genre='conference publication'
+        descMetadata.typeOfResource = 'text'
+        descMetadata.genre = 'conference publication'
         set_genre_authority_to_marc descMetadata
       when 'technical report'
-        descMetadata.typeOfResource='text'
-        descMetadata.genre='technical report'
+        descMetadata.typeOfResource = 'text'
+        descMetadata.genre = 'technical report'
         set_genre_authority_to_marc descMetadata
       when 'archival mixed material'
-        descMetadata.typeOfResource='mixed material'
+        descMetadata.typeOfResource = 'mixed material'
         set_type_of_resource_collection descMetadata
       when 'image'
-        descMetadata.typeOfResource='still image'
+        descMetadata.typeOfResource = 'still image'
       when 'software'
-        descMetadata.typeOfResource='software, multimedia'
+        descMetadata.typeOfResource = 'software, multimedia'
       when 'textbook'
-        descMetadata.typeOfResource='text'
-        descMetadata.genre='instruction'
+        descMetadata.typeOfResource = 'text'
+        descMetadata.genre = 'instruction'
         set_genre_authority_to_marc descMetadata
       else
-        descMetadata.typeOfResource=typ.to_s
+        descMetadata.typeOfResource = typ.to_s
       end
       descMetadata.content_will_change!
     end
@@ -316,7 +316,7 @@ class Hydrus::GenericObject < Dor::Item
 
   def send_object_returned_email_notification(opts={})
     return if recipients_for_object_returned_email.blank?
-    email=HydrusMailer.object_returned(returned_by: @current_user, object: self, item_url: opts[:item_url])
+    email = HydrusMailer.object_returned(returned_by: @current_user, object: self, item_url: opts[:item_url])
     email.deliver_now unless email.blank?
   end
 

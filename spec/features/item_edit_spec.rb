@@ -37,7 +37,7 @@ describe('Item edit', type: :request, integration: true) do
       contact: 'ozzy@hell.com',
       keywords: %w(foo bar fubb),
     )
-    comma_join  = '  ,  '
+    comma_join = '  ,  '
     # Visit edit page.
     login_as('archivist1')
     should_visit_edit_page(@hi)

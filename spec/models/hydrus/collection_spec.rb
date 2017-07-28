@@ -112,7 +112,7 @@ describe Hydrus::Collection, type: :model do
     end
 
     it 'should return true when both Collection and APO are valid' do
-      @exp_errs.each { |e| allow(@hc).to receive(e).and_return(@dru) unless e==:contact }
+      @exp_errs.each { |e| allow(@hc).to receive(e).and_return(@dru) unless e == :contact }
       allow(@hc).to receive(:contact).and_return('test@test.com') # we need a valid email address
       allow(@hc).to receive(:embargo_terms).and_return(@dru)
       allow(@hc).to receive(:pid).and_return(@dru)
@@ -283,7 +283,7 @@ describe Hydrus::Collection, type: :model do
     it 'apo_person_roles= should correctly update APO roleMetadtaDS' do
       @hc.apo_person_roles = {
         'hydrus-collection-manager' => 'archivist4, archivist5',
-        'hydrus-collection-item-depositor'     => 'archivist6',
+        'hydrus-collection-item-depositor' => 'archivist6',
       }
       expect(@rmdoc.ng_xml).to be_equivalent_to <<-EOF
         <roleMetadata>
@@ -450,7 +450,7 @@ describe Hydrus::Collection, type: :model do
     end
     describe 'dashboard_hash' do
       it 'should send 1 solr query if there are 99 apos' do
-        arr=*(1..99)
+        arr = *(1..99)
         expect(@HC).to receive(:apos_involving_user).and_return(arr)
         expect(@HC).to receive(:squery_collections_of_apos).exactly(1).times.and_return({})
         @HC.dashboard_hash(@user_foo)

@@ -16,7 +16,7 @@ class HydrusItemsController < ApplicationController
     @fobj = Hydrus::Collection.find(params[:hydrus_collection_id])
     @fobj.current_user = current_user
     authorize! :read, @fobj
-    @items=@fobj.items_list(num_files: true)
+    @items = @fobj.items_list(num_files: true)
   end
 
   def setup_attributes
@@ -34,12 +34,12 @@ class HydrusItemsController < ApplicationController
 
   def destroy
     authorize! :edit, @fobj
-    collection=@fobj.collection
+    collection = @fobj.collection
     if @fobj.is_destroyable
       @fobj.delete
-      flash[:notice]='The item was deleted.'
+      flash[:notice] = 'The item was deleted.'
     else
-      flash[:error]='You do not have permissions to delete this item.'
+      flash[:error] = 'You do not have permissions to delete this item.'
     end
     redirect_to polymorphic_path([collection,:items])
   end
@@ -47,10 +47,10 @@ class HydrusItemsController < ApplicationController
   def discard_confirmation
     authorize! :edit, @fobj
     if @fobj.is_destroyable
-      @id=params[:id]
+      @id = params[:id]
       render 'shared/discard_confirmation'
     else
-      flash[:error]='You do not have permissions to delete this item.'
+      flash[:error] = 'You do not have permissions to delete this item.'
       redirect_to polymorphic_path([@fobj.collection,:items])
     end
   end
@@ -77,7 +77,7 @@ class HydrusItemsController < ApplicationController
     ####
 
     file_info = params['file_info'] || {}
-    flash[:error]=''
+    flash[:error] = ''
 
     if params.has_key?('files')
       params['files'].each do |upload_file|
@@ -135,7 +135,7 @@ class HydrusItemsController < ApplicationController
 
     # delete any files that are missing and warn the user
     if @fobj.delete_missing_files > 0
-      flash[:error]+='Some files did not upload correctly. Please check and re-upload any missing files.'
+      flash[:error] += 'Some files did not upload correctly. Please check and re-upload any missing files.'
     end
 
     unless @fobj.save
@@ -186,9 +186,9 @@ class HydrusItemsController < ApplicationController
   end
 
   def terms_of_deposit
-    @pid=params[:pid]
-    @from=params[:from]
-    @fobj=Hydrus::Item.find(@pid)
+    @pid = params[:pid]
+    @from = params[:from]
+    @fobj = Hydrus::Item.find(@pid)
     authorize! :read, @fobj
     respond_to do |format|
       format.html
@@ -197,9 +197,9 @@ class HydrusItemsController < ApplicationController
   end
 
   def agree_to_terms_of_deposit
-    @pid=params[:pid]
-    @from=params[:from]
-    @fobj=Hydrus::Item.find(@pid)
+    @pid = params[:pid]
+    @from = params[:from]
+    @fobj = Hydrus::Item.find(@pid)
     authorize! :edit, @fobj
     @fobj.accept_terms_of_deposit(current_user)
     @fobj.save
@@ -210,11 +210,11 @@ class HydrusItemsController < ApplicationController
   end
 
   def send_purl_email
-    @pid=params[:pid]
-    @from=params[:from]
-    @fobj=Hydrus::Item.find(@pid)
+    @pid = params[:pid]
+    @from = params[:from]
+    @fobj = Hydrus::Item.find(@pid)
     authorize! :read, @fobj
-    @recipients=params[:recipients]
+    @recipients = params[:recipients]
     HydrusMailer.send_purl(recipients: @recipients,current_user: current_user,object: @fobj).deliver unless @recipients.blank?
     respond_to do |format|
       format.html
@@ -229,7 +229,7 @@ class HydrusItemsController < ApplicationController
       @file.pid = params[:id]
       @file.file = params[:file]
       @file.save
-      @dupe_ids=@file.dupes.collect {|dupe| dupe.id}
+      @dupe_ids = @file.dupes.collect {|dupe| dupe.id}
       @file.remove_dupes
     else
       render nothing: true

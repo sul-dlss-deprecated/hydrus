@@ -3,7 +3,7 @@ require 'spec_helper'
 describe HydrusMailer, type: :mailer do
   before(:each) do
     @fobj = Hydrus::Collection.new
-    @fobj.title='Collection Title'
+    @fobj.title = 'Collection Title'
     allow(@fobj).to receive('owner').and_return('jdoe')
     allow(@fobj).to receive('object_type').and_return('collection')
   end

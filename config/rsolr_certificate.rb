@@ -28,7 +28,7 @@ class RSolr::ClientCert::Connection
       )
       result = {}
       if request_context[:method] == :get
-        response=resource.post request_context[:data], {}
+        response = resource.post request_context[:data], {}
         result = {
           status: response.net_http_res.code.to_i,
           headers: response.net_http_res.to_hash,

@@ -9,11 +9,11 @@ module Hydrus::Contentable
 
   # remove any files deemed missing from the database; return the number deleted
   def delete_missing_files
-    files_missing=0
+    files_missing = 0
     files.each do |f|
       if f.missing?
         f.destroy
-        files_missing+=1
+        files_missing += 1
       end
     end
     files_missing

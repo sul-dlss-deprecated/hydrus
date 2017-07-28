@@ -56,19 +56,19 @@ module Hydrus::Responsible
   #Takes a sunetid and an apo pid
   #use solr to quickly find the roles for a person under a given apo
   def self.roles_of_person person_id, apo_id
-    toret=[]
-    roles=role_labels(:collection_level)
-    h           = Hydrus::SolrQueryable.default_query_params
+    toret = []
+    roles = role_labels(:collection_level)
+    h = Hydrus::SolrQueryable.default_query_params
     #query by id
-    h[:q]="id:\"#{apo_id}\""
+    h[:q] = "id:\"#{apo_id}\""
     #this is lazy, should just be the fields from roles modified to match convention
-    h[:fl]='*'
+    h[:fl] = '*'
     resp, sdocs = Hydrus::SolrQueryable.issue_solr_query(h)
     #only 1 doc
-    doc=resp.docs.first
+    doc = resp.docs.first
     roles.keys.each do |key|
       #the solr field is based on the role name, but doesnt match it precisely
-      field_name=key.gsub('hydrus-','').gsub('-','_')+'_person_identifier_t'
+      field_name = key.gsub('hydrus-','').gsub('-','_') + '_person_identifier_t'
       if doc[field_name] && doc[field_name].include?(person_id)
         toret << roles[key][:label]
       end

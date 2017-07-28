@@ -4,7 +4,7 @@ def dashboard(*args)
   stats = Hydrus::Collection.dashboard_stats(user)
   # Controller: add the stats to the collections.
   collections = stats.keys.map { |coll_dru|
-    hc  = Hydrus::Collection.find(coll_dru)
+    hc = Hydrus::Collection.find(coll_dru)
     hc.item_counts = stats[hc.pid] || {}
     hc
   }

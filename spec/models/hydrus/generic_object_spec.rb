@@ -163,7 +163,7 @@ describe Hydrus::GenericObject, type: :model do
   end
   context 'set_item_type' do
     before :each do
-      @obj  = Hydrus::GenericObject.new
+      @obj = Hydrus::GenericObject.new
       @descMD = Dor::DescMetadataDS.new(nil, nil)
     end
     def type_of_resource
@@ -344,7 +344,7 @@ end
 
     it 'fully populated object should be valid if contact email is valid' do
       dru = 'druid:ll000ll0001'
-      @exp.each { |e| allow(@go).to receive(e).and_return(dru) unless e==:contact}
+      @exp.each { |e| allow(@go).to receive(e).and_return(dru) unless e == :contact}
       allow(@go).to receive(:contact).and_return('test@test.com')
       expect(@go.valid?).to eq(true)
     end

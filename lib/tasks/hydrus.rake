@@ -8,7 +8,7 @@ namespace :hydrus do
     collection = ENV['collection'] # druid of collection to associate with  (full druid, including druid: prefix)
     item_type = ENV['type'] # type of hydrus item
 
-    item=Hydrus::Item.find(druid) # get druid
+    item = Hydrus::Item.find(druid) # get druid
 
     coll = Hydrus::Collection.find(collection)
 
@@ -25,22 +25,22 @@ namespace :hydrus do
     item.define_singleton_method :check_version_if_license_changed, lambda {return}
 
     # create hydrusProperties datastream and set values
-    item.item_type=item_type
-    item.accepted_terms_of_deposit='true'
-    item.reviewed_release_settings='true'
-    item.hydrusProperties.requires_human_approval='false'
-    item.object_status='published'
-    item.hydrusProperties.last_modify_time=Time.now.to_s
-    item.hydrusProperties.submit_for_approval_time=Time.now.to_s
-    item.hydrusProperties.initial_publish_time=Time.now.to_s
-    item.hydrusProperties.initial_submitted_for_publish_time=Time.now.to_s
-    item.hydrusProperties.submitted_for_publish_time=Time.now.to_s
+    item.item_type = item_type
+    item.accepted_terms_of_deposit = 'true'
+    item.reviewed_release_settings = 'true'
+    item.hydrusProperties.requires_human_approval = 'false'
+    item.object_status = 'published'
+    item.hydrusProperties.last_modify_time = Time.now.to_s
+    item.hydrusProperties.submit_for_approval_time = Time.now.to_s
+    item.hydrusProperties.initial_publish_time = Time.now.to_s
+    item.hydrusProperties.initial_submitted_for_publish_time = Time.now.to_s
+    item.hydrusProperties.submitted_for_publish_time = Time.now.to_s
 
     # save item
     item.save
 
     # index into solr
-    solr=Dor::SearchService.solr
+    solr = Dor::SearchService.solr
     solr_doc = item.to_solr
     solr.add(solr_doc, add_attributes: {commitWithin: 5000})
   end

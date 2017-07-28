@@ -111,7 +111,7 @@ describe Hydrus::Responsible, type: :model do
         </role>
       </roleMetadata>
     EOF
-    @obj.person_roles= {
+    @obj.person_roles = {
       'hydrus-collection-manager'        => 'archivist1,ZZZ',
       'hydrus-collection-reviewer'       => 'archivist3,ZZZ',
       'hydrus-collection-item-depositor' => 'foo,bar,ZZZ',

@@ -83,7 +83,7 @@ module Hydrus::Accessible
   
   # Removes access = none nodes
   def remove_access_none_nodes
-    q= "#{xp_machine}/none"
+    q = "#{xp_machine}/none"
     remove_nodes_by_xpath(q)
   end
   

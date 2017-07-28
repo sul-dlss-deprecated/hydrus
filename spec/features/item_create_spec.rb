@@ -382,7 +382,7 @@ describe('Item create', type: :request, integration: true) do
     expect(item.is_embargoed).to eq(false)
     expect(item.submitted_for_publish_time).not_to be_blank
     expect(item.visibility).to eq(['stanford'])
-    ps={visibility: 'stanford',license_code: 'cc-by',embargo_date: ''}
+    ps = {visibility: 'stanford',license_code: 'cc-by',embargo_date: ''}
     check_emb_vis_lic(item,ps)
 
     # Check events.
@@ -493,7 +493,7 @@ describe('Item create', type: :request, integration: true) do
     expect(item.is_returned).to eq(false)
     expect(item.is_destroyable).to eq(false)
     expect(item.valid?).to eq(true)
-    ps={visibility: 'world',license_code: 'cc-by-nd',embargo_date: ''}
+    ps = {visibility: 'world',license_code: 'cc-by-nd',embargo_date: ''}
     check_emb_vis_lic(item,ps)
 
     # Return to edit page, and try to save Item with an empty title.
@@ -527,7 +527,7 @@ describe('Item create', type: :request, integration: true) do
     end
 
     it 'should indicate the users who have accepted the terms of deposit for this collection in a hash and should returns dates accepted' do
-      users=subject.collection.users_accepted_terms_of_deposit
+      users = subject.collection.users_accepted_terms_of_deposit
       expect(users.class).to eq(Hash)
       expect(users.size).to eq(2)
       expect(users.keys.include?('archivist1')).to eq(true)
