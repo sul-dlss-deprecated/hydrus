@@ -69,9 +69,9 @@ describe Hydrus::HydrusPropertiesDS, type: :model do
       </hydrusProperties>
     EOF
     @dsdoc = Hydrus::HydrusPropertiesDS.new(nil, nil)
-    @dsdoc.accept_terms_of_deposit('foo','10-02-2012 00:00:00') # First user.
-    @dsdoc.accept_terms_of_deposit('bar','10-02-2012 00:00:44') # Second user.
-    @dsdoc.accept_terms_of_deposit('foo','10-02-2012 00:00:33') # First user, new date.
+    @dsdoc.accept_terms_of_deposit('foo', '10-02-2012 00:00:00') # First user.
+    @dsdoc.accept_terms_of_deposit('bar', '10-02-2012 00:00:44') # Second user.
+    @dsdoc.accept_terms_of_deposit('foo', '10-02-2012 00:00:33') # First user, new date.
     expect(@dsdoc.ng_xml).to be_equivalent_to @exp_xml
   end
 end

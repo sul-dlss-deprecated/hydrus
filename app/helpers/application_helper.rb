@@ -62,11 +62,11 @@ module ApplicationHelper
   end
 
   def terms_of_deposit_path(pid)
-    url_for(controller: 'hydrus_items',action: 'terms_of_deposit',pid: pid)
+    url_for(controller: 'hydrus_items', action: 'terms_of_deposit', pid: pid)
   end
 
   def terms_of_deposit_agree_path(pid)
-    url_for(controller: 'hydrus_items',action: 'agree_to_terms_of_deposit',pid: pid)
+    url_for(controller: 'hydrus_items', action: 'agree_to_terms_of_deposit', pid: pid)
   end
 
   def hydrus_strip(value)
@@ -118,7 +118,7 @@ module ApplicationHelper
 
   # a helper to create links to items that may or may not have titles yet
   def title_link(obj)
-    link_to(title_text(obj), polymorphic_path(obj),disable_after_click: 'true')
+    link_to(title_text(obj), polymorphic_path(obj), disable_after_click: 'true')
   end
 
   # this checks to see if the object passed in is "empty", which could be nil,

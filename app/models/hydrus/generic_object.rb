@@ -23,7 +23,7 @@ class Hydrus::GenericObject < Dor::Item
 
   # the pid without the druid: prefix
   def dru
-    pid.gsub('druid:','')
+    pid.gsub('druid:', '')
   end
 
   # Notes:

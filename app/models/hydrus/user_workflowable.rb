@@ -31,7 +31,7 @@ module Hydrus::UserWorkflowable
   def changed_fields
     old = old_self()
     cfs = []
-    tracked_fields.each do |k,fs|
+    tracked_fields.each do |k, fs|
       next if fs.all? { |f| equal_when_stripped? old.send(f), self.send(f) }
       cfs.push(k)
     end

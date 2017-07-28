@@ -6,7 +6,7 @@ class HydrusItemsController < ApplicationController
   before_filter :authenticate_user!
   before_filter :setup_attributes, except: [:new, :index, :send_purl_email, :terms_of_deposit, :agree_to_terms_of_deposit]
   before_filter :check_for_collection, only: :new
-  before_filter :redirect_if_not_correct_object_type, only: [:edit,:show]
+  before_filter :redirect_if_not_correct_object_type, only: [:edit, :show]
 
   def index
     unless params.has_key?(:hydrus_collection_id)
@@ -41,7 +41,7 @@ class HydrusItemsController < ApplicationController
     else
       flash[:error] = 'You do not have permissions to delete this item.'
     end
-    redirect_to polymorphic_path([collection,:items])
+    redirect_to polymorphic_path([collection, :items])
   end
 
   def discard_confirmation
@@ -51,7 +51,7 @@ class HydrusItemsController < ApplicationController
       render 'shared/discard_confirmation'
     else
       flash[:error] = 'You do not have permissions to delete this item.'
-      redirect_to polymorphic_path([@fobj.collection,:items])
+      redirect_to polymorphic_path([@fobj.collection, :items])
     end
   end
 
@@ -215,7 +215,7 @@ class HydrusItemsController < ApplicationController
     @fobj = Hydrus::Item.find(@pid)
     authorize! :read, @fobj
     @recipients = params[:recipients]
-    HydrusMailer.send_purl(recipients: @recipients,current_user: current_user,object: @fobj).deliver unless @recipients.blank?
+    HydrusMailer.send_purl(recipients: @recipients, current_user: current_user, object: @fobj).deliver unless @recipients.blank?
     respond_to do |format|
       format.html
       format.js

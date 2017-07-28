@@ -28,7 +28,7 @@ describe Hydrus::AccessControlsEnforcement do
   it 'equal_when_stripped?' do
     expect(equal_when_stripped?(' hi ', 'hi')).to eq(true)
     expect(equal_when_stripped?(' hi ', 'HI')).to eq(false)
-    expect(equal_when_stripped?([1,2], [1,2])).to eq(true)
+    expect(equal_when_stripped?([1, 2], [1, 2])).to eq(true)
     expect(equal_when_stripped?(['hi'], ['hi '])).to eq(false)
   end
 end

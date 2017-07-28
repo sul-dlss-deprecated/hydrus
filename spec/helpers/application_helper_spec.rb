@@ -4,7 +4,7 @@ describe ApplicationHelper, type: :helper do
   include ApplicationHelper
 
   # fake out some methods to make our tests pass
-  def can?(action,item)
+  def can?(action, item)
     true
   end
 
@@ -28,13 +28,13 @@ describe ApplicationHelper, type: :helper do
   it 'should indicate if an object is empty' do
     expect(hydrus_is_empty?(nil)).to be true
     expect(hydrus_is_empty?('')).to be true
-    expect(hydrus_is_empty?(['',''])).to be true
-    expect(hydrus_is_empty?(['',['']])).to be true
+    expect(hydrus_is_empty?(['', ''])).to be true
+    expect(hydrus_is_empty?(['', ['']])).to be true
     expect(hydrus_is_empty?(Hydrus::Contributor.new)).to be true
-    expect(hydrus_is_empty?(['',['stuff']])).to be false
+    expect(hydrus_is_empty?(['', ['stuff']])).to be false
     expect(hydrus_is_empty?(['stuff'])).to be false
     expect(hydrus_is_empty?('stuff')).to be false
-    expect(hydrus_is_empty?(Hydrus::Contributor.new(name: 'peter',role: 'el jefe'))).to be false
+    expect(hydrus_is_empty?(Hydrus::Contributor.new(name: 'peter', role: 'el jefe'))).to be false
   end
 
   it 'should show the item edit tab if the item is not published' do

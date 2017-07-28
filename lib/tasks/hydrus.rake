@@ -16,7 +16,7 @@ namespace :hydrus do
     item.collections << coll
 
     # change item type in RELS-EXT to be a hydrus item
-    item.datastreams['RELS-EXT'].content.gsub!('<fedora-model:hasModel rdf:resource="info:fedora/afmodel:Dor_Item"></fedora-model:hasModel>','<fedora-model:hasModel rdf:resource="info:fedora/afmodel:Hydrus_Item"/>')
+    item.datastreams['RELS-EXT'].content.gsub!('<fedora-model:hasModel rdf:resource="info:fedora/afmodel:Dor_Item"></fedora-model:hasModel>', '<fedora-model:hasModel rdf:resource="info:fedora/afmodel:Hydrus_Item"/>')
     item.remove_relationship :has_model, 'info:fedora/afmodel:Dor_Item'
     item.assert_content_model
 

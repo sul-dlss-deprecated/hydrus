@@ -50,7 +50,7 @@ class Hydrus::HydrusPropertiesDS < ActiveFedora::OmDatastream
   end
 
   define_template :user do |xml, username, datetime_accepted|
-    xml.user(username,dateAccepted: datetime_accepted)
+    xml.user(username, dateAccepted: datetime_accepted)
   end
 
   define_template :users_accepted_terms_of_deposit do |xml|

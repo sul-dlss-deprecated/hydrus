@@ -29,11 +29,11 @@ class Hydrus::ObjectFile < ActiveRecord::Base
   end
 
   def is_dupe?(new_filename)
-    self.class.where('pid=? and file=?',pid,new_filename).size > 0
+    self.class.where('pid=? and file=?', pid, new_filename).size > 0
   end
 
   def dupes
-    self.class.where('pid=? and file=? and id!=?',pid,filename,id)
+    self.class.where('pid=? and file=? and id!=?', pid, filename, id)
   end
 
   # any given object can only have one file with the same name; if the user uploads a new file with the same name as an existing file, the dupe will be removed

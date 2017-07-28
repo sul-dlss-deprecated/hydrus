@@ -382,8 +382,8 @@ describe('Item create', type: :request, integration: true) do
     expect(item.is_embargoed).to eq(false)
     expect(item.submitted_for_publish_time).not_to be_blank
     expect(item.visibility).to eq(['stanford'])
-    ps = { visibility: 'stanford',license_code: 'cc-by',embargo_date: '' }
-    check_emb_vis_lic(item,ps)
+    ps = { visibility: 'stanford', license_code: 'cc-by', embargo_date: '' }
+    check_emb_vis_lic(item, ps)
 
     # Check events.
     es = item.get_hydrus_events
@@ -493,8 +493,8 @@ describe('Item create', type: :request, integration: true) do
     expect(item.is_returned).to eq(false)
     expect(item.is_destroyable).to eq(false)
     expect(item.valid?).to eq(true)
-    ps = { visibility: 'world',license_code: 'cc-by-nd',embargo_date: '' }
-    check_emb_vis_lic(item,ps)
+    ps = { visibility: 'world', license_code: 'cc-by-nd', embargo_date: '' }
+    check_emb_vis_lic(item, ps)
 
     # Return to edit page, and try to save Item with an empty title.
     should_visit_edit_page(item)

@@ -1084,7 +1084,7 @@ describe Hydrus::Item, type: :model do
 
   it 'should indicate if we do require terms acceptance if user has never accepted terms on another item in the same collection' do
     @coll = Hydrus::Collection.new
-    allow(@coll).to receive(:users_accepted_terms_of_deposit).and_return({ 'archivist3' => '10-12-2008 00:00:00','archivist4' => '10-12-2009 00:00:05' })
+    allow(@coll).to receive(:users_accepted_terms_of_deposit).and_return({ 'archivist3' => '10-12-2008 00:00:00', 'archivist4' => '10-12-2009 00:00:05' })
     allow(@hi).to receive(:accepted_terms_of_deposit).and_return(false)
     allow(@hi).to receive(:collection).and_return(@coll)
     expect(@hi.requires_terms_acceptance('archivist1')).to be true
@@ -1092,7 +1092,7 @@ describe Hydrus::Item, type: :model do
 
   it 'should indicate if we do require terms acceptance if user already accepted terms on another item in the same collection, but it was more than 1 year ago' do
     @coll = Hydrus::Collection.new
-    allow(@coll).to receive(:users_accepted_terms_of_deposit).and_return({ 'archivist1' => '10-12-2008 00:00:00','archivist2' => '10-12-2009 00:00:05' })
+    allow(@coll).to receive(:users_accepted_terms_of_deposit).and_return({ 'archivist1' => '10-12-2008 00:00:00', 'archivist2' => '10-12-2009 00:00:05' })
     allow(@hi).to receive(:accepted_terms_of_deposit).and_return(false)
     allow(@hi).to receive(:collection).and_return(@coll)
     expect(@hi.requires_terms_acceptance('archivist1')).to be true
@@ -1100,7 +1100,7 @@ describe Hydrus::Item, type: :model do
 
   it 'should indicate if we do not require terms acceptance if user already accepted terms on another item in the same collection, and it was less than 1 year ago' do
     @coll = Hydrus::Collection.new
-    allow(@coll).to receive(:users_accepted_terms_of_deposit).and_return({ 'archivist1' => Time.now.in_time_zone - 364.days,'archivist2' => '10-12-2009 00:00:05' })
+    allow(@coll).to receive(:users_accepted_terms_of_deposit).and_return({ 'archivist1' => Time.now.in_time_zone - 364.days, 'archivist2' => '10-12-2009 00:00:05' })
     allow(@hi).to receive(:accepted_terms_of_deposit).and_return(false)
     allow(@hi).to receive(:collection).and_return(@coll)
     expect(@hi.requires_terms_acceptance('archivist1')).to be false

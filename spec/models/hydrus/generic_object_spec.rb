@@ -42,7 +42,7 @@ describe Hydrus::GenericObject, type: :model do
   end
 
   it 'can exercise object_type()' do
-    fake_imd = double('fake_imd', objectType: [123,456])
+    fake_imd = double('fake_imd', objectType: [123, 456])
     expect(@go).to receive(:identityMetadata).and_return(fake_imd)
     expect(@go.object_type).to eq(123)
   end
@@ -433,7 +433,7 @@ end
     allow(@go).to receive(:tracked_fields).and_return(tf)
     old = double('old_self')
     exp_diff = [:a, :ccc]
-    tf.each do |k,vs|
+    tf.each do |k, vs|
       vs.each do |v|
         allow(old).to receive(v).and_return(v.to_s)
         allow(@go).to receive(v).and_return(exp_diff.include?(k) ? 'new_val' : v.to_s)

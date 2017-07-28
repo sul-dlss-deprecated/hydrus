@@ -28,7 +28,7 @@ namespace :hydrus do
     # index the workflow objects
     Rake::Task['hydrus:reindex_workflow_objects'].invoke
 
-    unless ['test','development'].include?(Rails.env)
+    unless ['test', 'development'].include?(Rails.env)
       puts "****NOTE: For security reasons, you might want to change passwords for default users after this task using \"RAILS_ENV=#{ENV['RAILS_ENV']}rake hydrus:update_passwords['newpassword']\"*****"
     end
   end
@@ -80,11 +80,11 @@ namespace :hydrus do
 
   # call with hydrus:update_passwords['newpassword']
   desc 'update all fixture user passwords'
-  task :update_passwords, :new_password do |t,args|
+  task :update_passwords, :new_password do |t, args|
     require File.expand_path('config/environment')
     new_password = args[:new_password]
     users = YAML.load(File.read 'test/fixtures/users.yml')
-    users.each do |user,values|
+    users.each do |user, values|
       puts "Updating password for #{values['email']}"
       u = User.find_by_email(values['email'])
       u.password = new_password
@@ -97,20 +97,20 @@ namespace :hydrus do
   desc 'export object to foxml'
   task :export_object, :pid, :output_dir do |t, args|
     require File.expand_path('config/environment')
-    output_dir = args[:output_dir] || File.join(Rails.root.to_s,'tmp')
+    output_dir = args[:output_dir] || File.join(Rails.root.to_s, 'tmp')
     pid = args[:pid]
     ActiveFedora::FixtureExporter.export_to_path(pid, output_dir)
   end
 
   # call with rake hydrus:import_objects['/tmp']
   desc 'import foxml objects from directory into dor'
-  task :import_objects, :source_dir do |t,args|
+  task :import_objects, :source_dir do |t, args|
     require File.expand_path('config/environment')
     source_dir = args[:source_dir]
     Dir.chdir(source_dir)
     files = Dir.glob('*.foxml.xml')
     files.each do |file|
-      pid = ActiveFedora::FixtureLoader.import_to_fedora(File.join(source_dir,file))
+      pid = ActiveFedora::FixtureLoader.import_to_fedora(File.join(source_dir, file))
       ActiveFedora::FixtureLoader.index(pid)
     end
   end
@@ -138,7 +138,7 @@ namespace :hydrus do
     require File.expand_path('config/environment')
     app_base = File.expand_path('../../../', __FILE__)
     src_base = File.join(app_base, 'spec/fixtures/files')
-    dst_base = File.join(app_base, 'public',Hydrus::Application.config.file_upload_path)
+    dst_base = File.join(app_base, 'public', Hydrus::Application.config.file_upload_path)
     FIXTURE_PIDS.each do |pid|
       pid.gsub!('druid:', '')
       src = File.join(src_base, pid)
@@ -156,7 +156,7 @@ namespace :hydrus do
     puts 'clearing upload files directory'
     require File.expand_path('config/environment')
     app_base = File.expand_path('../../../', __FILE__)
-    dst_base = File.join(app_base, 'public',Hydrus::Application.config.file_upload_path)
+    dst_base = File.join(app_base, 'public', Hydrus::Application.config.file_upload_path)
     puts "Removing all folders in #{dst_base}"
     all_folders = Dir.glob("#{dst_base}/*")
     all_folders.each do |folder|

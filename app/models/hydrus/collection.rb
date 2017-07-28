@@ -101,7 +101,7 @@ class Hydrus::Collection < Dor::Collection
       object_type = self.class.array_to_single(solr_doc['mods_typeOfResource_ssim'])
       depositor = self.class.array_to_single(solr_doc['item_depositor_person_identifier_ssm'])
       create_date = solr_doc['system_create_dtsi']
-      items << { pid: id,num_files: num_files,object_type: object_type,title: title,status_label: status,item_depositor_id: depositor,create_date: create_date }
+      items << { pid: id, num_files: num_files, object_type: object_type, title: title, status_label: status, item_depositor_id: depositor, create_date: create_date }
     end
     items
 
@@ -161,12 +161,12 @@ class Hydrus::Collection < Dor::Collection
 
   # method used to build sidebar
   def license_details_provided?
-    validate! ? true : (errors.keys & [:license,:license_option]).size == 0
+    validate! ? true : (errors.keys & [:license, :license_option]).size == 0
   end
 
   # method used to build sidebar
   def embargo_details_provided?
-    validate! ? true : (errors.keys & [:embargo,:embargo_option]).size == 0
+    validate! ? true : (errors.keys & [:embargo, :embargo_option]).size == 0
   end
 
   # Returns true only if the Collection is unpublished and has no Items.
@@ -326,7 +326,7 @@ class Hydrus::Collection < Dor::Collection
   # returns a hash of depositors for this collection that have accepted the terms of deposit for an item in that collection
   def users_accepted_terms_of_deposit
     result = {}
-    hydrusProperties.find_by_terms(:users_accepted_terms_of_deposit,:user).each do |node|
+    hydrusProperties.find_by_terms(:users_accepted_terms_of_deposit, :user).each do |node|
       result.merge!(node.content => node['dateAccepted'])
     end
     result
@@ -344,7 +344,7 @@ class Hydrus::Collection < Dor::Collection
   end
 
   def strip_whitespace
-    strip_whitespace_from_fields [:title,:abstract,:contact]
+    strip_whitespace_from_fields [:title, :abstract, :contact]
   end
 
   # Rewrites the APO.person_roles, converting any email addresses to SUNET IDs.
@@ -590,7 +590,7 @@ class Hydrus::Collection < Dor::Collection
       hash[:pid] = coll_dru
       hash[:item_counts] = stats[coll_dru] || {}
       hash[:title] = self.object_title(solr[coll_dru][:solr])
-      hash[:roles] = Hydrus::Responsible.roles_of_person current_user.to_s, solr[coll_dru][:solr]['is_governed_by_ssim'].first.gsub('info:fedora/','')
+      hash[:roles] = Hydrus::Responsible.roles_of_person current_user.to_s, solr[coll_dru][:solr]['is_governed_by_ssim'].first.gsub('info:fedora/', '')
       count = 0
       stats[coll_dru].keys.each do |key|
         count += stats[coll_dru][key].to_i
@@ -653,7 +653,7 @@ class Hydrus::Collection < Dor::Collection
   # Returns a hash with all Item object_status values as the
   # keys and zeros as the values.
   def self.initial_item_counts
-    Hash[Hydrus::GenericObject.status_labels(:item).keys.map { |s| [s,0] }]
+    Hash[Hydrus::GenericObject.status_labels(:item).keys.map { |s| [s, 0] }]
   end
 
   # Takes an array of Collection druids.
@@ -690,7 +690,7 @@ class Hydrus::Collection < Dor::Collection
 
     # Prune the inner hashes, removing keys if the count is zero.
     counts.each do |druid, h|
-      h.delete_if { |k,v| v == 0 }
+      h.delete_if { |k, v| v == 0 }
     end
 
     counts

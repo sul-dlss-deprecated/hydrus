@@ -368,7 +368,7 @@ describe('Item edit', type: :request, integration: true) do
 
     # Item has expected rights.
     ps = { embargo_date: '', visibility: 'world', license_code: 'cc-by' }
-    check_emb_vis_lic(@hi,ps)
+    check_emb_vis_lic(@hi, ps)
 
     # Modify the collection to allow varying license.
     login_as('archivist1')
@@ -396,7 +396,7 @@ describe('Item edit', type: :request, integration: true) do
     # Item has expected rights.
     @hi = Hydrus::Item.find @druid
     ps = { embargo_date: '', visibility: 'world', license_code: 'pddl' }
-    check_emb_vis_lic(@hi,ps)
+    check_emb_vis_lic(@hi, ps)
 
     # Back to the edit page.
     should_visit_edit_page(@hi)

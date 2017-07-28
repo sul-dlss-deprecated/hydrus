@@ -213,7 +213,7 @@ class Hydrus::Item < Hydrus::GenericObject
   # this collection within the last year you can pass in a specific collection
   # to check, if not specified, defaults to this item's collection (useful when
   # creating new items)
-  def requires_terms_acceptance(user,coll=self.collection)
+  def requires_terms_acceptance(user, coll=self.collection)
     if to_bool(accepted_terms_of_deposit)
       # if this item has previously been accepted, no further checks are needed
       false
@@ -583,7 +583,7 @@ class Hydrus::Item < Hydrus::GenericObject
   end
 
   def strip_whitespace
-    strip_whitespace_from_fields [:preferred_citation,:title,:abstract,:contact]
+    strip_whitespace_from_fields [:preferred_citation, :title, :abstract, :contact]
   end
 
   def keywords(*args)

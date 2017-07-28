@@ -15,7 +15,7 @@ class HydrusMailer < ActionMailer::Base
     @user = opts[:user]
     to = Hydrus::Application.config.contact_us_recipients[@subject]
     cc = Hydrus::Application.config.contact_us_cc_recipients[@subject]
-    mail(to: to,cc: cc, subject: "Contacting the Stanford Digital Repository (SDR) - #{@subject}")
+    mail(to: to, cc: cc, subject: "Contacting the Stanford Digital Repository (SDR) - #{@subject}")
   end
 
   def invitation(opts={})

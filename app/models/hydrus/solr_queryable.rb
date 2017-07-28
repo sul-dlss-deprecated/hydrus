@@ -92,7 +92,7 @@ module Hydrus::SolrQueryable
   # Returns a hash of SOLR query parameters.
   # The query: get all Hydrus Collections.
   def squery_all_hydrus_collections
-    squery_all_hydrus_objects(['Hydrus_Collection'],fields: ['*'])
+    squery_all_hydrus_objects(['Hydrus_Collection'], fields: ['*'])
   end
 
   # Returns a hash of SOLR query parameters.

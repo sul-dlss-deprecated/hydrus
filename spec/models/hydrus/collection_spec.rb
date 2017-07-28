@@ -434,7 +434,7 @@ describe Hydrus::Collection, type: :model do
       end
 
       it 'should return empty hash if there are no Collections involving the user' do
-        expect(@HC).to receive(:apos_involving_user).and_return([1,2,3])
+        expect(@HC).to receive(:apos_involving_user).and_return([1, 2, 3])
         expect(@HC).to receive(:collections_of_apos).and_return([])
         expect(@HC).not_to receive(:item_counts_of_collections)
         expect(@HC.dashboard_stats(@user_foo)).to eq({})
@@ -442,8 +442,8 @@ describe Hydrus::Collection, type: :model do
 
       it 'should return item_counts_of_collections() if there are relevant Collections' do
         exp = { foo: 1, bar: 2 }
-        expect(@HC).to receive(:apos_involving_user).and_return([1,2,3])
-        expect(@HC).to receive(:collections_of_apos).and_return([4,5,6])
+        expect(@HC).to receive(:apos_involving_user).and_return([1, 2, 3])
+        expect(@HC).to receive(:collections_of_apos).and_return([4, 5, 6])
         expect(@HC).to receive(:item_counts_of_collections).and_return(exp)
         expect(@HC.dashboard_stats(@user_foo)).to eq(exp)
       end
@@ -459,7 +459,7 @@ describe Hydrus::Collection, type: :model do
     it 'can exercise initial_item_counts()' do
       h = @HC.initial_item_counts()
       expect(h).to be_instance_of(Hash)
-      expect(h.values).to eq([0,0,0,0])
+      expect(h.values).to eq([0, 0, 0, 0])
     end
 
     it 'can exercise methods returning APO and Collection druids' do
@@ -468,7 +468,7 @@ describe Hydrus::Collection, type: :model do
       allow(@HC).to receive(:issue_solr_query).and_return([resp, nil])
       expect(@HC).to receive(:get_druids_from_response).with(resp).exactly(3).and_return(exp)
       expect(@HC.apos_involving_user(@user_foo)).to eq(exp)
-      expect(@HC.collections_of_apos([1,2,3,4])).to eq(exp)
+      expect(@HC.collections_of_apos([1, 2, 3, 4])).to eq(exp)
       expect(@HC.all_hydrus_collections).to eq(exp)
     end
 
