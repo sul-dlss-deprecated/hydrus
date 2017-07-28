@@ -665,7 +665,7 @@ describe Hydrus::Item, type: :model do
       n = 0
       [true, false, nil].each do |stub_val|
         c    = double('collection', is_open: stub_val)
-        exp  = !(!(stub_val))
+        exp  = !(!stub_val)
         n   += 1 unless exp
         allow(@hi).to receive(:collection).and_return(c)
         expect(@hi.enforce_collection_is_open).to eq(exp)

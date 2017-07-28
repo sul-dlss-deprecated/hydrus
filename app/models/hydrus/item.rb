@@ -318,7 +318,7 @@ class Hydrus::Item < Hydrus::GenericObject
 
   # Returns true only if the Item is unpublished and is on the first version.
   def is_destroyable
-    !(is_published) && is_initial_version
+    !is_published && is_initial_version
   end
 
   def requires_human_approval
@@ -374,7 +374,7 @@ class Hydrus::Item < Hydrus::GenericObject
 
   # the date_created must be of format YYYY or YYYY-MM or YYYY-MM-DD
   def ensure_date_created_format
-    if (!(date_created =~ /^\d{4}$/)) && (!(date_created =~ /^\d{4}-\d{2}$/)) && (!(date_created =~ /^\d{4}-\d{2}-\d{2}$/))
+    if !(date_created =~ /^\d{4}$/) && !(date_created =~ /^\d{4}-\d{2}$/) && !(date_created =~ /^\d{4}-\d{2}-\d{2}$/)
       errors.add(:date_created, 'Incorrect date format')
     end
   end
@@ -457,7 +457,7 @@ class Hydrus::Item < Hydrus::GenericObject
 
   # Returns true if the Item is embargoed.
   def is_embargoed
-    !(embargo_date.blank?)
+    !embargo_date.blank?
   end
 
   # Returns the embargo date from the embargoMetadata, not the rightsMetadata.
@@ -525,7 +525,7 @@ class Hydrus::Item < Hydrus::GenericObject
     b  = beginning_of_embargo_range.to_datetime
     e  = end_of_embargo_range.to_datetime
     dt = embargo_date.to_datetime
-    unless (b <=(dt) && dt <=(e))
+    unless (b <=dt && dt <=e)
       b = HyTime.date_display(b)
       e = HyTime.date_display(e)
       errors.add(:embargo_date, "must be in the range #{b} through #{e}")
@@ -656,8 +656,8 @@ class Hydrus::Item < Hydrus::GenericObject
   def date_display
     disp = ''
     if date_range?
-      start_only = true if dates[:date_range_start_approximate] && (!(dates[:date_range_end_approximate]))
-      end_only =  true if dates[:date_range_end_approximate] && (!(dates[:date_range_start_approximate]))
+      start_only = true if dates[:date_range_start_approximate] && !dates[:date_range_end_approximate]
+      end_only =  true if dates[:date_range_end_approximate] && !dates[:date_range_start_approximate]
       both = true if dates[:date_range_start_approximate] && dates[:date_range_end_approximate]
       disp += '[ca. ' if start_only || both
       disp += "#{dates[:date_range_start].first}"
@@ -689,12 +689,12 @@ class Hydrus::Item < Hydrus::GenericObject
   end
 
   def undated?
-    !date_range? && date_created ==('Undated')
+    !date_range? && date_created =='Undated'
   end
 
   #check whether a string that we think is a date matches our expected date format
   def valid_date_string? str
-    str =~(/^\d{4}$/) || str =~(/^\d{4}-\d{2}$/) || str =~(/^\d{4}-\d{2}-\d{2}$/)
+    str =~/^\d{4}$/ || str =~/^\d{4}-\d{2}$/ || str =~/^\d{4}-\d{2}-\d{2}$/
   end
 
   def has_specified_a_valid_date
@@ -704,7 +704,7 @@ class Hydrus::Item < Hydrus::GenericObject
       end
     else
       if date_range?
-        if (!valid_date_string?(descMetadata.originInfo.date_range_start.first)) || (!valid_date_string?(descMetadata.originInfo.date_range_end.first))
+        if !valid_date_string?(descMetadata.originInfo.date_range_start.first) || !valid_date_string?(descMetadata.originInfo.date_range_end.first)
           errors.add(:dates, 'Incorrect date formats or missing dates.')
         end
       else
