@@ -35,7 +35,7 @@ class Rubydora::Transaction
             repository.ingest(pid: p, file: foxml)
             $fixture_solr_cache ||= {}
             $fixture_solr_cache[p] ||= begin
-              puts" indexing and caching #{p}"
+              puts " indexing and caching #{p}"
               ActiveFedora::Base.find(p, cast: true).to_solr
             end
             solr.add $fixture_solr_cache[p]

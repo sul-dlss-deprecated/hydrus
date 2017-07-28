@@ -645,7 +645,7 @@ describe('Item edit', type: :request, integration: true) do
         # Confirm that form has expected values.
         css_lab = "file_info_#{id}_label"
         css_hid = "file_info_#{id}_hide"
-        expect(find_by_id(css_lab).value).to    eq(fi[:label])
+        expect(find_by_id(css_lab).value).to eq(fi[:label])
 
         if fi[:hide]
           expect(find_by_id(css_hid)).to be_checked
