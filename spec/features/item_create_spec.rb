@@ -678,7 +678,7 @@ describe("Item create", :type => :request, :integration => true) do
       hyi = Hydrus::Item
       hyc = Hydrus::Collection
       afe = ActiveFedora::ObjectNotFoundError
-      wfs = Dor::WorkflowService
+      wfs = Dor::Config.workflow.client
       hwf = Dor::Config.hydrus.app_workflow.to_s
       # Create a new item.
       hi  = create_new_item()

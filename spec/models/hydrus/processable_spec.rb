@@ -79,7 +79,7 @@ describe Hydrus::Processable, :type => :model do
 
     it "can exercise all logic branches" do
       # At each stage, we set a stub, call is_accessioned(), and then reverse the stub.
-      wfs = Dor::WorkflowService
+      wfs = Dor::Config.workflow.client
       # Not published: false.
       allow(@go).to receive(:is_published).and_return(false)
       expect(@go.is_accessioned).to eq(false)

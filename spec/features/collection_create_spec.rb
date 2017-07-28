@@ -221,7 +221,7 @@ describe("Collection create", :type => :request, :integration => true) do
       hyc = Hydrus::Collection
       hya = Hydrus::AdminPolicyObject
       afe = ActiveFedora::ObjectNotFoundError
-      wfs = Dor::WorkflowService
+      wfs = Dor::Config.workflow.client
       hwf = Dor::Config.hydrus.app_workflow.to_s
       # Create a new collection.
       hc   = create_new_collection()
