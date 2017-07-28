@@ -11,12 +11,12 @@ class Hydrus::RightsMetadataDS < ActiveFedora::OmDatastream
       t.machine do
         t.world
         t.group
-        t.embargo_release_date(path: "embargoReleaseDate")
+        t.embargo_release_date(path: 'embargoReleaseDate')
       end
     end
 
-    t.discover_access ref: [:access], attributes: {type: "discover"}
-    t.read_access     ref: [:access], attributes: {type: "read"}
+    t.discover_access ref: [:access], attributes: {type: 'discover'}
+    t.read_access     ref: [:access], attributes: {type: 'read'}
 
     t.use do
       t.human {
@@ -27,7 +27,7 @@ class Hydrus::RightsMetadataDS < ActiveFedora::OmDatastream
       }
     end
 
-    t.terms_of_use ref: [:use, :human], attributes: { type: "useAndReproduction" }
+    t.terms_of_use ref: [:use, :human], attributes: { type: 'useAndReproduction' }
 
     # the remaining statements are accessors for dor-services and not used by hydrus
     t.copyright path: 'copyright/human', index_as: [:symbol]
@@ -65,16 +65,16 @@ class Hydrus::RightsMetadataDS < ActiveFedora::OmDatastream
   def self.xml_template
     Nokogiri::XML::Builder.new do |xml|
       xml.rightsMetadata{
-        xml.access(type: "discover") {
+        xml.access(type: 'discover') {
           xml.machine {
             xml.world # at Stanford metadata is publicly visible by policy
           }
         }
-        xml.access(type: "read") {
+        xml.access(type: 'read') {
           xml.machine
         }
         xml.use {
-          xml.human(type: "useAndReproduction")
+          xml.human(type: 'useAndReproduction')
         }
       }
     end.doc

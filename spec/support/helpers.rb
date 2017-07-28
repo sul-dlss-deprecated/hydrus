@@ -5,8 +5,8 @@ def noko_doc(x)
 end
 
 def mock_user
-  User.find_or_create_by(email: "some-user@example.com") do |u|
-    u.password = "test12345"
+  User.find_or_create_by(email: 'some-user@example.com') do |u|
+    u.password = 'test12345'
     u.password_confirmation = u.password
     u.save
   end
@@ -25,9 +25,9 @@ def login_as(email, password = nil)
   email += '@example.com' unless email.include?('@')
   logout
   visit new_user_session_path
-  fill_in "Email", with: email
-  fill_in "Password", with: password
-  click_button "Sign in"
+  fill_in 'Email', with: email
+  fill_in 'Password', with: password
+  click_button 'Sign in'
 end
 
 def logout
@@ -119,7 +119,7 @@ def check_emb_vis_lic(obj, opts)
   datastream = (is_emb ? em : rm)
   g = datastream.ng_xml.xpath("#{rd}/group")
   w = datastream.ng_xml.xpath("#{rd}/world")
-  if opts[:visibility] == "stanford"
+  if opts[:visibility] == 'stanford'
     expect(g.size).to eq(1)
     expect(g.first.content).to eq('stanford')
     expect(w.size).to eq(0)
@@ -179,9 +179,9 @@ def create_new_collection(opts = {})
   fill_in "#{hc}_apo_person_roles[hydrus-collection-viewer]", with: opts.viewers
   choose  "#{hc}_requires_human_approval_" + opts.requires_human_approval
   # Save.
-  click_button "save_nojs"
+  click_button 'save_nojs'
   expect(current_path).to eq("/collections/#{druid}")
-  expect(find('div.alert')).to have_content("Your changes have been saved")
+  expect(find('div.alert')).to have_content('Your changes have been saved')
   # Get the collection from Fedora and return it.
   Hydrus::Collection.find(druid)
 end
@@ -217,23 +217,23 @@ def create_new_item(opts = {})
   druid = m[1]
   # Fill in the required fields.
   click_button('Add Contributor')
-  fill_in "hydrus_item_contributors_0_name", with: opts.contributor
-  fill_in "Title of item",        with: opts.title
-  fill_in "hydrus_item_abstract", with: opts.abstract
-  fill_in "hydrus_item_contact",  with: opts.contact
-  fill_in "hydrus_item_keywords", with: opts.keywords
-  fill_in "hydrus_item_dates_date_created", with: opts.date_created
-  choose "hydrus_item_dates_date_type_single"
-  check "release_settings"
+  fill_in 'hydrus_item_contributors_0_name', with: opts.contributor
+  fill_in 'Title of item',        with: opts.title
+  fill_in 'hydrus_item_abstract', with: opts.abstract
+  fill_in 'hydrus_item_contact',  with: opts.contact
+  fill_in 'hydrus_item_keywords', with: opts.keywords
+  fill_in 'hydrus_item_dates_date_created', with: opts.date_created
+  choose 'hydrus_item_dates_date_type_single'
+  check 'release_settings'
   # Add a file.
   f      = Hydrus::ObjectFile.new
   f.pid  = druid
   f.file = Tempfile.new('mock_HydrusObjectFile_')
   f.save
   # Save.
-  click_button "save_nojs"
+  click_button 'save_nojs'
   expect(current_path).to eq("/items/#{druid}")
-  expect(find('div.alert')).to have_content("Your changes have been saved")
+  expect(find('div.alert')).to have_content('Your changes have been saved')
   # Agree to terms of deposit (hard to do via the UI).
   hi = Hydrus::Item.find(druid)
   hi.accept_terms_of_deposit(opts.user)

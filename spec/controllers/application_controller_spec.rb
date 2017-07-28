@@ -2,11 +2,11 @@ require 'spec_helper'
 
 describe ApplicationController, type: :controller do
 
-  it "should have the correct layout name" do
+  it 'should have the correct layout name' do
     expect(controller.layout_name).to eq('sul_chrome/application')
   end
 
-  it "can exercise errors_for_display()" do
+  it 'can exercise errors_for_display()' do
     obj = double('mock-object')
     msgs = {
       files: ['foo bar', 'fubb'],
@@ -17,7 +17,7 @@ describe ApplicationController, type: :controller do
     expect(controller.send(:errors_for_display, obj)).to eq(exp)
   end
 
-  it "can exercise try_to_save()" do
+  it 'can exercise try_to_save()' do
     # Successful save().
     expect(flash[:notice]).to eq(nil)
     obj = double('obj', save: true)

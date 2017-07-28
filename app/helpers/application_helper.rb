@@ -42,14 +42,14 @@ module ApplicationHelper
   end
 
   def render_contextual_layout
-    controller.controller_name == 'catalog' || controller.controller_name == 'sessions' ? (render "shared/home_contents") : (render "shared/main_contents")
+    controller.controller_name == 'catalog' || controller.controller_name == 'sessions' ? (render 'shared/home_contents') : (render 'shared/main_contents')
   end
 
   def hydrus_signin_link
     if Dor::Config.hydrus.show_standard_login
-      link_to("Sign in", new_user_session_path, class: 'signin_link')
+      link_to('Sign in', new_user_session_path, class: 'signin_link')
     else
-      link_to("Sign in via WebAuth", webauth_login_path)
+      link_to('Sign in via WebAuth', webauth_login_path)
     end
   end
 
@@ -70,7 +70,7 @@ module ApplicationHelper
   end
 
   def hydrus_strip(value)
-    value.nil? ? "" : value.strip
+    value.nil? ? '' : value.strip
   end
 
   # Returns true if the Edit tab should be shown for the Collection or Item.
@@ -82,20 +82,20 @@ module ApplicationHelper
   end
 
   def edit_item_text(item)
-    "Edit Draft"
+    'Edit Draft'
   end
 
   # text to show on item view tab
   def view_item_text(item)
-    item.is_published ? "Published Version" : "View Draft"
+    item.is_published ? 'Published Version' : 'View Draft'
   end
 
   def hydrus_object_setting_value(obj, opts = {})
     return obj unless hydrus_is_empty?(obj)
     if opts[:na]
-      return content_tag(:span, 'not available yet', class: "muted")
+      return content_tag(:span, 'not available yet', class: 'muted')
     else
-      return content_tag(:span, 'to be entered', class: "unspecified")
+      return content_tag(:span, 'to be entered', class: 'unspecified')
     end
   end
 
@@ -107,12 +107,12 @@ module ApplicationHelper
   end
 
   def title_text(obj)
-    obj.title.blank? ? "Untitled" : obj.title
+    obj.title.blank? ? 'Untitled' : obj.title
   end
 
   def delete_confirm_msg(obj)
     msg = "Are you sure you want to discard this #{obj.object_type}?"
-    msg += " This action is permanent and cannot be undone."
+    msg += ' This action is permanent and cannot be undone.'
     msg
   end
 
@@ -148,11 +148,11 @@ module ApplicationHelper
   end
 
   def view_path_from_model(model)
-    model.class.to_s.pluralize.parameterize("_")
+    model.class.to_s.pluralize.parameterize('_')
   end
 
   def select_status_checkbox_icon(field)
-    content_tag(:i, nil, class: field ? "icon-check" : "icon-minus")
+    content_tag(:i, nil, class: field ? 'icon-check' : 'icon-minus')
   end
 
   # Takes a value.
@@ -163,7 +163,7 @@ module ApplicationHelper
   end
 
   def sdr_mail_to
-    mt = mail_to("sdr-contact@lists.stanford.edu", "sdr-contact@lists.stanford.edu")
+    mt = mail_to('sdr-contact@lists.stanford.edu', 'sdr-contact@lists.stanford.edu')
     mt.html_safe
   end
 

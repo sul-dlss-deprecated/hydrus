@@ -67,7 +67,7 @@ class Hydrus::RoleMetadataDS < ActiveFedora::OmDatastream
   end
 
   def add_empty_person_to_role(role_type)
-    add_person_with_role("", role_type)
+    add_person_with_role('', role_type)
   end
 
   def insert_role(role_type)

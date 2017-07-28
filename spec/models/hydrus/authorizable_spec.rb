@@ -20,7 +20,7 @@ describe Hydrus::Authorizable, type: :model do
   let(:creator_user) { double('mock_creator', is_collection_creator?: true ) }
   let(:viewer_user) { double('mock_viewer', is_global_viewer?: true ) }
 
-  it "should be able to exercise the methods returning fixed Sets" do
+  it 'should be able to exercise the methods returning fixed Sets' do
     methods = [
       :administrators,
       :collection_creators,
@@ -34,20 +34,20 @@ describe Hydrus::Authorizable, type: :model do
     end
   end
 
-  it "does_intersect() should return true if the given sets intersect" do
+  it 'does_intersect() should return true if the given sets intersect' do
     expect(@auth.does_intersect(@s1, @s2)).to eq(false)
     expect(@auth.does_intersect(@s1, @s3)).to eq(true)
   end
 
-  describe "administrators" do
+  describe 'administrators' do
 
-    it "is_administrator() should work as expected" do
+    it 'is_administrator() should work as expected' do
       allow(@auth).to receive(:administrators).and_return(@s1)
       expect(@auth.is_administrator(@ua)).to eq(true)
       expect(@auth.is_administrator(@uf)).to eq(false)
     end
 
-    it "can_act_as_administrator() should be like is_administrator(), except in dev" do
+    it 'can_act_as_administrator() should be like is_administrator(), except in dev' do
       # In test environment, is_administrator() should determine outcome.
       expect(Rails.env).to eq('test')
       [true, false].each do |exp|
@@ -62,40 +62,40 @@ describe Hydrus::Authorizable, type: :model do
 
   end
 
-  describe "User model attributes" do
-    it "should be an admin if the user says it is" do
+  describe 'User model attributes' do
+    it 'should be an admin if the user says it is' do
       expect(@auth.can_act_as_administrator(admin_user)).to be_truthy
     end
 
-    it "should be a collection creator if the user says it is" do
+    it 'should be a collection creator if the user says it is' do
       expect(@auth.can_create_collections(creator_user)).to be_truthy
     end
     
-    it "should be a collection creator if the user says it is" do
+    it 'should be a collection creator if the user says it is' do
       expect(@auth.is_global_viewer(viewer_user)).to be_truthy
     end
   end
 
 
-  it "can_create_collections() should work as expected" do
+  it 'can_create_collections() should work as expected' do
     allow(@auth).to receive(:collection_creators).and_return(@s1)
     expect(@auth.can_create_collections(@ua)).to eq(true)
     expect(@auth.can_create_collections(@uf)).to eq(false)
   end
 
-  it "is_global_viewer() should work as expected" do
+  it 'is_global_viewer() should work as expected' do
     allow(@auth).to receive(:global_viewers).and_return(@s1)
     expect(@auth.is_global_viewer(@ua)).to eq(true)
     expect(@auth.is_global_viewer(@uf)).to eq(false)
   end
 
-  describe "can_do_it()" do
+  describe 'can_do_it()' do
 
-    it "should return false if given nil object" do
+    it 'should return false if given nil object' do
       expect(@auth.can_do_it('foo', 'bar', nil)).to eq(false)
     end
 
-    it "should dispatch to the correct method" do
+    it 'should dispatch to the correct method' do
       actions   = %w(read edit)
       obj_types = %w(collection item)
       obj_types.each do |typ|
@@ -110,7 +110,7 @@ describe Hydrus::Authorizable, type: :model do
 
   end
 
-  it "can_*_object() should return whatever can_do_it() returns" do
+  it 'can_*_object() should return whatever can_do_it() returns' do
     [true, false].each do |exp|
       allow(@auth).to receive(:can_do_it).and_return(exp)
       expect(@auth.can_read_object(@ua, @obj)).to eq(exp)
@@ -118,15 +118,15 @@ describe Hydrus::Authorizable, type: :model do
     end
   end
 
-  describe "can_read_collection()" do
+  describe 'can_read_collection()' do
 
-    it "should return true directly if the user has power to create collections" do
+    it 'should return true directly if the user has power to create collections' do
       expect(@hc).not_to receive(:roles_of_person)
       allow(@auth).to receive(:is_global_viewer).and_return(true)
       expect(@auth.can_read_collection(@ua, @hc)).to eq(true)
     end
 
-    it "should return true if the user has any role in the collection/apo" do
+    it 'should return true if the user has any role in the collection/apo' do
       allow(@auth).to receive(:is_global_viewer).and_return(false)
       # Roles in the APO.
       allow(@hc).to receive(:roles_of_person).and_return(@s1)
@@ -138,15 +138,15 @@ describe Hydrus::Authorizable, type: :model do
 
   end
 
-  describe "can_read_item()" do
+  describe 'can_read_item()' do
 
-    it "should return true directly if the user has power to create collections" do
+    it 'should return true directly if the user has power to create collections' do
       expect(@hi).not_to receive(:roles_of_person)
       allow(@auth).to receive(:is_global_viewer).and_return(true)
       expect(@auth.can_read_item(@ua, @hi)).to eq(true)
     end
 
-    it "should return true if the user has any role in the item or the collection/apo" do
+    it 'should return true if the user has any role in the item or the collection/apo' do
       allow(@auth).to receive(:is_global_viewer).and_return(false)
       # Roles in the item, but not the APO.
       allow(@hi).to receive(:roles_of_person).and_return(@s1)
@@ -164,20 +164,20 @@ describe Hydrus::Authorizable, type: :model do
 
   end
 
-  describe "can_create_items_in()" do
+  describe 'can_create_items_in()' do
 
-    it "should return false if given a nil object" do
+    it 'should return false if given a nil object' do
       expect(@hi).not_to receive(:is_administrator)
       expect(@auth.can_create_items_in(@ua, nil)).to eq(false)
     end
 
-    it "should return true directly if the user is an administrator" do
+    it 'should return true directly if the user is an administrator' do
       expect(@hi).not_to receive(:roles_of_person)
       allow(@auth).to receive(:is_administrator).and_return(true)
       expect(@auth.can_create_items_in(@ua, @hc)).to eq(true)
     end
 
-    it "should return true if the user has any of the item creator roles" do
+    it 'should return true if the user has any of the item creator roles' do
       allow(@auth).to receive(:is_administrator).and_return(false)
       allow(@auth).to receive(:item_creator_roles).and_return(@s1)
       # Yes
@@ -190,15 +190,15 @@ describe Hydrus::Authorizable, type: :model do
 
   end
 
-  describe "can_edit_collection()" do
+  describe 'can_edit_collection()' do
 
-    it "should return true directly if the user is an administrator" do
+    it 'should return true directly if the user is an administrator' do
       expect(@hc).not_to receive(:roles_of_person)
       allow(@auth).to receive(:is_administrator).and_return(true)
       expect(@auth.can_edit_collection(@ua, @hc)).to eq(true)
     end
 
-    it "should return true if the user has any of the collection editor roles" do
+    it 'should return true if the user has any of the collection editor roles' do
       allow(@auth).to receive(:is_administrator).and_return(false)
       allow(@auth).to receive(:collection_editor_roles).and_return(@s1)
       # Yes.
@@ -211,15 +211,15 @@ describe Hydrus::Authorizable, type: :model do
 
   end
 
-  describe "can_edit_item()" do
+  describe 'can_edit_item()' do
 
-    it "should return true directly if the user is an administrator" do
+    it 'should return true directly if the user is an administrator' do
       expect(@hi).not_to receive(:roles_of_person)
       allow(@auth).to receive(:is_administrator).and_return(true)
       expect(@auth.can_edit_item(@ua, @hi)).to eq(true)
     end
 
-    it "should return true if the user has any of the item editor roles" do
+    it 'should return true if the user has any of the item editor roles' do
       allow(@auth).to receive(:is_administrator).and_return(false)
       allow(@auth).to receive(:item_editor_roles).and_return(@s1)
       # Yes for the item, no for the APO.
@@ -238,7 +238,7 @@ describe Hydrus::Authorizable, type: :model do
 
   end
 
-  describe "can_review_item()" do
+  describe 'can_review_item()' do
 
     it "should return true directly if the user can edit the item's collection" do
       expect(@hi).not_to receive(:apo)
@@ -247,7 +247,7 @@ describe Hydrus::Authorizable, type: :model do
       expect(@auth.can_review_item(@ua, @hi)).to eq(true)
     end
 
-    it "should return true if the user has any of the item editor roles" do
+    it 'should return true if the user has any of the item editor roles' do
       allow(@hi).to receive(:collection)
       allow(@auth).to receive(:can_edit_collection).and_return(false)
       allow(@auth).to receive(:item_reviewer_roles).and_return(@s1)

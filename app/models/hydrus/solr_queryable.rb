@@ -15,7 +15,7 @@ module Hydrus::SolrQueryable
     add_governed_by_filter(h, apo_pids)
     add_involved_user_filter(h, user)
     solr_parameters[:fq] ||= []
-    solr_parameters[:fq] << h[:fq].join(" OR ") unless h[:fq].empty?
+    solr_parameters[:fq] << h[:fq].join(' OR ') unless h[:fq].empty?
   end
 
   # Takes a hash of SOLR query parameters, along with a SUNET ID.

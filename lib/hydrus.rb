@@ -64,7 +64,7 @@ module Hydrus
   def self.profile(opts = {})
     # Setup options.
     opts[:output_dir]  ||= "#{Rails.root}/tmp/profiling"
-    opts[:output_name] ||= "profile"
+    opts[:output_name] ||= 'profile'
     opts[:min_percent] ||= 0
     # Run the code being profiled.
     RubyProf.start

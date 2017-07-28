@@ -44,8 +44,8 @@ class Hydrus::RemediationRunner
   #   :object_type     # String: Item, Collection, or AdminPolicyObject
   #   :object_version  # Used to determine whether a remediation needs to run.
   def run
-    log.info("====================")
-    log.info("run() started")
+    log.info('====================')
+    log.info('run() started')
     rems = discover_remediations()
     all_hydrus_objects().each do |h|
       rems.each do |rem|
@@ -89,13 +89,13 @@ class Hydrus::RemediationRunner
     @remed_method   = remediation_method.to_s
     @remed_version  = @remed_method.sub(/\A\D+/, '').gsub(/_/, '.')
     # Log that we've started.
-    log.info("----")
+    log.info('----')
     log.info("started (#{object_type})")
   end
 
   # Loads up the Fedora object.
   def load_fedora_object
-    log.info("loading fedora object")
+    log.info('loading fedora object')
     @fobj = ActiveFedora::Base.find(@pid, cast: true)
   end
 
@@ -103,8 +103,8 @@ class Hydrus::RemediationRunner
   # applied to the currently loaded Fedora object, and logs accordingly.
   def remediation_is_needed
     msg = 'skipping'
-    msg = "running in --force mode" if force
-    msg = "is needed" if remed_version > object_version
+    msg = 'running in --force mode' if force
+    msg = 'is needed' if remed_version > object_version
     log.info(msg)
     msg != 'skipping'
   end

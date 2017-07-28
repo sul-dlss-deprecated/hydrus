@@ -97,7 +97,7 @@ module Hydrus::Accessible
   # Note that the Xpath query differs by datastream.
   def remove_embargo_date
     q = "#{xp_machine}/embargoReleaseDate"
-    q = "//embargoMetadata/releaseDate" if self.class == Dor::EmbargoMetadataDS
+    q = '//embargoMetadata/releaseDate' if self.class == Dor::EmbargoMetadataDS
     remove_nodes_by_xpath(q)
     remove_access_none_nodes
   end
@@ -106,7 +106,7 @@ module Hydrus::Accessible
   # Modifies the datastream accordingly.
   def update_access_blocks(group)
     remove_access_none_nodes
-    if group == "world"
+    if group == 'world'
       make_world_readable
     else
       remove_world_read_access
@@ -116,7 +116,7 @@ module Hydrus::Accessible
 
   # Initializes the releaseAccess node for embargoMetadata.
   def initialize_release_access_node(style = nil)
-    x = style == :generic ? generic_access_xml() : "<releaseAccess/>"
+    x = style == :generic ? generic_access_xml() : '<releaseAccess/>'
     self.release_access_node = Nokogiri::XML(x)
     ng_xml_will_change!
   end

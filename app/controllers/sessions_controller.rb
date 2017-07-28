@@ -20,7 +20,7 @@ class SessionsController < Devise::SessionsController
   end
 
   def destroy_webauth
-    flash[:notice] = "You have successfully logged out of WebAuth." unless request.env["WEBAUTH_USER"]
+    flash[:notice] = 'You have successfully logged out of WebAuth.' unless request.env['WEBAUTH_USER']
       redirect_to root_url
   end
 

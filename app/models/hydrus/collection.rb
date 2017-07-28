@@ -32,14 +32,14 @@ class Hydrus::Collection < Dor::Collection
   def check_embargo_options
     return if embargo_option == 'none'
     return unless embargo_terms.blank?
-    msg = "must have a maximum time period when the varies or fixed option is selected"
+    msg = 'must have a maximum time period when the varies or fixed option is selected'
     errors.add(:embargo, msg)
   end
 
   def check_license_options
     return if license_option == 'none'
     return unless license.blank?
-    msg = "must be specified when the varies or fixed license option is selected"
+    msg = 'must be specified when the varies or fixed license option is selected'
     errors.add(:license, msg)
   end
 
@@ -47,7 +47,7 @@ class Hydrus::Collection < Dor::Collection
 
   setup_delegations(
   # [:METHOD_NAME,             :uniq,  :at... ]
-  "hydrusProperties" => [
+  'hydrusProperties' => [
     [:requires_human_approval, true   ],
     [:embargo_option,          true,  ],
     [:embargo_terms,           true,  ],
@@ -144,7 +144,7 @@ class Hydrus::Collection < Dor::Collection
     identityMetadata.content_will_change!
     descMetadata.ng_xml.search('//mods:mods/mods:typeOfResource', 'mods' => 'http://www.loc.gov/mods/v3').each do |node|
       node['collection']='yes'
-      node.content="mixed material"
+      node.content='mixed material'
       descMetadata.content_will_change!
     end
   end
@@ -205,9 +205,9 @@ class Hydrus::Collection < Dor::Collection
   # the users who will receive email notifications when a collection is opened or closed
   def recipients_for_collection_update_emails
     (
-    apo.persons_with_role("hydrus-collection-item-depositor") +
-    apo.persons_with_role("hydrus-collection-manager") +
-    apo.persons_with_role("hydrus-collection-depositor")
+    apo.persons_with_role('hydrus-collection-item-depositor') +
+    apo.persons_with_role('hydrus-collection-manager') +
+    apo.persons_with_role('hydrus-collection-depositor')
     ).to_a.join(', ')
   end
 
@@ -275,26 +275,26 @@ class Hydrus::Collection < Dor::Collection
   def send_all_role_change_emails
 
     # new depositors get an email if the collection is open
-    depositors_before_update = old_self.apo.persons_with_role("hydrus-collection-item-depositor")
-    depositors_after_update = self.apo.persons_with_role("hydrus-collection-item-depositor")
-    new_depositors = (depositors_after_update - depositors_before_update).to_a.join(", ")
-    removed_depositors = (depositors_before_update - depositors_after_update).to_a.join(", ")
+    depositors_before_update = old_self.apo.persons_with_role('hydrus-collection-item-depositor')
+    depositors_after_update = self.apo.persons_with_role('hydrus-collection-item-depositor')
+    new_depositors = (depositors_after_update - depositors_before_update).to_a.join(', ')
+    removed_depositors = (depositors_before_update - depositors_after_update).to_a.join(', ')
     if self.is_open
       self.send_invitation_email_notification(new_depositors) if new_depositors.size > 0
       self.send_remove_invitation_email_notification(removed_depositors) if removed_depositors.size > 0
     end
 
     # collection managers changed, send an email to all managers
-    managers_before_update = old_self.apo.persons_with_role("hydrus-collection-manager")
-    managers_after_update = self.apo.persons_with_role("hydrus-collection-manager")
-    self.send_role_change_email(self.apo.persons_with_role("hydrus-collection-manager").to_a.join(',')) if managers_before_update != managers_after_update
+    managers_before_update = old_self.apo.persons_with_role('hydrus-collection-manager')
+    managers_after_update = self.apo.persons_with_role('hydrus-collection-manager')
+    self.send_role_change_email(self.apo.persons_with_role('hydrus-collection-manager').to_a.join(',')) if managers_before_update != managers_after_update
 
     # reviewers or viewers have been changed, send an email to all managers and reviewers
-    reviewers_before_update = old_self.apo.persons_with_role("hydrus-collection-reviewer")
-    reviewers_after_update = self.apo.persons_with_role("hydrus-collection-reviewer")
-    viewers_before_update = old_self.apo.persons_with_role("hydrus-collection-viewer")
-    viewers_after_update = self.apo.persons_with_role("hydrus-collection-viewer")
-    self.send_role_change_email((self.apo.persons_with_role("hydrus-collection-manager")+self.apo.persons_with_role("hydrus-collection-reviewer")).to_a.join(',')) if (reviewers_before_update != reviewers_after_update) || (viewers_before_update != viewers_after_update)
+    reviewers_before_update = old_self.apo.persons_with_role('hydrus-collection-reviewer')
+    reviewers_after_update = self.apo.persons_with_role('hydrus-collection-reviewer')
+    viewers_before_update = old_self.apo.persons_with_role('hydrus-collection-viewer')
+    viewers_after_update = self.apo.persons_with_role('hydrus-collection-viewer')
+    self.send_role_change_email((self.apo.persons_with_role('hydrus-collection-manager')+self.apo.persons_with_role('hydrus-collection-reviewer')).to_a.join(',')) if (reviewers_before_update != reviewers_after_update) || (viewers_before_update != viewers_after_update)
 
   end
 
@@ -375,8 +375,8 @@ class Hydrus::Collection < Dor::Collection
   # Called before validation occurs.
   # Used to keep embargo_terms and license in sync with their related options.
   def remove_values_for_associated_attribute_with_value_none
-    self.embargo_terms = nil    if embargo_option == "none"
-    self.license       = 'none' if license_option == "none"
+    self.embargo_terms = nil    if embargo_option == 'none'
+    self.license       = 'none' if license_option == 'none'
   end
 
   def roles_of_person(user)
@@ -435,35 +435,35 @@ class Hydrus::Collection < Dor::Collection
   # forms in the UI.
 
   def embargo_fixed
-    embargo_option == "fixed" ? embargo_terms : ""
+    embargo_option == 'fixed' ? embargo_terms : ''
   end
 
   def embargo_varies
-    embargo_option == "varies" ? embargo_terms : ""
+    embargo_option == 'varies' ? embargo_terms : ''
   end
 
   def embargo_fixed= val
-    self.embargo_terms= val if embargo_option == "fixed"
+    self.embargo_terms= val if embargo_option == 'fixed'
   end
 
   def embargo_varies= val
-    self.embargo_terms= val if embargo_option == "varies"
+    self.embargo_terms= val if embargo_option == 'varies'
   end
 
   def license_fixed
-    license_option == "fixed" ? license : ""
+    license_option == 'fixed' ? license : ''
   end
 
   def license_varies
-    license_option == "varies" ? license : ""
+    license_option == 'varies' ? license : ''
   end
 
   def license_fixed= val
-    self.license= val if license_option == "fixed"
+    self.license= val if license_option == 'fixed'
   end
 
   def license_varies= val
-    self.license= val if license_option == "varies"
+    self.license= val if license_option == 'varies'
   end
 
   # Visibility getters and setters.
@@ -491,7 +491,7 @@ class Hydrus::Collection < Dor::Collection
   end
 
   def visibility
-    return ["world"] if rightsMetadata.has_world_read_node
+    return ['world'] if rightsMetadata.has_world_read_node
     rightsMetadata.group_read_nodes.map { |n| n.text }
   end
 
@@ -611,7 +611,7 @@ class Hydrus::Collection < Dor::Collection
     elsif !dc_title.nil?
       return dc_title.first unless dc_title.first=='Hydrus'
     end
-    "Untitled"
+    'Untitled'
   end
 
   # given a solr doc field that might be an array, extract the first value if not nil, otherwise return blank

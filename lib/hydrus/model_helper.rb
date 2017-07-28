@@ -18,7 +18,7 @@ module Hydrus
     end
 
     def to_bool(val)
-      (val == "true" || val == true || val == 'yes')
+      (val == 'true' || val == true || val == 'yes')
     end
 
     # Takes a delimited string (eg, of keywords as entered on Item edit page).

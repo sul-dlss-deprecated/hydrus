@@ -1,6 +1,6 @@
 namespace :hydrus do
 
-  desc "associate DOR item with Hydrus"
+  desc 'associate DOR item with Hydrus'
   # associates a non-hydrus DOR item with the Hydrus app by adding datastreams and indexing into Hydrus solr
   # need to pass in druid of object to associated, collection druid of Hydrus collection to associate with, and type of hydrus object (e.g. dataset)
   # run with RAILS_ENV=dortest rake hydrus:index_object druid=druid:oo000oo0001 collection=druid:oo00oo002 type=dataset
@@ -18,7 +18,7 @@ namespace :hydrus do
     item.collections << coll
 
     # change item type in RELS-EXT to be a hydrus item
-    item.datastreams['RELS-EXT'].content.gsub!("<fedora-model:hasModel rdf:resource=\"info:fedora/afmodel:Dor_Item\"></fedora-model:hasModel>","<fedora-model:hasModel rdf:resource=\"info:fedora/afmodel:Hydrus_Item\"/>")
+    item.datastreams['RELS-EXT'].content.gsub!('<fedora-model:hasModel rdf:resource="info:fedora/afmodel:Dor_Item"></fedora-model:hasModel>','<fedora-model:hasModel rdf:resource="info:fedora/afmodel:Hydrus_Item"/>')
     item.remove_relationship :has_model, 'info:fedora/afmodel:Dor_Item'
     item.assert_content_model
 
@@ -28,9 +28,9 @@ namespace :hydrus do
 
     # create hydrusProperties datastream and set values
     item.item_type=item_type
-    item.accepted_terms_of_deposit="true"
-    item.reviewed_release_settings="true"
-    item.hydrusProperties.requires_human_approval="false"
+    item.accepted_terms_of_deposit='true'
+    item.reviewed_release_settings='true'
+    item.hydrusProperties.requires_human_approval='false'
     item.object_status='published'
     item.hydrusProperties.last_modify_time=Time.now.to_s
     item.hydrusProperties.submit_for_approval_time=Time.now.to_s
@@ -48,7 +48,7 @@ namespace :hydrus do
 
   end
 
-  desc "Index all DOR defined workflow objects into Hydrus solr instance" 
+  desc 'Index all DOR defined workflow objects into Hydrus solr instance' 
   task index_all_workflows: :environment do
     # get all workflow objects using risearch (sparql on fedora) since we don't have a direct connection to argo solr
     model_type = "<#{Dor::WorkflowObject.to_class_uri}>"
@@ -57,7 +57,7 @@ namespace :hydrus do
     pids.each { |pid| solr.add(Dor.find(pid).to_solr, add_attributes: {commitWithin: 5000}) }     # index into hydrus solr
   end
 
-  desc "Cleanup file upload temp files"
+  desc 'Cleanup file upload temp files'
   task cleanup_tmp: :environment do
     CarrierWave.clean_cached_files!
   end
@@ -65,20 +65,20 @@ namespace :hydrus do
 end
 
 
-desc "rails server with suppressed output"
+desc 'rails server with suppressed output'
 task server: :environment do
   # Note: to get this to work nicely, we also set the app to generate
   # unbuffered output: see config/application.rb.
-  system "rake jetty:start" unless `rake jetty:status` =~ /^Running:/
+  system 'rake jetty:start' unless `rake jetty:status` =~ /^Running:/
   exclusions = [
-    "WARN  Could not determine content-length of response",
-    "^Loaded datastream druid:",
-    "^Loaded datastream list",
-    "^Solr response: "
+    'WARN  Could not determine content-length of response',
+    '^Loaded datastream druid:',
+    '^Loaded datastream list',
+    '^Solr response: '
   ]
-  regex = exclusions.join("|")
+  regex = exclusions.join('|')
   cmd = [
-    "rails server 2>&1",
+    'rails server 2>&1',
     %Q<ruby -ne 'BEGIN { STDOUT.sync = true }; print $_ unless $_ =~ /#{regex}/'>
   ].join(' | ')
   system(cmd)

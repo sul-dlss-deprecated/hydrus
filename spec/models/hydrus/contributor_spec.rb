@@ -6,7 +6,7 @@ describe Hydrus::Contributor, type: :model do
     @hc = Hydrus::Contributor.new(name: 'Angus', role: 'guitar')
   end
 
-  it "default_contributor()" do
+  it 'default_contributor()' do
     @hc = Hydrus::Contributor.default_contributor
     expect(@hc).to be_instance_of(Hydrus::Contributor)
     expect(@hc.name).to eq('')
@@ -15,13 +15,13 @@ describe Hydrus::Contributor, type: :model do
     expect(@hc.role_key).to eq('personal_author')
   end
 
-  it "groups_for_select(): can exercise" do
+  it 'groups_for_select(): can exercise' do
     cgs = Hydrus::Contributor.groups_for_select
     expect(cgs).to be_instance_of(Array)
     expect(cgs.size).to eq(3)
   end
 
-  it "lookup_with_role_key()" do
+  it 'lookup_with_role_key()' do
     expect(Hydrus::Contributor.lookup_with_role_key('personal_author')).to eq(['personal', 'Author'])
     expect(Hydrus::Contributor.lookup_with_role_key('corporate_author')).to eq(['corporate', 'Author'])
     expect(Hydrus::Contributor.lookup_with_role_key('corporate_contributing_author')).to eq(['corporate', 'Contributing author'])
@@ -29,7 +29,7 @@ describe Hydrus::Contributor, type: :model do
     expect(Hydrus::Contributor.lookup_with_role_key('blah blah')).to eq(['personal', 'Author'])
   end
 
-  it "clone() and ==()" do
+  it 'clone() and ==()' do
     # Create two clones.
     c1 = Hydrus::Contributor.default_contributor
     c1.name = 'Los Pollos Hermanos'

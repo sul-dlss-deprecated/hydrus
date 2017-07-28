@@ -2,7 +2,7 @@ require 'rsolr/client_cert'
 require 'solrizer-fedora'
 
 # Force Blacklight to use RSolr::ClientCert::Connection
-Rails.logger.warn "Monkey-patching Blacklight.solr to use RSolr::ClientCert::Connection"
+Rails.logger.warn 'Monkey-patching Blacklight.solr to use RSolr::ClientCert::Connection'
 begin
   Blacklight.instance_variable_set(:@solr, Dor::Config.make_solr_connection(Blacklight.solr_config))
 end

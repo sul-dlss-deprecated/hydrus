@@ -21,7 +21,7 @@ describe Hydrus::AccessControlsEnforcement do
     @exp_rp = @mc.root_path
   end
 
-  describe "enforce_show_permissions" do
+  describe 'enforce_show_permissions' do
 
     before(:each) do
       @mc = MockController.new(id: @dru)
@@ -31,14 +31,14 @@ describe Hydrus::AccessControlsEnforcement do
       allow(@mc).to receive('new_user_session_path').and_return('/users/signin')
     end
 
-    it "should do nothing if the user can read the object" do
+    it 'should do nothing if the user can read the object' do
       allow(@mc).to receive('can?').and_return(true)
       expect(@mc).not_to receive(:redirect_to)
       @mc.enforce_show_permissions
       expect(@mc.flash).to eq({})
     end
 
-    it "should redirect to root path if user cannot read the object" do
+    it 'should redirect to root path if user cannot read the object' do
       allow(@mc).to receive('current_user').and_return('')
       allow(@mc).to receive('can?').and_return(false)
       allow(@mc).to receive(:root_url).and_return('/')
@@ -48,7 +48,7 @@ describe Hydrus::AccessControlsEnforcement do
       expect(f).to include(:error)
       expect(f[:error]).to match(/privileges.+view/)
     end
-    it "should redirect with a more friendly message if user isnt logged in" do
+    it 'should redirect with a more friendly message if user isnt logged in' do
       allow(@mc).to receive('can?').and_return(false)
       allow(@mc).to receive(:root_url).and_return('/')
       expect(@mc).to receive(:redirect_to).with(@exp_rp)
@@ -60,7 +60,7 @@ describe Hydrus::AccessControlsEnforcement do
 
   end
 
-  describe "enforce_edit_permissions" do
+  describe 'enforce_edit_permissions' do
 
     before(:each) do
       @mc = MockController.new(id: @dru)
@@ -69,7 +69,7 @@ describe Hydrus::AccessControlsEnforcement do
       allow(@mc).to receive('new_user_session_path').and_return('/users/signin')
     end
 
-    it "should do nothing if the user can edit the object" do
+    it 'should do nothing if the user can edit the object' do
       allow(@mc).to receive('can?').and_return(true)
       allow(@mc).to receive('current_user').and_return(nil)
       expect(@mc).not_to receive(:redirect_to)
@@ -77,7 +77,7 @@ describe Hydrus::AccessControlsEnforcement do
       expect(@mc.flash).to eq({})
     end
 
-    it "should redirect to view page if user cannot edit the object" do
+    it 'should redirect to view page if user cannot edit the object' do
       allow(@mc).to receive('can?').and_return(false)
       allow(@mc).to receive(:root_url).and_return('/')
       allow(@mc).to receive('current_user').and_return(OpenStruct.new)
@@ -91,7 +91,7 @@ describe Hydrus::AccessControlsEnforcement do
 
   end
 
-  describe "enforce_create_permissions: create items in collections" do
+  describe 'enforce_create_permissions: create items in collections' do
 
     before(:each) do
       @mc = MockController.new(id: @dru)
@@ -101,14 +101,14 @@ describe Hydrus::AccessControlsEnforcement do
       allow(@mc).to receive('new_user_session_path').and_return('/users/signin')
     end
 
-    it "should do nothing if the user can do it" do
+    it 'should do nothing if the user can do it' do
       allow(@mc).to receive('can?').and_return(true)
       expect(@mc).not_to receive(:redirect_to)
       @mc.enforce_create_permissions
       expect(@mc.flash).to eq({})
     end
 
-    it "should redirect to home page if user cannot do it" do
+    it 'should redirect to home page if user cannot do it' do
       allow(@mc).to receive('can?').and_return(false)
       allow(@mc).to receive(:root_url).and_return('/')
       allow(@mc).to receive('params').and_return({collection: 'druid:oo000oo0003'})
@@ -122,7 +122,7 @@ describe Hydrus::AccessControlsEnforcement do
 
   end
 
-  describe "enforce_create_permissions: create collections" do
+  describe 'enforce_create_permissions: create collections' do
 
     before(:each) do
       @mc = MockController.new()
@@ -132,14 +132,14 @@ describe Hydrus::AccessControlsEnforcement do
       allow(@mc).to receive('new_user_session_path').and_return('/users/signin')
     end
 
-    it "should do nothing if the user can do it" do
+    it 'should do nothing if the user can do it' do
       allow(@mc).to receive('can?').and_return(true)
       expect(@mc).not_to receive(:redirect_to)
       @mc.enforce_create_permissions
       expect(@mc.flash).to eq({})
     end
 
-    it "should redirect to home page if user cannot do it" do
+    it 'should redirect to home page if user cannot do it' do
       allow(@mc).to receive('can?').and_return(false)
       allow(@mc).to receive(:root_url).and_return('/')
       expect(@mc).to receive(:redirect_to).with(@exp_rp)
@@ -151,7 +151,7 @@ describe Hydrus::AccessControlsEnforcement do
 
   end
 
-  describe "apply_gated_discovery modifies the SOLR :fq parameters hash" do
+  describe 'apply_gated_discovery modifies the SOLR :fq parameters hash' do
 
     before(:each) do
       hmc = [
@@ -161,7 +161,7 @@ describe Hydrus::AccessControlsEnforcement do
       @has_model_clause = %Q<has_model_ssim:(#{hmc})>
     end
 
-    it "hash should include expected clauses for the normal use case" do
+    it 'hash should include expected clauses for the normal use case' do
       @mc = MockController.new()
       allow(@mc).to receive(:current_user).and_return('userFoo')
       apo_pids = %w(aaa bbb)
@@ -183,7 +183,7 @@ describe Hydrus::AccessControlsEnforcement do
       expect(solr_params).to eq(exp)
     end
 
-    it "hash should include a non-existent model if user is not logged in" do
+    it 'hash should include a non-existent model if user is not logged in' do
       @mc = MockController.new()
       allow(@mc).to receive(:current_user).and_return(nil)
       parts = {

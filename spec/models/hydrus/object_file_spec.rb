@@ -9,21 +9,21 @@ describe Hydrus::ObjectFile, type: :model do
     @hof.file = Tempfile.new(@nm)
   end
 
-  it "can exercise getters" do
+  it 'can exercise getters' do
     expect(@hof.size).to eq(0)
     expect(@hof.url).to match(/\/#{@nm}/)
     expect(@hof.current_path).to match(/\/#{@nm}/)
     expect(@hof.filename).to match(/\A#{@nm}/)
   end
 
-  describe "set_file_info()" do
+  describe 'set_file_info()' do
 
-    it "should make no changes if given nil" do
+    it 'should make no changes if given nil' do
       expect(@hof).not_to receive('label=')
       expect(@hof.set_file_info(nil)).to eq(false)
     end
 
-    it "should make no changes if passed new values equivalent to current values" do
+    it 'should make no changes if passed new values equivalent to current values' do
       # Set current values.
       lab = 'foobar'
       hid = false
@@ -38,7 +38,7 @@ describe Hydrus::ObjectFile, type: :model do
       expect(@hof.hide).to eq(hid)
     end
 
-    it "should make changes if passed new values that differ from current values" do
+    it 'should make changes if passed new values that differ from current values' do
       # Set current values.
       lab = 'foobar'
       hid = false

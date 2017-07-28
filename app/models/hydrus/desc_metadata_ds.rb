@@ -8,11 +8,11 @@ class Hydrus::DescMetadataDS < ActiveFedora::OmDatastream
   MODS_NS = 'http://www.loc.gov/mods/v3'
   MODS_SCHEMA = 'http://www.loc.gov/standards/mods/v3/mods-3-3.xsd'
   MODS_PARAMS = {
-    "version"            => "3.3",
-    "xmlns:xlink"        => "http://www.w3.org/1999/xlink",
-    "xmlns:xsi"          => "http://www.w3.org/2001/XMLSchema-instance",
-    "xmlns"              => MODS_NS,
-    "xsi:schemaLocation" => "#{MODS_NS} #{MODS_SCHEMA}",
+    'version'            => '3.3',
+    'xmlns:xlink'        => 'http://www.w3.org/1999/xlink',
+    'xmlns:xsi'          => 'http://www.w3.org/2001/XMLSchema-instance',
+    'xmlns'              => MODS_NS,
+    'xsi:schemaLocation' => "#{MODS_NS} #{MODS_SCHEMA}",
   }
 
   # OM terminology.
@@ -34,8 +34,8 @@ class Hydrus::DescMetadataDS < ActiveFedora::OmDatastream
     end
 
     t.originInfo IANS do
-      t.date_range_start path: 'dateCreated', attributes: { point: "start"}
-      t.date_range_end path: 'dateCreated', attributes: { point: "end"}
+      t.date_range_start path: 'dateCreated', attributes: { point: 'start'}
+      t.date_range_end path: 'dateCreated', attributes: { point: 'end'}
       t.dateCreated IA
       t.dateIssued IA
     end
@@ -44,9 +44,9 @@ class Hydrus::DescMetadataDS < ActiveFedora::OmDatastream
     t.genre
 
     t.abstract IA
-    t.preferred_citation path: 'note',  attributes: { type: "preferred citation" }
-    t.related_citation   path: 'note',  attributes: { type: "citation/reference" }
-    t.contact            path: 'note',  attributes: { type: "contact" }
+    t.preferred_citation path: 'note',  attributes: { type: 'preferred citation' }
+    t.related_citation   path: 'note',  attributes: { type: 'citation/reference' }
+    t.contact            path: 'note',  attributes: { type: 'contact' }
     t.subject IANS do
       t.topic IAF
     end
@@ -85,7 +85,7 @@ class Hydrus::DescMetadataDS < ActiveFedora::OmDatastream
     xml.name(type: name_type) {
       xml.namePart { xml.text(name) }
       xml.role {
-        xml.roleTerm(authority: "marcrelator", type: "text") { xml.text(role) }
+        xml.roleTerm(authority: 'marcrelator', type: 'text') { xml.text(role) }
       }
     }
   end
@@ -106,7 +106,7 @@ class Hydrus::DescMetadataDS < ActiveFedora::OmDatastream
   end
 
   define_template :related_citation do |xml|
-    xml.note(type: "citation/reference", displayLabel: 'Related Publication')
+    xml.note(type: 'citation/reference', displayLabel: 'Related Publication')
   end
 
   define_template :topic do |xml, topic|
@@ -124,7 +124,7 @@ class Hydrus::DescMetadataDS < ActiveFedora::OmDatastream
         xml.name {
           xml.namePart
           xml.role {
-            xml.roleTerm(authority: "marcrelator", type: "text")
+            xml.roleTerm(authority: 'marcrelator', type: 'text')
           }
         }
         xml.originInfo {
@@ -132,9 +132,9 @@ class Hydrus::DescMetadataDS < ActiveFedora::OmDatastream
         }
         xml.typeOfResource
         xml.abstract
-        xml.note(type: "preferred citation", displayLabel: 'Preferred Citation')
-        xml.note(type: "citation/reference", displayLabel: 'Related Publication')
-        xml.note(type: "contact",            displayLabel: 'Contact')
+        xml.note(type: 'preferred citation', displayLabel: 'Preferred Citation')
+        xml.note(type: 'citation/reference', displayLabel: 'Related Publication')
+        xml.note(type: 'contact',            displayLabel: 'Contact')
         xml.subject {
           xml.topic
         }

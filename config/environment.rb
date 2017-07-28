@@ -62,7 +62,7 @@ Dor.configure do
     app_workflow           'hydrusAssemblyWF'
     app_workflow_steps     %w(start-deposit submit approve start-assembly)
     ur_apo_druid           Settings.hydrus.ur_apo_druid
-    assembly_wf_xml        File.read(File.join(current_path, "assemblyWF_hydrus.xml"))
+    assembly_wf_xml        File.read(File.join(current_path, 'assemblyWF_hydrus.xml'))
     show_standard_login    Settings.hydrus.show_standard_login   # if true, the user has the option to login via a username/password as well as webauth; if false; only webauth is allowed
     exception_error_page   Settings.hydrus.exception_error_page  # if true, a generic error page will be shown with no exception messages; if false, standard Rails exceptions are shown directly to the user
     exception_error_panel  Settings.hydrus.exception_error_panel # if true and exception_error_page is also set to true, a collapsible exception error panel is shown on the friendly error page

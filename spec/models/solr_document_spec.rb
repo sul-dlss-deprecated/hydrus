@@ -14,7 +14,7 @@ describe SolrDocument, type: :model do
     end
   end
 
-  it "can exercise to_model(), stubbed" do
+  it 'can exercise to_model(), stubbed' do
     sdoc = SolrDocument.new
     id = 998877
     allow(sdoc).to receive(:id).and_return(id)
@@ -22,13 +22,13 @@ describe SolrDocument, type: :model do
     sdoc.to_model()
   end
 
-  it "can exercise simple getters" do
+  it 'can exercise simple getters' do
     h = {
       'main_title_ssm'                => 'foo title',
       'objectId_ssim' => 'foo:pid',
       'has_model_ssim'                 => 'info:fedora/afmodel:Hydrus_Item',
       'object_status_ssim'             => 'awaiting_approval',
-      "item_depositor_person_identifier_ssm" => 'foo_user',
+      'item_depositor_person_identifier_ssm' => 'foo_user',
     }
     sdoc = SolrDocument.new h
     expect(sdoc.main_title).to    eq(h['main_title_ssm'])
