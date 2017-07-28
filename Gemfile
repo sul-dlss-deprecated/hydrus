@@ -14,7 +14,7 @@ gem 'validates_email_format_of'
 gem 'whenever', '~> 0.9'
 
 # Stanford stuff
-gem 'assembly-objectfile', '1.5.0'
+gem 'assembly-objectfile', '~> 1.5'
 gem 'blacklight',   '~> 4.4'
 gem 'dor-services', '~> 5.24', require: false
 gem 'bagit', '~> 0.4'

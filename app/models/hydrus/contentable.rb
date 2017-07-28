@@ -53,7 +53,7 @@ module Hydrus::Contentable
       }
     end
     return Assembly::ContentMetadata.create_content_metadata(
-      :druid               => pid,
+      :druid               => dru,
       :objects             => objects,
       :add_file_attributes => true,
       :style               => conf.cm_style,
