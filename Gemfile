@@ -56,7 +56,6 @@ end
 
 group :production, :dortest do
   gem 'mysql2'
-  gem 'activerecord-mysql-adapter'
 end
 
 group :deployment do
