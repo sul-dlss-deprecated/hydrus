@@ -1,8 +1,10 @@
 # -*- encoding : utf-8 -*-
+# frozen_string_literal: true
+
 class CreateBookmarks < ActiveRecord::Migration
   def self.up
     create_table :bookmarks do |t|
-      t.integer :user_id, :null=>false
+      t.integer :user_id, null: false
       t.text :url
       t.string :document_id
       t.string :title

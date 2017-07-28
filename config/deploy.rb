@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 set :application, 'hydrus'
 set :repo_url, 'https://github.com/sul-dlss/hydrus.git'
 
@@ -50,8 +52,8 @@ namespace :deploy do
       # Here we can do anything such as:
       within release_path do
         with rails_env: fetch(:rails_env) do
-          rake "hydrus:cleanup_tmp"
-          rake "hydrus:index_all_workflows"
+          rake 'hydrus:cleanup_tmp'
+          rake 'hydrus:index_all_workflows'
         end
       end
     end

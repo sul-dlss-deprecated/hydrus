@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Hydrus::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
 
@@ -65,5 +67,4 @@ Hydrus::Application.configure do
   config.file_upload_path = 'uploads'
 
   config.eager_load = true
-
 end

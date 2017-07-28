@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Hydrus::GenericDS
 
   # TODO: Considering putting these methods in OM or ActiveFedora.
@@ -5,7 +7,7 @@ module Hydrus::GenericDS
   def add_hydrus_child_node(*args)
     node = add_child_node(*args)
     ng_xml_will_change!
-    return node
+    node
   end
 
   # Adds a node to a datastream, as a next sibling if possible.
@@ -17,7 +19,7 @@ module Hydrus::GenericDS
     node = sibling ? add_next_sibling_node(sibling, *args) :
                      add_child_node(ng_xml.root, *args)
     ng_xml_will_change!
-    return node
+    node
   end
 
   def remove_node(term, index)

@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 class CreateSuperusers < ActiveRecord::Migration
   def self.up
     create_table :superusers do |t|
-      t.integer :user_id, :null=>false
+      t.integer :user_id, null: false
     end
   end
 

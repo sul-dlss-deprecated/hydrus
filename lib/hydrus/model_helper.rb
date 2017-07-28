@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 module Hydrus
 
   module ModelHelper
 
     # Returns the object type as a string: item, collection, or adminPolicy.
     def object_type
-      return identityMetadata.objectType.first || self.class.to_s.demodulize.downcase
+      identityMetadata.objectType.first || self.class.to_s.demodulize.downcase
     end
 
     # Takes an array of OM terms.
@@ -18,14 +20,14 @@ module Hydrus
     end
 
     def to_bool(val)
-      return (val == "true" || val == true || val == 'yes')
+      (val == 'true' || val == true || val == 'yes')
     end
 
     # Takes a delimited string (eg, of keywords as entered on Item edit page).
     # Returns an array of elements obtained by parsing the string.
     # Allowed delimiters: comma, semi-colon, newlines.
     def self.parse_delimited(cds)
-      return cds.split(/[,;\n\r]/).each { |s| s.strip! }.select { |s| s.length > 0 }
+      cds.split(/[,;\n\r]/).each { |s| s.strip! }.select { |s| s.length > 0 }
     end
 
     # Takes two values.
@@ -34,7 +36,7 @@ module Hydrus
     def equal_when_stripped?(v1, v2)
       v1 = v1.strip if v1.respond_to?(:strip)
       v2 = v2.strip if v2.respond_to?(:strip)
-      return v1 == v2
+      v1 == v2
     end
 
   end

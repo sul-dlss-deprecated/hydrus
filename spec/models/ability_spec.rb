@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
-describe Ability, :type => :model do
-
+describe Ability, type: :model do
   before(:all) do
     @af = ActiveFedora::Base.new
   end
@@ -15,27 +16,25 @@ describe Ability, :type => :model do
     @dru  = 'some_pid'
   end
 
-  describe "get_fedora_object()" do
+  describe 'get_fedora_object()' do
     
-    it "if given non-String, just return it" do
+    it 'if given non-String, just return it' do
       obj = 1234
       expect(@ab.get_fedora_object(obj)).to eq(obj)
     end
 
-    it "if given String that is a valid pid, should return fedora object" do
+    it 'if given String that is a valid pid, should return fedora object' do
       allow(ActiveFedora::Base).to receive(:find).and_return(@af)
       expect(@ab.get_fedora_object(@dru)).to eq(@af)
     end
 
-    it "if given String that is not valid pid, should return nil" do
+    it 'if given String that is not valid pid, should return nil' do
       allow(ActiveFedora::Base).to receive(:find) { raise ActiveFedora::ObjectNotFoundError }
       expect(@ab.get_fedora_object(@dru)).to eq(nil)
     end
-
   end
 
-  describe "hydra_default_permissions" do
-
+  describe 'hydra_default_permissions' do
     before(:each) do
       allow(@ab).to receive(:get_fedora_object)
     end
@@ -144,7 +143,7 @@ describe Ability, :type => :model do
     end
 
     describe ':destroy' do
-      it "does not grant permission" do
+      it 'does not grant permission' do
         expect(@ab.can?(:destroy, @dru)).to eq(false)
         expect(@ab.can?(:destroy, @af)).to  eq(false)
       end

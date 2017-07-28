@@ -1,14 +1,16 @@
+# frozen_string_literal: true
+
 class ApplicationController < ActionController::Base
   include SulChrome::Controller
   include Blacklight::Controller
   include Hydra::Controller::ControllerBehavior
   include Hydrus::ModelHelper
 
-  check_authorization :unless => :devise_controller?
-  skip_authorization_check :only => [:contact]
+  check_authorization unless: :devise_controller?
+  skip_authorization_check only: [:contact]
 
   rescue_from CanCan::AccessDenied do |exception|
-    redirect_to root_url, :alert => exception.message
+    redirect_to root_url, alert: exception.message
   end
 
   helper_method :to_bool
@@ -19,26 +21,26 @@ class ApplicationController < ActionController::Base
   end
 
   def contact
-    @page_title="Contact Us"
-    @from=params[:from]
-    @subject=params[:subject]
-    @name=params[:name]
-    @email=params[:email]
-    @message=params[:message]
+    @page_title = 'Contact Us'
+    @from = params[:from]
+    @subject = params[:subject]
+    @name = params[:name]
+    @email = params[:email]
+    @message = params[:message]
 
     if request.post?
       unless @message.blank?
-        HydrusMailer.contact_message(:params=>params,:request=>request,:user=>current_user).deliver
-        flash[:notice]="Your message has been sent."
-        @message=nil
-        @name=nil
-        @email=nil
+        HydrusMailer.contact_message(params: params,request: request,user: current_user).deliver
+        flash[:notice] = 'Your message has been sent.'
+        @message = nil
+        @name = nil
+        @email = nil
         unless @from.blank?
           redirect_to(@from)
           return
         end
       else
-        flash.now[:error]="Please enter message text."
+        flash.now[:error] = 'Please enter message text.'
       end
     end
     render 'contact'
@@ -57,7 +59,7 @@ class ApplicationController < ActionController::Base
     else
       # Don't think this will ever be reached.
       # Currently, exceptions occur if the PID is not a Hydrus Item or Collection.
-      msg = "You do not have sufficient privileges to view the requested item."
+      msg = 'You do not have sufficient privileges to view the requested item.'
       flash[:error] = msg
       redirect_to root_url
     end
@@ -71,15 +73,15 @@ class ApplicationController < ActionController::Base
   protected
 
   def current_user
-    if request.env["WEBAUTH_USER"]
-      WebAuthUser.new(request.env["WEBAUTH_USER"], request.env)
+    if request.env['WEBAUTH_USER']
+      WebAuthUser.new(request.env['WEBAUTH_USER'], request.env)
     else
       super
     end
   end
 
   def authenticate_user! *args
-    unless request.env["WEBAUTH_USER"]
+    unless request.env['WEBAUTH_USER']
       super
     end
   end
@@ -91,7 +93,7 @@ class ApplicationController < ActionController::Base
     es = obj.errors.messages.map { |field, error|
       "#{field.to_s.humanize.capitalize} #{error.join(', ')}."
     }
-    return es.join("<br/>").html_safe
+    es.join('<br/>').html_safe
   end
 
   # Take a Collection/Item and a message.
@@ -105,7 +107,7 @@ class ApplicationController < ActionController::Base
     else
       flash[:error] = errors_for_display(obj)
     end
-    return v
+    v
   end
 
 end

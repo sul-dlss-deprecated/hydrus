@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Hydrus::Event
 
   attr_reader(:text, :who, :when, :type)

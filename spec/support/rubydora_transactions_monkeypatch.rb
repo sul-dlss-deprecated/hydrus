@@ -1,4 +1,6 @@
 
+# frozen_string_literal: true
+
 # TODO: incorporate this into Rubydora.
 # Relative to rollback() it Rubydora v0.5.0, it reduced
 # test suite runtime from 32 min down to about 8 min.
@@ -22,7 +24,7 @@ class Rubydora::Transaction
         # First, purge everything that was modified.
         aps.each do |p|
           begin
-            repository.purge_object(:pid => p)
+            repository.purge_object(pid: p)
             solr.delete_by_id p
             #run_hook(:after_rollback, :pid => p, :method => :ingest)
           rescue
@@ -32,11 +34,11 @@ class Rubydora::Transaction
         fixtures.each do |p, foxml|
           next unless fps.include?(p)
           begin
-            repository.ingest(:pid => p, :file => foxml)
+            repository.ingest(pid: p, file: foxml)
             $fixture_solr_cache ||= {}
             $fixture_solr_cache[p] ||= begin
               puts" indexing and caching #{p}"
-              ActiveFedora::Base.find(p, :cast => true).to_solr
+              ActiveFedora::Base.find(p, cast: true).to_solr
             end
             solr.add $fixture_solr_cache[p]
             #run_hook(:after_rollback, :pid => p, :method => :purge_object)
@@ -47,7 +49,7 @@ class Rubydora::Transaction
       # Wrap up.
       solr.commit
       repository.transactions_log.clear
-      return true
+      true
     end
 
     # Returns the pids of all objects modified in any way during the transaction.

@@ -1,4 +1,6 @@
 #!/usr/bin/env rake
+# frozen_string_literal: true
+
 # Add your own tasks in files placed in lib/tasks ending in .rake,
 # for example lib/tasks/capistrano.rake, and they will automatically be available to Rake.
 
@@ -10,4 +12,4 @@ Hydrus::Application.load_tasks
 task(:default).clear
 
 # and replace it with our own
-task :default => [:ci]
+task default: [:ci]

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # A mixin for roleMetadata stuff.
 
 module Hydrus::Responsible
@@ -6,7 +8,7 @@ module Hydrus::Responsible
   def persons_with_role(role)
     q     = "//role[@type='#{role}']/person/identifier"
     roles = roleMetadata.find_by_xpath(q).map { |node| node.text }
-    return Set.new(roles)
+    Set.new(roles)
   end
 
   # Returns a set of roles for the given SUNet ID.
@@ -15,7 +17,7 @@ module Hydrus::Responsible
     person_roles.each do |role, ids|
       roles << role if ids.include?(person_id)
     end
-    return roles
+    roles
   end
 
   # Returns of hash-of-sets containing role info.
@@ -29,7 +31,7 @@ module Hydrus::Responsible
   # need to invoke the same logic from roleMetadataDS. Probably
   # could use some class/module redesign here.
   def person_roles
-    return Hydrus::Responsible.person_roles(roleMetadata)
+    Hydrus::Responsible.person_roles(roleMetadata)
   end
 
   def self.person_roles(ds)
@@ -40,7 +42,7 @@ module Hydrus::Responsible
       h[role] ||= Set.new
       h[role] << id
     end
-    return h
+    h
   end
 
   # Takes a hash of roles and SUNETIDs: see pruned_role_info().
@@ -56,24 +58,24 @@ module Hydrus::Responsible
   #Takes a sunetid and an apo pid
   #use solr to quickly find the roles for a person under a given apo
   def self.roles_of_person person_id, apo_id
-    toret=[]
-    roles=role_labels(:collection_level)
-    h           = Hydrus::SolrQueryable.default_query_params
+    toret = []
+    roles = role_labels(:collection_level)
+    h = Hydrus::SolrQueryable.default_query_params
     #query by id
-    h[:q]="id:\"#{apo_id}\""
+    h[:q] = "id:\"#{apo_id}\""
     #this is lazy, should just be the fields from roles modified to match convention
-    h[:fl]='*'
+    h[:fl] = '*'
     resp, sdocs = Hydrus::SolrQueryable.issue_solr_query(h)
     #only 1 doc
-    doc=resp.docs.first
+    doc = resp.docs.first
     roles.keys.each do |key|
       #the solr field is based on the role name, but doesnt match it precisely
-      field_name=key.gsub('hydrus-','').gsub('-','_')+'_person_identifier_t'
+      field_name = key.gsub('hydrus-','').gsub('-','_') + '_person_identifier_t'
       if doc[field_name] && doc[field_name].include?(person_id)
         toret << roles[key][:label]
       end
     end
-    return toret
+    toret
   end
   
   # Takes a hash of roles and SUNETIDs:
@@ -111,7 +113,7 @@ module Hydrus::Responsible
         rsmalls.each { |r| roles.delete(r) } if roles.include?(rbig)
       end
     end
-    return proles
+    proles
   end
 
   # By default, returns a hash-of-hashes of roles and their UI labels and help texts.
@@ -129,40 +131,40 @@ module Hydrus::Responsible
     h = {
       # Item-level roles.
       'hydrus-item-depositor' => {
-        :label  => "Item Depositor",
-        :help   => "This is the original depositor of the item and can peform any action with the item",
-        :lesser => %w(hydrus-item-manager),
+        label: 'Item Depositor',
+        help: 'This is the original depositor of the item and can peform any action with the item',
+        lesser: %w(hydrus-item-manager),
       },
       'hydrus-item-manager' => {
-        :label  => "Item Manager",
-        :help   => "These users can edit the item",
-        :lesser => %w(),
+        label: 'Item Manager',
+        help: 'These users can edit the item',
+        lesser: %w(),
       },
       # Collection-level roles.
       'hydrus-collection-depositor' => {
-        :label  => "Owner",
-        :help   => "This user is the collection owner and can perform any action with the collection",
-        :lesser => %w(hydrus-collection-reviewer hydrus-collection-item-depositor hydrus-collection-viewer),
+        label: 'Owner',
+        help: 'This user is the collection owner and can perform any action with the collection',
+        lesser: %w(hydrus-collection-reviewer hydrus-collection-item-depositor hydrus-collection-viewer),
       },
       'hydrus-collection-manager' => {
-        :label  => "Manager",
-        :help   => "These users can edit collection details, and add and review items in the collection",
-        :lesser => %w(hydrus-collection-reviewer hydrus-collection-item-depositor hydrus-collection-viewer),
+        label: 'Manager',
+        help: 'These users can edit collection details, and add and review items in the collection',
+        lesser: %w(hydrus-collection-reviewer hydrus-collection-item-depositor hydrus-collection-viewer),
       },
       'hydrus-collection-reviewer' => {
-        :label  => "Reviewer",
-        :help   => "These users can review items in the collection, but not add new items",
-        :lesser => %w(hydrus-collection-viewer),
+        label: 'Reviewer',
+        help: 'These users can review items in the collection, but not add new items',
+        lesser: %w(hydrus-collection-viewer),
       },
       'hydrus-collection-item-depositor' => {
-        :label  => "Depositor",
-        :help   => "These users can add items to the collection, but cannot act as reviewers",
-        :lesser => %w(hydrus-collection-viewer),
+        label: 'Depositor',
+        help: 'These users can add items to the collection, but cannot act as reviewers',
+        lesser: %w(hydrus-collection-viewer),
       },
       'hydrus-collection-viewer' => {
-        :label  => "Viewer",
-        :help   => "These users can view items in the collection only",
-        :lesser => %w(),
+        label: 'Viewer',
+        help: 'These users can view items in the collection only',
+        lesser: %w(),
       },
     }
     # Remove item-level roles.
@@ -176,12 +178,12 @@ module Hydrus::Responsible
         opts.include?(:only_lesser) ? :lesser : nil
     h.keys.each { |role| h[role] = h[role][k] } if k
     # Return hash.
-    return h
+    h
   end
 
   def self.roles_for_ui(roles)
     labels = role_labels(:only_labels)
-    return roles.map { |r| labels[r] }
+    roles.map { |r| labels[r] }
   end
 
 end

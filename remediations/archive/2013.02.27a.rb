@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Hydrus::RemediationRunner
 
   # Used with these deployments:

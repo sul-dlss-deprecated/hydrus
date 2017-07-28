@@ -1,17 +1,18 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
-describe("Item versioning", :type => :request, :integration => true) do
-
+describe('Item versioning', type: :request, integration: true) do
   fixtures :users
 
   before :each do
     @hi = Hydrus::Item.find('druid:oo000oo0001')
-    @ok_notice = "Your changes have been saved."
-    @item_discard = ".icon-trash"
+    @ok_notice = 'Your changes have been saved.'
+    @item_discard = '.icon-trash'
     @buttons = {
-      :save                => 'save_nojs',
-      :publish_directly    => 'Publish',
-      :open_new_version    => 'Open new version',
+      save: 'save_nojs',
+      publish_directly: 'Publish',
+      open_new_version: 'Open new version',
     }
   end
 
@@ -27,15 +28,15 @@ describe("Item versioning", :type => :request, :integration => true) do
   after(:each) do
     p      = @hi.pid
     wf     = Dor::Config.hydrus.app_workflow
-    wf_xml = Hydrus.fixture_foxml(p, :is_wf => true)
+    wf_xml = Hydrus.fixture_foxml(p, is_wf: true)
     Dor::Config.workflow.client.delete_workflow('dor', p, 'versioningWF')
     Dor::Config.workflow.client.delete_workflow('dor', p, wf)
     Dor::Config.workflow.client.create_workflow('dor', p, wf, wf_xml)
   end
 
-  it "initial unpublished version of an item offers discard button" do
+  it 'initial unpublished version of an item offers discard button' do
     login_as('archivist1')
-    item=Hydrus::Item.find('druid:oo000oo0005')
+    item = Hydrus::Item.find('druid:oo000oo0005')
     should_visit_view_page(item)
     expect(page).to have_css(@item_discard) # we are unpublished and on v1, we do have a discard button
     expect(item.is_initial_version).to eq(true)
@@ -44,7 +45,7 @@ describe("Item versioning", :type => :request, :integration => true) do
   end
 
 
-  it "item view page should display version info" do
+  it 'item view page should display version info' do
     login_as('archivist1')
     should_visit_view_page(@hi)
     item_deets = find('dl.item-view')
@@ -52,14 +53,14 @@ describe("Item versioning", :type => :request, :integration => true) do
     expect(item_deets).to have_content(@hi.version_tag)
   end
 
-  it "if item is initial version, should not offer version info on the editing page" do
+  it 'if item is initial version, should not offer version info on the editing page' do
     expect(@hi.is_initial_version).to eq(true)
     login_as('archivist1')
     should_visit_edit_page(@hi)
     expect(page).not_to have_css('textarea#hydrus_item_version_description')
   end
 
-  it "should be able to open a new version" do
+  it 'should be able to open a new version' do
     pending
     # Before-assertions.
     expect(@hi.is_initial_version).to eq(true)
@@ -105,8 +106,8 @@ describe("Item versioning", :type => :request, :integration => true) do
 
     # Add the version info.
     should_visit_edit_page(@hi)
-    fill_in("hydrus_item_version_description", :with => 'Blah blah')
-    choose("Minor")
+    fill_in('hydrus_item_version_description', with: 'Blah blah')
+    choose('Minor')
     click_button(@buttons[:save])
 
     # Assertions after adding version description.
@@ -142,10 +143,9 @@ describe("Item versioning", :type => :request, :integration => true) do
 
     should_visit_view_page(@hi)
     expect(page).not_to have_css(@item_discard) # still no discard button even though we are not published, since we are on v2
-
   end
 
-  it "changing license should force user to select :major version" do
+  it 'changing license should force user to select :major version' do
     pending
     # Set the item's collection to license-varies mode.
     orig_lic = 'cc-by'
@@ -161,20 +161,19 @@ describe("Item versioning", :type => :request, :integration => true) do
     #   - change license
     #   - set version to minor
     should_visit_edit_page(@hi)
-    fill_in("hydrus_item_version_description", :with => 'Blah blah')
-    choose("Minor")
-    select("PDDL Public Domain Dedication and License", :from => 'hydrus_item_license')
+    fill_in('hydrus_item_version_description', with: 'Blah blah')
+    choose('Minor')
+    select('PDDL Public Domain Dedication and License', from: 'hydrus_item_license')
     # Try to save.
     #   - Should get a flash error message.
     #   - Item's license should be unchanged.
     click_button(@buttons[:save])
-    expect(find("#flash-notices div.alert")).to have_content("Version must be 'major'")
+    expect(find('#flash-notices div.alert')).to have_content("Version must be 'major'")
     @hi = Hydrus::Item.find(@hi.pid)
     expect(@hi.license).to eq(orig_lic)
   end
 
-  describe "editability of item visibility" do
-
+  describe 'editability of item visibility' do
     before(:each) do
       # Set the item's collection to visibility-varies mode.
       coll = @hi.collection
@@ -185,15 +184,14 @@ describe("Item versioning", :type => :request, :integration => true) do
       @vis_sel_css = 'select#' + @vis_css
     end
 
-    describe "initial version" do
-
-      it "collection in visibility-varies mode: offer visibility drop-down" do
+    describe 'initial version' do
+      it 'collection in visibility-varies mode: offer visibility drop-down' do
         login_as('archivist1')
         should_visit_edit_page(@hi)
         expect(page).to have_selector(@vis_sel_css)
       end
 
-      it "collection in visibility-fixed mode: do not offer visibility drop-down" do
+      it 'collection in visibility-fixed mode: do not offer visibility drop-down' do
         # Set the item's collection to visibility-varies mode.
         coll = @hi.collection
         coll.visibility_option = 'fixed'
@@ -203,12 +201,10 @@ describe("Item versioning", :type => :request, :integration => true) do
         should_visit_edit_page(@hi)
         expect(page).not_to have_selector(@vis_sel_css)
       end
-
     end
 
-    describe "subsequent version" do
-
-      it "prior visibility = world: do not offer drop-down" do
+    describe 'subsequent version' do
+      it 'prior visibility = world: do not offer drop-down' do
         pending
         # Set visibility to world.
         @hi.visibility = 'world'
@@ -222,7 +218,7 @@ describe("Item versioning", :type => :request, :integration => true) do
         expect(page).not_to have_selector(@vis_sel_css)
       end
 
-      it "prior visibility = stanford: offer drop-down" do
+      it 'prior visibility = stanford: offer drop-down' do
         pending
         # Set visibility to world.
         @hi.visibility = 'stanford'
@@ -235,26 +231,23 @@ describe("Item versioning", :type => :request, :integration => true) do
         should_visit_edit_page(@hi)
         expect(page).to have_selector(@vis_sel_css)
       end
-
     end
-
   end
 
-  describe "embargos" do
-
+  describe 'embargos' do
     before(:each) do
       @vs = {
-        :yes        => 'hydrus_item_embarg_visib_embargoed_yes',
-        :no         => 'hydrus_item_embarg_visib_embargoed_no',
-        :date       => 'hydrus_item_embarg_visib_date',
-        :date_sel   => 'input#hydrus_item_embarg_visib_date',
-        :flash      => "#flash-notices div.alert",
-        :err_range  => 'Embargo date must be in the range',
-        :err_format => 'Embargo date must be in yyyy-mm-dd',
+        yes: 'hydrus_item_embarg_visib_embargoed_yes',
+        no: 'hydrus_item_embarg_visib_embargoed_no',
+        date: 'hydrus_item_embarg_visib_date',
+        date_sel: 'input#hydrus_item_embarg_visib_date',
+        flash: '#flash-notices div.alert',
+        err_range: 'Embargo date must be in the range',
+        err_format: 'Embargo date must be in yyyy-mm-dd',
       }
     end
 
-    it "initial version never embargoed: should not be able to add an embargo" do
+    it 'initial version never embargoed: should not be able to add an embargo' do
       pending
       # Open new version.
       login_as('archivist1')
@@ -265,7 +258,7 @@ describe("Item versioning", :type => :request, :integration => true) do
       expect(page).not_to have_selector(@vs[:date])
     end
 
-    it "should be able to modify existing embargo (with valid dates) or even remove it" do
+    it 'should be able to modify existing embargo (with valid dates) or even remove it' do
       pending
       # Confirm initial status.
       expect(@hi.is_embargoed).to eq(false)
@@ -297,23 +290,23 @@ describe("Item versioning", :type => :request, :integration => true) do
       expect(page).to have_selector(@vs[:date_sel])
       # 1. Try to set an embargo too far into the future.
       choose(@vs[:yes])
-      fill_in(@vs[:date], :with => HyTime.date(pd + 1.year + 2.day))
+      fill_in(@vs[:date], with: HyTime.date(pd + 1.year + 2.day))
       click_button(@buttons[:save])
       expect(find(@vs[:flash])).to have_content(@vs[:err_range])
       # 2. Try to set an embargo with a malformed date.
       choose(@vs[:yes])
-      fill_in(@vs[:date], :with => 'foobar')
+      fill_in(@vs[:date], with: 'foobar')
       click_button(@buttons[:save])
       expect(find(@vs[:flash])).to have_content(@vs[:err_format])
       # 3a. Should be able to set a valid embargo date, farther into future.
       choose(@vs[:yes])
-      fill_in(@vs[:date], :with => HyTime.date(ed + 1.month))
+      fill_in(@vs[:date], with: HyTime.date(ed + 1.month))
       click_button(@buttons[:save])
       expect(find(@vs[:flash])).to have_content(@ok_notice)
       # 3b. Should be able to set a valid embargo date, closer to today.
       should_visit_edit_page(@hi)
       choose(@vs[:yes])
-      fill_in(@vs[:date], :with => HyTime.date(ed - 1.month))
+      fill_in(@vs[:date], with: HyTime.date(ed - 1.month))
       click_button(@buttons[:save])
       expect(find(@vs[:flash])).to have_content(@ok_notice)
       # Confirm that we set the embargo, and did not alter visibility.
@@ -331,7 +324,7 @@ describe("Item versioning", :type => :request, :integration => true) do
       expect(@hi.visibility).to eq(['world'])
     end
 
-    it "should not be able to modify embargo if the embargo window has passed" do
+    it 'should not be able to modify embargo if the embargo window has passed' do
       pending
       # Confirm initial status.
       expect(@hi.is_embargoed).to eq(false)
@@ -363,7 +356,5 @@ describe("Item versioning", :type => :request, :integration => true) do
       should_visit_edit_page(@hi)
       expect(page).not_to have_selector(@vs[:date_sel])
     end
-
   end
-
 end

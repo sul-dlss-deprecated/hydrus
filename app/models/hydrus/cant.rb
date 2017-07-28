@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Hydrus::Cant
 
   # A utility method that raises an exception with a useful message indicating
@@ -9,7 +11,7 @@ module Hydrus::Cant
   end
 
   def cannot_do_message(action)
-    return "Cannot perform action: " <<
+    'Cannot perform action: ' <<
           (self.class == Class ?
           "object_type=#{self}, action=#{action}, pid=none." :
           "object_type=#{hydrus_class_to_s}, action=#{action}, pid=#{pid}.")

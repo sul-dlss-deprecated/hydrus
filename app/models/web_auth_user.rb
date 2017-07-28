@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 class WebAuthUser
   attr_reader :groups
 
   def initialize(user_id, request_env = {})
-    raise "Cannot instantiate WebAuthUser without proper WEBAUTH_USER environment variable." if user_id.blank?
+    raise 'Cannot instantiate WebAuthUser without proper WEBAUTH_USER environment variable.' if user_id.blank?
     @id = user_id
-    @groups = request_env.fetch("WEBAUTH_LDAPPRIVGROUP", "").split("|")
+    @groups = request_env.fetch('WEBAUTH_LDAPPRIVGROUP', '').split('|')
   end
 
   def email
@@ -16,7 +18,7 @@ class WebAuthUser
   end
 
   def sunetid
-    return @id
+    @id
   end
 
   def is_webauth?
@@ -24,15 +26,15 @@ class WebAuthUser
   end
   
   def is_administrator?
-    groups.include? "dlss:hydrus-app-administrators"
+    groups.include? 'dlss:hydrus-app-administrators'
   end
   
   def is_collection_creator?
-    is_administrator? || groups.include?("dlss:hydrus-app-collection-creators")
+    is_administrator? || groups.include?('dlss:hydrus-app-collection-creators')
   end
   
   def is_global_viewer?
-    is_administrator? || groups.include?("dlss:hydrus-app-global-viewers")
+    is_administrator? || groups.include?('dlss:hydrus-app-global-viewers')
   end
 
 end

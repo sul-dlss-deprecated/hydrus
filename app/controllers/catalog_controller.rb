@@ -1,15 +1,17 @@
 # -*- encoding : utf-8 -*-
+# frozen_string_literal: true
+
 require 'blacklight/catalog'
 
 class CatalogController < ApplicationController
 
-  skip_authorization_check :only => [:home, :index]
+  skip_authorization_check only: [:home, :index]
 
   include Blacklight::Catalog
   include Hydrus::AccessControlsEnforcement
   # These before_filters apply the hydra access controls
-  before_filter :enforce_index_permissions, :only => :index
-  before_filter :enforce_viewing_context_for_show_requests, :only=>:show
+  before_filter :enforce_index_permissions, only: :index
+  before_filter :enforce_viewing_context_for_show_requests, only: :show
   # This applies appropriate access controls to all solr queries
   CatalogController.solr_search_params_logic << :add_access_controls_to_solr_params
   # This filters out objects that you want to exclude from search results, like FileAssets
@@ -19,8 +21,8 @@ class CatalogController < ApplicationController
 
   configure_blacklight do |config|
     config.default_solr_params = {
-      :qt => 'search',
-      :rows => 10
+      qt: 'search',
+      rows: 10
     }
 
     # solr field configuration for search results/index views
@@ -65,19 +67,19 @@ class CatalogController < ApplicationController
 
     # solr fields to be displayed in the index (search results) view
     #   The ordering of the field names is the order of the display
-    config.add_index_field 'id', :label => 'Identifier:'
-    config.add_index_field 'timestamp', :label => 'Timestamp:'
-    config.add_index_field 'text', :label => 'Text:'
-    config.add_index_field 'pub_date', :label => 'Pub Date:'
-    config.add_index_field 'format', :label => 'Format:'
+    config.add_index_field 'id', label: 'Identifier:'
+    config.add_index_field 'timestamp', label: 'Timestamp:'
+    config.add_index_field 'text', label: 'Text:'
+    config.add_index_field 'pub_date', label: 'Pub Date:'
+    config.add_index_field 'format', label: 'Format:'
 
     # solr fields to be displayed in the show (single result) view
     #   The ordering of the field names is the order of the display
-    config.add_show_field 'id', :label => 'Identifier:'
-    config.add_show_field 'timestamp', :label => 'Timestamp:'
-    config.add_show_field 'text', :label => 'Text:'
-    config.add_show_field 'pub_date', :label => 'Pub Date:'
-    config.add_show_field 'format', :label => 'Format:'
+    config.add_show_field 'id', label: 'Identifier:'
+    config.add_show_field 'timestamp', label: 'Timestamp:'
+    config.add_show_field 'text', label: 'Text:'
+    config.add_show_field 'pub_date', label: 'Pub Date:'
+    config.add_show_field 'format', label: 'Format:'
 
     # "fielded" search configuration. Used by pulldown among other places.
     # For supported keys in hash, see rdoc for Blacklight::SearchFields
@@ -103,7 +105,7 @@ class CatalogController < ApplicationController
     # label in pulldown is followed by the name of the SOLR field to sort by and
     # whether the sort is ascending or descending (it must be asc or desc
     # except in the relevancy case).
-    config.add_sort_field 'score desc', :label => 'relevance'
+    config.add_sort_field 'score desc', label: 'relevance'
     # config.add_sort_field 'title_sort asc', :label => 'year'
     # config.add_sort_field 'author_sort asc, title_sort asc', :label => 'author'
     # config.add_sort_field 'title_sort asc', :label => 'title'
@@ -150,7 +152,7 @@ class CatalogController < ApplicationController
 
   def enforce_index_permissions
     if (current_user.nil? and has_search_parameters?)
-      msg  = "You must sign in before searching."
+      msg = 'You must sign in before searching.'
       flash[:error] = msg
       redirect_to(new_user_session_path)
     end

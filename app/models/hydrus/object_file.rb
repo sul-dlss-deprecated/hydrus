@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Hydrus::ObjectFile < ActiveRecord::Base
 
   include Hydrus::ModelHelper
@@ -25,7 +27,7 @@ class Hydrus::ObjectFile < ActiveRecord::Base
   end
 
   def filename
-    file.file.nil? ? "" : file.file.identifier # don't throw exception if file is blank so the page doesn't show an exception
+    file.file.nil? ? '' : file.file.identifier # don't throw exception if file is blank so the page doesn't show an exception
   end
 
   def is_dupe?(new_filename)
@@ -38,7 +40,7 @@ class Hydrus::ObjectFile < ActiveRecord::Base
 
   # any given object can only have one file with the same name; if the user uploads a new file with the same name as an existing file, the dupe will be removed
   def remove_dupes
-    dupes.each {|dupe| dupe.delete}
+    dupes.each { |dupe| dupe.delete }
   end
 
   # A convenience uber-setter to simplify controller code.
@@ -57,15 +59,15 @@ class Hydrus::ObjectFile < ActiveRecord::Base
     # Set new values.
     self.label = lab
     self.hide  = hid
-    return true
+    true
   end
 
   # A getter that parallels set_file_info(), but using symbols as keys.
   # Written mainly to facilitate testing.
   def get_file_info
-    return {
-      :label => label,
-      :hide  => hide,
+    {
+      label: label,
+      hide: hide,
     }
   end
 

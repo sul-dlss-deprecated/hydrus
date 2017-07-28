@@ -1,10 +1,11 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
-describe Hydrus::HydrusPropertiesDS, :type => :model do
-
+describe Hydrus::HydrusPropertiesDS, type: :model do
   before(:all) do
-    @ds_start="<hydrusProperties>"
-    @ds_end="</hydrusProperties>"
+    @ds_start = '<hydrusProperties>'
+    @ds_end = '</hydrusProperties>'
     xml = <<-EOF
       #{@ds_start}
         <usersAcceptedTermsOfDeposit>
@@ -34,33 +35,33 @@ describe Hydrus::HydrusPropertiesDS, :type => :model do
     @dsdoc = Hydrus::HydrusPropertiesDS.from_xml(xml)
   end
 
-  it "should get expected values from OM terminology" do
-    expect(@dsdoc.term_values(:users_accepted_terms_of_deposit, :user)).to eq(["cardinal", "crimson", "cornellian", "mhamster"])
-    expect(@dsdoc.term_values(:users_accepted_terms_of_deposit, :user, :date_accepted)).to eq(["2011-09-02T01:10:32Z", "2012-05-02T12:10:44Z", "2011-10-02T02:13:31Z", "2011-10-02T02:13:31Z"])
-    expect(@dsdoc.term_values(:embargo_terms)).to eq(["1 year"])
-    expect(@dsdoc.term_values(:embargo_option)).to eq(["varies"])
-    expect(@dsdoc.term_values(:license_option)).to eq(["fixed"])
-    expect(@dsdoc.term_values(:visibility_option)).to eq(["fixed"])
-    expect(@dsdoc.term_values(:requires_human_approval)).to eq(["no"])
-    expect(@dsdoc.term_values(:accepted_terms_of_deposit)).to eq(["false"])
-    expect(@dsdoc.term_values(:item_type)).to eq(["dataset"])
-    expect(@dsdoc.term_values(:object_status)).to eq(["draft"])
-    expect(@dsdoc.term_values(:disapproval_reason)).to eq(["Idiota"])
-    expect(@dsdoc.term_values(:submitted_for_publish_time)).to eq(["2011-09-03T00:00:00Z"])
-    expect(@dsdoc.term_values(:initial_submitted_for_publish_time)).to eq(["2011-09-03T00:00:11Z"])
-    expect(@dsdoc.term_values(:initial_publish_time)).to eq(["2011-09-08T02:00:11Z"])
-    expect(@dsdoc.term_values(:submit_for_approval_time)).to eq(["2011-08-03T00:00:00Z"])
-    expect(@dsdoc.term_values(:last_modify_time)).to eq(["2011-09-02T00:00:00Z"])
-    expect(@dsdoc.term_values(:version_started_time)).to eq(["2011-09-01T00:00:00Z"])
-    expect(@dsdoc.term_values(:object_version)).to eq(["1999.01.01a"])
+  it 'should get expected values from OM terminology' do
+    expect(@dsdoc.term_values(:users_accepted_terms_of_deposit, :user)).to eq(['cardinal', 'crimson', 'cornellian', 'mhamster'])
+    expect(@dsdoc.term_values(:users_accepted_terms_of_deposit, :user, :date_accepted)).to eq(['2011-09-02T01:10:32Z', '2012-05-02T12:10:44Z', '2011-10-02T02:13:31Z', '2011-10-02T02:13:31Z'])
+    expect(@dsdoc.term_values(:embargo_terms)).to eq(['1 year'])
+    expect(@dsdoc.term_values(:embargo_option)).to eq(['varies'])
+    expect(@dsdoc.term_values(:license_option)).to eq(['fixed'])
+    expect(@dsdoc.term_values(:visibility_option)).to eq(['fixed'])
+    expect(@dsdoc.term_values(:requires_human_approval)).to eq(['no'])
+    expect(@dsdoc.term_values(:accepted_terms_of_deposit)).to eq(['false'])
+    expect(@dsdoc.term_values(:item_type)).to eq(['dataset'])
+    expect(@dsdoc.term_values(:object_status)).to eq(['draft'])
+    expect(@dsdoc.term_values(:disapproval_reason)).to eq(['Idiota'])
+    expect(@dsdoc.term_values(:submitted_for_publish_time)).to eq(['2011-09-03T00:00:00Z'])
+    expect(@dsdoc.term_values(:initial_submitted_for_publish_time)).to eq(['2011-09-03T00:00:11Z'])
+    expect(@dsdoc.term_values(:initial_publish_time)).to eq(['2011-09-08T02:00:11Z'])
+    expect(@dsdoc.term_values(:submit_for_approval_time)).to eq(['2011-08-03T00:00:00Z'])
+    expect(@dsdoc.term_values(:last_modify_time)).to eq(['2011-09-02T00:00:00Z'])
+    expect(@dsdoc.term_values(:version_started_time)).to eq(['2011-09-01T00:00:00Z'])
+    expect(@dsdoc.term_values(:object_version)).to eq(['1999.01.01a'])
   end
 
-  it "the blank template should match our expectations" do
+  it 'the blank template should match our expectations' do
     dsdoc = Hydrus::HydrusPropertiesDS.new(nil, nil)
     expect(dsdoc.ng_xml).to be_equivalent_to '<hydrusProperties></hydrusProperties>'
   end
 
-  it "accept_terms_of_deposit() should add new user nodes or modify date, as appropriate" do
+  it 'accept_terms_of_deposit() should add new user nodes or modify date, as appropriate' do
     @exp_xml = noko_doc <<-EOF
       <hydrusProperties>
         <usersAcceptedTermsOfDeposit>
@@ -75,5 +76,4 @@ describe Hydrus::HydrusPropertiesDS, :type => :model do
     @dsdoc.accept_terms_of_deposit('foo','10-02-2012 00:00:33') # First user, new date.
     expect(@dsdoc.ng_xml).to be_equivalent_to @exp_xml
   end
-
 end

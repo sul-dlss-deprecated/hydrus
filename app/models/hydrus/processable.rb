@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 # A mixin for workflow stuff.
 
 module Hydrus::Processable
 
   WFS  = Dor::WorkflowService
-  HWF  = Dor::Config.hydrus.app_workflow  # 'hydrusAssemblyWF'
+  HWF  = Dor::Config.hydrus.app_workflow # 'hydrusAssemblyWF'
   REPO = 'dor'
 
   # Takes the name of a step in the Hydrus workflow.
@@ -64,7 +66,7 @@ module Hydrus::Processable
   # Returns value of Dor::Config.hydrus.start_assembly_wf.
   # Wrapped in method to simplify testing stubs.
   def should_start_assembly_wf
-    return Dor::Config.hydrus.start_assembly_wf
+    Dor::Config.hydrus.start_assembly_wf
   end
 
   # Returns true if the most recent version of the object has been accessioned.
@@ -99,7 +101,7 @@ module Hydrus::Processable
     return false if WFS.get_active_lifecycle(REPO, p, 'submitted')
 
     # Accessioned and archived.
-    return true
+    true
   end
 
   # Returns a string -- the datetime when the object achived the published
@@ -111,12 +113,12 @@ module Hydrus::Processable
     else
       pt = WFS.get_lifecycle(REPO, pid, 'published')
     end
-    return HyTime.datetime(pt)
+    HyTime.datetime(pt)
   end
 
   # Returns true if we are running in development or test mode.
   def should_treat_as_accessioned
-    return %w(development test).include?(Rails.env)
+    %w(development test).include?(Rails.env)
   end
 
 end

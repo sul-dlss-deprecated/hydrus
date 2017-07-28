@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'dor-services'
 
 Dor.registered_classes['adminPolicy'] = Hydrus::AdminPolicyObject

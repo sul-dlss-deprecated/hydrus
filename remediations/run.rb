@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Runs remediation even if the object doesn't need it according to its object_version.
 force = !! ARGV.delete('--force')
 
@@ -9,6 +11,6 @@ no_versioning = !! ARGV.delete('--no-versioning')
 
 # Invoke the runner.
 Hydrus::RemediationRunner.new(
-  :force         => force,
-  :no_save       => no_save,
-  :no_versioning => no_versioning).run
+  force: force,
+  no_save: no_save,
+  no_versioning: no_versioning).run

@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
-describe(HydrusSolrController, :type => :feature, :integration => true) do
+describe(HydrusSolrController, type: :feature, integration: true) do
   describe '#delete_from_index' do
     it 'removes items from solr' do
       expect(Dor::SearchService.solr).to receive(:delete_by_id).with('x')

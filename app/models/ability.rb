@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Ability
 
   include CanCan::Ability
@@ -87,7 +89,7 @@ class Ability
     when ActiveFedora::Base
       obj
     when String
-      ActiveFedora::Base.find(obj, :cast => true)
+      ActiveFedora::Base.find(obj, cast: true)
     else
       Rails.logger.warn "Returning #{obj} from get_fedora_object"
       obj

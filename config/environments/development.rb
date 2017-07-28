@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Hydrus::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
 
@@ -29,5 +31,4 @@ Hydrus::Application.configure do
   config.assets.debug = true
 
   config.eager_load = false
-
 end

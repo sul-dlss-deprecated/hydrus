@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Hydrus::GenericObjectStuff
   extend ActiveSupport::Concern
   included do
@@ -15,32 +17,32 @@ module Hydrus::GenericObjectStuff
   extend  Hydrus::Delegatable
 
   has_metadata(
-    :name => "rightsMetadata",
-    :type => Hydrus::RightsMetadataDS,
-    :label => 'Rights Metadata',
-    :control_group => "M")
+    name: 'rightsMetadata',
+    type: Hydrus::RightsMetadataDS,
+    label: 'Rights Metadata',
+    control_group: 'M')
 
   has_metadata(
-    :name => "descMetadata",
-    :type => Hydrus::DescMetadataDS,
-    :label => 'Descriptive Metadata',
-    :control_group => 'M')
+    name: 'descMetadata',
+    type: Hydrus::DescMetadataDS,
+    label: 'Descriptive Metadata',
+    control_group: 'M')
 
   has_metadata(
-    :name => "hydrusProperties",
-    :type => Hydrus::HydrusPropertiesDS,
-    :label => 'Hydrus Properties',
-    :control_group => 'X')
+    name: 'hydrusProperties',
+    type: Hydrus::HydrusPropertiesDS,
+    label: 'Hydrus Properties',
+    control_group: 'X')
 
   setup_delegations(
     # [:METHOD_NAME,              :uniq, :at... ]
-    "descMetadata" => [
+    'descMetadata' => [
       [:title,                    true,  :main_title ],
       [:abstract,                 true   ],
       [:related_item_title,       false, :relatedItem, :titleInfo, :title],
       [:contact,                  true   ],
     ],
-    "hydrusProperties" => [
+    'hydrusProperties' => [
       [:disapproval_reason,                 true   ],
       [:object_status,                      true   ],
       [:submitted_for_publish_time,         true   ],
@@ -51,7 +53,7 @@ module Hydrus::GenericObjectStuff
       [:item_type,                          true   ],
       [:object_version,                     true   ],
     ],
-    "rightsMetadata" => [
+    'rightsMetadata' => [
       [:rmd_embargo_release_date, true,  :read_access, :machine, :embargo_release_date],
       [:terms_of_use,             true,  ],
     ],
@@ -76,7 +78,7 @@ module Hydrus::GenericObjectStuff
   # Since we need a custom setter, let's define the getter too
   # (rather than using delegation).
   def related_item_url
-    return descMetadata.relatedItem.location.url
+    descMetadata.relatedItem.location.url
   end
 
   # Takes an argument, typically an OM-ready hash. For example:
@@ -98,13 +100,13 @@ module Hydrus::GenericObjectStuff
   def with_protocol(uri)
     return uri if uri.blank?
     return uri if uri =~ /\A (http|https|ftp|sftp):\/\/ /x
-    return "http://" + uri
+    'http://' + uri
   end
   
   # Returns string representation of the class, minus the Hydrus:: prefix.
   # For example: Hydrus::Collection -> 'Collection'.
   def hydrus_class_to_s
-    return self.class.to_s.sub(/\AHydrus::/, '')
+    self.class.to_s.sub(/\AHydrus::/, '')
   end
   
   # After collections are published, further edits to the object are allowed.
@@ -132,7 +134,7 @@ module Hydrus::GenericObjectStuff
   #   "Item modified: title, abstract, license"
   def editing_event_message(fields)
     fs = fields.map { |e| e.to_s }.join(', ')
-    return "#{hydrus_class_to_s()} modified: #{fs}"
+    "#{hydrus_class_to_s()} modified: #{fs}"
   end
 
   def is_item?

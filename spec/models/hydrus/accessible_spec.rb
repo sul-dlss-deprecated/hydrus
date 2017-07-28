@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 # A mock class to use while testing the mixin.
@@ -14,8 +16,7 @@ class MockAccessible
 
 end
 
-describe Hydrus::Accessible, :type => :model do
-
+describe Hydrus::Accessible, type: :model do
   before(:each) do
     # XML snippets for various <access> nodes.
     @emb_date = 99999999
@@ -39,18 +40,18 @@ describe Hydrus::Accessible, :type => :model do
     rm_end    = '<use><human/><machine/></use></rightsMetadata>'
     # Assemble Nokogiri XML for embargoMetadata and rightsMetadata.
     @xml = {
-      :em_initial => noko_doc([em_start, em_blank, em_end].join),
-      :em_world   => noko_doc([em_start, em_world, em_end].join),
-      :em_stanf   => noko_doc([em_start, em_stanf, em_end].join),
-      :em_embargo => noko_doc([em_start, embe,     em_end].join),
-      :rm_initial => noko_doc([rm_start, di_world, rd_blank, rm_end].join),
-      :rm_world   => noko_doc([rm_start, di_world, rd_world, rm_end].join),
-      :rm_stanf   => noko_doc([rm_start, di_world, rd_stanf, rm_end].join),
-      :rm_embargo => noko_doc([rm_start, di_world, rd_embr,  rm_end].join),
+      em_initial: noko_doc([em_start, em_blank, em_end].join),
+      em_world: noko_doc([em_start, em_world, em_end].join),
+      em_stanf: noko_doc([em_start, em_stanf, em_end].join),
+      em_embargo: noko_doc([em_start, embe,     em_end].join),
+      rm_initial: noko_doc([rm_start, di_world, rd_blank, rm_end].join),
+      rm_world: noko_doc([rm_start, di_world, rd_world, rm_end].join),
+      rm_stanf: noko_doc([rm_start, di_world, rd_stanf, rm_end].join),
+      rm_embargo: noko_doc([rm_start, di_world, rd_embr, rm_end].join),
     }
   end
 
-  it "has_world_read_node() and world_read_nodes()" do
+  it 'has_world_read_node() and world_read_nodes()' do
     # World readable: yes.
     obj = MockAccessible.new(@xml[:em_initial], @xml[:rm_initial])
     expect(obj.embargoMetadata.has_world_read_node).to eq(false)
@@ -63,7 +64,7 @@ describe Hydrus::Accessible, :type => :model do
     end
   end
 
-  it "group_read_nodes()" do
+  it 'group_read_nodes()' do
     obj = MockAccessible.new(@xml[:em_stanf], @xml[:rm_stanf])
     [obj.embargoMetadata, obj.rightsMetadata].each do |ds|
       ns = ds.group_read_nodes
@@ -72,7 +73,7 @@ describe Hydrus::Accessible, :type => :model do
     end
   end
 
-  it "remove_world_read_access()" do
+  it 'remove_world_read_access()' do
     obj = MockAccessible.new(@xml[:em_world], @xml[:rm_world])
     [obj.embargoMetadata, obj.rightsMetadata].each do |ds|
       expect(ds.has_world_read_node).to eq(true)
@@ -81,7 +82,7 @@ describe Hydrus::Accessible, :type => :model do
     end
   end
 
-  it "remove_group_read_nodes() and add_read_group()" do
+  it 'remove_group_read_nodes() and add_read_group()' do
     obj = MockAccessible.new(@xml[:em_stanf], @xml[:rm_stanf])
     [obj.embargoMetadata, obj.rightsMetadata].each do |ds|
       expect(ds.group_read_nodes.size).to eq(1)
@@ -95,7 +96,7 @@ describe Hydrus::Accessible, :type => :model do
     end
   end
 
-  it "make_world_readable()" do
+  it 'make_world_readable()' do
     obj = MockAccessible.new(@xml[:em_stanf], @xml[:rm_stanf])
     [obj.embargoMetadata, obj.rightsMetadata].each do |ds|
       expect(ds.group_read_nodes.size).to eq(1)
@@ -106,7 +107,7 @@ describe Hydrus::Accessible, :type => :model do
     end
   end
 
-  it "remove_embargo_date()" do
+  it 'remove_embargo_date()' do
     obj = MockAccessible.new(@xml[:em_embargo], @xml[:rm_embargo])
     [obj.embargoMetadata, obj.rightsMetadata].each do |ds|
       expect(ds.ng_xml.to_s).to match(/#{@emb_date}/)
@@ -115,7 +116,7 @@ describe Hydrus::Accessible, :type => :model do
     end
   end
 
-  it "update_access_blocks(world)" do
+  it 'update_access_blocks(world)' do
     obj = MockAccessible.new(@xml[:em_stanf], @xml[:rm_stanf])
     [obj.embargoMetadata, obj.rightsMetadata].each do |ds|
       expect(ds.has_world_read_node).to eq(false)
@@ -126,7 +127,7 @@ describe Hydrus::Accessible, :type => :model do
     end
   end
 
-  it "update_access_blocks(stanford)" do
+  it 'update_access_blocks(stanford)' do
     obj = MockAccessible.new(@xml[:em_world], @xml[:rm_world])
     [obj.embargoMetadata, obj.rightsMetadata].each do |ds|
       expect(ds.has_world_read_node).to eq(true)
@@ -137,7 +138,7 @@ describe Hydrus::Accessible, :type => :model do
     end
   end
 
-  it "initialize_release_access_node()" do
+  it 'initialize_release_access_node()' do
     obj0 = MockAccessible.new(@xml[:em_initial], @xml[:rm_initial])
     obj1 = MockAccessible.new(@xml[:em_initial], @xml[:rm_initial])
     obj2 = MockAccessible.new(@xml[:em_stanf],   @xml[:rm_stanf])
@@ -151,5 +152,4 @@ describe Hydrus::Accessible, :type => :model do
     ds1.initialize_release_access_node()
     expect(ds1.ng_xml).to be_equivalent_to(obj0.embargoMetadata.ng_xml)
   end
-
 end
