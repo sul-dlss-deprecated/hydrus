@@ -57,13 +57,13 @@ class Hydrus::ObjectFile < ActiveRecord::Base
     # Set new values.
     self.label = lab
     self.hide  = hid
-    return true
+    true
   end
 
   # A getter that parallels set_file_info(), but using symbols as keys.
   # Written mainly to facilitate testing.
   def get_file_info
-    return {
+    {
       :label => label,
       :hide  => hide,
     }

@@ -11,7 +11,7 @@ module Hydrus
   # The second usage might disappear if we are able to improve Rubydora's
   # transaction features to support fixture restoration.
   def self.fixture_pids
-    return [
+    [
       # Ur-APO and the workflow objects.
       'druid:oo000oo0000',
       'druid:oo000oo0099',  # hydrusAssemblyWF
@@ -40,7 +40,7 @@ module Hydrus
   def self.all_fixture_foxml
     pids = fixture_pids()
     xmls = pids.map { |p| fixture_foxml(p) }
-    return Hash[ pids.zip(xmls) ]
+    Hash[ pids.zip(xmls) ]
   end
 
   # Takes a PID for a Hydrus fixtures, and an optional hash with the :is_wf
@@ -52,7 +52,7 @@ module Hydrus
     w = opts[:is_wf] ? 'workflow_xml/' : ''
     e = opts[:is_wf] ? ''              : '.foxml'
     f = File.join('spec/fixtures', w, p + e + '.xml')
-    return IO.read(f)
+    IO.read(f)
   end
 
   # To use this profiling method, wrap the code you want to profile like this,

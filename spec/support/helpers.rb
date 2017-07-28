@@ -52,7 +52,7 @@ def should_visit_new_item_page(coll)
   visit new_hydrus_item_path(:collection => coll)
   expect(current_path).to match(rgx)
   druid = rgx.match(current_path)[1]
-  return druid
+  druid
 end
 
 def confirm_rights_metadata_in_apo(obj)
@@ -144,7 +144,7 @@ def config_mint_ids(prev = nil)
   else
     suri.mint_ids = prev
   end
-  return prev
+  prev
 end
 
 # Creates a new collection through the UI.
@@ -183,7 +183,7 @@ def create_new_collection(opts = {})
   expect(current_path).to eq("/collections/#{druid}")
   expect(find('div.alert')).to have_content("Your changes have been saved")
   # Get the collection from Fedora and return it.
-  return Hydrus::Collection.find(druid)
+  Hydrus::Collection.find(druid)
 end
 
 # Creates a new item through the UI.
@@ -240,7 +240,7 @@ def create_new_item(opts = {})
   hi.save
   # Get the item from Fedora and return it.
   should_visit_view_page(hi)
-  return Hydrus::Item.find(druid)
+  Hydrus::Item.find(druid)
 end
 
 # Takes the file_url of an Item's uploaded file.

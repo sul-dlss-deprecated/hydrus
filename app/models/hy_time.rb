@@ -42,7 +42,7 @@ module HyTime
 
   # Returns DateTime object in the application's default timezone.
   def self.now()
-    return DateTime.now.in_time_zone(DEFAULT_TIMEZONE).to_datetime
+    DateTime.now.in_time_zone(DEFAULT_TIMEZONE).to_datetime
   end
 
   # Takes a String or DateTime-ish object, along with an options hash.

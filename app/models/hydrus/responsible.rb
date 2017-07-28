@@ -6,7 +6,7 @@ module Hydrus::Responsible
   def persons_with_role(role)
     q     = "//role[@type='#{role}']/person/identifier"
     roles = roleMetadata.find_by_xpath(q).map { |node| node.text }
-    return Set.new(roles)
+    Set.new(roles)
   end
 
   # Returns a set of roles for the given SUNet ID.
@@ -15,7 +15,7 @@ module Hydrus::Responsible
     person_roles.each do |role, ids|
       roles << role if ids.include?(person_id)
     end
-    return roles
+    roles
   end
 
   # Returns of hash-of-sets containing role info.
@@ -29,7 +29,7 @@ module Hydrus::Responsible
   # need to invoke the same logic from roleMetadataDS. Probably
   # could use some class/module redesign here.
   def person_roles
-    return Hydrus::Responsible.person_roles(roleMetadata)
+    Hydrus::Responsible.person_roles(roleMetadata)
   end
 
   def self.person_roles(ds)
@@ -40,7 +40,7 @@ module Hydrus::Responsible
       h[role] ||= Set.new
       h[role] << id
     end
-    return h
+    h
   end
 
   # Takes a hash of roles and SUNETIDs: see pruned_role_info().
@@ -73,7 +73,7 @@ module Hydrus::Responsible
         toret << roles[key][:label]
       end
     end
-    return toret
+    toret
   end
   
   # Takes a hash of roles and SUNETIDs:
@@ -111,7 +111,7 @@ module Hydrus::Responsible
         rsmalls.each { |r| roles.delete(r) } if roles.include?(rbig)
       end
     end
-    return proles
+    proles
   end
 
   # By default, returns a hash-of-hashes of roles and their UI labels and help texts.
@@ -176,12 +176,12 @@ module Hydrus::Responsible
         opts.include?(:only_lesser) ? :lesser : nil
     h.keys.each { |role| h[role] = h[role][k] } if k
     # Return hash.
-    return h
+    h
   end
 
   def self.roles_for_ui(roles)
     labels = role_labels(:only_labels)
-    return roles.map { |r| labels[r] }
+    roles.map { |r| labels[r] }
   end
 
 end

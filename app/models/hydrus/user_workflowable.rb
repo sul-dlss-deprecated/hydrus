@@ -2,7 +2,7 @@ module Hydrus::UserWorkflowable
 
   # Returns true if the object is in the draft state.
   def is_draft
-    return object_status == 'draft'
+    object_status == 'draft'
   end
   
   # Returns true if the object status is any flavor of published. This status
@@ -11,7 +11,7 @@ module Hydrus::UserWorkflowable
   # publish_time focuses on the time the object achieves the published
   # milestone in common accessioning.
   def is_published
-    return object_status[0..8] == 'published'
+    object_status[0..8] == 'published'
   end
   
   # Returns true if all required fields are filled in.
@@ -21,7 +21,7 @@ module Hydrus::UserWorkflowable
     # If the intersection of the errors keys and the required fields
     # is empty, the required fields are complete and the validation errors
     # are coming from other problems.
-    return (errors.keys & self.class::REQUIRED_FIELDS).size == 0
+    (errors.keys & self.class::REQUIRED_FIELDS).size == 0
   end
 
   # Compares the current object to its old self in fedora.
@@ -35,7 +35,7 @@ module Hydrus::UserWorkflowable
       next if fs.all? { |f| equal_when_stripped? old.send(f), self.send(f) }
       cfs.push(k)
     end
-    return cfs
+    cfs
   end
   
   # Returns the version of the object as it exists in fedora.

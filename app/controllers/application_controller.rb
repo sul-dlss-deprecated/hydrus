@@ -91,7 +91,7 @@ class ApplicationController < ActionController::Base
     es = obj.errors.messages.map { |field, error|
       "#{field.to_s.humanize.capitalize} #{error.join(', ')}."
     }
-    return es.join("<br/>").html_safe
+    es.join("<br/>").html_safe
   end
 
   # Take a Collection/Item and a message.
@@ -105,7 +105,7 @@ class ApplicationController < ActionController::Base
     else
       flash[:error] = errors_for_display(obj)
     end
-    return v
+    v
   end
 
 end

@@ -13,7 +13,7 @@ class MockResponsible
   end
 
   def rmd_xml
-    return <<-EOF
+    <<-EOF
       <roleMetadata>
         <role type="hydrus-collection-manager">
            <person>

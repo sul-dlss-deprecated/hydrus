@@ -49,13 +49,13 @@ class Hydrus::RoleMetadataDS < ActiveFedora::OmDatastream
   # Takes a SUNET ID and a role.
   # Adds the person under the given role.
   def add_person_with_role(sunetid, role_type)
-    return insert_person(get_or_add_role_node(role_type), sunetid)
+    insert_person(get_or_add_role_node(role_type), sunetid)
   end
 
   # Takes a workgroup name and a role.
   # Adds the group under the given role.
   def add_group_with_role(workgroup, role_type)
-    return insert_group(get_or_add_role_node(role_type), workgroup)
+    insert_group(get_or_add_role_node(role_type), workgroup)
   end
 
   # Takes a role name.
@@ -63,7 +63,7 @@ class Hydrus::RoleMetadataDS < ActiveFedora::OmDatastream
   # Creates the node if it does not exist already.
   def get_or_add_role_node(role_type)
     nodes = find_by_xpath("/roleMetadata/role[@type='#{role_type}']")
-    return nodes.size == 0 ? insert_role(role_type) : nodes.first
+    nodes.size == 0 ? insert_role(role_type) : nodes.first
   end
 
   def add_empty_person_to_role(role_type)
@@ -124,7 +124,7 @@ class Hydrus::RoleMetadataDS < ActiveFedora::OmDatastream
       end
     end
     # Return the solr doc.
-    return solr_doc
+    solr_doc
   end
 
 end

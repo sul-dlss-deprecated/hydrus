@@ -40,29 +40,29 @@ class SolrDocument
   end
 
   def main_title
-    return get('main_title_ssm')
+    get('main_title_ssm')
   end
 
   def pid
-    return get('objectId_ssim')
+    get('objectId_ssim')
   end
 
   def object_type
-    return get('has_model_ssim').gsub(/.+:Hydrus_/, '').downcase
+    get('has_model_ssim').gsub(/.+:Hydrus_/, '').downcase
   end
 
   def object_status
     typ    = object_type.to_sym
     status = get('object_status_ssim')
-    return Hydrus::GenericObject.status_label(typ, status)
+    Hydrus::GenericObject.status_label(typ, status)
   end
 
   def depositor
-    return get("#{object_type}_depositor_person_identifier_ssm")
+    get("#{object_type}_depositor_person_identifier_ssm")
   end
 
   def path
-    return "/#{object_type}s/#{pid}"
+    "/#{object_type}s/#{pid}"
   end
 
 end

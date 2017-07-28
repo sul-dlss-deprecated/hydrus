@@ -11,11 +11,11 @@ class User < ActiveRecord::Base
   # Blacklight uses #to_s on your user class to get
   # a user-displayable login/identifier for the account.
   def to_s
-    return sunetid
+    sunetid
   end
 
   def sunetid
-    return email.split('@').first
+    email.split('@').first
   end
 
   def is_webauth?

@@ -73,7 +73,7 @@ class Hydrus::RemediationRunner
       m = File.basename(r, '.rb').gsub(/\./, '_')
       methods << 'remediation_' + m
     end
-    return methods.sort
+    methods.sort
   end
 
   # Called by a remediation method, which always receives one of the
@@ -106,7 +106,7 @@ class Hydrus::RemediationRunner
     msg = "running in --force mode" if force
     msg = "is needed" if remed_version > object_version
     log.info(msg)
-    return msg != 'skipping'
+    msg != 'skipping'
   end
 
   # Some code to wrap version-handling and save-handling around the

@@ -16,7 +16,7 @@ module Hydrus::Contentable
         files_missing+=1
       end 
     end
-    return files_missing
+    files_missing
   end
     
   # create a DRUID tree folder for the project, providing its a valid druid (needed to some unit tests that don't use valid druids will work)  
@@ -52,7 +52,7 @@ module Hydrus::Contentable
         objects << aof
       }
     end
-    return Assembly::ContentMetadata.create_content_metadata(
+    Assembly::ContentMetadata.create_content_metadata(
       :druid               => pid,
       :objects             => objects,
       :add_file_attributes => true,
@@ -63,7 +63,7 @@ module Hydrus::Contentable
   end
 
   def parent_directory
-    return File.expand_path(File.join(base_file_directory, '..'))
+    File.expand_path(File.join(base_file_directory, '..'))
   end
 
   def base_file_directory

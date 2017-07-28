@@ -3,7 +3,7 @@
 
 def parse_do_opts(args, *ks)
   opts = ks.map { |k| args.delete("--#{k}") }
-  return Hash[ ks.zip(opts) ]
+  Hash[ ks.zip(opts) ]
 end
 
 def create_test_collection(*args)
@@ -25,7 +25,7 @@ def create_test_collection(*args)
   hc.open if do_opts[:open]
   hc.save
   puts "Created collection: user=#{user} apo_pid=#{hc.apo.pid} pid=#{hc.pid}"
-  return Hydrus::Collection.find(hc.pid)
+  Hydrus::Collection.find(hc.pid)
 end
 
 def create_test_item(*args)
@@ -61,7 +61,7 @@ def create_test_item(*args)
   # Save and return a refreshed object.
   hi.save
   puts "Created item: user=#{user} pid=#{hi.pid}"
-  return Hydrus::Item.find(hi.pid)
+  Hydrus::Item.find(hi.pid)
 end
 
 def create_test_batch(*args)

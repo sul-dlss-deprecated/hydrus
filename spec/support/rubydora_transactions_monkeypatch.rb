@@ -47,7 +47,7 @@ class Rubydora::Transaction
       # Wrap up.
       solr.commit
       repository.transactions_log.clear
-      return true
+      true
     end
 
     # Returns the pids of all objects modified in any way during the transaction.

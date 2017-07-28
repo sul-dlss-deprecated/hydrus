@@ -6,7 +6,7 @@ describe ApplicationHelper, :type => :helper do
 
   # fake out some methods to make our tests pass
   def can?(action,item)
-    return true
+    true
   end
 
   it "should show correct view_item_text" do
