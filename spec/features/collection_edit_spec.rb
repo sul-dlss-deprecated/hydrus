@@ -27,7 +27,6 @@ describe('Collection edit', type: :request, integration: true) do
   end
 
   it 'can edit Collection descMetadata content' do
-
     new_abstract  = '  foobarfubb '
     orig_abstract = @hc.abstract
     new_contact   = 'ted@gonzo.com'
@@ -113,7 +112,6 @@ describe('Collection edit', type: :request, integration: true) do
     expect(page).not_to have_css("##{new_url_field}")
     expect(page).not_to have_css("##{new_label_field}")
     expect(page).not_to have_css("##{new_delete_link}")
-
   end
 
   it 'can edit license content' do
@@ -199,7 +197,6 @@ describe('Collection edit', type: :request, integration: true) do
   end
 
   context 'modifying persons and roles' do
-
     def check_role_management_div(role_info)
       # Takes a role info hash, like that returned by apo_person_roles().
       # Confirms that the role-management section of the current page
@@ -281,13 +278,10 @@ describe('Collection edit', type: :request, integration: true) do
       expect(@hc.apo_person_roles).to eq(role_info_stripped)
       confirm_rights_metadata_in_apo(@hc)
     end
-
   end
 
   describe 'emails' do
-
     describe 'send_publish_email_notification()' do
-
       before(:each) do
         @coll = Hydrus::Collection.new
       end
@@ -316,11 +310,9 @@ describe('Collection edit', type: :request, integration: true) do
         e = expect {@coll.send_publish_email_notification(false)}
         e.to change { ActionMailer::Base.deliveries.count }.by(0)
       end
-
     end
 
     describe 'when updating a collection' do
-
       before(:each) do
         @prev_mint_ids = config_mint_ids()
       end
@@ -396,12 +388,10 @@ describe('Collection edit', type: :request, integration: true) do
         fill_in 'hydrus_collection_apo_person_roles[hydrus-collection-item-depositor]', with: 'jdoe'
         expect {click_button('save_nojs')}.to change { ActionMailer::Base.deliveries.count }.by(0)
       end
-
     end
   end
 
   describe 'role-protection' do
-
     before(:each) do
       @prev_mint_ids = config_mint_ids()
     end
@@ -437,7 +427,6 @@ describe('Collection edit', type: :request, integration: true) do
       should_visit_view_page(hc)
       expect(page).not_to have_button(@buttons[:close])
     end
-
   end
 
   describe 'license options' do

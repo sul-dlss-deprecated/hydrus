@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe(Hydrus::AdminPolicyObject, type: :feature, integration: true) do
-
   it 'should be able to create an APO object, whose APO is the Ur-APO' do
     # Create an APO.
     allow(Dor::SuriService).to receive(:mint_id).and_return 'druid:oo000oo1234'
@@ -20,7 +19,5 @@ describe(Hydrus::AdminPolicyObject, type: :feature, integration: true) do
 
     expect(apo.defaultObjectRights).to_not be_new
     expect(apo.relationships(:references_agreement)).to include 'info:fedora/druid:mc322hh4254'
-
   end
-
 end

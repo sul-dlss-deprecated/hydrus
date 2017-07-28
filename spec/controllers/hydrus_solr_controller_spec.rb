@@ -4,7 +4,6 @@ require 'spec_helper'
 
 describe HydrusSolrController, type: :controller do
   describe 'reindex()' do
-
     it 'should respond with 404 if object is not in Fedora' do
       bogus_pid = 'druid:BLAH'
       allow(ActiveFedora::Base).to receive(:find).and_return(nil)
@@ -34,7 +33,5 @@ describe HydrusSolrController, type: :controller do
       get(:reindex, id: 'druid:oo000oo9999')
       expect(response.status).to eq(200)
     end
-
   end
-
 end

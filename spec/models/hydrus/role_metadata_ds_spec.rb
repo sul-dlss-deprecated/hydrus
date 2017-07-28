@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe Hydrus::RoleMetadataDS, type: :model do
-
   before(:all) do
     @rmd_start = '<roleMetadata>'
     @rmd_end   = '</roleMetadata>'
@@ -14,7 +13,6 @@ describe Hydrus::RoleMetadataDS, type: :model do
   end
 
   context 'APO role metadata' do
-
     before(:each) do
       xml = <<-EOF
         #{@rmd_start}
@@ -55,11 +53,9 @@ describe Hydrus::RoleMetadataDS, type: :model do
       expect(@rmdoc.term_values(:collection_viewer, :person, :identifier)).to eq(%w())
       expect(@rmdoc.term_values(:role, :type)).to eq(%w(hydrus-collection-manager hydrus-collection-depositor hydrus-collection-reviewer))
     end
-
   end
 
   context 'ITEM object role metadata' do
-
     before(:each) do
       xml = <<-EOF
         #{@rmd_start}
@@ -94,11 +90,9 @@ describe Hydrus::RoleMetadataDS, type: :model do
       rmdoc.insert_person(role_node, '')
       expect(rmdoc.ng_xml).to be_equivalent_to exp_xml
     end
-
   end
 
   context 'inserting nodes' do
-
     before(:all) do
       @ep = '<person><identifier type="sunetid"/><name/></person>'
     end
@@ -120,7 +114,6 @@ describe Hydrus::RoleMetadataDS, type: :model do
     end
 
     context 'add_person_with_role()' do
-
       before(:each) do
         xml = <<-EOF
           #{@rmd_start}
@@ -180,11 +173,9 @@ describe Hydrus::RoleMetadataDS, type: :model do
         @rmdoc.add_empty_person_to_role('hydrus-collection-manager')
         expect(@rmdoc.ng_xml).to be_equivalent_to exp_xml
       end
-
     end
 
     context 'add_group_with_role()' do
-
       before(:each) do
         xml = <<-EOF
           #{@rmd_start}
@@ -204,10 +195,7 @@ describe Hydrus::RoleMetadataDS, type: :model do
         @rmdoc.add_group_with_role('dlss:developers', 'dor-apo-manager')
         expect(@rmdoc.ng_xml).to be_equivalent_to exp_xml
       end
-
     end
-
-
   end
 
   it 'the blank template should match our expectations' do
@@ -219,5 +207,4 @@ describe Hydrus::RoleMetadataDS, type: :model do
     rmdoc = Hydrus::RoleMetadataDS.new(nil, nil)
     expect(rmdoc.ng_xml).to be_equivalent_to exp_xml
   end
-
 end

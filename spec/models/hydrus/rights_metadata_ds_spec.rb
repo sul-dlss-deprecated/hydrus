@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe Hydrus::RightsMetadataDS, type: :model do
-
   before(:each) do
     xml = %Q(
       <rightsMetadata>
@@ -49,5 +48,4 @@ describe Hydrus::RightsMetadataDS, type: :model do
     expect(tou['type']).to eq('useAndReproduction')
     expect(@doc.use.machine).to eq([])
   end
-
 end

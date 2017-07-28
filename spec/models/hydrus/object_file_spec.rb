@@ -2,7 +2,6 @@ require 'spec_helper'
 require 'rake'
 
 describe Hydrus::ObjectFile, type: :model do
-
   before(:each) do
     @nm = 'mock_uploaded_file_'
     @hof = Hydrus::ObjectFile.new
@@ -17,7 +16,6 @@ describe Hydrus::ObjectFile, type: :model do
   end
 
   describe 'set_file_info()' do
-
     it 'should make no changes if given nil' do
       expect(@hof).not_to receive('label=')
       expect(@hof.set_file_info(nil)).to eq(false)
@@ -53,7 +51,5 @@ describe Hydrus::ObjectFile, type: :model do
       expect(@hof.label).to eq('bar')
       expect(@hof.hide).to eq(true)
     end
-
   end
-
 end

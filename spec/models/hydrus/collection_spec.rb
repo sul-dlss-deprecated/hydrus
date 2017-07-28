@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe Hydrus::Collection, type: :model do
-
   before(:each) do
     @hc = Hydrus::Collection.new
   end
@@ -23,7 +22,6 @@ describe Hydrus::Collection, type: :model do
   end
 
   describe 'open() and close()' do
-
     # More substantive testing is done at integration level.
 
     before(:each) do
@@ -75,11 +73,9 @@ describe Hydrus::Collection, type: :model do
         expect { @hc.send(meth) }.to raise_error
       end
     end
-
   end
 
   describe 'valid?()' do
-
     before(:each) do
       @apo = Hydrus::AdminPolicyObject.new
       allow(@hc).to receive(:apo).and_return(@apo)
@@ -123,7 +119,6 @@ describe Hydrus::Collection, type: :model do
       allow(@apo).to receive(:'valid?').and_return(true)
       expect(@hc.valid?).to eq(true)
     end
-
   end
 
   it 'is_destroyable() should return true only if Collection is unpublished with 0 Items' do
@@ -163,7 +158,6 @@ describe Hydrus::Collection, type: :model do
   end
 
   describe 'is_openable()' do
-
     it 'collection already open: should return false no matter what' do
       allow(@hc).to receive('validate!').and_return(true)
       allow(@hc).to receive(:object_status).and_return('published_open')
@@ -177,7 +171,6 @@ describe Hydrus::Collection, type: :model do
         expect(@hc.is_openable).to eq(exp)
       end
     end
-
   end
 
   it 'is_closeable() should return the value of is_open()' do
@@ -188,7 +181,6 @@ describe Hydrus::Collection, type: :model do
   end
 
   describe 'is_assemblable()' do
-
     it 'closed collection: should always return false' do
       allow(@hc).to receive(:is_open).and_return(false)
       expect(@hc).not_to receive('validate!')
@@ -202,7 +194,6 @@ describe Hydrus::Collection, type: :model do
         expect(@hc.is_assemblable).to eq(exp)
       end
     end
-
   end
 
   describe 'invite email' do
@@ -321,7 +312,6 @@ describe Hydrus::Collection, type: :model do
       allow(@hc).to receive(:apo).and_return(apo)
       @hc.apo_persons_with_role(role)
     end
-
   end
 
   it 'can exercise tracked_fields()' do
@@ -342,13 +332,11 @@ describe Hydrus::Collection, type: :model do
   end
 
   describe 'getters and setters' do
-
     before(:each) do
       @arg = 'foobar'
     end
 
     describe 'embargo/license conditional getters and setters' do
-
       before(:each) do
         @combos = [
           %w(embargo fixed embargo_terms),
@@ -394,11 +382,9 @@ describe Hydrus::Collection, type: :model do
           @hc.send("#{typ}_#{val}=", exp)
         end
       end
-
     end
 
     describe 'visibility_option_value getter and setter' do
-
       it 'can exercise the getter' do
         allow(@hc).to receive(:visibility_option).and_return('fixed')
         allow(@hc).to receive(:visibility).and_return(['world'])
@@ -410,11 +396,9 @@ describe Hydrus::Collection, type: :model do
         expect(@hc).to receive('visibility=').with('world')
         @hc.visibility_option_value = 'everyone'
       end
-
     end
 
     describe 'visibility getter and setter' do
-
       it "getter should return ['world'] if item is world visible" do
         allow(@hc).to receive_message_chain(:rightsMetadata, :has_world_read_node).and_return(true)
         expect(@hc.visibility).to eq(['world'])
@@ -433,20 +417,16 @@ describe Hydrus::Collection, type: :model do
         expect(@hc).to receive('visibility=').with('world')
         @hc.visibility_option_value = 'everyone'
       end
-
     end
-
   end
 
   describe 'dashboard stats and related methods' do
-
     before(:all) do
       @HC       = Hydrus::Collection
       @user_foo = 'user_foo'
     end
 
     describe 'dashboard_stats()' do
-
       it 'should return empty hash if there are no APOs involving the user' do
         expect(@HC).to receive(:apos_involving_user).and_return([])
         expect(@HC).not_to receive(:collections_of_apos)
@@ -467,7 +447,6 @@ describe Hydrus::Collection, type: :model do
         expect(@HC).to receive(:item_counts_of_collections).and_return(exp)
         expect(@HC.dashboard_stats(@user_foo)).to eq(exp)
       end
-
     end
     describe 'dashboard_hash' do
       it 'should send 1 solr query if there are 99 apos' do
@@ -557,7 +536,5 @@ describe Hydrus::Collection, type: :model do
       allow(@HC).to receive(:get_facet_counts_from_response).and_return(fcs)
       expect(@HC.item_counts_of_collections(coll_pids)).to eq(exp)
     end
-
   end
-
 end

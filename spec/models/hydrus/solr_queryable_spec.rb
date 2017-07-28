@@ -6,7 +6,6 @@ class MockSolrQueryable
 end
 
 describe Hydrus::SolrQueryable, type: :model do
-
   before(:each) do
     @msq  = MockSolrQueryable.new
     @hsq  = Hydrus::SolrQueryable
@@ -25,7 +24,6 @@ describe Hydrus::SolrQueryable, type: :model do
   end
 
   describe 'add_involved_user_filter() modifies the SOLR :fq parameters' do
-
     it 'should do nothing if there is no user' do
       h = {}
       @hsq.add_involved_user_filter(h, nil)
@@ -43,11 +41,9 @@ describe Hydrus::SolrQueryable, type: :model do
         expect(h[:fq]).to eq(exp)
       end
     end
-
   end
 
   describe 'add_governed_by_filter() modifies the SOLR :fq parameters' do
-
     it 'should do nothing if no druids are supplied' do
       h = {}
       @hsq.add_governed_by_filter(h, [])
@@ -67,11 +63,9 @@ describe Hydrus::SolrQueryable, type: :model do
         expect(h[:fq]).to eq(exp)
       end
     end
-
   end
 
   describe 'add_model_filter() modifies the SOLR :fq parameters' do
-
     it 'should do nothing if no models are supplied' do
       h = {}
       @hsq.add_model_filter(h)
@@ -91,7 +85,6 @@ describe Hydrus::SolrQueryable, type: :model do
         expect(h[:fq]).to eq(exp)
       end
     end
-
   end
 
   it 'squery_*() methods should return hashes of SOLR query parameters with expected keys' do
@@ -117,7 +110,6 @@ describe Hydrus::SolrQueryable, type: :model do
 
   # Note: These are integration tests.
   describe('all_hydrus_objects()', integration: true) do
-
     before(:each) do
       @all_objects = [
         {pid: 'druid:oo000oo0001', object_type: 'Item',              object_version: '2013.02.26a'},
@@ -153,7 +145,6 @@ describe Hydrus::SolrQueryable, type: :model do
       exp = @all_objects.reject { |h| h[:object_type] == 'AdminPolicyObject' }
       expect(got).to eq(exp)
     end
-
   end
   describe 'queries should send their parameters via post' do
     it 'should not fail if the query is very long' do
@@ -166,5 +157,4 @@ describe Hydrus::SolrQueryable, type: :model do
       expect{resp, sdocs = @msq.issue_solr_query(h)}.not_to raise_error
     end
   end
-
 end

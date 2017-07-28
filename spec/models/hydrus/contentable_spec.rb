@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe Hydrus::Contentable, type: :model do
-
   before(:each) do
     @go       = Hydrus::GenericObject.new
     @pid      = 'oo000oo9999'
@@ -20,7 +19,6 @@ describe Hydrus::Contentable, type: :model do
   end
 
   describe 'create_content_metadata_xml()' do
-
     it 'non-item should get blank XML node' do
       exp = ''
       allow(@go).to receive('is_item?').and_return(false)
@@ -48,7 +46,5 @@ describe Hydrus::Contentable, type: :model do
       allow(@go).to receive(:files).and_return(mock_files)
       expect(@go.create_content_metadata_xml).to be_equivalent_to(exp)
     end
-
   end
-
 end

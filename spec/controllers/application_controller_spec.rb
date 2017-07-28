@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe ApplicationController, type: :controller do
-
   it 'should have the correct layout name' do
     expect(controller.layout_name).to eq('sul_chrome/application')
   end
@@ -33,5 +32,4 @@ describe ApplicationController, type: :controller do
     expect(controller.send(:try_to_save, obj, 'blah')).to eq(false)
     expect(flash[:error]).to eq(msg)
   end
-
 end

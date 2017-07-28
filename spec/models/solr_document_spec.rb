@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe SolrDocument, type: :model do
-
   describe '#route_key' do
     it 'should be hydrus_collection for a Dor::Collection' do
       sdoc = SolrDocument.new has_model_ssim: 'info:fedora/afmodel:Dor_Collection'
@@ -38,5 +37,4 @@ describe SolrDocument, type: :model do
     expect(sdoc.depositor).to     eq('foo_user')
     expect(sdoc.path).to          eq('/items/foo:pid')
   end
-
 end

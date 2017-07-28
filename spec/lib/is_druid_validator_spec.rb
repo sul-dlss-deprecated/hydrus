@@ -1,9 +1,7 @@
 require 'spec_helper'
 
 describe IsDruidValidator do
-
   describe 'validate_each()' do
-
     before(:each) do
       @validator = IsDruidValidator.new({attributes: {pid: true}})
       @mock_record = double('mock_record', errors: {})
@@ -19,7 +17,5 @@ describe IsDruidValidator do
       expect(@mock_record).to receive('errors')
       @validator.validate_each(@mock_record, 'druid', 'foobar')
     end
-
   end
-
 end

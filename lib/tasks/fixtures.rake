@@ -1,5 +1,4 @@
 namespace :hydrus do
-
   # See lib/hydrus.rb for fixture PIDs.
   require 'hydrus'
   FIXTURE_PIDS = Hydrus.fixture_pids
@@ -21,7 +20,6 @@ namespace :hydrus do
 
   desc 'load hydrus fixtures'
   task loadfix: ['db:fixtures:load'] do
-
     fixture_loader = ActiveFedora::FixtureLoader.new('spec/fixtures')
     FIXTURE_PIDS.each { |pid|
       fixture_loader.reload(pid)
@@ -220,5 +218,4 @@ namespace :hydrus do
       puts 'Aborting'
     end
   end
-
 end

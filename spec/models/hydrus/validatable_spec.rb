@@ -11,9 +11,7 @@ class MockValidatable
 end
 
 describe Hydrus::Validatable, type: :model do
-
   describe 'should_validate()' do
-
     it 'should not call is_draft() when @should_validate is true' do
       obj = MockValidatable.new(true)
       expect(obj).not_to receive(:is_draft)
@@ -27,11 +25,9 @@ describe Hydrus::Validatable, type: :model do
         expect(obj.should_validate).to eq(!exp)
       end
     end
-
   end
 
   describe 'validate!' do
-
     it 'should return the value of valid?, but cached, so always equivalent to the first setting, including when @should_validate is false' do
       obj = MockValidatable.new
       first_value=false
@@ -56,7 +52,5 @@ describe Hydrus::Validatable, type: :model do
       obj.validate!
       expect(obj.instance_variable_get('@should_validate')).to eq(exp)
     end
-
   end
-
 end

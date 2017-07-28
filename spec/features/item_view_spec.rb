@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe('Item view', type: :request, integration: true) do
-
   fixtures :users
 
   before :each do
@@ -95,5 +94,4 @@ describe('Item view', type: :request, integration: true) do
     allow(@hi).to receive(:purl_url).and_return('https://purl-test.stanford.edu/pf182cd5962.xml')
     expect(@hi.purl_page_ready?).to eq(true)
   end
-
 end

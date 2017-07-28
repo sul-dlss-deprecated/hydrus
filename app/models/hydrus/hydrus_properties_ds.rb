@@ -47,7 +47,6 @@ class Hydrus::HydrusPropertiesDS < ActiveFedora::OmDatastream
     t.submitted_for_publish_time         path: 'submittedForPublishTime'
     t.initial_submitted_for_publish_time path: 'initialSubmittedForPublishTime'
     t.initial_publish_time               path: 'initialPublishTime'
-
   end
 
   define_template :user do |xml, username, datetime_accepted|

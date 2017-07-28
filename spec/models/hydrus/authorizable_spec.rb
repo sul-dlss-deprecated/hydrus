@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe Hydrus::Authorizable, type: :model do
-
   before(:each) do
     @auth = Hydrus::Authorizable
     @s0   = Set.new
@@ -40,7 +39,6 @@ describe Hydrus::Authorizable, type: :model do
   end
 
   describe 'administrators' do
-
     it 'is_administrator() should work as expected' do
       allow(@auth).to receive(:administrators).and_return(@s1)
       expect(@auth.is_administrator(@ua)).to eq(true)
@@ -59,7 +57,6 @@ describe Hydrus::Authorizable, type: :model do
       allow(@auth).to receive(:is_administrator).and_return(false)
       expect(@auth.can_act_as_administrator(nil)).to eq(true)
     end
-
   end
 
   describe 'User model attributes' do
@@ -90,7 +87,6 @@ describe Hydrus::Authorizable, type: :model do
   end
 
   describe 'can_do_it()' do
-
     it 'should return false if given nil object' do
       expect(@auth.can_do_it('foo', 'bar', nil)).to eq(false)
     end
@@ -107,7 +103,6 @@ describe Hydrus::Authorizable, type: :model do
         end
       end
     end
-
   end
 
   it 'can_*_object() should return whatever can_do_it() returns' do
@@ -119,7 +114,6 @@ describe Hydrus::Authorizable, type: :model do
   end
 
   describe 'can_read_collection()' do
-
     it 'should return true directly if the user has power to create collections' do
       expect(@hc).not_to receive(:roles_of_person)
       allow(@auth).to receive(:is_global_viewer).and_return(true)
@@ -135,11 +129,9 @@ describe Hydrus::Authorizable, type: :model do
       allow(@hc).to receive(:roles_of_person).and_return(@s0)
       expect(@auth.can_read_collection(@uf, @hc)).to eq(false)
     end
-
   end
 
   describe 'can_read_item()' do
-
     it 'should return true directly if the user has power to create collections' do
       expect(@hi).not_to receive(:roles_of_person)
       allow(@auth).to receive(:is_global_viewer).and_return(true)
@@ -161,11 +153,9 @@ describe Hydrus::Authorizable, type: :model do
       allow(@hi).to receive_message_chain(:apo, :roles_of_person).and_return(@s0)
       expect(@auth.can_read_item(@uf, @hi)).to eq(false)
     end
-
   end
 
   describe 'can_create_items_in()' do
-
     it 'should return false if given a nil object' do
       expect(@hi).not_to receive(:is_administrator)
       expect(@auth.can_create_items_in(@ua, nil)).to eq(false)
@@ -187,11 +177,9 @@ describe Hydrus::Authorizable, type: :model do
       allow(@hc).to receive(:roles_of_person).and_return(@s2)
       expect(@auth.can_create_items_in(@ua, @hc)).to eq(false)
     end
-
   end
 
   describe 'can_edit_collection()' do
-
     it 'should return true directly if the user is an administrator' do
       expect(@hc).not_to receive(:roles_of_person)
       allow(@auth).to receive(:is_administrator).and_return(true)
@@ -208,11 +196,9 @@ describe Hydrus::Authorizable, type: :model do
       allow(@hc).to receive(:roles_of_person).and_return(@s2)
       expect(@auth.can_edit_collection(@ua, @hc)).to eq(false)
     end
-
   end
 
   describe 'can_edit_item()' do
-
     it 'should return true directly if the user is an administrator' do
       expect(@hi).not_to receive(:roles_of_person)
       allow(@auth).to receive(:is_administrator).and_return(true)
@@ -235,11 +221,9 @@ describe Hydrus::Authorizable, type: :model do
       allow(@hi).to receive_message_chain(:apo, :roles_of_person).and_return(@s0)
       expect(@auth.can_edit_item(@ua, @hi)).to eq(false)
     end
-
   end
 
   describe 'can_review_item()' do
-
     it "should return true directly if the user can edit the item's collection" do
       expect(@hi).not_to receive(:apo)
       allow(@hi).to receive(:collection)
@@ -258,7 +242,5 @@ describe Hydrus::Authorizable, type: :model do
       allow(@hi).to receive_message_chain(:apo, :roles_of_person).and_return(@s2)
       expect(@auth.can_review_item(@ua, @hi)).to eq(false)
     end
-
   end
-
 end

@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe HyTime, type: :model do
-
   it 'should be able to exercise HyTime.now' do
     expect(HyTime.now).to be_kind_of(DateTime)
   end
@@ -16,7 +15,6 @@ describe HyTime, type: :model do
   end
 
   describe 'HyTime.formatted()' do
-
     it 'should get expected formatted datetimes using either a String or a DateTime' do
       # Create a time as a String and as a DateTime.
       pf  = :datetime_full

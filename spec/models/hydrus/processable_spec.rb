@@ -1,14 +1,12 @@
 require 'spec_helper'
 
 describe Hydrus::Processable, type: :model do
-
   before(:each) do
     @cannot_do_regex = /\ACannot perform action/
     @go = Hydrus::GenericObject.new
   end
 
   describe 'complete_workflow_step()' do
-
     it 'can exercise the method, stubbing out call to WF service' do
       step = 'submit'
       args = ['dor', @go.pid, 'hydrusAssemblyWF', step, 'completed']
@@ -17,7 +15,6 @@ describe Hydrus::Processable, type: :model do
       expect(@go).to receive(:workflows_content_is_stale)
       @go.complete_workflow_step(step)
     end
-
   end
 
   it 'can exercise uncomplete_workflow_steps() stubbed' do
@@ -31,7 +28,6 @@ describe Hydrus::Processable, type: :model do
   end
 
   describe 'start_common_assembly()' do
-
     it 'should raise exception if the object is not assemblable' do
       allow(@go).to receive(:is_assemblable).and_return(false)
       expect { @go.start_common_assembly }.to raise_exception(@cannot_do_regex)
@@ -58,11 +54,9 @@ describe Hydrus::Processable, type: :model do
       expect(@go).to receive(:start_assembly_wf).once
       @go.start_common_assembly
     end
-
   end
 
   describe 'start_assembly_wf()' do
-
     it 'should do nothing if the app is not configured to start assemblyWF' do
       allow(@go).to receive(:should_start_assembly_wf).and_return(false)
       expect(Dor::WorkflowService).not_to receive(:create_workflow)
@@ -72,11 +66,9 @@ describe Hydrus::Processable, type: :model do
     it 'can exercise should_start_assembly_wf()' do
       expect(@go.should_start_assembly_wf).to eq(Dor::Config.hydrus.start_assembly_wf)
     end
-
   end
 
   describe 'is_accessioned()' do
-
     it 'can exercise all logic branches' do
       # At each stage, we set a stub, call is_accessioned(), and then reverse the stub.
       wfs = Dor::Config.workflow.client
@@ -99,11 +91,9 @@ describe Hydrus::Processable, type: :model do
       # Survived all tests: true.
       expect(@go.is_accessioned).to eq(true)
     end
-
   end
 
   describe 'publish_time()' do
-
     it 'development and test mode: 1 day after submitted_for_publish_time' do
       spt = '2013-02-27T00:38:22Z'
       exp = '2013-02-28T00:38:22Z'
@@ -117,11 +107,9 @@ describe Hydrus::Processable, type: :model do
       allow(Dor::WorkflowService).to receive(:get_lifecycle).and_return(exp)
       expect(@go.publish_time).to eq(exp)
     end
-
   end
 
   it 'should_treat_as_accessioned(): can exercise' do
     expect(@go.should_treat_as_accessioned).to eq(true)
   end
-
 end

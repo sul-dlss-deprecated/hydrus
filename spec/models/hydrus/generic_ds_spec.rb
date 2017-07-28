@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe Hydrus::GenericDS, type: :model do
-
   before(:all) do
     @rmd_start = '<roleMetadata>'
     @rmd_end   = '</roleMetadata>'
@@ -32,7 +31,6 @@ describe Hydrus::GenericDS, type: :model do
   end
 
   describe 'remove_nodes()' do
-
     it 'should be able to remove all nodes of a particular type' do
       # Remove the <person> nodes.
       exp_xml = <<-EOF
@@ -74,11 +72,9 @@ describe Hydrus::GenericDS, type: :model do
       @rmdoc.remove_nodes(:collection_reviewer)
       expect(@rmdoc.ng_xml).to be_equivalent_to @rmd_xml
     end
-
   end
 
   describe 'remove_nodes_by_xpath()' do
-
     it 'should be able to remove nodes using xpath queries' do
       # Remove the <person> nodes.
       exp_xml = <<-EOF
@@ -108,11 +104,9 @@ describe Hydrus::GenericDS, type: :model do
       @rmdoc.remove_nodes_by_xpath('//foobar')
       expect(@rmdoc.ng_xml).to be_equivalent_to @rmd_xml
     end
-
   end
 
   describe 'remove_node()' do
-
     it 'should remove correct node' do
       @rmdoc.remove_node(:role, 1)
       exp = <<-EOF
@@ -129,11 +123,9 @@ describe Hydrus::GenericDS, type: :model do
       EOF
       expect(@rmdoc.ng_xml).to be_equivalent_to(exp)
     end
-
   end
 
   describe 'adding nodes' do
-
     it 'add_hydrus_child_node()' do
       n = @rmdoc.find_by_terms(:role).size
       @rmdoc.add_hydrus_child_node(@rmdoc.ng_xml.root, :role, 'blah')
@@ -160,5 +152,4 @@ describe Hydrus::GenericDS, type: :model do
     end
     
   end
-
 end

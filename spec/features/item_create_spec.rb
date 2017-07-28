@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe('Item create', type: :request, integration: true) do
-
   before(:all) do
     @div_alert   = '#flash-notices div.alert'
     @span_status = 'span#status-label'
@@ -520,7 +519,6 @@ describe('Item create', type: :request, integration: true) do
   end
 
   describe('terms of acceptance for an existing item', integration: true)  do
-
     subject { Hydrus::Item.find('druid:oo000oo0001') }
 
     it 'should indicate if the item has had terms accepted already' do
@@ -571,7 +569,6 @@ describe('Item create', type: :request, integration: true) do
     end
 
     describe 'collection: variable license' do
-
       it 'with a license: new items offer selector, with default selected' do
         login_as('archivist1')
         # Set collection to variable-license mode.
@@ -605,13 +602,10 @@ describe('Item create', type: :request, integration: true) do
           expect(nodes.first.text).to eq('No license')
         }
       end
-
     end
-
   end
 
   describe 'delete()' do
-
     it 'should raise error if object is not destroyable' do
       hi = Hydrus::Item.find('druid:oo000oo0001')
       expect(hi.is_destroyable).to eq(false)
@@ -657,7 +651,5 @@ describe('Item create', type: :request, integration: true) do
       expect(File.directory?(dir)).to eq(false)
       expect(Hydrus::ObjectFile.where(pid: pid).size).to eq(0)
     end
-
   end
-
 end

@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe Ability, type: :model do
-
   before(:all) do
     @af = ActiveFedora::Base.new
   end
@@ -31,11 +30,9 @@ describe Ability, type: :model do
       allow(ActiveFedora::Base).to receive(:find) { raise ActiveFedora::ObjectNotFoundError }
       expect(@ab.get_fedora_object(@dru)).to eq(nil)
     end
-
   end
 
   describe 'hydra_default_permissions' do
-
     before(:each) do
       allow(@ab).to receive(:get_fedora_object)
     end

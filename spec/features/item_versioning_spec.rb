@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe('Item versioning', type: :request, integration: true) do
-
   fixtures :users
 
   before :each do
@@ -142,7 +141,6 @@ describe('Item versioning', type: :request, integration: true) do
 
     should_visit_view_page(@hi)
     expect(page).not_to have_css(@item_discard) # still no discard button even though we are not published, since we are on v2
-
   end
 
   it 'changing license should force user to select :major version' do
@@ -174,7 +172,6 @@ describe('Item versioning', type: :request, integration: true) do
   end
 
   describe 'editability of item visibility' do
-
     before(:each) do
       # Set the item's collection to visibility-varies mode.
       coll = @hi.collection
@@ -186,7 +183,6 @@ describe('Item versioning', type: :request, integration: true) do
     end
 
     describe 'initial version' do
-
       it 'collection in visibility-varies mode: offer visibility drop-down' do
         login_as('archivist1')
         should_visit_edit_page(@hi)
@@ -203,11 +199,9 @@ describe('Item versioning', type: :request, integration: true) do
         should_visit_edit_page(@hi)
         expect(page).not_to have_selector(@vis_sel_css)
       end
-
     end
 
     describe 'subsequent version' do
-
       it 'prior visibility = world: do not offer drop-down' do
         pending
         # Set visibility to world.
@@ -235,13 +229,10 @@ describe('Item versioning', type: :request, integration: true) do
         should_visit_edit_page(@hi)
         expect(page).to have_selector(@vis_sel_css)
       end
-
     end
-
   end
 
   describe 'embargos' do
-
     before(:each) do
       @vs = {
         yes: 'hydrus_item_embarg_visib_embargoed_yes',
@@ -363,7 +354,5 @@ describe('Item versioning', type: :request, integration: true) do
       should_visit_edit_page(@hi)
       expect(page).not_to have_selector(@vs[:date_sel])
     end
-
   end
-
 end

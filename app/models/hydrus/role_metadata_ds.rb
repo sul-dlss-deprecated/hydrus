@@ -4,7 +4,6 @@ class Hydrus::RoleMetadataDS < ActiveFedora::OmDatastream
   include Hydrus::GenericDS
 
   set_terminology do |t|
-
     t.root path: 'roleMetadata'
 
     t.role do
