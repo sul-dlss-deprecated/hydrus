@@ -28,9 +28,9 @@ describe("Item versioning", :type => :request, :integration => true) do
     p      = @hi.pid
     wf     = Dor::Config.hydrus.app_workflow
     wf_xml = Hydrus.fixture_foxml(p, :is_wf => true)
-    Dor::WorkflowService.delete_workflow('dor', p, 'versioningWF')
-    Dor::WorkflowService.delete_workflow('dor', p, wf)
-    Dor::WorkflowService.create_workflow('dor', p, wf, wf_xml)
+    Dor::Config.workflow.client.delete_workflow('dor', p, 'versioningWF')
+    Dor::Config.workflow.client.delete_workflow('dor', p, wf)
+    Dor::Config.workflow.client.create_workflow('dor', p, wf, wf_xml)
   end
 
   it "initial unpublished version of an item offers discard button" do
