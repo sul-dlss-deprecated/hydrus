@@ -56,7 +56,6 @@ Hydrus::Application.routes.draw do
   match 'dor/reindex/:id'           => 'hydrus_solr#reindex',           :as => 'reindex',           via: [:get, :post, :put]
   match 'dor/delete_from_index/:id' => 'hydrus_solr#delete_from_index', :as => 'delete_from_index', via: [:get, :post]
 
-
    get '/404', to: 'exceptions#render_404'
    get '/500', to: 'exceptions#render_500'
 end

@@ -306,7 +306,6 @@ class HydrusItemsController < ApplicationController
 
   protected
 
-
   def check_for_collection
     unless params.has_key?(:collection)
       flash[:error] = 'You cannot create an item without specifying a collection.'

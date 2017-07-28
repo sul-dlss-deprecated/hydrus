@@ -20,7 +20,6 @@ class RSolr::Connection
 
     request = setup_raw_request request_context
 
-
     request.body = request_context[:data] if request_context[:method] ==:post && request_context[:data]
   end
     begin

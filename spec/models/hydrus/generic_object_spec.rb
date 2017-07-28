@@ -1,6 +1,5 @@
 require 'spec_helper'
 
-
 describe Hydrus::GenericObject, type: :model do
   before(:each) do
     @cannot_do_regex = /\ACannot perform action/

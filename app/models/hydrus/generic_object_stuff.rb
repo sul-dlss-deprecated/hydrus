@@ -72,7 +72,6 @@ module Hydrus::GenericObjectStuff
     }
   end
 
-
   # Since we need a custom setter, let's define the getter too
   # (rather than using delegation).
   def related_item_url

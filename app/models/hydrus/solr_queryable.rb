@@ -114,7 +114,6 @@ module Hydrus::SolrQueryable
 
   end
 
-
   # Takes an array of APO druids.
   # Returns a hash of SOLR query parameters.
   # The query: get the Collections governed by the APOs.

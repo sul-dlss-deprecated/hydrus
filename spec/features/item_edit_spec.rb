@@ -227,7 +227,6 @@ describe('Item edit', type: :request, integration: true) do
     @hi.descMetadata.relatedItem.location.url.first == new_link
   end
 
-
   it 'Related Content adding and deleting' do
     # Got to edit page.
     login_as('archivist1')

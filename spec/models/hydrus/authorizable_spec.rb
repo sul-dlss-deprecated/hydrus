@@ -73,7 +73,6 @@ describe Hydrus::Authorizable, type: :model do
     end
   end
 
-
   it 'can_create_collections() should work as expected' do
     allow(@auth).to receive(:collection_creators).and_return(@s1)
     expect(@auth.can_create_collections(@ua)).to eq(true)

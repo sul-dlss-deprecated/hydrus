@@ -82,7 +82,6 @@ describe HydrusCollectionsController, type: :controller do
     end
   end
 
-
   describe 'list_all', integration: true do
     it 'should redirect to root url for non-admins when not in development mode' do
       sign_in(mock_authed_user)

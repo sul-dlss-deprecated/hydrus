@@ -69,7 +69,6 @@ class HydrusCollectionsController < ApplicationController
     has_mvf =
       params.has_key?(:add_link)
 
-
     if has_mvf
       if params.has_key?(:add_link)
         @fobj.descMetadata.insert_related_item

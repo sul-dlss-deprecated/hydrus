@@ -60,7 +60,6 @@ namespace :hydrus do
   end
 end
 
-
 desc 'rails server with suppressed output'
 task server: :environment do
   # Note: to get this to work nicely, we also set the app to generate

@@ -308,7 +308,6 @@ class Hydrus::Item < Hydrus::GenericObject
     (validate! ? is_draft : false)
   end
 
-
   # Returns true if the object is ready for common assembly.
   # It's not strictly necessary to involve validate!, but it provides extra insurance.
   def is_assemblable

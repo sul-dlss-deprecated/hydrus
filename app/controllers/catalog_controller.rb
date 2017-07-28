@@ -61,7 +61,6 @@ class CatalogController < ApplicationController
     #use this instead if you don't want to query facets marked :show=>false
     #config.default_solr_params[:'facet.field'] = config.facet_fields.select{ |k, v| v[:show] != false}.keys
 
-
     # solr fields to be displayed in the index (search results) view
     #   The ordering of the field names is the order of the display
     config.add_index_field 'id', label: 'Identifier:'

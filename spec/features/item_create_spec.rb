@@ -186,7 +186,6 @@ describe('Item create', type: :request, integration: true) do
     expect(item.descMetadata.genre).to eq(['student project report'])
   end
 
-
   it 'Requires approval: should be able to submit, disapprove, resubmit, approve, etc' do
     # Setup.
     ni = OpenStruct.new(

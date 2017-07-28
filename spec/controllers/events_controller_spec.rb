@@ -7,7 +7,6 @@ describe EventsController, type: :controller do
     allow(controller).to receive_messages(current_ability: @ability)
   end
 
-
   it 'should require login' do
     get :index, hydrus_collection_id: '1234'
     expect(flash[:alert]).to eq('You need to sign in or sign up before continuing.')

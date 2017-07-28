@@ -42,7 +42,6 @@ describe('Item versioning', type: :request, integration: true) do
     expect(item.object_status).not_to eq('published')
   end
 
-
   it 'item view page should display version info' do
     login_as('archivist1')
     should_visit_view_page(@hi)
