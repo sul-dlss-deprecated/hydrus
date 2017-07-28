@@ -75,7 +75,7 @@ class Hydrus::DescMetadataDS < ActiveFedora::OmDatastream
   # Blocks to pass into Nokogiri::XML::Builder.new()
 
   define_template :date_created do |xml|
-        xml.originInfo{
+        xml.originInfo {
           xml.dateCreated
         }
   end

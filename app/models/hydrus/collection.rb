@@ -384,7 +384,7 @@ class Hydrus::Collection < Dor::Collection
   end
 
   def roles_of_person_for_ui(user)
-    roles_of_person(user).collect {|role| Hydrus::AdminPolicyObject.roles[role]}
+    roles_of_person(user).collect { |role| Hydrus::AdminPolicyObject.roles[role] }
   end
 
   def add_empty_person_to_role *args

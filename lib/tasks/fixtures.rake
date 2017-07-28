@@ -67,7 +67,7 @@ namespace :hydrus do
     pid = ENV['pid']
     collection = Hydrus::Collection.find pid
     unless collection.nil?
-      items_pids = collection.hydrus_items.collect{|item| item.pid}
+      items_pids = collection.hydrus_items.collect { |item| item.pid }
       all_pids = items_pids << collection.pid << collection.apo.pid
       all_pids.each do |pid|
         puts "Deleteing #{pid}"

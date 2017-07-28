@@ -125,7 +125,7 @@ class HydrusCollectionsController < ApplicationController
     @fobj.descMetadata.remove_node(params[:term], params[:term_index])
     @fobj.save
     respond_to do |want|
-      want.html {redirect_to :back}
+      want.html { redirect_to :back }
       want.js
     end
   end

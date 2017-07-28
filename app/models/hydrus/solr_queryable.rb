@@ -72,7 +72,7 @@ module Hydrus::SolrQueryable
   #This static version was added specifically to deal with loading the dashboard without instantiating an object.
   def self.issue_solr_query(h)
     solr_response = solr.find(h)
-    document_list = solr_response.docs.map {|doc| SolrDocument.new(doc, solr_response)}
+    document_list = solr_response.docs.map { |doc| SolrDocument.new(doc, solr_response) }
     [solr_response, document_list]
   end
 

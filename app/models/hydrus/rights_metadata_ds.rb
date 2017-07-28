@@ -64,7 +64,7 @@ class Hydrus::RightsMetadataDS < ActiveFedora::OmDatastream
 
   def self.xml_template
     Nokogiri::XML::Builder.new do |xml|
-      xml.rightsMetadata{
+      xml.rightsMetadata {
         xml.access(type: 'discover') {
           xml.machine {
             xml.world # at Stanford metadata is publicly visible by policy

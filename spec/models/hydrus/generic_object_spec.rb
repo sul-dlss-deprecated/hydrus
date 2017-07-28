@@ -338,13 +338,13 @@ end
 
     it 'fully populated object should not be valid if contact email is invalid' do
       dru = 'druid:ll000ll0001'
-      @exp.each { |e| allow(@go).to receive(e).and_return(dru)}
+      @exp.each { |e| allow(@go).to receive(e).and_return(dru) }
       expect(@go.valid?).to eq(false)
     end
 
     it 'fully populated object should be valid if contact email is valid' do
       dru = 'druid:ll000ll0001'
-      @exp.each { |e| allow(@go).to receive(e).and_return(dru) unless e == :contact}
+      @exp.each { |e| allow(@go).to receive(e).and_return(dru) unless e == :contact }
       allow(@go).to receive(:contact).and_return('test@test.com')
       expect(@go.valid?).to eq(true)
     end
@@ -444,7 +444,7 @@ end
   end
 
   it 'GenericObject does not implement tracked_fields()' do
-    expect{ @go.tracked_fields }.to raise_error(NoMethodError)
+    expect { @go.tracked_fields }.to raise_error(NoMethodError)
   end
 
   describe 'object returned email' do

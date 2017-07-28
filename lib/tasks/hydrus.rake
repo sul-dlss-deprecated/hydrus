@@ -21,8 +21,8 @@ namespace :hydrus do
     item.assert_content_model
 
     # ruby black magic: redefine should_validate and another method so we can save this hydrus item without going through all of the UI validations
-    item.define_singleton_method :should_validate, lambda {false}
-    item.define_singleton_method :check_version_if_license_changed, lambda {return}
+    item.define_singleton_method :should_validate, lambda { false }
+    item.define_singleton_method :check_version_if_license_changed, lambda { return }
 
     # create hydrusProperties datastream and set values
     item.item_type = item_type

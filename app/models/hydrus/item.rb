@@ -353,7 +353,7 @@ class Hydrus::Item < Hydrus::GenericObject
 
   # you must have at least one non-blank contributor
   def contributors_not_all_blank
-    if (contributors.all? {|contributor| contributor.name.blank?})
+    if (contributors.all? { |contributor| contributor.name.blank? })
       errors.add(:contributors, 'must be entered')
     end
   end
@@ -822,7 +822,7 @@ class Hydrus::Item < Hydrus::GenericObject
   # This method probably belongs in dor-services gem.
   def version_significance
     tags = versionMetadata.find_by_terms(:version, :tag).
-           map{ |t| Dor::VersionTag.parse(t.value) }.sort
+           map { |t| Dor::VersionTag.parse(t.value) }.sort
     return :major if tags.size < 2
     curr = tags[-1]
     prev = tags[-2]
