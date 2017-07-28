@@ -2,8 +2,6 @@ source 'https://rubygems.org'
 
 gem 'rails', '~> 4.2.9'
 
-gem 'rake', '~> 11.0'
-
 gem 'config'
 gem 'devise', '~> 4.0'
 gem 'jquery-rails'

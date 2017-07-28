@@ -330,7 +330,7 @@ GEM
       activesupport (= 4.2.9)
       rake (>= 0.8.7)
       thor (>= 0.18.1, < 2.0)
-    rake (11.3.0)
+    rake (12.0.0)
     rdf (1.99.1)
       link_header (~> 0.0, >= 0.0.8)
     rdf-aggregate-repo (1.99.0)
@@ -498,7 +498,6 @@ DEPENDENCIES
   okcomputer
   pry
   rails (~> 4.2.9)
-  rake (~> 11.0)
   rsolr-ext
   rspec-rails (~> 3.1)
   sass-rails (~> 4.0)
