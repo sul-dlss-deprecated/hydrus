@@ -1,7 +1,6 @@
 # A mixin for contentMetadata stuff.
 
 module Hydrus::Contentable
-
   # Check to see if all of the files that are referenced in the database actually exist on the file system
   def files_missing?
     files.map { |f| f.missing? }.include?(true)
@@ -78,5 +77,4 @@ module Hydrus::Contentable
   def metadata_directory
     File.join(base_file_directory, 'metadata')
   end
-
 end

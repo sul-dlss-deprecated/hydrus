@@ -1,5 +1,4 @@
 module Hydrus::AccessControlsEnforcement
-
   # Redirects to home page with a flash error if user lacks
   # authorization to read the Item/Collection.
   def enforce_show_permissions *args
@@ -80,5 +79,4 @@ module Hydrus::AccessControlsEnforcement
       # Logging.
       logger.debug("Solr parameters: #{ solr_parameters.inspect }")
     end
-
   end

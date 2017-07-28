@@ -1,7 +1,6 @@
 # A mixin used to control whether validation occurs.
 
 module Hydrus::Validatable
-
   # This method is used to control whether validations are run.
   # The basic criterion is whether the object is beyond the draft stage.
   # However, we often want to run validations in advance of that in
@@ -28,5 +27,4 @@ module Hydrus::Validatable
   def revalidate
     @status_valid = nil
   end
-
 end

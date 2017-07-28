@@ -1,6 +1,5 @@
 # A module to extend the Hydrus APO, Collection, and Item classes.
 module Hydrus::Delegatable
-
   # Takes a hash of arrays and calles delegate() accordingly.
   # See one of the usages for an example of the expected hash.
   def setup_delegations(delegations)

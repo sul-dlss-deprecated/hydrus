@@ -2,7 +2,6 @@
 # of the nil checks in this module.
 
 module Hydrus::Authorizable
-
   ####
   # Legacy logic to get SUNET IDs of those with Hydrus-wide powers from database.
   # This is now managed by LDAP groups.
@@ -168,5 +167,4 @@ module Hydrus::Authorizable
     user_roles = item.apo.roles_of_person(user.sunetid)
     does_intersect(user_roles, item_reviewer_roles)
   end
-
 end

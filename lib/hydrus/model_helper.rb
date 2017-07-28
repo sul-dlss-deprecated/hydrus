@@ -1,7 +1,5 @@
 module Hydrus
-
   module ModelHelper
-
     # Returns the object type as a string: item, collection, or adminPolicy.
     def object_type
       identityMetadata.objectType.first || self.class.to_s.demodulize.downcase
@@ -36,7 +34,5 @@ module Hydrus
       v2 = v2.strip if v2.respond_to?(:strip)
       v1 == v2
     end
-
   end
-
 end

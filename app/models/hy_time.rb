@@ -20,7 +20,6 @@
 #                      formatted() method for other options.
 
 module HyTime
-
   DT_FORMATS = {
     # Back-end datetime formats for XML storage are based on iso8601.
     # For example: "2012-11-16T23:40:11Z".
@@ -124,5 +123,4 @@ module HyTime
       return false
     end
   end
-
 end

@@ -1,5 +1,4 @@
 module Hydrus::Cant
-
   # A utility method that raises an exception with a useful message indicating
   # that the object cannot perform an action like open(), close(), approve(),
   # etc. Typically, self is an instance Hydrus::Item or Hydrus::Collection;

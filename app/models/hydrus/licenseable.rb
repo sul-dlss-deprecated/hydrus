@@ -1,5 +1,4 @@
 module Hydrus::Licenseable
-
   # Returns the text label of the object's license.
   def license_text
     nds = rightsMetadata.use.human.nodeset

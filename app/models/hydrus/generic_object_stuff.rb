@@ -146,5 +146,4 @@ module Hydrus::GenericObjectStuff
   def is_apo?
     false
   end
-
 end

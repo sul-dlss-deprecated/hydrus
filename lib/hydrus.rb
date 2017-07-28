@@ -1,5 +1,4 @@
 module Hydrus
-
   # All of our fixture PIDs, in order: APOs, then Collections, then Items.
   # Items can't be loaded until their APOs and Collections are in Fedora;
   # otherwise the dor-services indexing code will blow up.
@@ -77,5 +76,4 @@ module Hydrus
       p.print(f, min_percent: opts[:min_percent])
     end
   end
-
 end

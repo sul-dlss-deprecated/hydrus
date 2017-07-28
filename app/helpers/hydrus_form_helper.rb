@@ -1,5 +1,4 @@
 module HydrusFormHelper
-
   def hydrus_form_label(opts={}, &block)
     html = ''
     html << "<div class='span#{opts.has_key?(:columns) ? opts[:columns] : "1"} form-label #{opts[:class] if opts.has_key?(:class)}'>"
@@ -33,5 +32,4 @@ module HydrusFormHelper
     xml = Nokogiri.XML(obj.send(dsid).content, &:noblanks)
     CodeRay::Duo[:xml, :div].highlight(xml).html_safe
   end
-
 end

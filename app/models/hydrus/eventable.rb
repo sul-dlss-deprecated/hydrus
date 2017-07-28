@@ -26,5 +26,4 @@ module Hydrus::Eventable
     return if cfs.length == 0
     events.add_event('hydrus', @current_user, editing_event_message(cfs))
   end
-
 end

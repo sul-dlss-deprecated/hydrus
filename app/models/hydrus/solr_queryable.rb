@@ -1,7 +1,6 @@
 # A mixin for running SOLR queries.
 
 module Hydrus::SolrQueryable
-
   # Convenience variable to execute module methods.
   HSQ = self
 
@@ -216,5 +215,4 @@ module Hydrus::SolrQueryable
       h
     }
   end
-
 end

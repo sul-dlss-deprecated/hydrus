@@ -1,5 +1,4 @@
 module Hydrus::UserWorkflowable
-
   # Returns true if the object is in the draft state.
   def is_draft
     object_status == 'draft'
@@ -42,5 +41,4 @@ module Hydrus::UserWorkflowable
   def old_self
     @cached_old_self ||= self.class.find(pid)
   end
-
 end

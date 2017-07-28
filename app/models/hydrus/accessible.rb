@@ -15,7 +15,6 @@
 #       </access>
 
 module Hydrus::Accessible
-
   # An Xpath snippet that is used frequently.
   def xp_machine(type = 'read')
     '//access[@type="' + type + '"]/machine'
@@ -136,5 +135,4 @@ module Hydrus::Accessible
       </embargoAccess>
     XML
   end
-
 end

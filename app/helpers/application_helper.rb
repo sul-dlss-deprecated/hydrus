@@ -1,5 +1,4 @@
 module ApplicationHelper
-
   include HydrusFormHelper
 
   def application_name
@@ -183,5 +182,4 @@ module ApplicationHelper
       HTML
     .html_safe
   end
-
 end

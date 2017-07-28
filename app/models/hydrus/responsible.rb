@@ -1,7 +1,6 @@
 # A mixin for roleMetadata stuff.
 
 module Hydrus::Responsible
-
   # Returns a set of SUNet IDs having the given role.
   def persons_with_role(role)
     q     = "//role[@type='#{role}']/person/identifier"
@@ -183,5 +182,4 @@ module Hydrus::Responsible
     labels = role_labels(:only_labels)
     roles.map { |r| labels[r] }
   end
-
 end

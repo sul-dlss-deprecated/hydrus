@@ -120,5 +120,4 @@ module Hydrus::Processable
   def should_treat_as_accessioned
     %w(development test).include?(Rails.env)
   end
-
 end

@@ -1,5 +1,4 @@
 module Hydrus::GenericDS
-
   # TODO: Considering putting these methods in OM or ActiveFedora.
 
   def add_hydrus_child_node(*args)
@@ -44,5 +43,4 @@ module Hydrus::GenericDS
       ng_xml_will_change!
     end
   end
-
 end
