@@ -53,7 +53,7 @@ class Hydrus::ObjectFile < ActiveRecord::Base
     lab = h['label'] || ''
     hid = to_bool(h['hide'])
     # Do nothing if new values are the same as current values.
-    return false if (lab == label and hid == hide)
+    return false if (lab ==(label) && hid ==(hide))
     # Set new values.
     self.label = lab
     self.hide  = hid

@@ -82,7 +82,7 @@ module Hydrus::Authorizable
   # Returns true if the given user can act as a Hydrus administrator,
   # either by being one or because we're running in development mode.
   def self.can_act_as_administrator(user)
-    (is_administrator(user) or Rails.env == 'development')
+    (is_administrator(user) || Rails.env ==('development'))
   end
 
   # Returns true if the given user can create new Hydrus Collections.

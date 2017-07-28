@@ -374,7 +374,7 @@ class Hydrus::Item < Hydrus::GenericObject
 
   # the date_created must be of format YYYY or YYYY-MM or YYYY-MM-DD
   def ensure_date_created_format
-    if not date_created =~ /^\d{4}$/ and not date_created =~ /^\d{4}-\d{2}$/ and not date_created =~ /^\d{4}-\d{2}-\d{2}$/
+    if (not date_created =~ /^\d{4}$/) && (not date_created =~ /^\d{4}-\d{2}$/) && (not date_created =~ /^\d{4}-\d{2}-\d{2}$/)
       errors.add(:date_created, 'Incorrect date format')
     end
   end
@@ -525,7 +525,7 @@ class Hydrus::Item < Hydrus::GenericObject
     b  = beginning_of_embargo_range.to_datetime
     e  = end_of_embargo_range.to_datetime
     dt = embargo_date.to_datetime
-    unless (b <= dt and dt <= e)
+    unless (b <=(dt) && dt <=(e))
       b = HyTime.date_display(b)
       e = HyTime.date_display(e)
       errors.add(:embargo_date, "must be in the range #{b} through #{e}")
@@ -611,7 +611,7 @@ class Hydrus::Item < Hydrus::GenericObject
     h[:date_created] = single_date? ? descMetadata.date_created : ''
     #raise descMetadata.date_created.inspect
     begin
-      h[:date_created_approximate] = (descMetadata.originInfo.dateCreated.respond_to?(:nodeset) and single_date?) ? descMetadata.originInfo.dateCreated.nodeset.first['qualifier'] == 'approximate' : false
+      h[:date_created_approximate] = (descMetadata.originInfo.dateCreated.respond_to?(:nodeset) && single_date?) ? descMetadata.originInfo.dateCreated.nodeset.first['qualifier'] == 'approximate' : false
     rescue
       h[:date_created_approximate] = false
     end
@@ -629,7 +629,7 @@ class Hydrus::Item < Hydrus::GenericObject
     if h[:date_type] == 'single'
       descMetadata.originInfo.dateCreated = h[:date_created]
       #the if respond to is for initial item creation
-      if descMetadata.originInfo.dateCreated and descMetadata.originInfo.dateCreated.respond_to? :nodeset
+      if descMetadata.originInfo.dateCreated && descMetadata.originInfo.dateCreated.respond_to?(:nodeset)
         descMetadata.originInfo.dateCreated.nodeset.first['qualifier'] = 'approximate' if h[:date_created_approximate]
         descMetadata.originInfo.dateCreated.nodeset.first['keyDate'] = 'yes'
         descMetadata.originInfo.dateCreated.nodeset.first['encoding'] = 'w3cdtf'
@@ -656,18 +656,18 @@ class Hydrus::Item < Hydrus::GenericObject
   def date_display
     disp = ''
     if date_range?
-      start_only = true if dates[:date_range_start_approximate] and not dates[:date_range_end_approximate]
-      end_only =  true if dates[:date_range_end_approximate] and not dates[:date_range_start_approximate]
-      both = true if dates[:date_range_start_approximate] and dates[:date_range_end_approximate]
-      disp += '[ca. ' if start_only or both
+      start_only = true if dates[:date_range_start_approximate] && (not dates[:date_range_end_approximate])
+      end_only =  true if dates[:date_range_end_approximate] && (not dates[:date_range_start_approximate])
+      both = true if dates[:date_range_start_approximate] && dates[:date_range_end_approximate]
+      disp += '[ca. ' if start_only || both
       disp += "#{dates[:date_range_start].first}"
       disp += ']' if start_only
       disp += ' to ' unless both
       disp += ' - ' if both
       disp += '[' if end_only
-      disp += 'ca. ' if end_only or both
+      disp += 'ca. ' if end_only || both
       disp += "#{dates[:date_range_end].first}"
-      disp += ']' if end_only or both
+      disp += ']' if end_only || both
       return disp
     else
       if single_date?
@@ -685,16 +685,16 @@ class Hydrus::Item < Hydrus::GenericObject
   end
 
   def single_date?
-    !date_range? and !undated?
+    !date_range? && !undated?
   end
 
   def undated?
-    !date_range? and date_created == 'Undated'
+    !date_range? && date_created ==('Undated')
   end
 
   #check whether a string that we think is a date matches our expected date format
   def valid_date_string? str
-    str =~ /^\d{4}$/ or str =~ /^\d{4}-\d{2}$/ or str =~ /^\d{4}-\d{2}-\d{2}$/
+    str =~(/^\d{4}$/) || str =~(/^\d{4}-\d{2}$/) || str =~(/^\d{4}-\d{2}-\d{2}$/)
   end
 
   def has_specified_a_valid_date
@@ -704,7 +704,7 @@ class Hydrus::Item < Hydrus::GenericObject
       end
     else
       if date_range?
-        if not valid_date_string?(descMetadata.originInfo.date_range_start.first) or not valid_date_string?(descMetadata.originInfo.date_range_end.first)
+        if (not valid_date_string?(descMetadata.originInfo.date_range_start.first)) || (not valid_date_string?(descMetadata.originInfo.date_range_end.first))
           errors.add(:dates, 'Incorrect date formats or missing dates.')
         end
       else

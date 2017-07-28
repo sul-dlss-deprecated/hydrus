@@ -171,7 +171,7 @@ class Hydrus::Collection < Dor::Collection
 
   # Returns true only if the Collection is unpublished and has no Items.
   def is_destroyable
-    not(is_published or has_items)
+    not(is_published || has_items)
   end
 
   # Returns true only if the Collection has items.

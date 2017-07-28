@@ -2,7 +2,7 @@ class SessionsController < Devise::SessionsController
   layout :set_layout
 
   before_filter only: [:new] do
-    if current_user and params[:referrer]
+    if current_user && params[:referrer]
       redirect_to params[:referrer]
     end
   end

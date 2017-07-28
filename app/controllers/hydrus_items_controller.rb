@@ -114,8 +114,8 @@ class HydrusItemsController < ApplicationController
     ####
 
     has_mvf = (
-    params.has_key?(:add_contributor) or
-    params.has_key?(:add_link) or
+    params.has_key?(:add_contributor) ||
+    params.has_key?(:add_link) ||
     params.has_key?(:add_related_citation)
     )
 

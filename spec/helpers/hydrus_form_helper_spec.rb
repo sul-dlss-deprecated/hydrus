@@ -31,8 +31,8 @@ describe HydrusFormHelper, type: :helper do
 
   describe 'hydrus form header' do
     it 'should return the appropirate HTML when no options are sent' do
-      expect(hydrus_form_header{'Title and contact'}).to have_selector '.row .span9 h4' and
-      expect(hydrus_form_header{'Title and contact'}).to match(/<h4>Title and contact<\/h4>/)
+      expect(hydrus_form_header{'Title and contact'}).to(have_selector '.row .span9 h4') &&
+      expect(hydrus_form_header{'Title and contact'}).to(match(/<h4>Title and contact<\/h4>/))
     end
     it 'should apply the required element when the required option is sent' do
        expect(hydrus_form_header(required: true){'Title'}).to have_selector '.row .span9 .required'

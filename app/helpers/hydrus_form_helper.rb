@@ -20,7 +20,7 @@ module HydrusFormHelper
     html = ''
     html << "<div class='row section-header#{' first-header' if opts.has_key?(:first)}'>"
       html << "<div class='span9'>"
-        if opts.has_key?(:required) and opts[:required]
+        if opts.has_key?(:required) && opts[:required]
             html << "<span class='required'><span class='label label-important'>required</span></span>"
         end
       html << "<h4>#{capture(&block)}</h4>"
