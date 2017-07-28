@@ -367,7 +367,7 @@ describe Hydrus::Item, type: :model do
       # This enables the tests to run in a timezone other than Pacific.
       allow(HyTime).to receive(:datetime).with('2012-02-28', from_localzone: true).and_return(@edate)
       # XML snippets for various <access> nodes.
-      ed       = "<embargoReleaseDate>#{@edate}</embargoReleaseDate><none/>"
+      ed = "<embargoReleaseDate>#{@edate}</embargoReleaseDate><none/>"
 
       twpc = "         <twentyPctVisibilityStatus/>
          <twentyPctVisibilityReleaseDate/>"
@@ -393,7 +393,7 @@ describe Hydrus::Item, type: :model do
       @xml = {
         em_world: noko_doc([em_start, em_world, twpc, em_end].join),
         em_stanf: noko_doc([em_start, em_stanf, twpc, em_end].join),
-        rm_emb: noko_doc([rm_start, di_world, rd_emb,   rm_end].join),
+        rm_emb: noko_doc([rm_start, di_world, rd_emb, rm_end].join),
         rm_world: noko_doc([rm_start, di_world, rd_world, rm_end].join),
         rm_stanf: noko_doc([rm_start, di_world, rd_stanf, rm_end].join),
       }
@@ -663,7 +663,7 @@ describe Hydrus::Item, type: :model do
     end
 
     it 'enforce_collection_is_open() should return true only if the Item is in an open Collection' do
-      n  = 0
+      n = 0
       [true, false, nil].each do |stub_val|
         c    = double('collection', is_open: stub_val)
         exp  = not(not(stub_val))

@@ -59,7 +59,7 @@ module Hydrus::Responsible
   def self.roles_of_person person_id, apo_id
     toret=[]
     roles=role_labels(:collection_level)
-    h           = Hydrus::SolrQueryable.default_query_params
+    h = Hydrus::SolrQueryable.default_query_params
     #query by id
     h[:q]="id:\"#{apo_id}\""
     #this is lazy, should just be the fields from roles modified to match convention

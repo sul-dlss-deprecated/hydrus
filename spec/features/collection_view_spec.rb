@@ -8,7 +8,7 @@ describe('Collection view', type: :request, integration: true) do
     @apo_druid = 'druid:oo000oo0002'
     @druid = 'druid:oo000oo0003'
     @druid_no_files='druid:oo000oo0004'
-    @hc    = Hydrus::Collection.find @druid
+    @hc = Hydrus::Collection.find @druid
   end
 
   it 'If not logged in, should be redirected to login page, then back to our intended page after logging in' do

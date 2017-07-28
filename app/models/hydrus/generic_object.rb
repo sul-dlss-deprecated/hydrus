@@ -151,7 +151,7 @@ class Hydrus::GenericObject < Dor::Item
       descMetadata.content_will_change!
     end
   end
-  def set_genre_authority_to_marc  descMetadata
+  def set_genre_authority_to_marc descMetadata
     descMetadata.ng_xml.search('//mods:genre', 'mods' => 'http://www.loc.gov/mods/v3').first['authority'] = 'marcgt'
   end
   def remove_genre_authority descMetadata
@@ -195,10 +195,10 @@ class Hydrus::GenericObject < Dor::Item
   # license-related methods, along with some overly complex lookup methods.
   def self.license_groups
     [
-      ['None',  [
+      ['None', [
         ['No license', 'none'],
       ]],
-      ['Creative Commons Licenses',  [
+      ['Creative Commons Licenses', [
         ['CC BY Attribution'                                 , 'cc-by'],
         ['CC BY-SA Attribution Share Alike'                  , 'cc-by-sa'],
         ['CC BY-ND Attribution-NoDerivs'                     , 'cc-by-nd'],
@@ -206,7 +206,7 @@ class Hydrus::GenericObject < Dor::Item
         ['CC BY-NC-SA Attribution-NonCommercial-ShareAlike'  , 'cc-by-nc-sa'],
         ['CC BY-NC-ND Attribution-NonCommercial-NoDerivs'    , 'cc-by-nc-nd'],
       ]],
-      ['Open Data Commons Licenses',  [
+      ['Open Data Commons Licenses', [
         ['PDDL Public Domain Dedication and License'         , 'pddl'],
         ['ODC-By Attribution License'                        , 'odc-by'],
         ['ODC-ODbl Open Database License'                    , 'odc-odbl'],

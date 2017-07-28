@@ -56,7 +56,7 @@ describe(Hydrus::Item, type: :feature, integration: true) do
       exp   = Hash[ steps.map { |s| [s, 'waiting'] } ]
       # Code to check workflow statuses.
       check_statuses = lambda {
-        hi = Hydrus::Item.find(hi.pid)  # A refreshed copy of object.
+        hi = Hydrus::Item.find(hi.pid) # A refreshed copy of object.
         statuses = steps.map { |s| [s, hi.workflows.get_workflow_status(s)] }
         expect(Hash[statuses]).to eq(exp)
       }
@@ -97,7 +97,7 @@ describe(Hydrus::Item, type: :feature, integration: true) do
     it 'should create an item' do
       allow_any_instance_of(Dor::WorkflowDs).to receive(:current_priority).and_return 0
       allow(collection).to receive_messages(visibility_option_value: 'stanford', license: 'some-license')
-      item  = Hydrus::Item.create(collection.pid, mock_authed_user, 'some-type')
+      item = Hydrus::Item.create(collection.pid, mock_authed_user, 'some-type')
       expect(item).to be_instance_of Hydrus::Item
       expect(item).to_not be_new
       expect(item.visibility).to include 'stanford'
@@ -116,7 +116,7 @@ describe(Hydrus::Item, type: :feature, integration: true) do
     it 'should create another item' do
       allow_any_instance_of(Dor::WorkflowDs).to receive(:current_priority).and_return 0
       allow(collection).to receive_messages(users_accepted_terms_of_deposit: { mock_authed_user.to_s => Time.now})
-      item  = Hydrus::Item.create(collection.pid, mock_authed_user, 'some-type')
+      item = Hydrus::Item.create(collection.pid, mock_authed_user, 'some-type')
       expect(item).to be_instance_of Hydrus::Item
       expect(item).to_not be_new
       expect(item.item_type).to eq 'some-type'

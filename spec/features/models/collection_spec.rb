@@ -27,7 +27,7 @@ describe(Hydrus::Collection, type: :feature, integration: true) do
   end
 
   it 'should be able to create a Collection object, with an APO' do
-    coll  = Hydrus::Collection.create(mock_authed_user)
+    coll = Hydrus::Collection.create(mock_authed_user)
     expect(coll).to be_instance_of Hydrus::Collection
     expect(coll).to_not be_new
     expect(coll.apo.roleMetadata.collection_manager.val.first.strip).to include mock_authed_user.sunetid

@@ -4,7 +4,7 @@
 module Hydrus::Processable
 
   WFS  = Dor::WorkflowService
-  HWF  = Dor::Config.hydrus.app_workflow  # 'hydrusAssemblyWF'
+  HWF  = Dor::Config.hydrus.app_workflow # 'hydrusAssemblyWF'
   REPO = 'dor'
 
   # Takes the name of a step in the Hydrus workflow.

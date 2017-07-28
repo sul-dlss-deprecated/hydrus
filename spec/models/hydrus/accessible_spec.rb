@@ -46,7 +46,7 @@ describe Hydrus::Accessible, type: :model do
       rm_initial: noko_doc([rm_start, di_world, rd_blank, rm_end].join),
       rm_world: noko_doc([rm_start, di_world, rd_world, rm_end].join),
       rm_stanf: noko_doc([rm_start, di_world, rd_stanf, rm_end].join),
-      rm_embargo: noko_doc([rm_start, di_world, rd_embr,  rm_end].join),
+      rm_embargo: noko_doc([rm_start, di_world, rd_embr, rm_end].join),
     }
   end
 

@@ -162,7 +162,7 @@ describe Hydrus::Collection, type: :model do
     it 'collection already open: should return false no matter what' do
       allow(@hc).to receive('validate!').and_return(true)
       allow(@hc).to receive(:object_status).and_return('published_open')
-      expect(@hc.is_openable).to eq(false)  # False in spite of being valid.
+      expect(@hc.is_openable).to eq(false) # False in spite of being valid.
     end
 
     it 'collection not open: should return true if valid' do

@@ -158,7 +158,7 @@ describe('Collection edit', type: :request, integration: true) do
     new_check_field     = "hydrus_collection_embargo_option_#{new_embargo_option}"
     no_embargo_option   = 'none'
     no_embargo          = ''
-    no_embargo_check_field    = "hydrus_collection_embargo_option_#{no_embargo_option}"
+    no_embargo_check_field = "hydrus_collection_embargo_option_#{no_embargo_option}"
     ps={visibility: 'stanford',license_code: 'cc-by',embargo_date: ''}
     check_emb_vis_lic(@hc,ps)
     login_as('archivist1')

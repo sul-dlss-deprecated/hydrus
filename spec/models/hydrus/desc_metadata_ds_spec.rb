@@ -74,7 +74,7 @@ describe Hydrus::DescMetadataDS, type: :model do
         nm, nm,
         '</mods>',
       ].join '')
-      @dsdoc   = Hydrus::DescMetadataDS.from_xml("#{@mods_start}</mods>")
+      @dsdoc = Hydrus::DescMetadataDS.from_xml("#{@mods_start}</mods>")
       @dsdoc.insert_topic('foo')
       @dsdoc.insert_contributor('personal', 'NAME', 'ROLE')
       @dsdoc.insert_contributor('personal', 'NAME', 'ROLE')

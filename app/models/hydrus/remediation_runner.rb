@@ -139,7 +139,7 @@ class Hydrus::RemediationRunner
                             is_remediation: true)
       log.info('open_new_version(success)')
     rescue Exception => e
-      self.needs_versioning = false  # So we won't try to close the version.
+      self.needs_versioning = false # So we won't try to close the version.
       log_warning("open_new_version(FAILED): #{e.message}")
     end
   end

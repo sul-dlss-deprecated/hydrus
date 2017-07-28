@@ -10,7 +10,7 @@ module Hydrus::AccessControlsEnforcement
 
     return if can?(:read, obj)
     # Otherwise, redirect to the home page.
-    msg  = "You do not have sufficient privileges to view the requested item: '#{pid}'."
+    msg = "You do not have sufficient privileges to view the requested item: '#{pid}'."
     msg = "Please sign in below and you will be directed to the requested item: '#{pid}'." unless current_user
     flash[:error] = msg
     redirect_to_correct_page(root_path)

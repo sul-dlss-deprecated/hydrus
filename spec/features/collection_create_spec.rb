@@ -113,7 +113,7 @@ describe('Collection create', type: :request, integration: true) do
     expect(coll.is_published).to eq(false)
     expect(coll.is_destroyable).to eq(true)
     expect(coll.submitted_for_publish_time).to be_blank
-    expect(coll.valid?).to eq(true)  # Because unpublished, so validation is limited.
+    expect(coll.valid?).to eq(true) # Because unpublished, so validation is limited.
     expect(coll.is_open).to eq(false)
     # Go back to edit page and fill in required elements.
     should_visit_edit_page(coll)
