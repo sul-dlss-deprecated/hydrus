@@ -6,7 +6,7 @@ class CreateUserRoles < ActiveRecord::Migration
       t.timestamps
     end
     add_index :user_roles, :role
-    
+
     # default users in roles as of May 3, 2013
     UserRole.create(role: 'administrators',users: 'bess,geisler,hfrost,jdeering,lmcrae,petucket,snydman,tcramer,tonyn,jvine')
     UserRole.create(role: 'collection_creators',users: 'archivist1,archivist2,amyhodge,ronbo,mmarosti,dhartwig,skota,jcueva,gertvd,amorgan2,jejohns1,ssussman,jlmcbrid,jmanton,mtashiro')

@@ -8,19 +8,19 @@ class RSolr::Connection
     request_context[:uri] = uri
     body = Rack::Utils.parse_query(body)
     #move qt to post body
-    
+
     h = http request_context[:uri], request_context[:proxy], request_context[:read_timeout], request_context[:open_timeout]
-    
+
     request_context[:method] = :post
     request = setup_raw_request request_context
     request.set_form_data(body)
   else
-    
+
     h = http request_context[:uri], request_context[:proxy], request_context[:read_timeout], request_context[:open_timeout]
-    
+
     request = setup_raw_request request_context
-    
-    
+
+
     request.body = request_context[:data] if request_context[:method] ==:post && request_context[:data]
   end
     begin

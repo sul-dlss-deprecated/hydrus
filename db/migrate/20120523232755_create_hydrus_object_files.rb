@@ -5,6 +5,6 @@ class CreateHydrusObjectFiles < ActiveRecord::Migration
       t.string :file, null: false, default: ''
       t.timestamps
     end
-    add_index :object_files, :pid    
+    add_index :object_files, :pid
   end
 end

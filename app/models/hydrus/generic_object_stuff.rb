@@ -91,7 +91,7 @@ module Hydrus::GenericObjectStuff
     end
     descMetadata.relatedItem.location.url = h
   end
-  
+
   # Takes a string that is supposed to be a URI.
   # Returns the same string if it begins with a known protocol.
   # Otherwise, returns the string as an http URI.
@@ -100,13 +100,13 @@ module Hydrus::GenericObjectStuff
     return uri if uri =~ /\A (http|https|ftp|sftp):\/\/ /x
     'http://' + uri
   end
-  
+
   # Returns string representation of the class, minus the Hydrus:: prefix.
   # For example: Hydrus::Collection -> 'Collection'.
   def hydrus_class_to_s
     self.class.to_s.sub(/\AHydrus::/, '')
   end
-  
+
   # After collections are published, further edits to the object are allowed.
   # This occurs without requiring the open_new_version() process used by Items.
   #

@@ -14,7 +14,7 @@ describe Hydrus::Authorizable, type: :model do
     @hc   = double('mock_collecton')
     @hi   = double('mock_item')
   end
-  
+
   let(:admin_user) { double('mock_admin', is_administrator?: true ) }
   let(:creator_user) { double('mock_creator', is_collection_creator?: true ) }
   let(:viewer_user) { double('mock_viewer', is_global_viewer?: true ) }
@@ -67,7 +67,7 @@ describe Hydrus::Authorizable, type: :model do
     it 'should be a collection creator if the user says it is' do
       expect(@auth.can_create_collections(creator_user)).to be_truthy
     end
-    
+
     it 'should be a collection creator if the user says it is' do
       expect(@auth.is_global_viewer(viewer_user)).to be_truthy
     end

@@ -75,7 +75,7 @@ module Hydrus::Responsible
     end
     toret
   end
-  
+
   # Takes a hash of roles and SUNETIDs:
   #
   #   {

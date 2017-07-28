@@ -34,7 +34,7 @@ class RSolr::ClientCert::Connection
           headers: response.net_http_res.to_hash,
           body: response.net_http_res.body
         }
-      else 
+      else
         signature = [request_context[:method], request_context[:data], request_context[:headers]].compact
         resource.send(*signature) { |response, request, http_result, &block|
           result = {

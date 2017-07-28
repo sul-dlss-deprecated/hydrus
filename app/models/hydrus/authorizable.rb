@@ -24,7 +24,7 @@ module Hydrus::Authorizable
     users_in_role = UserRole.find_by_role(role)
     users_in_role.blank? ? Set.new([]) : Set.new(users_in_role.users.delete(' ').split(','))
   end
-  
+
   ####
   # Roles.
   ####

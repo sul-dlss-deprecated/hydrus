@@ -5,7 +5,7 @@ class EventsController < ApplicationController
       raise ActionController::RoutingError.new('Not Found')
     end
   end
-  
+
   before_filter :authenticate_user!
 
   def index

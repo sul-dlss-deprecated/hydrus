@@ -67,9 +67,9 @@ class HydrusCollectionsController < ApplicationController
     # Handle requests to add to multi-valued fields.
     ####
 
-    has_mvf = 
+    has_mvf =
       params.has_key?(:add_link)
-    
+
 
     if has_mvf
       if params.has_key?(:add_link)

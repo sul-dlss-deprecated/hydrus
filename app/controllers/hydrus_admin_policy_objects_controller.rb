@@ -4,7 +4,7 @@ class HydrusAdminPolicyObjectsController < ApplicationController
   include Hydra::Controller::UploadBehavior
 
   before_filter :authenticate_user!
-  
+
   def show
     @fobj = Hydrus::AdminPolicyObject.find(params[:id])
     authorize! :read, @fobj

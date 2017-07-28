@@ -18,7 +18,7 @@ describe WebAuthUser, type: :model do
       expect(@user.is_webauth?).to be_truthy
     end
   end
-  
+
   describe 'Privilege Groups' do
     let(:user_without_a_group) { WebAuthUser.new('jdoe') }
     let(:user_in_the_admin_group) { WebAuthUser.new('jdoe', { 'WEBAUTH_LDAPPRIVGROUP' => 'dlss:hydrus-app-administrators' }) }
@@ -28,13 +28,13 @@ describe WebAuthUser, type: :model do
       expect(user_without_a_group.is_collection_creator?).to be_falsey
       expect(user_without_a_group.is_global_viewer?).to be_falsey
     end
-    
+
     it 'should have privileges if the user is in the admin group' do
       expect(user_in_the_admin_group.is_administrator?).to be_truthy
       expect(user_in_the_admin_group.is_collection_creator?).to be_truthy
       expect(user_in_the_admin_group.is_global_viewer?).to be_truthy
     end
-    
+
     it 'should have privileges if the user is part of a priv group' do
       expect(user_in_role_groups.is_administrator?).to be_falsey
       expect(user_in_role_groups.is_collection_creator?).to be_truthy

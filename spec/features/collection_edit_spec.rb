@@ -335,15 +335,15 @@ describe('Collection edit', type: :request, integration: true) do
         email = ActionMailer::Base.deliveries.last
         expect(email.to).to eq(['archivist1@stanford.edu'])
         expect(email.subject).to eq('Collection opened for deposit in the Stanford Digital Repository')
-        
+
         click_link('Edit Collection')
 
         fill_in 'hydrus_collection_apo_person_roles[hydrus-collection-item-depositor]', with: 'jdoe'
-        
+
         expect { click_button('save_nojs') }.to change { ActionMailer::Base.deliveries.count }.by(1)
         email = ActionMailer::Base.deliveries.last
         expect(email.to).to eq(['jdoe@stanford.edu'])
-        expect(email.subject).to eq('Invitation to deposit in the Stanford Digital Repository')       
+        expect(email.subject).to eq('Invitation to deposit in the Stanford Digital Repository')
       end
 
       it "should not send an email to new depositors when we're updating a collection if user does not check the send email checkbox" do
@@ -359,10 +359,10 @@ describe('Collection edit', type: :request, integration: true) do
 
         fill_in 'hydrus_collection_apo_person_roles[hydrus-collection-item-depositor]', with: 'jdoe'
         uncheck('should_send_role_change_emails')
-        
+
         expect { click_button('save_nojs') }.to change { ActionMailer::Base.deliveries.count }.by(0)
       end
-      
+
       it 'should handle complex changes to depositors' do
         login_as('archivist1')
         visit new_hydrus_collection_path()

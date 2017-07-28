@@ -4,7 +4,7 @@ module Hydrus::UserWorkflowable
   def is_draft
     object_status == 'draft'
   end
-  
+
   # Returns true if the object status is any flavor of published. This status
   # is Hydrus-centric and aligns with the submitted_for_publish_time -- the
   # moment the user clicks Open/Approve/Publish in the UI. By contrast,
@@ -13,7 +13,7 @@ module Hydrus::UserWorkflowable
   def is_published
     object_status[0..8] == 'published'
   end
-  
+
   # Returns true if all required fields are filled in.
   def required_fields_completed?
     # Validate, and return true if all is OK.
@@ -37,7 +37,7 @@ module Hydrus::UserWorkflowable
     end
     cfs
   end
-  
+
   # Returns the version of the object as it exists in fedora.
   def old_self
     @cached_old_self ||= self.class.find(pid)

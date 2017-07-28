@@ -15,7 +15,7 @@ describe Ability, type: :model do
   end
 
   describe 'get_fedora_object()' do
-    
+
     it 'if given non-String, just return it' do
       obj = 1234
       expect(@ab.get_fedora_object(obj)).to eq(obj)

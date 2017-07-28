@@ -77,7 +77,7 @@ class Ability
 
   # Takes a String (presumably a pid) or an ActiveFedora object.
   # Returns the corresponding ActiveFedora object, if it exists; nil otherwise.
-  # 
+  #
   # Note: We catch the exception below to handle the scenario of a user manually
   # typing a URL with an invalid druid. In that case, this method will
   # return nil, and our methods in authorizable.rb need to return false

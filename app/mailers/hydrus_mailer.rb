@@ -14,10 +14,10 @@ class HydrusMailer < ActionMailer::Base
     @from = params[:from]
     @user = opts[:user]
     to = Hydrus::Application.config.contact_us_recipients[@subject]
-    cc = Hydrus::Application.config.contact_us_cc_recipients[@subject]    
-    mail(to: to,cc: cc, subject: "Contacting the Stanford Digital Repository (SDR) - #{@subject}") 
+    cc = Hydrus::Application.config.contact_us_cc_recipients[@subject]
+    mail(to: to,cc: cc, subject: "Contacting the Stanford Digital Repository (SDR) - #{@subject}")
   end
-  
+
   def invitation(opts={})
     @fobj = opts[:object]
     @collection_url = root_url(host: host)
@@ -29,13 +29,13 @@ class HydrusMailer < ActionMailer::Base
     @collection_url = polymorphic_url(@fobj, host: host)
     mail(to: HydrusMailer.process_user_list(opts[:to]), subject: 'Removed as a depositor in the Stanford Digital Repository') unless ignore?(@fobj.pid)
   end
-  
+
   def role_change(opts={})
     @fobj = opts[:object]
     @collection_url = polymorphic_url(@fobj, host: host)
     mail(to: HydrusMailer.process_user_list(opts[:to]), subject: 'Collection member updates in the Stanford Digital Repository') unless ignore?(@fobj.pid)
   end
-  
+
   def object_returned(opts={})
     @fobj = opts[:object]
     @returned_by = opts[:returned_by]
@@ -48,7 +48,7 @@ class HydrusMailer < ActionMailer::Base
     @item_url = opts[:item_url] || polymorphic_url(@fobj, host: host)
     mail(to: HydrusMailer.process_user_list(@fobj.recipients_for_item_deposit_emails), subject: "#{@fobj.object_type.capitalize} deposited in the Stanford Digital Repository") unless ignore?(@fobj.pid)
   end
-  
+
   def new_deposit(opts={})
     @fobj = opts[:object]
     @item_url = opts[:item_url] || polymorphic_url(@fobj, host: host)
@@ -60,7 +60,7 @@ class HydrusMailer < ActionMailer::Base
     @item_url = opts[:item_url] || polymorphic_url(@fobj, host: host)
     mail(to: HydrusMailer.process_user_list(@fobj.recipients_for_review_deposit_emails), subject: "#{@fobj.object_type.capitalize} ready for review in the Stanford Digital Repository") unless ignore?(@fobj.pid)
   end
-    
+
   def open_notification(opts={})
     @fobj = opts[:object]
     @collection_url = root_url(host: host)

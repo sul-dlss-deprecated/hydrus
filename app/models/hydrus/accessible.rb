@@ -50,7 +50,7 @@ module Hydrus::Accessible
     remove_world_read_access
     add_access_none_node
   end
-  
+
   # Returns true if there is a world read node.
   def has_world_read_node
     world_read_nodes.size > 0
@@ -73,20 +73,20 @@ module Hydrus::Accessible
     q = "#{xp_machine}/group"
     remove_nodes_by_xpath(q)
   end
-  
+
   # Add access <none/> node to read (remove any existing to avoid dupes)
   def add_access_none_node
     remove_access_none_nodes
     ng_xml.at_xpath(xp_machine).add_child('<none/>')
     ng_xml_will_change!
   end
-  
+
   # Removes access = none nodes
   def remove_access_none_nodes
     q = "#{xp_machine}/none"
     remove_nodes_by_xpath(q)
   end
-  
+
   # Removes world read nodes.
   def remove_world_read_access
     q = "#{xp_machine}/world"

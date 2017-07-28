@@ -99,7 +99,7 @@ describe HydrusCollectionsController, type: :controller do
     it 'should render the page for users with sufficient powers' do
       controller.current_ability.can :list_all_collections, Hydrus::Collection
       sign_in(mock_authed_user)
-      
+
       get(:list_all)
       expect(assigns[:all_collections]).not_to eq(nil)
       expect(response).to render_template(:list_all)

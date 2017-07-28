@@ -23,7 +23,7 @@ module Hydrus::Validatable
     end
     @status_valid
   end
-  
+
   # calling this method will removed the cached validate status, useful in unit tests
   def revalidate
     @status_valid = nil

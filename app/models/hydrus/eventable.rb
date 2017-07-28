@@ -10,7 +10,7 @@ module Hydrus::Eventable
   def current_user=(val)
     @current_user = val
   end
-  
+
   def get_hydrus_events
     es = []
     events.find_events_by_type('hydrus') do |who, whe, msg|
