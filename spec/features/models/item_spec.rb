@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe(Hydrus::Item, :type => :feature, :integration => true) do
+describe(Hydrus::Item, type: :feature, integration: true) do
 
   describe("Content metadata generation") do
 
@@ -126,13 +126,13 @@ describe(Hydrus::Item, :type => :feature, :integration => true) do
     end
 
     let(:collection) do
-      allow(@collection).to receive_messages(:is_open => true)
+      allow(@collection).to receive_messages(is_open: true)
       @collection
     end
 
     it "should create an item" do
       allow_any_instance_of(Dor::WorkflowDs).to receive(:current_priority).and_return 0
-      allow(collection).to receive_messages(:visibility_option_value => 'stanford', :license => 'some-license')
+      allow(collection).to receive_messages(visibility_option_value: 'stanford', license: 'some-license')
       item  = ItemService.create(collection.pid, mock_authed_user, 'some-type')
       expect(item).to be_instance_of Hydrus::Item
       expect(item).to_not be_new
@@ -151,7 +151,8 @@ describe(Hydrus::Item, :type => :feature, :integration => true) do
 
     it "should create another item" do
       allow_any_instance_of(Dor::WorkflowDs).to receive(:current_priority).and_return 0
-      allow(collection).to receive_messages(:users_accepted_terms_of_deposit => { mock_authed_user.to_s => Time.now})
+
+      allow(collection).to receive_messages(users_accepted_terms_of_deposit: { mock_authed_user.to_s => Time.now})
       item  = ItemService.create(collection.pid, mock_authed_user, 'some-type')
       expect(item).to be_instance_of Hydrus::Item
       expect(item).to_not be_new

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Hydrus::Item, :type => :model do
+describe Hydrus::Item, type: :model do
 
   before(:each) do
     @cannot_do_regex = /\ACannot perform action/
@@ -220,9 +220,9 @@ describe Hydrus::Item, :type => :model do
   describe "date=" do
     it 'should clear out existing dates and set a single date' do
       hash={
-        :date_created => ['2013'],
-        :date_created_approximate => 'hi',
-        :date_type => 'single'
+        date_created: ['2013'],
+        date_created_approximate: 'hi',
+        date_type: 'single'
       }
       @hi.dates = hash
       new_hash=@hi.dates
@@ -280,7 +280,7 @@ describe Hydrus::Item, :type => :model do
 
 
   end
-  describe "roleMetadata in the item", :integration=>true do
+  describe "roleMetadata in the item", integration: true do
     subject { Hydrus::Item.find('druid:oo000oo0001') }
     it "should have a roleMetadata datastream" do
       expect(subject.roleMetadata).to be_an_instance_of(Hydrus::RoleMetadataDS)
@@ -373,7 +373,7 @@ describe Hydrus::Item, :type => :model do
     before(:each) do
       @edate = '2012-02-28T08:00:00+00:00'
       # This enables the tests to run in a timezone other than Pacific.
-      allow(HyTime).to receive(:datetime).with("2012-02-28", :from_localzone => true).and_return(@edate)
+      allow(HyTime).to receive(:datetime).with("2012-02-28", from_localzone: true).and_return(@edate)
       # XML snippets for various <access> nodes.
       ed       = "<embargoReleaseDate>#{@edate}</embargoReleaseDate><none/>"
 
@@ -399,11 +399,11 @@ describe Hydrus::Item, :type => :model do
                  '</rightsMetadata>'
       # Assemble expected Nokogiri XML for embargoMetadata and rightsMetadata.
       @xml = {
-        :em_world   => noko_doc([em_start, em_world, twpc, em_end].join),
-        :em_stanf   => noko_doc([em_start, em_stanf, twpc, em_end].join),
-        :rm_emb     => noko_doc([rm_start, di_world, rd_emb,   rm_end].join),
-        :rm_world   => noko_doc([rm_start, di_world, rd_world, rm_end].join),
-        :rm_stanf   => noko_doc([rm_start, di_world, rd_stanf, rm_end].join),
+        em_world: noko_doc([em_start, em_world, twpc, em_end].join),
+        em_stanf: noko_doc([em_start, em_stanf, twpc, em_end].join),
+        rm_emb: noko_doc([rm_start, di_world, rd_emb,   rm_end].join),
+        rm_world: noko_doc([rm_start, di_world, rd_world, rm_end].join),
+        rm_stanf: noko_doc([rm_start, di_world, rd_stanf, rm_end].join),
       }
     end
 
@@ -459,7 +459,7 @@ describe Hydrus::Item, :type => :model do
         let(:rd_dt) { "2012-08-30T08:00:00+00:00" }
         before do
           # This enables the tests to run in a timezone other than Pacific.
-          allow(HyTime).to receive(:datetime).with("2012-08-30", :from_localzone => true).and_return(rd_dt)
+          allow(HyTime).to receive(:datetime).with("2012-08-30", from_localzone: true).and_return(rd_dt)
         end
 
         it "store date in UTC in both embargoMD and rightsMD" do
@@ -676,9 +676,9 @@ describe Hydrus::Item, :type => :model do
       allow(@hi).to receive(:reviewed_release_settings).and_return(true)
       @exp.each { |e| allow(@hi).to receive(e).and_return(dru) unless e==:contact }
       allow(@hi).to receive(:contact).and_return('test@test.com') # we need a valid email address
-      allow(@hi).to receive(:contributors).and_return([Hydrus::Contributor.new(:name=>'Some, person')]) # need at least one non-blank contributor
+      allow(@hi).to receive(:contributors).and_return([Hydrus::Contributor.new(name: 'Some, person')]) # need at least one non-blank contributor
       allow(@hi).to receive(:keywords).and_return(%w(aaa bbb))
-      allow(@hi).to receive(:dates).and_return({:date_created => '2011'})
+      allow(@hi).to receive(:dates).and_return({date_created: '2011'})
       allow(@hi).to receive(:date_created).and_return('2011')
       allow(@hi).to receive(:single_date?).and_return true
       allow(@hi).to receive_message_chain([:collection, :embargo_option]).and_return("varies")
@@ -694,7 +694,7 @@ describe Hydrus::Item, :type => :model do
     it "enforce_collection_is_open() should return true only if the Item is in an open Collection" do
       n  = 0
       [true, false, nil].each do |stub_val|
-        c    = double('collection', :is_open => stub_val)
+        c    = double('collection', is_open: stub_val)
         exp  = not(not(stub_val))
         n   += 1 unless exp
         allow(@hi).to receive(:collection).and_return(c)
@@ -1250,7 +1250,7 @@ describe Hydrus::Item, :type => :model do
       @stub_vm.call('1.0.1')
       expect(@hi.is_initial_version).to eq(true)
       @stub_vm.call('1.0.1')
-      expect(@hi.is_initial_version(:absolute => true)).to eq(false)
+      expect(@hi.is_initial_version(absolute: true)).to eq(false)
       @stub_vm.call('2.0.0')
       expect(@hi.is_initial_version).to eq(false)
       @stub_vm.call('2.1.0')

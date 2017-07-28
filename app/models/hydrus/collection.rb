@@ -14,12 +14,12 @@ class Hydrus::Collection < Dor::Collection
   after_validation :cleanup_usernames
   after_validation :strip_whitespace
 
-  validates :title,    :not_empty => true, :if => :should_validate
-  validates :abstract, :not_empty => true, :if => :should_validate
-  validates :contact,  :not_empty => true, :if => :should_validate
+  validates :title,    not_empty: true, if: :should_validate
+  validates :abstract, not_empty: true, if: :should_validate
+  validates :contact,  not_empty: true, if: :should_validate
 
-  validates :embargo_option, :presence => true, :if => :should_validate
-  validates :license_option, :presence => true, :if => :should_validate
+  validates :embargo_option, presence: true, if: :should_validate
+  validates :license_option, presence: true, if: :should_validate
   validate  :check_embargo_options
   validate  :check_license_options
 
@@ -101,7 +101,7 @@ class Hydrus::Collection < Dor::Collection
       object_type=self.class.array_to_single(solr_doc['mods_typeOfResource_ssim'])
       depositor=self.class.array_to_single(solr_doc['item_depositor_person_identifier_ssm'])
       create_date=solr_doc['system_create_dtsi']
-      items << {:pid=>id,:num_files=>num_files,:object_type=>object_type,:title=>title,:status_label=>status,:item_depositor_id=>depositor,:create_date=>create_date}
+      items << {pid: id,num_files: num_files,object_type: object_type,title: title,status_label: status,item_depositor_id: depositor,create_date: create_date}
     end
     items
 
@@ -134,7 +134,7 @@ class Hydrus::Collection < Dor::Collection
     coll.object_status = 'draft'
     coll.title = ''
     # Save and return.
-    coll.save(:no_edit_logging => true, :no_beautify => true)
+    coll.save(no_edit_logging: true, no_beautify: true)
     coll
   end
 
@@ -300,26 +300,26 @@ class Hydrus::Collection < Dor::Collection
 
   def send_role_change_email(recipients)
     return if recipients.blank?
-    email=HydrusMailer.role_change(:to =>  recipients, :object =>  self)
+    email=HydrusMailer.role_change(to: recipients, object: self)
     email.deliver_now unless email.to.blank?
   end
 
   def send_remove_invitation_email_notification(recipients)
     return if recipients.blank?
-    email=HydrusMailer.invitation_removed(:to =>  recipients, :object =>  self)
+    email=HydrusMailer.invitation_removed(to: recipients, object: self)
     email.deliver_now unless email.to.blank?
   end
 
   def send_invitation_email_notification(recipients)
     return if recipients.blank?
-    email=HydrusMailer.invitation(:to =>  recipients, :object =>  self)
+    email=HydrusMailer.invitation(to: recipients, object: self)
     email.deliver_now unless email.to.blank?
   end
 
   def send_publish_email_notification(value)
     return if recipients_for_collection_update_emails.blank?
     meth = value ? 'open' : 'close'
-    email = HydrusMailer.send("#{meth}_notification", :object => self)
+    email = HydrusMailer.send("#{meth}_notification", object: self)
     email.deliver_now unless email.to.blank?
   end
 
@@ -514,12 +514,12 @@ class Hydrus::Collection < Dor::Collection
 
   def tracked_fields
     {
-      :title       => [:title],
-      :description => [:abstract],
-      :embargo     => [:embargo_option, :embargo_terms],
-      :visibility  => [:visibility_option, :visibility],
-      :license     => [:license_option, :license],
-      :roles       => [:apo_person_roles],
+      title: [:title],
+      description: [:abstract],
+      embargo: [:embargo_option, :embargo_terms],
+      visibility: [:visibility_option, :visibility],
+      license: [:license_option, :license],
+      roles: [:apo_person_roles],
     }
   end
 
@@ -572,7 +572,7 @@ class Hydrus::Collection < Dor::Collection
     resp, sdocs = issue_solr_query(h)
     sdocs.each do |doc|
       pid = doc['objectId_ssim'].first unless doc['objectId_ssim'].nil?
-      toret[pid] = {:solr => doc} if pid
+      toret[pid] = {solr: doc} if pid
     end
 
     toret

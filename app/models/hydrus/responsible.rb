@@ -129,40 +129,40 @@ module Hydrus::Responsible
     h = {
       # Item-level roles.
       'hydrus-item-depositor' => {
-        :label  => "Item Depositor",
-        :help   => "This is the original depositor of the item and can peform any action with the item",
-        :lesser => %w(hydrus-item-manager),
+        label: "Item Depositor",
+        help: "This is the original depositor of the item and can peform any action with the item",
+        lesser: %w(hydrus-item-manager),
       },
       'hydrus-item-manager' => {
-        :label  => "Item Manager",
-        :help   => "These users can edit the item",
-        :lesser => %w(),
+        label: "Item Manager",
+        help: "These users can edit the item",
+        lesser: %w(),
       },
       # Collection-level roles.
       'hydrus-collection-depositor' => {
-        :label  => "Owner",
-        :help   => "This user is the collection owner and can perform any action with the collection",
-        :lesser => %w(hydrus-collection-reviewer hydrus-collection-item-depositor hydrus-collection-viewer),
+        label: "Owner",
+        help: "This user is the collection owner and can perform any action with the collection",
+        lesser: %w(hydrus-collection-reviewer hydrus-collection-item-depositor hydrus-collection-viewer),
       },
       'hydrus-collection-manager' => {
-        :label  => "Manager",
-        :help   => "These users can edit collection details, and add and review items in the collection",
-        :lesser => %w(hydrus-collection-reviewer hydrus-collection-item-depositor hydrus-collection-viewer),
+        label: "Manager",
+        help: "These users can edit collection details, and add and review items in the collection",
+        lesser: %w(hydrus-collection-reviewer hydrus-collection-item-depositor hydrus-collection-viewer),
       },
       'hydrus-collection-reviewer' => {
-        :label  => "Reviewer",
-        :help   => "These users can review items in the collection, but not add new items",
-        :lesser => %w(hydrus-collection-viewer),
+        label: "Reviewer",
+        help: "These users can review items in the collection, but not add new items",
+        lesser: %w(hydrus-collection-viewer),
       },
       'hydrus-collection-item-depositor' => {
-        :label  => "Depositor",
-        :help   => "These users can add items to the collection, but cannot act as reviewers",
-        :lesser => %w(hydrus-collection-viewer),
+        label: "Depositor",
+        help: "These users can add items to the collection, but cannot act as reviewers",
+        lesser: %w(hydrus-collection-viewer),
       },
       'hydrus-collection-viewer' => {
-        :label  => "Viewer",
-        :help   => "These users can view items in the collection only",
-        :lesser => %w(),
+        label: "Viewer",
+        help: "These users can view items in the collection only",
+        lesser: %w(),
       },
     }
     # Remove item-level roles.

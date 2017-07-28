@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe(Hydrus::Collection, :type => :feature, :integration => true) do
+describe(Hydrus::Collection, type: :feature, integration: true) do
 
   before(:all) do
     @prev_mint_ids = config_mint_ids()

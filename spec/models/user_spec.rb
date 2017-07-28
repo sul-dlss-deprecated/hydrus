@@ -1,11 +1,11 @@
 require 'spec_helper'
 
-describe User, :type => :model do
+describe User, type: :model do
 
   before(:each) do
     @id    = 'somebody'
     @email = "#{@id}@example.com"
-    @u     = User.create(:email => @email)
+    @u     = User.create(email: @email)
   end
 
   it "should return false to is_webauth?" do

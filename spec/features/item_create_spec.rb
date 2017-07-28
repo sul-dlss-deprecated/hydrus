@@ -1,34 +1,34 @@
 require 'spec_helper'
 
-describe("Item create", :type => :request, :integration => true) do
+describe("Item create", type: :request, integration: true) do
 
   before(:all) do
     @div_alert   = "#flash-notices div.alert"
     @span_status = 'span#status-label'
     @div_actions = "div.collection-actions"
     @notices = {
-      :save                => "Your changes have been saved.",
-      :publish_directly    => "Item published: v",
-      :submit_for_approval => "Item submitted for approval.",
-      :approve             => "Item approved and published: v",
-      :disapprove          => "Item returned.",
-      :resubmit            => "Item resubmitted for approval.",
+      save: "Your changes have been saved.",
+      publish_directly: "Item published: v",
+      submit_for_approval: "Item submitted for approval.",
+      approve: "Item approved and published: v",
+      disapprove: "Item returned.",
+      resubmit: "Item resubmitted for approval.",
     }
     @status_msgs = {
-      :draft             => "Draft",
-      :awaiting_approval => "Waiting for approval",
-      :returned          => "Item returned",
-      :published         => "Published",
+      draft: "Draft",
+      awaiting_approval: "Waiting for approval",
+      returned: "Item returned",
+      published: "Published",
     }
     @buttons = {
-      :add                 => 'Add',
-      :save                => 'save_nojs',
-      :add_contributor     => 'Add Contributor',
-      :submit_for_approval => 'Submit for Approval',
-      :resubmit            => 'Resubmit for Approval',
-      :disapprove          => 'Return',
-      :approve             => 'Approve and Publish',
-      :publish_directly    => 'Publish',
+      add: 'Add',
+      save: 'save_nojs',
+      add_contributor: 'Add Contributor',
+      submit_for_approval: 'Submit for Approval',
+      resubmit: 'Resubmit for Approval',
+      disapprove: 'Return',
+      approve: 'Approve and Publish',
+      publish_directly: 'Publish',
     }
     @hc_druid = 'druid:oo000oo0003'
     @edit_path_regex = Regexp.new('/items/(druid:\w{11})/edit')
@@ -45,10 +45,10 @@ describe("Item create", :type => :request, :integration => true) do
   context "depositing items into collections" do
       it "should have a non-js select list for depositing items into collections" do
         login_as('archivist1')
-        visit hydrus_collection_path(:id=>@hc_druid)
-        select "data set", :from => "type"
+        visit hydrus_collection_path(id: @hc_druid)
+        select "data set", from: "type"
         click_button("Add new item")
-        expect(current_path).not_to eq(hydrus_collection_path(:id=>@hc_druid))
+        expect(current_path).not_to eq(hydrus_collection_path(id: @hc_druid))
         expect(current_path).to match(@edit_path_regex)
       end
 
@@ -66,13 +66,13 @@ describe("Item create", :type => :request, :integration => true) do
   it "should be able to create a new default Item type, with expected datastreams" do
     # Login, go to new Item page, and store the druid of the new Item.
     login_as('archivist1')
-    visit new_hydrus_item_path(:collection => @hc_druid)
+    visit new_hydrus_item_path(collection: @hc_druid)
     expect(current_path).to match(@edit_path_regex)
     druid = @edit_path_regex.match(current_path)[1]
     # Fill in form and save.
-    fill_in "Title of item", :with => 'title_foo'
-    fill_in "hydrus_item_contributors_0_name", :with => 'contributor_foo'
-    fill_in "Abstract", :with => 'abstract_foo'
+    fill_in "Title of item", with: 'title_foo'
+    fill_in "hydrus_item_contributors_0_name", with: 'contributor_foo'
+    fill_in "Abstract", with: 'abstract_foo'
     click_button(@buttons[:save])
     expect(find(@div_alert)).to have_content(@notices[:save])
     # Get Item out of fedora and confirm that our edits were persisted.
@@ -108,15 +108,15 @@ describe("Item create", :type => :request, :integration => true) do
   it "should not be able to publish an item if there are no contributors" do
     # Login, go to new Item page, and store the druid of the new Item.
     login_as('archivist1')
-    visit new_hydrus_item_path(:collection => @hc_druid, :type=>'article')
+    visit new_hydrus_item_path(collection: @hc_druid, type: 'article')
     expect(current_path).to match(@edit_path_regex)
     druid = @edit_path_regex.match(current_path)[1]
     # Fill in form with all required fields (except contributor) and save.
-    fill_in "Title of item", :with => 'title_article'
-    fill_in "hydrus_item_contact", :with => 'bogus_email@test.com'
-    fill_in "Abstract", :with => 'abstract_article'
-    fill_in "Keywords", :with => 'keyword'
-    fill_in "hydrus_item_dates_date_created", :with => '2017'
+    fill_in "Title of item", with: 'title_article'
+    fill_in "hydrus_item_contact", with: 'bogus_email@test.com'
+    fill_in "Abstract", with: 'abstract_article'
+    fill_in "Keywords", with: 'keyword'
+    fill_in "hydrus_item_dates_date_created", with: '2017'
     check "terms_of_deposit_checkbox"
     check "release_settings"
     f = Hydrus::ObjectFile.new
@@ -132,7 +132,7 @@ describe("Item create", :type => :request, :integration => true) do
 
     # add in a contributor and confirm validation message goes away and publish button appears
     visit edit_hydrus_item_path(druid)
-    fill_in "hydrus_item_contributors_0_name", :with => 'Some, person' # nonblank contributor
+    fill_in "hydrus_item_contributors_0_name", with: 'Some, person' # nonblank contributor
     click_button(@buttons[:save])
     expect(find(@div_alert)).to_not have_content("Contributors must be entered")
     expect(page).to have_button('Publish')
@@ -141,13 +141,13 @@ describe("Item create", :type => :request, :integration => true) do
   it "should be able to create a new article type Item, with expected datastreams" do
     # Login, go to new Item page, and store the druid of the new Item.
     login_as('archivist1')
-    visit new_hydrus_item_path(:collection => @hc_druid, :type=>'article')
+    visit new_hydrus_item_path(collection: @hc_druid, type: 'article')
     expect(current_path).to match(@edit_path_regex)
     druid = @edit_path_regex.match(current_path)[1]
     # Fill in form and save.
-    fill_in "Title of item", :with => 'title_article'
-    fill_in "hydrus_item_contributors_0_name", :with => 'contributor_article'
-    fill_in "Abstract", :with => 'abstract_article'
+    fill_in "Title of item", with: 'title_article'
+    fill_in "hydrus_item_contributors_0_name", with: 'contributor_article'
+    fill_in "Abstract", with: 'abstract_article'
     click_button(@buttons[:save])
     expect(find(@div_alert)).to have_content(@notices[:save])
     # Get Item out of fedora and confirm that our edits were persisted.
@@ -165,13 +165,13 @@ describe("Item create", :type => :request, :integration => true) do
   it "should be able to create a new class project Item, with expected datastreams" do
     # Login, go to new Item page, and store the druid of the new Item.
     login_as('archivist1')
-    visit new_hydrus_item_path(:collection => @hc_druid, :type=>'class project')
+    visit new_hydrus_item_path(collection: @hc_druid, type: 'class project')
     expect(current_path).to match(@edit_path_regex)
     druid = @edit_path_regex.match(current_path)[1]
     # Fill in form and save.
-    fill_in "Title of item", :with => 'title_article'
-    fill_in "hydrus_item_contributors_0_name", :with => 'contributor_article'
-    fill_in "Abstract", :with => 'abstract_article'
+    fill_in "Title of item", with: 'title_article'
+    fill_in "hydrus_item_contributors_0_name", with: 'contributor_article'
+    fill_in "Abstract", with: 'abstract_article'
     click_button(@buttons[:save])
 
     expect(find(@div_alert)).to have_content(@notices[:save])
@@ -191,13 +191,13 @@ describe("Item create", :type => :request, :integration => true) do
   it "Requires approval: should be able to submit, disapprove, resubmit, approve, etc" do
     # Setup.
     ni = OpenStruct.new(
-      :title       => 'title_foo',
-      :abstract    => 'abstract_foo',
-      :contact     => 'ozzy@hell.com',
-      :reason      => 'Idiota',
-      :contributor => 'contributor_foo',
-      :keywords    => 'aaa,bbb',
-      :date_created => '2011',
+      title: 'title_foo',
+      abstract: 'abstract_foo',
+      contact: 'ozzy@hell.com',
+      reason: 'Idiota',
+      contributor: 'contributor_foo',
+      keywords: 'aaa,bbb',
+      date_created: '2011',
     )
 
     # Force Items to receive human approval.
@@ -208,14 +208,14 @@ describe("Item create", :type => :request, :integration => true) do
     # Login as a item depositor for this collection, go to new Item page, and
     # store the druid of the new Item.
     login_as('archivist6')
-    visit new_hydrus_item_path(:collection => @hc_druid)
+    visit new_hydrus_item_path(collection: @hc_druid)
     expect(page).to have_content('Welcome archivist6!')
     expect(current_path).to match(@edit_path_regex)
     druid = @edit_path_regex.match(current_path)[1]
 
     # Fill in form and save.
-    fill_in "hydrus_item_contributors_0_name", :with => ni.contributor
-    fill_in "Title of item", :with => ni.title
+    fill_in "hydrus_item_contributors_0_name", with: ni.contributor
+    fill_in "Title of item", with: ni.title
     click_button(@buttons[:save])
     expect(find(@div_alert)).to have_content(@notices[:save])
 
@@ -240,10 +240,10 @@ describe("Item create", :type => :request, :integration => true) do
     # Go back to edit page and fill in required elements.
     should_visit_edit_page(item)
     check "release_settings"
-    fill_in "hydrus_item_abstract", :with => ni.abstract
-    fill_in "hydrus_item_contact",  :with => ni.contact
-    fill_in "hydrus_item_keywords", :with => ni.keywords
-    fill_in "hydrus_item_dates_date_created", :with => ni.date_created
+    fill_in "hydrus_item_abstract", with: ni.abstract
+    fill_in "hydrus_item_contact",  with: ni.contact
+    fill_in "hydrus_item_keywords", with: ni.keywords
+    fill_in "hydrus_item_dates_date_created", with: ni.date_created
     f = Hydrus::ObjectFile.new
     f.pid = druid
     f.file = Tempfile.new('mock_HydrusObjectFile_')
@@ -262,7 +262,7 @@ describe("Item create", :type => :request, :integration => true) do
 
     # The view page should now offer the Submit for approval button (but no publish button) since we
     # have accepted the terms.
-    visit hydrus_item_path(:id=>item.pid)
+    visit hydrus_item_path(id: item.pid)
     expect(find(@div_actions)).to have_button(@buttons[:submit_for_approval])
     expect(find(@div_actions)).not_to have_button(@buttons[:publish_directly])
 
@@ -304,21 +304,21 @@ describe("Item create", :type => :request, :integration => true) do
 
     # Return to edit page, and try to save Item with an empty title.
     click_link "Edit Draft"
-    fill_in "hydrus_item_title", :with => ''
+    fill_in "hydrus_item_title", with: ''
     click_button(@buttons[:save])
     expect(find(@div_alert)).not_to have_content(@notices[:save])
     expect(find(@div_alert)).to have_content('Title cannot be blank')
 
     # Fill in the title and save.
-    fill_in "hydrus_item_title", :with => ni.title
+    fill_in "hydrus_item_title", with: ni.title
     click_button(@buttons[:save])
     expect(find(@div_alert)).to have_content(@notices[:save])
 
     # now login as archivist 1 (collection manager) and Disapprove the Item.
     login_as('archivist1')
-    visit hydrus_item_path(:id=>item.pid)
+    visit hydrus_item_path(id: item.pid)
     expect(page).to have_content('Welcome archivist1!')
-    fill_in "hydrus_item_disapproval_reason", :with => ni.reason
+    fill_in "hydrus_item_disapproval_reason", with: ni.reason
     e = expect { click_button(@buttons[:disapprove]) }
     e.to change { ActionMailer::Base.deliveries.count }.by(1)
 
@@ -334,12 +334,12 @@ describe("Item create", :type => :request, :integration => true) do
     expect(item.is_destroyable).to eq(true)
     expect(item.valid?).to eq(true)
     expect(item.disapproval_reason).to eq(ni.reason)
-    visit hydrus_item_path(:id=>item.pid)
+    visit hydrus_item_path(id: item.pid)
     expect(find(@span_status)).to have_content(@status_msgs[:returned])
 
     # now login as archivist 6 (depositor) and resubmit the Item.
     login_as('archivist6')
-    visit hydrus_item_path(:id=>item.pid)
+    visit hydrus_item_path(id: item.pid)
     expect(page).to have_content('Welcome archivist6!')
     expect(page).to have_content(ni.reason)
     expect(find(@span_status)).to have_content(@status_msgs[:returned])
@@ -360,7 +360,7 @@ describe("Item create", :type => :request, :integration => true) do
 
     # Now login as archivist 1 and approve the item.
     login_as('archivist1')
-    visit hydrus_item_path(:id=>item.pid)
+    visit hydrus_item_path(id: item.pid)
     click_button(@buttons[:approve])
     expect(find(@div_alert)).to have_content(@notices[:approve])
 
@@ -383,7 +383,7 @@ describe("Item create", :type => :request, :integration => true) do
     expect(item.is_embargoed).to eq(false)
     expect(item.submitted_for_publish_time).not_to be_blank
     expect(item.visibility).to eq(["stanford"])
-    ps={:visibility=>'stanford',:license_code=>'cc-by',:embargo_date=>''}
+    ps={visibility: 'stanford',license_code: 'cc-by',embargo_date: ''}
     check_emb_vis_lic(item,ps)
 
     # Check events.
@@ -403,13 +403,13 @@ describe("Item create", :type => :request, :integration => true) do
 
   it "Does not require approval: should be able to publish directly, with world visible rights and a different license than collection" do
     ni = OpenStruct.new(
-      :title       => 'title_foo',
-      :abstract    => 'abstract_foo',
-      :contact     => 'ozzy@hell.com',
-      :reason      => 'Idiota',
-      :contributor => 'contributor_foo',
-      :keywords    => 'aaa,bbb',
-      :date_created => '2011',
+      title: 'title_foo',
+      abstract: 'abstract_foo',
+      contact: 'ozzy@hell.com',
+      reason: 'Idiota',
+      contributor: 'contributor_foo',
+      keywords: 'aaa,bbb',
+      date_created: '2011',
     )
     # Force Items to not receive human approval and have varied visiblity and licenses
     coll = Hydrus::Collection.find(@hc_druid)
@@ -421,14 +421,14 @@ describe("Item create", :type => :request, :integration => true) do
 
     # Login as a item depositor for this collection, go to new Item page, and store the druid of the new Item.
     login_as('archivist1')
-    visit new_hydrus_item_path(:collection => @hc_druid)
+    visit new_hydrus_item_path(collection: @hc_druid)
     expect(current_path).to match(@edit_path_regex)
     druid = @edit_path_regex.match(current_path)[1]
     # Fill in form and save.
-    fill_in "hydrus_item_contributors_0_name", :with => ni.contributor
-    fill_in "Title of item", :with => ni.title
-    select "everyone", :from => "hydrus_item_embarg_visib_visibility"
-    select "CC BY-ND Attribution-NoDerivs", :from=>"hydrus_item_license"
+    fill_in "hydrus_item_contributors_0_name", with: ni.contributor
+    fill_in "Title of item", with: ni.title
+    select "everyone", from: "hydrus_item_embarg_visib_visibility"
+    select "CC BY-ND Attribution-NoDerivs", from: "hydrus_item_license"
     click_button(@buttons[:save])
     expect(find(@div_alert)).to have_content(@notices[:save])
     # The view page should display some validation error messages, and should not
@@ -448,10 +448,10 @@ describe("Item create", :type => :request, :integration => true) do
     # Go back to edit page and fill in required elements.
     should_visit_edit_page(item)
     check "release_settings"
-    fill_in "hydrus_item_abstract", :with => ni.abstract
-    fill_in "hydrus_item_contact",  :with => ni.contact
-    fill_in "hydrus_item_keywords", :with => ni.keywords
-    fill_in "hydrus_item_dates_date_created", :with => ni.date_created
+    fill_in "hydrus_item_abstract", with: ni.abstract
+    fill_in "hydrus_item_contact",  with: ni.contact
+    fill_in "hydrus_item_keywords", with: ni.keywords
+    fill_in "hydrus_item_dates_date_created", with: ni.date_created
     f = Hydrus::ObjectFile.new
     f.pid = druid
     f.file = Tempfile.new('mock_HydrusObjectFile_')
@@ -466,7 +466,7 @@ describe("Item create", :type => :request, :integration => true) do
     check "terms_of_deposit_checkbox"
     click_button(@buttons[:save])
 
-    visit hydrus_item_path(:id=>item.pid)
+    visit hydrus_item_path(id: item.pid)
     # now we should have the publish button
     expect(find(@div_actions)).to have_button(@buttons[:publish_directly])
     # Check various Item attributes and methods.
@@ -494,17 +494,17 @@ describe("Item create", :type => :request, :integration => true) do
     expect(item.is_returned).to eq(false)
     expect(item.is_destroyable).to eq(false)
     expect(item.valid?).to eq(true)
-    ps={:visibility=>'world',:license_code=>'cc-by-nd',:embargo_date=>''}
+    ps={visibility: 'world',license_code: 'cc-by-nd',embargo_date: ''}
     check_emb_vis_lic(item,ps)
 
     # Return to edit page, and try to save Item with an empty title.
     should_visit_edit_page(item)
-    fill_in "hydrus_item_title", :with => ''
+    fill_in "hydrus_item_title", with: ''
     click_button(@buttons[:save])
     expect(find(@div_alert)).not_to have_content(@notices[:save])
     expect(find(@div_alert)).to have_content('Title cannot be blank')
     # Fill in the title and save.
-    fill_in "hydrus_item_title", :with => ni.title
+    fill_in "hydrus_item_title", with: ni.title
     click_button(@buttons[:save])
     expect(find(@div_alert)).to have_content(@notices[:save])
 
@@ -519,7 +519,7 @@ describe("Item create", :type => :request, :integration => true) do
     ]
   end
 
-  describe("terms of acceptance for an existing item", :integration => true)  do
+  describe("terms of acceptance for an existing item", integration: true)  do
 
     subject { Hydrus::Item.find('druid:oo000oo0001') }
 
@@ -634,7 +634,7 @@ describe("Item create", :type => :request, :integration => true) do
       #   - in SOLR
       #   - in workflows
       expect(hi.class).to eq(hyi)
-      expect(hyc.all_hydrus_objects(:models => [hyi], :pids_only => true)).to include(pid)
+      expect(hyc.all_hydrus_objects(models: [hyi], pids_only: true)).to include(pid)
       expect(wfs.get_workflows(pid)).to eq([hwf])
       #   - with an uploaded file
       #   - and a corresponding entry in DB table
@@ -650,7 +650,7 @@ describe("Item create", :type => :request, :integration => true) do
       #   - from SOLR
       #   - from workflows
       expect { hyi.find(pid) }.to raise_error(afe)
-      expect(hyc.all_hydrus_objects(:models => [hyi], :pids_only => true)).not_to include(pid)
+      expect(hyc.all_hydrus_objects(models: [hyi], pids_only: true)).not_to include(pid)
       expect(wfs.get_workflows(pid)).to eq([])
       #   - with no upload directory
       #   - and no DB entries

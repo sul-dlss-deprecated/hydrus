@@ -25,8 +25,8 @@ def login_as(email, password = nil)
   email += '@example.com' unless email.include?('@')
   logout
   visit new_user_session_path
-  fill_in "Email", :with => email
-  fill_in "Password", :with => password
+  fill_in "Email", with: email
+  fill_in "Password", with: password
   click_button "Sign in"
 end
 
@@ -49,7 +49,7 @@ end
 # Extracts the new item's druid from the path and returns it.
 def should_visit_new_item_page(coll)
   rgx = Regexp.new('/items/(druid:\w{11})/edit')
-  visit new_hydrus_item_path(:collection => coll)
+  visit new_hydrus_item_path(collection: coll)
   expect(current_path).to match(rgx)
   druid = rgx.match(current_path)[1]
   druid
@@ -153,12 +153,12 @@ end
 def create_new_collection(opts = {})
   # Setup options.
   default_opts = {
-    :user                    => 'archivist1',
-    :title                   => 'title_foo',
-    :abstract                => 'abstract_foo',
-    :contact                 => 'foo@bar.com',
-    :requires_human_approval => 'yes',
-    :viewers                 => '',
+    user: 'archivist1',
+    title: 'title_foo',
+    abstract: 'abstract_foo',
+    contact: 'foo@bar.com',
+    requires_human_approval: 'yes',
+    viewers: '',
   }
   opts = OpenStruct.new(default_opts.merge opts)
   # Login and create new collection.
@@ -173,10 +173,10 @@ def create_new_collection(opts = {})
   hc    = 'hydrus_collection'
   rmdiv = find('div#role-management')
   dk    = 'hydrus_collection_apo_person_roles'
-  fill_in "#{hc}_title",    :with => opts.title
-  fill_in "#{hc}_abstract", :with => opts.abstract
-  fill_in "#{hc}_contact",  :with => opts.contact
-  fill_in "#{hc}_apo_person_roles[hydrus-collection-viewer]", :with => opts.viewers
+  fill_in "#{hc}_title",    with: opts.title
+  fill_in "#{hc}_abstract", with: opts.abstract
+  fill_in "#{hc}_contact",  with: opts.contact
+  fill_in "#{hc}_apo_person_roles[hydrus-collection-viewer]", with: opts.viewers
   choose  "#{hc}_requires_human_approval_" + opts.requires_human_approval
   # Save.
   click_button "save_nojs"
@@ -192,15 +192,15 @@ end
 def create_new_item(opts = {})
   # Setup options.
   default_opts = {
-    :collection_pid          => 'druid:oo000oo0003',
-    :user                    => mock_authed_user,
-    :title                   => 'title_foo',
-    :abstract                => 'abstract_foo',
-    :contributor             => 'foo_contributor',
-    :contact                 => 'foo@bar.com',
-    :keywords                => 'topicA,topicB',
-    :requires_human_approval => 'yes',
-    :date_created            => '2011',
+    collection_pid: 'druid:oo000oo0003',
+    user: mock_authed_user,
+    title: 'title_foo',
+    abstract: 'abstract_foo',
+    contributor: 'foo_contributor',
+    contact: 'foo@bar.com',
+    keywords: 'topicA,topicB',
+    requires_human_approval: 'yes',
+    date_created: '2011',
   }
   opts = OpenStruct.new(default_opts.merge opts)
   # Set the Collection's require_human_approval value.
@@ -209,7 +209,7 @@ def create_new_item(opts = {})
   hc.save
   # Login and create new item.
   login_as(opts.user.to_s)
-  visit new_hydrus_item_path(:collection => hc.pid)
+  visit new_hydrus_item_path(collection: hc.pid)
   # Extract the druid from the URL.
   r = Regexp.new('/items/(druid:\w{11})/edit')
   m = r.match(current_path)
@@ -217,12 +217,12 @@ def create_new_item(opts = {})
   druid = m[1]
   # Fill in the required fields.
   click_button('Add Contributor')
-  fill_in "hydrus_item_contributors_0_name", :with => opts.contributor
-  fill_in "Title of item",        :with => opts.title
-  fill_in "hydrus_item_abstract", :with => opts.abstract
-  fill_in "hydrus_item_contact",  :with => opts.contact
-  fill_in "hydrus_item_keywords", :with => opts.keywords
-  fill_in "hydrus_item_dates_date_created", :with => opts.date_created
+  fill_in "hydrus_item_contributors_0_name", with: opts.contributor
+  fill_in "Title of item",        with: opts.title
+  fill_in "hydrus_item_abstract", with: opts.abstract
+  fill_in "hydrus_item_contact",  with: opts.contact
+  fill_in "hydrus_item_keywords", with: opts.keywords
+  fill_in "hydrus_item_dates_date_created", with: opts.date_created
   choose "hydrus_item_dates_date_type_single"
   check "release_settings"
   # Add a file.

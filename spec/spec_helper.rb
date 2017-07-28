@@ -108,8 +108,8 @@ RSpec.configure do |config|
   # as the one that triggered the failure.
   # Kernel.srand config.seed
 
-  config.include Devise::Test::ControllerHelpers, :type => :controller
-  config.include Warden::Test::Helpers, :type => :controller
+  config.include Devise::Test::ControllerHelpers, type: :controller
+  config.include Warden::Test::Helpers, type: :controller
   config.after(:each) { Warden.test_reset! }
 
   config.include Capybara::DSL

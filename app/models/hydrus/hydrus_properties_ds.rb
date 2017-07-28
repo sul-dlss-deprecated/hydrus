@@ -4,34 +4,34 @@ class Hydrus::HydrusPropertiesDS < ActiveFedora::OmDatastream
   include SolrDocHelper
 
   set_terminology do |t|
-    t.root :path => 'hydrusProperties'
+    t.root path: 'hydrusProperties'
 
-    t.accepted_terms_of_deposit :path=> 'acceptedTermsOfDeposit'
+    t.accepted_terms_of_deposit path: 'acceptedTermsOfDeposit'
 
-    t.users_accepted_terms_of_deposit(:path => 'usersAcceptedTermsOfDeposit') do
+    t.users_accepted_terms_of_deposit(path: 'usersAcceptedTermsOfDeposit') do
       t.user do
-        t.date_accepted :path=> {:attribute => 'dateAccepted'}
+        t.date_accepted path: {attribute: 'dateAccepted'}
       end
     end
 
-    t.requires_human_approval   :path => 'requiresHumanApproval'
-    t.reviewed_release_settings :path => 'reviewedReleaseSettings'
-    t.item_type                 :path => 'itemType'
-    t.object_status             :path => 'objectStatus', :index_as => [:symbol]
-    t.disapproval_reason        :path => 'disapprovalReason'
-    t.submit_for_approval_time  :path => 'submitForApprovalTime'
-    t.last_modify_time          :path => 'lastModifyTime'
-    t.version_started_time      :path => 'versionStartedTime'
-    t.embargo_option            :path => 'embargoOption'
-    t.embargo_terms             :path => 'embargoTerms'
-    t.visibility_option         :path => 'visibilityOption'
-    t.license_option            :path => 'licenseOption'
-    t.prior_license             :path => 'priorLicense'
-    t.prior_visibility          :path => 'priorVisibility'
+    t.requires_human_approval   path: 'requiresHumanApproval'
+    t.reviewed_release_settings path: 'reviewedReleaseSettings'
+    t.item_type                 path: 'itemType'
+    t.object_status             path: 'objectStatus', index_as: [:symbol]
+    t.disapproval_reason        path: 'disapprovalReason'
+    t.submit_for_approval_time  path: 'submitForApprovalTime'
+    t.last_modify_time          path: 'lastModifyTime'
+    t.version_started_time      path: 'versionStartedTime'
+    t.embargo_option            path: 'embargoOption'
+    t.embargo_terms             path: 'embargoTerms'
+    t.visibility_option         path: 'visibilityOption'
+    t.license_option            path: 'licenseOption'
+    t.prior_license             path: 'priorLicense'
+    t.prior_visibility          path: 'priorVisibility'
 
     # When Hydrus objects are created, the version of the application
     # is stored here. Later, Hydrus remediation scripts can update this value.
-    t.object_version            :path => 'objectVersion', :index_as => [:symbol]
+    t.object_version            path: 'objectVersion', index_as: [:symbol]
 
     # Two variants of publish time:
     #   - The time the user clicks Open/Approve/Publish in UI.
@@ -44,14 +44,14 @@ class Hydrus::HydrusPropertiesDS < ActiveFedora::OmDatastream
     #           initial_publish_time
     #       - Obtained via workflow service.
     #           publish_time
-    t.submitted_for_publish_time         :path => 'submittedForPublishTime'
-    t.initial_submitted_for_publish_time :path => 'initialSubmittedForPublishTime'
-    t.initial_publish_time               :path => 'initialPublishTime'
+    t.submitted_for_publish_time         path: 'submittedForPublishTime'
+    t.initial_submitted_for_publish_time path: 'initialSubmittedForPublishTime'
+    t.initial_publish_time               path: 'initialPublishTime'
 
   end
 
   define_template :user do |xml, username, datetime_accepted|
-    xml.user(username,:dateAccepted => datetime_accepted)
+    xml.user(username,dateAccepted: datetime_accepted)
   end
 
   define_template :users_accepted_terms_of_deposit do |xml|

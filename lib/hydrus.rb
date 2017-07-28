@@ -74,7 +74,7 @@ module Hydrus
     fname = "#{opts[:output_dir]}/#{opts[:output_name]}-graph.html"
     File.open(fname, 'w') do |f|
       p = RubyProf::GraphHtmlPrinter.new(profile_results)
-      p.print(f, :min_percent => opts[:min_percent])
+      p.print(f, min_percent: opts[:min_percent])
     end
   end
 

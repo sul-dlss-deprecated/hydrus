@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe("Item edit", :type => :request, :integration => true) do
+describe("Item edit", type: :request, integration: true) do
   fixtures :users
 
   before :each do
@@ -8,15 +8,15 @@ describe("Item edit", :type => :request, :integration => true) do
     @hi    = Hydrus::Item.find @druid
     @ok_notice = "Your changes have been saved."
     @buttons = {
-      :add                 => 'Add',
-      :save                => 'save_nojs',
-      :add_contributor     => 'Add Contributor',
-      :submit_for_approval => 'Submit for Approval',
-      :resubmit            => 'Resubmit for Approval',
-      :disapprove          => 'Return',
-      :approve             => 'Approve and Publish',
-      :publish_directly    => 'Publish',
-      :open_new_version    => 'Open new version',
+      add: 'Add',
+      save: 'save_nojs',
+      add_contributor: 'Add Contributor',
+      submit_for_approval: 'Submit for Approval',
+      resubmit: 'Resubmit for Approval',
+      disapprove: 'Return',
+      approve: 'Approve and Publish',
+      publish_directly: 'Publish',
+      open_new_version: 'Open new version',
     }
   end
 
@@ -24,8 +24,8 @@ describe("Item edit", :type => :request, :integration => true) do
     logout
     visit edit_polymorphic_path(@hi)
     expect(current_path).to eq(new_user_session_path)
-    fill_in "Email", :with => 'archivist1@example.com'
-    fill_in "Password", :with => login_pw
+    fill_in "Email", with: 'archivist1@example.com'
+    fill_in "Password", with: login_pw
     click_button "Sign in"
     expect(current_path).to eq(edit_polymorphic_path(@hi))
   end
@@ -33,9 +33,9 @@ describe("Item edit", :type => :request, :integration => true) do
   it "should be able to edit simple items: abstract, contact, keywords" do
     # Set up the new values for the fields we will edit.
     ni = OpenStruct.new(
-      :abstract => 'abcxyz123',
-      :contact  => 'ozzy@hell.com',
-      :keywords => %w(foo bar fubb),
+      abstract: 'abcxyz123',
+      contact: 'ozzy@hell.com',
+      keywords: %w(foo bar fubb),
     )
     comma_join  = '  ,  '
     # Visit edit page.
@@ -49,9 +49,9 @@ describe("Item edit", :type => :request, :integration => true) do
     expect(find_field("hydrus_item_contact").value).not_to include(ni.contact)
     expect(find_field("Keywords").value).not_to include(ni.keywords[0])
     # Submit some changes.
-    fill_in("Abstract", :with => "  #{ni.abstract}  ")
-    fill_in("hydrus_item_contact", :with => "  #{ni.contact}  ")
-    fill_in("Keywords", :with => "  #{ni.keywords.join(comma_join)}  ")
+    fill_in("Abstract", with: "  #{ni.abstract}  ")
+    fill_in("hydrus_item_contact", with: "  #{ni.contact}  ")
+    fill_in("Keywords", with: "  #{ni.keywords.join(comma_join)}  ")
     click_button(@buttons[:save])
     # Confirm new location and flash message.
     expect(current_path).to eq(polymorphic_path(@hi))
@@ -72,7 +72,7 @@ describe("Item edit", :type => :request, :integration => true) do
       expect(find_field("hydrus_item[dates[date_created]]").value).not_to include(date_val)
 
       # Submit some changes.
-      fill_in("hydrus_item[dates[date_created]]", :with => date_val)
+      fill_in("hydrus_item[dates[date_created]]", with: date_val)
       choose("hydrus_item_dates_date_type_single")
       check "hydrus_item_dates_date_created_approximate"
       click_button(@buttons[:save])
@@ -98,9 +98,9 @@ describe("Item edit", :type => :request, :integration => true) do
       expect(find_field("hydrus_item[dates[date_start]]").value).not_to include(date_val)
 
       # Submit some changes.
-      fill_in("hydrus_item[dates[date_start]]", :with => date_val)
+      fill_in("hydrus_item[dates[date_start]]", with: date_val)
       check "hydrus_item_dates_date_range_start_approximate"
-      fill_in("hydrus_item[dates[date_range_end]]", :with => date_val_end)
+      fill_in("hydrus_item[dates[date_range_end]]", with: date_val_end)
       choose("hydrus_item_dates_date_type_range")
       click_button(@buttons[:save])
       # Confirm new location and flash message.
@@ -132,7 +132,7 @@ describe("Item edit", :type => :request, :integration => true) do
       click_link("remove_name_1")
       click_link("remove_name_1")
       # Edit a contributor name.
-      fill_in('hydrus_item_contributors_0_name', :with => 'Herr Finkelstein')
+      fill_in('hydrus_item_contributors_0_name', with: 'Herr Finkelstein')
       # Add some contributors.
       new_contributors = [
         [ 'Foo Conference',  'conference', 'Conference' ],
@@ -192,8 +192,8 @@ describe("Item edit", :type => :request, :integration => true) do
     expect(find_field(field_link).value).to eq(orig_link)
     expect(find_field(field_title).value).to eq(orig_title)
 
-    fill_in(field_link,  :with => new_link)
-    fill_in(field_title, :with => new_title)
+    fill_in(field_link,  with: new_link)
+    fill_in(field_title, with: new_title)
     click_button(@buttons[:save])
     expect(page).to have_content(@ok_notice)
 
@@ -217,8 +217,8 @@ describe("Item edit", :type => :request, :integration => true) do
     expect(find_field(field_link).value).to eq(orig_link)
     expect(find_field(field_title).value).to eq(orig_title)
 
-    fill_in(field_link,  :with => new_link)
-    fill_in(field_title, :with => new_title)
+    fill_in(field_link,  with: new_link)
+    fill_in(field_title, with: new_title)
     click_button(@buttons[:save])
     expect(page).to have_content(@ok_notice)
 
@@ -248,8 +248,8 @@ describe("Item edit", :type => :request, :integration => true) do
     expect(page).to have_css("#hydrus_item_related_item_title_2")
     expect(page).to have_css("#hydrus_item_related_item_url_2")
     expect(page).to have_css("#remove_relatedItem_2")
-    fill_in('hydrus_item_related_item_title_2', :with => 'Library Website')
-    fill_in('hydrus_item_related_item_url_2', :with => 'http://library.stanford.edu')
+    fill_in('hydrus_item_related_item_title_2', with: 'Library Website')
+    fill_in('hydrus_item_related_item_url_2', with: 'http://library.stanford.edu')
     # Save.
     click_button(@buttons[:save])
     expect(page).to have_content(@ok_notice)
@@ -277,10 +277,10 @@ describe("Item edit", :type => :request, :integration => true) do
     @hi    = Hydrus::Item.find(@druid)
     # Set up the new values for the fields we will edit.
     ni = OpenStruct.new(
-      :ri_title => 'My URL title',
-      :ri_url   => 'http://stanford.and.son',
-      :title_f  => "hydrus_item_related_item_title_0",
-      :url_f    => "hydrus_item_related_item_url_0",
+      ri_title: 'My URL title',
+      ri_url: 'http://stanford.and.son',
+      title_f: "hydrus_item_related_item_title_0",
+      url_f: "hydrus_item_related_item_url_0",
     )
     # Visit edit page.
     login_as('archivist1')
@@ -291,8 +291,8 @@ describe("Item edit", :type => :request, :integration => true) do
     expect(old_title).to be_blank
     expect(old_url).not_to eq(ni.ri_url)
     # Submit some changes.
-    fill_in ni.title_f, :with => ni.ri_title
-    fill_in ni.url_f, :with => ni.ri_url
+    fill_in ni.title_f, with: ni.ri_title
+    fill_in ni.url_f, with: ni.ri_url
     click_button(@buttons[:save])
     # Confirm new location and flash message.
     expect(current_path).to eq(polymorphic_path(@hi))
@@ -311,7 +311,7 @@ describe("Item edit", :type => :request, :integration => true) do
     should_visit_edit_page(@hi)
 
     expect(find_field(citation_field).value.strip).to eq(orig_pref_cit)
-    fill_in citation_field, :with => new_pref_cit
+    fill_in citation_field, with: new_pref_cit
     click_button(@buttons[:save])
     expect(page).to have_content(@ok_notice)
 
@@ -341,7 +341,7 @@ describe("Item edit", :type => :request, :integration => true) do
     expect(page).to have_css("##{new_citation}")
     expect(page).to have_css("##{new_delete_button}")
 
-    fill_in(new_citation, :with => new_citation_text)
+    fill_in(new_citation, with: new_citation_text)
 
     click_button(@buttons[:save])
     expect(page).to have_content(@ok_notice)
@@ -369,14 +369,14 @@ describe("Item edit", :type => :request, :integration => true) do
     css_lic_select         = "optgroup/option[@selected='selected']"
 
     # Item has expected rights.
-    ps = {:embargo_date=>'', :visibility=>'world', :license_code=>'cc-by'}
+    ps = {embargo_date: '', visibility: 'world', license_code: 'cc-by'}
     check_emb_vis_lic(@hi,ps)
 
     # Modify the collection to allow varying license.
     login_as('archivist1')
     should_visit_edit_page(Hydrus::Collection.find("druid:oo000oo0003"))
     choose varies_radio
-    select(new_collection_license, :from => collection_licenses)
+    select(new_collection_license, from: collection_licenses)
     click_button(@buttons[:save])
     expect(page).to have_content(@ok_notice)
 
@@ -391,13 +391,13 @@ describe("Item edit", :type => :request, :integration => true) do
     end
 
     # Select a different license, and save.
-    select(new_item_license, :from => item_licenses)
+    select(new_item_license, from: item_licenses)
     click_button(@buttons[:save])
     expect(page).to have_content(@ok_notice)
 
     # Item has expected rights.
     @hi = Hydrus::Item.find @druid
-    ps = {:embargo_date => '', :visibility => 'world', :license_code => 'pddl'}
+    ps = {embargo_date: '', visibility: 'world', license_code: 'pddl'}
     check_emb_vis_lic(@hi,ps)
 
     # Back to the edit page.
@@ -410,7 +410,7 @@ describe("Item edit", :type => :request, :integration => true) do
     end
 
     # Select no license, and save.
-    select(no_license, :from => item_licenses)
+    select(no_license, from: item_licenses)
     click_button(@buttons[:save])
     expect(page).to have_content(@ok_notice)
 
@@ -424,7 +424,7 @@ describe("Item edit", :type => :request, :integration => true) do
     end
 
     # Select original license, and save.
-    select(new_collection_license, :from => item_licenses)
+    select(new_collection_license, from: item_licenses)
     click_button(@buttons[:save])
     expect(page).to have_content(@ok_notice)
 
@@ -481,7 +481,7 @@ describe("Item edit", :type => :request, :integration => true) do
       # Disapprove the item.
       login_as(reviewer)
       should_visit_view_page(hi)
-      fill_in "hydrus_item_disapproval_reason", :with => "Doh!"
+      fill_in "hydrus_item_disapproval_reason", with: "Doh!"
       click_button(b)
 
       # Resubmit item.
@@ -511,7 +511,7 @@ describe("Item edit", :type => :request, :integration => true) do
       click_button(b)
 
       # Create another item, one not requiring review.
-      hi = create_new_item(:requires_human_approval => 'no')
+      hi = create_new_item(requires_human_approval: 'no')
 
       # Publish directly.
       # A viewer should not see the button.
@@ -534,10 +534,10 @@ describe("Item edit", :type => :request, :integration => true) do
 
     it "setting/removing embargo date modifies embargoMD and rightsMD as expected" do
       css = {
-        :emb_yes  => 'hydrus_item_embarg_visib_embargoed_yes',
-        :emb_no   => 'hydrus_item_embarg_visib_embargoed_no',
-        :visib    => 'hydrus_item_embarg_visib_visibility',
-        :emb_date => 'hydrus_item_embarg_visib_date',
+        emb_yes: 'hydrus_item_embarg_visib_embargoed_yes',
+        emb_no: 'hydrus_item_embarg_visib_embargoed_no',
+        visib: 'hydrus_item_embarg_visib_visibility',
+        emb_date: 'hydrus_item_embarg_visib_date',
       }
       lic = 'cc-by'
 
@@ -549,16 +549,16 @@ describe("Item edit", :type => :request, :integration => true) do
       # Reset the Item's publish time, so this test won't fail a year from now.
       today    = HyTime.now.beginning_of_day
       later    = today + 10.days
-      later_dt = HyTime.datetime(later, :from_localzone => true)
-      later_d  = HyTime.date(later, :from_localzone => true)
-      @hi.initial_submitted_for_publish_time = HyTime.datetime(today, :from_localzone => true)
+      later_dt = HyTime.datetime(later, from_localzone: true)
+      later_d  = HyTime.date(later, from_localzone: true)
+      @hi.initial_submitted_for_publish_time = HyTime.datetime(today, from_localzone: true)
       @hi.save
 
       # Check embargoMD and rightsMD: initial.
       check_emb_vis_lic(@hi,
-        :embargo_date => '',
-        :visibility   => 'world',
-        :license_code => lic,
+        embargo_date: '',
+        visibility: 'world',
+        license_code: lic,
       )
 
       # Login.
@@ -567,8 +567,8 @@ describe("Item edit", :type => :request, :integration => true) do
       # Visit edit page: set an embargo date and change visibility.
       should_visit_edit_page(@hi)
       choose(css[:emb_yes])
-      fill_in(css[:emb_date], :with => later_d)
-      select('Stanford only', :from => css[:visib])
+      fill_in(css[:emb_date], with: later_d)
+      select('Stanford only', from: css[:visib])
 
       # Save and confirm.
       click_button(@buttons[:save])
@@ -578,9 +578,9 @@ describe("Item edit", :type => :request, :integration => true) do
       # Check embargoMD and rightsMD: after setting an embargo date.
       @hi = Hydrus::Item.find(@hi.pid)
       check_emb_vis_lic(@hi,
-        :embargo_date => later_dt,
-        :visibility   => 'stanford',
-        :license_code => lic,
+        embargo_date: later_dt,
+        visibility: 'stanford',
+        license_code: lic,
       )
 
       # Visit edit page: remove embargo.
@@ -595,9 +595,9 @@ describe("Item edit", :type => :request, :integration => true) do
       # Check embargoMD and rightsMD: after removing embargo.
       @hi = Hydrus::Item.find(@hi.pid)
       check_emb_vis_lic(@hi,
-        :embargo_date => '',
-        :visibility   => 'stanford',
-        :license_code => lic,
+        embargo_date: '',
+        visibility: 'stanford',
+        license_code: lic,
       )
     end
 
@@ -669,7 +669,7 @@ describe("Item edit", :type => :request, :integration => true) do
         exp[id][:label] = lab
         exp[id][:hide]  = hid
         # Modify the values -- in the web form.
-        fill_in(css_lab, :with => lab)
+        fill_in(css_lab, with: lab)
         meth = hid ? :check : :uncheck
         send(meth, css_hid)
       end

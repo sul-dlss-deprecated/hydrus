@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe HyTime, :type => :model do
+describe HyTime, type: :model do
 
   it "should be able to exercise HyTime.now" do
     expect(HyTime.now).to be_kind_of(DateTime)
@@ -36,18 +36,18 @@ describe HyTime, :type => :model do
       }
       exp.each do |f, e|
         # String, with and without a :parse format.
-        expect(HyTime.formatted(dt1, :parse => pf, :format => f)).to eq(e)
-        expect(HyTime.formatted(dt1, :format => f)).to eq(e)
+        expect(HyTime.formatted(dt1, parse: pf, format: f)).to eq(e)
+        expect(HyTime.formatted(dt1, format: f)).to eq(e)
         # DateTime.
-        expect(HyTime.formatted(dt2, :format => f)).to eq(e)
+        expect(HyTime.formatted(dt2, format: f)).to eq(e)
       end
     end
 
     it "should use :datetime as the default output format" do
       dt = '2000-01-02T03:04:05Z'
       expect(HyTime.formatted(dt)).to eq(dt)
-      expect(HyTime.formatted(dt, :format => :time_display)).to  eq('7:04 pm')
-      expect(HyTime.formatted('2000-01-02', :parse => :date)).to eq('2000-01-02T00:00:00Z')
+      expect(HyTime.formatted(dt, format: :time_display)).to  eq('7:04 pm')
+      expect(HyTime.formatted('2000-01-02', parse: :date)).to eq('2000-01-02T00:00:00Z')
     end
 
     it "should return empty string if given a blank value" do
@@ -61,7 +61,7 @@ describe HyTime, :type => :model do
         # Force Pacific time
         allow(DateTime).to receive(:local_offset).and_return((-8 * 60 * 60).to_r/86400)
       end
-      subject { HyTime.formatted(dt, :from_localzone => fltz) }
+      subject { HyTime.formatted(dt, from_localzone: fltz) }
 
       context "when false" do
         let(:fltz) { false }

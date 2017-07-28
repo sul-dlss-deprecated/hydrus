@@ -10,4 +10,4 @@ Hydrus::Application.load_tasks
 task(:default).clear
 
 # and replace it with our own
-task :default => [:ci]
+task default: [:ci]

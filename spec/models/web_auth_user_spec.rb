@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe WebAuthUser, :type => :model do
+describe WebAuthUser, type: :model do
   describe "w/ webauth user" do
     before(:each) do
       @user = WebAuthUser.new("jdoe")

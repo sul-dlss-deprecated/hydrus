@@ -10,7 +10,7 @@ class MockValidatable
   def valid?; end
 end
 
-describe Hydrus::Validatable, :type => :model do
+describe Hydrus::Validatable, type: :model do
 
   describe "should_validate()" do
 

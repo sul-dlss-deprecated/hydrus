@@ -5,40 +5,40 @@ class Hydrus::RoleMetadataDS < ActiveFedora::OmDatastream
 
   set_terminology do |t|
 
-    t.root :path => 'roleMetadata'
+    t.root path: 'roleMetadata'
 
     t.role do
-      t.type_ :path => {:attribute => 'type'}
+      t.type_ path: {attribute: 'type'}
       t.person do
-        t.identifier :index_as => [:facetable] do
-          t.type_ :path => {:attribute => 'type'}
+        t.identifier index_as: [:facetable] do
+          t.type_ path: {attribute: 'type'}
         end
         t.name
       end
       t.group do
-        t.identifier :index_as => [:facetable]  do
-          t.type_ :path => {:attribute => 'type'}
+        t.identifier index_as: [:facetable]  do
+          t.type_ path: {attribute: 'type'}
         end
       end
     end
 
-    t.person_id :proxy => [:role, :person, :identifier]
+    t.person_id proxy: [:role, :person, :identifier]
 
     # Collection-level roles.
-    t.collection_creator        :ref => [:role], :attributes => {:type => 'hydrus-collection-creator'}
-    t.collection_manager        :ref => [:role], :attributes => {:type => 'hydrus-collection-manager'}
-    t.collection_depositor      :ref => [:role], :attributes => {:type => 'hydrus-collection-depositor'}
-    t.collection_item_depositor :ref => [:role], :attributes => {:type => 'hydrus-collection-item-depositor'}
-    t.collection_reviewer       :ref => [:role], :attributes => {:type => 'hydrus-collection-reviewer'}
-    t.collection_viewer         :ref => [:role], :attributes => {:type => 'hydrus-collection-viewer'}
+    t.collection_creator        ref: [:role], attributes: {type: 'hydrus-collection-creator'}
+    t.collection_manager        ref: [:role], attributes: {type: 'hydrus-collection-manager'}
+    t.collection_depositor      ref: [:role], attributes: {type: 'hydrus-collection-depositor'}
+    t.collection_item_depositor ref: [:role], attributes: {type: 'hydrus-collection-item-depositor'}
+    t.collection_reviewer       ref: [:role], attributes: {type: 'hydrus-collection-reviewer'}
+    t.collection_viewer         ref: [:role], attributes: {type: 'hydrus-collection-viewer'}
 
     # Item-level roles.
-    t.item_manager              :ref => [:role], :attributes => {:type => 'hydrus-item-manager'}
-    t.item_depositor            :ref => [:role], :attributes => {:type => 'hydrus-item-depositor'}
+    t.item_manager              ref: [:role], attributes: {type: 'hydrus-item-manager'}
+    t.item_depositor            ref: [:role], attributes: {type: 'hydrus-item-depositor'}
 
     t.item_depositor_person_identifier(
-      :ref => [:item_depositor, :person, :identifier],
-      :index_as => [:facetable, :displayable]
+      ref: [:item_depositor, :person, :identifier],
+      index_as: [:facetable, :displayable]
     )
   end
 
@@ -87,19 +87,19 @@ class Hydrus::RoleMetadataDS < ActiveFedora::OmDatastream
   ####
 
   define_template :role do |xml, role_type|
-    xml.role(:type => role_type)
+    xml.role(type: role_type)
   end
 
   define_template :person do |xml, sunetid|
     xml.person {
-      xml.identifier(:type => 'sunetid') { xml.text(sunetid) }
+      xml.identifier(type: 'sunetid') { xml.text(sunetid) }
       xml.name
     }
   end
 
   define_template :group do |xml, workgroup|
     xml.group {
-      xml.identifier(:type => 'workgroup') { xml.text(workgroup) }
+      xml.identifier(type: 'workgroup') { xml.text(workgroup) }
     }
   end
 

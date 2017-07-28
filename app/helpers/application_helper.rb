@@ -47,26 +47,26 @@ module ApplicationHelper
 
   def hydrus_signin_link
     if Dor::Config.hydrus.show_standard_login
-      link_to("Sign in", new_user_session_path, :class=>'signin_link')
+      link_to("Sign in", new_user_session_path, class: 'signin_link')
     else
       link_to("Sign in via WebAuth", webauth_login_path)
     end
   end
 
   def new_user_session_path options = {}
-    super({:referrer => request.fullpath}.merge options)
+    super({referrer: request.fullpath}.merge options)
   end
 
   def webauth_login_path options = {}
-    super({:referrer => request.fullpath}.merge options)
+    super({referrer: request.fullpath}.merge options)
   end
 
   def terms_of_deposit_path(pid)
-    url_for(:controller=>'hydrus_items',:action=>'terms_of_deposit',:pid=>pid)
+    url_for(controller: 'hydrus_items',action: 'terms_of_deposit',pid: pid)
   end
 
   def terms_of_deposit_agree_path(pid)
-    url_for(:controller=>'hydrus_items',:action=>'agree_to_terms_of_deposit',:pid=>pid)
+    url_for(controller: 'hydrus_items',action: 'agree_to_terms_of_deposit',pid: pid)
   end
 
   def hydrus_strip(value)
@@ -93,9 +93,9 @@ module ApplicationHelper
   def hydrus_object_setting_value(obj, opts = {})
     return obj unless hydrus_is_empty?(obj)
     if opts[:na]
-      return content_tag(:span, 'not available yet', :class => "muted")
+      return content_tag(:span, 'not available yet', class: "muted")
     else
-      return content_tag(:span, 'to be entered', :class => "unspecified")
+      return content_tag(:span, 'to be entered', class: "unspecified")
     end
   end
 
@@ -118,7 +118,7 @@ module ApplicationHelper
 
   # a helper to create links to items that may or may not have titles yet
   def title_link(obj)
-    link_to(title_text(obj), polymorphic_path(obj),:disable_after_click=>'true')
+    link_to(title_text(obj), polymorphic_path(obj),disable_after_click: 'true')
   end
 
   # this checks to see if the object passed in is "empty", which could be nil,
@@ -144,7 +144,7 @@ module ApplicationHelper
   end
 
   def render_contextual_navigation(model)
-    render :partial=>"#{view_path_from_model(model)}/navigation"
+    render partial: "#{view_path_from_model(model)}/navigation"
   end
 
   def view_path_from_model(model)
@@ -152,7 +152,7 @@ module ApplicationHelper
   end
 
   def select_status_checkbox_icon(field)
-    content_tag(:i, nil, :class =>  field ? "icon-check" : "icon-minus")
+    content_tag(:i, nil, class: field ? "icon-check" : "icon-minus")
   end
 
   # Takes a value.

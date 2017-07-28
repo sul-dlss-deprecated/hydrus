@@ -96,7 +96,7 @@ class Hydrus::RemediationRunner
   # Loads up the Fedora object.
   def load_fedora_object
     log.info("loading fedora object")
-    @fobj = ActiveFedora::Base.find(@pid, :cast => true)
+    @fobj = ActiveFedora::Base.find(@pid, cast: true)
   end
 
   # Returns true if the currently running remediation method needs to be
@@ -133,9 +133,9 @@ class Hydrus::RemediationRunner
   def open_new_version_of_object
     return unless needs_versioning
     begin
-      fobj.open_new_version(:description    => remed_method,
-                            :significance   => :admin,
-                            :is_remediation => true)
+      fobj.open_new_version(description: remed_method,
+                            significance: :admin,
+                            is_remediation: true)
       log.info('open_new_version(success)')
     rescue Exception => e
       self.needs_versioning = false  # So we won't try to close the version.
@@ -147,7 +147,7 @@ class Hydrus::RemediationRunner
   def try_to_save_object
     return if no_save
     log.info('trying to save')
-    if fobj.save(:is_remediation => true)
+    if fobj.save(is_remediation: true)
       log.info('saved')
     else
       es = fobj.errors
@@ -160,7 +160,7 @@ class Hydrus::RemediationRunner
   def close_version_of_object
     return unless needs_versioning
     begin
-      fobj.close_version(:is_remediation => true)
+      fobj.close_version(is_remediation: true)
       log.info('close_version(success)')
     rescue Exception => e
       log_warning("close_version(FAILED): #{e.message}")

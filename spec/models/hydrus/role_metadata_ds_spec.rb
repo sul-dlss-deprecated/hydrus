@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Hydrus::RoleMetadataDS, :type => :model do
+describe Hydrus::RoleMetadataDS, type: :model do
 
   before(:all) do
     @rmd_start = '<roleMetadata>'

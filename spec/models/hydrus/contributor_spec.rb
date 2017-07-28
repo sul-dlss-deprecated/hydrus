@@ -1,9 +1,9 @@
 require 'spec_helper'
 
-describe Hydrus::Contributor, :type => :model do
+describe Hydrus::Contributor, type: :model do
 
   before(:each) do
-    @hc = Hydrus::Contributor.new(:name => 'Angus', :role => 'guitar')
+    @hc = Hydrus::Contributor.new(name: 'Angus', role: 'guitar')
   end
 
   it "default_contributor()" do

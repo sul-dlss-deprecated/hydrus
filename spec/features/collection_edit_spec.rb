@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe("Collection edit", :type => :request, :integration => true) do
+describe("Collection edit", type: :request, integration: true) do
   fixtures :users
 
   before :each do
@@ -8,11 +8,11 @@ describe("Collection edit", :type => :request, :integration => true) do
     @druid_no_files = 'druid:oo000oo0004'
     @hc             = Hydrus::Collection.find @druid
     @buttons = {
-      :sign_in  => 'Sign in',
-      :save     => 'save_nojs',
-      :add_link => 'Add anothoer link',
-      :open     => 'Open Collection',
-      :close    => 'Close Collection',
+      sign_in: 'Sign in',
+      save: 'save_nojs',
+      add_link: 'Add anothoer link',
+      open: 'Open Collection',
+      close: 'Close Collection',
     }
   end
 
@@ -20,8 +20,8 @@ describe("Collection edit", :type => :request, :integration => true) do
     logout
     visit edit_polymorphic_path(@hc)
     expect(current_path).to eq(new_user_session_path)
-    fill_in "Email", :with => 'archivist1@example.com'
-    fill_in "Password", :with => login_pw
+    fill_in "Email", with: 'archivist1@example.com'
+    fill_in "Password", with: login_pw
     click_button "Sign in"
     expect(current_path).to eq(edit_polymorphic_path(@hc))
   end
@@ -41,8 +41,8 @@ describe("Collection edit", :type => :request, :integration => true) do
 
     expect(page).not_to have_content(new_abstract)
     expect(page).to have_no_xpath("//input[@value='#{new_contact}']")
-    fill_in "Description", :with => new_abstract
-    fill_in "hydrus_collection_contact", :with => new_contact
+    fill_in "Description", with: new_abstract
+    fill_in "hydrus_collection_contact", with: new_contact
     click_button "save_nojs"
 
     expect(current_path).to eq(polymorphic_path(@hc))
@@ -92,8 +92,8 @@ describe("Collection edit", :type => :request, :integration => true) do
     expect(page).to have_css("##{new_label_field}")
     expect(page).to have_css("##{new_delete_link}")
 
-    fill_in("hydrus_collection_related_item_url_2", :with => new_url)
-    fill_in("hydrus_collection_related_item_title_2", :with => new_label)
+    fill_in("hydrus_collection_related_item_url_2", with: new_url)
+    fill_in("hydrus_collection_related_item_title_2", with: new_label)
 
     click_button "save_nojs"
     expect(current_path).to eq(polymorphic_path(@hc))
@@ -126,25 +126,25 @@ describe("Collection edit", :type => :request, :integration => true) do
     new_license_label   = 'ODC-ODbl Open Database License'
     new_license_option  = 'varies'
     new_check_field     = "hydrus_collection_license_option_#{new_license_option}"
-    ps={:visibility=>'stanford',:license_code=>'cc-by',:embargo_date=>''}
+    ps={visibility: 'stanford',license_code: 'cc-by',embargo_date: ''}
     check_emb_vis_lic(@hc,ps)
 
     login_as('archivist1')
     # Visit edit page, and confirm content.
     should_visit_edit_page(@hc)
     expect(page).to have_checked_field(orig_check_field)
-    expect(page.has_select?("license_option_#{orig_license_option}", :selected => orig_license_label)).to eq(true)
+    expect(page.has_select?("license_option_#{orig_license_option}", selected: orig_license_label)).to eq(true)
     expect(find_field("license_option_#{orig_license_option}").value).to eq('cc-by')
-    expect(page.has_select?("license_option_#{new_license_option}", :selected => [])).to eq(true)
+    expect(page.has_select?("license_option_#{new_license_option}", selected: [])).to eq(true)
     # Make changes, save, and confirm redirect.
     choose(new_check_field)
-    select(new_license_label, :from => "license_option_#{new_license_option}")
+    select(new_license_label, from: "license_option_#{new_license_option}")
     click_button "save_nojs"
     expect(current_path).to eq(polymorphic_path(@hc))
     # Visit view page, and confirm that changes occured.
     visit polymorphic_path(@hc)
     @hc = Hydrus::Collection.find @druid
-    ps={:visibility=>'stanford',:license_code=>'odc-odbl',:embargo_date=>''}
+    ps={visibility: 'stanford',license_code: 'odc-odbl',embargo_date: ''}
     check_emb_vis_lic(@hc,ps)
     confirm_rights_metadata_in_apo(@hc)
   end
@@ -160,33 +160,33 @@ describe("Collection edit", :type => :request, :integration => true) do
     no_embargo_option   = 'none'
     no_embargo          = ''
     no_embargo_check_field    = "hydrus_collection_embargo_option_#{no_embargo_option}"
-    ps={:visibility=>'stanford',:license_code=>'cc-by',:embargo_date=>''}
+    ps={visibility: 'stanford',license_code: 'cc-by',embargo_date: ''}
     check_emb_vis_lic(@hc,ps)
     login_as('archivist1')
     # Visit edit page, and confirm content.
     should_visit_edit_page(@hc)
     expect(page).to have_checked_field(orig_check_field)
     expect(page.has_select?('embargo_option_varies')).to eq(true)
-    expect(page.has_select?('embargo_option_varies', :selected => "#{orig_embargo} after deposit")).to eq(true)
-    expect(page.has_select?('embargo_option_fixed', :selected => [])).to eq(true)
+    expect(page.has_select?('embargo_option_varies', selected: "#{orig_embargo} after deposit")).to eq(true)
+    expect(page.has_select?('embargo_option_fixed', selected: [])).to eq(true)
     # Make changes, save, and confirm redirect.
     choose(new_check_field)
-    select(new_embargo, :from => "embargo_option_#{new_embargo_option}")
+    select(new_embargo, from: "embargo_option_#{new_embargo_option}")
     click_button "save_nojs"
     expect(current_path).to eq(polymorphic_path(@hc))
     # Visit view-page, and confirm that changes occured.
     visit polymorphic_path(@hc)
     # Undo changes, and confirm.
     should_visit_edit_page(@hc)
-    expect(page.has_select?('embargo_option_varies', :selected => [])).to eq(true)
-    expect(page.has_select?('embargo_option_fixed', :selected => "#{new_embargo} after deposit")).to eq(true)
+    expect(page.has_select?('embargo_option_varies', selected: [])).to eq(true)
+    expect(page.has_select?('embargo_option_fixed', selected: "#{new_embargo} after deposit")).to eq(true)
     choose(orig_check_field)
-    select(orig_embargo, :from => "embargo_option_#{orig_embargo_option}")
+    select(orig_embargo, from: "embargo_option_#{orig_embargo_option}")
     click_button "save_nojs"
     expect(current_path).to eq(polymorphic_path(@hc))
     # Set to no embargo after embargo was previously set and ensure there is no longer an embargo period set.
     should_visit_edit_page(@hc)
-    expect(page.has_select?('embargo_option_varies', :selected => "#{orig_embargo} after deposit")).to eq(true)
+    expect(page.has_select?('embargo_option_varies', selected: "#{orig_embargo} after deposit")).to eq(true)
     choose(no_embargo_check_field)
     click_button "save_nojs"
     expect(current_path).to eq(polymorphic_path(@hc))
@@ -233,7 +233,7 @@ describe("Collection edit", :type => :request, :integration => true) do
       rmdiv = find('div#role-management-wth-reviewers')
       dk    = 'hydrus_collection_apo_person_roles'
       role_info.each do |role,ids|
-        rmdiv.fill_in("#{dk}[#{role}]", :with => ids.to_a.join(', '))
+        rmdiv.fill_in("#{dk}[#{role}]", with: ids.to_a.join(', '))
       end
       # Check role-management section after additions.
       click_button "save_nojs"
@@ -270,7 +270,7 @@ describe("Collection edit", :type => :request, :integration => true) do
       rmdiv = find('div#role-management-wth-reviewers')
       dk    = 'hydrus_collection_apo_person_roles'
       role_info.each do |role,ids|
-        rmdiv.fill_in("#{dk}[#{role}]", :with => ids.to_a.join(', '))
+        rmdiv.fill_in("#{dk}[#{role}]", with: ids.to_a.join(', '))
       end
       # Check role-management section after additions.
       click_button "save_nojs"
@@ -293,7 +293,7 @@ describe("Collection edit", :type => :request, :integration => true) do
       end
 
       it "should send open email when there are item depositors" do
-        @coll.apo_person_roles = {:"hydrus-collection-item-depositor" => "jdoe"}
+        @coll.apo_person_roles = {"hydrus-collection-item-depositor": "jdoe"}
         e = expect { @coll.send_publish_email_notification(true) }
         e.to change { ActionMailer::Base.deliveries.count }.by(1)
         email = ActionMailer::Base.deliveries.last
@@ -302,7 +302,7 @@ describe("Collection edit", :type => :request, :integration => true) do
       end
 
       it "should send close email when there are item depositors" do
-        @coll.apo_person_roles = {:"hydrus-collection-item-depositor" => "jdoe"}
+        @coll.apo_person_roles = {"hydrus-collection-item-depositor": "jdoe"}
         e = expect { @coll.send_publish_email_notification(false) }
         e.to change { ActionMailer::Base.deliveries.count }.by(1)
         email = ActionMailer::Base.deliveries.last
@@ -332,9 +332,9 @@ describe("Collection edit", :type => :request, :integration => true) do
       it "should send an email to managers when we're opening a collection and to a depositor when we add them" do
         login_as('archivist1')
         visit new_hydrus_collection_path()
-        fill_in "hydrus_collection_title", :with => "TestingTitle"
-        fill_in "hydrus_collection_abstract", :with => "Summary of my content"
-        fill_in "hydrus_collection_contact", :with => "jdoe@example.com"
+        fill_in "hydrus_collection_title", with: "TestingTitle"
+        fill_in "hydrus_collection_abstract", with: "Summary of my content"
+        fill_in "hydrus_collection_contact", with: "jdoe@example.com"
         click_button("save_nojs")
         expect(page).to have_content("Your changes have been saved.")
 
@@ -346,7 +346,7 @@ describe("Collection edit", :type => :request, :integration => true) do
         
         click_link("Edit Collection")
 
-        fill_in "hydrus_collection_apo_person_roles[hydrus-collection-item-depositor]", :with => "jdoe"
+        fill_in "hydrus_collection_apo_person_roles[hydrus-collection-item-depositor]", with: "jdoe"
         
         expect {click_button("save_nojs")}.to change { ActionMailer::Base.deliveries.count }.by(1)
         email = ActionMailer::Base.deliveries.last
@@ -357,15 +357,15 @@ describe("Collection edit", :type => :request, :integration => true) do
       it "should not send an email to new depositors when we're updating a collection if user does not check the send email checkbox" do
         login_as('archivist1')
         visit new_hydrus_collection_path()
-        fill_in "hydrus_collection_title", :with => "TestingTitle"
-        fill_in "hydrus_collection_abstract", :with => "Summary of my content"
-        fill_in "hydrus_collection_contact", :with => "jdoe@example.com"
+        fill_in "hydrus_collection_title", with: "TestingTitle"
+        fill_in "hydrus_collection_abstract", with: "Summary of my content"
+        fill_in "hydrus_collection_contact", with: "jdoe@example.com"
         click_button("save_nojs")
         expect(page).to have_content("Your changes have been saved.")
         click_button("Open Collection")
         click_link("Edit Collection")
 
-        fill_in "hydrus_collection_apo_person_roles[hydrus-collection-item-depositor]", :with => "jdoe"
+        fill_in "hydrus_collection_apo_person_roles[hydrus-collection-item-depositor]", with: "jdoe"
         uncheck("should_send_role_change_emails")
         
         expect {click_button("save_nojs")}.to change { ActionMailer::Base.deliveries.count }.by(0)
@@ -374,16 +374,16 @@ describe("Collection edit", :type => :request, :integration => true) do
       it "should handle complex changes to depositors" do
         login_as('archivist1')
         visit new_hydrus_collection_path()
-        fill_in "hydrus_collection_title", :with => "TestingTitle"
-        fill_in "hydrus_collection_abstract", :with => "Summary of my content"
-        fill_in "hydrus_collection_contact", :with => "jdoe@example.com"
-        fill_in "hydrus_collection_apo_person_roles[hydrus-collection-item-depositor]", :with => "jdoe, leland, janedoe"
+        fill_in "hydrus_collection_title", with: "TestingTitle"
+        fill_in "hydrus_collection_abstract", with: "Summary of my content"
+        fill_in "hydrus_collection_contact", with: "jdoe@example.com"
+        fill_in "hydrus_collection_apo_person_roles[hydrus-collection-item-depositor]", with: "jdoe, leland, janedoe"
         click_button("save_nojs")
         expect(page).to have_content("Your changes have been saved.")
         click_button("Open Collection")
         click_link("Edit Collection")
 
-        fill_in "hydrus_collection_apo_person_roles[hydrus-collection-item-depositor]", :with => "jandoe, leland, jondoe"
+        fill_in "hydrus_collection_apo_person_roles[hydrus-collection-item-depositor]", with: "jandoe, leland, jondoe"
         expect {click_button("save_nojs")}.to change { ActionMailer::Base.deliveries.count }.by(2) # a removal notice for jdoe,jandoe and an invitation notice jandoe and jondoe
         email = ActionMailer::Base.deliveries.last
         expect(email.to).to eq(["jdoe@stanford.edu", "janedoe@stanford.edu"])
@@ -393,7 +393,7 @@ describe("Collection edit", :type => :request, :integration => true) do
       it "should not send an email if the collection is closed" do
         login_as('archivist1')
         visit new_hydrus_collection_path()
-        fill_in "hydrus_collection_apo_person_roles[hydrus-collection-item-depositor]", :with => "jdoe"
+        fill_in "hydrus_collection_apo_person_roles[hydrus-collection-item-depositor]", with: "jdoe"
         expect {click_button("save_nojs")}.to change { ActionMailer::Base.deliveries.count }.by(0)
       end
 
@@ -415,8 +415,8 @@ describe("Collection edit", :type => :request, :integration => true) do
       owner  = 'archivist2'
       viewer = 'archivist6'
       opts = {
-        :user    => owner,
-        :viewers => viewer,
+        user: owner,
+        viewers: viewer,
       }
       hc = create_new_collection(opts)
       # Should see the open collection button.
@@ -463,7 +463,7 @@ describe("Collection edit", :type => :request, :integration => true) do
       login_as('archivist1')
       should_visit_edit_page(@hc)
       choose('hydrus_collection_license_option_varies')
-      select('ODC-ODbl Open Database License', :from => 'license_option_varies')
+      select('ODC-ODbl Open Database License', from: 'license_option_varies')
       click_button(@buttons[:save])
       expect(page).to have_selector 'div.alert', text: 'Your changes have been saved'
     end
@@ -474,7 +474,7 @@ describe("Collection edit", :type => :request, :integration => true) do
       should_visit_edit_page(@hc)
       choose('hydrus_collection_license_option_fixed')
       click_button(@buttons[:save])
-      select('ODC-ODbl Open Database License', :from => 'license_option_fixed')
+      select('ODC-ODbl Open Database License', from: 'license_option_fixed')
       click_button(@buttons[:save])
       expect(page).to have_selector 'div.alert', text: 'Your changes have been saved'
     end

@@ -15,22 +15,22 @@ module Hydrus::GenericObjectStuff
   extend  Hydrus::Delegatable
 
   has_metadata(
-    :name => "rightsMetadata",
-    :type => Hydrus::RightsMetadataDS,
-    :label => 'Rights Metadata',
-    :control_group => "M")
+    name: "rightsMetadata",
+    type: Hydrus::RightsMetadataDS,
+    label: 'Rights Metadata',
+    control_group: "M")
 
   has_metadata(
-    :name => "descMetadata",
-    :type => Hydrus::DescMetadataDS,
-    :label => 'Descriptive Metadata',
-    :control_group => 'M')
+    name: "descMetadata",
+    type: Hydrus::DescMetadataDS,
+    label: 'Descriptive Metadata',
+    control_group: 'M')
 
   has_metadata(
-    :name => "hydrusProperties",
-    :type => Hydrus::HydrusPropertiesDS,
-    :label => 'Hydrus Properties',
-    :control_group => 'X')
+    name: "hydrusProperties",
+    type: Hydrus::HydrusPropertiesDS,
+    label: 'Hydrus Properties',
+    control_group: 'X')
 
   setup_delegations(
     # [:METHOD_NAME,              :uniq, :at... ]

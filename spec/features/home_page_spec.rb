@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe("Home page", :type => :request, :integration => true) do
+describe("Home page", type: :request, integration: true) do
 
   before(:each) do
     @search_box  = '.search-query-form #search'

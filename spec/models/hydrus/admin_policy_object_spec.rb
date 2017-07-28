@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Hydrus::AdminPolicyObject, :type => :model do
+describe Hydrus::AdminPolicyObject, type: :model do
 
   before(:each) do
     @apo = Hydrus::AdminPolicyObject.new

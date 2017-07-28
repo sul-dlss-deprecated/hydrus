@@ -4,7 +4,7 @@ namespace :hydrus do
   # associates a non-hydrus DOR item with the Hydrus app by adding datastreams and indexing into Hydrus solr
   # need to pass in druid of object to associated, collection druid of Hydrus collection to associate with, and type of hydrus object (e.g. dataset)
   # run with RAILS_ENV=production rake hydrus:index_object druid=druid:oo000oo0001 collection=druid:oo00oo002 type=dataset
-  task :index_object => :environment do |t, args|
+  task index_object: :environment do |t, args|
 
     druid = ENV['druid'] # druid to index (full druid, including druid: prefix)
     collection = ENV['collection'] # druid of collection to associate with  (full druid, including druid: prefix)
@@ -44,21 +44,21 @@ namespace :hydrus do
     # index into solr
     solr=Dor::SearchService.solr
     solr_doc = item.to_solr
-    solr.add(solr_doc, :add_attributes => {:commitWithin => 5000})
+    solr.add(solr_doc, add_attributes: {commitWithin: 5000})
 
   end
 
-  desc "Index all DOR defined workflow objects into Hydrus solr instance" 
-  task :index_all_workflows => :environment do
+  desc "Index all DOR defined workflow objects into Hydrus solr instance"
+  task index_all_workflows: :environment do
     # get all workflow objects using risearch (sparql on fedora) since we don't have a direct connection to argo solr
     model_type = "<#{Dor::WorkflowObject.to_class_uri}>"
     solr = Dor::SearchService.solr
-    pids = Dor::SearchService.risearch 'select $object from <#ri> where $object ' "<fedora-model:hasModel> #{model_type}", { :limit => nil }
-    pids.each { |pid| solr.add(Dor.find(pid).to_solr, :add_attributes => {:commitWithin => 5000}) }     # index into hydrus solr
+    pids = Dor::SearchService.risearch 'select $object from <#ri> where $object ' "<fedora-model:hasModel> #{model_type}", { limit: nil }
+    pids.each { |pid| solr.add(Dor.find(pid).to_solr, add_attributes: {commitWithin: 5000}) }     # index into hydrus solr
   end
 
   desc "Cleanup file upload temp files"
-  task :cleanup_tmp => :environment do
+  task cleanup_tmp: :environment do
     CarrierWave.clean_cached_files!
   end
 
@@ -66,7 +66,7 @@ end
 
 
 desc "rails server with suppressed output"
-task :server => :environment do
+task server: :environment do
   # Note: to get this to work nicely, we also set the app to generate
   # unbuffered output: see config/application.rb.
   system "rake jetty:start" unless `rake jetty:status` =~ /^Running:/

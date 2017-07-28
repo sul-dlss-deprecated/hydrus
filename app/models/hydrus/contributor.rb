@@ -21,9 +21,9 @@ class Hydrus::Contributor < Hydrus::GenericModel
   # The data.
   @@contributor_groups = [
     {
-      :group_label => 'Individual',
-      :name_type   => 'personal',
-      :roles      => [
+      group_label: 'Individual',
+      name_type: 'personal',
+      roles: [
         'Advisor',
         'Author',
         'Collector',
@@ -35,9 +35,9 @@ class Hydrus::Contributor < Hydrus::GenericModel
       ],
     },
     {
-      :group_label => 'Organization',
-      :name_type   => 'corporate',
-      :roles      => [
+      group_label: 'Organization',
+      name_type: 'corporate',
+      roles: [
         'Author',
         'Contributing author',
         'Degree granting institution',
@@ -47,9 +47,9 @@ class Hydrus::Contributor < Hydrus::GenericModel
       ],
     },
     {
-      :group_label => 'Event',
-      :name_type   => 'conference',
-      :roles      => [
+      group_label: 'Event',
+      name_type: 'conference',
+      roles: [
         'Conference',
       ],
     },
@@ -64,9 +64,9 @@ class Hydrus::Contributor < Hydrus::GenericModel
   def self.default_contributor
     typ, role = lookup_with_role_key(@@default_role_key)
     new(
-      :name      => '',
-      :role      => role,
-      :name_type => typ
+      name: '',
+      role: role,
+      name_type: typ
     )
   end
 
@@ -115,7 +115,7 @@ class Hydrus::Contributor < Hydrus::GenericModel
   # Returns new Contributor based on attributes of self.
   # Used in testing.
   def clone
-    Hydrus::Contributor.new(:name => name, :role => role, :name_type => name_type)
+    Hydrus::Contributor.new(name: name, role: role, name_type: name_type)
   end
 
 end

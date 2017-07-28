@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Hydrus::Processable, :type => :model do
+describe Hydrus::Processable, type: :model do
 
   before(:each) do
     @cannot_do_regex = /\ACannot perform action/

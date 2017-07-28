@@ -20,7 +20,7 @@ namespace :hydrus do
   end
 
   desc "load hydrus fixtures"
-  task :loadfix => ['db:fixtures:load'] do
+  task loadfix: ['db:fixtures:load'] do
 
     fixture_loader = ActiveFedora::FixtureLoader.new('spec/fixtures')
     FIXTURE_PIDS.each { |pid|
@@ -37,14 +37,14 @@ namespace :hydrus do
 
   # call with rake hydrus:reindex pid=druid:oo000oo0099
   desc "reindex specified pid"
-  task :reindex => :environment do
+  task reindex: :environment do
     require File.expand_path('config/environment')
     pid=ENV["pid"]
     obj = Dor.load_instance pid
     unless obj.nil?
       puts "Reindexing #{pid} in solr"
       solr_doc = obj.to_solr
-      Dor::SearchService.solr.add(solr_doc, :add_attributes => {:commitWithin => 1000})
+      Dor::SearchService.solr.add(solr_doc, add_attributes: {commitWithin: 1000})
     else
       puts "#{pid} not found"
     end
@@ -52,7 +52,7 @@ namespace :hydrus do
 
   # call with rake hydrus:reindex_workflow_objects
   desc "reindex all workflow objects for the given environment"
-  task :reindex_workflow_objects => :environment do
+  task reindex_workflow_objects: :environment do
     require File.expand_path('config/environment')
     pids=Dor::Config.hydrus.workflow_object_druids
     pids.each do |pid|
@@ -64,7 +64,7 @@ namespace :hydrus do
 
   # call with rake hydrus:delete_objects pid=druid:oo000oo0003
   desc "delete a given hydrus collection object and all associated items and APOs"
-  task :delete_objects => :environment do
+  task delete_objects: :environment do
     require File.expand_path('config/environment')
     pid=ENV["pid"]
     collection=Hydrus::Collection.find pid
@@ -205,7 +205,7 @@ namespace :hydrus do
   end
 
   desc "delete all existing objects in solr without nuking jetty (objects will remain in fedora)"
-  task :solr_nuke => :environment do
+  task solr_nuke: :environment do
     require File.expand_path('config/environment')
     url1="curl #{Dor::Config.solrizer.url}/update --data '<delete><query>*:*</query></delete>' -H 'Content-type:text/xml; charset=utf-8'"
     url2="curl #{Dor::Config.solrizer.url}/update --data '<commit/>' -H 'Content-type:text/xml; charset=utf-8'"

@@ -4,8 +4,8 @@ class HydrusCollectionsController < ApplicationController
   include Hydra::Controller::UploadBehavior
 
   before_filter :authenticate_user!
-  before_filter :setup_attributes, :except => [:index, :new, :list_all]
-  before_filter :redirect_if_not_correct_object_type, :only => [:edit, :show]
+  before_filter :setup_attributes, except: [:index, :new, :list_all]
+  before_filter :redirect_if_not_correct_object_type, only: [:edit, :show]
 
   def index
     authorize! :index, Hydrus::Collection
@@ -111,9 +111,9 @@ class HydrusCollectionsController < ApplicationController
       }
       want.js {
         if params.has_key?(:add_link)
-          render "add_link", :locals=>{:index=>@fobj.related_item_title.length-1}
+          render "add_link", locals: {index: @fobj.related_item_title.length-1}
         else
-          render :json => tidy_response_from_update(@response)
+          render json: tidy_response_from_update(@response)
         end
       }
     end
@@ -147,7 +147,7 @@ class HydrusCollectionsController < ApplicationController
   def list_all
     authorize! :list_all_collections, Hydrus::Collection
     @all_collections = Hydrus::Collection.all_hydrus_collections.
-                       sort.map { |p| Hydrus::Collection.find({:id => p}, :lightweight => true) }
+                       sort.map { |p| Hydrus::Collection.find({id: p}, lightweight: true) }
   end
 
   private

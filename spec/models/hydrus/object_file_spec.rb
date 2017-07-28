@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'rake'
 
-describe Hydrus::ObjectFile, :type => :model do
+describe Hydrus::ObjectFile, type: :model do
 
   before(:each) do
     @nm = 'mock_uploaded_file_'

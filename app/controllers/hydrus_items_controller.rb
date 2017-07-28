@@ -4,9 +4,9 @@ class HydrusItemsController < ApplicationController
   include Hydra::Controller::UploadBehavior
 
   before_filter :authenticate_user!
-  before_filter :setup_attributes, :except => [:new, :index, :send_purl_email, :terms_of_deposit, :agree_to_terms_of_deposit]
-  before_filter :check_for_collection, :only => :new
-  before_filter :redirect_if_not_correct_object_type, :only => [:edit,:show]
+  before_filter :setup_attributes, except: [:new, :index, :send_purl_email, :terms_of_deposit, :agree_to_terms_of_deposit]
+  before_filter :check_for_collection, only: :new
+  before_filter :redirect_if_not_correct_object_type, only: [:edit,:show]
 
   def index
     unless params.has_key?(:hydrus_collection_id)
@@ -16,7 +16,7 @@ class HydrusItemsController < ApplicationController
     @fobj = Hydrus::Collection.find(params[:hydrus_collection_id])
     @fobj.current_user = current_user
     authorize! :read, @fobj
-    @items=@fobj.items_list(:num_files=>true)
+    @items=@fobj.items_list(num_files: true)
   end
 
   def setup_attributes
@@ -170,15 +170,15 @@ class HydrusItemsController < ApplicationController
       want.js {
         if params.has_key?(:add_contributor)
           i = @fobj.contributors.length - 1
-          render "add_contributor", :locals => { :index => i, :guid=>SecureRandom.uuid }
+          render "add_contributor", locals: { index: i, guid: SecureRandom.uuid }
         elsif params.has_key?(:add_link)
           i = @fobj.related_items.length - 1
-          render "add_link", :locals => { :index => i, :guid=>SecureRandom.uuid  }
+          render "add_link", locals: { index: i, guid: SecureRandom.uuid  }
         elsif params.has_key?(:add_related_citation)
           i = @fobj.related_citation.length - 1
-          render "add_related_citation", :locals => { :index => i, :guid=>SecureRandom.uuid  }
+          render "add_related_citation", locals: { index: i, guid: SecureRandom.uuid  }
         else
-          render :json => tidy_response_from_update(@response)
+          render json: tidy_response_from_update(@response)
         end
       }
     end
@@ -215,7 +215,7 @@ class HydrusItemsController < ApplicationController
     @fobj=Hydrus::Item.find(@pid)
     authorize! :read, @fobj
     @recipients=params[:recipients]
-    HydrusMailer.send_purl(:recipients=>@recipients,:current_user=>current_user,:object=>@fobj).deliver unless @recipients.blank?
+    HydrusMailer.send_purl(recipients: @recipients,current_user: current_user,object: @fobj).deliver unless @recipients.blank?
     respond_to do |format|
       format.html
       format.js
@@ -232,7 +232,7 @@ class HydrusItemsController < ApplicationController
       @dupe_ids=@file.dupes.collect {|dupe| dupe.id}
       @file.remove_dupes
     else
-      render :nothing=>true
+      render nothing: true
       return
     end
   end
@@ -248,7 +248,7 @@ class HydrusItemsController < ApplicationController
         redirect_to :back
       }
       want.js {
-        render :action => :destroy_file
+        render action: :destroy_file
       }
     end
   end

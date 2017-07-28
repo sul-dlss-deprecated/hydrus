@@ -11,19 +11,19 @@ def dashboard(*args)
   # View: display results.
   collections.each do |hc|
     ap({
-      :coll_pid    => hc.pid,
-      :apo_pid     => hc.apo.pid,
-      :title       => hc.title,
-      :roles       => hc.apo.roles_of_person(user),
-      :item_counts => hc.item_counts,
+      coll_pid: hc.pid,
+      apo_pid: hc.apo.pid,
+      title: hc.title,
+      roles: hc.apo.roles_of_person(user),
+      item_counts: hc.item_counts,
     })
   end
 end
 
 def solr_query(*args)
   h = {
-    :q    => '*.*',
-    :fl   => 'objectId_ssim',
+    q: '*.*',
+    fl: 'objectId_ssim',
   }
   resp, sdocs = issue_solr_query(h)
   ap resp['response']['numFound']
@@ -32,12 +32,12 @@ end
 
 def resolrize(*args)
   pid = args.first
-  solrizer = Solrizer::Fedora::Solrizer.new(:index_full_text => true)
+  solrizer = Solrizer::Fedora::Solrizer.new(index_full_text: true)
   if pid
     pid = "druid:#{pid}"
     solrizer.solrize(pid)
   else
-    solrizer.solrize_objects(:suppress_errors => true)
+    solrizer.solrize_objects(suppress_errors: true)
   end
 end
 

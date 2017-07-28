@@ -4,8 +4,8 @@ class Hydrus::GenericObject < Dor::Item
 
   attr_accessor :files_were_changed
 
-  validates :pid, :is_druid => true
-  validate :check_contact_email_format, :if => :should_validate
+  validates :pid, is_druid: true
+  validate :check_contact_email_format, if: :should_validate
 
   # We are using the validates_email_format_of gem to check email addresses.
   # Normally, you can use this tool with a simple validates() call:
@@ -66,7 +66,7 @@ class Hydrus::GenericObject < Dor::Item
   end
 
   def get_fedora_item(pid)
-    ActiveFedora::Base.find(pid, :cast => true)
+    ActiveFedora::Base.find(pid, cast: true)
   end
 
   def discover_access
@@ -254,12 +254,12 @@ class Hydrus::GenericObject < Dor::Item
   # keys and human readable labels as values.
   def self.status_labels(typ, status = nil)
     h = {
-      :collection => {
+      collection: {
         'draft'             => "draft",
         'published_open'    => "published",
         'published_closed'  => "published",
       },
-      :item       => {
+      item: {
         'draft'             => "draft",
         'awaiting_approval' => "waiting for approval",
         'returned'          => "item returned",
@@ -301,12 +301,12 @@ class Hydrus::GenericObject < Dor::Item
   # Returns a hash of info needed to register a Dor object.
   def self.dor_registration_params(user_string, obj_typ, apo_pid)
     {
-      :object_type       => obj_typ,
-      :admin_policy      => apo_pid,
-      :source_id         => { 'Hydrus' => "#{obj_typ}-#{user_string}-#{HyTime.now_datetime_full}" },
-      :label             => 'Hydrus',
-      :tags              => [Settings.hydrus.project_tag],
-      :initiate_workflow => [Dor::Config.hydrus.app_workflow],
+      object_type: obj_typ,
+      admin_policy: apo_pid,
+      source_id: { 'Hydrus' => "#{obj_typ}-#{user_string}-#{HyTime.now_datetime_full}" },
+      label: 'Hydrus',
+      tags: [Settings.hydrus.project_tag],
+      initiate_workflow: [Dor::Config.hydrus.app_workflow],
     }
   end
 
@@ -316,7 +316,7 @@ class Hydrus::GenericObject < Dor::Item
 
   def send_object_returned_email_notification(opts={})
     return if recipients_for_object_returned_email.blank?
-    email=HydrusMailer.object_returned(:returned_by => @current_user, :object => self, :item_url=>opts[:item_url])
+    email=HydrusMailer.object_returned(returned_by: @current_user, object: self, item_url: opts[:item_url])
     email.deliver_now unless email.blank?
   end
 

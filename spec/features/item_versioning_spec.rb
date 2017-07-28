@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe("Item versioning", :type => :request, :integration => true) do
+describe("Item versioning", type: :request, integration: true) do
 
   fixtures :users
 
@@ -9,9 +9,9 @@ describe("Item versioning", :type => :request, :integration => true) do
     @ok_notice = "Your changes have been saved."
     @item_discard = ".icon-trash"
     @buttons = {
-      :save                => 'save_nojs',
-      :publish_directly    => 'Publish',
-      :open_new_version    => 'Open new version',
+      save: 'save_nojs',
+      publish_directly: 'Publish',
+      open_new_version: 'Open new version',
     }
   end
 
@@ -27,7 +27,7 @@ describe("Item versioning", :type => :request, :integration => true) do
   after(:each) do
     p      = @hi.pid
     wf     = Dor::Config.hydrus.app_workflow
-    wf_xml = Hydrus.fixture_foxml(p, :is_wf => true)
+    wf_xml = Hydrus.fixture_foxml(p, is_wf: true)
     Dor::Config.workflow.client.delete_workflow('dor', p, 'versioningWF')
     Dor::Config.workflow.client.delete_workflow('dor', p, wf)
     Dor::Config.workflow.client.create_workflow('dor', p, wf, wf_xml)
@@ -105,7 +105,7 @@ describe("Item versioning", :type => :request, :integration => true) do
 
     # Add the version info.
     should_visit_edit_page(@hi)
-    fill_in("hydrus_item_version_description", :with => 'Blah blah')
+    fill_in("hydrus_item_version_description", with: 'Blah blah')
     choose("Minor")
     click_button(@buttons[:save])
 
@@ -161,9 +161,9 @@ describe("Item versioning", :type => :request, :integration => true) do
     #   - change license
     #   - set version to minor
     should_visit_edit_page(@hi)
-    fill_in("hydrus_item_version_description", :with => 'Blah blah')
+    fill_in("hydrus_item_version_description", with: 'Blah blah')
     choose("Minor")
-    select("PDDL Public Domain Dedication and License", :from => 'hydrus_item_license')
+    select("PDDL Public Domain Dedication and License", from: 'hydrus_item_license')
     # Try to save.
     #   - Should get a flash error message.
     #   - Item's license should be unchanged.
@@ -244,13 +244,13 @@ describe("Item versioning", :type => :request, :integration => true) do
 
     before(:each) do
       @vs = {
-        :yes        => 'hydrus_item_embarg_visib_embargoed_yes',
-        :no         => 'hydrus_item_embarg_visib_embargoed_no',
-        :date       => 'hydrus_item_embarg_visib_date',
-        :date_sel   => 'input#hydrus_item_embarg_visib_date',
-        :flash      => "#flash-notices div.alert",
-        :err_range  => 'Embargo date must be in the range',
-        :err_format => 'Embargo date must be in yyyy-mm-dd',
+        yes: 'hydrus_item_embarg_visib_embargoed_yes',
+        no: 'hydrus_item_embarg_visib_embargoed_no',
+        date: 'hydrus_item_embarg_visib_date',
+        date_sel: 'input#hydrus_item_embarg_visib_date',
+        flash: "#flash-notices div.alert",
+        err_range: 'Embargo date must be in the range',
+        err_format: 'Embargo date must be in yyyy-mm-dd',
       }
     end
 
@@ -297,23 +297,23 @@ describe("Item versioning", :type => :request, :integration => true) do
       expect(page).to have_selector(@vs[:date_sel])
       # 1. Try to set an embargo too far into the future.
       choose(@vs[:yes])
-      fill_in(@vs[:date], :with => HyTime.date(pd + 1.year + 2.day))
+      fill_in(@vs[:date], with: HyTime.date(pd + 1.year + 2.day))
       click_button(@buttons[:save])
       expect(find(@vs[:flash])).to have_content(@vs[:err_range])
       # 2. Try to set an embargo with a malformed date.
       choose(@vs[:yes])
-      fill_in(@vs[:date], :with => 'foobar')
+      fill_in(@vs[:date], with: 'foobar')
       click_button(@buttons[:save])
       expect(find(@vs[:flash])).to have_content(@vs[:err_format])
       # 3a. Should be able to set a valid embargo date, farther into future.
       choose(@vs[:yes])
-      fill_in(@vs[:date], :with => HyTime.date(ed + 1.month))
+      fill_in(@vs[:date], with: HyTime.date(ed + 1.month))
       click_button(@buttons[:save])
       expect(find(@vs[:flash])).to have_content(@ok_notice)
       # 3b. Should be able to set a valid embargo date, closer to today.
       should_visit_edit_page(@hi)
       choose(@vs[:yes])
-      fill_in(@vs[:date], :with => HyTime.date(ed - 1.month))
+      fill_in(@vs[:date], with: HyTime.date(ed - 1.month))
       click_button(@buttons[:save])
       expect(find(@vs[:flash])).to have_content(@ok_notice)
       # Confirm that we set the embargo, and did not alter visibility.

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe ApplicationHelper, :type => :helper do
+describe ApplicationHelper, type: :helper do
 
   include ApplicationHelper
 
@@ -35,16 +35,16 @@ describe ApplicationHelper, :type => :helper do
     expect(hydrus_is_empty?(['',['stuff']])).to be false
     expect(hydrus_is_empty?(['stuff'])).to be false
     expect(hydrus_is_empty?('stuff')).to be false
-    expect(hydrus_is_empty?(Hydrus::Contributor.new(:name=>'peter',:role=>'el jefe'))).to be false
+    expect(hydrus_is_empty?(Hydrus::Contributor.new(name: 'peter',role: 'el jefe'))).to be false
   end
 
   it 'should show the item edit tab if the item is not published' do
-    item = double(Hydrus::Item, :is_published => true)
+    item = double(Hydrus::Item, is_published: true)
     expect(show_item_edit(item)).to eq(false)
   end
 
   it 'should not show the item edit tab if the item is published' do
-    item = double(Hydrus::Item, :is_published => false)
+    item = double(Hydrus::Item, is_published: false)
     expect(show_item_edit(item)).to eq(true)
   end
 
@@ -63,7 +63,7 @@ describe ApplicationHelper, :type => :helper do
     exp_na   = '<span class="muted">not available yet</span>'
     expect(hydrus_object_setting_value(nil)).to eq(exp_unsp)
     expect(hydrus_object_setting_value('')).to eq(exp_unsp)
-    expect(hydrus_object_setting_value('', :na => true)).to eq(exp_na)
+    expect(hydrus_object_setting_value('', na: true)).to eq(exp_na)
     expect(hydrus_object_setting_value('cool dude')).to eq('cool dude')
   end
 
@@ -115,12 +115,12 @@ describe ApplicationHelper, :type => :helper do
 
   describe "render helpers" do
     it "should return a string that corresponds to the view path for that model" do
-      expect(helper.view_path_from_model(Hydrus::Collection.new(:pid=>"1234"))).to eq("hydrus_collections")
-      expect(helper.view_path_from_model(Hydrus::Item.new(:pid=>"1234"))).to       eq("hydrus_items")
+      expect(helper.view_path_from_model(Hydrus::Collection.new(pid: "1234"))).to eq("hydrus_collections")
+      expect(helper.view_path_from_model(Hydrus::Item.new(pid: "1234"))).to       eq("hydrus_items")
     end
   end
 
-  describe "item title link helpers", :integration=>true do
+  describe "item title link helpers", integration: true do
 
     it "should return item title links, showing special text when blank" do
       hi=Hydrus::Item.new

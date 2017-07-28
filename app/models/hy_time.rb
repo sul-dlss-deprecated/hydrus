@@ -26,14 +26,14 @@ module HyTime
     # For example: "2012-11-16T23:40:11Z".
     # Note that the :datetime format string produces the same string
     # as calling iso8601() on a DateTime object.
-    :date             => '%F',
-    :time             => '%TZ',
-    :datetime         => '%FT%TZ',
-    :datetime_full    => '%FT%T.%LZ',  # With milliseconds.
+    date: '%F',
+    time: '%TZ',
+    datetime: '%FT%TZ',
+    datetime_full: '%FT%T.%LZ',  # With milliseconds.
     # Display formats -- for the web UI, for example.
-    :date_display     => '%F',
-    :time_display     => '%-l:%M %P',
-    :datetime_display => '%F %-l:%M %P',
+    date_display: '%F',
+    time_display: '%-l:%M %P',
+    datetime_display: '%F %-l:%M %P',
   }
 
   DEFAULT_TIMEZONE   = 'UTC'
@@ -105,12 +105,12 @@ module HyTime
     define_singleton_method(f) do |*args|
       dt   = args[0]
       opts = args[1] || {}
-      opts = opts.merge(:format => f)
+      opts = opts.merge(format: f)
       return formatted(dt, opts)
     end
     # HyTime.now_FMT
     define_singleton_method("now_#{f}") do
-      return formatted(now, :format => f)
+      return formatted(now, format: f)
     end
   end
 

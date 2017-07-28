@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Hydrus::Authorizable, :type => :model do
+describe Hydrus::Authorizable, type: :model do
 
   before(:each) do
     @auth = Hydrus::Authorizable
@@ -8,17 +8,17 @@ describe Hydrus::Authorizable, :type => :model do
     @s1   = Set.new(%w(aa bb cc))
     @s2   = Set.new(%w(dd ee ff))
     @s3   = Set.new(%w(bb ee))
-    @ua   = double('mock_user', :sunetid => 'aa', :is_administrator? => false, :is_collection_creator? => false, :is_global_viewer? => false)
-    @ub   = double('mock_user', :sunetid => 'bb')
-    @uf   = double('mock_user', :sunetid => 'ff', :is_administrator? => false, :is_collection_creator? => false, :is_global_viewer? => false)
+    @ua   = double('mock_user', sunetid: 'aa', is_administrator?: false, is_collection_creator?: false, is_global_viewer?: false)
+    @ub   = double('mock_user', sunetid: 'bb')
+    @uf   = double('mock_user', sunetid: 'ff', is_administrator?: false, is_collection_creator?: false, is_global_viewer?: false)
     @obj  = double('mock_fedora_obj')
     @hc   = double('mock_collecton')
     @hi   = double('mock_item')
   end
   
-  let(:admin_user) { double('mock_admin', :is_administrator? => true ) }
-  let(:creator_user) { double('mock_creator', :is_collection_creator? => true ) }
-  let(:viewer_user) { double('mock_viewer', :is_global_viewer? => true ) }
+  let(:admin_user) { double('mock_admin', is_administrator?: true ) }
+  let(:creator_user) { double('mock_creator', is_collection_creator?: true ) }
+  let(:viewer_user) { double('mock_viewer', is_global_viewer?: true ) }
 
   it "should be able to exercise the methods returning fixed Sets" do
     methods = [

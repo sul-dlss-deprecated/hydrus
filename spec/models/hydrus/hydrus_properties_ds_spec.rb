@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Hydrus::HydrusPropertiesDS, :type => :model do
+describe Hydrus::HydrusPropertiesDS, type: :model do
 
   before(:all) do
     @ds_start="<hydrusProperties>"

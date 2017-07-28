@@ -53,13 +53,13 @@ module Hydrus::Contentable
       }
     end
     Assembly::ContentMetadata.create_content_metadata(
-      :druid               => dru,
-      :objects             => objects,
-      :add_file_attributes => true,
-      :style               => conf.cm_style,
-      :file_attributes     => conf.cm_file_attributes,
-      :auto_labels         => false,
-      :include_root_xml    => false)
+      druid: dru,
+      objects: objects,
+      add_file_attributes: true,
+      style: conf.cm_style,
+      file_attributes: conf.cm_file_attributes,
+      auto_labels: false,
+      include_root_xml: false)
   end
 
   def parent_directory
