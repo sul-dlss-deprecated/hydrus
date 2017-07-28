@@ -4,7 +4,6 @@ class SessionsController < Devise::SessionsController
   before_filter :only => [:new] do
     if current_user and params[:referrer]
       redirect_to params[:referrer]
-      return false
     end
   end
 

@@ -5,6 +5,7 @@ class Hydrus::ObjectFile < ActiveRecord::Base
   #attr_accessible :label, :pid, :hide
 
   mount_uploader :file, FileUploader
+  after_destroy :remove_file!
 
   def size
     file.size

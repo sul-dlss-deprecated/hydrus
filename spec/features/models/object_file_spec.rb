@@ -23,13 +23,13 @@ describe Hydrus::ObjectFile, :type => :feature, :integration=>true do
 
     files = @hi.files
     expect(files.size).to eq(4)
+    file = files.first
 
-    filename = files[0].filename
-    file_url = files[0].url
-    full_file_path = "public" + file_url
+    file_url = file.url
+    full_file_path = file.current_path
     expect(File.exists?(full_file_path)).to be_truthy
 
-    files[0].destroy
+    file.destroy
 
     @hi=Hydrus::Item.find(pid)
     expect(@hi.files.size).to eq(3)
