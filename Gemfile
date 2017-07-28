@@ -40,7 +40,7 @@ gem 'uglifier', '>= 1.0.3'
 # gems only needed for particular environments
 
 group :development, :test do
-  gem 'jettywrapper', '1.4.2'
+  gem 'jettywrapper', '~> 1.4'
   gem 'sqlite3'
   gem 'rspec-rails', '~> 3.1'
   gem 'capybara'
