@@ -130,7 +130,7 @@ module ApplicationHelper
     if obj.nil? # nil case
       is_blank=true
     elsif obj.class == Array # arrays
-      is_blank=obj.all? {|element| hydrus_is_empty?(element)}
+      is_blank=obj.all? { |element| hydrus_is_empty?(element) }
     elsif obj.class == String # strings
       is_blank=obj.blank?
     else # case of abitrary object

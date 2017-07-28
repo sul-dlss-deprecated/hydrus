@@ -22,7 +22,7 @@ describe WebAuthUser, type: :model do
   
   describe 'Privilege Groups' do
     let(:user_without_a_group) { WebAuthUser.new('jdoe') }
-    let(:user_in_the_admin_group) { WebAuthUser.new('jdoe', { 'WEBAUTH_LDAPPRIVGROUP' => 'dlss:hydrus-app-administrators'})}
+    let(:user_in_the_admin_group) { WebAuthUser.new('jdoe', { 'WEBAUTH_LDAPPRIVGROUP' => 'dlss:hydrus-app-administrators'}) }
     let(:user_in_role_groups) {  WebAuthUser.new('jdoe', { 'WEBAUTH_LDAPPRIVGROUP' => 'dlss:hydrus-app-collection-creators|dlss:hydrus-app-global-viewers'}) }
     it 'should have no privileges by default' do
       expect(user_without_a_group.is_administrator?).to be_falsey
@@ -45,9 +45,9 @@ describe WebAuthUser, type: :model do
 
   describe 'w/o enviornment variable set' do
     it 'should raise an error' do
-      expect{WebAuthUser.new('')}.to raise_error
-      expect{WebAuthUser.new(nil)}.to raise_error
-      expect{WebAuthUser.new}.to raise_error
+      expect{ WebAuthUser.new('') }.to raise_error
+      expect{ WebAuthUser.new(nil) }.to raise_error
+      expect{ WebAuthUser.new }.to raise_error
     end
   end
 end

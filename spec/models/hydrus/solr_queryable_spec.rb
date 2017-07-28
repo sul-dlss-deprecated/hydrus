@@ -155,7 +155,7 @@ describe Hydrus::SolrQueryable, type: :model do
       end
       h = @msq.squery_item_counts_of_collections(fake_pids)
       #this raises an exception due to receiving a 413 error from solr unless the parameters are posted
-      expect{resp, sdocs = @msq.issue_solr_query(h)}.not_to raise_error
+      expect{ resp, sdocs = @msq.issue_solr_query(h) }.not_to raise_error
     end
   end
 end

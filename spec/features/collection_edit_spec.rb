@@ -306,9 +306,9 @@ describe('Collection edit', type: :request, integration: true) do
       end
 
       it 'should not send an email when there are no item depositors' do
-        e = expect {@coll.send_publish_email_notification(true)}
+        e = expect { @coll.send_publish_email_notification(true) }
         e.to change { ActionMailer::Base.deliveries.count }.by(0)
-        e = expect {@coll.send_publish_email_notification(false)}
+        e = expect { @coll.send_publish_email_notification(false) }
         e.to change { ActionMailer::Base.deliveries.count }.by(0)
       end
     end
@@ -331,7 +331,7 @@ describe('Collection edit', type: :request, integration: true) do
         click_button('save_nojs')
         expect(page).to have_content('Your changes have been saved.')
 
-        expect {click_button('Open Collection')}.to change { ActionMailer::Base.deliveries.count }.by(1)
+        expect { click_button('Open Collection') }.to change { ActionMailer::Base.deliveries.count }.by(1)
 
         email = ActionMailer::Base.deliveries.last
         expect(email.to).to eq(['archivist1@stanford.edu'])
@@ -341,7 +341,7 @@ describe('Collection edit', type: :request, integration: true) do
 
         fill_in 'hydrus_collection_apo_person_roles[hydrus-collection-item-depositor]', with: 'jdoe'
         
-        expect {click_button('save_nojs')}.to change { ActionMailer::Base.deliveries.count }.by(1)
+        expect { click_button('save_nojs') }.to change { ActionMailer::Base.deliveries.count }.by(1)
         email = ActionMailer::Base.deliveries.last
         expect(email.to).to eq(['jdoe@stanford.edu'])
         expect(email.subject).to eq('Invitation to deposit in the Stanford Digital Repository')       
@@ -361,7 +361,7 @@ describe('Collection edit', type: :request, integration: true) do
         fill_in 'hydrus_collection_apo_person_roles[hydrus-collection-item-depositor]', with: 'jdoe'
         uncheck('should_send_role_change_emails')
         
-        expect {click_button('save_nojs')}.to change { ActionMailer::Base.deliveries.count }.by(0)
+        expect { click_button('save_nojs') }.to change { ActionMailer::Base.deliveries.count }.by(0)
       end
       
       it 'should handle complex changes to depositors' do
@@ -377,7 +377,7 @@ describe('Collection edit', type: :request, integration: true) do
         click_link('Edit Collection')
 
         fill_in 'hydrus_collection_apo_person_roles[hydrus-collection-item-depositor]', with: 'jandoe, leland, jondoe'
-        expect {click_button('save_nojs')}.to change { ActionMailer::Base.deliveries.count }.by(2) # a removal notice for jdoe,jandoe and an invitation notice jandoe and jondoe
+        expect { click_button('save_nojs') }.to change { ActionMailer::Base.deliveries.count }.by(2) # a removal notice for jdoe,jandoe and an invitation notice jandoe and jondoe
         email = ActionMailer::Base.deliveries.last
         expect(email.to).to eq(['jdoe@stanford.edu', 'janedoe@stanford.edu'])
         expect(email.subject).to eq('Removed as a depositor in the Stanford Digital Repository')
@@ -387,7 +387,7 @@ describe('Collection edit', type: :request, integration: true) do
         login_as('archivist1')
         visit new_hydrus_collection_path()
         fill_in 'hydrus_collection_apo_person_roles[hydrus-collection-item-depositor]', with: 'jdoe'
-        expect {click_button('save_nojs')}.to change { ActionMailer::Base.deliveries.count }.by(0)
+        expect { click_button('save_nojs') }.to change { ActionMailer::Base.deliveries.count }.by(0)
       end
     end
   end

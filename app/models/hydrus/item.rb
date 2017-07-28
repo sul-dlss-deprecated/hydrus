@@ -407,7 +407,7 @@ class Hydrus::Item < Hydrus::GenericObject
 
   # you must have at least one non-blank contributor
   def contributors_not_all_blank
-    if (contributors.all? {|contributor| contributor.name.blank?})
+    if (contributors.all? { |contributor| contributor.name.blank? })
       errors.add(:contributors, 'must be entered')
     end
   end

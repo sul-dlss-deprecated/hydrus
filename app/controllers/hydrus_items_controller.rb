@@ -230,7 +230,7 @@ class HydrusItemsController < ApplicationController
       @file.pid = params[:id]
       @file.file = params[:file]
       @file.save
-      @dupe_ids=@file.dupes.collect {|dupe| dupe.id}
+      @dupe_ids=@file.dupes.collect { |dupe| dupe.id }
       @file.remove_dupes
     else
       render nothing: true 
@@ -259,7 +259,7 @@ class HydrusItemsController < ApplicationController
     @fobj.descMetadata.remove_node(params[:term], params[:term_index])
     @fobj.save
     respond_to do |want|
-      want.html {redirect_to :back}
+      want.html { redirect_to :back }
       want.js
     end
   end

@@ -77,7 +77,7 @@ describe HydrusItemsController, type: :controller do
         expect(response).to redirect_to(hydrus_item_path(@pid))
         expect(flash[:notice]).to match(/Your changes have been saved/)
         expect(flash[:notice]).to match(/'fixture.html' uploaded/)
-        expect(Hydrus::Item.find(@pid).files.map{|file| file.filename }.include?('fixture.html')).to be_truthy
+        expect(Hydrus::Item.find(@pid).files.map{ |file| file.filename }.include?('fixture.html')).to be_truthy
       end
     end
   end

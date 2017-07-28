@@ -5,7 +5,7 @@ module Hydrus::Contentable
 
   # Check to see if all of the files that are referenced in the database actually exist on the file system
   def files_missing?
-    files.map{|f| f.missing?}.include?(true)
+    files.map{ |f| f.missing? }.include?(true)
   end
   
   # remove any files deemed missing from the database; return the number deleted
