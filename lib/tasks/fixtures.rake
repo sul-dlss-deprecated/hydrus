@@ -142,9 +142,9 @@ namespace :hydrus do
     src_base = File.join(app_base, 'spec/fixtures/files')
     dst_base = File.join(app_base, 'public',Hydrus::Application.config.file_upload_path)
     FIXTURE_PIDS.each do |pid|
-      pid.gsub!('druid:', '')
-      src = File.join(src_base, pid)
-      dst = DruidTools::Druid.new(pid, dst_base).path('content')
+      druid = pid.sub('druid:', '')
+      src = File.join(src_base, druid)
+      dst = DruidTools::Druid.new(druid, dst_base).path('content')
       if File.exists?(src) && File.directory?(src)
         FileUtils.mkdir_p(dst) unless File.directory?(dst)
         cmd = "cp -fr #{src}/* #{dst}/"
