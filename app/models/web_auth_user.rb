@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class WebAuthUser
   attr_reader :groups
 

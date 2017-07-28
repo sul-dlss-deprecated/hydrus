@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'spec_helper'
 
 describe Hydrus::RoleMetadataDS, type: :model do

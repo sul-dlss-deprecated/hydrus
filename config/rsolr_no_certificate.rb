@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class RSolr::Connection
   def execute client, request_context
     if request_context[:method] != :post

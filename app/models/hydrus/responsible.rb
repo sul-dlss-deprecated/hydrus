@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # A mixin for roleMetadata stuff.
 
 module Hydrus::Responsible

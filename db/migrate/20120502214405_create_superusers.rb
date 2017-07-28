@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class CreateSuperusers < ActiveRecord::Migration
   def self.up
     create_table :superusers do |t|

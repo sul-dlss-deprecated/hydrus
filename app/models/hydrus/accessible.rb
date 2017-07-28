@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # A module used to read and modify the <access> nodes that
 # exist in rightsMetadata and in embargoMetadata/releaseAccess.
 #

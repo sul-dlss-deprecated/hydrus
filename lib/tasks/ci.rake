@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 ZIP_FILE = 'https://github.com/projecthydra/hydra-jetty/archive/v7.3.1.zip'
 
 desc 'Run Continuous Integration Suite (tests, coverage, docs)'

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # A mixin for workflow stuff.
 
 module Hydrus::Processable

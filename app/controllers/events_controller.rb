@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class EventsController < ApplicationController
 
   before_filter do

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class HydrusAdminPolicyObjectsController < ApplicationController
 
   include Hydra::Controller::ControllerBehavior

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Hydrus
 
   # All of our fixture PIDs, in order: APOs, then Collections, then Items.

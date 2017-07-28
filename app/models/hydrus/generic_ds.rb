@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Hydrus::GenericDS
 
   # TODO: Considering putting these methods in OM or ActiveFedora.

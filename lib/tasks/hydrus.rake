@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 namespace :hydrus do
   desc 'associate DOR item with Hydrus'
   # associates a non-hydrus DOR item with the Hydrus app by adding datastreams and indexing into Hydrus solr

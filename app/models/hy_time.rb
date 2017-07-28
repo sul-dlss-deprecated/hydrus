@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # A module to consolidate time-related logic, parsing, and formatting
 # for the Hydrus application.
 #

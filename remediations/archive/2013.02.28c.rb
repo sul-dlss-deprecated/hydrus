@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class Hydrus::RemediationRunner
 
   # Run solely for the purpose of opening-closing a version for Items.

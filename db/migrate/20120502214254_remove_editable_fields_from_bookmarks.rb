@@ -1,5 +1,6 @@
 # -*- encoding : utf-8 -*-
 # frozen_string_literal: true
+
 class RemoveEditableFieldsFromBookmarks < ActiveRecord::Migration
   def self.up
     remove_column :bookmarks, :notes

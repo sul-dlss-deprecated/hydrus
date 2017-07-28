@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class UriValidator < ActiveModel::EachValidator
   def validate_each(object, attribute, value)
     raise(ArgumentError, 'A regular expression must be supplied as the :format option of the options hash') unless options[:format].nil? or options[:format].is_a?(Regexp)

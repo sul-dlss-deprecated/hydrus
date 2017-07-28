@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class Hydrus::Item < Hydrus::GenericObject
   include Hydrus::Responsible
 

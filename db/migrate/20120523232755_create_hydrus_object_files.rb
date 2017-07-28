@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class CreateHydrusObjectFiles < ActiveRecord::Migration
   def change
     create_table(:object_files) do |t|

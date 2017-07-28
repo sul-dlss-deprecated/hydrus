@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'okcomputer'
 require 'faraday'
 # Check an HTTP connection with client certificates

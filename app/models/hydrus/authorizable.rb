@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # See get_fedora_object() in ability.rb for discussion
 # of the nil checks in this module.
 

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 namespace :hydrus do
   # See lib/hydrus.rb for fixture PIDs.
   require 'hydrus'

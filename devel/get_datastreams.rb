@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # A script used to print datastreams for an object.
 
 def main(args)

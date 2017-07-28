@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # A module to extend the Hydrus APO, Collection, and Item classes.
 module Hydrus::Delegatable
 

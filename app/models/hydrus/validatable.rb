@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # A mixin used to control whether validation occurs.
 
 module Hydrus::Validatable

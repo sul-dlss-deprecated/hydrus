@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Hydrus::GenericObjectStuff
   extend ActiveSupport::Concern
   included do

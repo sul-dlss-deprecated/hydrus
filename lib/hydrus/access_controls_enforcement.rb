@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Hydrus::AccessControlsEnforcement
 
   # Redirects to home page with a flash error if user lacks

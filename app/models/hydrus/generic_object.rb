@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class Hydrus::GenericObject < Dor::Item
 
   include Hydrus::GenericObjectStuff

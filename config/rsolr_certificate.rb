@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'rsolr/client_cert'
 require 'solrizer-fedora'
 

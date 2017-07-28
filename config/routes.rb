@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 Hydrus::Application.routes.draw do
   HydraHead.add_routes(self)
 

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Hydrus::Licenseable
 
   # Returns the text label of the object's license.

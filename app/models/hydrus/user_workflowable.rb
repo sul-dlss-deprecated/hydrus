@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Hydrus::UserWorkflowable
 
   # Returns true if the object is in the draft state.

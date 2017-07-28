@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 set :application, 'hydrus'
 set :repo_url, 'https://github.com/sul-dlss/hydrus.git'
 

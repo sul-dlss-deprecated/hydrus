@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Hydrus::Cant
 
   # A utility method that raises an exception with a useful message indicating
