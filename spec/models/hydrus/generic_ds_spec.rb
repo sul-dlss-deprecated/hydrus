@@ -150,6 +150,5 @@ describe Hydrus::GenericDS, type: :model do
       expect(roles.size).to eq(1)
       expect(roles.last['type']).to eq('blah')
     end
-
   end
 end
