@@ -107,12 +107,12 @@ module Hydrus::Processable
   # Returns a string -- the datetime when the object achived the published
   # lifecycle in common accessioning.
   def publish_time
-    if should_treat_as_accessioned
-      # In development and test mode, simulated a publish_time of 1 day later.
-      pt = submitted_for_publish_time.to_datetime + 1.day
-    else
-      pt = workflow_client.get_lifecycle(REPO, pid, 'published')
-    end
+    pt = if should_treat_as_accessioned
+           # In development and test mode, simulated a publish_time of 1 day later.
+           submitted_for_publish_time.to_datetime + 1.day
+         else
+           workflow_client.get_lifecycle(REPO, pid, 'published')
+         end
     HyTime.datetime(pt)
   end
 
