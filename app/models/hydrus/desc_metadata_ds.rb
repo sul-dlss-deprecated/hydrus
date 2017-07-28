@@ -34,8 +34,8 @@ class Hydrus::DescMetadataDS < ActiveFedora::OmDatastream
     end
 
     t.originInfo IANS do
-      t.date_range_start path: 'dateCreated', attributes: { point: 'start'}
-      t.date_range_end path: 'dateCreated', attributes: { point: 'end'}
+      t.date_range_start path: 'dateCreated', attributes: { point: 'start' }
+      t.date_range_end path: 'dateCreated', attributes: { point: 'end' }
       t.dateCreated IA
       t.dateIssued IA
     end

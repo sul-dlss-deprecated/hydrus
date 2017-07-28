@@ -42,7 +42,7 @@ namespace :hydrus do
     # index into solr
     solr = Dor::SearchService.solr
     solr_doc = item.to_solr
-    solr.add(solr_doc, add_attributes: {commitWithin: 5000})
+    solr.add(solr_doc, add_attributes: { commitWithin: 5000 })
   end
 
   desc 'Index all DOR defined workflow objects into Hydrus solr instance'
@@ -51,7 +51,7 @@ namespace :hydrus do
     model_type = "<#{Dor::WorkflowObject.to_class_uri}>"
     solr = Dor::SearchService.solr
     pids = Dor::SearchService.risearch 'select $object from <#ri> where $object ' "<fedora-model:hasModel> #{model_type}", { limit: nil }
-    pids.each { |pid| solr.add(Dor.find(pid).to_solr, add_attributes: {commitWithin: 5000}) }     # index into hydrus solr
+    pids.each { |pid| solr.add(Dor.find(pid).to_solr, add_attributes: { commitWithin: 5000 }) }     # index into hydrus solr
   end
 
   desc 'Cleanup file upload temp files'

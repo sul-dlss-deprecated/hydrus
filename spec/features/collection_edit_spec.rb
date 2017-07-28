@@ -124,7 +124,7 @@ describe('Collection edit', type: :request, integration: true) do
     new_license_label   = 'ODC-ODbl Open Database License'
     new_license_option  = 'varies'
     new_check_field     = "hydrus_collection_license_option_#{new_license_option}"
-    ps = {visibility: 'stanford',license_code: 'cc-by',embargo_date: ''}
+    ps = { visibility: 'stanford',license_code: 'cc-by',embargo_date: '' }
     check_emb_vis_lic(@hc,ps)
 
     login_as('archivist1')
@@ -142,7 +142,7 @@ describe('Collection edit', type: :request, integration: true) do
     # Visit view page, and confirm that changes occured.
     visit polymorphic_path(@hc)
     @hc = Hydrus::Collection.find @druid
-    ps = {visibility: 'stanford',license_code: 'odc-odbl',embargo_date: ''}
+    ps = { visibility: 'stanford',license_code: 'odc-odbl',embargo_date: '' }
     check_emb_vis_lic(@hc,ps)
     confirm_rights_metadata_in_apo(@hc)
   end
@@ -158,7 +158,7 @@ describe('Collection edit', type: :request, integration: true) do
     no_embargo_option   = 'none'
     no_embargo          = ''
     no_embargo_check_field = "hydrus_collection_embargo_option_#{no_embargo_option}"
-    ps = {visibility: 'stanford',license_code: 'cc-by',embargo_date: ''}
+    ps = { visibility: 'stanford',license_code: 'cc-by',embargo_date: '' }
     check_emb_vis_lic(@hc,ps)
     login_as('archivist1')
     # Visit edit page, and confirm content.
@@ -287,7 +287,7 @@ describe('Collection edit', type: :request, integration: true) do
       end
 
       it 'should send open email when there are item depositors' do
-        @coll.apo_person_roles = {"hydrus-collection-item-depositor": 'jdoe'}
+        @coll.apo_person_roles = { "hydrus-collection-item-depositor": 'jdoe' }
         e = expect { @coll.send_publish_email_notification(true) }
         e.to change { ActionMailer::Base.deliveries.count }.by(1)
         email = ActionMailer::Base.deliveries.last
@@ -296,7 +296,7 @@ describe('Collection edit', type: :request, integration: true) do
       end
 
       it 'should send close email when there are item depositors' do
-        @coll.apo_person_roles = {"hydrus-collection-item-depositor": 'jdoe'}
+        @coll.apo_person_roles = { "hydrus-collection-item-depositor": 'jdoe' }
         e = expect { @coll.send_publish_email_notification(false) }
         e.to change { ActionMailer::Base.deliveries.count }.by(1)
         email = ActionMailer::Base.deliveries.last

@@ -42,7 +42,7 @@ namespace :hydrus do
     unless obj.nil?
       puts "Reindexing #{pid} in solr"
       solr_doc = obj.to_solr
-      Dor::SearchService.solr.add(solr_doc, add_attributes: {commitWithin: 1000})
+      Dor::SearchService.solr.add(solr_doc, add_attributes: { commitWithin: 1000 })
     else
       puts "#{pid} not found"
     end

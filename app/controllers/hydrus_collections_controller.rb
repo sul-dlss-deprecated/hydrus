@@ -111,7 +111,7 @@ class HydrusCollectionsController < ApplicationController
       }
       want.js {
         if params.has_key?(:add_link)
-          render 'add_link', locals: {index: @fobj.related_item_title.length - 1}
+          render 'add_link', locals: { index: @fobj.related_item_title.length - 1 }
         else
           render json: tidy_response_from_update(@response)
         end
@@ -147,7 +147,7 @@ class HydrusCollectionsController < ApplicationController
   def list_all
     authorize! :list_all_collections, Hydrus::Collection
     @all_collections = Hydrus::Collection.all_hydrus_collections.
-                       sort.map { |p| Hydrus::Collection.find({id: p}, lightweight: true) }
+                       sort.map { |p| Hydrus::Collection.find({ id: p }, lightweight: true) }
   end
 
   private

@@ -7,16 +7,16 @@ class Hydrus::RoleMetadataDS < ActiveFedora::OmDatastream
     t.root path: 'roleMetadata'
 
     t.role do
-      t.type_ path: {attribute: 'type'}
+      t.type_ path: { attribute: 'type' }
       t.person do
         t.identifier index_as: [:facetable] do
-          t.type_ path: {attribute: 'type'}
+          t.type_ path: { attribute: 'type' }
         end
         t.name
       end
       t.group do
         t.identifier index_as: [:facetable]  do
-          t.type_ path: {attribute: 'type'}
+          t.type_ path: { attribute: 'type' }
         end
       end
     end
@@ -24,16 +24,16 @@ class Hydrus::RoleMetadataDS < ActiveFedora::OmDatastream
     t.person_id proxy: [:role, :person, :identifier]
 
     # Collection-level roles.
-    t.collection_creator        ref: [:role], attributes: {type: 'hydrus-collection-creator'}
-    t.collection_manager        ref: [:role], attributes: {type: 'hydrus-collection-manager'}
-    t.collection_depositor      ref: [:role], attributes: {type: 'hydrus-collection-depositor'}
-    t.collection_item_depositor ref: [:role], attributes: {type: 'hydrus-collection-item-depositor'}
-    t.collection_reviewer       ref: [:role], attributes: {type: 'hydrus-collection-reviewer'}
-    t.collection_viewer         ref: [:role], attributes: {type: 'hydrus-collection-viewer'}
+    t.collection_creator        ref: [:role], attributes: { type: 'hydrus-collection-creator' }
+    t.collection_manager        ref: [:role], attributes: { type: 'hydrus-collection-manager' }
+    t.collection_depositor      ref: [:role], attributes: { type: 'hydrus-collection-depositor' }
+    t.collection_item_depositor ref: [:role], attributes: { type: 'hydrus-collection-item-depositor' }
+    t.collection_reviewer       ref: [:role], attributes: { type: 'hydrus-collection-reviewer' }
+    t.collection_viewer         ref: [:role], attributes: { type: 'hydrus-collection-viewer' }
 
     # Item-level roles.
-    t.item_manager              ref: [:role], attributes: {type: 'hydrus-item-manager'}
-    t.item_depositor            ref: [:role], attributes: {type: 'hydrus-item-depositor'}
+    t.item_manager              ref: [:role], attributes: { type: 'hydrus-item-manager' }
+    t.item_depositor            ref: [:role], attributes: { type: 'hydrus-item-depositor' }
 
     t.item_depositor_person_identifier(
       ref: [:item_depositor, :person, :identifier],

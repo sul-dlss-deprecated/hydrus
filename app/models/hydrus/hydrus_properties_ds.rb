@@ -10,7 +10,7 @@ class Hydrus::HydrusPropertiesDS < ActiveFedora::OmDatastream
 
     t.users_accepted_terms_of_deposit(path: 'usersAcceptedTermsOfDeposit') do
       t.user do
-        t.date_accepted path: {attribute: 'dateAccepted'}
+        t.date_accepted path: { attribute: 'dateAccepted' }
       end
     end
 

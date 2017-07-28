@@ -101,7 +101,7 @@ class Hydrus::Collection < Dor::Collection
       object_type = self.class.array_to_single(solr_doc['mods_typeOfResource_ssim'])
       depositor = self.class.array_to_single(solr_doc['item_depositor_person_identifier_ssm'])
       create_date = solr_doc['system_create_dtsi']
-      items << {pid: id,num_files: num_files,object_type: object_type,title: title,status_label: status,item_depositor_id: depositor,create_date: create_date}
+      items << { pid: id,num_files: num_files,object_type: object_type,title: title,status_label: status,item_depositor_id: depositor,create_date: create_date }
     end
     items
 
@@ -572,7 +572,7 @@ class Hydrus::Collection < Dor::Collection
     resp, sdocs = issue_solr_query(h)
     sdocs.each do |doc|
       pid = doc['objectId_ssim'].first unless doc['objectId_ssim'].nil?
-      toret[pid] = {solr: doc} if pid
+      toret[pid] = { solr: doc } if pid
     end
 
     toret

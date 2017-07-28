@@ -152,22 +152,22 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
   # getting and setting behavior of embargo lengths. If you change these keys
   # here, you need to update the collection model as well
   def self.embargo_types
-    {'none'   => 'No delay -- release all items as soon as they are deposited',
+    { 'none'   => 'No delay -- release all items as soon as they are deposited',
      'varies' => 'Varies -- select a release date per item, from "now" to a maximum of',
-     'fixed'  => 'Fixed -- delay release of all items for'}
+     'fixed'  => 'Fixed -- delay release of all items for' }
   end
 
   def self.visibility_types
-    {'everyone' => 'Everyone -- all items in this collection will be public',
+    { 'everyone' => 'Everyone -- all items in this collection will be public',
      'varies'   => 'Varies -- default is public, but you can choose to restrict some items to Stanford community',
-     'stanford' => 'Stanford community -- all items will be visible only to Stanford-authenticated users'}
+     'stanford' => 'Stanford community -- all items will be visible only to Stanford-authenticated users' }
   end
 
   def self.embargo_terms
-    {'6 months after deposit' => '6 months',
+    { '6 months after deposit' => '6 months',
      '1 year after deposit'   => '1 year',
      '2 years after deposit'  => '2 years',
-     '3 years after deposit'  => '3 years'}
+     '3 years after deposit'  => '3 years' }
   end
 
 end

@@ -441,7 +441,7 @@ describe Hydrus::Collection, type: :model do
       end
 
       it 'should return item_counts_of_collections() if there are relevant Collections' do
-        exp = {foo: 1, bar: 2}
+        exp = { foo: 1, bar: 2 }
         expect(@HC).to receive(:apos_involving_user).and_return([1,2,3])
         expect(@HC).to receive(:collections_of_apos).and_return([4,5,6])
         expect(@HC).to receive(:item_counts_of_collections).and_return(exp)
@@ -474,7 +474,7 @@ describe Hydrus::Collection, type: :model do
 
     it 'can exercise get_facet_counts_from_response()' do
       exp  = 1234
-      fcs  = {'facet_pivot' => {a: exp}}
+      fcs  = { 'facet_pivot' => { a: exp } }
       resp = double('resp', facet_counts: fcs)
       expect(@HC.get_facet_counts_from_response(resp)).to eq(exp)
     end

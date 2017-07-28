@@ -11,7 +11,7 @@ module Hydrus::SolrQueryable
 
   def self.add_gated_discovery(solr_parameters, apo_pids, user)
 
-    h = { fq: []}
+    h = { fq: [] }
     add_governed_by_filter(h, apo_pids)
     add_involved_user_filter(h, user)
     solr_parameters[:fq] ||= []

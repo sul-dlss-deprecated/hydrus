@@ -575,8 +575,8 @@ end
     @go.descMetadata.insert_related_item
     @go.descMetadata.insert_related_item
     # Set using hashes.
-    @go.related_item_title = {'0' => 'A', '1' => 'B', '2' => 'C'}
-    @go.related_item_url   = {'0' => 'boo', '1' => 'bar', '2' => 'ftp://quux'}
+    @go.related_item_title = { '0' => 'A', '1' => 'B', '2' => 'C' }
+    @go.related_item_url   = { '0' => 'boo', '1' => 'bar', '2' => 'ftp://quux' }
     expect(@go.related_item_title).to eq(%w(A B C))
     expect(@go.related_item_url).to eq(['http://boo', 'http://bar', 'ftp://quux'])
     # Also confirm that each title and URL is put in its own relatedItem node.

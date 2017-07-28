@@ -15,15 +15,15 @@ class Hydrus::RightsMetadataDS < ActiveFedora::OmDatastream
       end
     end
 
-    t.discover_access ref: [:access], attributes: {type: 'discover'}
-    t.read_access     ref: [:access], attributes: {type: 'read'}
+    t.discover_access ref: [:access], attributes: { type: 'discover' }
+    t.read_access     ref: [:access], attributes: { type: 'read' }
 
     t.use do
       t.human {
-        t.type_ path: {attribute: 'type'}
+        t.type_ path: { attribute: 'type' }
       }
       t.machine {
-        t.type_ path: {attribute: 'type'}
+        t.type_ path: { attribute: 'type' }
       }
     end
 

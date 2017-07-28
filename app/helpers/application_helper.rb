@@ -54,11 +54,11 @@ module ApplicationHelper
   end
 
   def new_user_session_path options = {}
-    super({referrer: request.fullpath}.merge options)
+    super({ referrer: request.fullpath }.merge options)
   end
 
   def webauth_login_path options = {}
-    super({referrer: request.fullpath}.merge options)
+    super({ referrer: request.fullpath }.merge options)
   end
 
   def terms_of_deposit_path(pid)

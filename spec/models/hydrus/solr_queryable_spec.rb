@@ -33,8 +33,8 @@ describe Hydrus::SolrQueryable, type: :model do
     it 'should add the expected :fq clause' do
       tests = [
         [ {},                [@role_md_clause] ],
-        [ {fq: []},       [@role_md_clause] ],
-        [ {fq: ['blah']}, ['blah', @role_md_clause] ],
+        [ { fq: [] },       [@role_md_clause] ],
+        [ { fq: ['blah'] }, ['blah', @role_md_clause] ],
       ]
       tests.each do |h, exp|
         @hsq.add_involved_user_filter(h, @user)
@@ -55,8 +55,8 @@ describe Hydrus::SolrQueryable, type: :model do
       igb    = 'is_governed_by_ssim:("info:fedora/aaa" OR "info:fedora/bbb")'
       tests  = [
         [ {},                [igb] ],
-        [ {fq: []},       [igb] ],
-        [ {fq: ['blah']}, ['blah', igb] ],
+        [ { fq: [] },       [igb] ],
+        [ { fq: ['blah'] }, ['blah', igb] ],
       ]
       tests.each do |h, exp|
         @hsq.add_governed_by_filter(h, druids)
@@ -77,8 +77,8 @@ describe Hydrus::SolrQueryable, type: :model do
       hms    = 'has_model_ssim:("info:fedora/afmodel:xxx" OR "info:fedora/afmodel:yyy")'
       tests  = [
         [ {},                [hms] ],
-        [ {fq: []},       [hms] ],
-        [ {fq: ['blah']}, ['blah', hms] ],
+        [ { fq: [] },       [hms] ],
+        [ { fq: ['blah'] }, ['blah', hms] ],
       ]
       tests.each do |h, exp|
         @hsq.add_model_filter(h, *models)
@@ -103,7 +103,7 @@ describe Hydrus::SolrQueryable, type: :model do
   it 'can exercise get_druids_from_response()' do
     k    = 'objectId_ssim'
     exp  = [12, 34, 56]
-    docs = exp.map { |n| {k => [n]} }
+    docs = exp.map { |n| { k => [n] } }
     resp = double('resp', docs: docs)
     expect(@msq.get_druids_from_response(resp)).to eq(exp)
   end
@@ -112,19 +112,19 @@ describe Hydrus::SolrQueryable, type: :model do
   describe('all_hydrus_objects()', integration: true) do
     before(:each) do
       @all_objects = [
-        {pid: 'druid:oo000oo0001', object_type: 'Item',              object_version: '2013.02.26a'},
-        {pid: 'druid:oo000oo0002', object_type: 'AdminPolicyObject', object_version: '2013.02.26a'},
-        {pid: 'druid:oo000oo0003', object_type: 'Collection',        object_version: '2013.02.26a'},
-        {pid: 'druid:oo000oo0004', object_type: 'Collection',        object_version: '2013.02.26a'},
-        {pid: 'druid:oo000oo0005', object_type: 'Item',              object_version: '2013.02.26a'},
-        {pid: 'druid:oo000oo0006', object_type: 'Item',              object_version: '2013.02.26a'},
-        {pid: 'druid:oo000oo0007', object_type: 'Item',              object_version: '2013.02.26a'},
-        {pid: 'druid:oo000oo0008', object_type: 'AdminPolicyObject', object_version: '2013.02.26a'},
-        {pid: 'druid:oo000oo0009', object_type: 'AdminPolicyObject', object_version: '2013.02.26a'},
-        {pid: 'druid:oo000oo0010', object_type: 'Collection',        object_version: '2013.02.26a'},
-        {pid: 'druid:oo000oo0011', object_type: 'Item',              object_version: '2013.02.26a'},
-        {pid: 'druid:oo000oo0012', object_type: 'Item',              object_version: '2013.02.26a'},
-        {pid: 'druid:oo000oo0013', object_type: 'Item',              object_version: '2013.02.26a'}
+        { pid: 'druid:oo000oo0001', object_type: 'Item',              object_version: '2013.02.26a' },
+        { pid: 'druid:oo000oo0002', object_type: 'AdminPolicyObject', object_version: '2013.02.26a' },
+        { pid: 'druid:oo000oo0003', object_type: 'Collection',        object_version: '2013.02.26a' },
+        { pid: 'druid:oo000oo0004', object_type: 'Collection',        object_version: '2013.02.26a' },
+        { pid: 'druid:oo000oo0005', object_type: 'Item',              object_version: '2013.02.26a' },
+        { pid: 'druid:oo000oo0006', object_type: 'Item',              object_version: '2013.02.26a' },
+        { pid: 'druid:oo000oo0007', object_type: 'Item',              object_version: '2013.02.26a' },
+        { pid: 'druid:oo000oo0008', object_type: 'AdminPolicyObject', object_version: '2013.02.26a' },
+        { pid: 'druid:oo000oo0009', object_type: 'AdminPolicyObject', object_version: '2013.02.26a' },
+        { pid: 'druid:oo000oo0010', object_type: 'Collection',        object_version: '2013.02.26a' },
+        { pid: 'druid:oo000oo0011', object_type: 'Item',              object_version: '2013.02.26a' },
+        { pid: 'druid:oo000oo0012', object_type: 'Item',              object_version: '2013.02.26a' },
+        { pid: 'druid:oo000oo0013', object_type: 'Item',              object_version: '2013.02.26a' }
       ]
     end
 

@@ -89,8 +89,8 @@ describe Hydrus::Item, type: :model do
         </mods>
       eos
       @hi.contributors = {
-        '0' => {'name' => 'AAA', 'role_key' => 'corporate_author'},
-        '1' => {'name' => 'BBB', 'role_key' => 'personal_author'},
+        '0' => { 'name' => 'AAA', 'role_key' => 'corporate_author' },
+        '1' => { 'name' => 'BBB', 'role_key' => 'personal_author' },
       }
       expect(@hi.descMetadata.ng_xml).to be_equivalent_to(exp)
     end
@@ -648,7 +648,7 @@ describe Hydrus::Item, type: :model do
       allow(@hi).to receive(:contact).and_return('test@test.com') # we need a valid email address
       allow(@hi).to receive(:contributors).and_return([Hydrus::Contributor.new(name: 'Some, person')]) # need at least one non-blank contributor
       allow(@hi).to receive(:keywords).and_return(%w(aaa bbb))
-      allow(@hi).to receive(:dates).and_return({date_created: '2011'})
+      allow(@hi).to receive(:dates).and_return({ date_created: '2011' })
       allow(@hi).to receive(:date_created).and_return('2011')
       allow(@hi).to receive(:single_date?).and_return true
       allow(@hi).to receive_message_chain([:collection, :embargo_option]).and_return('varies')
@@ -1084,7 +1084,7 @@ describe Hydrus::Item, type: :model do
 
   it 'should indicate if we do require terms acceptance if user has never accepted terms on another item in the same collection' do
     @coll = Hydrus::Collection.new
-    allow(@coll).to receive(:users_accepted_terms_of_deposit).and_return({'archivist3' => '10-12-2008 00:00:00','archivist4' => '10-12-2009 00:00:05'})
+    allow(@coll).to receive(:users_accepted_terms_of_deposit).and_return({ 'archivist3' => '10-12-2008 00:00:00','archivist4' => '10-12-2009 00:00:05' })
     allow(@hi).to receive(:accepted_terms_of_deposit).and_return(false)
     allow(@hi).to receive(:collection).and_return(@coll)
     expect(@hi.requires_terms_acceptance('archivist1')).to be true
@@ -1092,7 +1092,7 @@ describe Hydrus::Item, type: :model do
 
   it 'should indicate if we do require terms acceptance if user already accepted terms on another item in the same collection, but it was more than 1 year ago' do
     @coll = Hydrus::Collection.new
-    allow(@coll).to receive(:users_accepted_terms_of_deposit).and_return({'archivist1' => '10-12-2008 00:00:00','archivist2' => '10-12-2009 00:00:05'})
+    allow(@coll).to receive(:users_accepted_terms_of_deposit).and_return({ 'archivist1' => '10-12-2008 00:00:00','archivist2' => '10-12-2009 00:00:05' })
     allow(@hi).to receive(:accepted_terms_of_deposit).and_return(false)
     allow(@hi).to receive(:collection).and_return(@coll)
     expect(@hi.requires_terms_acceptance('archivist1')).to be true
@@ -1100,7 +1100,7 @@ describe Hydrus::Item, type: :model do
 
   it 'should indicate if we do not require terms acceptance if user already accepted terms on another item in the same collection, and it was less than 1 year ago' do
     @coll = Hydrus::Collection.new
-    allow(@coll).to receive(:users_accepted_terms_of_deposit).and_return({'archivist1' => Time.now.in_time_zone - 364.days,'archivist2' => '10-12-2009 00:00:05'})
+    allow(@coll).to receive(:users_accepted_terms_of_deposit).and_return({ 'archivist1' => Time.now.in_time_zone - 364.days,'archivist2' => '10-12-2009 00:00:05' })
     allow(@hi).to receive(:accepted_terms_of_deposit).and_return(false)
     allow(@hi).to receive(:collection).and_return(@coll)
     expect(@hi.requires_terms_acceptance('archivist1')).to be false

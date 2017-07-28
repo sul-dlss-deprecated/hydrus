@@ -105,7 +105,7 @@ describe Hydrus::AccessControlsEnforcement do
     it 'should redirect to home page if user cannot do it' do
       allow(@mc).to receive('can?').and_return(false)
       allow(@mc).to receive(:root_url).and_return('/')
-      allow(@mc).to receive('params').and_return({collection: 'druid:oo000oo0003'})
+      allow(@mc).to receive('params').and_return({ collection: 'druid:oo000oo0003' })
       allow(@mc).to receive(:root_path).and_return(@exp_rp)
       expect(@mc).to receive(:redirect_to).with(@exp_rp)
       @mc.enforce_create_permissions
@@ -168,7 +168,7 @@ describe Hydrus::AccessControlsEnforcement do
           "#{parts[:hm]}",
         ],
       }
-      solr_params = {a: 'blah'}
+      solr_params = { a: 'blah' }
       @mc.apply_gated_discovery(solr_params, {})
       expect(solr_params).to eq(exp)
     end
