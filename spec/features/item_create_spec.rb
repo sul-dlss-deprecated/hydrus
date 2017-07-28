@@ -537,64 +537,9 @@ describe("Item create", :type => :request, :integration => true) do
       expect(users.keys.include?('archivist3')).to eq(true)
       expect(users['archivist3']).to eq('2012-05-02T20:02:44Z')
     end
-
-  end
-
-  describe("terms of acceptance for a new item",:integration => true)  do
-
-    subject { Hydrus::Collection.find('druid:oo000oo0003') }
-
-    it "should indicate that a new item in a collection requires terms acceptance, if the user has already accepted another item in this collection but it was more than 1 year ago" do
-      u ='archivist1' # this user accepted more than 1 year ago
-      expect(subject.users_accepted_terms_of_deposit.keys.include?(u)).to eq(true)
-      ni = ItemService.create(subject.pid, mock_authed_user(u))
-      expect(ni.requires_terms_acceptance(u,subject)).to eq(true)
-      expect(ni.accepted_terms_of_deposit).to eq("false")
-      expect(ni.terms_of_deposit_accepted?).to eq(false)
-    end
-
-    it "should indicate that a new item in a collection does not require terms acceptance, if the user has already accepted another item in this collection less than 1 year ago" do
-      u='archivist3'
-      dt = HyTime.now - 1.month # force this user to have accepted 1 month ago.
-      expect(subject.users_accepted_terms_of_deposit.keys.include?(u)).to eq(true)
-      subject.hydrusProperties.accept_terms_of_deposit(u,HyTime.datetime(dt))
-      subject.save
-      ni = ItemService.create(subject.pid, mock_authed_user(u))
-      expect(ni.requires_terms_acceptance(u,subject)).to eq(false)
-      expect(ni.accepted_terms_of_deposit).to eq("true")
-      expect(ni.terms_of_deposit_accepted?).to eq(true)
-    end
-
-    it "should indicate that a new item in a collection requires terms acceptance, when the user has not already accepted another item in this collection" do
-      u='archivist5'
-      allow(Hydrus::Authorizable).to receive(:can_create_items_in).and_return(true)
-      ni = ItemService.create(subject.pid, mock_authed_user(u))
-      expect(ni.requires_terms_acceptance(u,subject)).to eq(true)
-      expect(ni.accepted_terms_of_deposit).to eq("false")
-      expect(ni.terms_of_deposit_accepted?).to eq(false)
-    end
-
-    it "should accept the terms for an item, updating the appropriate hydrusProperties metadata in item and collection" do
-      u    = 'archivist5'
-      user = mock_authed_user(u)
-      allow(Hydrus::Authorizable).to receive(:can_create_items_in).and_return(true)
-      allow(Hydrus::Authorizable).to receive(:can_edit_item).and_return(true)
-      ni = ItemService.create(subject.pid, user)
-      expect(ni.requires_terms_acceptance(u,subject)).to eq(true)
-      expect(ni.accepted_terms_of_deposit).to eq("false")
-      expect(subject.users_accepted_terms_of_deposit.keys.include?(u)).to eq(false)
-      ni.accept_terms_of_deposit(user)
-      expect(ni.accepted_terms_of_deposit).to eq("true")
-      expect(ni.terms_of_deposit_accepted?).to eq(true)
-      coll=Hydrus::Collection.find('druid:oo000oo0003')
-      expect(coll.users_accepted_terms_of_deposit.keys.include?(u)).to eq(true)
-      expect(coll.users_accepted_terms_of_deposit[u].nil?).to eq(false)
-    end
-
   end
 
   describe "licenses" do
-
     before(:each) do
       @lic_select = 'select#hydrus_item_license'
     end

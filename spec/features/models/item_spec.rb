@@ -40,6 +40,37 @@ describe(Hydrus::Item, :type => :feature, :integration => true) do
 
   end
 
+  describe "#accept_terms_of_deposit" do
+    let(:user_key) { 'archivist5' }
+    let(:user) { mock_authed_user(user_key) }
+    let(:item) { ItemService.create(collection.pid, user) }
+    let(:collection) { Hydrus::Collection.find('druid:oo000oo0003') }
+
+    before do
+      allow(Hydrus::Authorizable).to receive(:can_create_items_in).and_return(true)
+      allow(Hydrus::Authorizable).to receive(:can_edit_item).and_return(true)
+    end
+
+    around do |example|
+      @prev_mint_ids = Dor::Config.configure.suri.mint_ids
+      Dor::Config.configure.suri.mint_ids = true
+      example.run
+      Dor::Config.configure.suri.mint_ids = @prev_mint_ids
+    end
+
+    it "should accept the terms for an item, updating the appropriate hydrusProperties metadata in item and collection" do
+      expect(item.requires_terms_acceptance(user_key, collection)).to eq(true)
+      expect(item.accepted_terms_of_deposit).to eq("false")
+      expect(collection.users_accepted_terms_of_deposit.keys.include?(user_key)).to eq(false)
+      item.accept_terms_of_deposit(user)
+      expect(item.accepted_terms_of_deposit).to eq("true")
+      expect(item.terms_of_deposit_accepted?).to eq(true)
+      collection.reload
+      expect(collection.users_accepted_terms_of_deposit.keys.include?(user_key)).to eq(true)
+      expect(collection.users_accepted_terms_of_deposit[user_key].nil?).to eq(false)
+    end
+  end
+
   describe "do_publish()" do
 
     before(:each) do
