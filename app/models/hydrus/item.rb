@@ -20,9 +20,9 @@ class Hydrus::Item < Hydrus::GenericObject
 
   validate  :enforce_collection_is_open, on: :create
 
-  validates :contributors, at_least_one: true,  if: :should_validate
-  validate  :contributors_not_all_blank,           if: :should_validate
-  validates :files, at_least_one: true,         if: :should_validate
+  validates :contributors, at_least_one: true, if: :should_validate
+  validate  :contributors_not_all_blank, if: :should_validate
+  validates :files, at_least_one: true, if: :should_validate
   validate  :must_accept_terms_of_deposit,         if: :should_validate
   validate  :must_review_release_settings,         if: :should_validate
 
@@ -30,7 +30,7 @@ class Hydrus::Item < Hydrus::GenericObject
   validate  :embargo_date_in_range
   validate  :check_version_if_license_changed
   validate  :check_visibility_not_reduced
-  validate  :has_specified_a_valid_date,          if: :should_validate
+  validate  :has_specified_a_valid_date, if: :should_validate
 
   belongs_to :collection, property: :is_member_of_collection, class_name: 'Hydrus::Collection'
 
@@ -597,7 +597,7 @@ class Hydrus::Item < Hydrus::GenericObject
     kws = Hydrus::ModelHelper.parse_delimited(val)
     return if keywords == kws
     descMetadata.remove_nodes(:subject)
-    kws.each { |kw| descMetadata.insert_topic(kw)  }
+    kws.each { |kw| descMetadata.insert_topic(kw) }
   end
 
   # Returns the Item's contributors, as an array of Hydrus::Contributor objects.

@@ -35,7 +35,7 @@ describe Hydrus::RightsMetadataDS, type: :model do
     expect(tou['type']).to eq('useAndReproduction')  # Still have tou.
     expect(lic['type']).to eq('GCODE')               # Check human license.
     expect(lic.content).to eq('TXT')
-    ns = @doc.use.machine.nodeset               # Check machine license.
+    ns = @doc.use.machine.nodeset # Check machine license.
     expect(ns.size).to eq(1)
     lic = ns.first
     expect(lic['type']).to eq('GCODE')

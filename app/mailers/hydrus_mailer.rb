@@ -64,7 +64,7 @@ class HydrusMailer < ActionMailer::Base
   def open_notification(opts={})
     @fobj = opts[:object]
     @collection_url = root_url(host: host)
-    mail(to: HydrusMailer.process_user_list(@fobj.recipients_for_collection_update_emails), subject: 'Collection opened for deposit in the Stanford Digital Repository')  unless ignore?(@fobj.pid)
+    mail(to: HydrusMailer.process_user_list(@fobj.recipients_for_collection_update_emails), subject: 'Collection opened for deposit in the Stanford Digital Repository') unless ignore?(@fobj.pid)
   end
 
   def close_notification(opts={})

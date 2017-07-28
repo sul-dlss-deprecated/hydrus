@@ -136,13 +136,13 @@ describe ApplicationHelper, type: :helper do
       'hello',
       "\r\n", "\r\n", "\n",       # Various newline styles.
       '<script>DANGER</script>',  # Injected JavaScript.
-      "\r",   "\r",   "\r\n",     # More newlines.
+      "\r", "\r", "\r\n", # More newlines.
       'world',
     ].join
     exp = [
       'hello',
       br, br, br,
-      '&lt;script&gt;DANGER&lt;/script&gt;',  # Safely escaped.
+      '&lt;script&gt;DANGER&lt;/script&gt;', # Safely escaped.
       br, br, br,
       'world',
     ].join

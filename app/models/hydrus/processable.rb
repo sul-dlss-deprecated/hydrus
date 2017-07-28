@@ -1,8 +1,7 @@
 # A mixin for workflow stuff.
 
 module Hydrus::Processable
-
-  HWF  = Dor::Config.hydrus.app_workflow  # 'hydrusAssemblyWF'
+  HWF  = Dor::Config.hydrus.app_workflow # 'hydrusAssemblyWF'
   REPO = 'dor'
 
   def workflow_client

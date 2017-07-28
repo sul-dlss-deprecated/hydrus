@@ -81,7 +81,7 @@ describe Hydrus::RoleMetadataDS, type: :model do
       p = '<person><identifier type="sunetid"/><name/></person>'
       exp_parts = [
         @rmd_start,
-        '<role type="hydrus-item-depositor">',  p, '</role>',
+        '<role type="hydrus-item-depositor">', p, '</role>',
         @rmd_end,
       ]
       exp_xml = noko_doc(exp_parts.join '')
@@ -131,8 +131,8 @@ describe Hydrus::RoleMetadataDS, type: :model do
       it 'should add the person node to an existing role node' do
         exp_parts = [
           @rmd_start,
-          '<role type="hydrus-collection-manager">',  @p1, @p2, '</role>',
-          '<role type="hydrus-collection-depositor">',  @p3, '</role>',
+          '<role type="hydrus-collection-manager">', @p1, @p2, '</role>',
+          '<role type="hydrus-collection-depositor">', @p3, '</role>',
           @rmd_end,
         ]
         exp_xml = noko_doc(exp_parts.join '')
@@ -140,8 +140,8 @@ describe Hydrus::RoleMetadataDS, type: :model do
         expect(@rmdoc.ng_xml).to be_equivalent_to exp_xml
         exp_parts = [
           @rmd_start,
-          '<role type="hydrus-collection-manager">',  @p1, @p2, '</role>',
-          '<role type="hydrus-collection-depositor">',  @p3, @p4, '</role>',
+          '<role type="hydrus-collection-manager">', @p1, @p2, '</role>',
+          '<role type="hydrus-collection-depositor">', @p3, @p4, '</role>',
           @rmd_end,
         ]
         exp_xml = noko_doc(exp_parts.join '')
@@ -152,9 +152,9 @@ describe Hydrus::RoleMetadataDS, type: :model do
       it 'should create the role node when none exists' do
         exp_parts = [
           @rmd_start,
-          '<role type="hydrus-collection-manager">',  @p1, '</role>',
-          '<role type="hydrus-collection-depositor">',  @p3, '</role>',
-          '<role type="foo-role">',  @p2, '</role>',
+          '<role type="hydrus-collection-manager">', @p1, '</role>',
+          '<role type="hydrus-collection-depositor">', @p3, '</role>',
+          '<role type="foo-role">', @p2, '</role>',
           @rmd_end,
         ]
         exp_xml = noko_doc(exp_parts.join '')
@@ -165,8 +165,8 @@ describe Hydrus::RoleMetadataDS, type: :model do
       it 'add_empty_person_to_role should insert an empty person node as a child of the role node' do
         exp_parts = [
           @rmd_start,
-          '<role type="hydrus-collection-manager">',  @p1, @ep, '</role>',
-          '<role type="hydrus-collection-depositor">',  @p3, '</role>',
+          '<role type="hydrus-collection-manager">', @p1, @ep, '</role>',
+          '<role type="hydrus-collection-depositor">', @p3, '</role>',
           @rmd_end,
         ]
         exp_xml = noko_doc(exp_parts.join '')

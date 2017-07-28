@@ -234,7 +234,7 @@ describe('Item create', type: :request, integration: true) do
     expect(item.is_destroyable).to eq(true)
     expect(item.submitted_for_publish_time).to be_blank
     expect(item.accepted_terms_of_deposit).to eq('false')
-    expect(item.valid?).to eq(true)  # Because unpublished, so validation is limited.
+    expect(item.valid?).to eq(true) # Because unpublished, so validation is limited.
 
     # Go back to edit page and fill in required elements.
     should_visit_edit_page(item)
@@ -442,7 +442,7 @@ describe('Item create', type: :request, integration: true) do
     expect(item.is_returned).to eq(false)
     expect(item.is_destroyable).to eq(true)
     expect(item.accepted_terms_of_deposit).to eq('false')
-    expect(item.valid?).to eq(true)  # Because unpublished, so validation is limited.
+    expect(item.valid?).to eq(true) # Because unpublished, so validation is limited.
 
     # Go back to edit page and fill in required elements.
     should_visit_edit_page(item)
@@ -518,7 +518,7 @@ describe('Item create', type: :request, integration: true) do
     ]
   end
 
-  describe('terms of acceptance for an existing item', integration: true)  do
+  describe('terms of acceptance for an existing item', integration: true) do
     subject { Hydrus::Item.find('druid:oo000oo0001') }
 
     it 'should indicate if the item has had terms accepted already' do

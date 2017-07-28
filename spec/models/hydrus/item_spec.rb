@@ -392,7 +392,7 @@ describe Hydrus::Item, type: :model do
       @xml = {
         em_world: noko_doc([em_start, em_world, twpc, em_end].join),
         em_stanf: noko_doc([em_start, em_stanf, twpc, em_end].join),
-        rm_emb: noko_doc([rm_start, di_world, rd_emb,   rm_end].join),
+        rm_emb: noko_doc([rm_start, di_world, rd_emb, rm_end].join),
         rm_world: noko_doc([rm_start, di_world, rd_world, rm_end].join),
         rm_stanf: noko_doc([rm_start, di_world, rd_stanf, rm_end].join),
       }

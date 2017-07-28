@@ -584,7 +584,7 @@ end
     ri_nodes = @go.descMetadata.find_by_terms(:relatedItem)
     expect(ri_nodes.size).to eq(3)
     ri_nodes.each do |nd|
-      nd = Nokogiri::XML(nd.to_s, &:noblanks)  # Generic XML w/o namespaces.
+      nd = Nokogiri::XML(nd.to_s, &:noblanks) # Generic XML w/o namespaces.
       expect(nd.xpath('//title').size).to eq(1)
       expect(nd.xpath('//url').size).to eq(1)
     end

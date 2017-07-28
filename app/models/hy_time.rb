@@ -29,7 +29,7 @@ module HyTime
     date: '%F',
     time: '%TZ',
     datetime: '%FT%TZ',
-    datetime_full: '%FT%T.%LZ',  # With milliseconds.
+    datetime_full: '%FT%T.%LZ', # With milliseconds.
     # Display formats -- for the web UI, for example.
     date_display: '%F',
     time_display: '%-l:%M %P',

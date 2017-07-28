@@ -495,7 +495,7 @@ class Hydrus::Collection < Dor::Collection
     rightsMetadata.group_read_nodes.map { |n| n.text }
   end
 
-  def visibility=(val)  # val = world or stanford
+  def visibility=(val) # val = world or stanford
     rightsMetadata.update_access_blocks(val)
   end
 
@@ -538,7 +538,7 @@ class Hydrus::Collection < Dor::Collection
 
       coll_pids = all_hydrus_collections
 
-    else   # Get PIDs of the APOs in which USER plays a role
+    else # Get PIDs of the APOs in which USER plays a role
 
       apo_pids = apos_involving_user(user)
       return {} if apo_pids.size == 0
@@ -621,14 +621,14 @@ class Hydrus::Collection < Dor::Collection
 
   # Returns an array collection druids for all APOs
   def self.all_hydrus_collections
-    h           = squery_all_hydrus_collections(   )
+    h           = squery_all_hydrus_collections( )
     resp, sdocs = issue_solr_query(h)
     get_druids_from_response(resp)
   end
 
   # Returns an array of all APO druids
   def self.all_hydrus_apos
-    h           = squery_all_hydrus_apos(   )
+    h           = squery_all_hydrus_apos( )
     resp, sdocs = issue_solr_query(h)
     get_druids_from_response(resp)
   end
@@ -653,7 +653,7 @@ class Hydrus::Collection < Dor::Collection
   # Returns a hash with all Item object_status values as the
   # keys and zeros as the values.
   def self.initial_item_counts
-    Hash[ Hydrus::GenericObject.status_labels(:item).keys.map { |s| [s,0]  } ]
+    Hash[ Hydrus::GenericObject.status_labels(:item).keys.map { |s| [s,0] } ]
   end
 
   # Takes an array of Collection druids.
@@ -710,7 +710,7 @@ class Hydrus::Collection < Dor::Collection
     item_counts.map { |s, n| [n, Hydrus::GenericObject.status_label(:item, s)] }
   end
 
-  def  self.item_counts_with_labels ic
+  def self.item_counts_with_labels ic
     ic.map { |s, n| [n, Hydrus::GenericObject.status_label(:item, s)] }
   end
   # Deletes a Collection and its APO.

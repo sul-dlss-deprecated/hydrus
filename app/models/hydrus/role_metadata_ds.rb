@@ -15,7 +15,7 @@ class Hydrus::RoleMetadataDS < ActiveFedora::OmDatastream
         t.name
       end
       t.group do
-        t.identifier index_as: [:facetable]  do
+        t.identifier index_as: [:facetable] do
           t.type_ path: { attribute: 'type' }
         end
       end

@@ -86,7 +86,7 @@ describe(Hydrus::Item, type: :feature, integration: true) do
       exp   = Hash[ steps.map { |s| [s, 'waiting'] } ]
       # Code to check workflow statuses.
       check_statuses = lambda {
-        hi = Hydrus::Item.find(hi.pid)  # A refreshed copy of object.
+        hi = Hydrus::Item.find(hi.pid) # A refreshed copy of object.
         statuses = steps.map { |s| [s, hi.workflows.get_workflow_status(s)] }
         expect(Hash[statuses]).to eq(exp)
       }
