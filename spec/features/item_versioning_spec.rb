@@ -36,7 +36,7 @@ describe('Item versioning', type: :request, integration: true) do
 
   it 'initial unpublished version of an item offers discard button' do
     login_as('archivist1')
-    item=Hydrus::Item.find('druid:oo000oo0005')
+    item = Hydrus::Item.find('druid:oo000oo0005')
     should_visit_view_page(item)
     expect(page).to have_css(@item_discard) # we are unpublished and on v1, we do have a discard button
     expect(item.is_initial_version).to eq(true)

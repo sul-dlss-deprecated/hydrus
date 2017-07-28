@@ -11,7 +11,7 @@ describe ApplicationHelper, type: :helper do
   end
 
   it 'should show correct view_item_text' do
-    hi=Hydrus::Item.new
+    hi = Hydrus::Item.new
     allow(hi).to receive(:is_published).and_return(true)
     expect(helper.view_item_text(hi)).to eq('Published Version')
     allow(hi).to receive(:is_published).and_return(false)
@@ -50,7 +50,7 @@ describe ApplicationHelper, type: :helper do
   end
 
   it 'should render the correct contextual layout' do
-    controller=double('HydrusCollectionsController')
+    controller = double('HydrusCollectionsController')
     rendered = helper.render_contextual_layout
 
     expect(rendered).to have_selector 'ul.breadcrumb'
@@ -110,7 +110,7 @@ describe ApplicationHelper, type: :helper do
   end
 
   it 'should show edit item text' do
-    hi=Hydrus::Item.new
+    hi = Hydrus::Item.new
     expect(helper.edit_item_text(hi)).to eq('Edit Draft')
   end
 
@@ -123,8 +123,8 @@ describe ApplicationHelper, type: :helper do
 
   describe 'item title link helpers', integration: true do
     it 'should return item title links, showing special text when blank' do
-      hi=Hydrus::Item.new
-      hi2=Hydrus::Item.find('druid:oo000oo0001')
+      hi = Hydrus::Item.new
+      hi2 = Hydrus::Item.find('druid:oo000oo0001')
       expect(helper.title_text(hi)).to eq('Untitled')
       expect(helper.title_text(hi2)).to eq('How Couples Meet and Stay Together')
       expect(helper.title_link(hi)).to have_selector 'a[href="/items"][disable_after_click="true"]', text: 'Untitled'

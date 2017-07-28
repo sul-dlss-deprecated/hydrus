@@ -45,8 +45,8 @@ def create_test_item(*args)
   hi.keywords    = 'foo,bar'
   hi.visibility  = 'stanford'
   hi.contributors = {
-    '0' => {'name'=>'Nugent, Ted', 'role_key'=>'personal_author'},
-    '1' => {'name'=>'EMI',         'role_key'=>'corporate_sponsor'},
+    '0' => {'name' => 'Nugent, Ted', 'role_key' => 'personal_author'},
+    '1' => {'name' => 'EMI',         'role_key' => 'corporate_sponsor'},
   }
   hi.accepted_terms_of_deposit = 'yes'
   hi.reviewed_release_settings = 'yes'

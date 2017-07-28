@@ -39,7 +39,7 @@ namespace :hydrus do
   desc 'reindex specified pid'
   task reindex: :environment do
     require File.expand_path('config/environment')
-    pid=ENV['pid']
+    pid = ENV['pid']
     obj = Dor.load_instance pid
     unless obj.nil?
       puts "Reindexing #{pid} in solr"
@@ -54,7 +54,7 @@ namespace :hydrus do
   desc 'reindex all workflow objects for the given environment'
   task reindex_workflow_objects: :environment do
     require File.expand_path('config/environment')
-    pids=Dor::Config.hydrus.workflow_object_druids
+    pids = Dor::Config.hydrus.workflow_object_druids
     pids.each do |pid|
       ENV['pid'] = pid
       Rake::Task['hydrus:reindex'].reenable
@@ -66,10 +66,10 @@ namespace :hydrus do
   desc 'delete a given hydrus collection object and all associated items and APOs'
   task delete_objects: :environment do
     require File.expand_path('config/environment')
-    pid=ENV['pid']
-    collection=Hydrus::Collection.find pid
+    pid = ENV['pid']
+    collection = Hydrus::Collection.find pid
     unless collection.nil?
-      items_pids=collection.hydrus_items.collect{ |item| item.pid }
+      items_pids = collection.hydrus_items.collect{ |item| item.pid }
       all_pids = items_pids << collection.pid << collection.apo.pid
       all_pids.each do |pid|
         puts "Deleteing #{pid}"
@@ -84,13 +84,13 @@ namespace :hydrus do
   desc 'update all fixture user passwords'
   task :update_passwords, :new_password do |t,args|
     require File.expand_path('config/environment')
-    new_password=args[:new_password]
+    new_password = args[:new_password]
     users = YAML.load(File.read 'test/fixtures/users.yml')
     users.each do |user,values|
       puts "Updating password for #{values['email']}"
-      u=User.find_by_email(values['email'])
-      u.password=new_password
-      u.password_confirmation=new_password
+      u = User.find_by_email(values['email'])
+      u.password = new_password
+      u.password_confirmation = new_password
       u.save
     end
   end
@@ -99,8 +99,8 @@ namespace :hydrus do
   desc 'export object to foxml'
   task :export_object, :pid, :output_dir do |t, args|
     require File.expand_path('config/environment')
-    output_dir=args[:output_dir] || File.join(Rails.root.to_s,'tmp')
-    pid=args[:pid]
+    output_dir = args[:output_dir] || File.join(Rails.root.to_s,'tmp')
+    pid = args[:pid]
     ActiveFedora::FixtureExporter.export_to_path(pid, output_dir)
   end
 
@@ -108,9 +108,9 @@ namespace :hydrus do
   desc 'import foxml objects from directory into dor'
   task :import_objects, :source_dir do |t,args|
     require File.expand_path('config/environment')
-    source_dir=args[:source_dir]
+    source_dir = args[:source_dir]
     Dir.chdir(source_dir)
-    files=Dir.glob('*.foxml.xml')
+    files = Dir.glob('*.foxml.xml')
     files.each do |file|
       pid = ActiveFedora::FixtureLoader.import_to_fedora(File.join(source_dir,file))
       ActiveFedora::FixtureLoader.index(pid)
@@ -160,7 +160,7 @@ namespace :hydrus do
     app_base = File.expand_path('../../../', __FILE__)
     dst_base = File.join(app_base, 'public',Hydrus::Application.config.file_upload_path)
     puts "Removing all folders in #{dst_base}"
-    all_folders=Dir.glob("#{dst_base}/*")
+    all_folders = Dir.glob("#{dst_base}/*")
     all_folders.each do |folder|
        FileUtils.rm_rf folder
     end
@@ -207,8 +207,8 @@ namespace :hydrus do
   desc 'delete all existing objects in solr without nuking jetty (objects will remain in fedora)'
   task solr_nuke: :environment do
     require File.expand_path('config/environment')
-    url1="curl #{Dor::Config.solrizer.url}/update --data '<delete><query>*:*</query></delete>' -H 'Content-type:text/xml; charset=utf-8'"
-    url2="curl #{Dor::Config.solrizer.url}/update --data '<commit/>' -H 'Content-type:text/xml; charset=utf-8'"
+    url1 = "curl #{Dor::Config.solrizer.url}/update --data '<delete><query>*:*</query></delete>' -H 'Content-type:text/xml; charset=utf-8'"
+    url2 = "curl #{Dor::Config.solrizer.url}/update --data '<commit/>' -H 'Content-type:text/xml; charset=utf-8'"
     puts "Delete all objects at SOLR URL #{Dor::Config.solrizer.url} in Rails environment '#{Rails.env}'? (type yes to proceed)"
     confirm = $stdin.gets.chomp
     if confirm == 'yes'

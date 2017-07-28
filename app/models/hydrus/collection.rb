@@ -92,17 +92,17 @@ class Hydrus::Collection < Dor::Collection
   # return a helper array of hashes with just some basic info to build the items list -this allows us to build the item listing view without having to go to Fedora at all and is much faster
   def items_list(opts={})
 
-    get_num_files=opts[:num_files] || true
+    get_num_files = opts[:num_files] || true
 
-    items=[]
+    items = []
     items_from_solr.each do |solr_doc|
-      id=solr_doc['id']
-      title=self.class.object_title(solr_doc)
-      num_files=(get_num_files ? Hydrus::ObjectFile.where(pid: id).count : -1)
-      status=self.class.array_to_single(solr_doc['object_status_ssim'])
-      object_type=self.class.array_to_single(solr_doc['mods_typeOfResource_ssim'])
-      depositor=self.class.array_to_single(solr_doc['item_depositor_person_identifier_ssm'])
-      create_date=solr_doc['system_create_dtsi']
+      id = solr_doc['id']
+      title = self.class.object_title(solr_doc)
+      num_files = (get_num_files ? Hydrus::ObjectFile.where(pid: id).count : -1)
+      status = self.class.array_to_single(solr_doc['object_status_ssim'])
+      object_type = self.class.array_to_single(solr_doc['mods_typeOfResource_ssim'])
+      depositor = self.class.array_to_single(solr_doc['item_depositor_person_identifier_ssm'])
+      create_date = solr_doc['system_create_dtsi']
       items << {pid: id,num_files: num_files,object_type: object_type,title: title,status_label: status,item_depositor_id: depositor,create_date: create_date}
     end
     items
@@ -141,12 +141,12 @@ class Hydrus::Collection < Dor::Collection
   end
 
   def set_collection_type
-    self.hydrusProperties.item_type='collection'
+    self.hydrusProperties.item_type = 'collection'
     identityMetadata.add_value(:objectType, 'set')
     identityMetadata.content_will_change!
     descMetadata.ng_xml.search('//mods:mods/mods:typeOfResource', 'mods' => 'http://www.loc.gov/mods/v3').each do |node|
-      node['collection']='yes'
-      node.content='mixed material'
+      node['collection'] = 'yes'
+      node.content = 'mixed material'
       descMetadata.content_will_change!
     end
   end
@@ -296,25 +296,25 @@ class Hydrus::Collection < Dor::Collection
     reviewers_after_update = self.apo.persons_with_role('hydrus-collection-reviewer')
     viewers_before_update = old_self.apo.persons_with_role('hydrus-collection-viewer')
     viewers_after_update = self.apo.persons_with_role('hydrus-collection-viewer')
-    self.send_role_change_email((self.apo.persons_with_role('hydrus-collection-manager')+self.apo.persons_with_role('hydrus-collection-reviewer')).to_a.join(',')) if (reviewers_before_update != reviewers_after_update) || (viewers_before_update != viewers_after_update)
+    self.send_role_change_email((self.apo.persons_with_role('hydrus-collection-manager') + self.apo.persons_with_role('hydrus-collection-reviewer')).to_a.join(',')) if (reviewers_before_update != reviewers_after_update) || (viewers_before_update != viewers_after_update)
 
   end
 
   def send_role_change_email(recipients)
     return if recipients.blank?
-    email=HydrusMailer.role_change(to: recipients, object: self)
+    email = HydrusMailer.role_change(to: recipients, object: self)
     email.deliver_now unless email.to.blank?
   end
 
   def send_remove_invitation_email_notification(recipients)
     return if recipients.blank?
-    email=HydrusMailer.invitation_removed(to: recipients, object: self)
+    email = HydrusMailer.invitation_removed(to: recipients, object: self)
     email.deliver_now unless email.to.blank?
   end
 
   def send_invitation_email_notification(recipients)
     return if recipients.blank?
-    email=HydrusMailer.invitation(to: recipients, object: self)
+    email = HydrusMailer.invitation(to: recipients, object: self)
     email.deliver_now unless email.to.blank?
   end
 
@@ -327,7 +327,7 @@ class Hydrus::Collection < Dor::Collection
 
   # returns a hash of depositors for this collection that have accepted the terms of deposit for an item in that collection
   def users_accepted_terms_of_deposit
-    result={}
+    result = {}
     hydrusProperties.find_by_terms(:users_accepted_terms_of_deposit,:user).each do |node|
       result.merge!(node.content => node['dateAccepted'])
     end
@@ -405,7 +405,7 @@ class Hydrus::Collection < Dor::Collection
   ####
 
   def owner
-    depositors=apo.persons_with_role('hydrus-collection-depositor')
+    depositors = apo.persons_with_role('hydrus-collection-depositor')
     depositors.size == 1 ? depositors.first : ''
   end
 
@@ -414,7 +414,7 @@ class Hydrus::Collection < Dor::Collection
   end
 
   def collection_depositor= val
-    apo.collection_depositor= val
+    apo.collection_depositor = val
   end
 
   def person_id *args
@@ -426,7 +426,7 @@ class Hydrus::Collection < Dor::Collection
   end
 
   def apo_person_roles= val
-    apo.person_roles= val
+    apo.person_roles = val
   end
 
   def apo_persons_with_role(role)
@@ -445,11 +445,11 @@ class Hydrus::Collection < Dor::Collection
   end
 
   def embargo_fixed= val
-    self.embargo_terms= val if embargo_option == 'fixed'
+    self.embargo_terms = val if embargo_option == 'fixed'
   end
 
   def embargo_varies= val
-    self.embargo_terms= val if embargo_option == 'varies'
+    self.embargo_terms = val if embargo_option == 'varies'
   end
 
   def license_fixed
@@ -461,11 +461,11 @@ class Hydrus::Collection < Dor::Collection
   end
 
   def license_fixed= val
-    self.license= val if license_option == 'fixed'
+    self.license = val if license_option == 'fixed'
   end
 
   def license_varies= val
-    self.license= val if license_option == 'varies'
+    self.license = val if license_option == 'varies'
   end
 
   # Visibility getters and setters.
@@ -560,7 +560,7 @@ class Hydrus::Collection < Dor::Collection
   # Returns a hash of solr documents, one for each collection (if no user is supplied, you will get everything)
   def self.dashboard_hash user=nil
 
-    toret={}
+    toret = {}
     h = nil
 
     if user.nil? # if we don't specify a user, we want everything (for an admin), so we can skip APO lookups and go directly to all collections
@@ -588,17 +588,17 @@ class Hydrus::Collection < Dor::Collection
 
     #build a hash with all of the needed collection information without instantiating each collection, because fedora is slow
     collections = stats.keys.map { |coll_dru|
-      hash={}
-      hash[:pid]=coll_dru
-      hash[:item_counts]=stats[coll_dru] || {}
-      hash[:title]=self.object_title(solr[coll_dru][:solr])
-      hash[:roles]=Hydrus::Responsible.roles_of_person current_user.to_s, solr[coll_dru][:solr]['is_governed_by_ssim'].first.gsub('info:fedora/','')
-      count=0
+      hash = {}
+      hash[:pid] = coll_dru
+      hash[:item_counts] = stats[coll_dru] || {}
+      hash[:title] = self.object_title(solr[coll_dru][:solr])
+      hash[:roles] = Hydrus::Responsible.roles_of_person current_user.to_s, solr[coll_dru][:solr]['is_governed_by_ssim'].first.gsub('info:fedora/','')
+      count = 0
       stats[coll_dru].keys.each do |key|
         count += stats[coll_dru][key].to_i
       end
-      hash[:hydrus_items]=count
-      hash[:solr]=solr[coll_dru]
+      hash[:hydrus_items] = count
+      hash[:solr] = solr[coll_dru]
       hash
     }
     collections
@@ -606,12 +606,12 @@ class Hydrus::Collection < Dor::Collection
 
   # given a solr document, try a few places to get the title, starting with objectlabel, then dc_title, and finally just untitled
   def self.object_title(solr_doc)
-    mods_title=solr_doc['titleInfo_title_ssm']
-    dc_title=solr_doc['title_tesim']
+    mods_title = solr_doc['titleInfo_title_ssm']
+    dc_title = solr_doc['title_tesim']
     if !mods_title.nil?
       return mods_title.first
     elsif !dc_title.nil?
-      return dc_title.first unless dc_title.first=='Hydrus'
+      return dc_title.first unless dc_title.first == 'Hydrus'
     end
     'Untitled'
   end
@@ -683,7 +683,7 @@ class Hydrus::Collection < Dor::Collection
         status = p['value']
         n      = p['count']
         if not counts[druid]
-          raise 'adding '+druid
+          raise 'adding ' + druid
         end
         counts[druid] ||= initial_item_counts()
         counts[druid][status] = n

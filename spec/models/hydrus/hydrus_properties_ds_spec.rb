@@ -4,8 +4,8 @@ require 'spec_helper'
 
 describe Hydrus::HydrusPropertiesDS, type: :model do
   before(:all) do
-    @ds_start='<hydrusProperties>'
-    @ds_end='</hydrusProperties>'
+    @ds_start = '<hydrusProperties>'
+    @ds_end = '</hydrusProperties>'
     xml = <<-EOF
       #{@ds_start}
         <usersAcceptedTermsOfDeposit>

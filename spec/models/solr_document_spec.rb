@@ -25,7 +25,7 @@ describe SolrDocument, type: :model do
 
   it 'can exercise simple getters' do
     h = {
-      'main_title_ssm'                => 'foo title',
+      'main_title_ssm' => 'foo title',
       'objectId_ssim' => 'foo:pid',
       'has_model_ssim'                 => 'info:fedora/afmodel:Hydrus_Item',
       'object_status_ssim'             => 'awaiting_approval',

@@ -32,7 +32,7 @@ describe Hydrus::Validatable, type: :model do
   describe 'validate!' do
     it 'should return the value of valid?, but cached, so always equivalent to the first setting, including when @should_validate is false' do
       obj = MockValidatable.new
-      first_value=false
+      first_value = false
       [first_value, true, false, true].each do |exp|
         allow(obj).to receive('valid?').and_return(exp)
         expect(obj.validate!).to eq(first_value)

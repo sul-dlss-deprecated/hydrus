@@ -34,7 +34,7 @@ module ApplicationHelper
     if session[:seen_beta_dialog]
       true
     else
-      session[:seen_beta_dialog]=true
+      session[:seen_beta_dialog] = true
       false
     end
   end
@@ -129,13 +129,13 @@ module ApplicationHelper
   # objects whose attributes are all blank
   def hydrus_is_empty?(obj)
     if obj.nil? # nil case
-      is_blank=true
+      is_blank = true
     elsif obj.class == Array # arrays
-      is_blank=obj.all? { |element| hydrus_is_empty?(element) }
+      is_blank = obj.all? { |element| hydrus_is_empty?(element) }
     elsif obj.class == String # strings
-      is_blank=obj.blank?
+      is_blank = obj.blank?
     else # case of abitrary object
-      is_blank=hydrus_is_object_empty?(obj)
+      is_blank = hydrus_is_object_empty?(obj)
     end
     is_blank
   end

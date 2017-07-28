@@ -50,7 +50,7 @@ Hydrus::Application.routes.draw do
     get 'users/auth/webauth/logout' => 'sessions#destroy_webauth', :as => 'webauth_logout'
   end
   get 'error' => 'signin#error', :as => 'error'
-  get 'contact' => 'application#contact', :as=>'contact'
+  get 'contact' => 'application#contact', :as => 'contact'
 
   # Actions for the HydrusSolrController.
   get 'hydrus_solr/reindex/:id'           => 'hydrus_solr#reindex' # NOTE: It's not clear that anything is using this.

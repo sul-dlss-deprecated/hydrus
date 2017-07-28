@@ -123,7 +123,7 @@ module Hydrus::SolrQueryable
   # The query: get the Collections governed by the APOs.
   def squery_collections_of_apos(druids)
     h = HSQ.default_query_params()
-    h[:fl]='*'
+    h[:fl] = '*'
     HSQ.add_model_filter(h, 'Hydrus_Collection')
     HSQ.add_governed_by_filter(h, druids)
     h

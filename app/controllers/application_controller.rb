@@ -21,26 +21,26 @@ class ApplicationController < ActionController::Base
   end
 
   def contact
-    @page_title='Contact Us'
-    @from=params[:from]
-    @subject=params[:subject]
-    @name=params[:name]
-    @email=params[:email]
-    @message=params[:message]
+    @page_title = 'Contact Us'
+    @from = params[:from]
+    @subject = params[:subject]
+    @name = params[:name]
+    @email = params[:email]
+    @message = params[:message]
 
     if request.post?
       unless @message.blank?
         HydrusMailer.contact_message(params: params,request: request,user: current_user).deliver
-        flash[:notice]='Your message has been sent.'
-        @message=nil
-        @name=nil
-        @email=nil
+        flash[:notice] = 'Your message has been sent.'
+        @message = nil
+        @name = nil
+        @email = nil
         unless @from.blank?
           redirect_to(@from)
           return
         end
       else
-        flash.now[:error]='Please enter message text.'
+        flash.now[:error] = 'Please enter message text.'
       end
     end
     render 'contact'

@@ -91,8 +91,8 @@ describe Hydrus::Item, type: :model do
         </mods>
       eos
       @hi.contributors = {
-        '0' => {'name'=>'AAA', 'role_key'=>'corporate_author'},
-        '1' => {'name'=>'BBB', 'role_key'=>'personal_author'},
+        '0' => {'name' => 'AAA', 'role_key' => 'corporate_author'},
+        '1' => {'name' => 'BBB', 'role_key' => 'personal_author'},
       }
       expect(@hi.descMetadata.ng_xml).to be_equivalent_to(exp)
     end
@@ -175,7 +175,7 @@ describe Hydrus::Item, type: :model do
         </mods>
       eos
       allow(@hi).to receive(:descMetadata).and_return(Hydrus::DescMetadataDS.from_xml(@xml))
-      hash=@hi.dates
+      hash = @hi.dates
       expect(hash[:date_range_start]).to eq(['2005-04'])
       expect(hash[:date_range_end]).to eq(['2005-05'])
       expect(hash[:date_range_start_approximate]).to be_truthy
@@ -190,7 +190,7 @@ describe Hydrus::Item, type: :model do
         </mods>
       eos
       allow(@hi).to receive(:descMetadata).and_return(Hydrus::DescMetadataDS.from_xml(@xml))
-      hash=@hi.dates
+      hash = @hi.dates
       expect(hash[:date_range_start]).to eq([])
       expect(hash[:date_range_end]).to eq([])
       expect(hash[:date_range_start_approximate]).to be_falsey
@@ -206,7 +206,7 @@ describe Hydrus::Item, type: :model do
         </mods>
       eos
       allow(@hi).to receive(:descMetadata).and_return(Hydrus::DescMetadataDS.from_xml(@xml))
-      hash=@hi.dates
+      hash = @hi.dates
       expect(hash[:date_created]).to eq(['2013'])
       expect(hash[:date_range_start]).to eq([])
       expect(hash[:date_range_end]).to eq([])
@@ -217,13 +217,13 @@ describe Hydrus::Item, type: :model do
   end
   describe 'date=' do
     it 'should clear out existing dates and set a single date' do
-      hash={
+      hash = {
         date_created: ['2013'],
         date_created_approximate: 'hi',
         date_type: 'single'
       }
       @hi.dates = hash
-      new_hash=@hi.dates
+      new_hash = @hi.dates
       expect(new_hash[:date_created]).to eq(['2013'])
       expect(@hi.single_date?).to be_truthy
     end
@@ -646,7 +646,7 @@ describe Hydrus::Item, type: :model do
       allow(@hi).to receive(:enforce_collection_is_open).and_return(true)
       allow(@hi).to receive(:accepted_terms_of_deposit).and_return(true)
       allow(@hi).to receive(:reviewed_release_settings).and_return(true)
-      @exp.each { |e| allow(@hi).to receive(e).and_return(dru) unless e==:contact }
+      @exp.each { |e| allow(@hi).to receive(e).and_return(dru) unless e == :contact }
       allow(@hi).to receive(:contact).and_return('test@test.com') # we need a valid email address
       allow(@hi).to receive(:contributors).and_return([Hydrus::Contributor.new(name: 'Some, person')]) # need at least one non-blank contributor
       allow(@hi).to receive(:keywords).and_return(%w(aaa bbb))
@@ -655,7 +655,7 @@ describe Hydrus::Item, type: :model do
       allow(@hi).to receive(:single_date?).and_return true
       allow(@hi).to receive_message_chain([:collection, :embargo_option]).and_return('varies')
       if not @hi.valid?
-        msg=@hi.errors.messages.map { |field, error|
+        msg = @hi.errors.messages.map { |field, error|
         "#{field.to_s.humanize.capitalize} #{error.join(', ')}"
         }
         raise msg.join ', \n'
@@ -1070,7 +1070,7 @@ describe Hydrus::Item, type: :model do
 
   it 'should indicate that release settings have not been reviewed yet' do
     expect(@hi.reviewed_release_settings?).to eq(false)
-    @hi.reviewed_release_settings='true'
+    @hi.reviewed_release_settings = 'true'
     @hi.revalidate
     expect(@hi.reviewed_release_settings?).to eq(true)
   end
@@ -1085,31 +1085,31 @@ describe Hydrus::Item, type: :model do
   end
 
   it 'should indicate if we do require terms acceptance if user has never accepted terms on another item in the same collection' do
-    @coll=Hydrus::Collection.new
-    allow(@coll).to receive(:users_accepted_terms_of_deposit).and_return({'archivist3'=>'10-12-2008 00:00:00','archivist4'=>'10-12-2009 00:00:05'})
+    @coll = Hydrus::Collection.new
+    allow(@coll).to receive(:users_accepted_terms_of_deposit).and_return({'archivist3' => '10-12-2008 00:00:00','archivist4' => '10-12-2009 00:00:05'})
     allow(@hi).to receive(:accepted_terms_of_deposit).and_return(false)
     allow(@hi).to receive(:collection).and_return(@coll)
     expect(@hi.requires_terms_acceptance('archivist1')).to be true
   end
 
   it 'should indicate if we do require terms acceptance if user already accepted terms on another item in the same collection, but it was more than 1 year ago' do
-    @coll=Hydrus::Collection.new
-    allow(@coll).to receive(:users_accepted_terms_of_deposit).and_return({'archivist1'=>'10-12-2008 00:00:00','archivist2'=>'10-12-2009 00:00:05'})
+    @coll = Hydrus::Collection.new
+    allow(@coll).to receive(:users_accepted_terms_of_deposit).and_return({'archivist1' => '10-12-2008 00:00:00','archivist2' => '10-12-2009 00:00:05'})
     allow(@hi).to receive(:accepted_terms_of_deposit).and_return(false)
     allow(@hi).to receive(:collection).and_return(@coll)
     expect(@hi.requires_terms_acceptance('archivist1')).to be true
   end
 
   it 'should indicate if we do not require terms acceptance if user already accepted terms on another item in the same collection, and it was less than 1 year ago' do
-    @coll=Hydrus::Collection.new
-    allow(@coll).to receive(:users_accepted_terms_of_deposit).and_return({'archivist1'=>Time.now.in_time_zone - 364.days,'archivist2'=>'10-12-2009 00:00:05'})
+    @coll = Hydrus::Collection.new
+    allow(@coll).to receive(:users_accepted_terms_of_deposit).and_return({'archivist1' => Time.now.in_time_zone - 364.days,'archivist2' => '10-12-2009 00:00:05'})
     allow(@hi).to receive(:accepted_terms_of_deposit).and_return(false)
     allow(@hi).to receive(:collection).and_return(@coll)
     expect(@hi.requires_terms_acceptance('archivist1')).to be false
   end
 
   it 'should accept the terms of deposit for a user' do
-    @coll=Hydrus::Collection.new
+    @coll = Hydrus::Collection.new
     allow(Hydrus::Authorizable).to receive(:can_edit_item).and_return(true)
     allow(@coll).to receive(:accept_terms_of_deposit)
     allow(@hi).to receive(:collection).and_return(@coll)

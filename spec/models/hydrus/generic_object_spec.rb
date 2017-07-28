@@ -346,7 +346,7 @@ end
 
     it 'fully populated object should be valid if contact email is valid' do
       dru = 'druid:ll000ll0001'
-      @exp.each { |e| allow(@go).to receive(e).and_return(dru) unless e==:contact }
+      @exp.each { |e| allow(@go).to receive(e).and_return(dru) unless e == :contact }
       allow(@go).to receive(:contact).and_return('test@test.com')
       expect(@go.valid?).to eq(true)
     end

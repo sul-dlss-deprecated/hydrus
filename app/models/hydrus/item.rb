@@ -136,7 +136,7 @@ class Hydrus::Item < Hydrus::GenericObject
       msg = 'Terms of deposit accepted due to previous item acceptance in collection'
       item.events.add_event('hydrus', user, msg)
     else
-      item.accepted_terms_of_deposit='false'
+      item.accepted_terms_of_deposit = 'false'
     end
 
     # Save and return.
@@ -307,7 +307,7 @@ class Hydrus::Item < Hydrus::GenericObject
 
   # get the friendly display name for the current item type
   def item_type_for_display
-    typ=self.class.item_types.key(self.item_type)
+    typ = self.class.item_types.key(self.item_type)
     typ.blank? ? self.class.item_types.key(Hydrus::Application.config.default_item_type) : typ
   end
 
@@ -661,7 +661,7 @@ class Hydrus::Item < Hydrus::GenericObject
   end
 
   def dates
-    h={}
+    h = {}
     #raise descMetadata.ng_xml.to_s
     h[:date_created] = single_date? ? descMetadata.date_created : ''
     #raise descMetadata.date_created.inspect
@@ -686,25 +686,25 @@ class Hydrus::Item < Hydrus::GenericObject
       #the if respond to is for initial item creation
       if descMetadata.originInfo.dateCreated and descMetadata.originInfo.dateCreated.respond_to? :nodeset
         descMetadata.originInfo.dateCreated.nodeset.first['qualifier'] = 'approximate' if h[:date_created_approximate]
-        descMetadata.originInfo.dateCreated.nodeset.first['keyDate']='yes'
-        descMetadata.originInfo.dateCreated.nodeset.first['encoding']='w3cdtf'
+        descMetadata.originInfo.dateCreated.nodeset.first['keyDate'] = 'yes'
+        descMetadata.originInfo.dateCreated.nodeset.first['encoding'] = 'w3cdtf'
       end
     end
     if h[:date_type] == 'range'
       descMetadata.originInfo.date_range_start = h[:date_start]
       if descMetadata.originInfo.date_range_start.respond_to? :nodeset
         descMetadata.originInfo.date_range_start.nodeset.first['qualifier'] = 'approximate' if h[:date_range_start_approximate] == 'hi'
-        descMetadata.originInfo.date_range_start.nodeset.first['keyDate']='yes'
-        descMetadata.originInfo.date_range_start.nodeset.first['encoding']='w3cdtf'
+        descMetadata.originInfo.date_range_start.nodeset.first['keyDate'] = 'yes'
+        descMetadata.originInfo.date_range_start.nodeset.first['encoding'] = 'w3cdtf'
       end
       descMetadata.originInfo.date_range_end = h[:date_range_end]
       if descMetadata.originInfo.date_range_end.respond_to? :nodeset
         descMetadata.originInfo.date_range_end.nodeset.first['qualifier'] = 'approximate' if h[:date_range_end_approximate] == 'hi'
-        descMetadata.originInfo.date_range_end.nodeset.first['encoding']='w3cdtf'
+        descMetadata.originInfo.date_range_end.nodeset.first['encoding'] = 'w3cdtf'
       end
     end
     if h[:date_type] == 'undated'
-      descMetadata.originInfo.dateCreated='Undated'
+      descMetadata.originInfo.dateCreated = 'Undated'
     end
   end
   #the date(s) rendered for display
@@ -807,14 +807,14 @@ class Hydrus::Item < Hydrus::GenericObject
 
   # the users who will receive email notifications when a new item is created
   def recipients_for_new_deposit_emails
-    managers=apo.persons_with_role('hydrus-collection-manager').to_a
+    managers = apo.persons_with_role('hydrus-collection-manager').to_a
     managers.delete(self.item_depositor_id)
     managers.join(', ')
   end
 
   # the users who will receive email notifications when an item is submitted for review
   def recipients_for_review_deposit_emails
-    managers=(
+    managers = (
       apo.persons_with_role('hydrus-collection-manager') +
       apo.persons_with_role('hydrus-collection-reviewer')
     ).to_a
