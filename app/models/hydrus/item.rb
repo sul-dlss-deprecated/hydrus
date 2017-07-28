@@ -92,59 +92,6 @@ class Hydrus::Item < Hydrus::GenericObject
     roleMetadata.item_depositor.person.identifier.first
   end
 
-  # Note: currently all items of of type :item. In the future,
-  # the calling code can pass in the needed value.
-  def self.create(collection_pid, user, itype = Hydrus::Application.config.default_item_type)
-    # Make sure user can create items in the parent collection.
-    coll = Hydrus::Collection.find(collection_pid)
-    raise "#{cannot_do_message(:create)}\nCollection '#{collection_pid}' is not open" unless coll.is_open()
-    raise "#{cannot_do_message(:create)}\nUser '#{user}' cannot create items in #{coll} #{collection_pid} according to APO #{coll.apo.pid}" unless Hydrus::Authorizable.can_create_items_in(user, coll)
-    # Create the object, with the correct model.
-    dor_item = Hydrus::GenericObject.register_dor_object(user, 'item', coll.apo_pid)
-    item     = Hydrus::Item.find(dor_item.pid)
-    item.remove_relationship :has_model, 'info:fedora/afmodel:Dor_Item'
-    item.assert_content_model
-    # Add the Item to the Collection.
-    item.collections << coll
-    # Create default rightsMetadata from the collection
-    #item.rightsMetadata.content = coll.rightsMetadata.ng_xml.to_s
-    # Set the item_type, and add some Hydrus-specific info to identityMetadata.
-    item.set_item_type(itype)
-
-    # Add roleMetadata with current user as hydrus-item-depositor.
-    item.roleMetadata.add_person_with_role(user, 'hydrus-item-depositor')
-    # Set default license, embargo, and visibility.
-    item.license = coll.license
-    if coll.embargo_option == 'fixed'
-      item.embargo_date = HyTime.date_display(item.end_of_embargo_range)
-    end
-    vov = coll.visibility_option_value
-    item.visibility = vov == 'stanford' ? vov : 'world'
-    item.terms_of_use = Hydrus::GenericObject.stanford_terms_of_use
-    # Set object status.
-    item.object_status = 'draft'
-    # Set version info.
-    # The call to content_will_change! forces the instantiation of the versionMetadata XML.
-    item.version_started_time = HyTime.now_datetime
-    item.versionMetadata.content_will_change!
-    # Add event.
-    item.events.add_event('hydrus', user, "Item created")
-    # Check to see if this user needs to agree again for this new item, if not,
-    # indicate agreement has already occured automatically
-    if item.requires_terms_acceptance(user.to_s,coll) == false
-      item.accepted_terms_of_deposit = "true"
-      msg = 'Terms of deposit accepted due to previous item acceptance in collection'
-      item.events.add_event('hydrus', user, msg)
-    else
-      item.accepted_terms_of_deposit="false"
-    end
-
-    # Save and return.
-    item.save(:no_edit_logging => true, :no_beautify => true)
-    item.send_new_deposit_email_notification
-    return item
-  end
-
   # Publish the Item directly, bypassing human approval.
   def publish_directly
     raise "#{cannot_do_message(:publish_directly)}\nItem is not publishable" unless is_publishable()

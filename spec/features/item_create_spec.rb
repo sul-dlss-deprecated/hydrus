@@ -547,7 +547,7 @@ describe("Item create", :type => :request, :integration => true) do
     it "should indicate that a new item in a collection requires terms acceptance, if the user has already accepted another item in this collection but it was more than 1 year ago" do
       u ='archivist1' # this user accepted more than 1 year ago
       expect(subject.users_accepted_terms_of_deposit.keys.include?(u)).to eq(true)
-      ni=Hydrus::Item.create(subject.pid, mock_authed_user(u))
+      ni = ItemService.create(subject.pid, mock_authed_user(u))
       expect(ni.requires_terms_acceptance(u,subject)).to eq(true)
       expect(ni.accepted_terms_of_deposit).to eq("false")
       expect(ni.terms_of_deposit_accepted?).to eq(false)
@@ -559,7 +559,7 @@ describe("Item create", :type => :request, :integration => true) do
       expect(subject.users_accepted_terms_of_deposit.keys.include?(u)).to eq(true)
       subject.hydrusProperties.accept_terms_of_deposit(u,HyTime.datetime(dt))
       subject.save
-      ni=Hydrus::Item.create(subject.pid, mock_authed_user(u))
+      ni = ItemService.create(subject.pid, mock_authed_user(u))
       expect(ni.requires_terms_acceptance(u,subject)).to eq(false)
       expect(ni.accepted_terms_of_deposit).to eq("true")
       expect(ni.terms_of_deposit_accepted?).to eq(true)
@@ -568,7 +568,7 @@ describe("Item create", :type => :request, :integration => true) do
     it "should indicate that a new item in a collection requires terms acceptance, when the user has not already accepted another item in this collection" do
       u='archivist5'
       allow(Hydrus::Authorizable).to receive(:can_create_items_in).and_return(true)
-      ni=Hydrus::Item.create(subject.pid, mock_authed_user(u))
+      ni = ItemService.create(subject.pid, mock_authed_user(u))
       expect(ni.requires_terms_acceptance(u,subject)).to eq(true)
       expect(ni.accepted_terms_of_deposit).to eq("false")
       expect(ni.terms_of_deposit_accepted?).to eq(false)
@@ -579,7 +579,7 @@ describe("Item create", :type => :request, :integration => true) do
       user = mock_authed_user(u)
       allow(Hydrus::Authorizable).to receive(:can_create_items_in).and_return(true)
       allow(Hydrus::Authorizable).to receive(:can_edit_item).and_return(true)
-      ni=Hydrus::Item.create(subject.pid, user)
+      ni = ItemService.create(subject.pid, user)
       expect(ni.requires_terms_acceptance(u,subject)).to eq(true)
       expect(ni.accepted_terms_of_deposit).to eq("false")
       expect(subject.users_accepted_terms_of_deposit.keys.include?(u)).to eq(false)

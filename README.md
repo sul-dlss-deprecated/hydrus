@@ -249,7 +249,7 @@ params[:pid] = 'ITEM_PID' if args.last == 'APO_PID'
 bundle exec rails c ENV
 hc = Hydrus::Collection.find 'COLL_PID'
 u  = User.new(:email => 'EMAIL')
-hi = Hydrus::Item.create(hc.pid, u)
+hi = ItemService.create(hc.pid, u)
 ```
 
 ## Manually Adding a File to an Existing Object
