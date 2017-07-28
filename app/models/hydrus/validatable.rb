@@ -9,7 +9,7 @@ module Hydrus::Validatable
   # instance variable provides a mechanism to short-circuit the typical logic.
   def should_validate
     return true if @should_validate
-    return !is_draft
+    !is_draft
   end
 
   # Returns true only if the object is valid.
@@ -21,7 +21,7 @@ module Hydrus::Validatable
       @status_valid = valid?
       @should_validate = prev
     end
-    return @status_valid
+    @status_valid
   end
   
   # calling this method will removed the cached validate status, useful in unit tests

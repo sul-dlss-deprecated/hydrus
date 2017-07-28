@@ -76,7 +76,7 @@ module Hydrus::GenericObjectStuff
   # Since we need a custom setter, let's define the getter too
   # (rather than using delegation).
   def related_item_url
-    return descMetadata.relatedItem.location.url
+    descMetadata.relatedItem.location.url
   end
 
   # Takes an argument, typically an OM-ready hash. For example:
@@ -98,13 +98,13 @@ module Hydrus::GenericObjectStuff
   def with_protocol(uri)
     return uri if uri.blank?
     return uri if uri =~ /\A (http|https|ftp|sftp):\/\/ /x
-    return "http://" + uri
+    "http://" + uri
   end
   
   # Returns string representation of the class, minus the Hydrus:: prefix.
   # For example: Hydrus::Collection -> 'Collection'.
   def hydrus_class_to_s
-    return self.class.to_s.sub(/\AHydrus::/, '')
+    self.class.to_s.sub(/\AHydrus::/, '')
   end
   
   # After collections are published, further edits to the object are allowed.
@@ -132,7 +132,7 @@ module Hydrus::GenericObjectStuff
   #   "Item modified: title, abstract, license"
   def editing_event_message(fields)
     fs = fields.map { |e| e.to_s }.join(', ')
-    return "#{hydrus_class_to_s()} modified: #{fs}"
+    "#{hydrus_class_to_s()} modified: #{fs}"
   end
 
   def is_item?

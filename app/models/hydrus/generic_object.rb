@@ -62,15 +62,15 @@ class Hydrus::GenericObject < Dor::Item
   #       when this method was invoked via save().
   def beautified_xml(orig_xml)
     nd = Nokogiri::XML(orig_xml, &:noblanks)
-    return nd.to_xml
+    nd.to_xml
   end
 
   def get_fedora_item(pid)
-    return ActiveFedora::Base.find(pid, :cast => true)
+    ActiveFedora::Base.find(pid, :cast => true)
   end
 
   def discover_access
-    return rightsMetadata.discover_access.first
+    rightsMetadata.discover_access.first
   end
 
   def purl_url
@@ -215,7 +215,7 @@ class Hydrus::GenericObject < Dor::Item
 
   # Should consolidate with info in license_groups().
   def self.license_commons
-    return {
+    {
       'Creative Commons Licenses'  => "creativeCommons",
       'Open Data Commons Licenses' => "openDataCommons",
     }
@@ -223,7 +223,7 @@ class Hydrus::GenericObject < Dor::Item
 
   # Should consolidate with info in license_groups().
   def self.license_group_urls
-    return {
+    {
       "creativeCommons" => 'http://creativecommons.org/licenses/',
       "openDataCommons" => 'http://opendatacommons.org/licenses/',
     }
@@ -234,7 +234,7 @@ class Hydrus::GenericObject < Dor::Item
   def self.license_human(code)
     code = 'none' if code.blank?
     lic = license_groups.map(&:last).flatten(1).find { |txt, c| c == code }
-    return lic ? lic.first : "Unknown license"
+    lic ? lic.first : "Unknown license"
   end
 
   # Takes a license code: cc-by, pddl, none, ...
@@ -246,7 +246,7 @@ class Hydrus::GenericObject < Dor::Item
         return hgo.license_commons[grp] if c == code
       end
     end
-    return nil
+    nil
   end
 
   # Takes a symbol (:collection or :item).
@@ -266,24 +266,24 @@ class Hydrus::GenericObject < Dor::Item
         'published'         => "published",
       },
     }
-    return status ? h[typ] : h[typ]
+    status ? h[typ] : h[typ]
   end
 
   # Takes an object_status value.
   # Returns its corresponding label.
   def self.status_label(typ, status)
-    return status_labels(typ)[status]
+    status_labels(typ)[status]
   end
 
   # Returns a human readable label corresponding to the object's status.
   def status_label
     h1 = Hydrus::GenericObject.status_labels(:collection)
     h2 = Hydrus::GenericObject.status_labels(:item)
-    return h1.merge(h2)[object_status]
+    h1.merge(h2)[object_status]
   end
 
   def self.stanford_terms_of_use
-    return '
+    '
       User agrees that, where applicable, content will not be used to identify
       or to otherwise infringe the privacy or confidentiality rights of
       individuals.  Content distributed via the Stanford Digital Repository may
@@ -295,12 +295,12 @@ class Hydrus::GenericObject < Dor::Item
   # Registers an object in Dor, and returns it.
   def self.register_dor_object(*args)
     params = self.dor_registration_params(*args)
-    return Dor::RegistrationService.register_object(params)
+    Dor::RegistrationService.register_object(params)
   end
 
   # Returns a hash of info needed to register a Dor object.
   def self.dor_registration_params(user_string, obj_typ, apo_pid)
-    return {
+    {
       :object_type       => obj_typ,
       :admin_policy      => apo_pid,
       :source_id         => { 'Hydrus' => "#{obj_typ}-#{user_string}-#{HyTime.now_datetime_full}" },
@@ -321,7 +321,7 @@ class Hydrus::GenericObject < Dor::Item
   end
 
   def purl_page_ready?
-    return RestClient.get(purl_url) { |resp, req, res| resp }.code == 200
+    RestClient.get(purl_url) { |resp, req, res| resp }.code == 200
   end
 
 end

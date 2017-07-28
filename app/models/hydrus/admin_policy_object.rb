@@ -101,7 +101,7 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
     apo.add_relationship(:references_agreement, "info:fedora/druid:mc322hh4254")
     # Save and return.
     apo.save!
-    return apo
+    apo
   end
 
   # Lazy initializers for instance variables.
@@ -109,7 +109,7 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
   # some Items and Collections are obtained in ways that won't call
   # our constructor code -- for example, Hydrus::Item.find().
   def current_user
-    return (@current_user ||= '')
+    (@current_user ||= '')
   end
 
   def current_user=(val)
@@ -140,7 +140,7 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
   # Keys correspond to the license_option in the OM terminology.
   # Values are displayed in the web form.
   def self.license_types
-    return {
+    {
       'none'   => 'no license',
       'varies' => 'varies -- contributor may select a license for each item, with a default of',
       'fixed'  => 'required license -- applies to all items in the collection',

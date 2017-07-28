@@ -8,14 +8,14 @@ class Hydrus::Contributor < Hydrus::GenericModel
   # (Author, Publisher, etc) into strings like this: personal_author,
   # corporate_publisher, etc.
   def self.make_role_key(name_type, role)
-    return "#{name_type} #{role}".parameterize.underscore
+    "#{name_type} #{role}".parameterize.underscore
   end
 
   # The default role_key for a new contributor, before the user sets any values.
   @@default_role_key = make_role_key('personal', 'Author')
 
   def self.default_role_key
-    return @@default_role_key
+    @@default_role_key
   end
 
   # The data.
@@ -63,7 +63,7 @@ class Hydrus::Contributor < Hydrus::GenericModel
   # Returns a new Contributor object, with default values.
   def self.default_contributor
     typ, role = lookup_with_role_key(@@default_role_key)
-    return new(
+    new(
       :name      => '',
       :role      => role,
       :name_type => typ
@@ -78,7 +78,7 @@ class Hydrus::Contributor < Hydrus::GenericModel
       return [cg[:name_type], role] if role
     end
     # If nothing found, just return the defaults.
-    return lookup_with_role_key()
+    lookup_with_role_key()
   end
 
   # Returns the contributor groups data, reorganized for use in a call to
@@ -89,7 +89,7 @@ class Hydrus::Contributor < Hydrus::GenericModel
   #   [ GROUP_LABEL, [ [ROLE,ROLEKEY], [ROLE,ROLEKEY], ...] ]
   #   ...
   def self.groups_for_select
-    return @@contributor_groups.map { |cg|
+    @@contributor_groups.map { |cg|
       glab  = cg[:group_label]
       roles = cg[:roles]
       rks   = cg[:role_keys]
@@ -99,13 +99,13 @@ class Hydrus::Contributor < Hydrus::GenericModel
 
   # Returns the role_key of a Contributor instance.
   def role_key
-    return self.class.make_role_key(name_type, role)
+    self.class.make_role_key(name_type, role)
   end
 
   # Method to check for equality.
   # Used in testing.
   def ==(other)
-    return (
+    (
       self.name      == other.name &&
       self.role      == other.role &&
       self.name_type == other.name_type
@@ -115,7 +115,7 @@ class Hydrus::Contributor < Hydrus::GenericModel
   # Returns new Contributor based on attributes of self.
   # Used in testing.
   def clone
-    return Hydrus::Contributor.new(:name => name, :role => role, :name_type => name_type)
+    Hydrus::Contributor.new(:name => name, :role => role, :name_type => name_type)
   end
 
 end

@@ -106,7 +106,7 @@ class ApplicationController < ActionController::Base
     else
       flash[:error] = errors_for_display(obj)
     end
-    return v
+    v
   end
 
 end

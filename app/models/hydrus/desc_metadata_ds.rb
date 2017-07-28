@@ -188,7 +188,7 @@ class Hydrus::DescMetadataDS < ActiveFedora::OmDatastream
       )
       cs << c
     end
-    return cs
+    cs
   end
 
 end

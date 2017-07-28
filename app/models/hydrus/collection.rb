@@ -84,7 +84,7 @@ class Hydrus::Collection < Dor::Collection
   def items_from_solr
     h           = self.class.squery_items_in_collection(self.pid)
     resp, sdocs = self.class.issue_solr_query(h)
-    return sdocs
+    sdocs
   end
 
   # return a helper array of hashes with just some basic info to build the items list -this allows us to build the item listing view without having to go to Fedora at all and is much faster
@@ -103,7 +103,7 @@ class Hydrus::Collection < Dor::Collection
       create_date=solr_doc['system_create_dtsi']
       items << {:pid=>id,:num_files=>num_files,:object_type=>object_type,:title=>title,:status_label=>status,:item_depositor_id=>depositor,:create_date=>create_date}
     end
-    return items
+    items
 
   end
 
@@ -135,7 +135,7 @@ class Hydrus::Collection < Dor::Collection
     coll.title = ''
     # Save and return.
     coll.save(:no_edit_logging => true, :no_beautify => true)
-    return coll
+    coll
   end
 
   def set_collection_type
@@ -156,7 +156,7 @@ class Hydrus::Collection < Dor::Collection
     v1 = super
     v2 = apo.valid?
     errors.messages.merge!(apo.errors.messages)
-    return v1 && v2
+    v1 && v2
   end
 
   # method used to build sidebar
@@ -171,35 +171,35 @@ class Hydrus::Collection < Dor::Collection
 
   # Returns true only if the Collection is unpublished and has no Items.
   def is_destroyable
-    return not(is_published or has_items)
+    not(is_published or has_items)
   end
 
   # Returns true only if the Collection has items.
   def has_items
-    return items.size > 0
+    items.size > 0
   end
 
   # Returns true if the collection is open.
   def is_open
-    return object_status == 'published_open'
+    object_status == 'published_open'
   end
 
   # Returns true if the collection can be opened.
   def is_openable
     return false if is_open
-    return validate!
+    validate!
   end
 
   # Returns true if the collection can be closed.
   def is_closeable
-    return is_open
+    is_open
   end
 
   # Returns true if the object is ready for common assembly.
   # It's not strictly necessary to involve validate!, but it provides extra insurance.
   def is_assemblable
     return false unless is_open
-    return validate!
+    validate!
   end
 
   # the users who will receive email notifications when a collection is opened or closed
@@ -329,7 +329,7 @@ class Hydrus::Collection < Dor::Collection
     hydrusProperties.find_by_terms(:users_accepted_terms_of_deposit,:user).each do |node|
       result.merge!(node.content => node['dateAccepted'])
     end
-    return result
+    result
   end
 
   # Takes a user, a datetime string, and an Item.
@@ -363,7 +363,7 @@ class Hydrus::Collection < Dor::Collection
       ids = users.map { |u| u.split('@').first }
       result[role] = ids.join(',')
     }
-    return result
+    result
   end
 
   def save_apo
@@ -420,7 +420,7 @@ class Hydrus::Collection < Dor::Collection
   end
 
   def apo_person_roles
-    return apo.person_roles
+    apo.person_roles
   end
 
   def apo_person_roles= val
@@ -428,7 +428,7 @@ class Hydrus::Collection < Dor::Collection
   end
 
   def apo_persons_with_role(role)
-    return apo.persons_with_role(role)
+    apo.persons_with_role(role)
   end
 
   # Embargo and license getters and setters to support the complex
@@ -481,7 +481,7 @@ class Hydrus::Collection < Dor::Collection
   def visibility_option_value *args
     opt = visibility_option     # fixed or varies
     vis = visibility.first      # world or stanford
-    return vov_lookup["#{opt}_#{vis}"]
+    vov_lookup["#{opt}_#{vis}"]
   end
 
   def visibility_option_value= val
@@ -492,7 +492,7 @@ class Hydrus::Collection < Dor::Collection
 
   def visibility
     return ["world"] if rightsMetadata.has_world_read_node
-    return rightsMetadata.group_read_nodes.map { |n| n.text }
+    rightsMetadata.group_read_nodes.map { |n| n.text }
   end
 
   def visibility=(val)  # val = world or stanford
@@ -509,11 +509,11 @@ class Hydrus::Collection < Dor::Collection
       'varies'   => 'varies_world',
       'stanford' => 'fixed_stanford',
     }
-    return lookup.merge(lookup.invert)
+    lookup.merge(lookup.invert)
   end
 
   def tracked_fields
-    return {
+    {
       :title       => [:title],
       :description => [:abstract],
       :embargo     => [:embargo_option, :embargo_terms],
@@ -550,7 +550,7 @@ class Hydrus::Collection < Dor::Collection
     return {} if coll_pids.size == 0
 
     # Returns the item counts for those collections.
-    return item_counts_of_collections(coll_pids)
+    item_counts_of_collections(coll_pids)
 
   end
 
@@ -611,7 +611,7 @@ class Hydrus::Collection < Dor::Collection
     elsif !dc_title.nil?
       return dc_title.first unless dc_title.first=='Hydrus'
     end
-    return "Untitled"
+    "Untitled"
   end
 
   # given a solr doc field that might be an array, extract the first value if not nil, otherwise return blank
@@ -623,14 +623,14 @@ class Hydrus::Collection < Dor::Collection
   def self.all_hydrus_collections
     h           = squery_all_hydrus_collections(   )
     resp, sdocs = issue_solr_query(h)
-    return get_druids_from_response(resp)
+    get_druids_from_response(resp)
   end
 
   # Returns an array of all APO druids
   def self.all_hydrus_apos
     h           = squery_all_hydrus_apos(   )
     resp, sdocs = issue_solr_query(h)
-    return get_druids_from_response(resp)
+    get_druids_from_response(resp)
   end
 
   # Takes a user name.
@@ -639,7 +639,7 @@ class Hydrus::Collection < Dor::Collection
     return [] unless user
     h           = squery_apos_involving_user(user)
     resp, sdocs = issue_solr_query(h)
-    return get_druids_from_response(resp)
+    get_druids_from_response(resp)
   end
 
   # Takes an array of APO druids.
@@ -647,13 +647,13 @@ class Hydrus::Collection < Dor::Collection
   def self.collections_of_apos(apo_pids)
     h           = squery_collections_of_apos(apo_pids)
     resp, sdocs = issue_solr_query(h)
-    return get_druids_from_response(resp)
+    get_druids_from_response(resp)
   end
 
   # Returns a hash with all Item object_status values as the
   # keys and zeros as the values.
   def self.initial_item_counts
-    return Hash[ Hydrus::GenericObject.status_labels(:item).keys.map { |s| [s,0]  } ]
+    Hash[ Hydrus::GenericObject.status_labels(:item).keys.map { |s| [s,0]  } ]
   end
 
   # Takes an array of Collection druids.
@@ -693,25 +693,25 @@ class Hydrus::Collection < Dor::Collection
       h.delete_if { |k,v| v == 0 }
     end
 
-    return counts
+    counts
   end
 
   # Takes a SOLR response.
   # Returns an array of hashes containing the needed facet counts.
   # Written as a separate method for testing purposes.
   def self.get_facet_counts_from_response(resp)
-    return resp.facet_counts['facet_pivot'].values.first
+    resp.facet_counts['facet_pivot'].values.first
   end
 
   # Returns an array-of-arrays containing the collection's @item_counts
   # information. Instead of using object_status values, the info
   # uses human readable labels for the UI. See unit test for an example.
   def item_counts_with_labels
-    return item_counts.map { |s, n| [n, Hydrus::GenericObject.status_label(:item, s)] }
+    item_counts.map { |s, n| [n, Hydrus::GenericObject.status_label(:item, s)] }
   end
 
   def  self.item_counts_with_labels ic
-    return ic.map { |s, n| [n, Hydrus::GenericObject.status_label(:item, s)] }
+    ic.map { |s, n| [n, Hydrus::GenericObject.status_label(:item, s)] }
   end
   # Deletes a Collection and its APO.
   def delete

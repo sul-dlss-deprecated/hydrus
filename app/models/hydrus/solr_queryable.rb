@@ -52,7 +52,7 @@ module Hydrus::SolrQueryable
 
   # Returns a default hash of query params, used by a few methods.
   def self.default_query_params
-    return {
+    {
       :rows => 9999,
       :fl   => 'objectId_ssim',
       :q    => '*',
@@ -73,7 +73,7 @@ module Hydrus::SolrQueryable
   def self.issue_solr_query(h)
     solr_response = solr.find(h)
     document_list = solr_response.docs.map {|doc| SolrDocument.new(doc, solr_response)}
-    return [solr_response, document_list]
+    [solr_response, document_list]
   end
 
   def self.solr
@@ -86,19 +86,19 @@ module Hydrus::SolrQueryable
     h = HSQ.default_query_params()
     h[:fl] = opts[:fields].join(',') if opts[:fields]
     HSQ.add_model_filter(h, *models)
-    return h
+    h
   end
 
   # Returns a hash of SOLR query parameters.
   # The query: get all Hydrus Collections.
   def squery_all_hydrus_collections
-    return squery_all_hydrus_objects(['Hydrus_Collection'],:fields=>['*'])
+    squery_all_hydrus_objects(['Hydrus_Collection'],:fields=>['*'])
   end
 
   # Returns a hash of SOLR query parameters.
   # The query: get all Hydrus Collections.
   def squery_all_hydrus_apos
-    return squery_all_hydrus_objects(['Hydrus_AdminPolicyObject'])
+    squery_all_hydrus_objects(['Hydrus_AdminPolicyObject'])
   end
 
   # Takes a string -- a user's SUNET ID.
@@ -108,7 +108,7 @@ module Hydrus::SolrQueryable
     h = HSQ.default_query_params()
     HSQ.add_model_filter(h, 'Hydrus_AdminPolicyObject')
     HSQ.add_involved_user_filter(h, user)
-    return h
+    h
   end
 
   def squery_apo_roles(apo_druid)
@@ -124,7 +124,7 @@ module Hydrus::SolrQueryable
     h[:fl]='*'
     HSQ.add_model_filter(h, 'Hydrus_Collection')
     HSQ.add_governed_by_filter(h, druids)
-    return h
+    h
   end
 
   # Takes the druid of a collection, returns solr documents for all items in that collection
@@ -138,7 +138,7 @@ module Hydrus::SolrQueryable
       :fq            => [ %Q<is_member_of_collection_ssim:(#{imo})> ],
     }
     HSQ.add_model_filter(h, 'Hydrus_Item')
-    return h
+    h
   end
 
   # Takes an array of Collection druids.
@@ -156,7 +156,7 @@ module Hydrus::SolrQueryable
       :fq            => [ %Q<is_member_of_collection_ssim:(#{imo})> ],
     }
     HSQ.add_model_filter(h, 'Hydrus_Item')
-    return h
+    h
   end
 
   # Returns an array of druids for all objects belonging to the
@@ -187,14 +187,14 @@ module Hydrus::SolrQueryable
     data.each do |d|
       d[:object_type] = d[:object_type].sub(/\Ainfo:fedora\/afmodel:Hydrus_/, '')
     end
-    return data
+    data
   end
 
   # Takes a SOLR response.
   # Returns an array of druids corresponding to the documents.
   def get_druids_from_response(resp)
     k = 'objectId_ssim'
-    return resp.docs.map { |doc| doc[k].first }
+    resp.docs.map { |doc| doc[k].first }
   end
 
   # Takes a SOLR response and a hash of field remappings.
@@ -206,7 +206,7 @@ module Hydrus::SolrQueryable
   # When retrieving values from the SOLR documents, only the first
   # values for each key is retained.
   def get_fields_from_response(resp, fields)
-    return resp.docs.map { |doc|
+    resp.docs.map { |doc|
       h = {}
       fields.each { |solr_doc_key, remapped_key|
         d = doc[solr_doc_key]

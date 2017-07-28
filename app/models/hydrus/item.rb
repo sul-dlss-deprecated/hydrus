@@ -216,7 +216,7 @@ class Hydrus::Item < Hydrus::GenericObject
   def requires_terms_acceptance(user,coll=self.collection)
     if to_bool(accepted_terms_of_deposit)
       # if this item has previously been accepted, no further checks are needed
-      return false
+      false
     else
       # if this item has not been accepted, let's look at the collection.
       # Get the users who have accepted the terms of deposit for any other items in this collection.
@@ -263,34 +263,34 @@ class Hydrus::Item < Hydrus::GenericObject
   def is_submittable_for_approval
     return false unless object_status == 'draft'
     return false unless to_bool(requires_human_approval)
-    return validate!
+    validate!
   end
 
   # Returns true if the object is waiting for approval by a reviewer.
   def is_awaiting_approval
-    return object_status == 'awaiting_approval'
+    object_status == 'awaiting_approval'
   end
 
   # Returns true if the object status is currently returned-by-reviewer.
   def is_returned
-    return object_status == 'returned'
+    object_status == 'returned'
   end
 
   # Returns true if the object can be approved by a reviewer.
   def is_approvable
     return false unless is_awaiting_approval
-    return validate!
+    validate!
   end
 
   # Returns true if the object can be returned by a reviewer.
   def is_disapprovable
-    return is_awaiting_approval
+    is_awaiting_approval
   end
 
   # Returns true if the object can be resubmitted for approval.
   def is_resubmittable
     return false unless is_returned
-    return validate!
+    validate!
   end
 
   # Returns true if the item is publishable: must be valid and must
@@ -298,14 +298,14 @@ class Hydrus::Item < Hydrus::GenericObject
   def is_publishable
     return false unless validate!
     return is_awaiting_approval if to_bool(requires_human_approval)
-    return is_draft
+    is_draft
   end
 
   # Returns true if the item is publishable: must be valid and must
   # have the correct object_status.  Any item requiring human approval is not publishable, it is only approvable
   def is_publishable_directly
     return false if to_bool(requires_human_approval)
-    return (validate! ? is_draft : false)
+    (validate! ? is_draft : false)
   end
 
 
@@ -313,12 +313,12 @@ class Hydrus::Item < Hydrus::GenericObject
   # It's not strictly necessary to involve validate!, but it provides extra insurance.
   def is_assemblable
     return false unless is_published
-    return validate!
+    validate!
   end
 
   # Returns true only if the Item is unpublished and is on the first version.
   def is_destroyable
-    return not(is_published) && is_initial_version
+    not(is_published) && is_initial_version
   end
 
   def requires_human_approval
@@ -348,7 +348,7 @@ class Hydrus::Item < Hydrus::GenericObject
     c = collection
     return true if c && c.is_open
     errors.add(:collection, "must be open to have new items added")
-    return false
+    false
   end
 
   # you must have at least one non-blank contributor
@@ -419,13 +419,13 @@ class Hydrus::Item < Hydrus::GenericObject
     return false unless collection.visibility_option == 'varies'
     return true  if is_initial_version
     return false if prior_visibility == 'world'
-    return true
+    true
   end
 
   # Return's true if the Item belongs to a collection that allows
   # Items to set their own licenses.
   def licenses_can_vary
-    return collection.license_option == 'varies'
+    collection.license_option == 'varies'
   end
 
   # Takes a hash with the following keys and possible values:
@@ -457,7 +457,7 @@ class Hydrus::Item < Hydrus::GenericObject
 
   # Returns true if the Item is embargoed.
   def is_embargoed
-    return not(embargo_date.blank?)
+    not(embargo_date.blank?)
   end
 
   # Returns the embargo date from the embargoMetadata, not the rightsMetadata.
@@ -467,7 +467,7 @@ class Hydrus::Item < Hydrus::GenericObject
   def embargo_date
     ed = embargoMetadata ? embargoMetadata.release_date : ''
     ed = '' if ed.nil?
-    return ed
+    ed
   end
 
   # Sets the embargo date in both embargoMetadata and rightsMetadata.
@@ -540,7 +540,7 @@ class Hydrus::Item < Hydrus::GenericObject
   # dates in the past; for that reason, we do not use this method
   # to definie the beginning date allowed by the embargo date picker.
   def beginning_of_embargo_range
-    return initial_submitted_for_publish_time || HyTime.now_datetime
+    initial_submitted_for_publish_time || HyTime.now_datetime
   end
 
   # Parses embargo_terms (eg, "2 years") into its number and time-unit parts.
@@ -549,7 +549,7 @@ class Hydrus::Item < Hydrus::GenericObject
   def end_of_embargo_range
     n, time_unit = collection.embargo_terms.split
     dt = beginning_of_embargo_range.to_datetime + n.to_i.send(time_unit)
-    return HyTime.datetime(dt)
+    HyTime.datetime(dt)
   end
 
   # Returns visibility as an array -- typically either ['world'] or ['stanford'].
@@ -557,7 +557,7 @@ class Hydrus::Item < Hydrus::GenericObject
   def visibility
     ds = is_embargoed ? embargoMetadata : rightsMetadata
     return ["world"] if ds.has_world_read_node
-    return ds.group_read_nodes.map { |n| n.text }
+    ds.group_read_nodes.map { |n| n.text }
   end
 
   # Takes a visibility -- typically 'world' or 'stanford'.
@@ -602,7 +602,7 @@ class Hydrus::Item < Hydrus::GenericObject
 
   # Returns the Item's contributors, as an array of Hydrus::Contributor objects.
   def contributors
-    return descMetadata.contributors
+    descMetadata.contributors
   end
 
   def dates
@@ -739,7 +739,7 @@ class Hydrus::Item < Hydrus::GenericObject
   end
 
   def self.discovery_roles
-    return {
+    {
       "everyone"      => "world",
       "Stanford only" => "stanford",
     }
@@ -754,7 +754,7 @@ class Hydrus::Item < Hydrus::GenericObject
   def recipients_for_new_deposit_emails
     managers=apo.persons_with_role("hydrus-collection-manager").to_a
     managers.delete(self.item_depositor_id)
-    return managers.join(', ')
+    managers.join(', ')
   end
 
   # the users who will receive email notifications when an item is submitted for review
@@ -764,12 +764,12 @@ class Hydrus::Item < Hydrus::GenericObject
       apo.persons_with_role("hydrus-collection-reviewer")
     ).to_a
     managers.delete(self.item_depositor_id)
-    return managers.join(', ')
+    managers.join(', ')
   end
 
   # See GenericObject#changed_fields for discussion.
   def tracked_fields
-    return {
+    {
       :title      => [:title],
       :abstract   => [:abstract],
       :files      => [:files_were_changed],
@@ -781,17 +781,17 @@ class Hydrus::Item < Hydrus::GenericObject
 
   # Returns the Item's current version number, 1..N.
   def version_id
-    return current_version
+    current_version
   end
 
   # Returns the Item's current version tag, eg v2.2.0.
   def version_tag
-    return 'v' + versionMetadata.current_tag
+    'v' + versionMetadata.current_tag
   end
 
   # Returns the description of the current version.
   def version_description
-    return versionMetadata.description_for_version(current_version)
+    versionMetadata.description_for_version(current_version)
   end
 
   # Returns true if the current version is the initial version.
@@ -803,7 +803,7 @@ class Hydrus::Item < Hydrus::GenericObject
   def is_initial_version(opts = {})
     return true if current_version == '1'
     return false if opts[:absolute]
-    return version_tag =~ /\Av1\.0\./ ? true : false
+    version_tag =~ /\Av1\.0\./ ? true : false
   end
 
   # Takes a string.
@@ -826,7 +826,7 @@ class Hydrus::Item < Hydrus::GenericObject
     return :major if tags.size < 2
     curr = tags[-1]
     prev = tags[-2]
-    return prev.major != curr.major ? :major :
+    prev.major != curr.major ? :major :
            prev.minor != curr.minor ? :minor : :admin
   end
 

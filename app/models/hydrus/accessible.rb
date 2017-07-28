@@ -18,7 +18,7 @@ module Hydrus::Accessible
 
   # An Xpath snippet that is used frequently.
   def xp_machine(type = 'read')
-    return '//access[@type="' + type + '"]/machine'
+    '//access[@type="' + type + '"]/machine'
   end
 
   # Takes a group (for example, 'stanford').
@@ -53,19 +53,19 @@ module Hydrus::Accessible
   
   # Returns true if there is a world read node.
   def has_world_read_node
-    return world_read_nodes.size > 0
+    world_read_nodes.size > 0
   end
 
   # Returns all world read nodes -- should be only one.
   def world_read_nodes
     q = "#{xp_machine}/world"
-    return ng_xml.xpath(q)
+    ng_xml.xpath(q)
   end
 
   # Returns all group read nodes.
   def group_read_nodes
     q = "#{xp_machine}/group"
-    return ng_xml.xpath(q)
+    ng_xml.xpath(q)
   end
 
   # Removes group read nodes.
@@ -123,7 +123,7 @@ module Hydrus::Accessible
 
   # The Generic <releaseAccess> node for embargoMetadata.
   def generic_access_xml
-    return <<-XML
+    <<-XML
       <releaseAccess>
         <access type="discover">
           <machine>

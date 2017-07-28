@@ -13,7 +13,7 @@ module ApplicationHelper
   def license_image(license_code)
     gcode = Hydrus::GenericObject.license_group_code(license_code)
     lcode = license_code.downcase.gsub('-', '_')
-    return gcode == 'creativeCommons' ? image_tag("licenses/#{lcode}.png") : ''
+    gcode == 'creativeCommons' ? image_tag("licenses/#{lcode}.png") : ''
   end
 
   def license_link(license_code)
@@ -21,19 +21,19 @@ module ApplicationHelper
     txt   = hgo.license_human(license_code)
     gcode = hgo.license_group_code(license_code)
     url   = hgo.license_group_urls[gcode]
-    return gcode ? link_to(txt, url) : txt
+    gcode ? link_to(txt, url) : txt
   end
 
   def button_color(status)
-    return status.downcase == 'published' ? 'success' : 'warning'
+    status.downcase == 'published' ? 'success' : 'warning'
   end
 
   def seen_beta_dialog?
     if session[:seen_beta_dialog]
-      return true
+      true
     else
       session[:seen_beta_dialog]=true
-      return false
+      false
     end
   end
 
@@ -78,7 +78,7 @@ module ApplicationHelper
   #   - Object is not published.
   def show_item_edit(item)
     return false unless can?(:edit, item)
-    return ! item.is_published
+    ! item.is_published
   end
 
   def edit_item_text(item)
@@ -103,7 +103,7 @@ module ApplicationHelper
   # newlines to <br> tags, and then declars the string to be
   # safe for direct display as HTML.
   def show_line_breaks(txt)
-    return html_escape(txt).gsub(/\r\n?|\n/, '<br/>').html_safe
+    html_escape(txt).gsub(/\r\n?|\n/, '<br/>').html_safe
   end
 
   def title_text(obj)
@@ -113,12 +113,12 @@ module ApplicationHelper
   def delete_confirm_msg(obj)
     msg = "Are you sure you want to discard this #{obj.object_type}?"
     msg += " This action is permanent and cannot be undone."
-    return msg
+    msg
   end
 
   # a helper to create links to items that may or may not have titles yet
   def title_link(obj)
-    return link_to(title_text(obj), polymorphic_path(obj),:disable_after_click=>'true')
+    link_to(title_text(obj), polymorphic_path(obj),:disable_after_click=>'true')
   end
 
   # this checks to see if the object passed in is "empty", which could be nil,
@@ -135,7 +135,7 @@ module ApplicationHelper
     else # case of abitrary object
       is_blank=hydrus_is_object_empty?(obj)
     end
-    return is_blank
+    is_blank
   end
 
   # this checks to see if the object passed in has attributes that are all blank
@@ -159,12 +159,12 @@ module ApplicationHelper
   # Returns it as a string, in double-quotes.
   # Nil will stringify to ''.
   def in_quotes(val)
-    return %Q("#{val}")
+    %Q("#{val}")
   end
 
   def sdr_mail_to
     mt = mail_to("sdr-contact@lists.stanford.edu", "sdr-contact@lists.stanford.edu")
-    return mt.html_safe
+    mt.html_safe
   end
 
   def google_analytics

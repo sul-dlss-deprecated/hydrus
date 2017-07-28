@@ -16,7 +16,7 @@ class WebAuthUser
   end
 
   def sunetid
-    return @id
+    @id
   end
 
   def is_webauth?

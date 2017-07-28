@@ -81,16 +81,11 @@ class HydrusSolrController < ApplicationController
   # Private method to return the application's SOLR connection.
   def solr
     @@solr ||= Dor::SearchService.solr
-    return @@solr
   end
 
   # Private method to return the logger for the SOLR reindexer.
   def index_logger
     @@index_logger ||= Logger.new("#{Rails.root}/log/indexer.log", 10, 10240000)
-    #@@index_logger.formatter = proc do |severity, t, progname, msg|
-    #  "#{severity}: #{t}: #{msg}\n"
-    #end
-    return @@index_logger
   end
 
 end

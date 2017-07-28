@@ -4,13 +4,13 @@ module Hydrus::Licenseable
   def license_text
     nds = rightsMetadata.use.human.nodeset
     nd  = nds.find { |nd| nd[:type] != 'useAndReproduction' }
-    return nd ? nd.content : ''
+    nd ? nd.content : ''
   end
 
   # Returns the license group code (eg creativeCommons) corresponding
   # to the object's license.
   def license_group_code
-    return rightsMetadata.use.machine.type.first
+    rightsMetadata.use.machine.type.first
   end
 
   # Returns the object's license code: cc-by, pddl...
@@ -26,7 +26,7 @@ module Hydrus::Licenseable
     nd = rightsMetadata.use.machine.nodeset.first
     return 'none' unless nd
     prefix = nd[:type] == 'creativeCommons' ? 'cc-' : ''
-    return prefix + nd.text
+    prefix + nd.text
   end
 
   # Takes a license code: cc-by, pddl, none, ...
