@@ -299,7 +299,6 @@ GEM
       nokogiri (>= 1.4.2)
       solrizer (~> 3.3)
     orm_adapter (0.5.0)
-    power_assert (1.0.2)
     pry (0.10.4)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
@@ -435,8 +434,6 @@ GEM
       bootstrap-sass
       rails (>= 3.1.0)
     systemu (2.6.5)
-    test-unit (3.2.5)
-      power_assert
     therubyracer (0.12.3)
       libv8 (~> 3.16.14.15)
       ref
@@ -509,7 +506,6 @@ DEPENDENCIES
   simplecov
   sqlite3
   sul_chrome (~> 0.1.0)
-  test-unit
   therubyracer
   uglifier (>= 1.0.3)
   validates_email_format_of
