@@ -5,8 +5,7 @@ gem 'rails', '~> 4.2.9'
 gem 'rake', '~> 11.0'
 
 gem 'config'
-# Devise updated for http://blog.plataformatec.com.br/2016/01/improve-remember-me-cookie-expiration-in-devise/
-gem 'devise', '~> 3.5.4'
+gem 'devise', '~> 4.0'
 gem 'jquery-rails'
 gem 'dynamic_form'
 gem 'bootstrap-datepicker-rails'
