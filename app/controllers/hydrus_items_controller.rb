@@ -62,7 +62,7 @@ class HydrusItemsController < ApplicationController
     authorize! :create_items_in, coll_pid
 
     item_type = params[:type] || Hydrus::Application.config.default_item_type
-    item = Hydrus::Item.create(coll_pid, current_user, item_type)
+    item = ItemService.create(coll_pid, current_user, item_type)
     item.current_user = current_user
     redirect_to edit_polymorphic_path(item)
   end
@@ -78,7 +78,7 @@ class HydrusItemsController < ApplicationController
 
     file_info = params["file_info"] || {}
     flash[:error]=""
-    
+
     if params.has_key?("files")
       params["files"].each do |upload_file|
         hof = Hydrus::ObjectFile.new
@@ -100,7 +100,7 @@ class HydrusItemsController < ApplicationController
         @fobj.files_were_changed = true  # To log an editing event.
       end
     end
-    
+
     ####
     # Update attributes without saving.
     ####
@@ -134,10 +134,10 @@ class HydrusItemsController < ApplicationController
     ####
 
     # delete any files that are missing and warn the user
-    if @fobj.delete_missing_files > 0 
+    if @fobj.delete_missing_files > 0
       flash[:error]+="Some files did not upload correctly. Please check and re-upload any missing files."
     end
-    
+
     unless @fobj.save
       errors = @fobj.errors.messages.map { |field, error|
         "#{field.to_s.humanize.capitalize} #{error.join(', ')}"
@@ -156,9 +156,9 @@ class HydrusItemsController < ApplicationController
     notice << @fobj.errors.messages.map { |field, error|
         "#{field.to_s.humanize.capitalize} #{error.join(', ')}"
       }
-    flash[:notice] = notice.join("<br/>").html_safe unless notice.blank?  
+    flash[:notice] = notice.join("<br/>").html_safe unless notice.blank?
     flash[:error] = nil if flash[:error].blank?
-      
+
     respond_to do |want|
       want.html {
         if has_mvf
@@ -224,7 +224,7 @@ class HydrusItemsController < ApplicationController
 
   def create_file
     authorize! :edit, @fobj
-    if request.post? 
+    if request.post?
       @file = Hydrus::ObjectFile.new
       @file.pid = params[:id]
       @file.file = params[:file]
@@ -232,7 +232,7 @@ class HydrusItemsController < ApplicationController
       @dupe_ids=@file.dupes.collect {|dupe| dupe.id}
       @file.remove_dupes
     else
-      render :nothing=>true 
+      render :nothing=>true
       return
     end
   end

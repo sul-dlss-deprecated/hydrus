@@ -40,6 +40,37 @@ describe(Hydrus::Item, :type => :feature, :integration => true) do
 
   end
 
+  describe "#accept_terms_of_deposit" do
+    let(:user_key) { 'archivist5' }
+    let(:user) { mock_authed_user(user_key) }
+    let(:item) { ItemService.create(collection.pid, user) }
+    let(:collection) { Hydrus::Collection.find('druid:oo000oo0003') }
+
+    before do
+      allow(Hydrus::Authorizable).to receive(:can_create_items_in).and_return(true)
+      allow(Hydrus::Authorizable).to receive(:can_edit_item).and_return(true)
+    end
+
+    around do |example|
+      @prev_mint_ids = Dor::Config.configure.suri.mint_ids
+      Dor::Config.configure.suri.mint_ids = true
+      example.run
+      Dor::Config.configure.suri.mint_ids = @prev_mint_ids
+    end
+
+    it "should accept the terms for an item, updating the appropriate hydrusProperties metadata in item and collection" do
+      expect(item.requires_terms_acceptance(user_key, collection)).to eq(true)
+      expect(item.accepted_terms_of_deposit).to eq("false")
+      expect(collection.users_accepted_terms_of_deposit.keys.include?(user_key)).to eq(false)
+      item.accept_terms_of_deposit(user)
+      expect(item.accepted_terms_of_deposit).to eq("true")
+      expect(item.terms_of_deposit_accepted?).to eq(true)
+      collection.reload
+      expect(collection.users_accepted_terms_of_deposit.keys.include?(user_key)).to eq(true)
+      expect(collection.users_accepted_terms_of_deposit[user_key].nil?).to eq(false)
+    end
+  end
+
   describe "do_publish()" do
 
     before(:each) do
@@ -53,7 +84,7 @@ describe(Hydrus::Item, :type => :feature, :integration => true) do
     it "should modify workflows as expected" do
       # Setup.
       druid = 'druid:oo000oo0003'
-      hi    = Hydrus::Item.create(druid, mock_authed_user)
+      hi    = ItemService.create(druid, mock_authed_user)
       wf    = Dor::Config.hydrus.app_workflow
       steps = Dor::Config.hydrus.app_workflow_steps
       exp   = Hash[ steps.map { |s| [s, 'waiting'] } ]
@@ -102,7 +133,7 @@ describe(Hydrus::Item, :type => :feature, :integration => true) do
     it "should create an item" do
       allow_any_instance_of(Dor::WorkflowDs).to receive(:current_priority).and_return 0
       allow(collection).to receive_messages(:visibility_option_value => 'stanford', :license => 'some-license')
-      item  = Hydrus::Item.create(collection.pid, mock_authed_user, 'some-type')
+      item  = ItemService.create(collection.pid, mock_authed_user, 'some-type')
       expect(item).to be_instance_of Hydrus::Item
       expect(item).to_not be_new
       expect(item.visibility).to include 'stanford'
@@ -121,7 +152,7 @@ describe(Hydrus::Item, :type => :feature, :integration => true) do
     it "should create another item" do
       allow_any_instance_of(Dor::WorkflowDs).to receive(:current_priority).and_return 0
       allow(collection).to receive_messages(:users_accepted_terms_of_deposit => { mock_authed_user.to_s => Time.now})
-      item  = Hydrus::Item.create(collection.pid, mock_authed_user, 'some-type')
+      item  = ItemService.create(collection.pid, mock_authed_user, 'some-type')
       expect(item).to be_instance_of Hydrus::Item
       expect(item).to_not be_new
       expect(item.item_type).to eq 'some-type'
