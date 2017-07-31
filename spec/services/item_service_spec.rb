@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 RSpec.describe ItemService do
@@ -8,22 +10,22 @@ RSpec.describe ItemService do
     Dor::Config.configure.suri.mint_ids = @prev_mint_ids
   end
 
-  describe ".create" do
-    describe("terms of acceptance for a new item", integration: true)  do
+  describe '.create' do
+    describe('terms of acceptance for a new item', integration: true) do
       let(:item) { described_class.create(collection.pid, mock_authed_user(user)) }
       let(:collection) { Hydrus::Collection.find('druid:oo000oo0003') }
 
-      context "if the user has already accepted another item in this collection but it was more than 1 year ago" do
+      context 'if the user has already accepted another item in this collection but it was more than 1 year ago' do
         let(:user) { 'archivist1' } # this user accepted more than 1 year ago
-        it "indicates that a new item in a collection requires terms acceptance" do
+        it 'indicates that a new item in a collection requires terms acceptance' do
           expect(collection.users_accepted_terms_of_deposit.keys.include?(user)).to eq(true)
           expect(item.requires_terms_acceptance(user, collection)).to eq(true)
-          expect(item.accepted_terms_of_deposit).to eq("false")
+          expect(item.accepted_terms_of_deposit).to eq('false')
           expect(item.terms_of_deposit_accepted?).to eq(false)
         end
       end
 
-      context "if the user has already accepted another item in this collection less than 1 year ago" do
+      context 'if the user has already accepted another item in this collection less than 1 year ago' do
         let(:user) { 'archivist3' }
         before do
           dt = HyTime.now - 1.month # force this user to have accepted 1 month ago.
@@ -31,23 +33,23 @@ RSpec.describe ItemService do
           collection.save!
         end
 
-        it "indicates that a new item in a collection does not require terms acceptance" do
+        it 'indicates that a new item in a collection does not require terms acceptance' do
           expect(collection.users_accepted_terms_of_deposit.keys.include?(user)).to eq(true)
           expect(item.requires_terms_acceptance(user, collection)).to eq(false)
-          expect(item.accepted_terms_of_deposit).to eq("true")
+          expect(item.accepted_terms_of_deposit).to eq('true')
           expect(item.terms_of_deposit_accepted?).to eq(true)
         end
       end
 
-      context "when the user has not already accepted another item in this collection" do
+      context 'when the user has not already accepted another item in this collection' do
         let(:user) { 'archivist5' }
         before do
           allow(Hydrus::Authorizable).to receive(:can_create_items_in).and_return(true)
         end
 
-        it "indicates that a new item in a collection requires terms acceptance" do
+        it 'indicates that a new item in a collection requires terms acceptance' do
           expect(item.requires_terms_acceptance(user, collection)).to eq(true)
-          expect(item.accepted_terms_of_deposit).to eq("false")
+          expect(item.accepted_terms_of_deposit).to eq('false')
           expect(item.terms_of_deposit_accepted?).to eq(false)
         end
       end

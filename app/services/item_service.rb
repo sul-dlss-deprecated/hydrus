@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ItemService
   def self.create(collection_pid, user, item_type = Hydrus::Application.config.default_item_type)
     new(collection: Hydrus::Collection.find(collection_pid),
@@ -30,7 +32,7 @@ class ItemService
 
   # Make sure user can create items in the parent collection.
   def validate!
-    raise "#{cannot_do_message(:create)}\nCollection '#{collection.pid}' is not open" unless collection.is_open()
+    raise "#{cannot_do_message(:create)}\nCollection '#{collection.pid}' is not open" unless collection.is_open
     raise "#{cannot_do_message(:create)}\nUser '#{user}' cannot create items in #{collection} #{collection.pid} according to APO #{collection.apo.pid}" unless Hydrus::Authorizable.can_create_items_in(user, collection)
   end
 
@@ -77,23 +79,23 @@ class ItemService
 
   # Add event.
   def create_event
-    item.events.add_event('hydrus', user, "Item created")
+    item.events.add_event('hydrus', user, 'Item created')
   end
 
   # Check to see if this user needs to agree again for this new item, if not,
   # indicate agreement has already occured automatically
   def check_terms_of_deposit
     if item.requires_terms_acceptance(user.to_s, collection) == false
-      item.accepted_terms_of_deposit = "true"
+      item.accepted_terms_of_deposit = 'true'
       msg = 'Terms of deposit accepted due to previous item acceptance in collection'
       item.events.add_event('hydrus', user, msg)
     else
-      item.accepted_terms_of_deposit="false"
+      item.accepted_terms_of_deposit = 'false'
     end
   end
 
   def save_item
-    item.save(:no_edit_logging => true, :no_beautify => true)
+    item.save(no_edit_logging: true, no_beautify: true)
   end
 
   def send_notifications
