@@ -16,14 +16,14 @@ class Dor::WorkflowDs
   # Returns the corresponding process node.
   def get_workflow_step(step)
     node = get_workflow_node()
-    return node ? node.at_xpath("//process[@name='#{step}']") : nil
+    node.at_xpath("//process[@name='#{step}']")
   end
 
   # Takes the name of a hydrusAssemblyWF step.
   # Returns the staus of the corresponding process node.
   def get_workflow_status(step)
     node = get_workflow_step(step)
-    return node ? node['status'] : nil
+    node && node['status']
   end
 
   # Takes the name of a hydrusAssemblyWF step.
