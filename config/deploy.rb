@@ -40,6 +40,9 @@ set :bundle_audit_ignore, %w{CVE-2015-3226}
 # honeybadger_env otherwise defaults to rails_env
 set :honeybadger_env, fetch(:stage)
 
+# update shared_configs before restarting app
+before 'deploy:restart', 'shared_configs:update'
+
 namespace :deploy do
   after :restart, :clear_tmp do
     on roles(:web), in: :groups, limit: 3, wait: 10 do
