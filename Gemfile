@@ -2,11 +2,8 @@ source 'https://rubygems.org'
 
 gem 'rails', '~> 4.2.9'
 
-gem 'rake', '~> 11.0'
-
 gem 'config'
-# Devise updated for http://blog.plataformatec.com.br/2016/01/improve-remember-me-cookie-expiration-in-devise/
-gem 'devise', '~> 3.5.4'
+gem 'devise', '~> 4.0'
 gem 'jquery-rails'
 gem 'dynamic_form'
 gem 'bootstrap-datepicker-rails'
@@ -17,10 +14,10 @@ gem 'validates_email_format_of'
 gem 'whenever', '~> 0.9'
 
 # Stanford stuff
-gem 'assembly-objectfile', '1.5.0'
+gem 'assembly-objectfile', '~> 1.5'
 gem 'blacklight',   '~> 4.4'
 gem 'dor-services', '~> 5.24', require: false
-gem 'bagit', '0.3.2' # > 0.3.2 requires ruby 2
+gem 'bagit', '~> 0.4'
 gem 'dor-workflow-service'
 gem 'net-http-persistent', '~> 2.9' # https://github.com/sul-dlss/dor-workflow-service/issues/44
 gem 'druid-tools', '~> 0.4.0'
@@ -40,7 +37,7 @@ gem 'uglifier', '>= 1.0.3'
 # gems only needed for particular environments
 
 group :development, :test do
-  gem 'jettywrapper', '1.4.2'
+  gem 'jettywrapper', '~> 1.4'
   gem 'sqlite3'
   gem 'rspec-rails', '~> 3.1'
   gem 'capybara'
@@ -64,10 +61,6 @@ group :deployment do
   gem 'capistrano-passenger'
   gem 'dlss-capistrano'
 end
-
-# Ruby 2.2+ has removed test/unit from the core library. Rails requires this as a dependency
-# Rails 3.2 uses ActiveSupport::Test case in lib/rails/console/app.rb, so we need it in all groups
-gem 'test-unit'
 
 gem 'honeybadger'
 gem 'rsolr-ext'

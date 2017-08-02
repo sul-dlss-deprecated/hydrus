@@ -50,12 +50,12 @@ GEM
     airbrussh (1.3.0)
       sshkit (>= 1.6.1, != 1.7.0)
     arel (6.0.4)
-    assembly-objectfile (1.5.0)
+    assembly-objectfile (1.6.8)
       mime-types
       mini_exiftool
       nokogiri
     awesome_print (1.8.0)
-    bagit (0.3.2)
+    bagit (0.4.0)
       docopt (~> 0.5.0)
       validatable (~> 1.6)
     bcrypt (3.1.11)
@@ -129,12 +129,11 @@ GEM
     deep_merge (1.1.1)
     deprecation (0.99.0)
       activesupport
-    devise (3.5.10)
+    devise (4.3.0)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
-      railties (>= 3.2.6, < 5)
+      railties (>= 4.1.0, < 5.2)
       responders
-      thread_safe (~> 0.1)
       warden (~> 1.2.3)
     diff-lcs (1.3)
     dlss-capistrano (3.4.1)
@@ -221,12 +220,11 @@ GEM
       rails (>= 3.2.6)
     i18n (0.8.6)
     iso-639 (0.2.8)
-    jettywrapper (1.4.2)
+    jettywrapper (1.8.3)
       activesupport (>= 3.0.0)
       childprocess
       i18n
       logger
-      mediashelf-loggable
     jquery-rails (4.3.1)
       rails-dom-testing (>= 1, < 3)
       railties (>= 4.2.0)
@@ -256,7 +254,9 @@ GEM
       unf
     mediashelf-loggable (0.4.10)
     method_source (0.8.2)
-    mime-types (1.25.1)
+    mime-types (3.1)
+      mime-types-data (~> 3.2015)
+    mime-types-data (3.2016.0521)
     mini_exiftool (2.8.0)
     mini_portile2 (2.2.0)
     minitest (5.10.3)
@@ -300,7 +300,6 @@ GEM
       nokogiri (>= 1.4.2)
       solrizer (~> 3.3)
     orm_adapter (0.5.0)
-    power_assert (1.0.2)
     pry (0.10.4)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
@@ -333,7 +332,7 @@ GEM
       activesupport (= 4.2.9)
       rake (>= 0.8.7)
       thor (>= 0.18.1, < 2.0)
-    rake (11.3.0)
+    rake (12.0.0)
     rdf (1.99.1)
       link_header (~> 0.0, >= 0.0.8)
     rdf-aggregate-repo (1.99.0)
@@ -436,8 +435,6 @@ GEM
       bootstrap-sass
       rails (>= 3.1.0)
     systemu (2.6.5)
-    test-unit (3.2.5)
-      power_assert
     therubyracer (0.12.3)
       libv8 (~> 3.16.14.15)
       ref
@@ -468,9 +465,9 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  assembly-objectfile (= 1.5.0)
+  assembly-objectfile (~> 1.5)
   awesome_print
-  bagit (= 0.3.2)
+  bagit (~> 0.4)
   blacklight (~> 4.4)
   bootstrap-datepicker-rails
   bootstrap-sass (= 2.3.2.1)
@@ -484,7 +481,7 @@ DEPENDENCIES
   coderay
   coffee-rails (~> 4.2)
   config
-  devise (~> 3.5.4)
+  devise (~> 4.0)
   dlss-capistrano
   dor-services (~> 5.24)
   dor-workflow-service
@@ -493,7 +490,7 @@ DEPENDENCIES
   equivalent-xml
   honeybadger
   hydra-head (~> 6.5)
-  jettywrapper (= 1.4.2)
+  jettywrapper (~> 1.4)
   jquery-rails
   launchy
   letter_opener
@@ -503,14 +500,12 @@ DEPENDENCIES
   okcomputer
   pry
   rails (~> 4.2.9)
-  rake (~> 11.0)
   rsolr-ext
   rspec-rails (~> 3.1)
   sass-rails (~> 4.0)
   simplecov
   sqlite3
   sul_chrome (~> 0.1.0)
-  test-unit
   therubyracer
   uglifier (>= 1.0.3)
   validates_email_format_of
