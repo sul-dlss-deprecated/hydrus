@@ -15,7 +15,7 @@ class Hydrus::Item < Hydrus::GenericObject
   validates :keywords,            not_empty: true, if: :should_validate
   #validates :date_created,        :not_empty => true, :if => :should_validate
   validates :version_description, not_empty: true, if: lambda {
-    should_validate() && ! is_initial_version()
+    should_validate() && !is_initial_version()
   }
 
   validate  :enforce_collection_is_open, on: :create
@@ -203,7 +203,7 @@ class Hydrus::Item < Hydrus::GenericObject
   def close_version(opts = {})
     raise "#{cannot_do_message(:close_version)}\nItem is initial version" if is_initial_version(absolute: true)
     # We want to start accessioning only if ...
-    sa = !! opts[:is_remediation]              # ... we are running a remediation and
+    sa = !!opts[:is_remediation]              # ... we are running a remediation and
     sa = false if should_treat_as_accessioned  # ... we are not in development or test
     super(version_num: version_id, start_accession: sa)
   end

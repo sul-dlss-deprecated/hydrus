@@ -192,14 +192,6 @@ Layout/MultilineOperationIndentation:
     - 'app/models/hydrus/cant.rb'
     - 'spec/helpers/hydrus_form_helper_spec.rb'
 
-# Offense count: 6
-# Cop supports --auto-correct.
-Layout/SpaceAfterNot:
-  Exclude:
-    - 'app/helpers/application_helper.rb'
-    - 'app/models/hydrus/item.rb'
-    - 'remediations/run.rb'
-
 # Offense count: 20
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, SupportedStyles.

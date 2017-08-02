@@ -77,7 +77,7 @@ module ApplicationHelper
   #   - Object is not published.
   def show_item_edit(item)
     return false unless can?(:edit, item)
-    ! item.is_published
+    !item.is_published
   end
 
   def edit_item_text(item)
