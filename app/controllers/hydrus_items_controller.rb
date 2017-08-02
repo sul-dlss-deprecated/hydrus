@@ -142,7 +142,7 @@ class HydrusItemsController < ApplicationController
       errors = @fobj.errors.messages.map { |field, error|
         "#{field.to_s.humanize.capitalize} #{error.join(', ')}"
       }
-      flash[:error] += errors.join("<br/>").html_safe
+      flash[:error] += safe_join(errors, raw('<br />'))
       render :edit
       return
     end
@@ -156,7 +156,7 @@ class HydrusItemsController < ApplicationController
     notice << @fobj.errors.messages.map { |field, error|
         "#{field.to_s.humanize.capitalize} #{error.join(', ')}"
       }
-    flash[:notice] = notice.join("<br/>").html_safe unless notice.blank?
+    flash[:notice] = safe_join(notice, raw('<br />')) unless notice.blank?
     flash[:error] = nil if flash[:error].blank?
 
     respond_to do |want|

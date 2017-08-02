@@ -62,7 +62,7 @@ class HydrusCollectionsController < ApplicationController
     if params.has_key?("hydrus_collection")
       @fobj.attributes = params["hydrus_collection"]
     end
-    
+
     ####
     # Handle requests to add to multi-valued fields.
     ####
@@ -85,13 +85,13 @@ class HydrusCollectionsController < ApplicationController
       errors = @fobj.errors.messages.map { |field, error|
         "#{field.to_s.humanize.capitalize} #{error.join(', ')}"
       }
-      flash[:error] = errors.join("<br/>").html_safe
+      flash[:error] = safe_join(errors, raw('<br />'))
       render :edit
       return
     end
 
-    if params['should_send_role_change_emails']=="true" && @fobj.changed_fields.include?(:roles) # if roles have changed as the result of an update, send the appropriate emails    
-      @fobj.send_all_role_change_emails 
+    if params['should_send_role_change_emails']=="true" && @fobj.changed_fields.include?(:roles) # if roles have changed as the result of an update, send the appropriate emails
+      @fobj.send_all_role_change_emails
     end
 
     ####
@@ -99,7 +99,7 @@ class HydrusCollectionsController < ApplicationController
     ####
 
     notice << "Your changes have been saved."
-    flash[:notice] = notice.join("<br/>").html_safe unless notice.blank?
+    flash[:notice] = safe_join(notice, raw('<br />')) unless notice.blank?
 
     respond_to do |want|
       want.html {

@@ -12,7 +12,7 @@ describe ApplicationController, :type => :controller do
       :files => ['foo bar', 'fubb'],
       :title => ['blah blah'],
     }
-    exp = 'Files foo bar, fubb.<br/>Title blah blah.'
+    exp = 'Files foo bar, fubb.<br />Title blah blah.'
     allow(obj).to receive_message_chain(:errors, :messages).and_return(msgs)
     expect(controller.send(:errors_for_display, obj)).to eq(exp)
   end

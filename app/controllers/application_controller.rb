@@ -3,6 +3,7 @@ class ApplicationController < ActionController::Base
   include Blacklight::Controller
   include Hydra::Controller::ControllerBehavior
   include Hydrus::ModelHelper
+  include ActionView::Helpers::OutputSafetyHelper # for safe_join() and raw()
 
   check_authorization :unless => :devise_controller?
   skip_authorization_check :only => [:contact]
@@ -91,7 +92,7 @@ class ApplicationController < ActionController::Base
     es = obj.errors.messages.map { |field, error|
       "#{field.to_s.humanize.capitalize} #{error.join(', ')}."
     }
-    return es.join("<br/>").html_safe
+    safe_join(es, raw('<br />'))
   end
 
   # Take a Collection/Item and a message.
