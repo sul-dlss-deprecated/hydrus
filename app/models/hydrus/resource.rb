@@ -1,3 +1,0 @@
-class Hydrus::Resource
-
-end
