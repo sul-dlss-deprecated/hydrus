@@ -1,5 +1,4 @@
 class Hydrus::RemediationRunner
-
   # Run solely for the purpose of opening-closing a version for Items.
   def remediation_2013_02_28c(opts)
     # Setup.
@@ -13,6 +12,4 @@ class Hydrus::RemediationRunner
       #   - open new version and close it for Items
     }
   end
-
-
 end

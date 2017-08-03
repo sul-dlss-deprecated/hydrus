@@ -1,5 +1,4 @@
 class Ability
-
   include CanCan::Ability
   include Hydra::Ability
 
@@ -77,7 +76,7 @@ class Ability
 
   # Takes a String (presumably a pid) or an ActiveFedora object.
   # Returns the corresponding ActiveFedora object, if it exists; nil otherwise.
-  # 
+  #
   # Note: We catch the exception below to handle the scenario of a user manually
   # typing a URL with an invalid druid. In that case, this method will
   # return nil, and our methods in authorizable.rb need to return false
@@ -87,12 +86,12 @@ class Ability
     when ActiveFedora::Base
       obj
     when String
-      ActiveFedora::Base.find(obj, :cast => true)
+      ActiveFedora::Base.find(obj, cast: true)
     else
       Rails.logger.warn "Returning #{obj} from get_fedora_object"
       obj
     end
   rescue ActiveFedora::ObjectNotFoundError
-      return nil
+    return nil
   end
 end

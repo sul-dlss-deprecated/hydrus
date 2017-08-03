@@ -1,5 +1,4 @@
 class Hydrus::RemediationRunner
-
   def remediation_2013_02_28e(opts)
     # Setup.
     unpack_args(opts, __method__)
@@ -17,5 +16,4 @@ class Hydrus::RemediationRunner
     log.info(__method__)
     fobj.prior_license = fobj.license
   end
-
 end

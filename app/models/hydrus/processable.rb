@@ -1,8 +1,7 @@
 # A mixin for workflow stuff.
 
 module Hydrus::Processable
-
-  HWF  = Dor::Config.hydrus.app_workflow  # 'hydrusAssemblyWF'
+  HWF  = Dor::Config.hydrus.app_workflow # 'hydrusAssemblyWF'
   REPO = 'dor'
 
   def workflow_client
@@ -67,7 +66,7 @@ module Hydrus::Processable
   # Returns value of Dor::Config.hydrus.start_assembly_wf.
   # Wrapped in method to simplify testing stubs.
   def should_start_assembly_wf
-    return Dor::Config.hydrus.start_assembly_wf
+    Dor::Config.hydrus.start_assembly_wf
   end
 
   # Returns true if the most recent version of the object has been accessioned.
@@ -102,24 +101,23 @@ module Hydrus::Processable
     return false if workflow_client.get_active_lifecycle(REPO, p, 'submitted')
 
     # Accessioned and archived.
-    return true
+    true
   end
 
   # Returns a string -- the datetime when the object achived the published
   # lifecycle in common accessioning.
   def publish_time
-    if should_treat_as_accessioned
-      # In development and test mode, simulated a publish_time of 1 day later.
-      pt = submitted_for_publish_time.to_datetime + 1.day
-    else
-      pt = workflow_client.get_lifecycle(REPO, pid, 'published')
-    end
-    return HyTime.datetime(pt)
+    pt = if should_treat_as_accessioned
+           # In development and test mode, simulated a publish_time of 1 day later.
+           submitted_for_publish_time.to_datetime + 1.day
+         else
+           workflow_client.get_lifecycle(REPO, pid, 'published')
+         end
+    HyTime.datetime(pt)
   end
 
   # Returns true if we are running in development or test mode.
   def should_treat_as_accessioned
-    return %w(development test).include?(Rails.env)
+    %w(development test).include?(Rails.env)
   end
-
 end

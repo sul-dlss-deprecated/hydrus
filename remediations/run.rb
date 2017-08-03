@@ -9,6 +9,6 @@ no_versioning = !! ARGV.delete('--no-versioning')
 
 # Invoke the runner.
 Hydrus::RemediationRunner.new(
-  :force         => force,
-  :no_save       => no_save,
-  :no_versioning => no_versioning).run
+  force: force,
+  no_save: no_save,
+  no_versioning: no_versioning).run

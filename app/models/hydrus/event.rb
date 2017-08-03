@@ -1,5 +1,4 @@
 class Hydrus::Event
-
   attr_reader(:text, :who, :when, :type)
 
   def initialize(who, whe, text)
@@ -8,5 +7,4 @@ class Hydrus::Event
     @when = whe
     @type = 'hydrus'
   end
-
 end

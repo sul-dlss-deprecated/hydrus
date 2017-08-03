@@ -5,8 +5,8 @@ def noko_doc(x)
 end
 
 def mock_user
-  User.find_or_create_by(email: "some-user@example.com") do |u|
-    u.password = "test12345"
+  User.find_or_create_by(email: 'some-user@example.com') do |u|
+    u.password = 'test12345'
     u.password_confirmation = u.password
     u.save
   end
@@ -25,9 +25,9 @@ def login_as(email, password = nil)
   email += '@example.com' unless email.include?('@')
   logout
   visit new_user_session_path
-  fill_in "Email", :with => email
-  fill_in "Password", :with => password
-  click_button "Sign in"
+  fill_in 'Email', with: email
+  fill_in 'Password', with: password
+  click_button 'Sign in'
 end
 
 def logout
@@ -49,10 +49,10 @@ end
 # Extracts the new item's druid from the path and returns it.
 def should_visit_new_item_page(coll)
   rgx = Regexp.new('/items/(druid:\w{11})/edit')
-  visit new_hydrus_item_path(:collection => coll)
+  visit new_hydrus_item_path(collection: coll)
   expect(current_path).to match(rgx)
   druid = rgx.match(current_path)[1]
-  return druid
+  druid
 end
 
 def confirm_rights_metadata_in_apo(obj)
@@ -88,10 +88,10 @@ def check_emb_vis_lic(obj, opts)
   rd     = '//access[@type="read"]/machine'
   rm     = obj.rightsMetadata
   em     = obj.embargoMetadata
-  is_emb = (obj.class == Hydrus::Item and obj.is_embargoed)
+  is_emb = (obj.class ==Hydrus::Item && obj.is_embargoed)
 
   # Consistency between is_embargoed() and testing expectations.
-  expect(opts[:embargo_date].blank?).to eq(not(is_emb))
+  expect(opts[:embargo_date].blank?).to eq(!is_emb)
 
   # All objects should be world discoverable.
   expect(obj.rightsMetadata.ng_xml.xpath("#{di}/world").size).to eq(1)
@@ -119,7 +119,7 @@ def check_emb_vis_lic(obj, opts)
   datastream = (is_emb ? em : rm)
   g = datastream.ng_xml.xpath("#{rd}/group")
   w = datastream.ng_xml.xpath("#{rd}/world")
-  if opts[:visibility] == "stanford"
+  if opts[:visibility] == 'stanford'
     expect(g.size).to eq(1)
     expect(g.first.content).to eq('stanford')
     expect(w.size).to eq(0)
@@ -144,7 +144,7 @@ def config_mint_ids(prev = nil)
   else
     suri.mint_ids = prev
   end
-  return prev
+  prev
 end
 
 # Creates a new collection through the UI.
@@ -153,12 +153,12 @@ end
 def create_new_collection(opts = {})
   # Setup options.
   default_opts = {
-    :user                    => 'archivist1',
-    :title                   => 'title_foo',
-    :abstract                => 'abstract_foo',
-    :contact                 => 'foo@bar.com',
-    :requires_human_approval => 'yes',
-    :viewers                 => '',
+    user: 'archivist1',
+    title: 'title_foo',
+    abstract: 'abstract_foo',
+    contact: 'foo@bar.com',
+    requires_human_approval: 'yes',
+    viewers: '',
   }
   opts = OpenStruct.new(default_opts.merge opts)
   # Login and create new collection.
@@ -173,17 +173,17 @@ def create_new_collection(opts = {})
   hc    = 'hydrus_collection'
   rmdiv = find('div#role-management')
   dk    = 'hydrus_collection_apo_person_roles'
-  fill_in "#{hc}_title",    :with => opts.title
-  fill_in "#{hc}_abstract", :with => opts.abstract
-  fill_in "#{hc}_contact",  :with => opts.contact
-  fill_in "#{hc}_apo_person_roles[hydrus-collection-viewer]", :with => opts.viewers
+  fill_in "#{hc}_title",    with: opts.title
+  fill_in "#{hc}_abstract", with: opts.abstract
+  fill_in "#{hc}_contact",  with: opts.contact
+  fill_in "#{hc}_apo_person_roles[hydrus-collection-viewer]", with: opts.viewers
   choose  "#{hc}_requires_human_approval_" + opts.requires_human_approval
   # Save.
-  click_button "save_nojs"
+  click_button 'save_nojs'
   expect(current_path).to eq("/collections/#{druid}")
-  expect(find('div.alert')).to have_content("Your changes have been saved")
+  expect(find('div.alert')).to have_content('Your changes have been saved')
   # Get the collection from Fedora and return it.
-  return Hydrus::Collection.find(druid)
+  Hydrus::Collection.find(druid)
 end
 
 # Creates a new item through the UI.
@@ -192,15 +192,15 @@ end
 def create_new_item(opts = {})
   # Setup options.
   default_opts = {
-    :collection_pid          => 'druid:oo000oo0003',
-    :user                    => mock_authed_user,
-    :title                   => 'title_foo',
-    :abstract                => 'abstract_foo',
-    :contributor             => 'foo_contributor',
-    :contact                 => 'foo@bar.com',
-    :keywords                => 'topicA,topicB',
-    :requires_human_approval => 'yes',
-    :date_created            => '2011',
+    collection_pid: 'druid:oo000oo0003',
+    user: mock_authed_user,
+    title: 'title_foo',
+    abstract: 'abstract_foo',
+    contributor: 'foo_contributor',
+    contact: 'foo@bar.com',
+    keywords: 'topicA,topicB',
+    requires_human_approval: 'yes',
+    date_created: '2011',
   }
   opts = OpenStruct.new(default_opts.merge opts)
   # Set the Collection's require_human_approval value.
@@ -209,7 +209,7 @@ def create_new_item(opts = {})
   hc.save
   # Login and create new item.
   login_as(opts.user.to_s)
-  visit new_hydrus_item_path(:collection => hc.pid)
+  visit new_hydrus_item_path(collection: hc.pid)
   # Extract the druid from the URL.
   r = Regexp.new('/items/(druid:\w{11})/edit')
   m = r.match(current_path)
@@ -217,30 +217,30 @@ def create_new_item(opts = {})
   druid = m[1]
   # Fill in the required fields.
   click_button('Add Contributor')
-  fill_in "hydrus_item_contributors_0_name", :with => opts.contributor
-  fill_in "Title of item",        :with => opts.title
-  fill_in "hydrus_item_abstract", :with => opts.abstract
-  fill_in "hydrus_item_contact",  :with => opts.contact
-  fill_in "hydrus_item_keywords", :with => opts.keywords
-  fill_in "hydrus_item_dates_date_created", :with => opts.date_created
-  choose "hydrus_item_dates_date_type_single"
-  check "release_settings"
+  fill_in 'hydrus_item_contributors_0_name', with: opts.contributor
+  fill_in 'Title of item',        with: opts.title
+  fill_in 'hydrus_item_abstract', with: opts.abstract
+  fill_in 'hydrus_item_contact',  with: opts.contact
+  fill_in 'hydrus_item_keywords', with: opts.keywords
+  fill_in 'hydrus_item_dates_date_created', with: opts.date_created
+  choose 'hydrus_item_dates_date_type_single'
+  check 'release_settings'
   # Add a file.
   f      = Hydrus::ObjectFile.new
   f.pid  = druid
   f.file = Tempfile.new('mock_HydrusObjectFile_')
   f.save
   # Save.
-  click_button "save_nojs"
+  click_button 'save_nojs'
   expect(current_path).to eq("/items/#{druid}")
-  expect(find('div.alert')).to have_content("Your changes have been saved")
+  expect(find('div.alert')).to have_content('Your changes have been saved')
   # Agree to terms of deposit (hard to do via the UI).
   hi = Hydrus::Item.find(druid)
   hi.accept_terms_of_deposit(opts.user)
   hi.save
   # Get the item from Fedora and return it.
   should_visit_view_page(hi)
-  return Hydrus::Item.find(druid)
+  Hydrus::Item.find(druid)
 end
 
 # Takes the file_url of an Item's uploaded file.

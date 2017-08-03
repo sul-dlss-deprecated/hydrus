@@ -1,29 +1,27 @@
 require 'spec_helper'
 require 'rake'
 
-describe Hydrus::ObjectFile, :type => :model do
-
+describe Hydrus::ObjectFile, type: :model do
   before(:each) do
     @nm = 'mock_uploaded_file_'
     @hof = Hydrus::ObjectFile.new
     @hof.file = Tempfile.new(@nm)
   end
 
-  it "can exercise getters" do
+  it 'can exercise getters' do
     expect(@hof.size).to eq(0)
     expect(@hof.url).to match(/\/#{@nm}/)
     expect(@hof.current_path).to match(/\/#{@nm}/)
     expect(@hof.filename).to match(/\A#{@nm}/)
   end
 
-  describe "set_file_info()" do
-
-    it "should make no changes if given nil" do
+  describe 'set_file_info()' do
+    it 'should make no changes if given nil' do
       expect(@hof).not_to receive('label=')
       expect(@hof.set_file_info(nil)).to eq(false)
     end
 
-    it "should make no changes if passed new values equivalent to current values" do
+    it 'should make no changes if passed new values equivalent to current values' do
       # Set current values.
       lab = 'foobar'
       hid = false
@@ -38,7 +36,7 @@ describe Hydrus::ObjectFile, :type => :model do
       expect(@hof.hide).to eq(hid)
     end
 
-    it "should make changes if passed new values that differ from current values" do
+    it 'should make changes if passed new values that differ from current values' do
       # Set current values.
       lab = 'foobar'
       hid = false
@@ -53,7 +51,5 @@ describe Hydrus::ObjectFile, :type => :model do
       expect(@hof.label).to eq('bar')
       expect(@hof.hide).to eq(true)
     end
-
   end
-
 end

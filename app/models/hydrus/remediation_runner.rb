@@ -1,5 +1,4 @@
 class Hydrus::RemediationRunner
-
   include Hydrus::SolrQueryable
 
   attr_accessor(
@@ -44,8 +43,8 @@ class Hydrus::RemediationRunner
   #   :object_type     # String: Item, Collection, or AdminPolicyObject
   #   :object_version  # Used to determine whether a remediation needs to run.
   def run
-    log.info("====================")
-    log.info("run() started")
+    log.info('====================')
+    log.info('run() started')
     rems = discover_remediations()
     all_hydrus_objects().each do |h|
       rems.each do |rem|
@@ -73,7 +72,7 @@ class Hydrus::RemediationRunner
       m = File.basename(r, '.rb').gsub(/\./, '_')
       methods << 'remediation_' + m
     end
-    return methods.sort
+    methods.sort
   end
 
   # Called by a remediation method, which always receives one of the
@@ -89,24 +88,24 @@ class Hydrus::RemediationRunner
     @remed_method   = remediation_method.to_s
     @remed_version  = @remed_method.sub(/\A\D+/, '').gsub(/_/, '.')
     # Log that we've started.
-    log.info("----")
+    log.info('----')
     log.info("started (#{object_type})")
   end
 
   # Loads up the Fedora object.
   def load_fedora_object
-    log.info("loading fedora object")
-    @fobj = ActiveFedora::Base.find(@pid, :cast => true)
+    log.info('loading fedora object')
+    @fobj = ActiveFedora::Base.find(@pid, cast: true)
   end
 
   # Returns true if the currently running remediation method needs to be
   # applied to the currently loaded Fedora object, and logs accordingly.
   def remediation_is_needed
     msg = 'skipping'
-    msg = "running in --force mode" if force
-    msg = "is needed" if remed_version > object_version
+    msg = 'running in --force mode' if force
+    msg = 'is needed' if remed_version > object_version
     log.info(msg)
-    return msg != 'skipping'
+    msg != 'skipping'
   end
 
   # Some code to wrap version-handling and save-handling around the
@@ -133,12 +132,12 @@ class Hydrus::RemediationRunner
   def open_new_version_of_object
     return unless needs_versioning
     begin
-      fobj.open_new_version(:description    => remed_method,
-                            :significance   => :admin,
-                            :is_remediation => true)
+      fobj.open_new_version(description: remed_method,
+                            significance: :admin,
+                            is_remediation: true)
       log.info('open_new_version(success)')
     rescue Exception => e
-      self.needs_versioning = false  # So we won't try to close the version.
+      self.needs_versioning = false # So we won't try to close the version.
       log_warning("open_new_version(FAILED): #{e.message}")
     end
   end
@@ -147,7 +146,7 @@ class Hydrus::RemediationRunner
   def try_to_save_object
     return if no_save
     log.info('trying to save')
-    if fobj.save(:is_remediation => true)
+    if fobj.save(is_remediation: true)
       log.info('saved')
     else
       es = fobj.errors
@@ -160,7 +159,7 @@ class Hydrus::RemediationRunner
   def close_version_of_object
     return unless needs_versioning
     begin
-      fobj.close_version(:is_remediation => true)
+      fobj.close_version(is_remediation: true)
       log.info('close_version(success)')
     rescue Exception => e
       log_warning("close_version(FAILED): #{e.message}")
@@ -172,5 +171,4 @@ class Hydrus::RemediationRunner
     problems.add(pid)
     log.warn(msg)
   end
-
 end

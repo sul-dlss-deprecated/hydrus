@@ -3,8 +3,8 @@
 require 'simplecov'
 SimpleCov.start 'rails'
 
-ENV["RAILS_ENV"] ||= 'test'
-require File.expand_path("../../config/environment", __FILE__)
+ENV['RAILS_ENV'] ||= 'test'
+require File.expand_path('../../config/environment', __FILE__)
 require 'rspec/rails'
 require 'capybara/rspec'
 require 'tempfile'
@@ -24,7 +24,7 @@ require 'equivalent-xml/rspec_matchers'
 # of increasing the boot-up time by auto-requiring all files in the support
 # directory. Alternatively, in the individual `*_spec.rb` files, manually
 # require only the support files necessary.
-Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
+Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 
 # Checks for pending migration and applies them before tests are run.
 # If you are not using ActiveRecord, you can remove this line.
@@ -108,8 +108,8 @@ RSpec.configure do |config|
   # as the one that triggered the failure.
   # Kernel.srand config.seed
 
-  config.include Devise::Test::ControllerHelpers, :type => :controller
-  config.include Warden::Test::Helpers, :type => :controller
+  config.include Devise::Test::ControllerHelpers, type: :controller
+  config.include Warden::Test::Helpers, type: :controller
   config.after(:each) { Warden.test_reset! }
 
   config.include Capybara::DSL
@@ -167,5 +167,4 @@ RSpec.configure do |config|
       end
     end
   end
-
 end

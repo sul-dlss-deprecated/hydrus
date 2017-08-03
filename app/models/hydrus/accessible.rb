@@ -15,10 +15,9 @@
 #       </access>
 
 module Hydrus::Accessible
-
   # An Xpath snippet that is used frequently.
   def xp_machine(type = 'read')
-    return '//access[@type="' + type + '"]/machine'
+    '//access[@type="' + type + '"]/machine'
   end
 
   # Takes a group (for example, 'stanford').
@@ -50,22 +49,22 @@ module Hydrus::Accessible
     remove_world_read_access
     add_access_none_node
   end
-  
+
   # Returns true if there is a world read node.
   def has_world_read_node
-    return world_read_nodes.size > 0
+    world_read_nodes.size > 0
   end
 
   # Returns all world read nodes -- should be only one.
   def world_read_nodes
     q = "#{xp_machine}/world"
-    return ng_xml.xpath(q)
+    ng_xml.xpath(q)
   end
 
   # Returns all group read nodes.
   def group_read_nodes
     q = "#{xp_machine}/group"
-    return ng_xml.xpath(q)
+    ng_xml.xpath(q)
   end
 
   # Removes group read nodes.
@@ -73,20 +72,20 @@ module Hydrus::Accessible
     q = "#{xp_machine}/group"
     remove_nodes_by_xpath(q)
   end
-  
+
   # Add access <none/> node to read (remove any existing to avoid dupes)
   def add_access_none_node
     remove_access_none_nodes
     ng_xml.at_xpath(xp_machine).add_child('<none/>')
     ng_xml_will_change!
   end
-  
+
   # Removes access = none nodes
   def remove_access_none_nodes
-    q= "#{xp_machine}/none"
+    q = "#{xp_machine}/none"
     remove_nodes_by_xpath(q)
   end
-  
+
   # Removes world read nodes.
   def remove_world_read_access
     q = "#{xp_machine}/world"
@@ -97,7 +96,7 @@ module Hydrus::Accessible
   # Note that the Xpath query differs by datastream.
   def remove_embargo_date
     q = "#{xp_machine}/embargoReleaseDate"
-    q = "//embargoMetadata/releaseDate" if self.class == Dor::EmbargoMetadataDS
+    q = '//embargoMetadata/releaseDate' if self.class == Dor::EmbargoMetadataDS
     remove_nodes_by_xpath(q)
     remove_access_none_nodes
   end
@@ -106,7 +105,7 @@ module Hydrus::Accessible
   # Modifies the datastream accordingly.
   def update_access_blocks(group)
     remove_access_none_nodes
-    if group == "world"
+    if group == 'world'
       make_world_readable
     else
       remove_world_read_access
@@ -116,14 +115,14 @@ module Hydrus::Accessible
 
   # Initializes the releaseAccess node for embargoMetadata.
   def initialize_release_access_node(style = nil)
-    x = style == :generic ? generic_access_xml() : "<releaseAccess/>"
+    x = style == :generic ? generic_access_xml() : '<releaseAccess/>'
     self.release_access_node = Nokogiri::XML(x)
     ng_xml_will_change!
   end
 
   # The Generic <releaseAccess> node for embargoMetadata.
   def generic_access_xml
-    return <<-XML
+    <<-XML
       <releaseAccess>
         <access type="discover">
           <machine>
@@ -136,5 +135,4 @@ module Hydrus::Accessible
       </embargoAccess>
     XML
   end
-
 end

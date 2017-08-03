@@ -1,7 +1,6 @@
 # A mixin for running SOLR queries.
 
 module Hydrus::SolrQueryable
-
   # Convenience variable to execute module methods.
   HSQ = self
 
@@ -11,11 +10,11 @@ module Hydrus::SolrQueryable
 
   def self.add_gated_discovery(solr_parameters, apo_pids, user)
 
-    h = { :fq => []}
+    h = { fq: [] }
     add_governed_by_filter(h, apo_pids)
     add_involved_user_filter(h, user)
     solr_parameters[:fq] ||= []
-    solr_parameters[:fq] << h[:fq].join(" OR ") unless h[:fq].empty?
+    solr_parameters[:fq] << h[:fq].join(' OR ') unless h[:fq].empty?
   end
 
   # Takes a hash of SOLR query parameters, along with a SUNET ID.
@@ -52,10 +51,10 @@ module Hydrus::SolrQueryable
 
   # Returns a default hash of query params, used by a few methods.
   def self.default_query_params
-    return {
-      :rows => 9999,
-      :fl   => 'objectId_ssim',
-      :q    => '*',
+    {
+      rows: 9999,
+      fl: 'objectId_ssim',
+      q: '*',
     }
   end
 
@@ -72,12 +71,12 @@ module Hydrus::SolrQueryable
   #This static version was added specifically to deal with loading the dashboard without instantiating an object.
   def self.issue_solr_query(h)
     solr_response = solr.find(h)
-    document_list = solr_response.docs.map {|doc| SolrDocument.new(doc, solr_response)}
-    return [solr_response, document_list]
+    document_list = solr_response.docs.map { |doc| SolrDocument.new(doc, solr_response) }
+    [solr_response, document_list]
   end
 
   def self.solr
-      @solr ||= RSolr.connect(Blacklight.solr_config)
+    @solr ||= RSolr.connect(Blacklight.solr_config)
   end
 
   # Returns a hash of SOLR query parameters.
@@ -86,19 +85,19 @@ module Hydrus::SolrQueryable
     h = HSQ.default_query_params()
     h[:fl] = opts[:fields].join(',') if opts[:fields]
     HSQ.add_model_filter(h, *models)
-    return h
+    h
   end
 
   # Returns a hash of SOLR query parameters.
   # The query: get all Hydrus Collections.
   def squery_all_hydrus_collections
-    return squery_all_hydrus_objects(['Hydrus_Collection'],:fields=>['*'])
+    squery_all_hydrus_objects(['Hydrus_Collection'], fields: ['*'])
   end
 
   # Returns a hash of SOLR query parameters.
   # The query: get all Hydrus Collections.
   def squery_all_hydrus_apos
-    return squery_all_hydrus_objects(['Hydrus_AdminPolicyObject'])
+    squery_all_hydrus_objects(['Hydrus_AdminPolicyObject'])
   end
 
   # Takes a string -- a user's SUNET ID.
@@ -108,37 +107,36 @@ module Hydrus::SolrQueryable
     h = HSQ.default_query_params()
     HSQ.add_model_filter(h, 'Hydrus_AdminPolicyObject')
     HSQ.add_involved_user_filter(h, user)
-    return h
+    h
   end
 
   def squery_apo_roles(apo_druid)
 
   end
 
-
   # Takes an array of APO druids.
   # Returns a hash of SOLR query parameters.
   # The query: get the Collections governed by the APOs.
   def squery_collections_of_apos(druids)
     h = HSQ.default_query_params()
-    h[:fl]='*'
+    h[:fl] = '*'
     HSQ.add_model_filter(h, 'Hydrus_Collection')
     HSQ.add_governed_by_filter(h, druids)
-    return h
+    h
   end
 
   # Takes the druid of a collection, returns solr documents for all items in that collection
   def squery_items_in_collection(druid)
     imo = %Q<"info:fedora/#{druid}">
     h = {
-      :rows          => 1000,
-      :fl            => '',
-      :facet         => false,
-      :q             => '*',
-      :fq            => [ %Q<is_member_of_collection_ssim:(#{imo})> ],
+      rows: 1000,
+      fl: '',
+      facet: false,
+      q: '*',
+      fq: [%Q<is_member_of_collection_ssim:(#{imo})>],
     }
     HSQ.add_model_filter(h, 'Hydrus_Item')
-    return h
+    h
   end
 
   # Takes an array of Collection druids.
@@ -147,15 +145,16 @@ module Hydrus::SolrQueryable
   def squery_item_counts_of_collections(druids)
     imo = druids.map { |d| %Q<"info:fedora/#{d}"> }.join(' OR ')
     h = {
-      :rows          => 0,
-      :fl            => '',
-      :facet         => true,
-      :'facet.pivot' => 'is_member_of_collection_ssim,object_status_ssim',
-      :q             => '*',
-      :fq            => [ %Q<is_member_of_collection_ssim:(#{imo})> ],
+      rows: 0,
+      'facet.limit': -1, # unlimited
+      fl: '',
+      facet: true,
+      'facet.pivot': 'is_member_of_collection_ssim,object_status_ssim',
+      q: '*',
+      fq: [%Q<is_member_of_collection_ssim:(#{imo})>],
     }
     HSQ.add_model_filter(h, 'Hydrus_Item')
-    return h
+    h
   end
 
   # Returns an array of druids for all objects belonging to the
@@ -174,7 +173,7 @@ module Hydrus::SolrQueryable
       'has_model_ssim'                 => :object_type,
       'object_version_ssim'            => :object_version,
     }
-    h = squery_all_hydrus_objects(models, :fields => fields.keys)
+    h = squery_all_hydrus_objects(models, fields: fields.keys)
     # Run query and return either a list of PIDs if that's all the caller wanted.
     resp, sdocs = issue_solr_query(h)
     return get_druids_from_response(resp) if opts[:pids_only]
@@ -186,14 +185,14 @@ module Hydrus::SolrQueryable
     data.each do |d|
       d[:object_type] = d[:object_type].sub(/\Ainfo:fedora\/afmodel:Hydrus_/, '')
     end
-    return data
+    data
   end
 
   # Takes a SOLR response.
   # Returns an array of druids corresponding to the documents.
   def get_druids_from_response(resp)
     k = 'objectId_ssim'
-    return resp.docs.map { |doc| doc[k].first }
+    resp.docs.map { |doc| doc[k].first }
   end
 
   # Takes a SOLR response and a hash of field remappings.
@@ -205,7 +204,7 @@ module Hydrus::SolrQueryable
   # When retrieving values from the SOLR documents, only the first
   # values for each key is retained.
   def get_fields_from_response(resp, fields)
-    return resp.docs.map { |doc|
+    resp.docs.map { |doc|
       h = {}
       fields.each { |solr_doc_key, remapped_key|
         d = doc[solr_doc_key]
@@ -215,5 +214,4 @@ module Hydrus::SolrQueryable
       h
     }
   end
-
 end

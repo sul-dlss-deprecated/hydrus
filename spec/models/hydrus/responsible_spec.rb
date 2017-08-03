@@ -2,7 +2,6 @@ require 'spec_helper'
 
 # A mock class to use while testing out mixin.
 class MockResponsible
-
   include Hydrus::Responsible
   include Hydrus::ModelHelper
 
@@ -13,7 +12,7 @@ class MockResponsible
   end
 
   def rmd_xml
-    return <<-EOF
+    <<-EOF
       <roleMetadata>
         <role type="hydrus-collection-manager">
            <person>
@@ -48,28 +47,26 @@ class MockResponsible
       </roleMetadata>
     EOF
   end
-
 end
 
-describe Hydrus::Responsible, :type => :model do
-
+describe Hydrus::Responsible, type: :model do
   before(:each) do
     @obj = MockResponsible.new
   end
 
-  it "person_roles() should return the expected hash" do
-    expect(@obj.person_roles['hydrus-collection-manager']).to match_array(["archivist4", "archivist5"])
-    expect(@obj.person_roles['hydrus-collection-reviewer']).to match_array(["archivist3"])
-    expect(@obj.person_roles['hydrus-collection-item-depositor']).to match_array(["archivist6", "archivist3"])
+  it 'person_roles() should return the expected hash' do
+    expect(@obj.person_roles['hydrus-collection-manager']).to match_array(['archivist4', 'archivist5'])
+    expect(@obj.person_roles['hydrus-collection-reviewer']).to match_array(['archivist3'])
+    expect(@obj.person_roles['hydrus-collection-item-depositor']).to match_array(['archivist6', 'archivist3'])
   end
 
-  it "persons_with_role() should return expected IDs" do
-    expect(@obj.persons_with_role('hydrus-collection-manager')).to match_array(["archivist4", "archivist5"])
-    expect(@obj.persons_with_role('hydrus-collection-reviewer')).to match_array(["archivist3"])
-    expect(@obj.persons_with_role('hydrus-collection-item-depositor')).to match_array(["archivist6", "archivist3"])
+  it 'persons_with_role() should return expected IDs' do
+    expect(@obj.persons_with_role('hydrus-collection-manager')).to match_array(['archivist4', 'archivist5'])
+    expect(@obj.persons_with_role('hydrus-collection-reviewer')).to match_array(['archivist3'])
+    expect(@obj.persons_with_role('hydrus-collection-item-depositor')).to match_array(['archivist6', 'archivist3'])
   end
 
-  it "roles_of_person() should return expected roles" do
+  it 'roles_of_person() should return expected roles' do
     expect(@obj.roles_of_person('archivist3')).to eq(Set.new(%w(
       hydrus-collection-reviewer
       hydrus-collection-item-depositor
@@ -77,7 +74,7 @@ describe Hydrus::Responsible, :type => :model do
     expect(@obj.roles_of_person('xxxxx')).to eq(Set.new)
   end
 
-  it "person_roles= should rewrite the <person> nodes, but not <group> nodes" do
+  it 'person_roles= should rewrite the <person> nodes, but not <group> nodes' do
     exp = <<-EOF
       <roleMetadata>
         <role type="hydrus-collection-manager">
@@ -112,15 +109,15 @@ describe Hydrus::Responsible, :type => :model do
         </role>
       </roleMetadata>
     EOF
-    @obj.person_roles= {
-      "hydrus-collection-manager"        => "archivist1,ZZZ",
-      "hydrus-collection-reviewer"       => "archivist3,ZZZ",
-      "hydrus-collection-item-depositor" => "foo,bar,ZZZ",
+    @obj.person_roles = {
+      'hydrus-collection-manager'        => 'archivist1,ZZZ',
+      'hydrus-collection-reviewer'       => 'archivist3,ZZZ',
+      'hydrus-collection-item-depositor' => 'foo,bar,ZZZ',
     }
     expect(@obj.roleMetadata.ng_xml).to be_equivalent_to(exp)
   end
 
-  it "pruned_role_info() should prune out lesser roles" do
+  it 'pruned_role_info() should prune out lesser roles' do
     h = {
       'hydrus-collection-depositor'      => 'aaa',
       'hydrus-collection-manager'        => 'aaa,bbb,ccc,ddd,eee',
@@ -143,7 +140,7 @@ describe Hydrus::Responsible, :type => :model do
     expect(Hydrus::Responsible.pruned_role_info(h)).to eq(exp)
   end
 
-  it "role_labels() should return the expect hash of roles and labels" do
+  it 'role_labels() should return the expect hash of roles and labels' do
     k1 = 'hydrus-item-depositor'
     k2 = 'hydrus-collection-reviewer'
     # Entire hash of hashes.
@@ -164,5 +161,4 @@ describe Hydrus::Responsible, :type => :model do
     expect(h[k1]).to  match(/original depositor/)
     expect(h[k2]).to  match(/can review/)
   end
-
 end
