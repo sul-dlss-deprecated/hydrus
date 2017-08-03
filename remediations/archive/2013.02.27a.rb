@@ -1,7 +1,6 @@
 class Hydrus::RemediationRunner
 
   # Used with these deployments:
-  #   dortest:    2013.02.28a
   #   production: 2013.02.28b
   def remediation_2013_02_27a(opts)
     # Setup.

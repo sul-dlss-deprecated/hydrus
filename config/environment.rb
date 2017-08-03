@@ -2,7 +2,6 @@
 require File.expand_path('../application', __FILE__)
 
 current_path=File.dirname(__FILE__)
-no_solr_cert=(%w{development dortest test prod_w_local_dor}.include?(Rails.env))
 
 # Override make_solr_connection() so that we use POST for solr queries
 require File.expand_path(File.join(current_path, 'rsolr_no_certificate'))

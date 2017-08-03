@@ -115,11 +115,11 @@ Remediation scripts:
 - See `remediations/archive/0000.00.00a.rb` for a schematic example.
 - After remediations are run on all deployed environments, they typically won't be needed in the future, so they can be moved in the Git repo into the remediations/archive directory.
 
-Running remediations (using dortest environment as the example):
+Running remediations (using production environment as the example):
 
 ```bash
 # Must run from the deployed box.
-RAILS_ENV=dortest bundle exec rails runner remediations/run.rb
+RAILS_ENV=production bundle exec rails runner remediations/run.rb
 grep -i warn log/remediation.log  #Then search for problems.
 ```
 
@@ -151,7 +151,7 @@ true or false.
 ## Starting Jetty on deployment servers
 
 Run this from the jetty directory.
-Note that dortest and production don't rely on Jetty.
+Note that Jetty is only for local development and testing.
 ```bash
 nohup java -Djetty.port=8983 \
            -Dsolr.solr.home=/home/lyberadmin/hydrus/shared/jetty/solr \

@@ -5,11 +5,7 @@ set :repo_url, 'https://github.com/sul-dlss/hydrus.git'
 ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
 
 # Default deploy_to directory is /var/www/my_app
-
-# We need the Capistrano config to match the path where Passenger is configured for
-# otherwise it won't be able to restart. We need to use /home/lyberadmin even though
-# /home is a symlink to /var/home
-set :deploy_to, '/home/lyberadmin/hydrus'
+set :deploy_to, '/opt/app/hydrus/hydrus'
 
 # Default value for :format is :pretty
 # set :format, :pretty
@@ -43,6 +39,9 @@ set :bundle_audit_ignore, %w{CVE-2015-3226}
 
 # honeybadger_env otherwise defaults to rails_env
 set :honeybadger_env, fetch(:stage)
+
+# update shared_configs before restarting app
+before 'deploy:restart', 'shared_configs:update'
 
 namespace :deploy do
   after :restart, :clear_tmp do
