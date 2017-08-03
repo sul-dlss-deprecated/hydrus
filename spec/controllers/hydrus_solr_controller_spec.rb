@@ -28,6 +28,13 @@ describe HydrusSolrController, :type => :controller do
       expect(response.status).to eq(200)
     end
 
+    it "should index Hydrus objects tagged with our project prefix" do
+      allow(ActiveFedora::Base).to receive(:find).and_return(instance_double(Hydrus::Item, tags: ['Project : Hydrus : IR : data'], to_solr: { id: 'x' }))
+      expect(Dor::SearchService.solr).to receive(:update).with(data: /x/).and_return(true)
+      get(:reindex, :id => 'druid:oo000oo9999')
+      expect(response.status).to eq(200)
+    end
+
   end
 
 end
