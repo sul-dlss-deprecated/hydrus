@@ -84,7 +84,7 @@ describe HydrusItemsController, :type => :controller do
         put :update, :id => @pid, "files" => [@file]
         expect(response).to redirect_to(hydrus_item_path(@pid))
         expect(flash[:notice]).to match(/Your changes have been saved/)
-        expect(flash[:notice]).to match(/'fixture.html' uploaded/)
+        expect(flash[:notice]).to match(/&#39;fixture.html&#39; uploaded/)
         expect(Hydrus::Item.find(@pid).files.map{|file| file.filename }.include?("fixture.html")).to be_truthy
       end
 
@@ -103,7 +103,7 @@ describe HydrusItemsController, :type => :controller do
     describe "as a nested resource of a collection" do
 
       it "should return the collection requested via the hydrus_collection_id parameter and assign it to the fobj instance variable" do
-        
+
         sign_in(mock_authed_user)
         mock_coll = double("HydrusCollection")
         expect(mock_coll).to receive(:"current_user=")
