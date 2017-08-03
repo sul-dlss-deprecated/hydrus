@@ -35,6 +35,7 @@ db/*.sqlite3
 /log/*.log
 /tmp
 *.log
+workflow_service.log.*
 
 tags
 jetty/
