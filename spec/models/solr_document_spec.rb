@@ -1,7 +1,6 @@
 require 'spec_helper'
 
-describe SolrDocument, :type => :model do
-
+describe SolrDocument, type: :model do
   describe '#route_key' do
     it 'should be hydrus_collection for a Dor::Collection' do
       sdoc = SolrDocument.new has_model_ssim: 'info:fedora/afmodel:Dor_Collection'
@@ -14,7 +13,7 @@ describe SolrDocument, :type => :model do
     end
   end
 
-  it "can exercise to_model(), stubbed" do
+  it 'can exercise to_model(), stubbed' do
     sdoc = SolrDocument.new
     id = 998877
     allow(sdoc).to receive(:id).and_return(id)
@@ -22,13 +21,13 @@ describe SolrDocument, :type => :model do
     sdoc.to_model()
   end
 
-  it "can exercise simple getters" do
+  it 'can exercise simple getters' do
     h = {
-      'main_title_ssm'                => 'foo title',
+      'main_title_ssm' => 'foo title',
       'objectId_ssim' => 'foo:pid',
       'has_model_ssim'                 => 'info:fedora/afmodel:Hydrus_Item',
       'object_status_ssim'             => 'awaiting_approval',
-      "item_depositor_person_identifier_ssm" => 'foo_user',
+      'item_depositor_person_identifier_ssm' => 'foo_user',
     }
     sdoc = SolrDocument.new h
     expect(sdoc.main_title).to    eq(h['main_title_ssm'])
@@ -38,5 +37,4 @@ describe SolrDocument, :type => :model do
     expect(sdoc.depositor).to     eq('foo_user')
     expect(sdoc.path).to          eq('/items/foo:pid')
   end
-
 end

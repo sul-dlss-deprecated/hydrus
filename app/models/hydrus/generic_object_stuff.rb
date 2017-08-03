@@ -2,60 +2,60 @@ module Hydrus::GenericObjectStuff
   extend ActiveSupport::Concern
   included do
     include ActiveModel::Validations
-  include Hydrus::ModelHelper
-  include Hydrus::Validatable
-  include Hydrus::Processable
-  include Hydrus::Contentable
-  include Hydrus::WorkflowDsExtension
-  include Hydrus::Licenseable
-  include Hydrus::UserWorkflowable
-  include Hydrus::Eventable
-  include Hydrus::Cant
-  extend  Hydrus::Cant
-  extend  Hydrus::Delegatable
+    include Hydrus::ModelHelper
+    include Hydrus::Validatable
+    include Hydrus::Processable
+    include Hydrus::Contentable
+    include Hydrus::WorkflowDsExtension
+    include Hydrus::Licenseable
+    include Hydrus::UserWorkflowable
+    include Hydrus::Eventable
+    include Hydrus::Cant
+    extend  Hydrus::Cant
+    extend  Hydrus::Delegatable
 
-  has_metadata(
-    :name => "rightsMetadata",
-    :type => Hydrus::RightsMetadataDS,
-    :label => 'Rights Metadata',
-    :control_group => "M")
+    has_metadata(
+      name: 'rightsMetadata',
+      type: Hydrus::RightsMetadataDS,
+      label: 'Rights Metadata',
+      control_group: 'M')
 
-  has_metadata(
-    :name => "descMetadata",
-    :type => Hydrus::DescMetadataDS,
-    :label => 'Descriptive Metadata',
-    :control_group => 'M')
+    has_metadata(
+      name: 'descMetadata',
+      type: Hydrus::DescMetadataDS,
+      label: 'Descriptive Metadata',
+      control_group: 'M')
 
-  has_metadata(
-    :name => "hydrusProperties",
-    :type => Hydrus::HydrusPropertiesDS,
-    :label => 'Hydrus Properties',
-    :control_group => 'X')
+    has_metadata(
+      name: 'hydrusProperties',
+      type: Hydrus::HydrusPropertiesDS,
+      label: 'Hydrus Properties',
+      control_group: 'X')
 
-  setup_delegations(
-    # [:METHOD_NAME,              :uniq, :at... ]
-    "descMetadata" => [
-      [:title,                    true,  :main_title ],
-      [:abstract,                 true   ],
-      [:related_item_title,       false, :relatedItem, :titleInfo, :title],
-      [:contact,                  true   ],
-    ],
-    "hydrusProperties" => [
-      [:disapproval_reason,                 true   ],
-      [:object_status,                      true   ],
-      [:submitted_for_publish_time,         true   ],
-      [:initial_submitted_for_publish_time, true   ],
-      [:initial_publish_time,               true   ],
-      [:submit_for_approval_time,           true   ],
-      [:last_modify_time,                   true   ],
-      [:item_type,                          true   ],
-      [:object_version,                     true   ],
-    ],
-    "rightsMetadata" => [
-      [:rmd_embargo_release_date, true,  :read_access, :machine, :embargo_release_date],
-      [:terms_of_use,             true,  ],
-    ],
-  )
+    setup_delegations(
+      # [:METHOD_NAME,              :uniq, :at... ]
+      'descMetadata' => [
+        [:title,                    true,  :main_title],
+        [:abstract,                 true],
+        [:related_item_title,       false, :relatedItem, :titleInfo, :title],
+        [:contact,                  true],
+      ],
+      'hydrusProperties' => [
+        [:disapproval_reason,                 true],
+        [:object_status,                      true],
+        [:submitted_for_publish_time,         true],
+        [:initial_submitted_for_publish_time, true],
+        [:initial_publish_time,               true],
+        [:submit_for_approval_time,           true],
+        [:last_modify_time,                   true],
+        [:item_type,                          true],
+        [:object_version,                     true],
+      ],
+      'rightsMetadata' => [
+        [:rmd_embargo_release_date, true,  :read_access, :machine, :embargo_release_date],
+        [:terms_of_use,             true,],
+      ],
+    )
   end
 
   def apo
@@ -72,11 +72,10 @@ module Hydrus::GenericObjectStuff
     }
   end
 
-
   # Since we need a custom setter, let's define the getter too
   # (rather than using delegation).
   def related_item_url
-    return descMetadata.relatedItem.location.url
+    descMetadata.relatedItem.location.url
   end
 
   # Takes an argument, typically an OM-ready hash. For example:
@@ -91,22 +90,22 @@ module Hydrus::GenericObjectStuff
     end
     descMetadata.relatedItem.location.url = h
   end
-  
+
   # Takes a string that is supposed to be a URI.
   # Returns the same string if it begins with a known protocol.
   # Otherwise, returns the string as an http URI.
   def with_protocol(uri)
     return uri if uri.blank?
     return uri if uri =~ /\A (http|https|ftp|sftp):\/\/ /x
-    return "http://" + uri
+    'http://' + uri
   end
-  
+
   # Returns string representation of the class, minus the Hydrus:: prefix.
   # For example: Hydrus::Collection -> 'Collection'.
   def hydrus_class_to_s
-    return self.class.to_s.sub(/\AHydrus::/, '')
+    self.class.to_s.sub(/\AHydrus::/, '')
   end
-  
+
   # After collections are published, further edits to the object are allowed.
   # This occurs without requiring the open_new_version() process used by Items.
   #
@@ -132,7 +131,7 @@ module Hydrus::GenericObjectStuff
   #   "Item modified: title, abstract, license"
   def editing_event_message(fields)
     fs = fields.map { |e| e.to_s }.join(', ')
-    return "#{hydrus_class_to_s()} modified: #{fs}"
+    "#{hydrus_class_to_s()} modified: #{fs}"
   end
 
   def is_item?
@@ -146,5 +145,4 @@ module Hydrus::GenericObjectStuff
   def is_apo?
     false
   end
-
 end

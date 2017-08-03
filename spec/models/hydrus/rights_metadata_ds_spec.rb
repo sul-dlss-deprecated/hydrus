@@ -1,7 +1,6 @@
 require 'spec_helper'
 
-describe Hydrus::RightsMetadataDS, :type => :model do
-
+describe Hydrus::RightsMetadataDS, type: :model do
   before(:each) do
     xml = %Q(
       <rightsMetadata>
@@ -14,13 +13,13 @@ describe Hydrus::RightsMetadataDS, :type => :model do
     @doc = Hydrus::RightsMetadataDS.new(nil, nil)
   end
 
-  it "blank template should match our expectations" do
+  it 'blank template should match our expectations' do
     expect(@doc.ng_xml).not_to be_nil
-    expect(@initial   ).not_to be_nil
+    expect(@initial).not_to be_nil
     expect(@doc.ng_xml).to be_equivalent_to(@initial)
   end
 
-  it "should be able to add and remove license (and not molest terms-of-use)" do
+  it 'should be able to add and remove license (and not molest terms-of-use)' do
     # Initial: only a use-and-repro statement.
     ns = @doc.use.human.nodeset
     expect(ns.size).to eq(1)
@@ -36,7 +35,7 @@ describe Hydrus::RightsMetadataDS, :type => :model do
     expect(tou['type']).to eq('useAndReproduction')  # Still have tou.
     expect(lic['type']).to eq('GCODE')               # Check human license.
     expect(lic.content).to eq('TXT')
-    ns = @doc.use.machine.nodeset               # Check machine license.
+    ns = @doc.use.machine.nodeset # Check machine license.
     expect(ns.size).to eq(1)
     lic = ns.first
     expect(lic['type']).to eq('GCODE')
@@ -49,5 +48,4 @@ describe Hydrus::RightsMetadataDS, :type => :model do
     expect(tou['type']).to eq('useAndReproduction')
     expect(@doc.use.machine).to eq([])
   end
-
 end

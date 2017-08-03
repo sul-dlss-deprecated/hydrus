@@ -33,7 +33,6 @@ set :linked_dirs, %w{log config/certs config/settings tmp/pids tmp/cache tmp/soc
 # Default value for keep_releases is 5
 # set :keep_releases, 5
 
-
 set :bundle_without, %w{development test deployment}.join(' ')
 set :bundle_audit_ignore, %w{CVE-2015-3226}
 
@@ -49,8 +48,8 @@ namespace :deploy do
       # Here we can do anything such as:
       within release_path do
         with rails_env: fetch(:rails_env) do
-          rake "hydrus:cleanup_tmp"
-          rake "hydrus:index_all_workflows"
+          rake 'hydrus:cleanup_tmp'
+          rake 'hydrus:index_all_workflows'
         end
       end
     end

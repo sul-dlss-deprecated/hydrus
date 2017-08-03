@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class FileUploader < CarrierWave::Uploader::Base
-
   # Include RMagick or MiniMagick support:
   # include CarrierWave::RMagick
   # include CarrierWave::MiniMagick
@@ -23,24 +22,24 @@ class FileUploader < CarrierWave::Uploader::Base
   def remember_cache_id(new_file)
     @cache_id_was = cache_id
   end
-  
+
   def delete_tmp_dir(new_file)
     # make sure we don't delete other things accidentally by checking the name pattern
     if @cache_id_was.present? && @cache_id_was =~ /\A[\d]{8}\-[\d]{4}\-[\d]+\-[\d]{4}\z/
       FileUtils.rm_rf(File.join(root, cache_dir, @cache_id_was))
     end
   end
-  
+
   # Override the directory where uploaded files will be stored.
   def store_dir
-    DruidTools::Druid.new(model.pid,Hydrus::Application.config.file_upload_path).path('content')
+    DruidTools::Druid.new(model.pid, Hydrus::Application.config.file_upload_path).path('content')
   end
 
   # temp directory where files are stored before they are uploaded
   def cache_dir
-    File.join(root,Hydrus::Application.config.file_upload_path,'tmp')
+    File.join(root, Hydrus::Application.config.file_upload_path, 'tmp')
   end
-    
+
   # Provide a default URL as a default if there hasn't been a file uploaded:
   # def default_url
   #   # For Rails 3.1+ asset pipeline compatibility:
@@ -72,5 +71,4 @@ class FileUploader < CarrierWave::Uploader::Base
   # def filename
   #   "something.jpg" if original_filename
   # end
-
 end

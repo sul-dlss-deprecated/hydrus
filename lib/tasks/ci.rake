@@ -1,7 +1,7 @@
 ZIP_FILE = 'https://github.com/projecthydra/hydra-jetty/archive/v7.3.1.zip'
 
-desc "Run Continuous Integration Suite (tests, coverage, docs)"
-task :ci => ['jetty:clean', 'jetty:config'] do
+desc 'Run Continuous Integration Suite (tests, coverage, docs)'
+task ci: [:rubocop, 'jetty:clean', 'jetty:config'] do
   unless Rails.env.test?
     # force any CI sub-tasks to run in the test environment (e.g. to ensure
     # fixtures get loaded into the right places)
@@ -9,13 +9,13 @@ task :ci => ['jetty:clean', 'jetty:config'] do
     next
   end
 
-  Rake::Task["db:migrate"].invoke
+  Rake::Task['db:migrate'].invoke
 
   require 'jettywrapper'
   jetty_params = Jettywrapper.load_config.merge({
-    :jetty_home => File.expand_path(File.dirname(__FILE__) + '/../../jetty'),
-    :jetty_port => 8983,
-    :startup_wait => 200
+    jetty_home: File.expand_path(File.dirname(__FILE__) + '/../../jetty'),
+    jetty_port: 8983,
+    startup_wait: 200
   })
 
   error = nil

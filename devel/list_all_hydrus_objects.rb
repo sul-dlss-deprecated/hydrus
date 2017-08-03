@@ -2,7 +2,7 @@
 
 def main()
   cpids = Hydrus::Collection.all_hydrus_collections.sort
-  abort "No Hydrus objects found" if cpids.size == 0
+  abort 'No Hydrus objects found' if cpids.size == 0
   cpids.each do |cpid|
     coll = Hydrus::Collection.find(cpid)
     apo  = coll.apo

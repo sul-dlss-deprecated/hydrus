@@ -1,5 +1,4 @@
 class Hydrus::RemediationRunner
-
   # Used with these deployments:
   #   production: 2013.02.28b
   def remediation_2013_02_27a(opts)
@@ -110,5 +109,4 @@ class Hydrus::RemediationRunner
     fobj.dc.content = fobj.generate_dublin_core.to_s
     fobj.dc.content_will_change!
   end
-
 end

@@ -31,7 +31,7 @@ class HydrusSolrController < ApplicationController
     msg = "reindex(#{pid})"
     # Try to find the object in Fedora, and cast it to the appropriate class.
     begin
-      obj = ActiveFedora::Base.find(pid, :cast => true)
+      obj = ActiveFedora::Base.find(pid, cast: true)
     rescue ActiveFedora::ObjectNotFoundError
       obj = nil
     end
@@ -41,19 +41,19 @@ class HydrusSolrController < ApplicationController
       msg = "#{msg}: failed to find object"
       index_logger.warn(msg)
       response.status = 404
-      render(:text => msg)
+      render(text: msg)
     elsif is_hydrus_object(obj)
       # It's a Hydrus object: re-solrize it and render the SOLR document.
       solr_doc = obj.to_solr
-      solr.add(solr_doc, :add_attributes => {:commitWithin => 5000})
+      solr.add(solr_doc, add_attributes: { commitWithin: 5000 })
       msg = "#{msg}: updated SOLR index: class=#{obj.class}"
       index_logger.info(msg)
-      render(:text => solr_doc)
+      render(text: solr_doc)
     else
       # Not a Hydrus object: skip it.
       msg = "#{msg}: skipped non-Hydrus object"
       index_logger.info(msg)
-      render(:text => msg)
+      render(text: msg)
     end
   end
 
@@ -68,7 +68,7 @@ class HydrusSolrController < ApplicationController
     solr.delete_by_id(pid)
     solr.commit
     index_logger.info(msg)
-    render(:text => msg)
+    render(text: msg)
   end
 
   private
@@ -81,16 +81,10 @@ class HydrusSolrController < ApplicationController
   # Private method to return the application's SOLR connection.
   def solr
     @@solr ||= Dor::SearchService.solr
-    return @@solr
   end
 
   # Private method to return the logger for the SOLR reindexer.
   def index_logger
     @@index_logger ||= Logger.new("#{Rails.root}/log/indexer.log", 10, 10240000)
-    #@@index_logger.formatter = proc do |severity, t, progname, msg|
-    #  "#{severity}: #{t}: #{msg}\n"
-    #end
-    return @@index_logger
   end
-
 end

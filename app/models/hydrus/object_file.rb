@@ -1,5 +1,4 @@
 class Hydrus::ObjectFile < ActiveRecord::Base
-
   include Hydrus::ModelHelper
 
   #attr_accessible :label, :pid, :hide
@@ -25,20 +24,20 @@ class Hydrus::ObjectFile < ActiveRecord::Base
   end
 
   def filename
-    file.file.nil? ? "" : file.file.identifier # don't throw exception if file is blank so the page doesn't show an exception
+    file.file.nil? ? '' : file.file.identifier # don't throw exception if file is blank so the page doesn't show an exception
   end
 
   def is_dupe?(new_filename)
-    self.class.where('pid=? and file=?',pid,new_filename).size > 0
+    self.class.where('pid=? and file=?', pid, new_filename).size > 0
   end
 
   def dupes
-    self.class.where('pid=? and file=? and id!=?',pid,filename,id)
+    self.class.where('pid=? and file=? and id!=?', pid, filename, id)
   end
 
   # any given object can only have one file with the same name; if the user uploads a new file with the same name as an existing file, the dupe will be removed
   def remove_dupes
-    dupes.each {|dupe| dupe.delete}
+    dupes.each { |dupe| dupe.delete }
   end
 
   # A convenience uber-setter to simplify controller code.
@@ -53,20 +52,19 @@ class Hydrus::ObjectFile < ActiveRecord::Base
     lab = h['label'] || ''
     hid = to_bool(h['hide'])
     # Do nothing if new values are the same as current values.
-    return false if (lab == label and hid == hide)
+    return false if (lab ==label && hid ==hide)
     # Set new values.
     self.label = lab
     self.hide  = hid
-    return true
+    true
   end
 
   # A getter that parallels set_file_info(), but using symbols as keys.
   # Written mainly to facilitate testing.
   def get_file_info
-    return {
-      :label => label,
-      :hide  => hide,
+    {
+      label: label,
+      hide: hide,
     }
   end
-
 end

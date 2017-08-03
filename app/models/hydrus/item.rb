@@ -3,34 +3,34 @@ class Hydrus::Item < Hydrus::GenericObject
 
   # Override Dor::Governable so that we look for Hydrus::AdminPolicyObjects
   belongs_to :admin_policy_object, property: :is_governed_by, class_name: 'Hydrus::AdminPolicyObject'
-  has_and_belongs_to_many :collections, :property => :is_member_of_collection, :class_name => 'Hydrus::Collection'
+  has_and_belongs_to_many :collections, property: :is_member_of_collection, class_name: 'Hydrus::Collection'
 
   REQUIRED_FIELDS = [:title, :abstract, :contact, :keywords, :version_description, :date_created]
 
   after_validation :strip_whitespace
   attr_accessor :dates
-  validates :title,               :not_empty => true, :if => :should_validate
-  validates :abstract,            :not_empty => true, :if => :should_validate
-  validates :contact,             :not_empty => true, :if => :should_validate
-  validates :keywords,            :not_empty => true, :if => :should_validate
+  validates :title,               not_empty: true, if: :should_validate
+  validates :abstract,            not_empty: true, if: :should_validate
+  validates :contact,             not_empty: true, if: :should_validate
+  validates :keywords,            not_empty: true, if: :should_validate
   #validates :date_created,        :not_empty => true, :if => :should_validate
-  validates :version_description, :not_empty => true, :if => lambda {
-    should_validate() && ! is_initial_version()
+  validates :version_description, not_empty: true, if: lambda {
+    should_validate() && !is_initial_version()
   }
 
-  validate  :enforce_collection_is_open, :on => :create
+  validate  :enforce_collection_is_open, on: :create
 
-  validates :contributors, :at_least_one => true,  :if => :should_validate
-  validate  :contributors_not_all_blank,           :if => :should_validate
-  validates :files, :at_least_one => true,         :if => :should_validate
-  validate  :must_accept_terms_of_deposit,         :if => :should_validate
-  validate  :must_review_release_settings,         :if => :should_validate
+  validates :contributors, at_least_one: true, if: :should_validate
+  validate  :contributors_not_all_blank, if: :should_validate
+  validates :files, at_least_one: true, if: :should_validate
+  validate  :must_accept_terms_of_deposit,         if: :should_validate
+  validate  :must_review_release_settings,         if: :should_validate
 
   validate  :embargo_date_is_well_formed
   validate  :embargo_date_in_range
   validate  :check_version_if_license_changed
   validate  :check_visibility_not_reduced
-  validate  :has_specified_a_valid_date,          :if => :should_validate
+  validate  :has_specified_a_valid_date, if: :should_validate
 
   belongs_to :collection, property: :is_member_of_collection, class_name: 'Hydrus::Collection'
 
@@ -55,35 +55,35 @@ class Hydrus::Item < Hydrus::GenericObject
     #   :prior_visibility   => prior_visibility,
     #   :embargo_date       => embargo_date,
     # })
-    msg = "cannot be reduced in subsequent versions"
+    msg = 'cannot be reduced in subsequent versions'
     errors.add(:visibility, msg)
   end
 
   setup_delegations(
     # [:METHOD_NAME,               :uniq, :at... ]
-    "descMetadata" => [
-      [:preferred_citation,        true   ],
-      [:date_created,              true   ],
-      [:related_citation,          false  ],
+    'descMetadata' => [
+      [:preferred_citation,        true],
+      [:date_created,              true],
+      [:related_citation,          false],
     ],
-    "roleMetadata" => [
+    'roleMetadata' => [
     #  [:item_depositor_id,         true,  :item_depositor, :person, :identifier],
       [:item_depositor_name,       true,  :item_depositor, :person, :name],
     ],
-    "hydrusProperties" => [
-      [:reviewed_release_settings, true   ],
-      [:accepted_terms_of_deposit, true   ],
-      [:version_started_time,      true   ],
-      [:prior_license,             true   ],
-      [:prior_visibility,          true   ],
+    'hydrusProperties' => [
+      [:reviewed_release_settings, true],
+      [:accepted_terms_of_deposit, true],
+      [:version_started_time,      true],
+      [:prior_license,             true],
+      [:prior_visibility,          true],
     ]
   )
 
   has_metadata(
-    :name => "roleMetadata",
-    :type => Hydrus::RoleMetadataDS,
-    :label => 'Role Metadata',
-    :control_group => 'M')
+    name: 'roleMetadata',
+    type: Hydrus::RoleMetadataDS,
+    label: 'Role Metadata',
+    control_group: 'M')
 
   # @return [String] the identifier of the object's depositor
   def item_depositor_id
@@ -123,10 +123,10 @@ class Hydrus::Item < Hydrus::GenericObject
   # This method handles the initial submission, not resubmissions.
   def submit_for_approval
     raise "#{cannot_do_message(:submit_for_approval)}\nItem is not submittable" unless is_submittable_for_approval()
-    self.submit_for_approval_time   = HyTime.now_datetime
+    self.submit_for_approval_time = HyTime.now_datetime
     self.object_status = 'awaiting_approval'
     complete_workflow_step('submit')
-    events.add_event('hydrus', @current_user, "Item submitted for approval")
+    events.add_event('hydrus', @current_user, 'Item submitted for approval')
     send_deposit_review_email_notification
   end
 
@@ -134,7 +134,7 @@ class Hydrus::Item < Hydrus::GenericObject
   def approve
     raise "#{cannot_do_message(:approve)}\nItem is not approvable" unless is_approvable()
     hydrusProperties.remove_nodes(:disapproval_reason)
-    events.add_event('hydrus', @current_user, "Item approved")
+    events.add_event('hydrus', @current_user, 'Item approved')
     do_publish()
   end
 
@@ -144,17 +144,17 @@ class Hydrus::Item < Hydrus::GenericObject
     raise "#{cannot_do_message(:disapprove)}\nItem is not disapprovable" unless is_disapprovable()
     self.object_status      = 'returned'
     self.disapproval_reason = reason
-    events.add_event('hydrus', @current_user, "Item returned")
+    events.add_event('hydrus', @current_user, 'Item returned')
     send_object_returned_email_notification
   end
 
   # Resubmits an object after it was disapproved/returned.
   def resubmit
     raise "#{cannot_do_message(:resubmit)}\nItem is not resubmittable" unless is_resubmittable()
-    self.submit_for_approval_time   = HyTime.now_datetime
+    self.submit_for_approval_time = HyTime.now_datetime
     self.object_status = 'awaiting_approval'
     hydrusProperties.remove_nodes(:disapproval_reason)
-    events.add_event('hydrus', @current_user, "Item resubmitted for approval")
+    events.add_event('hydrus', @current_user, 'Item resubmitted for approval')
     send_deposit_review_email_notification
   end
 
@@ -173,15 +173,15 @@ class Hydrus::Item < Hydrus::GenericObject
     # Store the time when the object was initially published.
     self.initial_publish_time = publish_time() if is_initial_version
     # Call the dor-services method, with a couple of Hydrus-specific options.
-    super(:assume_accessioned => should_treat_as_accessioned(), :create_workflows_ds => false)
+    super(assume_accessioned: should_treat_as_accessioned(), create_workflows_ds: false)
     # Set some version metadata that the Hydrus app uses.
     sig  = opts[:significance] || :major
     desc = opts[:description]  || ''
-    versionMetadata.update_current_version(:description => desc, :significance => sig)
+    versionMetadata.update_current_version(description: desc, significance: sig)
     # Varying behavior: remediations vs ordinary user edits.
     if opts[:is_remediation]
       # Just log the event.
-      events.add_event('hydrus', 'admin', "Object remediated")
+      events.add_event('hydrus', 'admin', 'Object remediated')
     else
       self.version_started_time = HyTime.now_datetime
       # Put the object back in the draft state.
@@ -192,7 +192,7 @@ class Hydrus::Item < Hydrus::GenericObject
       self.prior_license = license
       self.prior_visibility = visibility
       # Log the event.
-      events.add_event('hydrus', @current_user, "New version opened")
+      events.add_event('hydrus', @current_user, 'New version opened')
     end
   end
 
@@ -201,11 +201,11 @@ class Hydrus::Item < Hydrus::GenericObject
   # See do_publish(), where all of the Hydrus-specific work is done; here
   # we simply invoke the dor-services method.
   def close_version(opts = {})
-    raise "#{cannot_do_message(:close_version)}\nItem is initial version" if is_initial_version(:absolute => true)
+    raise "#{cannot_do_message(:close_version)}\nItem is initial version" if is_initial_version(absolute: true)
     # We want to start accessioning only if ...
-    sa = !! opts[:is_remediation]              # ... we are running a remediation and
+    sa = !!opts[:is_remediation]              # ... we are running a remediation and
     sa = false if should_treat_as_accessioned  # ... we are not in development or test
-    super(:version_num => version_id, :start_accession => sa)
+    super(version_num: version_id, start_accession: sa)
   end
 
   # indicates if this item has an accepted terms of deposit, or if the supplied
@@ -213,10 +213,10 @@ class Hydrus::Item < Hydrus::GenericObject
   # this collection within the last year you can pass in a specific collection
   # to check, if not specified, defaults to this item's collection (useful when
   # creating new items)
-  def requires_terms_acceptance(user,coll=self.collection)
+  def requires_terms_acceptance(user, coll=self.collection)
     if to_bool(accepted_terms_of_deposit)
       # if this item has previously been accepted, no further checks are needed
-      return false
+      false
     else
       # if this item has not been accepted, let's look at the collection.
       # Get the users who have accepted the terms of deposit for any other items in this collection.
@@ -234,25 +234,25 @@ class Hydrus::Item < Hydrus::GenericObject
 
   def send_new_deposit_email_notification
     return if recipients_for_new_deposit_emails.blank?
-    email = HydrusMailer.send("new_deposit", :object => self)
+    email = HydrusMailer.send('new_deposit', object: self)
     email.deliver_now unless email.to.blank?
   end
 
   def send_item_deposit_email_notification
     return if recipients_for_item_deposit_emails.blank?
-    email = HydrusMailer.send("item_deposit", :object => self)
+    email = HydrusMailer.send('item_deposit', object: self)
     email.deliver_now unless email.to.blank?
   end
 
   def send_deposit_review_email_notification
     return if recipients_for_review_deposit_emails.blank?
-    email = HydrusMailer.send("new_item_for_review", :object => self)
+    email = HydrusMailer.send('new_item_for_review', object: self)
     email.deliver_now unless email.to.blank?
   end
 
   # get the friendly display name for the current item type
   def item_type_for_display
-    typ=self.class.item_types.key(self.item_type)
+    typ = self.class.item_types.key(self.item_type)
     typ.blank? ? self.class.item_types.key(Hydrus::Application.config.default_item_type) : typ
   end
 
@@ -263,34 +263,34 @@ class Hydrus::Item < Hydrus::GenericObject
   def is_submittable_for_approval
     return false unless object_status == 'draft'
     return false unless to_bool(requires_human_approval)
-    return validate!
+    validate!
   end
 
   # Returns true if the object is waiting for approval by a reviewer.
   def is_awaiting_approval
-    return object_status == 'awaiting_approval'
+    object_status == 'awaiting_approval'
   end
 
   # Returns true if the object status is currently returned-by-reviewer.
   def is_returned
-    return object_status == 'returned'
+    object_status == 'returned'
   end
 
   # Returns true if the object can be approved by a reviewer.
   def is_approvable
     return false unless is_awaiting_approval
-    return validate!
+    validate!
   end
 
   # Returns true if the object can be returned by a reviewer.
   def is_disapprovable
-    return is_awaiting_approval
+    is_awaiting_approval
   end
 
   # Returns true if the object can be resubmitted for approval.
   def is_resubmittable
     return false unless is_returned
-    return validate!
+    validate!
   end
 
   # Returns true if the item is publishable: must be valid and must
@@ -298,27 +298,26 @@ class Hydrus::Item < Hydrus::GenericObject
   def is_publishable
     return false unless validate!
     return is_awaiting_approval if to_bool(requires_human_approval)
-    return is_draft
+    is_draft
   end
 
   # Returns true if the item is publishable: must be valid and must
   # have the correct object_status.  Any item requiring human approval is not publishable, it is only approvable
   def is_publishable_directly
     return false if to_bool(requires_human_approval)
-    return (validate! ? is_draft : false)
+    (validate! ? is_draft : false)
   end
-
 
   # Returns true if the object is ready for common assembly.
   # It's not strictly necessary to involve validate!, but it provides extra insurance.
   def is_assemblable
     return false unless is_published
-    return validate!
+    validate!
   end
 
   # Returns true only if the Item is unpublished and is on the first version.
   def is_destroyable
-    return not(is_published) && is_initial_version
+    !is_published && is_initial_version
   end
 
   def requires_human_approval
@@ -347,34 +346,34 @@ class Hydrus::Item < Hydrus::GenericObject
   def enforce_collection_is_open
     c = collection
     return true if c && c.is_open
-    errors.add(:collection, "must be open to have new items added")
-    return false
+    errors.add(:collection, 'must be open to have new items added')
+    false
   end
 
   # you must have at least one non-blank contributor
   def contributors_not_all_blank
-    if (contributors.all? {|contributor| contributor.name.blank?})
-      errors.add(:contributors, "must be entered")
+    if (contributors.all? { |contributor| contributor.name.blank? })
+      errors.add(:contributors, 'must be entered')
     end
   end
 
   # the user must accept the terms of deposit to publish
   def must_accept_terms_of_deposit
-     if to_bool(accepted_terms_of_deposit) != true
-       errors.add(:terms_of_deposit, "must be accepted")
-     end
+    if to_bool(accepted_terms_of_deposit) != true
+      errors.add(:terms_of_deposit, 'must be accepted')
+    end
   end
 
   # the user must have reviewed the release and visibility settings
   def must_review_release_settings
     if to_bool(reviewed_release_settings) != true
-      errors.add(:release_settings, "must be reviewed")
+      errors.add(:release_settings, 'must be reviewed')
     end
   end
 
   # the date_created must be of format YYYY or YYYY-MM or YYYY-MM-DD
   def ensure_date_created_format
-    if not date_created =~ /^\d{4}$/ and not date_created =~ /^\d{4}-\d{2}$/ and not date_created =~ /^\d{4}-\d{2}-\d{2}$/
+    if !(date_created =~ /^\d{4}$/) && !(date_created =~ /^\d{4}-\d{2}$/) && !(date_created =~ /^\d{4}-\d{2}-\d{2}$/)
       errors.add(:date_created, 'Incorrect date format')
     end
   end
@@ -389,7 +388,7 @@ class Hydrus::Item < Hydrus::GenericObject
   # At the colleciton level we store user name and datetime.
   def accept_terms_of_deposit(user)
     raise "#{cannot_do_message(:accept_terms_of_deposit)}\nUser #{user} cannot edit item" unless Hydrus::Authorizable.can_edit_item(user, self)
-    self.accepted_terms_of_deposit = "true"
+    self.accepted_terms_of_deposit = 'true'
     collection.accept_terms_of_deposit(user, HyTime.now_datetime, self)
     events.add_event('hydrus', user, 'Terms of deposit accepted')
   end
@@ -419,13 +418,13 @@ class Hydrus::Item < Hydrus::GenericObject
     return false unless collection.visibility_option == 'varies'
     return true  if is_initial_version
     return false if prior_visibility == 'world'
-    return true
+    true
   end
 
   # Return's true if the Item belongs to a collection that allows
   # Items to set their own licenses.
   def licenses_can_vary
-    return collection.license_option == 'varies'
+    collection.license_option == 'varies'
   end
 
   # Takes a hash with the following keys and possible values:
@@ -457,7 +456,7 @@ class Hydrus::Item < Hydrus::GenericObject
 
   # Returns true if the Item is embargoed.
   def is_embargoed
-    return not(embargo_date.blank?)
+    !embargo_date.blank?
   end
 
   # Returns the embargo date from the embargoMetadata, not the rightsMetadata.
@@ -467,7 +466,7 @@ class Hydrus::Item < Hydrus::GenericObject
   def embargo_date
     ed = embargoMetadata ? embargoMetadata.release_date : ''
     ed = '' if ed.nil?
-    return ed
+    ed
   end
 
   # Sets the embargo date in both embargoMetadata and rightsMetadata.
@@ -484,7 +483,7 @@ class Hydrus::Item < Hydrus::GenericObject
   #     be avoided if we simplify the UI, removing the embargo radio button.
   def embargo_date= val
     if HyTime.is_well_formed_datetime(val)
-      ed = HyTime.datetime(val, :from_localzone => true)
+      ed = HyTime.datetime(val, from_localzone: true)
     elsif val.blank?
       ed = nil
     else
@@ -525,7 +524,7 @@ class Hydrus::Item < Hydrus::GenericObject
     b  = beginning_of_embargo_range.to_datetime
     e  = end_of_embargo_range.to_datetime
     dt = embargo_date.to_datetime
-    unless (b <= dt and dt <= e)
+    unless (b <=dt && dt <=e)
       b = HyTime.date_display(b)
       e = HyTime.date_display(e)
       errors.add(:embargo_date, "must be in the range #{b} through #{e}")
@@ -540,7 +539,7 @@ class Hydrus::Item < Hydrus::GenericObject
   # dates in the past; for that reason, we do not use this method
   # to definie the beginning date allowed by the embargo date picker.
   def beginning_of_embargo_range
-    return initial_submitted_for_publish_time || HyTime.now_datetime
+    initial_submitted_for_publish_time || HyTime.now_datetime
   end
 
   # Parses embargo_terms (eg, "2 years") into its number and time-unit parts.
@@ -549,15 +548,15 @@ class Hydrus::Item < Hydrus::GenericObject
   def end_of_embargo_range
     n, time_unit = collection.embargo_terms.split
     dt = beginning_of_embargo_range.to_datetime + n.to_i.send(time_unit)
-    return HyTime.datetime(dt)
+    HyTime.datetime(dt)
   end
 
   # Returns visibility as an array -- typically either ['world'] or ['stanford'].
   # Embargo status determines which datastream is used to obtain the information.
   def visibility
     ds = is_embargoed ? embargoMetadata : rightsMetadata
-    return ["world"] if ds.has_world_read_node
-    return ds.group_read_nodes.map { |n| n.text }
+    return ['world'] if ds.has_world_read_node
+    ds.group_read_nodes.map { |n| n.text }
   end
 
   # Takes a visibility -- typically 'world' or 'stanford'.
@@ -583,7 +582,7 @@ class Hydrus::Item < Hydrus::GenericObject
   end
 
   def strip_whitespace
-    strip_whitespace_from_fields [:preferred_citation,:title,:abstract,:contact]
+    strip_whitespace_from_fields [:preferred_citation, :title, :abstract, :contact]
   end
 
   def keywords(*args)
@@ -597,28 +596,28 @@ class Hydrus::Item < Hydrus::GenericObject
     kws = Hydrus::ModelHelper.parse_delimited(val)
     return if keywords == kws
     descMetadata.remove_nodes(:subject)
-    kws.each { |kw| descMetadata.insert_topic(kw)  }
+    kws.each { |kw| descMetadata.insert_topic(kw) }
   end
 
   # Returns the Item's contributors, as an array of Hydrus::Contributor objects.
   def contributors
-    return descMetadata.contributors
+    descMetadata.contributors
   end
 
   def dates
-    h={}
+    h = {}
     #raise descMetadata.ng_xml.to_s
     h[:date_created] = single_date? ? descMetadata.date_created : ''
     #raise descMetadata.date_created.inspect
     begin
-      h[:date_created_approximate] = (descMetadata.originInfo.dateCreated.respond_to?(:nodeset) and single_date?) ? descMetadata.originInfo.dateCreated.nodeset.first['qualifier'] == "approximate" : false
+      h[:date_created_approximate] = (descMetadata.originInfo.dateCreated.respond_to?(:nodeset) && single_date?) ? descMetadata.originInfo.dateCreated.nodeset.first['qualifier'] == 'approximate' : false
     rescue
       h[:date_created_approximate] = false
     end
     h[:date_range_start] = descMetadata.originInfo.date_range_start ? descMetadata.originInfo.date_range_start : ''
-    h[:date_range_start_approximate] = descMetadata.originInfo.date_range_start.first ? descMetadata.ng_xml.search("//mods:originInfo/mods:dateCreated[@point='start']", 'mods' => 'http://www.loc.gov/mods/v3').first['qualifier'] == "approximate" : false
+    h[:date_range_start_approximate] = descMetadata.originInfo.date_range_start.first ? descMetadata.ng_xml.search("//mods:originInfo/mods:dateCreated[@point='start']", 'mods' => 'http://www.loc.gov/mods/v3').first['qualifier'] == 'approximate' : false
     h[:date_range_end] = descMetadata.originInfo.date_range_end ? descMetadata.originInfo.date_range_end : ''
-    h[:date_range_end_approximate] = descMetadata.originInfo.date_range_end.first ? descMetadata.ng_xml.search("//mods:originInfo/mods:dateCreated[@point='end']", 'mods' => 'http://www.loc.gov/mods/v3').first['qualifier'] == "approximate" : false
+    h[:date_range_end_approximate] = descMetadata.originInfo.date_range_end.first ? descMetadata.ng_xml.search("//mods:originInfo/mods:dateCreated[@point='end']", 'mods' => 'http://www.loc.gov/mods/v3').first['qualifier'] == 'approximate' : false
     h[:undated] = undated?
     h[:range] = date_range?
     h[:single] = single_date?
@@ -629,45 +628,45 @@ class Hydrus::Item < Hydrus::GenericObject
     if h[:date_type] == 'single'
       descMetadata.originInfo.dateCreated = h[:date_created]
       #the if respond to is for initial item creation
-      if descMetadata.originInfo.dateCreated and descMetadata.originInfo.dateCreated.respond_to? :nodeset
-        descMetadata.originInfo.dateCreated.nodeset.first['qualifier'] = "approximate" if h[:date_created_approximate]
-        descMetadata.originInfo.dateCreated.nodeset.first['keyDate']="yes"
-        descMetadata.originInfo.dateCreated.nodeset.first['encoding']="w3cdtf"
+      if descMetadata.originInfo.dateCreated && descMetadata.originInfo.dateCreated.respond_to?(:nodeset)
+        descMetadata.originInfo.dateCreated.nodeset.first['qualifier'] = 'approximate' if h[:date_created_approximate]
+        descMetadata.originInfo.dateCreated.nodeset.first['keyDate'] = 'yes'
+        descMetadata.originInfo.dateCreated.nodeset.first['encoding'] = 'w3cdtf'
       end
     end
     if h[:date_type] == 'range'
       descMetadata.originInfo.date_range_start = h[:date_start]
       if descMetadata.originInfo.date_range_start.respond_to? :nodeset
-        descMetadata.originInfo.date_range_start.nodeset.first['qualifier'] = "approximate" if h[:date_range_start_approximate] == "hi"
-        descMetadata.originInfo.date_range_start.nodeset.first['keyDate']="yes"
-        descMetadata.originInfo.date_range_start.nodeset.first['encoding']="w3cdtf"
+        descMetadata.originInfo.date_range_start.nodeset.first['qualifier'] = 'approximate' if h[:date_range_start_approximate] == 'hi'
+        descMetadata.originInfo.date_range_start.nodeset.first['keyDate'] = 'yes'
+        descMetadata.originInfo.date_range_start.nodeset.first['encoding'] = 'w3cdtf'
       end
       descMetadata.originInfo.date_range_end = h[:date_range_end]
       if descMetadata.originInfo.date_range_end.respond_to? :nodeset
-        descMetadata.originInfo.date_range_end.nodeset.first['qualifier'] = "approximate" if h[:date_range_end_approximate] == "hi"
-        descMetadata.originInfo.date_range_end.nodeset.first['encoding']="w3cdtf"
+        descMetadata.originInfo.date_range_end.nodeset.first['qualifier'] = 'approximate' if h[:date_range_end_approximate] == 'hi'
+        descMetadata.originInfo.date_range_end.nodeset.first['encoding'] = 'w3cdtf'
       end
     end
     if h[:date_type] == 'undated'
-      descMetadata.originInfo.dateCreated='Undated'
+      descMetadata.originInfo.dateCreated = 'Undated'
     end
   end
   #the date(s) rendered for display
   def date_display
     disp = ''
     if date_range?
-      start_only = true if dates[:date_range_start_approximate] and not dates[:date_range_end_approximate]
-      end_only =  true if dates[:date_range_end_approximate] and not dates[:date_range_start_approximate]
-      both = true if dates[:date_range_start_approximate] and dates[:date_range_end_approximate]
-      disp += '[ca. ' if start_only or both
+      start_only = true if dates[:date_range_start_approximate] && !dates[:date_range_end_approximate]
+      end_only =  true if dates[:date_range_end_approximate] && !dates[:date_range_start_approximate]
+      both = true if dates[:date_range_start_approximate] && dates[:date_range_end_approximate]
+      disp += '[ca. ' if start_only || both
       disp += "#{dates[:date_range_start].first}"
       disp += ']' if start_only
       disp += ' to ' unless both
       disp += ' - ' if both
       disp += '[' if end_only
-      disp += 'ca. ' if end_only or both
+      disp += 'ca. ' if end_only || both
       disp += "#{dates[:date_range_end].first}"
-      disp += ']' if end_only or both
+      disp += ']' if end_only || both
       return disp
     else
       if single_date?
@@ -685,30 +684,30 @@ class Hydrus::Item < Hydrus::GenericObject
   end
 
   def single_date?
-    !date_range? and !undated?
+    !date_range? && !undated?
   end
 
   def undated?
-    !date_range? and date_created == 'Undated'
+    !date_range? && date_created =='Undated'
   end
 
   #check whether a string that we think is a date matches our expected date format
   def valid_date_string? str
-    str =~ /^\d{4}$/ or str =~ /^\d{4}-\d{2}$/ or str =~ /^\d{4}-\d{2}-\d{2}$/
+    str =~/^\d{4}$/ || str =~/^\d{4}-\d{2}$/ || str =~/^\d{4}-\d{2}-\d{2}$/
   end
 
   def has_specified_a_valid_date
     if single_date?
-      if not valid_date_string? date_created
+      if !valid_date_string? date_created
         errors.add(:dates, 'Incorrect date format or missing date.')
       end
     else
       if date_range?
-        if not valid_date_string?(descMetadata.originInfo.date_range_start.first) or not valid_date_string?(descMetadata.originInfo.date_range_end.first)
+        if !valid_date_string?(descMetadata.originInfo.date_range_start.first) || !valid_date_string?(descMetadata.originInfo.date_range_end.first)
           errors.add(:dates, 'Incorrect date formats or missing dates.')
         end
       else
-        if not undated?
+        if !undated?
           errors.add(:dates, 'No date type selected.')
         end
       end
@@ -739,9 +738,9 @@ class Hydrus::Item < Hydrus::GenericObject
   end
 
   def self.discovery_roles
-    return {
-      "everyone"      => "world",
-      "Stanford only" => "stanford",
+    {
+      'everyone'      => 'world',
+      'Stanford only' => 'stanford',
     }
   end
 
@@ -752,46 +751,46 @@ class Hydrus::Item < Hydrus::GenericObject
 
   # the users who will receive email notifications when a new item is created
   def recipients_for_new_deposit_emails
-    managers=apo.persons_with_role("hydrus-collection-manager").to_a
+    managers = apo.persons_with_role('hydrus-collection-manager').to_a
     managers.delete(self.item_depositor_id)
-    return managers.join(', ')
+    managers.join(', ')
   end
 
   # the users who will receive email notifications when an item is submitted for review
   def recipients_for_review_deposit_emails
-    managers=(
-      apo.persons_with_role("hydrus-collection-manager") +
-      apo.persons_with_role("hydrus-collection-reviewer")
+    managers = (
+      apo.persons_with_role('hydrus-collection-manager') +
+      apo.persons_with_role('hydrus-collection-reviewer')
     ).to_a
     managers.delete(self.item_depositor_id)
-    return managers.join(', ')
+    managers.join(', ')
   end
 
   # See GenericObject#changed_fields for discussion.
   def tracked_fields
-    return {
-      :title      => [:title],
-      :abstract   => [:abstract],
-      :files      => [:files_were_changed],
-      :embargo    => [:embargo_date],
-      :visibility => [:visibility],
-      :license    => [:license],
+    {
+      title: [:title],
+      abstract: [:abstract],
+      files: [:files_were_changed],
+      embargo: [:embargo_date],
+      visibility: [:visibility],
+      license: [:license],
     }
   end
 
   # Returns the Item's current version number, 1..N.
   def version_id
-    return current_version
+    current_version
   end
 
   # Returns the Item's current version tag, eg v2.2.0.
   def version_tag
-    return 'v' + versionMetadata.current_tag
+    'v' + versionMetadata.current_tag
   end
 
   # Returns the description of the current version.
   def version_description
-    return versionMetadata.description_for_version(current_version)
+    versionMetadata.description_for_version(current_version)
   end
 
   # Returns true if the current version is the initial version.
@@ -803,30 +802,30 @@ class Hydrus::Item < Hydrus::GenericObject
   def is_initial_version(opts = {})
     return true if current_version == '1'
     return false if opts[:absolute]
-    return version_tag =~ /\Av1\.0\./ ? true : false
+    version_tag =~ /\Av1\.0\./ ? true : false
   end
 
   # Takes a string.
   # Sets the description of the current version.
   def version_description=(val)
-    versionMetadata.update_current_version(:description => val)
+    versionMetadata.update_current_version(description: val)
   end
 
   # Takes a string or symbol: major, minor, admin.
   # Sets the significance of the current version.
   def version_significance=(val)
-    versionMetadata.update_current_version(:significance => val.to_sym)
+    versionMetadata.update_current_version(significance: val.to_sym)
   end
 
   # Returns the significance (major, minor, or admin) of the current version.
   # This method probably belongs in dor-services gem.
   def version_significance
     tags = versionMetadata.find_by_terms(:version, :tag).
-           map{ |t| Dor::VersionTag.parse(t.value) }.sort
+           map { |t| Dor::VersionTag.parse(t.value) }.sort
     return :major if tags.size < 2
     curr = tags[-1]
     prev = tags[-2]
-    return prev.major != curr.major ? :major :
+    prev.major != curr.major ? :major :
            prev.minor != curr.minor ? :minor : :admin
   end
 

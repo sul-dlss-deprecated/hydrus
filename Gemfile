@@ -31,7 +31,7 @@ gem 'sass-rails',     '~> 4.0'
 gem 'coffee-rails',   '~> 4.2'
 gem 'bootstrap-sass', '2.3.2.1'
 gem 'therubyracer'
-gem 'libv8', '~> 3.16.14.19'  # dep of therubyracer
+gem 'libv8', '~> 3.16.14.19' # dep of therubyracer
 gem 'uglifier', '>= 1.0.3'
 
 # gems only needed for particular environments
@@ -47,8 +47,9 @@ group :development, :test do
   gem 'launchy'
   gem 'byebug'
   gem 'letter_opener'
-# gem 'database_cleaner'
   gem 'pry'
+  gem 'rubocop', '~> 0.49.1'
+  # gem 'rubocop-rspec', '~> 1.5'
 end
 
 group :production do

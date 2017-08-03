@@ -1,6 +1,5 @@
 # -*- encoding : utf-8 -*-
 class SolrDocument
-
   include Blacklight::Solr::Document
 
   # self.unique_key = 'id'
@@ -8,27 +7,27 @@ class SolrDocument
   # The following shows how to setup this blacklight document to display marc documents
   extension_parameters[:marc_source_field] = :marc_display
   extension_parameters[:marc_format_type] = :marcxml
-  use_extension( Blacklight::Solr::Document::Marc) do |document|
-    document.key?( :marc_display  )
+  use_extension(Blacklight::Solr::Document::Marc) do |document|
+    document.key?(:marc_display)
   end
 
   # Email uses the semantic field mappings below to generate the body of an email.
-  SolrDocument.use_extension( Blacklight::Solr::Document::Email )
+  SolrDocument.use_extension(Blacklight::Solr::Document::Email)
 
   # SMS uses the semantic field mappings below to generate the body of an SMS email.
-  SolrDocument.use_extension( Blacklight::Solr::Document::Sms )
+  SolrDocument.use_extension(Blacklight::Solr::Document::Sms)
 
   # DublinCore uses the semantic field mappings below to assemble an OAI-compliant Dublin Core document
   # Semantic mappings of solr stored fields. Fields may be multi or
   # single valued. See Blacklight::Solr::Document::ExtendableClassMethods#field_semantics
   # and Blacklight::Solr::Document#to_semantic_values
   # Recommendation: Use field names from Dublin Core
-  use_extension( Blacklight::Solr::Document::DublinCore)
+  use_extension(Blacklight::Solr::Document::DublinCore)
   field_semantics.merge!(
-                         :title => "title_tesim",
-                         :author => "author_display",
-                         :language => "language_facet",
-                         :format => "format"
+                         title: 'title_tesim',
+                         author: 'author_display',
+                         language: 'language_facet',
+                         format: 'format'
                          )
 
   def route_key
@@ -40,29 +39,28 @@ class SolrDocument
   end
 
   def main_title
-    return get('main_title_ssm')
+    get('main_title_ssm')
   end
 
   def pid
-    return get('objectId_ssim')
+    get('objectId_ssim')
   end
 
   def object_type
-    return get('has_model_ssim').gsub(/.+:Hydrus_/, '').downcase
+    get('has_model_ssim').gsub(/.+:Hydrus_/, '').downcase
   end
 
   def object_status
     typ    = object_type.to_sym
     status = get('object_status_ssim')
-    return Hydrus::GenericObject.status_label(typ, status)
+    Hydrus::GenericObject.status_label(typ, status)
   end
 
   def depositor
-    return get("#{object_type}_depositor_person_identifier_ssm")
+    get("#{object_type}_depositor_person_identifier_ssm")
   end
 
   def path
-    return "/#{object_type}s/#{pid}"
+    "/#{object_type}s/#{pid}"
   end
-
 end

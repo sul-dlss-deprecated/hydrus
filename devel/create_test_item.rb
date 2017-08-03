@@ -3,14 +3,14 @@
 
 def parse_do_opts(args, *ks)
   opts = ks.map { |k| args.delete("--#{k}") }
-  return Hash[ ks.zip(opts) ]
+  Hash[ks.zip(opts)]
 end
 
 def create_test_collection(*args)
   # Create a new Collection and set all required values.
   do_opts           = parse_do_opts(args, :open)
   user              = args.shift || 'archivist1'
-  user              = User.new(:email => "#{user}@example.com")
+  user              = User.new(email: "#{user}@example.com")
   hc                = Hydrus::Collection.create(user)
   hc.title          = "Title for: #{hc.pid}"
   hc.abstract       = 'abstract'
@@ -25,7 +25,7 @@ def create_test_collection(*args)
   hc.open if do_opts[:open]
   hc.save
   puts "Created collection: user=#{user} apo_pid=#{hc.apo.pid} pid=#{hc.pid}"
-  return Hydrus::Collection.find(hc.pid)
+  Hydrus::Collection.find(hc.pid)
 end
 
 def create_test_item(*args)
@@ -33,18 +33,18 @@ def create_test_item(*args)
   do_opts        = parse_do_opts(args, :submit_for_approval, :disapprove, :approve)
   hc_pid         = args.shift
   user           = args.shift || 'archivist1'
-  user           = User.new(:email => "#{user}@example.com")
+  user           = User.new(email: "#{user}@example.com")
   hc_pid         = "druid:#{hc_pid}" unless hc_pid =~ /^druid:/
   hi             = Hydrus::Item.create(hc_pid, user)
   hi.title       = "Title for: #{hi.pid}"
   hi.abstract    = 'abstract'
   hi.contact     = 'foo@bar.com'
   hi.license     = 'cc-by-nc'
-  hi.keywords    = "foo,bar"
+  hi.keywords    = 'foo,bar'
   hi.visibility  = 'stanford'
   hi.contributors = {
-    "0" => {"name"=>"Nugent, Ted", "role_key"=>"personal_author"},
-    "1" => {"name"=>"EMI",         "role_key"=>"corporate_sponsor"},
+    '0' => { 'name' => 'Nugent, Ted', 'role_key' => 'personal_author' },
+    '1' => { 'name' => 'EMI',         'role_key' => 'corporate_sponsor' },
   }
   hi.accepted_terms_of_deposit = 'yes'
   hi.reviewed_release_settings = 'yes'
@@ -61,7 +61,7 @@ def create_test_item(*args)
   # Save and return a refreshed object.
   hi.save
   puts "Created item: user=#{user} pid=#{hi.pid}"
-  return Hydrus::Item.find(hi.pid)
+  Hydrus::Item.find(hi.pid)
 end
 
 def create_test_batch(*args)
@@ -83,7 +83,7 @@ def create_test_batch(*args)
       if hc && hc.is_open
         hi = create_test_item(hc.pid, 'archivist1', *opts)
       else
-        help("Cannot create item without opening collection first")
+        help('Cannot create item without opening collection first')
       end
     end
   end
@@ -93,12 +93,12 @@ def parse_batch_opts(arg)
   # Takes a string and returns the corresponding array of options
   # that will be passed to one of the create_*() methods.
   opts = {
-    :c  => %w(c),
-    :co => %w(c --open),
-    :i  => %w(i),
-    :is => %w(i --submit_for_approval),
-    :ia => %w(i --submit_for_approval --approve),
-    :id => %w(i --submit_for_approval --disapprove),
+    c: %w(c),
+    co: %w(c --open),
+    i: %w(i),
+    is: %w(i --submit_for_approval),
+    ia: %w(i --submit_for_approval --approve),
+    id: %w(i --submit_for_approval --disapprove),
   }
   opts = opts[arg.to_sym]
   return opts if opts
@@ -126,9 +126,9 @@ def main
   args = ARGV.dup
   m    = (args.shift || 'NONE').to_sym
   ms   = {
-    :collection => method(:create_test_collection),
-    :item       => method(:create_test_item),
-    :batch      => method(:create_test_batch),
+    collection: method(:create_test_collection),
+    item: method(:create_test_item),
+    batch: method(:create_test_batch),
   }
   help() unless ms.has_key?(m)
   ms[m].call(*args)

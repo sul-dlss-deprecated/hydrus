@@ -1,19 +1,18 @@
 require 'spec_helper'
 
-describe("Home page", :type => :request, :integration => true) do
-
+describe('Home page', type: :request, integration: true) do
   before(:each) do
     @search_box  = '.search-query-form #search'
-    @sdr         = "Stanford Digital Repository"
-    @your_cs     = "Your Active Collections"
-    @breadcrumbs = "ul.breadcrumb li a"
+    @sdr         = 'Stanford Digital Repository'
+    @your_cs     = 'Your Active Collections'
+    @breadcrumbs = 'ul.breadcrumb li a'
     @cc_button   = 'a.btn[href="/collections/new"]'
     @alert       = 'div.alert'
     @search_url  = '/catalog?q=&search_field=text&commit=search'
     @sign_in_msg = 'You must sign in'
   end
 
-  it "if not logged in, should see intro text, but not other controls" do
+  it 'if not logged in, should see intro text, but not other controls' do
     logout
     visit root_path
     expect(page).to have_content(@sdr)
@@ -22,7 +21,7 @@ describe("Home page", :type => :request, :integration => true) do
     expect(page).not_to have_button(@cc_button)
   end
 
-  it "if logged in, should see intro text, search box, and listing of collections" do
+  it 'if logged in, should see intro text, search box, and listing of collections' do
     login_as('archivist1')
     visit root_path
     expect(page).to have_content(@sdr)
@@ -44,7 +43,7 @@ describe("Home page", :type => :request, :integration => true) do
 
     it 'restricts search results' do
       visit(@search_url)
-      expect(find('.page_links')).to have_content("1 - 10 of 10")
+      expect(find('.page_links')).to have_content('1 - 10 of 10')
     end
 
     it 'has a button to create a new collection' do
@@ -67,33 +66,30 @@ describe("Home page", :type => :request, :integration => true) do
 
     it 'restricts search results' do
       visit(@search_url)
-      expect(find('.page_links')).to have_content("1 - 9 of 9")
+      expect(find('.page_links')).to have_content('1 - 9 of 9')
     end
   end
 
-  it "breadcrumbs should not be displayed" do
+  it 'breadcrumbs should not be displayed' do
     # Logged out
     logout
     visit root_path
     expect(page).not_to have_css(@breadcrumbs)
   end
 
-  it "should not show Create Collection button if user has no authority to create collections" do
+  it 'should not show Create Collection button if user has no authority to create collections' do
     # No
     login_as('archivist3@example.com', login_pw)
     visit root_path
     expect(page).not_to have_selector(@cc_button)
   end
 
-  describe "search" do
-
-    it "should not be able to issue direct-URL search if not logged in" do
+  describe 'search' do
+    it 'should not be able to issue direct-URL search if not logged in' do
       logout
       visit @search_url
       expect(current_path).to eq(new_user_session_path)
       expect(find(@alert)).to have_content(@sign_in_msg)
     end
-
   end
-
 end

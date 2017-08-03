@@ -1,7 +1,6 @@
 require 'spec_helper'
 
-describe Hydrus::Item, :type => :model do
-
+describe Hydrus::Item, type: :model do
   before(:each) do
     @cannot_do_regex = /\ACannot perform action/
     @hi = Hydrus::Item.new
@@ -21,10 +20,10 @@ describe Hydrus::Item, :type => :model do
     @workflow_xml = noko_doc(@workflow_xml)
   end
 
-  describe "#files" do
+  describe '#files' do
     subject { Hydrus::Item.new }
 
-    it "should retrieve ObjectFiles from the database" do
+    it 'should retrieve ObjectFiles from the database' do
       relation = subject.files
       expect(relation).to be_a ActiveRecord::Relation
       expect(relation.where_values_hash).to eq 'pid' => subject.pid
@@ -32,8 +31,7 @@ describe Hydrus::Item, :type => :model do
     end
   end
 
-  describe "#contributors" do
-
+  describe '#contributors' do
     before(:each) do
       @rattr = 'authority="marcrelator" type="text"'
       @xml = <<-eos
@@ -55,12 +53,12 @@ describe Hydrus::Item, :type => :model do
       allow(@hi).to receive(:descMetadata).and_return(Hydrus::DescMetadataDS.from_xml(@xml))
     end
 
-    it "contributors()" do
+    it 'contributors()' do
       expect(@hi.contributors.length).to eq(3)
       @hi.contributors.all? { |c| expect(c).to be_instance_of(Hydrus::Contributor) }
     end
 
-    it "insert_contributor()" do
+    it 'insert_contributor()' do
       extra_xml = <<-eos
         <name type="corporate">
           <namePart>FooBar</namePart>
@@ -77,7 +75,7 @@ describe Hydrus::Item, :type => :model do
       expect(@hi.descMetadata.ng_xml).to be_equivalent_to(new_xml)
     end
 
-    it "contributors=()" do
+    it 'contributors=()' do
       exp = <<-eos
         <mods xmlns="http://www.loc.gov/mods/v3">
           <name type="corporate">
@@ -91,16 +89,14 @@ describe Hydrus::Item, :type => :model do
         </mods>
       eos
       @hi.contributors = {
-        "0" => {"name"=>"AAA", "role_key"=>"corporate_author"},
-        "1" => {"name"=>"BBB", "role_key"=>"personal_author"},
+        '0' => { 'name' => 'AAA', 'role_key' => 'corporate_author' },
+        '1' => { 'name' => 'BBB', 'role_key' => 'personal_author' },
       }
       expect(@hi.descMetadata.ng_xml).to be_equivalent_to(exp)
     end
-
   end
-  describe "dates" do
+  describe 'dates' do
     before(:each) do
-
     end
     it 'single_date? should be true for a normal date_created' do
       @xml = <<-eos
@@ -177,7 +173,7 @@ describe Hydrus::Item, :type => :model do
         </mods>
       eos
       allow(@hi).to receive(:descMetadata).and_return(Hydrus::DescMetadataDS.from_xml(@xml))
-      hash=@hi.dates
+      hash = @hi.dates
       expect(hash[:date_range_start]).to eq(['2005-04'])
       expect(hash[:date_range_end]).to eq(['2005-05'])
       expect(hash[:date_range_start_approximate]).to be_truthy
@@ -192,7 +188,7 @@ describe Hydrus::Item, :type => :model do
         </mods>
       eos
       allow(@hi).to receive(:descMetadata).and_return(Hydrus::DescMetadataDS.from_xml(@xml))
-      hash=@hi.dates
+      hash = @hi.dates
       expect(hash[:date_range_start]).to eq([])
       expect(hash[:date_range_end]).to eq([])
       expect(hash[:date_range_start_approximate]).to be_falsey
@@ -208,7 +204,7 @@ describe Hydrus::Item, :type => :model do
         </mods>
       eos
       allow(@hi).to receive(:descMetadata).and_return(Hydrus::DescMetadataDS.from_xml(@xml))
-      hash=@hi.dates
+      hash = @hi.dates
       expect(hash[:date_created]).to eq(['2013'])
       expect(hash[:date_range_start]).to eq([])
       expect(hash[:date_range_end]).to eq([])
@@ -217,15 +213,15 @@ describe Hydrus::Item, :type => :model do
       expect(hash[:undated]).to be_falsey
     end
   end
-  describe "date=" do
+  describe 'date=' do
     it 'should clear out existing dates and set a single date' do
-      hash={
-        :date_created => ['2013'],
-        :date_created_approximate => 'hi',
-        :date_type => 'single'
+      hash = {
+        date_created: ['2013'],
+        date_created_approximate: 'hi',
+        date_type: 'single'
       }
       @hi.dates = hash
-      new_hash=@hi.dates
+      new_hash = @hi.dates
       expect(new_hash[:date_created]).to eq(['2013'])
       expect(@hi.single_date?).to be_truthy
     end
@@ -277,20 +273,17 @@ describe Hydrus::Item, :type => :model do
       allow(@hi).to receive(:descMetadata).and_return(Hydrus::DescMetadataDS.from_xml(@xml))
       expect(@hi.date_display).to eq('')
     end
-
-
   end
-  describe "roleMetadata in the item", :integration=>true do
+  describe 'roleMetadata in the item', integration: true do
     subject { Hydrus::Item.find('druid:oo000oo0001') }
-    it "should have a roleMetadata datastream" do
+    it 'should have a roleMetadata datastream' do
       expect(subject.roleMetadata).to be_an_instance_of(Hydrus::RoleMetadataDS)
       expect(subject.item_depositor_id).to eq('archivist1')
       expect(subject.item_depositor_name).to eq('Archivist, One')
     end
   end
 
-  describe "keywords" do
-
+  describe 'keywords' do
     before(:each) do
       @mods_start = '<mods xmlns="http://www.loc.gov/mods/v3">'
       xml = <<-EOF
@@ -303,11 +296,11 @@ describe Hydrus::Item, :type => :model do
       allow(@hi).to receive(:descMetadata).and_return(@dsdoc)
     end
 
-    it "keywords() should return expected values" do
+    it 'keywords() should return expected values' do
       expect(@hi.keywords).to eq(%w(divorce marriage))
     end
 
-    it "keywords= should rewrite all <subject> nodes" do
+    it 'keywords= should rewrite all <subject> nodes' do
       @hi.keywords = ' foo , bar , quux  '
       expect(@dsdoc.ng_xml).to be_equivalent_to <<-EOF
         #{@mods_start}
@@ -318,18 +311,17 @@ describe Hydrus::Item, :type => :model do
       EOF
     end
 
-    it "keywords= should not modify descMD if the keywords are same as existing" do
+    it 'keywords= should not modify descMD if the keywords are same as existing' do
       kws = %w(foo bar)
       allow(@hi).to receive(:keywords).and_return(kws)
       expect(@hi).not_to receive(:descMetadata)
       @hi.keywords = kws.join(',')
     end
-
   end
 
-  describe "visibility()" do
+  describe 'visibility()' do
     let(:mock_groups) { [double(text: 'foo'), double(text: 'bar')] }
-    it "should return [] for initial visibility" do
+    it 'should return [] for initial visibility' do
       expect(@hi.visibility).to eq([])
     end
 
@@ -368,14 +360,13 @@ describe Hydrus::Item, :type => :model do
     end
   end
 
-  describe "embarg_visib=()" do
-
+  describe 'embarg_visib=()' do
     before(:each) do
       @edate = '2012-02-28T08:00:00+00:00'
       # This enables the tests to run in a timezone other than Pacific.
-      allow(HyTime).to receive(:datetime).with("2012-02-28", :from_localzone => true).and_return(@edate)
+      allow(HyTime).to receive(:datetime).with('2012-02-28', from_localzone: true).and_return(@edate)
       # XML snippets for various <access> nodes.
-      ed       = "<embargoReleaseDate>#{@edate}</embargoReleaseDate><none/>"
+      ed = "<embargoReleaseDate>#{@edate}</embargoReleaseDate><none/>"
 
       twpc = "         <twentyPctVisibilityStatus/>
          <twentyPctVisibilityReleaseDate/>"
@@ -399,15 +390,15 @@ describe Hydrus::Item, :type => :model do
                  '</rightsMetadata>'
       # Assemble expected Nokogiri XML for embargoMetadata and rightsMetadata.
       @xml = {
-        :em_world   => noko_doc([em_start, em_world, twpc, em_end].join),
-        :em_stanf   => noko_doc([em_start, em_stanf, twpc, em_end].join),
-        :rm_emb     => noko_doc([rm_start, di_world, rd_emb,   rm_end].join),
-        :rm_world   => noko_doc([rm_start, di_world, rd_world, rm_end].join),
-        :rm_stanf   => noko_doc([rm_start, di_world, rd_stanf, rm_end].join),
+        em_world: noko_doc([em_start, em_world, twpc, em_end].join),
+        em_stanf: noko_doc([em_start, em_stanf, twpc, em_end].join),
+        rm_emb: noko_doc([rm_start, di_world, rd_emb, rm_end].join),
+        rm_world: noko_doc([rm_start, di_world, rd_world, rm_end].join),
+        rm_stanf: noko_doc([rm_start, di_world, rd_stanf, rm_end].join),
       }
     end
 
-    it "can exercise all combinations of is_embargoed and visibility to get expected XML" do
+    it 'can exercise all combinations of is_embargoed and visibility to get expected XML' do
       # All permutations of embargoed = yes|no and visibility = world|stanford,
       # along with the expected rightsMetadata and embargoMetadata XML keys.
       tests = [
@@ -430,12 +421,10 @@ describe Hydrus::Item, :type => :model do
         expect(@hi.embargoMetadata.ng_xml).to be_equivalent_to(@xml[exp_em]) if emb
       end
     end
-
   end
 
-  describe "embargo" do
-
-    it "is_embargoed should return true if the Item has a non-blank embargo date" do
+  describe 'embargo' do
+    it 'is_embargoed should return true if the Item has a non-blank embargo date' do
       tests = {
         ''                     => false,
         nil                    => false,
@@ -447,71 +436,63 @@ describe Hydrus::Item, :type => :model do
       end
     end
 
-    describe "embargo_date() and embargo_date=()" do
-
-      it "getter should return value from embargoMetadata" do
+    describe 'embargo_date() and embargo_date=()' do
+      it 'getter should return value from embargoMetadata' do
         exp = 'foo release date'
         allow(@hi).to receive_message_chain(:embargoMetadata, :release_date).and_return(exp)
         expect(@hi.embargo_date).to eq(exp)
       end
 
-      describe "setter: with valid date" do
-        let(:rd_dt) { "2012-08-30T08:00:00+00:00" }
+      describe 'setter: with valid date' do
+        let(:rd_dt) { '2012-08-30T08:00:00+00:00' }
         before do
           # This enables the tests to run in a timezone other than Pacific.
-          allow(HyTime).to receive(:datetime).with("2012-08-30", :from_localzone => true).and_return(rd_dt)
+          allow(HyTime).to receive(:datetime).with('2012-08-30', from_localzone: true).and_return(rd_dt)
         end
 
-        it "store date in UTC in both embargoMD and rightsMD" do
+        it 'store date in UTC in both embargoMD and rightsMD' do
           @hi.embargo_date = '2012-08-30'
           expect(@hi.embargo_date).to eq(rd_dt)
           expect(@hi.rmd_embargo_release_date).to eq(rd_dt)
           expect(@hi.embargoMetadata.status).to eq('embargoed')
           expect(@hi.instance_variable_get('@embargo_date_was_malformed')).to eq(nil)
         end
-
       end
 
-      describe "setter: with invalid date" do
-
-        it "blank or nil: delete embargoMetadata; do not set instance var" do
+      describe 'setter: with invalid date' do
+        it 'blank or nil: delete embargoMetadata; do not set instance var' do
           expect(@hi.embargoMetadata).to receive(:delete)
           dt = rand() < 0.5 ? '' : nil
           @hi.embargo_date = dt
-          expect(@hi.rightsMetadata.ng_xml.at_xpath("//embargoReleaseDate")).to eq(nil)
+          expect(@hi.rightsMetadata.ng_xml.at_xpath('//embargoReleaseDate')).to eq(nil)
           expect(@hi.instance_variable_get('@embargo_date_was_malformed')).to eq(nil)
         end
 
-        it "malformed: do not delete embargoMetadata; set instance var" do
+        it 'malformed: do not delete embargoMetadata; set instance var' do
           expect(@hi.embargoMetadata).not_to receive(:delete)
           @hi.embargo_date = 'blah'
-          expect(@hi.rightsMetadata.ng_xml.at_xpath("//embargoReleaseDate")).to eq(nil)
+          expect(@hi.rightsMetadata.ng_xml.at_xpath('//embargoReleaseDate')).to eq(nil)
           expect(@hi.instance_variable_get('@embargo_date_was_malformed')).to eq(true)
         end
-
       end
-
     end
 
-    describe "beginning_of_embargo_range()" do
-
-      it "initial_submitted_for_publish_time missing: should return now_datetime()" do
+    describe 'beginning_of_embargo_range()' do
+      it 'initial_submitted_for_publish_time missing: should return now_datetime()' do
         exp = 'foo bar'
         allow(HyTime).to receive(:now_datetime).and_return(exp)
         allow(@hi).to receive(:initial_submitted_for_publish_time).and_return(nil)
         expect(@hi.beginning_of_embargo_range).to eq(exp)
       end
 
-      it "initial_submitted_for_publish_time present: should return it" do
+      it 'initial_submitted_for_publish_time present: should return it' do
         exp = 'foo bar blah'
         allow(@hi).to receive(:initial_submitted_for_publish_time).and_return(exp)
         expect(@hi.beginning_of_embargo_range).to eq(exp)
       end
-
     end
 
-    describe "end_of_embargo_range()" do
-
+    describe 'end_of_embargo_range()' do
       it "should get the end date range properly based on the collection's APO" do
         t = 'T00:00:00Z'
         allow(@hi).to receive(:beginning_of_embargo_range).and_return("2012-08-01#{t}")
@@ -525,12 +506,10 @@ describe Hydrus::Item, :type => :model do
           expect(@hi.end_of_embargo_range).to eq(exp)
         end
       end
-
     end
 
-    describe "embargo_can_be_changed()" do
-
-      it "Collection does not allow embargo variability: should return false" do
+    describe 'embargo_can_be_changed()' do
+      it 'Collection does not allow embargo variability: should return false' do
         expect(@hi).not_to receive(:is_initial_version)
         %w(none fixed).each do |opt|
           allow(@hc).to receive(:embargo_option).and_return(opt)
@@ -538,26 +517,25 @@ describe Hydrus::Item, :type => :model do
         end
       end
 
-      describe "Collection allows embargo variability" do
-
+      describe 'Collection allows embargo variability' do
         before(:each) do
           allow(@hc).to receive(:embargo_option).and_return('varies')
         end
 
-        it "initial version: always true" do
+        it 'initial version: always true' do
           allow(@hi).to receive(:is_initial_version).and_return(true)
           expect(@hi).not_to receive(:is_embargoed)
           expect(@hi.embargo_can_be_changed).to eq(true)
         end
 
-        it "subsequent versions: not embargoed: always false" do
+        it 'subsequent versions: not embargoed: always false' do
           allow(@hi).to receive(:is_initial_version).and_return(false)
           allow(@hi).to receive(:is_embargoed).and_return(false)
           expect(@hi).not_to receive(:end_of_embargo_range)
           expect(@hi.embargo_can_be_changed).to eq(false)
         end
 
-        it "subsequent versions: embargoed: true if end_of_embargo_range is in future" do
+        it 'subsequent versions: embargoed: true if end_of_embargo_range is in future' do
           allow(@hi).to receive(:is_initial_version).and_return(false)
           allow(@hi).to receive(:is_embargoed).and_return(true)
           tpast = HyTime.datetime(HyTime.now - 2.day)
@@ -567,15 +545,11 @@ describe Hydrus::Item, :type => :model do
           allow(@hi).to receive(:end_of_embargo_range).and_return(tfut)
           expect(@hi.embargo_can_be_changed).to eq(true)
         end
-
       end
-
     end
-
   end
 
-  describe "strip_whitespace_from_fields()" do
-
+  describe 'strip_whitespace_from_fields()' do
     before(:each) do
       xml = <<-eos
        <mods xmlns="http://www.loc.gov/mods/v3">
@@ -588,18 +562,16 @@ describe Hydrus::Item, :type => :model do
       allow(@hi).to receive(:descMetadata).and_return(dmd)
     end
 
-    it "should be able to call method on a Hydrus::Item to remove whitespace" do
+    it 'should be able to call method on a Hydrus::Item to remove whitespace' do
       a = @hi.abstract
       t = @hi.title
       @hi.strip_whitespace_from_fields([:abstract, :title])
       expect(@hi.abstract).to eq(a.strip)
       expect(@hi.title).to eq(t.strip)
     end
-
   end
 
-  describe "validations" do
-
+  describe 'validations' do
     before(:each) do
       @exp = [
         :pid,
@@ -614,26 +586,25 @@ describe Hydrus::Item, :type => :model do
       @hi.instance_variable_set('@should_validate', true)
     end
 
-    it "blank slate Item (should_validate=false) should include only two errors" do
+    it 'blank slate Item (should_validate=false) should include only two errors' do
       allow(@hi).to receive(:should_validate).and_return(false)
       expect(@hi.valid?).to eq(false)
       expect(@hi.errors.messages.keys).to include(*@exp[0..1])
     end
 
-    it "blank slate Item (should_validate=true) should include all errors" do
+    it 'blank slate Item (should_validate=true) should include all errors' do
       expect(@hi.valid?).to eq(false)
       expect(@hi.errors.messages.keys).to include(*@exp)
     end
 
-    describe "embargo_date_in_range()" do
-
-      it "should not perform validation unless preconditions are met" do
+    describe 'embargo_date_in_range()' do
+      it 'should not perform validation unless preconditions are met' do
         expect(@hi).not_to receive(:beginning_of_embargo_range)
         allow(@hi).to receive(:is_embargoed).and_return(false)
         @hi.embargo_date_in_range
       end
 
-      it "should add a validation error when embargo_date falls outside the embargo range" do
+      it 'should add a validation error when embargo_date falls outside the embargo range' do
         # Set up beginning/end of embargo range.
         b   = '2012-02-01T08:00:00Z'
         e   = '2012-03-01T08:00:00Z'
@@ -666,36 +637,35 @@ describe Hydrus::Item, :type => :model do
           @hi.errors.clear
         end
       end
-
     end
 
-    it "fully populated Item should be valid" do
+    it 'fully populated Item should be valid' do
       dru = 'druid:ll000ll0001'
       allow(@hi).to receive(:enforce_collection_is_open).and_return(true)
       allow(@hi).to receive(:accepted_terms_of_deposit).and_return(true)
       allow(@hi).to receive(:reviewed_release_settings).and_return(true)
-      @exp.each { |e| allow(@hi).to receive(e).and_return(dru) unless e==:contact }
+      @exp.each { |e| allow(@hi).to receive(e).and_return(dru) unless e == :contact }
       allow(@hi).to receive(:contact).and_return('test@test.com') # we need a valid email address
-      allow(@hi).to receive(:contributors).and_return([Hydrus::Contributor.new(:name=>'Some, person')]) # need at least one non-blank contributor
+      allow(@hi).to receive(:contributors).and_return([Hydrus::Contributor.new(name: 'Some, person')]) # need at least one non-blank contributor
       allow(@hi).to receive(:keywords).and_return(%w(aaa bbb))
-      allow(@hi).to receive(:dates).and_return({:date_created => '2011'})
+      allow(@hi).to receive(:dates).and_return({ date_created: '2011' })
       allow(@hi).to receive(:date_created).and_return('2011')
       allow(@hi).to receive(:single_date?).and_return true
-      allow(@hi).to receive_message_chain([:collection, :embargo_option]).and_return("varies")
-      if not @hi.valid?
-        msg=@hi.errors.messages.map { |field, error|
-        "#{field.to_s.humanize.capitalize} #{error.join(', ')}"
+      allow(@hi).to receive_message_chain([:collection, :embargo_option]).and_return('varies')
+      if !@hi.valid?
+        msg = @hi.errors.messages.map { |field, error|
+          "#{field.to_s.humanize.capitalize} #{error.join(', ')}"
         }
         raise msg.join ', \n'
       end
       expect(@hi.valid?).to eq(true)
     end
 
-    it "enforce_collection_is_open() should return true only if the Item is in an open Collection" do
-      n  = 0
+    it 'enforce_collection_is_open() should return true only if the Item is in an open Collection' do
+      n = 0
       [true, false, nil].each do |stub_val|
-        c    = double('collection', :is_open => stub_val)
-        exp  = not(not(stub_val))
+        c    = double('collection', is_open: stub_val)
+        exp  = !(!stub_val)
         n   += 1 unless exp
         allow(@hi).to receive(:collection).and_return(c)
         expect(@hi.enforce_collection_is_open).to eq(exp)
@@ -703,8 +673,7 @@ describe Hydrus::Item, :type => :model do
       end
     end
 
-    describe "check_version_if_license_changed()" do
-
+    describe 'check_version_if_license_changed()' do
       before(:each) do
         # Setup failing conditions.
         allow(@hi).to receive(:is_initial_version).and_return(false)
@@ -716,33 +685,31 @@ describe Hydrus::Item, :type => :model do
         @assert_no_errors.call
       end
 
-      it "can produce a version error" do
+      it 'can produce a version error' do
         @hi.check_version_if_license_changed
         expect(@hi.errors.messages.keys).to eq([:version])
       end
 
-      it "initial version: cannot produce a version error" do
+      it 'initial version: cannot produce a version error' do
         allow(@hi).to receive(:is_initial_version).and_return(true)
         @hi.check_version_if_license_changed
         @assert_no_errors.call
       end
 
-      it "license was not changed: cannot produce a version error" do
+      it 'license was not changed: cannot produce a version error' do
         allow(@hi).to receive(:prior_license).and_return(@hi.license)
         @hi.check_version_if_license_changed
         @assert_no_errors.call
       end
 
-      it "version is major: cannot produce a version error" do
+      it 'version is major: cannot produce a version error' do
         allow(@hi).to receive(:version_significance).and_return(:major)
         @hi.check_version_if_license_changed
         @assert_no_errors.call
       end
-
     end
 
-    describe "check_visibility_not_reduced()" do
-
+    describe 'check_visibility_not_reduced()' do
       before(:each) do
         # Setup failing conditions.
         allow(@hi).to receive(:is_initial_version).and_return(false)
@@ -753,45 +720,42 @@ describe Hydrus::Item, :type => :model do
         @assert_no_errors.call
       end
 
-      it "can produce a version error" do
+      it 'can produce a version error' do
         @hi.check_visibility_not_reduced
         expect(@hi.errors.messages.keys).to eq([:visibility])
       end
 
-      it "initial version: cannot produce a visibility error" do
+      it 'initial version: cannot produce a visibility error' do
         allow(@hi).to receive(:is_initial_version).and_return(true)
         @hi.check_visibility_not_reduced
         @assert_no_errors.call
       end
 
-      it "visibility was not changed: cannot produce a visibility error" do
+      it 'visibility was not changed: cannot produce a visibility error' do
         allow(@hi).to receive(:prior_visibility).and_return(@hi.visibility.first)
         @hi.check_visibility_not_reduced
         @assert_no_errors.call
       end
 
-      it "visibility was expanded: cannot produce a visibility error" do
+      it 'visibility was expanded: cannot produce a visibility error' do
         allow(@hi).to receive(:visibility).and_return(['world'])
         allow(@hi).to receive(:prior_visibility).and_return('stanford')
         @hi.check_visibility_not_reduced
         @assert_no_errors.call
       end
-
     end
-
   end
 
-  it "can exercise discovery_roles()" do
+  it 'can exercise discovery_roles()' do
     expect(Hydrus::Item.discovery_roles).to be_instance_of(Hash)
   end
 
-  it "can exercise tracked_fields()" do
+  it 'can exercise tracked_fields()' do
     expect(@hi.tracked_fields).to be_an_instance_of(Hash)
   end
 
-  describe "is_submittable_for_approval()" do
-
-    it "if item is not a draft, should return false" do
+  describe 'is_submittable_for_approval()' do
+    it 'if item is not a draft, should return false' do
       # Normally this would lead to a true result.
       allow(@hi).to receive(:requires_human_approval).and_return('yes')
       allow(@hi).to receive('validate!').and_return(true)
@@ -800,7 +764,7 @@ describe Hydrus::Item, :type => :model do
       expect(@hi.is_submittable_for_approval).to eq(false)
     end
 
-    it "if item does not require human approval, should return false" do
+    it 'if item does not require human approval, should return false' do
       # Normally this would lead to a true result.
       allow(@hi).to receive(:object_status).and_return('draft')
       allow(@hi).to receive('validate!').and_return(true)
@@ -809,7 +773,7 @@ describe Hydrus::Item, :type => :model do
       expect(@hi.is_submittable_for_approval).to eq(false)
     end
 
-    it "otherwise, should return the value of validate!" do
+    it 'otherwise, should return the value of validate!' do
       allow(@hi).to receive(:object_status).and_return('draft')
       allow(@hi).to receive(:requires_human_approval).and_return('yes')
       [true, false, true, false].each do |exp|
@@ -817,10 +781,9 @@ describe Hydrus::Item, :type => :model do
         expect(@hi.is_submittable_for_approval).to eq(exp)
       end
     end
-
   end
 
-  it "is_awaiting_approval() should return true object_status has expected value" do
+  it 'is_awaiting_approval() should return true object_status has expected value' do
     tests = {
       'awaiting_approval' => true,
       'returned'          => false,
@@ -833,7 +796,7 @@ describe Hydrus::Item, :type => :model do
     end
   end
 
-  it "is_returned() should return true object_status has expected value" do
+  it 'is_returned() should return true object_status has expected value' do
     tests = {
       'awaiting_approval' => false,
       'returned'          => true,
@@ -846,59 +809,54 @@ describe Hydrus::Item, :type => :model do
     end
   end
 
-  describe "is_approvable()" do
-
-    it "item not awaiting approval: should always return false" do
+  describe 'is_approvable()' do
+    it 'item not awaiting approval: should always return false' do
       allow(@hi).to receive(:is_awaiting_approval).and_return(false)
       expect(@hi).not_to receive('validate!')
       expect(@hi.is_approvable).to eq(false)
     end
 
-    it "item not awaiting approval: should return value of validate!" do
+    it 'item not awaiting approval: should return value of validate!' do
       allow(@hi).to receive(:is_awaiting_approval).and_return(true)
       [true, false].each do |exp|
         allow(@hi).to receive('validate!').and_return(exp)
         expect(@hi.is_approvable).to eq(exp)
       end
     end
-
   end
 
-  it "is_disapprovable() should return the value of is_awaiting_approval()" do
+  it 'is_disapprovable() should return the value of is_awaiting_approval()' do
     [true, false].each do |exp|
       allow(@hi).to receive(:is_awaiting_approval).and_return(exp)
       expect(@hi.is_disapprovable).to eq(exp)
     end
   end
 
-  describe "is_resubmittable()" do
-
-    it "item not returned: should always return false" do
+  describe 'is_resubmittable()' do
+    it 'item not returned: should always return false' do
       allow(@hi).to receive(:is_returned).and_return(false)
       expect(@hi).not_to receive('validate!')
       expect(@hi.is_resubmittable).to eq(false)
     end
 
-    it "item not returned: should return value of validate!" do
+    it 'item not returned: should return value of validate!' do
       allow(@hi).to receive(:is_returned).and_return(true)
       [true, false].each do |exp|
         allow(@hi).to receive('validate!').and_return(exp)
         expect(@hi.is_resubmittable).to eq(exp)
       end
     end
-
   end
 
-  it "is_destroyable() should return the negative of is_published" do
+  it 'is_destroyable() should return the negative of is_published' do
     allow(@hi).to receive(:is_published).and_return(false)
     expect(@hi.is_destroyable).to eq(true)
     allow(@hi).to receive(:is_published).and_return(true)
     expect(@hi.is_destroyable).to eq(false)
   end
 
-  describe "is_publishable()" do
-
-    it "invalid object: should always return false" do
+  describe 'is_publishable()' do
+    it 'invalid object: should always return false' do
       # If the item were valid, this setup would cause the method to return true.
       allow(@hi).to receive(:requires_human_approval).and_return('no')
       allow(@hi).to receive(:is_draft).and_return(true)
@@ -907,7 +865,7 @@ describe Hydrus::Item, :type => :model do
       expect(@hi.is_publishable).to eq(false)
     end
 
-    it "valid object: requires approval: should return value of is_awaiting_approval()" do
+    it 'valid object: requires approval: should return value of is_awaiting_approval()' do
       allow(@hi).to receive('validate!').and_return(true)
       allow(@hi).to receive(:requires_human_approval).and_return('yes')
       [true, false, true, false].each do |exp|
@@ -916,7 +874,7 @@ describe Hydrus::Item, :type => :model do
       end
     end
 
-    it "valid object: does not require approval: should return value of is_draft()" do
+    it 'valid object: does not require approval: should return value of is_draft()' do
       allow(@hi).to receive('validate!').and_return(true)
       allow(@hi).to receive(:requires_human_approval).and_return('no')
       [true, false, true, false].each do |exp|
@@ -924,12 +882,10 @@ describe Hydrus::Item, :type => :model do
         expect(@hi.is_publishable).to eq(exp)
       end
     end
-
   end
 
-  describe "is_publishable_directly()" do
-
-    it "invalid object: should always return false" do
+  describe 'is_publishable_directly()' do
+    it 'invalid object: should always return false' do
       # If the item were valid, this setup would cause the method to return true.
       allow(@hi).to receive(:requires_human_approval).and_return('no')
       allow(@hi).to receive(:is_draft).and_return(true)
@@ -938,7 +894,7 @@ describe Hydrus::Item, :type => :model do
       expect(@hi.is_publishable_directly).to eq(false)
     end
 
-    it "valid object: requires approval: should always return false regardless of is_awaiting_approval status" do
+    it 'valid object: requires approval: should always return false regardless of is_awaiting_approval status' do
       allow(@hi).to receive('validate!').and_return(true)
       allow(@hi).to receive(:requires_human_approval).and_return('yes')
       [true, false, true, false].each do |exp|
@@ -947,7 +903,7 @@ describe Hydrus::Item, :type => :model do
       end
     end
 
-    it "valid object: does not require approval: should return value of is_draft()" do
+    it 'valid object: does not require approval: should return value of is_draft()' do
       allow(@hi).to receive('validate!').and_return(true)
       allow(@hi).to receive(:requires_human_approval).and_return('no')
       [true, false, true, false].each do |exp|
@@ -955,49 +911,44 @@ describe Hydrus::Item, :type => :model do
         expect(@hi.is_publishable_directly).to eq(exp)
       end
     end
-
   end
 
-  describe "is_assemblable()" do
-
-    it "unpublished item: should always return false" do
+  describe 'is_assemblable()' do
+    it 'unpublished item: should always return false' do
       allow(@hi).to receive(:is_published).and_return(false)
       expect(@hi).not_to receive('validate!')
       expect(@hi.is_assemblable).to eq(false)
     end
 
-    it "is assemblable if it validates" do
+    it 'is assemblable if it validates' do
       allow(@hi).to receive(:is_published).and_return(true)
       allow(@hi).to receive('validate!').and_return(true)
       expect(@hi.is_assemblable).to eq(true)
     end
 
-    it "is not assemblable if it does not validate" do
+    it 'is not assemblable if it does not validate' do
       allow(@hi).to receive(:is_published).and_return(true)
       allow(@hi).to receive('validate!').and_return(false)
       expect(@hi.is_assemblable).to eq(false)
     end
   end
 
-  describe "publish_directly()" do
-
-    it "item is not publishable: should raise exception" do
+  describe 'publish_directly()' do
+    it 'item is not publishable: should raise exception' do
       allow(@hi).to receive(:is_publishable).and_return(false)
       expect { @hi.publish_directly }.to raise_exception(@cannot_do_regex)
     end
 
-    it "item is publishable: should call the expected methods" do
+    it 'item is publishable: should call the expected methods' do
       allow(@hi).to receive(:is_publishable).and_return(true)
       expect(@hi).to receive(:complete_workflow_step).with('submit')
       expect(@hi).to receive(:do_publish)
       @hi.publish_directly
     end
-
   end
 
-  describe "do_publish()" do
-
-    it "should call expected methods and set labels, status, and events" do
+  describe 'do_publish()' do
+    it 'should call expected methods and set labels, status, and events' do
       # Set up object title.
       exp = 'foobar title'
       allow(@hi).to receive(:title).and_return(exp)
@@ -1019,24 +970,22 @@ describe Hydrus::Item, :type => :model do
       expect(@hi.get_hydrus_events.first.text).to match(/\AItem published: v\d/)
     end
 
-    it "should close_version() if the object is not an initial version" do
+    it 'should close_version() if the object is not an initial version' do
       allow(@hi).to receive(:complete_workflow_step)
       allow(@hi).to receive(:start_common_assembly)
       allow(@hi).to receive(:is_initial_version).and_return(false)
       expect(@hi).to receive(:close_version)
       @hi.do_publish
     end
-
   end
 
-  describe "submit_for_approval()" do
-
-    it "item is not submittable: should raise exception" do
+  describe 'submit_for_approval()' do
+    it 'item is not submittable: should raise exception' do
       allow(@hi).to receive(:is_submittable_for_approval).and_return(false)
       expect { @hi.submit_for_approval }.to raise_exception(@cannot_do_regex)
     end
 
-    it "item is submittable: should set status and call expected methods" do
+    it 'item is submittable: should set status and call expected methods' do
       allow(@hi).to receive(:is_submittable_for_approval).and_return(true)
       expect(@hi).to receive(:complete_workflow_step).with('submit')
       expect(@hi.submit_for_approval_time).to be_blank
@@ -1045,35 +994,31 @@ describe Hydrus::Item, :type => :model do
       expect(@hi.submit_for_approval_time).not_to be_blank
       expect(@hi.object_status).to eq('awaiting_approval')
     end
-
   end
 
-  describe "approve()" do
-
-    it "item is not approvable: should raise exception" do
+  describe 'approve()' do
+    it 'item is not approvable: should raise exception' do
       allow(@hi).to receive(:is_approvable).and_return(false)
       expect { @hi.approve }.to raise_exception(@cannot_do_regex)
     end
 
-    it "item is approvable: should remove disapproval_reason and call expected methods" do
+    it 'item is approvable: should remove disapproval_reason and call expected methods' do
       allow(@hi).to receive(:is_approvable).and_return(true)
       expect(@hi).to receive(:do_publish)
       @hi.disapproval_reason = 'some reason'
       @hi.approve
       expect(@hi.disapproval_reason).to eq(nil)
     end
-
   end
 
-  describe "disapprove()" do
-
-    it "item is not disapprovable: should raise exception" do
+  describe 'disapprove()' do
+    it 'item is not disapprovable: should raise exception' do
       reason = 'some reason'
       allow(@hi).to receive(:is_disapprovable).and_return(false)
       expect { @hi.disapprove(reason) }.to raise_exception(@cannot_do_regex)
     end
 
-    it "item is disapprovable: should set disapproval_reason and object status and call expected methods" do
+    it 'item is disapprovable: should set disapproval_reason and object status and call expected methods' do
       reason = 'some reason'
       allow(@hi).to receive(:is_disapprovable).and_return(true)
       expect(@hi).to receive(:send_object_returned_email_notification)
@@ -1083,17 +1028,15 @@ describe Hydrus::Item, :type => :model do
       expect(@hi.disapproval_reason).to eq(reason)
       expect(@hi.object_status).to eq('returned')
     end
-
   end
 
-  describe "resubmit()" do
-
-    it "item is not resubmittable: should raise exception" do
+  describe 'resubmit()' do
+    it 'item is not resubmittable: should raise exception' do
       allow(@hi).to receive(:is_resubmittable).and_return(false)
       expect { @hi.resubmit }.to raise_exception(@cannot_do_regex)
     end
 
-    it "item is resubmittable: should remove disapproval_reason, set object status, and call expected methods" do
+    it 'item is resubmittable: should remove disapproval_reason, set object status, and call expected methods' do
       allow(@hi).to receive(:is_resubmittable).and_return(true)
       @hi.disapproval_reason = 'some reason'
       expect(@hi.object_status).not_to eq('awaiting_approval')
@@ -1101,75 +1044,70 @@ describe Hydrus::Item, :type => :model do
       expect(@hi.disapproval_reason).to eq(nil)
       expect(@hi.object_status).to eq('awaiting_approval')
     end
-
   end
 
-  describe "open_new_version()" do
-
+  describe 'open_new_version()' do
     # More significant testing is done at the integration level.
 
-    it "should raise exception if item is initial version" do
+    it 'should raise exception if item is initial version' do
       allow(@hi).to receive(:is_accessioned).and_return(false)
       expect { @hi.open_new_version }.to raise_exception(@cannot_do_regex)
     end
-
   end
 
-  describe "close_version()" do
-
-    it "should raise exception if item is initial version" do
+  describe 'close_version()' do
+    it 'should raise exception if item is initial version' do
       allow(@hi).to receive(:is_initial_version).and_return(true)
       expect { @hi.close_version }.to raise_exception(@cannot_do_regex)
     end
-
   end
 
-  it "should indicate no files have been uploaded yet" do
+  it 'should indicate no files have been uploaded yet' do
     expect(@hi.files_uploaded?).to eq(false)
   end
 
-  it "should indicate that release settings have not been reviewed yet" do
+  it 'should indicate that release settings have not been reviewed yet' do
     expect(@hi.reviewed_release_settings?).to eq(false)
-    @hi.reviewed_release_settings="true"
+    @hi.reviewed_release_settings = 'true'
     @hi.revalidate
     expect(@hi.reviewed_release_settings?).to eq(true)
   end
 
-  it "should indicate that terms of deposit have not been accepted yet" do
+  it 'should indicate that terms of deposit have not been accepted yet' do
     expect(@hi.terms_of_deposit_accepted?).to eq(false)
   end
 
-  it "should indicate if we do not require terms acceptance if user already accepted terms" do
+  it 'should indicate if we do not require terms acceptance if user already accepted terms' do
     allow(@hi).to receive(:accepted_terms_of_deposit).and_return(true)
     expect(@hi.requires_terms_acceptance('archivist1')).to be false
   end
 
-  it "should indicate if we do require terms acceptance if user has never accepted terms on another item in the same collection" do
-    @coll=Hydrus::Collection.new
-    allow(@coll).to receive(:users_accepted_terms_of_deposit).and_return({'archivist3'=>'10-12-2008 00:00:00','archivist4'=>'10-12-2009 00:00:05'})
+  it 'should indicate if we do require terms acceptance if user has never accepted terms on another item in the same collection' do
+    @coll = Hydrus::Collection.new
+    allow(@coll).to receive(:users_accepted_terms_of_deposit).and_return({ 'archivist3' => '10-12-2008 00:00:00', 'archivist4' => '10-12-2009 00:00:05' })
     allow(@hi).to receive(:accepted_terms_of_deposit).and_return(false)
     allow(@hi).to receive(:collection).and_return(@coll)
     expect(@hi.requires_terms_acceptance('archivist1')).to be true
   end
 
-  it "should indicate if we do require terms acceptance if user already accepted terms on another item in the same collection, but it was more than 1 year ago" do
-    @coll=Hydrus::Collection.new
-    allow(@coll).to receive(:users_accepted_terms_of_deposit).and_return({'archivist1'=>'10-12-2008 00:00:00','archivist2'=>'10-12-2009 00:00:05'})
+  it 'should indicate if we do require terms acceptance if user already accepted terms on another item in the same collection, but it was more than 1 year ago' do
+    @coll = Hydrus::Collection.new
+    allow(@coll).to receive(:users_accepted_terms_of_deposit).and_return({ 'archivist1' => '10-12-2008 00:00:00', 'archivist2' => '10-12-2009 00:00:05' })
     allow(@hi).to receive(:accepted_terms_of_deposit).and_return(false)
     allow(@hi).to receive(:collection).and_return(@coll)
     expect(@hi.requires_terms_acceptance('archivist1')).to be true
   end
 
-  it "should indicate if we do not require terms acceptance if user already accepted terms on another item in the same collection, and it was less than 1 year ago" do
-    @coll=Hydrus::Collection.new
-    allow(@coll).to receive(:users_accepted_terms_of_deposit).and_return({'archivist1'=>Time.now.in_time_zone - 364.days,'archivist2'=>'10-12-2009 00:00:05'})
+  it 'should indicate if we do not require terms acceptance if user already accepted terms on another item in the same collection, and it was less than 1 year ago' do
+    @coll = Hydrus::Collection.new
+    allow(@coll).to receive(:users_accepted_terms_of_deposit).and_return({ 'archivist1' => Time.now.in_time_zone - 364.days, 'archivist2' => '10-12-2009 00:00:05' })
     allow(@hi).to receive(:accepted_terms_of_deposit).and_return(false)
     allow(@hi).to receive(:collection).and_return(@coll)
     expect(@hi.requires_terms_acceptance('archivist1')).to be false
   end
 
-  it "should accept the terms of deposit for a user" do
-    @coll=Hydrus::Collection.new
+  it 'should accept the terms of deposit for a user' do
+    @coll = Hydrus::Collection.new
     allow(Hydrus::Authorizable).to receive(:can_edit_item).and_return(true)
     allow(@coll).to receive(:accept_terms_of_deposit)
     allow(@hi).to receive(:collection).and_return(@coll)
@@ -1181,9 +1119,8 @@ describe Hydrus::Item, :type => :model do
     expect(@hi.terms_of_deposit_accepted?).to eq(true)
   end
 
-  describe "embargo_date_is_well_formed()" do
-
-    it "should be driven by @embargo_date_was_malformed instance variable" do
+  describe 'embargo_date_is_well_formed()' do
+    it 'should be driven by @embargo_date_was_malformed instance variable' do
       k = :embargo_date
       [true, false].each do |exp|
         expect(@hi.errors.messages.keys.include?(k)).to eq(false)
@@ -1193,21 +1130,19 @@ describe Hydrus::Item, :type => :model do
         @hi.errors.clear
       end
     end
-
   end
 
-  it "requires_human_approval() if the collection does" do
+  it 'requires_human_approval() if the collection does' do
     allow(@hi).to receive_message_chain(:collection, :requires_human_approval).and_return('yes')
     expect(@hi.requires_human_approval).to eq('yes')
   end
 
-  it "does not requires_human_approval() if the collection does not" do
+  it 'does not requires_human_approval() if the collection does not' do
     allow(@hi).to receive_message_chain(:collection, :requires_human_approval).and_return('no')
     expect(@hi.requires_human_approval).to eq('no')
   end
 
-  describe "version getters and setters" do
-
+  describe 'version getters and setters' do
     before(:each) do
       vs = [
         '<version tag="1.0.0" versionId="1"><description>Blah 1.0.0</description></version>',
@@ -1233,7 +1168,7 @@ describe Hydrus::Item, :type => :model do
       }
     end
 
-    it "basic getters should return expected attributes of the current version" do
+    it 'basic getters should return expected attributes of the current version' do
       @stub_vm.call('1.0.0')
       expect(@hi.version_id).to eq('1')
       expect(@hi.version_tag).to eq('v1.0.0')
@@ -1244,20 +1179,20 @@ describe Hydrus::Item, :type => :model do
       expect(@hi.version_description).to eq('Blah 2.1.0')
     end
 
-    it "is_initial_version() should return true only for the first version" do
+    it 'is_initial_version() should return true only for the first version' do
       @stub_vm.call('1.0.0')
       expect(@hi.is_initial_version).to eq(true)
       @stub_vm.call('1.0.1')
       expect(@hi.is_initial_version).to eq(true)
       @stub_vm.call('1.0.1')
-      expect(@hi.is_initial_version(:absolute => true)).to eq(false)
+      expect(@hi.is_initial_version(absolute: true)).to eq(false)
       @stub_vm.call('2.0.0')
       expect(@hi.is_initial_version).to eq(false)
       @stub_vm.call('2.1.0')
       expect(@hi.is_initial_version).to eq(false)
     end
 
-    it "version_significance() should return :major, :minor, or :admin" do
+    it 'version_significance() should return :major, :minor, or :admin' do
       tests = {
         '1.0.0' => :major,
         '2.0.0' => :major,
@@ -1271,7 +1206,7 @@ describe Hydrus::Item, :type => :model do
       end
     end
 
-    it "version_significance=() should modify the version tag as expected" do
+    it 'version_significance=() should modify the version tag as expected' do
       @stub_vm.call('2.1.0')
       tests = {
         'major' => 'v3.0.0',
@@ -1284,13 +1219,12 @@ describe Hydrus::Item, :type => :model do
       end
     end
 
-    it "version_description=() modifies the description" do
+    it 'version_description=() modifies the description' do
       @stub_vm.call('2.1.0')
       expect(@hi.version_description).to eq('Blah 2.1.0')
       exp = 'blah blah blah!!'
       @hi.version_description = exp
       expect(@hi.version_description).to eq(exp)
     end
-
   end
 end
