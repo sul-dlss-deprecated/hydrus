@@ -148,6 +148,7 @@ module Hydrus::SolrQueryable
     imo = druids.map { |d| %Q<"info:fedora/#{d}"> }.join(' OR ')
     h = {
       :rows          => 0,
+      :'facet.limit' => -1, # unlimited
       :fl            => '',
       :facet         => true,
       :'facet.pivot' => 'is_member_of_collection_ssim,object_status_ssim',
