@@ -102,7 +102,7 @@ describe Hydrus::SolrQueryable, :type => :model do
     h = @msq.squery_collections_of_apos(['a', 'b'])
     expect(Set.new(h.keys)).to eq(Set.new([:rows, :fl, :q, :fq]))
     h = @msq.squery_item_counts_of_collections(['c', 'd'])
-    expect(Set.new(h.keys)).to eq(Set.new([:rows, :fl, :q, :facet, :'facet.pivot', :fq]))
+    expect(Set.new(h.keys)).to eq(Set.new([:rows, :'facet.limit', :fl, :q, :facet, :'facet.pivot', :fq]))
     h = @msq.squery_all_hydrus_collections()
     expect(Set.new(h.keys)).to eq(Set.new([:rows, :fl, :q, :fq]))
   end
