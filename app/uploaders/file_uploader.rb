@@ -18,6 +18,19 @@ class FileUploader < CarrierWave::Uploader::Base
   before :store, :remember_cache_id
   after :store, :delete_tmp_dir
 
+  ##
+  # By default, CarrierWave copies an uploaded file twice, first copying the file into the cache, then copying the file into the store.
+  # For large files, this can be prohibitively time consuming.
+  # You may change this behavior by overriding either or both of the move_to_cache and move_to_store methods and set values to true.
+  def move_to_cache
+    true
+  end
+
+  def move_to_store
+    true
+  end
+  ##
+
   # store! nil's the cache_id after it finishes so we need to remember it for deletion
   def remember_cache_id(new_file)
     @cache_id_was = cache_id
