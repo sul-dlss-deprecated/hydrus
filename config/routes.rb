@@ -35,6 +35,9 @@ Hydrus::Application.routes.draw do
     get 'agree_to_terms_of_deposit', as: 'agree_to_terms_of_deposit', on: :collection
   end
 
+  resources :contacts
+  get 'contact' => 'contacts#new', as: 'contact_path' # an alias for the friendly /contact path
+
   resources :admin_policy_objects, controller: 'hydrus_admin_policy_objects', as: 'hydrus_admin_policy_objects' do
     resources :datastreams, only: :index
   end
@@ -47,7 +50,6 @@ Hydrus::Application.routes.draw do
     get 'users/auth/webauth' => 'sessions#new', :as => 'webauth_login'
     get 'users/auth/webauth/logout' => 'sessions#destroy_webauth', :as => 'webauth_logout'
   end
-  match 'contact' => 'contact#index', :as => 'contact', via: [:get, :post]
 
   # Actions for the HydrusSolrController.
   get 'hydrus_solr/reindex/:id'           => 'hydrus_solr#reindex' # NOTE: It's not clear that anything is using this.

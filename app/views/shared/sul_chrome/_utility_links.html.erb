@@ -7,5 +7,5 @@
 <%- else -%>
   <%= hydrus_signin_link %>
 <%- end -%>
-| <%=link_to "Contact Us", contact_path(:from=>request.path)%>
+| <%=link_to "Contact Us", new_contact_path(:from=>request.path)%>
 
