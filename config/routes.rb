@@ -35,8 +35,7 @@ Hydrus::Application.routes.draw do
     get 'agree_to_terms_of_deposit', as: 'agree_to_terms_of_deposit', on: :collection
   end
 
-  resources :contacts
-  get 'contact' => 'contacts#new', as: 'contact_path' # an alias for the friendly /contact path
+  resource :contact
 
   resources :admin_policy_objects, controller: 'hydrus_admin_policy_objects', as: 'hydrus_admin_policy_objects' do
     resources :datastreams, only: :index
