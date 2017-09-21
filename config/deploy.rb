@@ -34,7 +34,6 @@ set :linked_dirs, %w{log config/certs config/settings tmp/pids tmp/cache tmp/soc
 # set :keep_releases, 5
 
 set :bundle_without, %w{development test deployment}.join(' ')
-set :bundle_audit_ignore, %w{CVE-2015-3226}
 
 # honeybadger_env otherwise defaults to rails_env
 set :honeybadger_env, fetch(:stage)
