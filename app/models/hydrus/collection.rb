@@ -674,18 +674,17 @@ class Hydrus::Collection < Dor::Collection
     #       { "value" => "published",         "count" => 0 },
     #     ]
     #   }
-    get_facet_counts_from_response(resp).each { |fc|
+    get_facet_counts_from_response(resp).each do |fc|
       druid = fc['value'].split('/').last
-      fc['pivot'].each { |p|
+      fc['pivot'].each do |p|
         status = p['value']
         n      = p['count']
-        if !(counts[druid])
-          raise 'adding ' + druid
+        if counts[druid]
+          counts[druid] ||= initial_item_counts()
+          counts[druid][status] = n
         end
-        counts[druid] ||= initial_item_counts()
-        counts[druid][status] = n
-      }
-    }
+      end
+    end
 
     # Prune the inner hashes, removing keys if the count is zero.
     counts.each do |druid, h|
