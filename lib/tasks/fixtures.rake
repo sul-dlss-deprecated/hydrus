@@ -186,7 +186,7 @@ namespace :hydrus do
     # Restore jetty to initial state.
     Rake::Task['jetty:stop'].invoke
     Rake::Task['jetty:clean'].invoke
-    Rake::Task['hydra:jetty:config'].invoke
+    Rake::Task['hydra:jetty:config_fedora'].invoke
     Rake::Task['jetty:start'].invoke
     Rake::Task['hydrus:clear_upload_files'].invoke
   end

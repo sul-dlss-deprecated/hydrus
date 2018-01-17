@@ -10,7 +10,8 @@ Digital Repository for preservation and access.
 ## Setting up your environment
 
 First, you need a Java runtime so you can have a local Solr and Fedora instance for development/testing.
-One way to install Solr/Fedora is by using hydra-jetty, which is what the instructions below assume
+One way to install Solr/Fedora is by using solr_wrapper and jetty_wrapper (for Fedora),
+ which is what the instructions below assume
 
 ```bash
 rvm install 2.3.4
@@ -24,11 +25,12 @@ cd hydrus
 bundle install
 
 rake jetty:clean # download hydra-jetty
-rake hydra:jetty:config # configure hydra-jetty
 
 # Create a config/settings.local.yml file, adding passwords, etc.  Talk to another developer to see what is needed here.
 
-rake jetty:start # start your local solr/fedora
+rake jetty:start # start your local fedora
+
+solr_wrapper # start Solr. Do this in a separate terminal window.
 
 rake db:migrate
 rake db:test:prepare
@@ -40,10 +42,12 @@ rake hydrus:refreshfix RAILS_ENV=test
 
 ## Running the application
 
-Assuming you are using hydra-jetty for solr/fedora, start the Jetty server:
+Assuming you are using solr_wrapper for Solr and jetty_wrapper for Fedora,
+start the servers:
 
 ```bash
 rake jetty:start
+solr_wrapper # Do this in a separate terminal window.
 ```
 
 Run the Hydrus application in either of these ways:
@@ -67,7 +71,7 @@ docker run -d -p 127.0.0.1:3002:3000 suldlss/suri-rails:latest
 * Jetty - [http://localhost:8983](http://localhost:8983)
 * Fedora admin - [http://localhost:8983/fedora/admin](http://localhost:8983/fedora/admin)
 * Fedora objects - [http://localhost:8983/fedora/objects](http://localhost:8983/fedora/objects)
-* Solr - [http://localhost:8983/solr](http://localhost:8983/solr)
+* Solr - [http://localhost:8984/solr](http://localhost:8983/solr)
 
 ## User accounts used during development
 

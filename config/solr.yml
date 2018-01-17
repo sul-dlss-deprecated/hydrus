@@ -1,5 +1,5 @@
 development:
-  url: http://localhost:8983/solr/development
+  url: http://localhost:8984/solr/hydrus-test
 
 test:
-  url: http://localhost:8983/solr/test
+  url: http://localhost:8984/solr/hydrus-test
