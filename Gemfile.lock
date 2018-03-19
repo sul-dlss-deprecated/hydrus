@@ -133,7 +133,7 @@ GEM
     deep_merge (1.2.1)
     deprecation (0.99.0)
       activesupport
-    devise (4.4.2)
+    devise (4.4.3)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
       railties (>= 4.1.0, < 6.0)
@@ -274,7 +274,7 @@ GEM
       launchy (~> 2.2)
     link_header (0.0.8)
     logger (1.2.8)
-    loofah (2.2.0)
+    loofah (2.2.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     lyber-utils (0.1.2)
