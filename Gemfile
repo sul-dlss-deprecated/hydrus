@@ -4,6 +4,7 @@ gem 'rails', '~> 4.2.9'
 
 gem 'config'
 gem 'devise', '~> 4.0'
+gem 'devise-remote-user', '~> 1.0'
 gem 'jquery-rails'
 gem 'dynamic_form'
 gem 'bootstrap-datepicker-rails'
