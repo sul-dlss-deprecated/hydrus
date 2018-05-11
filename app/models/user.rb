@@ -2,6 +2,8 @@ class User < ActiveRecord::Base
   include Hydra::User
   include Blacklight::User
 
+  attr_reader :groups
+
   devise :remote_user_authenticatable
 
   # Blacklight uses #to_s on your user class to get
@@ -24,5 +26,5 @@ class User < ActiveRecord::Base
 
   def is_global_viewer?
     is_administrator? || groups.include?('dlss:hydrus-app-global-viewers')
-  end 
+  end
 end
