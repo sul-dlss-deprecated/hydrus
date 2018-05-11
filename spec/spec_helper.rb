@@ -11,6 +11,7 @@ require 'tempfile'
 require 'rspec/matchers' # req by equivalent-xml custom matcher `be_equivalent_to`
 require 'equivalent-xml'
 require 'equivalent-xml/rspec_matchers'
+require 'factory_bot'
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -111,6 +112,7 @@ RSpec.configure do |config|
   config.include Devise::Test::ControllerHelpers, type: :controller
   config.include Warden::Test::Helpers, type: :controller
   config.after(:each) { Warden.test_reset! }
+  config.include FactoryBot::Syntax::Methods
 
   config.include Capybara::DSL
 
