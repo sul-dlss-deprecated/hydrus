@@ -7,10 +7,6 @@ describe User, type: :model do
     @u     = User.create(email: @email)
   end
 
-  it 'should return false to is_webauth?' do
-    expect(@u.is_webauth?).to be_falsey
-  end
-
   it 'to_s() should return the user ID portion of the email' do
     expect(@u.to_s).to eq(@id)
   end
