@@ -45,16 +45,11 @@ class ApplicationController < ActionController::Base
   protected
 
   def current_user
-    if request.env['WEBAUTH_USER']
-      WebAuthUser.new(request.env['WEBAUTH_USER'], request.env)
-    else
-      super
-    end
-  end
-
-  def authenticate_user! *args
-    unless request.env['WEBAUTH_USER']
-      super
+    super.tap do |cur_user|
+      break unless cur_user
+      if request.env['eduPersonEntitlement']
+        cur_user.groups = request.env['eduPersonEntitlement'].split(';')
+      end
     end
   end
 
