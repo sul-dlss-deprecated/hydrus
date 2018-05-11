@@ -4,7 +4,11 @@ Hydrus::Application.routes.draw do
   root to: 'catalog#home'
   get 'catalog' => 'catalog#index', :as => :catalog_index
 
-  devise_for :users, controllers: { sessions: 'sessions' }
+  devise_for :users, skip: [:registrations, :passwords, :sessions] # controllers: { sessions: 'sessions' }
+  devise_scope :user do
+    get 'webauth/login' => 'login#login', as: :new_user_session
+    match 'webauth/logout' => 'devise/sessions#destroy', :as => :destroy_user_session, :via => Devise.mappings[:user].sign_out_via
+  end
 
   # Actions to advance Collections through the Hydrus process.
   post 'collections/open/:id'  => 'hydrus_collections#open',     :as => 'open_collection'
