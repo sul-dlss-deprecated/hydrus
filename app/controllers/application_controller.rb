@@ -5,6 +5,8 @@ class ApplicationController < ActionController::Base
   include Hydrus::ModelHelper
   include ActionView::Helpers::OutputSafetyHelper # for safe_join() and raw()
 
+  # before_action :authenticate_user!
+
   check_authorization unless: :devise_controller?
 
   rescue_from CanCan::AccessDenied do |exception|

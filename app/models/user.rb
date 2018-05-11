@@ -2,7 +2,7 @@ class User < ActiveRecord::Base
   include Hydra::User
   include Blacklight::User
 
-  attr_reader :groups
+  attr_accessor :groups
 
   devise :remote_user_authenticatable
 

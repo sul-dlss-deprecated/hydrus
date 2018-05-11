@@ -4,13 +4,13 @@ def noko_doc(x)
   Nokogiri.XML(x) { |conf| conf.default_xml.noblanks }
 end
 
-def mock_user
-  User.find_or_create_by(email: 'some-user@example.com') do |u|
-    u.password = 'test12345'
-    u.password_confirmation = u.password
-    u.save
-  end
-end
+#def mock_user
+#  User.find_or_create_by(email: 'some-user@example.com') do |u|
+#    u.password = 'test12345'
+#    u.password_confirmation = u.password
+#    u.save
+#  end
+#end
 
 def mock_authed_user(u = 'archivist1')
   User.find_by_email("#{u}@example.com")
