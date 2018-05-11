@@ -2,7 +2,7 @@ class User < ActiveRecord::Base
   include Hydra::User
   include Blacklight::User
 
-  attr_reader :groups
+  attr_accessor :groups
 
   devise :remote_user_authenticatable
 
@@ -17,14 +17,17 @@ class User < ActiveRecord::Base
   end
 
   def is_administrator?
+    return false if groups.nil?
     groups.include? 'dlss:hydrus-app-administrators'
   end
 
   def is_collection_creator?
+    return false if groups.nil?
     is_administrator? || groups.include?('dlss:hydrus-app-collection-creators')
   end
 
   def is_global_viewer?
+    return false if groups.nil?
     is_administrator? || groups.include?('dlss:hydrus-app-global-viewers')
   end
 end

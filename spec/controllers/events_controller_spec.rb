@@ -14,8 +14,9 @@ describe EventsController, type: :controller do
   end
 
   context 'as an authenticated user' do
+    let(:user) { User.find_or_create_by(email: 'archivist1@example.com') }
     before :each do
-      sign_in(mock_authed_user)
+      sign_in(user)
     end
   
     it "should restrict access to users who shouldn't be able to view items" do

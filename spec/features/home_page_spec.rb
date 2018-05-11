@@ -1,6 +1,9 @@
 require 'spec_helper'
 
 describe('Home page', type: :request, integration: true) do
+  let(:archivist1) { User.find_or_create_by(email: 'archivist1@example.com') }
+  let(:archivist2) { User.find_or_create_by(email: 'archivist2@example.com') }
+  let(:archivist3) { User.find_or_create_by(email: 'archivist3@example.com') }
   before(:each) do
     @search_box  = '.search-query-form #search'
     @sdr         = 'Stanford Digital Repository'
@@ -13,7 +16,7 @@ describe('Home page', type: :request, integration: true) do
   end
 
   it 'if not logged in, should see intro text, but not other controls' do
-    logout
+    sign_out
     visit root_path
     expect(page).to have_content(@sdr)
     expect(page).not_to have_content(@your_cs)
@@ -22,7 +25,7 @@ describe('Home page', type: :request, integration: true) do
   end
 
   it 'if logged in, should see intro text, search box, and listing of collections' do
-    login_as('archivist1')
+    sign_in archivist1
     visit root_path
     expect(page).to have_content(@sdr)
     expect(page).to have_content(@your_cs)
@@ -31,7 +34,7 @@ describe('Home page', type: :request, integration: true) do
 
   context 'as archivist1' do
     before do
-      login_as('archivist1')
+      sign_in archivist1
     end
 
     it 'shows collections' do
@@ -54,7 +57,7 @@ describe('Home page', type: :request, integration: true) do
 
   context 'as archivist2' do
     before do
-      login_as('archivist2')
+      sign_in archivist2
     end
 
     it 'shows the collections they have access to' do
@@ -79,17 +82,8 @@ describe('Home page', type: :request, integration: true) do
 
   it 'should not show Create Collection button if user has no authority to create collections' do
     # No
-    login_as('archivist3@example.com', login_pw)
+    sign_in archivist3
     visit root_path
     expect(page).not_to have_selector(@cc_button)
-  end
-
-  describe 'search' do
-    it 'should not be able to issue direct-URL search if not logged in' do
-      logout
-      visit @search_url
-      expect(current_path).to eq(new_user_session_path)
-      expect(find(@alert)).to have_content(@sign_in_msg)
-    end
   end
 end

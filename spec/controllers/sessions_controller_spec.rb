@@ -8,8 +8,8 @@ describe SessionsController, type: :controller do
   describe 'routes' do
     it 'should properly define login' do
       pending
-      expect(webauth_login_path).to eq('/users/auth/webauth')
-      assert_routing({ path: 'users/auth/webauth', method: :get },
+      expect(webauth_login_path).to eq('/webauth/login')
+      assert_routing({ path: '/webauth/login', method: :get },
         { controller: 'sessions', action: 'new' })
     end
     it 'should properly define logout' do

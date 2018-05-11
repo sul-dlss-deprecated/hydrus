@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe('Contact page', type: :request, integration: true) do
+  let(:archivist3) { User.find_or_create_by(email: 'archivist3@example.com') }
   before(:each) do
     @name_textbox      = 'input#name'
     @email_textbox     = 'input#email'
@@ -32,7 +33,7 @@ describe('Contact page', type: :request, integration: true) do
   end
 
   it 'shows the partial form and then generate an email when a user fills in the contact form when logged in' do
-    login_as('archivist3@example.com', login_pw)
+    sign_in archivist3
     visit contact_path
     expect(page).to_not have_selector(@name_textbox) # name and email text boxes are not shown when logged in
     expect(page).to_not have_selector(@email_textbox)

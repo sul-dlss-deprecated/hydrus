@@ -4,17 +4,13 @@ def noko_doc(x)
   Nokogiri.XML(x) { |conf| conf.default_xml.noblanks }
 end
 
-def mock_user
-  User.find_or_create_by(email: 'some-user@example.com') do |u|
-    u.password = 'test12345'
-    u.password_confirmation = u.password
-    u.save
-  end
-end
-
-def mock_authed_user(u = 'archivist1')
-  User.find_by_email("#{u}@example.com")
-end
+# def mock_user
+#  User.find_or_create_by(email: 'some-user@example.com') do |u|
+#    u.password = 'test12345'
+#    u.password_confirmation = u.password
+#    u.save
+#  end
+# end
 
 def login_pw
   'beatcal'
@@ -153,7 +149,7 @@ end
 def create_new_collection(opts = {})
   # Setup options.
   default_opts = {
-    user: 'archivist1',
+    user: User.find_or_create_by(email: 'archivist1@example.com'),
     title: 'title_foo',
     abstract: 'abstract_foo',
     contact: 'foo@bar.com',
@@ -162,7 +158,7 @@ def create_new_collection(opts = {})
   }
   opts = OpenStruct.new(default_opts.merge opts)
   # Login and create new collection.
-  login_as(opts.user)
+  sign_in(opts.user)
   visit(new_hydrus_collection_path)
   # Extract the druid from the URL.
   r = Regexp.new('/collections/(druid:\w{11})/edit')
@@ -193,7 +189,7 @@ def create_new_item(opts = {})
   # Setup options.
   default_opts = {
     collection_pid: 'druid:oo000oo0003',
-    user: mock_authed_user,
+    user: User.find_or_create_by(email: 'archivist1@example.com'),
     title: 'title_foo',
     abstract: 'abstract_foo',
     contributor: 'foo_contributor',
@@ -208,7 +204,7 @@ def create_new_item(opts = {})
   hc.requires_human_approval = opts.requires_human_approval
   hc.save
   # Login and create new item.
-  login_as(opts.user.to_s)
+  sign_in(opts.user)
   visit new_hydrus_item_path(collection: hc.pid)
   # Extract the druid from the URL.
   r = Regexp.new('/items/(druid:\w{11})/edit')

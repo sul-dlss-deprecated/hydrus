@@ -52,6 +52,7 @@ describe HydrusCollectionsController, type: :controller do
   end
 
   describe 'Update Action', integration: true do
+    let(:mock_user) { create :mock_user }
     before(:all) do
       @pid = 'druid:oo000oo0003'
     end
@@ -65,6 +66,7 @@ describe HydrusCollectionsController, type: :controller do
   end
 
   describe 'open', integration: true do
+    let(:mock_user) { create :mock_user }
     it 'should raise exception if user lacks required permissions' do
       sign_in(mock_user)
       post(:open, id: 'druid:oo000oo0003')
@@ -74,6 +76,8 @@ describe HydrusCollectionsController, type: :controller do
   end
 
   describe 'close', integration: true do
+    let(:mock_user) { User.find_or_create_by(email: 'some-user@example.com') }
+
     it 'should raise exception if user lacks required permissions' do
       sign_in(mock_user)
       post(:close, id: 'druid:oo000oo0003')
@@ -83,8 +87,9 @@ describe HydrusCollectionsController, type: :controller do
   end
 
   describe 'list_all', integration: true do
+    let(:user) { User.find_or_create_by(email: 'archivist1@example.com') }
     it 'should redirect to root url for non-admins when not in development mode' do
-      sign_in(mock_authed_user)
+      sign_in(user)
       get(:list_all)
       expect(flash[:alert]).to eq('You are not authorized to access this page.')
       expect(response).to redirect_to(root_path)
@@ -97,7 +102,7 @@ describe HydrusCollectionsController, type: :controller do
 
     it 'should render the page for users with sufficient powers' do
       controller.current_ability.can :list_all_collections, Hydrus::Collection
-      sign_in(mock_authed_user)
+      sign_in(user)
 
       get(:list_all)
       expect(assigns[:all_collections]).not_to eq(nil)
