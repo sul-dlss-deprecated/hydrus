@@ -51,6 +51,14 @@ rails server
 rake  server   # Filters some logging noise
 ```
 
+## Running external services
+```
+docker pull suldlss/suri-rails:latest
+docker pull suldlss/workflow-server:latest
+docker run -d -p 127.0.0.1:3001:3000 suldlss/workflow-server:latest
+docker run -d -p 127.0.0.1:3002:3000 suldlss/suri-rails:latest
+```
+
 ## Useful URLs during development
 
 * Hydrus - [http://localhost:3000](http://localhost:3000)

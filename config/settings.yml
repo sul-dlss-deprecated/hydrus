@@ -37,7 +37,7 @@ sdr:
   url: 'https://sdr.example.com/solr/collection'
 
 suri:
-  url: 'https://sul-lyberservices-test.stanford.edu'
+  url: 'http://localhost:3002'
   user: ~
   password: ~
   mint_ids: true
@@ -51,5 +51,5 @@ fedora:
 #   key_pass: ''
 
 workflow:
-  url: https://sul-lyberservices-dev.stanford.edu/workflow/
+  url: http://localhost:3001
   timeout: 120

@@ -1,6 +1,17 @@
 notifications:
   email: false
 
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker pull suldlss/workflow-server:latest
+  - docker pull suldlss/suri-rails:latest
+  - docker run -d -p 127.0.0.1:3001:3000 suldlss/workflow-server:latest
+  - docker run -d -p 127.0.0.1:3002:3000 suldlss/suri-rails:latest
+  - docker ps -a
+
 rvm:
   - 2.3.4
 
