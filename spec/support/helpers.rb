@@ -12,10 +12,6 @@ end
 #  end
 #end
 
-def mock_authed_user(u = 'archivist1')
-  User.find_by_email("#{u}@example.com")
-end
-
 def login_pw
   'beatcal'
 end
@@ -193,7 +189,7 @@ def create_new_item(opts = {})
   # Setup options.
   default_opts = {
     collection_pid: 'druid:oo000oo0003',
-    user: mock_authed_user,
+    user: FactoryBot.create(:archivist1),
     title: 'title_foo',
     abstract: 'abstract_foo',
     contributor: 'foo_contributor',

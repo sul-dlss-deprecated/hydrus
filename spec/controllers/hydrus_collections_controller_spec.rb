@@ -83,8 +83,9 @@ describe HydrusCollectionsController, type: :controller do
   end
 
   describe 'list_all', integration: true do
+    let(:user) { create :archivist1 }
     it 'should redirect to root url for non-admins when not in development mode' do
-      sign_in(mock_authed_user)
+      sign_in(user)
       get(:list_all)
       expect(flash[:alert]).to eq('You are not authorized to access this page.')
       expect(response).to redirect_to(root_path)
@@ -97,7 +98,7 @@ describe HydrusCollectionsController, type: :controller do
 
     it 'should render the page for users with sufficient powers' do
       controller.current_ability.can :list_all_collections, Hydrus::Collection
-      sign_in(mock_authed_user)
+      sign_in(user)
 
       get(:list_all)
       expect(assigns[:all_collections]).not_to eq(nil)
