@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe('Item versioning', type: :request, integration: true) do
-  fixtures :users
+  # fixtures :users
 
   before :each do
     @hi = Hydrus::Item.find('druid:oo000oo0001')

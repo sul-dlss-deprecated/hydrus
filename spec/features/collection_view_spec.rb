@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe('Collection view', type: :request, integration: true) do
-  fixtures :users
+  # fixtures :users
 
   before :each do
     @apo_druid = 'druid:oo000oo0002'
