@@ -148,9 +148,10 @@ describe(Hydrus::Item, type: :feature, integration: true) do
     end
 
     it 'should create another item' do
+      let(:user) { create :archivist1 }
       allow_any_instance_of(Dor::WorkflowDs).to receive(:current_priority).and_return 0
-      allow(collection).to receive_messages(users_accepted_terms_of_deposit: { mock_authed_user.to_s => Time.now })
-      item = ItemService.create(collection.pid, mock_authed_user, 'some-type')
+      allow(collection).to receive_messages(users_accepted_terms_of_deposit: { user.to_s => Time.now })
+      item = ItemService.create(collection.pid, user, 'some-type')
       expect(item).to be_instance_of Hydrus::Item
       expect(item).to_not be_new
       expect(item.item_type).to eq 'some-type'

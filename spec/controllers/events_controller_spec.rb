@@ -14,8 +14,9 @@ describe EventsController, type: :controller do
   end
 
   context 'as an authenticated user' do
+    let(:user) { create :archivist1 }
     before :each do
-      sign_in(mock_authed_user)
+      sign_in(user)
     end
   
     it "should restrict access to users who shouldn't be able to view items" do
