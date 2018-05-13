@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe(Hydrus::Collection, type: :feature, integration: true) do
-  let(:user) { create :archivist1 }
+  let(:user) { build_stubbed :archivist1 }
   before(:all) do
     @prev_mint_ids = config_mint_ids()
   end
