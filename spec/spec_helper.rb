@@ -164,8 +164,8 @@ RSpec.configure do |config|
       # TODO: simplify if rollback_fixtures() is incorporated into Rubydora.
       if ENV['USE_OLD_ROLLBACK']
         t.rollback
-      else
-        t.rollback_fixtures(Hydrus.all_fixture_foxml())
+        # else
+        # t.rollback_fixtures(Hydrus.all_fixture_foxml())
       end
     end
   end
