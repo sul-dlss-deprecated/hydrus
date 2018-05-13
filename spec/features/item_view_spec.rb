@@ -2,10 +2,12 @@ require 'spec_helper'
 
 describe('Item view', type: :request, integration: true) do
   # fixtures :users
+  let(:user) { build_stubbed :archivist1 }
 
   before :each do
     @druid = 'druid:oo000oo0001'
     @hi    = Hydrus::Item.find @druid
+    sign_in :user
   end
 
   it 'If not logged in, should be redirected to the login page, then back to our intended page after logging in' do
@@ -19,7 +21,6 @@ describe('Item view', type: :request, integration: true) do
   end
 
   it 'Breadcrumbs should be displayed with home link, linked trucated collection name, and unlinked item name with state' do
-    login_as('archivist1')
     visit polymorphic_path(@hi)
     expect(page).to have_selector('ul.breadcrumb li a', text: 'Home')
     expect(page).to have_selector('ul.breadcrumb li a', text: 'SSDS Social Science Data Co...')
@@ -28,13 +29,11 @@ describe('Item view', type: :request, integration: true) do
 
   it 'should redirect to the item page if the requested druid is an item but is visited at the collection page URL' do
     @bad_url = "/collections/#{@druid}" # this is actually an item druid
-    login_as('archivist1')
     visit @bad_url
     expect(current_path).to eq(polymorphic_path(@hi))
   end
 
   it 'Some of the expected info is displayed, and disappers if blank' do
-    login_as('archivist1')
     visit polymorphic_path(@hi)
     expect(current_path).to eq(polymorphic_path(@hi))
     expect(page).to have_content('archivist1@example.com')
@@ -61,7 +60,6 @@ describe('Item view', type: :request, integration: true) do
   end
 
   it 'should apply the active class to the active tab' do
-    login_as('archivist1')
     should_visit_view_page(@hi)
     expect(page).to have_selector('ul.nav li.active', text: 'Published Version')
 
@@ -70,7 +68,6 @@ describe('Item view', type: :request, integration: true) do
   end
 
   it 'should show the events in a history tab' do
-    login_as('archivist1')
     should_visit_view_page([@hi, :events])
     expect(page).to have_content('How Couples Meet and Stay Together')
     expect(page).to have_content('Event History for this Item')
@@ -78,7 +75,6 @@ describe('Item view', type: :request, integration: true) do
   end
 
   it 'redirect_if_not_correct_object_type()' do
-    login_as('archivist1')
     # View item URL with a collection PID.
     visit '/items/druid:oo000oo0003'
     expect(current_path).to eq('/collections/druid:oo000oo0003')
