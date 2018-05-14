@@ -46,7 +46,7 @@ group :development, :test do
   gem 'byebug'
   gem 'letter_opener'
   gem 'pry'
-  gem 'rubocop', '~> 0.49.1'
+  gem 'rubocop', '~> 0.56.0'
   # gem 'rubocop-rspec', '~> 1.5'
 end
 
