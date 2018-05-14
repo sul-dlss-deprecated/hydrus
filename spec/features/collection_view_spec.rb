@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe('Collection view', type: :request, integration: true) do
   # fixtures :users
-
+  let(:user) { build_stubbed(:archivist1) }
   before :each do
     @apo_druid = 'druid:oo000oo0002'
     @druid = 'druid:oo000oo0003'
@@ -11,7 +11,7 @@ describe('Collection view', type: :request, integration: true) do
   end
 
   it 'If not logged in, should be redirected to login page, then back to our intended page after logging in' do
-    logout
+    # logout
     visit "/collections/#{@druid}"
     expect(current_path).to eq(new_user_session_path)
     fill_in 'Email', with: 'archivist1@example.com'

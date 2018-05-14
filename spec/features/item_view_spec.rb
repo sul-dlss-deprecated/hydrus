@@ -7,11 +7,11 @@ describe('Item view', type: :request, integration: true) do
   before :each do
     @druid = 'druid:oo000oo0001'
     @hi    = Hydrus::Item.find @druid
-    sign_in :user
+    sign_in user
   end
 
   it 'If not logged in, should be redirected to the login page, then back to our intended page after logging in' do
-    logout
+    # logout
     visit "/items/#{@druid}"
     expect(current_path).to eq(new_user_session_path)
     fill_in 'Email', with: 'archivist1@example.com'
