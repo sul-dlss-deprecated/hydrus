@@ -13,7 +13,7 @@ hydrus:
     - 'druid:yp220bx1022' # versioningWF
 
 purl:
-  base_url: 'https://purl-test.stanford.edu/'
+  base_url: 'https://sul-purl-test.stanford.edu/'
 
 workflow:
   url: 'https://workflow.example.com/workflow'
