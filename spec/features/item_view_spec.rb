@@ -87,11 +87,19 @@ describe('Item view', type: :request, integration: true) do
     expect(current_path).to eq('/items/druid:oo000oo0001/edit')
   end
 
-  it 'can exercise purl_page_ready?' do
-    # Our fixture object is not on PURL.
-    expect(@hi.purl_page_ready?).to eq(false)
-    # But this pid does exist on sul-purl-test.
-    allow(@hi).to receive(:purl_url).and_return('https://sul-purl-test.stanford.edu/pf182cd5962.xml')
-    expect(@hi.purl_page_ready?).to eq(true)
+  describe '#purl_page_ready?' do
+    subject { @hi.purl_page_ready? }
+    before do
+      allow(RestClient).to receive(:get).and_return(double(code: code))
+    end
+    context 'when the return code is 200' do
+      let(:code) { 200 }
+      it { is_expected.to be true }
+    end
+
+    context 'when the return code is 404' do
+      let(:code) { 404 }
+      it { is_expected.to be false }
+    end
   end
 end

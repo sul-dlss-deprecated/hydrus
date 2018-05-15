@@ -183,7 +183,11 @@ namespace :hydrus do
       druid = File.basename(f, '.xml').gsub(/_/, ':')
       # Push content up to the WF service.
       resp = [druid, hwf]
-      resp << Dor::WorkflowService.delete_workflow(repo, druid, hwf)
+      begin
+        resp << Dor::WorkflowService.delete_workflow(repo, druid, hwf)
+      rescue Faraday::ResourceNotFound
+        logger.info "Delete workflow for #{druid} returned 404"
+      end
       resp << Dor::WorkflowService.create_workflow(repo, druid, hwf, xml)
       resp << vwf
       resp << Dor::WorkflowService.delete_workflow(repo, druid, vwf)

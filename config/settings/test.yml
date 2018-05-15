@@ -15,7 +15,7 @@ purl:
   base_url: 'https://purl.stanford.edu/'
 
 suri:
-  url: 'https://sul-lyberservices-test.stanford.edu'
+  url: 'http://localhost:3002'
   user: ~
   password: ~
   mint_ids: false
