@@ -51,7 +51,7 @@ rails server
 rake  server   # Filters some logging noise
 ```
 
-## Running external services
+## Running external services using Docker
 ```
 docker pull suldlss/suri-rails:latest
 docker pull suldlss/workflow-server:latest
