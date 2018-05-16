@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe('Collection edit', type: :request, integration: true) do
   # fixtures :users
+  let(:archivist1) { build_stubbed(:archivist1) }
 
   before :each do
     @druid          = 'druid:oo000oo0003'
@@ -32,7 +33,7 @@ describe('Collection edit', type: :request, integration: true) do
     new_contact   = 'ted@gonzo.com'
     orig_contact  = @hc.contact
 
-    login_as('archivist1')
+    sign_in archivist1
     should_visit_edit_page(@hc)
 
     expect(page).to have_content(orig_abstract)
@@ -50,13 +51,13 @@ describe('Collection edit', type: :request, integration: true) do
   end
 
   it 'does not shows deletion link for a collection if it has any items in it' do
-    login_as('archivist1')
+    sign_in archivist1
     should_visit_edit_page(@hc)
     expect(page).not_to have_css('.discard-item')
   end
 
   it 'does not shows deletion link for a collection if has no items but is stil open' do
-    login_as('archivist1')
+    sign_in archivist1
     @hc = Hydrus::Collection.find(@druid_no_files)
     should_visit_edit_page(@hc)
     expect(page).not_to have_css('.discard-item')
@@ -71,7 +72,7 @@ describe('Collection edit', type: :request, integration: true) do
     original_url_field = 'hydrus_collection_related_item_url_1'
     original_label_field = 'hydrus_collection_related_item_title_1'
 
-    login_as('archivist1')
+    sign_in archivist1
     should_visit_edit_page(@hc)
 
     expect(page).not_to have_css("##{new_url_field}")
@@ -127,7 +128,7 @@ describe('Collection edit', type: :request, integration: true) do
     ps = { visibility: 'stanford', license_code: 'cc-by', embargo_date: '' }
     check_emb_vis_lic(@hc, ps)
 
-    login_as('archivist1')
+    sign_in archivist1
     # Visit edit page, and confirm content.
     should_visit_edit_page(@hc)
     expect(page).to have_checked_field(orig_check_field)
@@ -160,7 +161,7 @@ describe('Collection edit', type: :request, integration: true) do
     no_embargo_check_field = "hydrus_collection_embargo_option_#{no_embargo_option}"
     ps = { visibility: 'stanford', license_code: 'cc-by', embargo_date: '' }
     check_emb_vis_lic(@hc, ps)
-    login_as('archivist1')
+    sign_in archivist1
     # Visit edit page, and confirm content.
     should_visit_edit_page(@hc)
     expect(page).to have_checked_field(orig_check_field)
@@ -214,7 +215,7 @@ describe('Collection edit', type: :request, integration: true) do
 
     it 'should be able to add/remove persons with various roles' do
       # Visit edit page.
-      login_as('archivist1')
+      sign_in archivist1
       should_visit_edit_page(@hc)
       # Check the initial role-management section.
       role_info = @hc.apo_person_roles
@@ -244,7 +245,7 @@ describe('Collection edit', type: :request, integration: true) do
 
     it 'should be able to strip email addresses to leave just sunetIDs from persons with various roles' do
       # Visit edit page.
-      login_as('archivist1')
+      sign_in archivist1
       should_visit_edit_page(@hc)
       # Check the initial role-management section.
       role_info = @hc.apo_person_roles
@@ -322,7 +323,7 @@ describe('Collection edit', type: :request, integration: true) do
       end
 
       it "should send an email to managers when we're opening a collection and to a depositor when we add them" do
-        login_as('archivist1')
+        sign_in archivist1
         visit new_hydrus_collection_path()
         fill_in 'hydrus_collection_title', with: 'TestingTitle'
         fill_in 'hydrus_collection_abstract', with: 'Summary of my content'
@@ -347,7 +348,7 @@ describe('Collection edit', type: :request, integration: true) do
       end
 
       it "should not send an email to new depositors when we're updating a collection if user does not check the send email checkbox" do
-        login_as('archivist1')
+        sign_in archivist1
         visit new_hydrus_collection_path()
         fill_in 'hydrus_collection_title', with: 'TestingTitle'
         fill_in 'hydrus_collection_abstract', with: 'Summary of my content'
@@ -364,7 +365,7 @@ describe('Collection edit', type: :request, integration: true) do
       end
 
       it 'should handle complex changes to depositors' do
-        login_as('archivist1')
+        sign_in archivist1
         visit new_hydrus_collection_path()
         fill_in 'hydrus_collection_title', with: 'TestingTitle'
         fill_in 'hydrus_collection_abstract', with: 'Summary of my content'
@@ -383,7 +384,7 @@ describe('Collection edit', type: :request, integration: true) do
       end
 
       it 'should not send an email if the collection is closed' do
-        login_as('archivist1')
+        sign_in archivist1
         visit new_hydrus_collection_path()
         fill_in 'hydrus_collection_apo_person_roles[hydrus-collection-item-depositor]', with: 'jdoe'
         expect { click_button('save_nojs') }.to change { ActionMailer::Base.deliveries.count }.by(0)
@@ -438,7 +439,7 @@ describe('Collection edit', type: :request, integration: true) do
     end
 
     it 'enforces license selection' do
-      login_as('archivist1')
+      sign_in archivist1
       should_visit_edit_page(@hc)
       choose('hydrus_collection_license_option_varies')
       click_button(@buttons[:save])
@@ -449,7 +450,7 @@ describe('Collection edit', type: :request, integration: true) do
 
     it 'form should enforce license selection for license options varies' do
       # Edit collection, but forget to choose a license.
-      login_as('archivist1')
+      sign_in archivist1
       should_visit_edit_page(@hc)
       choose('hydrus_collection_license_option_varies')
       select('ODC-ODbl Open Database License', from: 'license_option_varies')
@@ -459,7 +460,7 @@ describe('Collection edit', type: :request, integration: true) do
 
     it 'form should enforce license selection for license options fixed' do
       # Edit collection, but forget to choose a license.
-      login_as('archivist1')
+      sign_in archivist1
       should_visit_edit_page(@hc)
       choose('hydrus_collection_license_option_fixed')
       click_button(@buttons[:save])

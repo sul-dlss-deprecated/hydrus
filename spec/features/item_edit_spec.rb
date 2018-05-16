@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe('Item edit', type: :request, integration: true) do
   # fixtures :users
+  let(:archivist1) { build_stubbed(:archivist1) }
 
   before :each do
     @druid = 'druid:oo000oo0001'
@@ -39,7 +40,7 @@ describe('Item edit', type: :request, integration: true) do
     )
     comma_join = '  ,  '
     # Visit edit page.
-    login_as('archivist1')
+    sign_in archivist1
     should_visit_edit_page(@hi)
     # Make sure the object does not have the new content yet.
     expect(@hi.abstract).not_to eq(ni.abstract)
@@ -66,7 +67,7 @@ describe('Item edit', type: :request, integration: true) do
   describe 'dates' do
     it 'should edit a single date' do
       # Visit edit page.
-      login_as('archivist1')
+      sign_in archivist1
       should_visit_edit_page(@hi)
       date_val = '2004'
       expect(find_field('hydrus_item[dates[date_created]]').value).not_to include(date_val)
@@ -91,7 +92,7 @@ describe('Item edit', type: :request, integration: true) do
     end
     it 'should edit a date range' do
       # Visit edit page.
-      login_as('archivist1')
+      sign_in archivist1
       should_visit_edit_page(@hi)
       date_val = '2004'
       date_val_end = '2005'
@@ -124,7 +125,7 @@ describe('Item edit', type: :request, integration: true) do
       exp = @hi.contributors.map { |c| c.clone }
       expect(exp.size).to eq(5)
       # Go to edit page.
-      login_as('archivist1')
+      sign_in archivist1
       should_visit_edit_page(@hi)
       # Delete some contributors.
       # Note: [3,1,1] corresponds to elements 3, 1, 2 from original list.
@@ -185,7 +186,7 @@ describe('Item edit', type: :request, integration: true) do
     new_title   = 'foo_TITLE_bar'
     field_title = 'hydrus_item_related_item_title_0'
 
-    login_as('archivist1')
+    sign_in archivist1
     should_visit_edit_page(@hi)
 
     expect(find_field(field_link).value).to eq(orig_link)
@@ -210,7 +211,7 @@ describe('Item edit', type: :request, integration: true) do
     new_title   = 'foo_TITLE_bar'
     field_title = 'hydrus_item_related_item_title_0'
 
-    login_as('archivist1')
+    sign_in archivist1
     should_visit_edit_page(@hi)
 
     expect(find_field(field_link).value).to eq(orig_link)
@@ -229,7 +230,7 @@ describe('Item edit', type: :request, integration: true) do
 
   it 'Related Content adding and deleting' do
     # Got to edit page.
-    login_as('archivist1')
+    sign_in archivist1
     should_visit_edit_page(@hi)
     # Check for the related item input fields.
     expect(page).to have_css('input#hydrus_item_related_item_title_0')
@@ -281,7 +282,7 @@ describe('Item edit', type: :request, integration: true) do
       url_f: 'hydrus_item_related_item_url_0',
     )
     # Visit edit page.
-    login_as('archivist1')
+    sign_in archivist1
     should_visit_edit_page(@hi)
     # Make sure the object does not have the new content yet.
     old_title = find_field(ni.title_f).value
@@ -305,7 +306,7 @@ describe('Item edit', type: :request, integration: true) do
     new_pref_cit  = 'new_citation_FOO'
     orig_pref_cit = @hi.preferred_citation
 
-    login_as('archivist1')
+    sign_in archivist1
     should_visit_edit_page(@hi)
 
     expect(find_field(citation_field).value.strip).to eq(orig_pref_cit)
@@ -323,7 +324,7 @@ describe('Item edit', type: :request, integration: true) do
     new_delete_button    = 'remove_related_citation_2'
     new_citation_text    = ' This is a citation for a related item! '
 
-    login_as('archivist1')
+    sign_in archivist1
     should_visit_edit_page(@hi)
 
     expect(page).to have_css('textarea#hydrus_item_related_citation_0')
@@ -370,7 +371,7 @@ describe('Item edit', type: :request, integration: true) do
     check_emb_vis_lic(@hi, ps)
 
     # Modify the collection to allow varying license.
-    login_as('archivist1')
+    sign_in archivist1
     should_visit_edit_page(Hydrus::Collection.find('druid:oo000oo0003'))
     choose varies_radio
     select(new_collection_license, from: collection_licenses)
@@ -460,7 +461,7 @@ describe('Item edit', type: :request, integration: true) do
 
       # But the owner should see the button.
       # Submit it for approval.
-      login_as(owner)
+      sign_in archivist1
       should_visit_view_page(hi)
       click_button(b)
 
@@ -487,7 +488,7 @@ describe('Item edit', type: :request, integration: true) do
 
       # But the owner should see the button.
       # Resubmit the item.
-      login_as(owner)
+      sign_in archivist1
       should_visit_view_page(hi)
       click_button(b)
 
@@ -516,7 +517,7 @@ describe('Item edit', type: :request, integration: true) do
 
       # But the owner should see the button.
       # Publish directly.
-      login_as(owner)
+      sign_in archivist1
       should_visit_view_page(hi)
       click_button(b)
     end
@@ -553,7 +554,7 @@ describe('Item edit', type: :request, integration: true) do
       )
 
       # Login.
-      login_as('archivist1')
+      sign_in archivist1
 
       # Visit edit page: set an embargo date and change visibility.
       should_visit_edit_page(@hi)
@@ -631,7 +632,7 @@ describe('Item edit', type: :request, integration: true) do
       }
 
       # Login.
-      login_as('archivist1')
+      sign_in archivist1
 
       # Visit view page and check file info.
       should_visit_view_page(@hi)
