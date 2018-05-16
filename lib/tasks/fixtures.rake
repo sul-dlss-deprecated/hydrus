@@ -18,8 +18,12 @@ namespace :hydrus do
     EOF
   end
 
-  desc 'load hydrus fixtures'
-  task loadfix: ['db:fixtures:load'] do
+  desc "load hydrus fixtures"
+  task :loadfix => ['db:fixtures:load'] do
+    $: << 'spec/support'
+    require 'service_mocks'
+    ServiceMocks.mock
+    
     fixture_loader = ActiveFedora::FixtureLoader.new('spec/fixtures')
     FIXTURE_PIDS.each { |pid|
       fixture_loader.reload(pid)

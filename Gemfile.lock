@@ -128,6 +128,8 @@ GEM
       deep_merge (~> 1.2.1)
       dry-validation (>= 0.10.4)
     confstruct (0.2.7)
+    crack (0.4.3)
+      safe_yaml (~> 1.0.0)
     crass (1.0.3)
     daemons (1.2.6)
     deep_merge (1.2.1)
@@ -226,6 +228,7 @@ GEM
       activesupport (>= 4.2.0)
     haml (4.0.7)
       tilt
+    hashdiff (0.3.2)
     hike (1.2.3)
     honeybadger (3.3.0)
     hooks (0.4.1)
@@ -434,6 +437,7 @@ GEM
       mime-types
       nokogiri
       rest-client
+    safe_yaml (1.0.4)
     sass (3.2.19)
     sass-rails (4.0.5)
       railties (>= 4.0.0, < 5.0)
@@ -493,6 +497,10 @@ GEM
       i18n
     warden (1.2.7)
       rack (>= 1.0)
+    webmock (1.22.5)
+      addressable (< 2.4.0)
+      crack (>= 0.3.2)
+      hashdiff
     whenever (0.10.0)
       chronic (>= 0.6.3)
     xml-simple (1.1.5)
@@ -546,6 +554,7 @@ DEPENDENCIES
   sul_chrome (~> 0.1.0)
   uglifier (>= 1.0.3)
   validates_email_format_of
+  webmock
   whenever (~> 0.9)
 
 BUNDLED WITH

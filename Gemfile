@@ -50,6 +50,10 @@ group :development, :test do
   # gem 'rubocop-rspec', '~> 1.5'
 end
 
+group :test do
+  gem 'webmock'
+end
+
 group :production do
   gem 'mysql2'
 end
