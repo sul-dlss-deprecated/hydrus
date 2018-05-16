@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe('Item create', type: :request, integration: true) do
+  let(:archivist1) { build_stubbed(:archivist1) }
+  let(:archivist6) { build_stubbed(:archivist6) }
   before(:all) do
     @div_alert   = '#flash-notices div.alert'
     @span_status = 'span#status-label'
@@ -34,6 +36,7 @@ describe('Item create', type: :request, integration: true) do
     # Need to mint an actual druid in order to pass validation.
     @prev_mint_ids = Dor::Config.configure.suri.mint_ids
     Dor::Config.configure.suri.mint_ids = true
+    # sign_in archivist1
   end
 
   after(:all) do
@@ -42,29 +45,32 @@ describe('Item create', type: :request, integration: true) do
   end
 
   context 'depositing items into collections' do
-      it 'should have a non-js select list for depositing items into collections' do
-        login_as('archivist1')
-        visit hydrus_collection_path(id: @hc_druid)
-        select 'data set', from: 'type'
-        click_button('Add new item')
-        expect(current_path).not_to eq(hydrus_collection_path(id: @hc_druid))
-        expect(current_path).to match(@edit_path_regex)
-      end
-
-      it 'should be able to access create-new-Item screen via the Collection view page' do
-        Capybara.ignore_hidden_elements = false
-        login_as('archivist1')
-        collection = Hydrus::Collection.find(@hc_druid)
-        visit polymorphic_path(collection)
-        click_link 'data set'
-        expect(current_path).to match(@edit_path_regex)
-        Capybara.ignore_hidden_elements = true
-      end
+    it 'should have a non-js select list for depositing items into collections' do
+      # login_as('archivist1')
+      sign_in archivist1
+      visit hydrus_collection_path(id: @hc_druid)
+      select 'data set', from: 'type'
+      click_button('Add new item')
+      expect(current_path).not_to eq(hydrus_collection_path(id: @hc_druid))
+      expect(current_path).to match(@edit_path_regex)
     end
+
+    it 'should be able to access create-new-Item screen via the Collection view page' do
+      Capybara.ignore_hidden_elements = false
+      # login_as('archivist1')
+      sign_in archivist1
+      collection = Hydrus::Collection.find(@hc_druid)
+      visit polymorphic_path(collection)
+      click_link 'data set'
+      expect(current_path).to match(@edit_path_regex)
+      Capybara.ignore_hidden_elements = true
+    end
+  end
 
   it 'should be able to create a new default Item type, with expected datastreams' do
     # Login, go to new Item page, and store the druid of the new Item.
-    login_as('archivist1')
+    # login_as('archivist1')
+    sign_in archivist1
     visit new_hydrus_item_path(collection: @hc_druid)
     expect(current_path).to match(@edit_path_regex)
     druid = @edit_path_regex.match(current_path)[1]
@@ -106,7 +112,8 @@ describe('Item create', type: :request, integration: true) do
 
   it 'should not be able to publish an item if there are no contributors' do
     # Login, go to new Item page, and store the druid of the new Item.
-    login_as('archivist1')
+    # login_as('archivist1')
+    sign_in archivist1
     visit new_hydrus_item_path(collection: @hc_druid, type: 'article')
     expect(current_path).to match(@edit_path_regex)
     druid = @edit_path_regex.match(current_path)[1]
@@ -139,7 +146,8 @@ describe('Item create', type: :request, integration: true) do
 
   it 'should be able to create a new article type Item, with expected datastreams' do
     # Login, go to new Item page, and store the druid of the new Item.
-    login_as('archivist1')
+    # login_as('archivist1')
+    sign_in archivist1
     visit new_hydrus_item_path(collection: @hc_druid, type: 'article')
     expect(current_path).to match(@edit_path_regex)
     druid = @edit_path_regex.match(current_path)[1]
@@ -163,7 +171,8 @@ describe('Item create', type: :request, integration: true) do
 
   it 'should be able to create a new class project Item, with expected datastreams' do
     # Login, go to new Item page, and store the druid of the new Item.
-    login_as('archivist1')
+    # login_as('archivist1')
+    sign_in archivist1
     visit new_hydrus_item_path(collection: @hc_druid, type: 'class project')
     expect(current_path).to match(@edit_path_regex)
     druid = @edit_path_regex.match(current_path)[1]
@@ -205,7 +214,8 @@ describe('Item create', type: :request, integration: true) do
 
     # Login as a item depositor for this collection, go to new Item page, and
     # store the druid of the new Item.
-    login_as('archivist6')
+    # login_as('archivist6')
+    sign_in archivist6
     visit new_hydrus_item_path(collection: @hc_druid)
     expect(page).to have_content('Welcome archivist6!')
     expect(current_path).to match(@edit_path_regex)
@@ -313,7 +323,8 @@ describe('Item create', type: :request, integration: true) do
     expect(find(@div_alert)).to have_content(@notices[:save])
 
     # now login as archivist 1 (collection manager) and Disapprove the Item.
-    login_as('archivist1')
+    # login_as('archivist1')
+    sign_in archivist1
     visit hydrus_item_path(id: item.pid)
     expect(page).to have_content('Welcome archivist1!')
     fill_in 'hydrus_item_disapproval_reason', with: ni.reason
@@ -336,7 +347,8 @@ describe('Item create', type: :request, integration: true) do
     expect(find(@span_status)).to have_content(@status_msgs[:returned])
 
     # now login as archivist 6 (depositor) and resubmit the Item.
-    login_as('archivist6')
+    # login_as('archivist6')
+    sign_in(archivist6)
     visit hydrus_item_path(id: item.pid)
     expect(page).to have_content('Welcome archivist6!')
     expect(page).to have_content(ni.reason)
@@ -357,7 +369,8 @@ describe('Item create', type: :request, integration: true) do
     expect(find(@span_status)).to have_content(@status_msgs[:awaiting_approval])
 
     # Now login as archivist 1 and approve the item.
-    login_as('archivist1')
+    # login_as('archivist1')
+    sign_in archivist1
     visit hydrus_item_path(id: item.pid)
     click_button(@buttons[:approve])
     expect(find(@div_alert)).to have_content(@notices[:approve])
@@ -418,7 +431,7 @@ describe('Item create', type: :request, integration: true) do
     coll.save
 
     # Login as a item depositor for this collection, go to new Item page, and store the druid of the new Item.
-    login_as('archivist1')
+    # login_as('archivist1')
     visit new_hydrus_item_path(collection: @hc_druid)
     expect(current_path).to match(@edit_path_regex)
     druid = @edit_path_regex.match(current_path)[1]
@@ -542,7 +555,8 @@ describe('Item create', type: :request, integration: true) do
     end
 
     it 'collection: no license: new items should have no license' do
-      login_as('archivist1')
+      # login_as('archivist1')
+      sign_in archivist1
       # Set collection to no-license mode.
       coll = Hydrus::Collection.find(@hc_druid)
       coll.license_option = 'none'
@@ -555,7 +569,8 @@ describe('Item create', type: :request, integration: true) do
     end
 
     it 'collection: fixed license: new items should have that license' do
-      login_as('archivist1')
+      # login_as('archivist1')
+      sign_in archivist1
       # Set collection to fixed-license mode.
       coll = Hydrus::Collection.find(@hc_druid)
       coll.license_option = 'fixed'
@@ -569,7 +584,8 @@ describe('Item create', type: :request, integration: true) do
 
     describe 'collection: variable license' do
       it 'with a license: new items offer selector, with default selected' do
-        login_as('archivist1')
+        # login_as('archivist1')
+        sign_in archivist1
         # Set collection to variable-license mode.
         coll = Hydrus::Collection.find(@hc_druid)
         coll.license_option = 'varies'
@@ -586,7 +602,8 @@ describe('Item create', type: :request, integration: true) do
       end
 
       it 'with no license: new items offer selector, with no-license selected' do
-        login_as('archivist1')
+        # login_as('archivist1')
+        sign_in archivist1
         # Set collection to variable-license mode.
         coll = Hydrus::Collection.find(@hc_druid)
         coll.license_option = 'varies'

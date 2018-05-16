@@ -1,6 +1,9 @@
 require 'spec_helper'
 
 describe('Collection create', type: :request, integration: true) do
+  let(:archivist1) { build_stubbed(:archivist1) }
+  let(:archivist99) { build_stubbed(:archivist99) }
+
   before(:each) do
     @alert           = 'div.alert'
     @notice_save     = 'Your changes have been saved'
@@ -15,7 +18,7 @@ describe('Collection create', type: :request, integration: true) do
   end
 
   it 'should not be able to visit new collection URL if user lacks authority to create collections' do
-    login_as('archivist99')
+    sign_in archivist99
     visit new_hydrus_collection_path
     expect(current_path).to eq(root_path)
     expect(find(@alert)).to have_content('You do not have sufficient privileges')
@@ -28,7 +31,7 @@ describe('Collection create', type: :request, integration: true) do
       contact: 'ozzy@hell.com',
     )
     # Login, go to new Collection page, and store the druid of the new Collection.
-    login_as('archivist1')
+    sign_in archivist1
     visit new_hydrus_collection_path()
     expect(current_path).to match(@edit_path_regex)
     druid = @edit_path_regex.match(current_path)[1]
@@ -90,7 +93,7 @@ describe('Collection create', type: :request, integration: true) do
     open_button    = 'Open Collection'
     close_button   = 'Close Collection'
     # Login, go to new Collection page, and store the druid of the new Collection.
-    login_as('archivist1')
+    sign_in archivist1
     visit new_hydrus_collection_path()
     expect(current_path).to match(@edit_path_regex)
     druid = @edit_path_regex.match(current_path)[1]
@@ -215,6 +218,7 @@ describe('Collection create', type: :request, integration: true) do
     end
 
     it 'should fully delete collection and APO: from fedora, solr, workflows' do
+      sign_in archivist1
       # Setup.
       hyc = Hydrus::Collection
       hya = Hydrus::AdminPolicyObject
