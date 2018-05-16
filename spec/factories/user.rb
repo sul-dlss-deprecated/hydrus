@@ -5,7 +5,7 @@ FactoryBot.define do
   end
 
   factory :archivist2, class: User do
-    email 'archivist2='
+    email 'archivist2'
   end
 
   factory :archivist3, class: User do
@@ -32,5 +32,9 @@ FactoryBot.define do
 
   factory :archivist99, class: User do
     email 'archivist99'
+  end
+
+  factory :mock_user, class: User do
+    email 'some-user@example.com'
   end
 end
