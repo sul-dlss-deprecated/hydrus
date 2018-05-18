@@ -92,8 +92,9 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
     rmd = apo.roleMetadata
     rmd.add_person_with_role(user, 'hydrus-collection-manager')
     rmd.add_person_with_role(user, 'hydrus-collection-depositor')
-    rmd.add_group_with_role('dlss:pmag-staff', 'dor-apo-manager')
-    rmd.add_group_with_role('dlss:developers', 'dor-apo-manager')
+    %w[sdr:developer sdr:service-manager sdr:metadata-staff].each do |group|
+      rmd.add_group_with_role(group, 'dor-apo-manager')
+    end
     # Create defaultObjectRights datastream ... by mentioning it.
     apo.defaultObjectRights.content_will_change!
     # Add the references agreement to the APO's RELS-EXT.
