@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe('Item edit', type: :request, integration: true) do
-
   before :each do
     @druid = 'druid:oo000oo0001'
     @hi    = Hydrus::Item.find @druid
@@ -31,7 +30,6 @@ describe('Item edit', type: :request, integration: true) do
   end
 
   context 'when logged in as archivist1' do
-
     it 'is able to edit simple items: abstract, contact, keywords' do
       # Set up the new values for the fields we will edit.
       ni = OpenStruct.new(
