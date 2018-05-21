@@ -16,7 +16,7 @@ describe('Home page', type: :request, integration: true) do
   end
 
   it 'if not logged in, should see intro text, but not other controls' do
-    logout
+    sign_out
     visit root_path
     expect(page).to have_content(@sdr)
     expect(page).not_to have_content(@your_cs)
@@ -85,14 +85,5 @@ describe('Home page', type: :request, integration: true) do
     sign_in archivist3
     visit root_path
     expect(page).not_to have_selector(@cc_button)
-  end
-
-  describe 'search' do
-    it 'should not be able to issue direct-URL search if not logged in' do
-      logout
-      visit @search_url
-      expect(current_path).to eq(new_user_session_path)
-      expect(find(@alert)).to have_content(@sign_in_msg)
-    end
   end
 end
