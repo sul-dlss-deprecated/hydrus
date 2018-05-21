@@ -6,6 +6,11 @@ module Features
       TestShibbolethHeaders.user = user.sunetid
       TestShibbolethHeaders.groups = groups
     end
+
+    def sign_out
+      TestShibbolethHeaders.user = nil
+      TestShibbolethHeaders.groups = nil
+    end
   end
 end
 
