@@ -393,6 +393,8 @@ describe('Collection edit', type: :request, integration: true) do
   end
 
   describe 'role-protection' do
+    let(:owner) { create :archivist2 }
+    let(:viewer) { create :archivist6 }
     before(:each) do
       @prev_mint_ids = config_mint_ids()
     end
@@ -403,28 +405,26 @@ describe('Collection edit', type: :request, integration: true) do
 
     it 'action buttons should not be accessible to users with insufficient powers' do
       # Create a collection.
-      owner  = 'archivist2'
-      viewer = 'archivist6'
       opts = {
-        user: owner,
-        viewers: viewer,
+        user: owner.email,
+        viewers: viewer.email,
       }
+      sign_in(owner)
       hc = create_new_collection(opts)
       # Should see the open collection button.
-      login_as(owner)
       should_visit_view_page(hc)
       expect(page).to have_button(@buttons[:open])
       # But another user should not see the button.
-      login_as(viewer)
+      sign_in(viewer)
       should_visit_view_page(hc)
       expect(page).not_to have_button(@buttons[:open])
       # Open the collection. Should see close button.
-      login_as(owner)
+      sign_in(owner)
       should_visit_view_page(hc)
       click_button(@buttons[:open])
       expect(page).to have_button(@buttons[:close])
       # But another user should not see the button.
-      login_as(viewer)
+      sign_in(viewer)
       should_visit_view_page(hc)
       expect(page).not_to have_button(@buttons[:close])
     end

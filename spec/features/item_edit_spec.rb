@@ -20,9 +20,8 @@ describe('Item edit', type: :request, integration: true) do
   end
 
   context 'without logging in' do
-    let(:current_user) { nil }
     it 'redirects to login' do
-      get destroy_user_session_path
+      sign_out
       get edit_polymorphic_path(@hi)
       expect(response.code).to eq('302')
       expect(response).to redirect_to new_user_session_path
@@ -39,8 +38,7 @@ describe('Item edit', type: :request, integration: true) do
       )
       comma_join = '  ,  '
       # Visit edit page.
-      get edit_polymorphic_path(@hi)
-      expect(response.code).to eq('200')
+      should_visit_edit_page(@hi)
       # Make sure the object does not have the new content yet.
       expect(@hi.abstract).not_to eq(ni.abstract)
       expect(@hi.contact).not_to  eq(ni.contact)
@@ -445,7 +443,7 @@ describe('Item edit', type: :request, integration: true) do
       # Submit for approval.
       # A viewer should not see the button.
       b = @buttons[:submit_for_approval]
-      login_as(viewer)
+      sign_in User.find_or_create_by(email: 'archivist7@example.com')
       should_visit_view_page(hi)
       expect(page).not_to have_button(b)
 
@@ -457,13 +455,13 @@ describe('Item edit', type: :request, integration: true) do
       # Disapprove item.
       # A viewer should not see the button.
       b = @buttons[:disapprove]
-      login_as(viewer)
+      sign_in User.find_or_create_by(email: 'archivist7@example.com')
       should_visit_view_page(hi)
       expect(page).not_to have_button(b)
 
       # But the reviewer should see the button.
       # Disapprove the item.
-      login_as(reviewer)
+      sign_in User.find_or_create_by(email: 'archivist5@example.com')
       should_visit_view_page(hi)
       fill_in 'hydrus_item_disapproval_reason', with: 'Doh!'
       click_button(b)
@@ -471,7 +469,7 @@ describe('Item edit', type: :request, integration: true) do
       # Resubmit item.
       # A viewer should not see the button.
       b = @buttons[:resubmit]
-      login_as(viewer)
+      sign_in User.find_or_create_by(email: 'archivist7@example.com')
       should_visit_view_page(hi)
       expect(page).not_to have_button(b)
 
@@ -483,13 +481,13 @@ describe('Item edit', type: :request, integration: true) do
       # Approve item.
       # A viewer should not see the button.
       b = @buttons[:approve]
-      login_as(viewer)
+      sign_in User.find_or_create_by(email: 'archivist7@example.com')
       should_visit_view_page(hi)
       expect(page).not_to have_button(b)
 
       # But the reviewer should see the button.
       # Disapprove the item.
-      login_as(reviewer)
+      sign_in User.find_or_create_by(email: 'archivist5@example.com')
       should_visit_view_page(hi)
       click_button(b)
 
@@ -499,13 +497,13 @@ describe('Item edit', type: :request, integration: true) do
       # Publish directly.
       # A viewer should not see the button.
       b = @buttons[:publish_directly]
-      login_as(viewer)
+      sign_in User.find_or_create_by(email: 'archivist7@example.com')
       should_visit_view_page(hi)
       expect(page).not_to have_button(b)
 
       # But the owner should see the button.
       # Publish directly.
-      sign_in archivist1
+      sign_in User.find_or_create_by(email: 'archivist1@example.com')
       should_visit_view_page(hi)
       click_button(b)
     end
