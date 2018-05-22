@@ -52,13 +52,13 @@ describe HydrusCollectionsController, type: :controller do
   end
 
   describe 'Update Action', integration: true do
-    let(:mock_user) { build_stubbed(:mock_user) }
+    let(:mock_user) { create :mock_user }
     before(:all) do
       @pid = 'druid:oo000oo0003'
     end
 
     it 'should not allow a user to update an object if you do not have edit permissions' do
-      sign_in mock_user
+      sign_in(mock_user)
       put :update, id: @pid
       expect(response).to redirect_to(root_path)
       expect(flash[:alert]).to eq('You are not authorized to access this page.')
@@ -66,9 +66,9 @@ describe HydrusCollectionsController, type: :controller do
   end
 
   describe 'open', integration: true do
-    let(:mock_user) { build_stubbed(:mock_user) }
+    let(:mock_user) { create :mock_user }
     it 'should raise exception if user lacks required permissions' do
-      sign_in mock_user
+      sign_in(mock_user)
       post(:open, id: 'druid:oo000oo0003')
 
       expect(flash[:alert]).to eq('You are not authorized to access this page.')
@@ -76,10 +76,10 @@ describe HydrusCollectionsController, type: :controller do
   end
 
   describe 'close', integration: true do
-    let(:mock_user) { build_stubbed(:mock_user) }
+    let(:mock_user) { create :mock_user }
 
     it 'should raise exception if user lacks required permissions' do
-      sign_in mock_user
+      sign_in(mock_user)
       post(:close, id: 'druid:oo000oo0003')
 
       expect(flash[:alert]).to eq('You are not authorized to access this page.')
