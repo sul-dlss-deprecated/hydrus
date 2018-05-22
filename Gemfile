@@ -51,7 +51,9 @@ group :development, :test do
 end
 
 group :production do
-  gem 'mysql2'
+  # Rails 4.2.10 only supports mysql2 < 0.5
+  # See https://github.com/rails/rails/blob/v4.2.10/activerecord/lib/active_record/connection_adapters/mysql2_adapter.rb#L3
+  gem 'mysql2', '~> 0.4.5'
 end
 
 group :deployment do
