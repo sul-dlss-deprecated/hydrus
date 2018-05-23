@@ -18,7 +18,7 @@ RSpec.describe ItemService do
       context 'if the user has already accepted another item in this collection but it was more than 1 year ago' do
         let(:user) { User.find_or_create_by(email: 'archivist1@example.com') } # this user accepted more than 1 year ago
         it 'indicates that a new item in a collection requires terms acceptance' do
-          expect(collection.users_accepted_terms_of_deposit.keys.include?(user.email)).to eq(true)
+          expect(collection.users_accepted_terms_of_deposit.keys.include?(user.sunetid)).to eq(true)
           expect(item.requires_terms_acceptance(user, collection)).to eq(true)
           expect(item.accepted_terms_of_deposit).to eq('false')
           expect(item.terms_of_deposit_accepted?).to eq(false)
@@ -34,7 +34,7 @@ RSpec.describe ItemService do
         end
 
         it 'indicates that a new item in a collection does not require terms acceptance' do
-          expect(collection.users_accepted_terms_of_deposit.keys.include?(user.email)).to eq(true)
+          expect(collection.users_accepted_terms_of_deposit.keys.include?(user.sunetid)).to eq(true)
           expect(item.requires_terms_acceptance(user, collection)).to eq(false)
           expect(item.accepted_terms_of_deposit).to eq('true')
           expect(item.terms_of_deposit_accepted?).to eq(true)
