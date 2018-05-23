@@ -1,8 +1,8 @@
 require 'spec_helper'
 
 describe('Item create', type: :request, integration: true) do
-  let(:archivist1) { build_stubbed(:archivist1) }
-  let(:archivist6) { build_stubbed(:archivist6) }
+  let(:archivist1) { User.find_or_create_by(email: 'archivist1@example.com') }
+  let(:archivist6) { User.find_or_create_by(email: 'archivist6@example.com') }
   before(:all) do
     @div_alert   = '#flash-notices div.alert'
     @span_status = 'span#status-label'

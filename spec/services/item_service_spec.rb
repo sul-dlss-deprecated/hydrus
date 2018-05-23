@@ -16,7 +16,7 @@ RSpec.describe ItemService do
       let(:collection) { Hydrus::Collection.find('druid:oo000oo0003') }
 
       context 'if the user has already accepted another item in this collection but it was more than 1 year ago' do
-        let(:user) { User.find_or_create_by(email: 'archivist1') } # this user accepted more than 1 year ago
+        let(:user) { User.find_or_create_by(email: 'archivist1@example.com') } # this user accepted more than 1 year ago
         it 'indicates that a new item in a collection requires terms acceptance' do
           expect(collection.users_accepted_terms_of_deposit.keys.include?(user.email)).to eq(true)
           expect(item.requires_terms_acceptance(user, collection)).to eq(true)
@@ -26,7 +26,7 @@ RSpec.describe ItemService do
       end
 
       context 'if the user has already accepted another item in this collection less than 1 year ago' do
-        let(:user) { build_stubbed :archivist3 }
+        let(:user) { User.find_or_create_by(email: 'archivist3@example.com') }
         before do
           dt = HyTime.now - 1.month # force this user to have accepted 1 month ago.
           collection.hydrusProperties.accept_terms_of_deposit(user, HyTime.datetime(dt))
@@ -42,7 +42,7 @@ RSpec.describe ItemService do
       end
 
       context 'when the user has not already accepted another item in this collection' do
-        let(:user) { build_stubbed :archivist5 }
+        let(:user) { User.find_or_create_by(email: 'archivist5@example.com') }
         before do
           allow(Hydrus::Authorizable).to receive(:can_create_items_in).and_return(true)
         end

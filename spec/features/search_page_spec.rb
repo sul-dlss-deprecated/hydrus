@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe('Search page', type: :request, integration: true) do
-  let(:archivist1) { build_stubbed(:archivist1) }
+  let(:archivist1) { User.find_or_create_by(email: 'archivist1@example.com') }
   it 'Some results should appear for archivist1 user for default search' do
     pending('removed search pending decision on if and where to show it')
     visit root_path
