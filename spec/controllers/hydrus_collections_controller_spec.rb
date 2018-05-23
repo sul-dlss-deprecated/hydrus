@@ -76,7 +76,7 @@ describe HydrusCollectionsController, type: :controller do
   end
 
   describe 'close', integration: true do
-    let(:mock_user) { create :mock_user }
+    let(:mock_user) { User.find_or_create_by(email: 'some-user@example.com') }
 
     it 'should raise exception if user lacks required permissions' do
       sign_in(mock_user)
@@ -87,7 +87,7 @@ describe HydrusCollectionsController, type: :controller do
   end
 
   describe 'list_all', integration: true do
-    let(:user) { create :archivist1 }
+    let(:user) { User.find_or_create_by(email: 'archivist1@example.com') }
     it 'should redirect to root url for non-admins when not in development mode' do
       sign_in(user)
       get(:list_all)

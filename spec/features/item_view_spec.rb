@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe('Item view', type: :request, integration: true) do
   # fixtures :users
-  let(:user) { build_stubbed :archivist1 }
+  let(:user) { User.find_or_create_by(email: 'archivist1@example.com') }
 
   before :each do
     @druid = 'druid:oo000oo0001'

@@ -1,9 +1,9 @@
 require 'spec_helper'
 
 describe('Home page', type: :request, integration: true) do
-  let(:archivist1) { build_stubbed(:archivist1) }
-  let(:archivist2) { build_stubbed(:archivist2) }
-  let(:archivist3) { build_stubbed(:archivist3) }
+  let(:archivist1) { User.find_or_create_by(email: 'archivist1@example.com') }
+  let(:archivist2) { User.find_or_create_by(email: 'archivist2@example.com') }
+  let(:archivist3) { User.find_or_create_by(email: 'archivist3@example.com') }
   before(:each) do
     @search_box  = '.search-query-form #search'
     @sdr         = 'Stanford Digital Repository'

@@ -39,7 +39,7 @@ describe(Hydrus::Item, type: :feature, integration: true) do
 
   describe '#accept_terms_of_deposit' do
     let(:user_key) { 'archivist5' }
-    let(:user) { build_stubbed :archivist5 }
+    let(:user) { User.find_or_create_by(email: 'archivist5@example.com') }
     let(:item) { ItemService.create(collection.pid, user) }
     let(:collection) { Hydrus::Collection.find('druid:oo000oo0003') }
 
@@ -69,7 +69,7 @@ describe(Hydrus::Item, type: :feature, integration: true) do
   end
 
   describe 'do_publish()' do
-    let(:user) { build_stubbed :archivist1 }
+    let(:user) { User.find_or_create_by(email: 'archivist1@example.com') }
     before(:each) do
       @prev_mint_ids = config_mint_ids()
     end
@@ -106,7 +106,7 @@ describe(Hydrus::Item, type: :feature, integration: true) do
   end
 
   describe 'create()' do
-    let(:user) { build_stubbed :archivist1 }
+    let(:user) { User.find_or_create_by(email: 'archivist1@example.com') }
 
     before(:all) do
       @prev_mint_ids = config_mint_ids()
@@ -148,7 +148,7 @@ describe(Hydrus::Item, type: :feature, integration: true) do
     end
 
     it 'should create another item' do
-      let(:user) { build_stubbed :archivist1 }
+      let(:user) { User.find_or_create_by(email: 'archivist1@example.com') }
       allow_any_instance_of(Dor::WorkflowDs).to receive(:current_priority).and_return 0
       allow(collection).to receive_messages(users_accepted_terms_of_deposit: { user.to_s => Time.now })
       item = ItemService.create(collection.pid, user, 'some-type')

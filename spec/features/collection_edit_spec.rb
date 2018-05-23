@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe('Collection edit', type: :request, integration: true) do
   # fixtures :users
-  let(:archivist1) { build_stubbed(:archivist1) }
+  let(:archivist1) { User.find_or_create_by(email: 'archivist1@example.com') }
 
   before :each do
     @druid          = 'druid:oo000oo0003'
@@ -393,8 +393,8 @@ describe('Collection edit', type: :request, integration: true) do
   end
 
   describe 'role-protection' do
-    let(:owner) { create :archivist2 }
-    let(:viewer) { create :archivist6 }
+    let(:owner) { User.find_or_create_by(email: 'archivist2@example.com') }
+    let(:viewer) { User.find_or_create_by(email: 'archivist6@example.com') }
     before(:each) do
       @prev_mint_ids = config_mint_ids()
     end
@@ -406,7 +406,7 @@ describe('Collection edit', type: :request, integration: true) do
     it 'action buttons should not be accessible to users with insufficient powers' do
       # Create a collection.
       opts = {
-        user: owner.email,
+        user: owner,
         viewers: viewer.email,
       }
       sign_in(owner)
