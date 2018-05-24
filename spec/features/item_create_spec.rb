@@ -261,11 +261,6 @@ describe('Item create', type: :request, integration: true) do
     # we haven't accepted the terms.
     expect(find(@div_actions)).not_to have_button(@buttons[:submit_for_approval])
 
-    # Accept terms of deposit
-#    should_visit_edit_page(item)
-#    check 'terms_of_deposit_checkbox'
-#    click_button(@buttons[:save])
-
     # The view page should now offer the Submit for approval button (but no publish button) since we
     # have accepted the terms.
     visit hydrus_item_path(id: item.pid)
@@ -534,7 +529,6 @@ describe('Item create', type: :request, integration: true) do
     end
 
     it 'should indicate the users who have accepted the terms of deposit for this collection in a hash and should returns dates accepted' do
-      byebug
       users = subject.collection.users_accepted_terms_of_deposit
       expect(users.class).to eq(Hash)
       expect(users.size).to eq(2)
