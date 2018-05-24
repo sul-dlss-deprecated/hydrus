@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe('Item versioning', type: :request, integration: true) do
-  # fixtures :users
   let(:archivist1) { User.find_or_create_by(email: 'archivist1@example.com') }
 
   before :each do
