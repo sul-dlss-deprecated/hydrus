@@ -215,7 +215,7 @@ describe('Item create', type: :request, integration: true) do
     sign_in(archivist6)
     visit new_hydrus_item_path(collection: @hc_druid)
     # save_and_open_page
-    expect(page).to have_content('Welcome archivist6!')
+    expect(page).to have_content('Welcome archivist6')
     expect(current_path).to match(@edit_path_regex)
     druid = @edit_path_regex.match(current_path)[1]
 
@@ -341,7 +341,7 @@ describe('Item create', type: :request, integration: true) do
     # now login as archivist 6 (depositor) and resubmit the Item.
     sign_in(archivist6)
     visit hydrus_item_path(id: item.pid)
-    expect(page).to have_content('Welcome archivist6!')
+    expect(page).to have_content('Welcome archivist6')
     expect(page).to have_content(ni.reason)
     expect(find(@span_status)).to have_content(@status_msgs[:returned])
     click_button(@buttons[:resubmit])
