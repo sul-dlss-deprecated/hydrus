@@ -1,10 +1,9 @@
 require 'spec_helper'
 
 describe('Collection edit', type: :request, integration: true) do
-  # fixtures :users
   let(:archivist1) { User.find_or_create_by(email: 'archivist1@example.com') }
 
-  before :each do
+  before do
     @druid          = 'druid:oo000oo0003'
     @druid_no_files = 'druid:oo000oo0004'
     @hc             = Hydrus::Collection.find @druid
@@ -15,16 +14,6 @@ describe('Collection edit', type: :request, integration: true) do
       open: 'Open Collection',
       close: 'Close Collection',
     }
-  end
-
-  it 'if not logged in, should be redirected to the login page, then back to our intended page after logging in' do
-    logout
-    visit edit_polymorphic_path(@hc)
-    expect(current_path).to eq(new_user_session_path)
-    fill_in 'Email', with: 'archivist1@example.com'
-    fill_in 'Password', with: login_pw
-    click_button 'Sign in'
-    expect(current_path).to eq(edit_polymorphic_path(@hc))
   end
 
   it 'can edit Collection descMetadata content' do
