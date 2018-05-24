@@ -13,6 +13,7 @@ describe('Contact page', type: :request, integration: true) do
   end
 
   it 'shows the full form and then generate an email when a user fills in the contact form when not logged in' do
+    sign_out
     visit contact_path
     expect(page).to have_selector(@name_textbox)
     expect(page).to have_selector(@email_textbox)
