@@ -14,6 +14,15 @@ class ApplicationController < ActionController::Base
   helper_method :to_bool
   helper_method :current_user
 
+  # This is a backport from Rails 5 and can be removed when we use Rails 5
+  def redirect_back(fallback_location:, **args)
+    if referer == request.headers['Referer']
+      redirect_to referer, **args
+    else
+      redirect_to fallback_location, **args
+    end
+  end
+
   def layout_name
     'sul_chrome/application'
   end

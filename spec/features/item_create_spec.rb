@@ -121,7 +121,7 @@ describe('Item create', type: :request, integration: true) do
     fill_in 'Abstract', with: 'abstract_article'
     fill_in 'Keywords', with: 'keyword'
     fill_in 'hydrus_item_dates_date_created', with: '2017'
-    # check 'terms_of_deposit_checkbox'
+    check 'terms_of_deposit_checkbox'
     check 'release_settings'
     f = Hydrus::ObjectFile.new
     f.pid = druid
@@ -215,7 +215,7 @@ describe('Item create', type: :request, integration: true) do
     sign_in(archivist6)
     visit new_hydrus_item_path(collection: @hc_druid)
     # save_and_open_page
-    expect(page).to have_content('Welcome archivist6!')
+    expect(page).to have_content('Welcome archivist6')
     expect(current_path).to match(@edit_path_regex)
     druid = @edit_path_regex.match(current_path)[1]
 
@@ -262,9 +262,9 @@ describe('Item create', type: :request, integration: true) do
     expect(find(@div_actions)).not_to have_button(@buttons[:submit_for_approval])
 
     # Accept terms of deposit
-#    should_visit_edit_page(item)
-#    check 'terms_of_deposit_checkbox'
-#    click_button(@buttons[:save])
+    should_visit_edit_page(item)
+    check 'terms_of_deposit_checkbox'
+    click_button(@buttons[:save])
 
     # The view page should now offer the Submit for approval button (but no publish button) since we
     # have accepted the terms.
@@ -346,7 +346,7 @@ describe('Item create', type: :request, integration: true) do
     # now login as archivist 6 (depositor) and resubmit the Item.
     sign_in(archivist6)
     visit hydrus_item_path(id: item.pid)
-    expect(page).to have_content('Welcome archivist6!')
+    expect(page).to have_content('Welcome archivist6')
     expect(page).to have_content(ni.reason)
     expect(find(@span_status)).to have_content(@status_msgs[:returned])
     click_button(@buttons[:resubmit])
@@ -426,7 +426,7 @@ describe('Item create', type: :request, integration: true) do
     coll.save
 
     # Login as a item depositor for this collection, go to new Item page, and store the druid of the new Item.
-    # login_as('archivist1')
+    sign_in(archivist1)
     visit new_hydrus_item_path(collection: @hc_druid)
     expect(current_path).to match(@edit_path_regex)
     druid = @edit_path_regex.match(current_path)[1]
@@ -469,7 +469,7 @@ describe('Item create', type: :request, integration: true) do
 
     # Accept terms of deposit
     should_visit_edit_page(item)
-    # check 'terms_of_deposit_checkbox'
+    check 'terms_of_deposit_checkbox'
     click_button(@buttons[:save])
 
     visit hydrus_item_path(id: item.pid)
@@ -534,7 +534,6 @@ describe('Item create', type: :request, integration: true) do
     end
 
     it 'should indicate the users who have accepted the terms of deposit for this collection in a hash and should returns dates accepted' do
-      byebug
       users = subject.collection.users_accepted_terms_of_deposit
       expect(users.class).to eq(Hash)
       expect(users.size).to eq(2)

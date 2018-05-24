@@ -1,23 +1,13 @@
 require 'spec_helper'
 
-describe('Collection view', type: :request, integration: true) do
-  # fixtures :users
+RSpec.describe('Collection view', type: :request, integration: true) do
   let(:archivist1) { User.find_or_create_by(email: 'archivist1@example.com') }
-  before :each do
+
+  before do
     @apo_druid = 'druid:oo000oo0002'
     @druid = 'druid:oo000oo0003'
     @druid_no_files = 'druid:oo000oo0004'
     @hc = Hydrus::Collection.find @druid
-  end
-
-  it 'If not logged in, should be redirected to login page, then back to our intended page after logging in' do
-    sign_out
-    visit "/collections/#{@druid}"
-    expect(current_path).to eq(new_user_session_path)
-    fill_in 'Email', with: 'archivist1@example.com'
-    fill_in 'Password', with: login_pw
-    click_button 'Sign in'
-    expect(current_path).to eq("/collections/#{@druid}")
   end
 
   it 'Breadcrumbs should be displayed with home link and unlinked trucated collection name' do
