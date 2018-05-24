@@ -450,6 +450,7 @@ describe('Item edit', type: :request, integration: true) do
 
       # But the owner should see the button.
       # Submit it for approval.
+      sign_in(owner)
       should_visit_view_page(hi)
       click_button(b)
 
@@ -476,6 +477,7 @@ describe('Item edit', type: :request, integration: true) do
 
       # But the owner should see the button.
       # Resubmit the item.
+      sign_in(owner)
       should_visit_view_page(hi)
       click_button(b)
 
