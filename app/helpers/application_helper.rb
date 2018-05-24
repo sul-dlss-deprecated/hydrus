@@ -44,19 +44,7 @@ module ApplicationHelper
     controller.controller_name == 'catalog' || controller.controller_name == 'sessions' ? (render 'shared/home_contents') : (render 'shared/main_contents')
   end
 
-  def hydrus_signin_link
-    if Dor::Config.hydrus.show_standard_login
-      link_to('Sign in', new_user_session_path, class: 'signin_link')
-    else
-      link_to('Sign in via WebAuth', webauth_login_path)
-    end
-  end
-
   def new_user_session_path options = {}
-    super({ referrer: request.fullpath }.merge options)
-  end
-
-  def webauth_login_path options = {}
     super({ referrer: request.fullpath }.merge options)
   end
 
