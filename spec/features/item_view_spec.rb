@@ -2,16 +2,6 @@ require 'spec_helper'
 
 RSpec.describe('Item view', type: :request, integration: true) do
   let(:druid) { 'druid:oo000oo0001' }
-  context 'when not logged in' do
-    it 'is redirected to the login page, then back to our intended page after logging in' do
-      visit "/items/#{druid}"
-      expect(current_path).to eq(new_user_session_path)
-      fill_in 'Email', with: 'archivist1@example.com'
-      fill_in 'Password', with: login_pw
-      click_button 'Sign in'
-      expect(current_path).to eq(polymorphic_path(@hi))
-    end
-  end
 
   context 'when signed in' do
     let(:user) { User.find_or_create_by(email: 'archivist1@example.com') }
