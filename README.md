@@ -151,10 +151,6 @@ run this:
 
     rake hydrus:reindex_workflow_objects
 
-If you want to enable or disable login via email address and password (as
-opposed to webauth), look at the appropriate environment file in
-`config/environments/`. Set the config parameter "show_standard_login" to either
-true or false.
 
 ## Starting Jetty on deployment servers
 

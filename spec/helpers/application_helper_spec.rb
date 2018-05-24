@@ -20,11 +20,6 @@ describe ApplicationHelper, type: :helper do
     expect(helper.application_name).to eq('Stanford Digital Repository')
   end
 
-  it 'should show the signin link' do
-    allow(controller.request).to receive(:fullpath).and_return('/items/oo000oo0001')
-    expect(helper.hydrus_signin_link).to have_link 'Sign in', href: '/users/sign_in?referrer=%2Fitems%2Foo000oo0001'
-  end
-
   it 'should indicate if an object is empty' do
     expect(hydrus_is_empty?(nil)).to be true
     expect(hydrus_is_empty?('')).to be true
