@@ -217,7 +217,7 @@ describe('Item create', type: :request, integration: true) do
     # login_as('archivist6')
     sign_in archivist6
     visit new_hydrus_item_path(collection: @hc_druid)
-    expect(page).to have_content('Welcome archivist6!')
+    expect(page).to have_content('Welcome archivist6')
     expect(current_path).to match(@edit_path_regex)
     druid = @edit_path_regex.match(current_path)[1]
 
@@ -326,7 +326,7 @@ describe('Item create', type: :request, integration: true) do
     # login_as('archivist1')
     sign_in archivist1
     visit hydrus_item_path(id: item.pid)
-    expect(page).to have_content('Welcome archivist1!')
+    expect(page).to have_content('Welcome archivist1')
     fill_in 'hydrus_item_disapproval_reason', with: ni.reason
     e = expect { click_button(@buttons[:disapprove]) }
     e.to change { ActionMailer::Base.deliveries.count }.by(1)
@@ -350,7 +350,7 @@ describe('Item create', type: :request, integration: true) do
     # login_as('archivist6')
     sign_in(archivist6)
     visit hydrus_item_path(id: item.pid)
-    expect(page).to have_content('Welcome archivist6!')
+    expect(page).to have_content('Welcome archivist6')
     expect(page).to have_content(ni.reason)
     expect(find(@span_status)).to have_content(@status_msgs[:returned])
     click_button(@buttons[:resubmit])
