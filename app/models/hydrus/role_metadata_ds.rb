@@ -112,7 +112,7 @@ class Hydrus::RoleMetadataDS < ActiveFedora::OmDatastream
   ####
 
   def to_solr(solr_doc = {}, *args)
-    super(solr_doc, *args)
+    solr_doc = super(solr_doc, *args)
     # Get the roles and their persons.
     h = Hydrus::Responsible.person_roles(self)
     # Add keys to the solr index to aggregate the roles of each user.

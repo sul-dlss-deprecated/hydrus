@@ -10,6 +10,7 @@ class MockController
     @params    = ps
     @root_path = '/users/signin'
   end
+  delegate :logger, to: Rails
 end
 
 describe Hydrus::AccessControlsEnforcement do

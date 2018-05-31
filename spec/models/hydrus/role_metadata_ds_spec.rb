@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Hydrus::RoleMetadataDS, type: :model do
-  before(:all) do
+  before do
     @rmd_start = '<roleMetadata>'
     @rmd_end   = '</roleMetadata>'
     @p1 = '<person><identifier type="sunetid">sunetid1</identifier><name/></person>'
@@ -11,10 +11,11 @@ describe Hydrus::RoleMetadataDS, type: :model do
     @g1 = '<group><identifier type="workgroup">dlss:pmag-staff</identifier></group>'
     @g2 = '<group><identifier type="workgroup">dlss:developers</identifier></group>'
   end
+  let(:rmdoc) { Hydrus::RoleMetadataDS.from_xml(xml) }
 
   context 'APO role metadata' do
-    before(:each) do
-      xml = <<-EOF
+    let(:xml) do
+      <<-EOF
         #{@rmd_start}
           <role type="hydrus-collection-manager">
              <person>
@@ -40,24 +41,37 @@ describe Hydrus::RoleMetadataDS, type: :model do
           </role>
         #{@rmd_end}
       EOF
-      @rmdoc = Hydrus::RoleMetadataDS.from_xml(xml)
     end
 
-    it 'should get expected values from OM terminology' do
-      expect(@rmdoc.term_values(:role, :person, :identifier)).to eq(%w(archivist4 archivist5 archivist3 archivist6))
-      expect(@rmdoc.term_values(:person_id)).to eq(%w(archivist4 archivist5 archivist3 archivist6))
-      expect(@rmdoc.term_values(:role, :person, :name)).to eq(['Archivist, Four', 'Archivist, Five', 'Archivist, Three', 'Archivist, Six'])
-      expect(@rmdoc.term_values(:collection_manager, :person, :identifier)).to eq(%w(archivist4 archivist5))
-      expect(@rmdoc.term_values(:collection_depositor, :person, :identifier)).to eq(%w(archivist3))
-      expect(@rmdoc.term_values(:collection_reviewer, :person, :identifier)).to eq(%w(archivist6))
-      expect(@rmdoc.term_values(:collection_viewer, :person, :identifier)).to eq(%w())
-      expect(@rmdoc.term_values(:role, :type)).to eq(%w(hydrus-collection-manager hydrus-collection-depositor hydrus-collection-reviewer))
+    describe '#term_values' do
+      it 'gets expected values from OM terminology' do
+        expect(rmdoc.term_values(:role, :person, :identifier)).to eq(%w(archivist4 archivist5 archivist3 archivist6))
+        expect(rmdoc.term_values(:person_id)).to eq(%w(archivist4 archivist5 archivist3 archivist6))
+        expect(rmdoc.term_values(:role, :person, :name)).to eq(['Archivist, Four', 'Archivist, Five', 'Archivist, Three', 'Archivist, Six'])
+        expect(rmdoc.term_values(:collection_manager, :person, :identifier)).to eq(%w(archivist4 archivist5))
+        expect(rmdoc.term_values(:collection_depositor, :person, :identifier)).to eq(%w(archivist3))
+        expect(rmdoc.term_values(:collection_reviewer, :person, :identifier)).to eq(%w(archivist6))
+        expect(rmdoc.term_values(:collection_viewer, :person, :identifier)).to eq(%w())
+        expect(rmdoc.term_values(:role, :type)).to eq(%w(hydrus-collection-manager hydrus-collection-depositor hydrus-collection-reviewer))
+      end
+    end
+
+    describe '#to_solr' do
+      before do
+        allow(rmdoc).to receive(:dsid).and_return('roleMetadata')
+      end
+
+      subject { rmdoc.to_solr }
+
+      it 'creates an index document' do
+        expect(subject).to have_key 'role_person_identifier_sim'
+      end
     end
   end
 
   context 'ITEM object role metadata' do
-    before(:each) do
-      xml = <<-EOF
+    let(:xml) do
+      <<-EOF
         #{@rmd_start}
           <role type="hydrus-item-depositor">
              <person>
@@ -67,14 +81,13 @@ describe Hydrus::RoleMetadataDS, type: :model do
           </role>
         #{@rmd_end}
       EOF
-      @rmdoc = Hydrus::RoleMetadataDS.from_xml(xml)
     end
 
     it 'should get expected values from OM terminology' do
-      expect(@rmdoc.term_values(:role, :person, :identifier)).to eq(['vviolet'])
-      expect(@rmdoc.term_values(:role, :person, :name)).to eq(['Violet, Viola'])
-      expect(@rmdoc.term_values(:item_depositor, :person, :identifier)).to eq(['vviolet'])
-      expect(@rmdoc.term_values(:role, :type)).to eq(['hydrus-item-depositor'])
+      expect(rmdoc.term_values(:role, :person, :identifier)).to eq(['vviolet'])
+      expect(rmdoc.term_values(:role, :person, :name)).to eq(['Violet, Viola'])
+      expect(rmdoc.term_values(:item_depositor, :person, :identifier)).to eq(['vviolet'])
+      expect(rmdoc.term_values(:role, :type)).to eq(['hydrus-item-depositor'])
     end
 
     it 'Should be able to insert new hydrus-item-depositor role with person node' do
@@ -114,8 +127,8 @@ describe Hydrus::RoleMetadataDS, type: :model do
     end
 
     context 'add_person_with_role()' do
-      before(:each) do
-        xml = <<-EOF
+      let(:xml) do
+        <<-EOF
           #{@rmd_start}
             <role type="hydrus-collection-manager">
               #{@p1}
@@ -125,7 +138,6 @@ describe Hydrus::RoleMetadataDS, type: :model do
             </role>
           #{@rmd_end}
         EOF
-        @rmdoc = Hydrus::RoleMetadataDS.from_xml(xml)
       end
 
       it 'should add the person node to an existing role node' do
@@ -136,8 +148,8 @@ describe Hydrus::RoleMetadataDS, type: :model do
           @rmd_end,
         ]
         exp_xml = noko_doc(exp_parts.join '')
-        @rmdoc.add_person_with_role('sunetid2', 'hydrus-collection-manager')
-        expect(@rmdoc.ng_xml).to be_equivalent_to exp_xml
+        rmdoc.add_person_with_role('sunetid2', 'hydrus-collection-manager')
+        expect(rmdoc.ng_xml).to be_equivalent_to exp_xml
         exp_parts = [
           @rmd_start,
           '<role type="hydrus-collection-manager">', @p1, @p2, '</role>',
@@ -145,8 +157,8 @@ describe Hydrus::RoleMetadataDS, type: :model do
           @rmd_end,
         ]
         exp_xml = noko_doc(exp_parts.join '')
-        @rmdoc.add_person_with_role('sunetid4', 'hydrus-collection-depositor')
-        expect(@rmdoc.ng_xml).to be_equivalent_to exp_xml
+        rmdoc.add_person_with_role('sunetid4', 'hydrus-collection-depositor')
+        expect(rmdoc.ng_xml).to be_equivalent_to exp_xml
       end
 
       it 'should create the role node when none exists' do
@@ -158,8 +170,8 @@ describe Hydrus::RoleMetadataDS, type: :model do
           @rmd_end,
         ]
         exp_xml = noko_doc(exp_parts.join '')
-        @rmdoc.add_person_with_role('sunetid2', 'foo-role')
-        expect(@rmdoc.ng_xml).to be_equivalent_to exp_xml
+        rmdoc.add_person_with_role('sunetid2', 'foo-role')
+        expect(rmdoc.ng_xml).to be_equivalent_to exp_xml
       end
 
       it 'add_empty_person_to_role should insert an empty person node as a child of the role node' do
@@ -170,18 +182,17 @@ describe Hydrus::RoleMetadataDS, type: :model do
           @rmd_end,
         ]
         exp_xml = noko_doc(exp_parts.join '')
-        @rmdoc.add_empty_person_to_role('hydrus-collection-manager')
-        expect(@rmdoc.ng_xml).to be_equivalent_to exp_xml
+        rmdoc.add_empty_person_to_role('hydrus-collection-manager')
+        expect(rmdoc.ng_xml).to be_equivalent_to exp_xml
       end
     end
 
     context 'add_group_with_role()' do
-      before(:each) do
-        xml = <<-EOF
+      let(:xml) do
+        <<-EOF
           #{@rmd_start}
           #{@rmd_end}
         EOF
-        @rmdoc = Hydrus::RoleMetadataDS.from_xml(xml)
       end
 
       it 'should add groups under roles' do
@@ -191,9 +202,9 @@ describe Hydrus::RoleMetadataDS, type: :model do
           @rmd_end,
         ]
         exp_xml = noko_doc(exp_parts.join '')
-        @rmdoc.add_group_with_role('dlss:pmag-staff', 'dor-apo-manager')
-        @rmdoc.add_group_with_role('dlss:developers', 'dor-apo-manager')
-        expect(@rmdoc.ng_xml).to be_equivalent_to exp_xml
+        rmdoc.add_group_with_role('dlss:pmag-staff', 'dor-apo-manager')
+        rmdoc.add_group_with_role('dlss:developers', 'dor-apo-manager')
+        expect(rmdoc.ng_xml).to be_equivalent_to exp_xml
       end
     end
   end

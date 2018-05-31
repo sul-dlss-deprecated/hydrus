@@ -12,7 +12,7 @@ RSpec.describe 'shared/sul_chrome/_main_container.html.erb' do
     let(:banner) { true }
 
     it 'shows the banner' do
-      expect(rendered).to have_selector 'img[src="/assets/test-version-ribbon.png"]'
+      expect(rendered).to have_selector 'img[src^="/assets/test-version-ribbon"]'
     end
   end
 
@@ -20,7 +20,7 @@ RSpec.describe 'shared/sul_chrome/_main_container.html.erb' do
     let(:banner) { false }
 
     it "doesn't show the banner" do
-      expect(rendered).not_to have_selector 'img[src="/assets/test-version-ribbon.png"]'
+      expect(rendered).not_to have_selector 'img[src^="/assets/test-version-ribbon"]'
     end
   end
 end
