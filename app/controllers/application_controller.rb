@@ -85,4 +85,10 @@ class ApplicationController < ActionController::Base
     end
     v
   end
+
+  private
+
+  def after_sign_out_path_for(*)
+    '/Shibboleth.sso/Logout'
+  end
 end
