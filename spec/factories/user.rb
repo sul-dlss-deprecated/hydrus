@@ -39,8 +39,9 @@ FactoryBot.define do
     initialize_with { User.find_or_create_by(email: 'archivist99@example.com') }
   end
 
-  factory :mock_user, class: User do
-    email 'some-user@example.com'
-    initialize_with { User.find_or_create_by(email: 'some-user@example.com') }
+  factory :user do
+    sequence :email do |n|
+      "person#{n}@example.com"
+    end
   end
 end
