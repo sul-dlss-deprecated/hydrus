@@ -141,7 +141,7 @@ end
 def create_new_collection(opts = {})
   # Setup options.
   default_opts = {
-    user: User.find_or_create_by(email: 'archivist1@example.com'),
+    user: create(:archivist1),
     title: 'title_foo',
     abstract: 'abstract_foo',
     contact: 'foo@bar.com',
@@ -181,7 +181,7 @@ def create_new_item(opts = {})
   # Setup options.
   default_opts = {
     collection_pid: 'druid:oo000oo0003',
-    user: User.find_or_create_by(email: 'archivist1@example.com'),
+    user: create(:archivist1),
     title: 'title_foo',
     abstract: 'abstract_foo',
     contributor: 'foo_contributor',

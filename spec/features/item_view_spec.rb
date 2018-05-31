@@ -4,7 +4,7 @@ RSpec.describe('Item view', type: :request, integration: true) do
   let(:druid) { 'druid:oo000oo0001' }
 
   context 'when signed in' do
-    let(:user) { User.find_or_create_by(email: 'archivist1@example.com') }
+    let(:user) { create :archivist1 }
 
     before do
       @hi = Hydrus::Item.find druid

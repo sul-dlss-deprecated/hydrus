@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe('Item edit', type: :request, integration: true) do
+  let(:archivist1) { create :archivist1 }
   before :each do
     @druid = 'druid:oo000oo0001'
     @hi    = Hydrus::Item.find @druid
@@ -16,7 +17,7 @@ describe('Item edit', type: :request, integration: true) do
       publish_directly: 'Publish',
       open_new_version: 'Open new version',
     }
-    sign_in(User.find_or_create_by(email: 'archivist1@example.com'))
+    sign_in(archivist1)
   end
 
   context 'without logging in' do
@@ -425,9 +426,9 @@ describe('Item edit', type: :request, integration: true) do
   end
 
   describe 'role-protection' do
-    let(:owner) { User.find_or_create_by(email: 'archivist1@example.com') }
-    let(:reviewer) { User.find_or_create_by(email: 'archivist5@example.com') }
-    let(:viewer) { User.find_or_create_by(email: 'archivist7@example.com') }
+    let(:owner) { create :archivist1 }
+    let(:reviewer) { create :archivist5 }
+    let(:viewer) { create :archivist7 }
     before(:each) do
       @prev_mint_ids = config_mint_ids()
     end

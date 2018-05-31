@@ -1,8 +1,8 @@
 require 'spec_helper'
 
 describe('Collection create', type: :request, integration: true) do
-  let(:archivist1) { User.find_or_create_by(email: 'archivist1@example.com') }
-  let(:archivist99) { User.find_or_create_by(email: 'archivist99@example.com') }
+  let(:archivist1) { create :archivist1 }
+  let(:archivist99) { create :archivist99 }
 
   before(:each) do
     @alert           = 'div.alert'
