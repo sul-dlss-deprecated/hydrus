@@ -51,14 +51,14 @@ describe HydrusItemsController, type: :controller do
     let(:user) { User.find_or_create_by(email: 'some-user@example.com') }
     let(:archivist1) { User.find_or_create_by(email: 'archivist1@example.com') }
     it 'should restrict access to non authed user' do
-      sign_in user
+      sign_in(user)
       get(:new, collection: 'druid:oo000oo0003')
       expect(response).to redirect_to(root_path)
       expect(flash[:alert]).to eq('You are not authorized to access this page.')
     end
 
     it 'should redirect w/ a flash error when no collection has been provided' do
-      sign_in archivist1
+      sign_in(archivist1)
       get :new
       expect(response).to redirect_to(root_path)
       expect(flash[:error]).to match(/You cannot create an item without specifying a collection./)

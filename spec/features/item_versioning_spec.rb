@@ -33,7 +33,7 @@ describe('Item versioning', type: :request, integration: true) do
   end
 
   it 'initial unpublished version of an item offers discard button' do
-    sign_in archivist1
+    sign_in(archivist1)
     item = Hydrus::Item.find('druid:oo000oo0005')
     should_visit_view_page(item)
     expect(page).to have_css(@item_discard) # we are unpublished and on v1, we do have a discard button
@@ -43,7 +43,7 @@ describe('Item versioning', type: :request, integration: true) do
   end
 
   it 'item view page should display version info' do
-    sign_in archivist1
+    sign_in(archivist1)
     should_visit_view_page(@hi)
     item_deets = find('dl.item-view')
     expect(item_deets).to have_content('Version')
@@ -52,7 +52,7 @@ describe('Item versioning', type: :request, integration: true) do
 
   it 'if item is initial version, should not offer version info on the editing page' do
     expect(@hi.is_initial_version).to eq(true)
-    sign_in archivist1
+    sign_in(archivist1)
     should_visit_edit_page(@hi)
     expect(page).not_to have_css('textarea#hydrus_item_version_description')
   end
@@ -73,7 +73,7 @@ describe('Item versioning', type: :request, integration: true) do
     expect(@hi.workflows.workflow_step_is_done('approve')).to eq(true)
 
     # Open new version.
-    sign_in archivist1
+    sign_in(archivist1)
     should_visit_view_page(@hi)
     expect(page).not_to have_css(@item_discard) # we are published and on v1, we do not have a discard button
 
@@ -151,7 +151,7 @@ describe('Item versioning', type: :request, integration: true) do
     coll.license = orig_lic
     coll.save
     # Open new version.
-    sign_in archivist1
+    sign_in(archivist1)
     should_visit_view_page(@hi)
     click_button(@buttons[:open_new_version])
     # Go to edit page:
@@ -183,7 +183,7 @@ describe('Item versioning', type: :request, integration: true) do
 
     describe 'initial version' do
       it 'collection in visibility-varies mode: offer visibility drop-down' do
-        sign_in archivist1
+        sign_in(archivist1)
         should_visit_edit_page(@hi)
         expect(page).to have_selector(@vis_sel_css)
       end
@@ -194,7 +194,7 @@ describe('Item versioning', type: :request, integration: true) do
         coll.visibility_option = 'fixed'
         coll.save
         # Go to edit page.
-        sign_in archivist1
+        sign_in(archivist1)
         should_visit_edit_page(@hi)
         expect(page).not_to have_selector(@vis_sel_css)
       end
@@ -207,7 +207,7 @@ describe('Item versioning', type: :request, integration: true) do
         @hi.visibility = 'world'
         @hi.save
         # Open new version.
-        sign_in archivist1
+        sign_in(archivist1)
         should_visit_view_page(@hi)
         click_button(@buttons[:open_new_version])
         # Edit page should not offer ability to change visibility.
@@ -221,7 +221,7 @@ describe('Item versioning', type: :request, integration: true) do
         @hi.visibility = 'stanford'
         @hi.save
         # Open new version.
-        sign_in archivist1
+        sign_in(archivist1)
         should_visit_view_page(@hi)
         click_button(@buttons[:open_new_version])
         # Edit page should not offer ability to change visibility.
@@ -247,7 +247,7 @@ describe('Item versioning', type: :request, integration: true) do
     it 'initial version never embargoed: should not be able to add an embargo' do
       pending
       # Open new version.
-      sign_in archivist1
+      sign_in(archivist1)
       should_visit_view_page(@hi)
       click_button(@buttons[:open_new_version])
       # Edit page should not offer ability to add an embargo.
@@ -279,7 +279,7 @@ describe('Item versioning', type: :request, integration: true) do
       expect(@hi.visibility).to eq(['world'])
       expect(@hi.initial_submitted_for_publish_time).to eq(pds)
       # Open new version.
-      sign_in archivist1
+      sign_in(archivist1)
       should_visit_view_page(@hi)
       click_button(@buttons[:open_new_version])
       # Edit page should offer ability to add an embargo.
@@ -346,7 +346,7 @@ describe('Item versioning', type: :request, integration: true) do
       expect(@hi.visibility).to eq(['world'])
       expect(@hi.initial_submitted_for_publish_time).to eq(pds)
       # Open new version.
-      sign_in archivist1
+      sign_in(archivist1)
       should_visit_view_page(@hi)
       click_button(@buttons[:open_new_version])
       # Edit page should not offer ability to modify the embargo.

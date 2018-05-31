@@ -25,7 +25,7 @@ describe('Home page', type: :request, integration: true) do
   end
 
   it 'if logged in, should see intro text, search box, and listing of collections' do
-    sign_in archivist1
+    sign_in(archivist1)
     visit root_path
     expect(page).to have_content(@sdr)
     expect(page).to have_content(@your_cs)
@@ -34,7 +34,7 @@ describe('Home page', type: :request, integration: true) do
 
   context 'as archivist1' do
     before do
-      sign_in archivist1
+      sign_in(archivist1)
     end
 
     it 'shows collections' do
@@ -57,7 +57,7 @@ describe('Home page', type: :request, integration: true) do
 
   context 'as archivist2' do
     before do
-      sign_in archivist2
+      sign_in(archivist2)
     end
 
     it 'shows the collections they have access to' do
@@ -82,7 +82,7 @@ describe('Home page', type: :request, integration: true) do
 
   it 'should not show Create Collection button if user has no authority to create collections' do
     # No
-    sign_in archivist3
+    sign_in(archivist3)
     visit root_path
     expect(page).not_to have_selector(@cc_button)
   end
