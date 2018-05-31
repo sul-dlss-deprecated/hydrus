@@ -37,7 +37,7 @@ describe('Item view', type: :request, integration: true) do
     login_as('archivist1')
     visit polymorphic_path(@hi)
     expect(current_path).to eq(polymorphic_path(@hi))
-    expect(page).to have_content('archivist1@example.com')
+    expect(page).to have_content('archivist1@example.com') # this is the "Contact at" field
     expect(page).to have_content('How Couples Meet and Stay Together')
     expect(page).to have_content('The story of Pinocchio')
     expect(page).to have_content('druid:oo000oo0001')
