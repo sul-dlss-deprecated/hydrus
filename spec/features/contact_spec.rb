@@ -34,7 +34,7 @@ describe('Contact page', type: :request, integration: true) do
   end
 
   it 'shows the partial form and then generate an email when a user fills in the contact form when logged in' do
-    sign_in archivist3
+    sign_in(archivist3)
     visit contact_path
     expect(page).to_not have_selector(@name_textbox) # name and email text boxes are not shown when logged in
     expect(page).to_not have_selector(@email_textbox)

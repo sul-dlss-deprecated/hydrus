@@ -16,7 +16,7 @@ describe('Item edit', type: :request, integration: true) do
       publish_directly: 'Publish',
       open_new_version: 'Open new version',
     }
-    sign_in User.find_or_create_by(email: 'archivist1@example.com')
+    sign_in(User.find_or_create_by(email: 'archivist1@example.com'))
   end
 
   context 'without logging in' do

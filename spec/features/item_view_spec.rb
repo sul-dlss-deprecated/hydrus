@@ -8,7 +8,7 @@ RSpec.describe('Item view', type: :request, integration: true) do
 
     before do
       @hi = Hydrus::Item.find druid
-      sign_in user
+      sign_in(user)
     end
 
     it 'Breadcrumbs should be displayed with home link, linked trucated collection name, and unlinked item name with state' do

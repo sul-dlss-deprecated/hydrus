@@ -45,7 +45,7 @@ describe('Item create', type: :request, integration: true) do
 
   context 'depositing items into collections' do
     it 'should have a non-js select list for depositing items into collections' do
-      sign_in archivist1
+      sign_in(archivist1)
       visit hydrus_collection_path(id: @hc_druid)
       select 'data set', from: 'type'
       click_button('Add new item')
@@ -55,7 +55,7 @@ describe('Item create', type: :request, integration: true) do
 
     it 'should be able to access create-new-Item screen via the Collection view page' do
       Capybara.ignore_hidden_elements = false
-      sign_in archivist1
+      sign_in(archivist1)
       collection = Hydrus::Collection.find(@hc_druid)
       visit polymorphic_path(collection)
       click_link 'data set'
@@ -141,7 +141,7 @@ describe('Item create', type: :request, integration: true) do
 
   it 'should be able to create a new article type Item, with expected datastreams' do
     # Login, go to new Item page, and store the druid of the new Item.
-    sign_in archivist1
+    sign_in(archivist1)
     visit new_hydrus_item_path(collection: @hc_druid, type: 'article')
     expect(current_path).to match(@edit_path_regex)
     druid = @edit_path_regex.match(current_path)[1]
@@ -165,7 +165,7 @@ describe('Item create', type: :request, integration: true) do
 
   it 'should be able to create a new class project Item, with expected datastreams' do
     # Login, go to new Item page, and store the druid of the new Item.
-    sign_in archivist1
+    sign_in(archivist1)
     visit new_hydrus_item_path(collection: @hc_druid, type: 'class project')
     expect(current_path).to match(@edit_path_regex)
     druid = @edit_path_regex.match(current_path)[1]
@@ -544,7 +544,7 @@ describe('Item create', type: :request, integration: true) do
     end
 
     it 'collection: no license: new items should have no license' do
-      sign_in archivist1
+      sign_in(archivist1)
       # Set collection to no-license mode.
       coll = Hydrus::Collection.find(@hc_druid)
       coll.license_option = 'none'
@@ -557,7 +557,7 @@ describe('Item create', type: :request, integration: true) do
     end
 
     it 'collection: fixed license: new items should have that license' do
-      sign_in archivist1
+      sign_in(archivist1)
       # Set collection to fixed-license mode.
       coll = Hydrus::Collection.find(@hc_druid)
       coll.license_option = 'fixed'
@@ -571,7 +571,7 @@ describe('Item create', type: :request, integration: true) do
 
     describe 'collection: variable license' do
       it 'with a license: new items offer selector, with default selected' do
-        sign_in archivist1
+        sign_in(archivist1)
         # Set collection to variable-license mode.
         coll = Hydrus::Collection.find(@hc_druid)
         coll.license_option = 'varies'
@@ -588,7 +588,7 @@ describe('Item create', type: :request, integration: true) do
       end
 
       it 'with no license: new items offer selector, with no-license selected' do
-        sign_in archivist1
+        sign_in(archivist1)
         # Set collection to variable-license mode.
         coll = Hydrus::Collection.find(@hc_druid)
         coll.license_option = 'varies'
