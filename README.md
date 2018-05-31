@@ -157,16 +157,6 @@ opposed to webauth), look at the appropriate environment file in
 `config/environments/`. Set the config parameter "show_standard_login" to either
 true or false.
 
-## Starting Jetty on deployment servers
-
-Run this from the jetty directory.
-Note that Jetty is only for local development and testing.
-```bash
-nohup java -Djetty.port=8983 \
-           -Dsolr.solr.home=/home/lyberadmin/hydrus/shared/jetty/solr \
-           -XX:MaxPermSize=128m -Xmx256m -jar start.jar \
-           > logs/`date +%Y_%m_%d`.request.log 2>&1 <&- &
-```
 ## Terms of deposit text
 
 If you update the text, you should change the following:
