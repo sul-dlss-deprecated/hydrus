@@ -1,8 +1,7 @@
 require 'spec_helper'
 
 describe('Item edit', type: :request, integration: true) do
-  fixtures :users
-
+  let(:archivist1) { create :archivist1 }
   before :each do
     @druid = 'druid:oo000oo0001'
     @hi    = Hydrus::Item.find @druid
@@ -18,55 +17,55 @@ describe('Item edit', type: :request, integration: true) do
       publish_directly: 'Publish',
       open_new_version: 'Open new version',
     }
+    sign_in(archivist1)
   end
 
-  it 'If not logged in, should be redirected to the login page, then back to our intended page after logging in' do
-    logout
-    visit edit_polymorphic_path(@hi)
-    expect(current_path).to eq(new_user_session_path)
-    fill_in 'Email', with: 'archivist1@example.com'
-    fill_in 'Password', with: login_pw
-    click_button 'Sign in'
-    expect(current_path).to eq(edit_polymorphic_path(@hi))
+  context 'without logging in' do
+    it 'redirects to login' do
+      sign_out
+      get edit_polymorphic_path(@hi)
+      expect(response.code).to eq('302')
+      expect(response).to redirect_to new_user_session_path
+    end
   end
 
-  it 'should be able to edit simple items: abstract, contact, keywords' do
-    # Set up the new values for the fields we will edit.
-    ni = OpenStruct.new(
-      abstract: 'abcxyz123',
-      contact: 'ozzy@hell.com',
-      keywords: %w(foo bar fubb),
-    )
-    comma_join = '  ,  '
-    # Visit edit page.
-    login_as('archivist1')
-    should_visit_edit_page(@hi)
-    # Make sure the object does not have the new content yet.
-    expect(@hi.abstract).not_to eq(ni.abstract)
-    expect(@hi.contact).not_to  eq(ni.contact)
-    expect(@hi.keywords).not_to eq(ni.keywords)
-    expect(find_field('Abstract').value).not_to include(ni.abstract)
-    expect(find_field('hydrus_item_contact').value).not_to include(ni.contact)
-    expect(find_field('Keywords').value).not_to include(ni.keywords[0])
-    # Submit some changes.
-    fill_in('Abstract', with: "  #{ni.abstract}  ")
-    fill_in('hydrus_item_contact', with: "  #{ni.contact}  ")
-    fill_in('Keywords', with: "  #{ni.keywords.join(comma_join)}  ")
-    click_button(@buttons[:save])
-    # Confirm new location and flash message.
-    expect(current_path).to eq(polymorphic_path(@hi))
-    expect(page).to have_content(@ok_notice)
-    # Confirm new content in fedora.
-    @hi = Hydrus::Item.find @druid
-    expect(@hi.abstract).to eq(ni.abstract)
-    expect(@hi.contact).to  eq(ni.contact)
-    expect(@hi.keywords).to eq(ni.keywords)
+  context 'when logged in as archivist1' do
+    it 'is able to edit simple items: abstract, contact, keywords' do
+      # Set up the new values for the fields we will edit.
+      ni = OpenStruct.new(
+        abstract: 'abcxyz123',
+        contact: 'ozzy@hell.com',
+        keywords: %w(foo bar fubb),
+      )
+      comma_join = '  ,  '
+      # Visit edit page.
+      should_visit_edit_page(@hi)
+      # Make sure the object does not have the new content yet.
+      expect(@hi.abstract).not_to eq(ni.abstract)
+      expect(@hi.contact).not_to  eq(ni.contact)
+      expect(@hi.keywords).not_to eq(ni.keywords)
+      expect(find_field('Abstract').value).not_to include(ni.abstract)
+      expect(find_field('hydrus_item_contact').value).not_to include(ni.contact)
+      expect(find_field('Keywords').value).not_to include(ni.keywords[0])
+      # Submit some changes.
+      fill_in('Abstract', with: "  #{ni.abstract}  ")
+      fill_in('hydrus_item_contact', with: "  #{ni.contact}  ")
+      fill_in('Keywords', with: "  #{ni.keywords.join(comma_join)}  ")
+      click_button(@buttons[:save])
+      # Confirm new location and flash message.
+      expect(current_path).to eq(polymorphic_path(@hi))
+      expect(page).to have_content(@ok_notice)
+      # Confirm new content in fedora.
+      @hi = Hydrus::Item.find @druid
+      expect(@hi.abstract).to eq(ni.abstract)
+      expect(@hi.contact).to  eq(ni.contact)
+      expect(@hi.keywords).to eq(ni.keywords)
+    end
   end
 
   describe 'dates' do
     it 'should edit a single date' do
       # Visit edit page.
-      login_as('archivist1')
       should_visit_edit_page(@hi)
       date_val = '2004'
       expect(find_field('hydrus_item[dates[date_created]]').value).not_to include(date_val)
@@ -91,7 +90,6 @@ describe('Item edit', type: :request, integration: true) do
     end
     it 'should edit a date range' do
       # Visit edit page.
-      login_as('archivist1')
       should_visit_edit_page(@hi)
       date_val = '2004'
       date_val_end = '2005'
@@ -124,7 +122,6 @@ describe('Item edit', type: :request, integration: true) do
       exp = @hi.contributors.map { |c| c.clone }
       expect(exp.size).to eq(5)
       # Go to edit page.
-      login_as('archivist1')
       should_visit_edit_page(@hi)
       # Delete some contributors.
       # Note: [3,1,1] corresponds to elements 3, 1, 2 from original list.
@@ -185,7 +182,6 @@ describe('Item edit', type: :request, integration: true) do
     new_title   = 'foo_TITLE_bar'
     field_title = 'hydrus_item_related_item_title_0'
 
-    login_as('archivist1')
     should_visit_edit_page(@hi)
 
     expect(find_field(field_link).value).to eq(orig_link)
@@ -210,7 +206,6 @@ describe('Item edit', type: :request, integration: true) do
     new_title   = 'foo_TITLE_bar'
     field_title = 'hydrus_item_related_item_title_0'
 
-    login_as('archivist1')
     should_visit_edit_page(@hi)
 
     expect(find_field(field_link).value).to eq(orig_link)
@@ -229,7 +224,6 @@ describe('Item edit', type: :request, integration: true) do
 
   it 'Related Content adding and deleting' do
     # Got to edit page.
-    login_as('archivist1')
     should_visit_edit_page(@hi)
     # Check for the related item input fields.
     expect(page).to have_css('input#hydrus_item_related_item_title_0')
@@ -281,7 +275,6 @@ describe('Item edit', type: :request, integration: true) do
       url_f: 'hydrus_item_related_item_url_0',
     )
     # Visit edit page.
-    login_as('archivist1')
     should_visit_edit_page(@hi)
     # Make sure the object does not have the new content yet.
     old_title = find_field(ni.title_f).value
@@ -305,7 +298,6 @@ describe('Item edit', type: :request, integration: true) do
     new_pref_cit  = 'new_citation_FOO'
     orig_pref_cit = @hi.preferred_citation
 
-    login_as('archivist1')
     should_visit_edit_page(@hi)
 
     expect(find_field(citation_field).value.strip).to eq(orig_pref_cit)
@@ -323,7 +315,6 @@ describe('Item edit', type: :request, integration: true) do
     new_delete_button    = 'remove_related_citation_2'
     new_citation_text    = ' This is a citation for a related item! '
 
-    login_as('archivist1')
     should_visit_edit_page(@hi)
 
     expect(page).to have_css('textarea#hydrus_item_related_citation_0')
@@ -370,7 +361,6 @@ describe('Item edit', type: :request, integration: true) do
     check_emb_vis_lic(@hi, ps)
 
     # Modify the collection to allow varying license.
-    login_as('archivist1')
     should_visit_edit_page(Hydrus::Collection.find('druid:oo000oo0003'))
     choose varies_radio
     select(new_collection_license, from: collection_licenses)
@@ -436,6 +426,9 @@ describe('Item edit', type: :request, integration: true) do
   end
 
   describe 'role-protection' do
+    let(:owner) { create :archivist1 }
+    let(:reviewer) { create :archivist5 }
+    let(:viewer) { create :archivist7 }
     before(:each) do
       @prev_mint_ids = config_mint_ids()
     end
@@ -445,35 +438,33 @@ describe('Item edit', type: :request, integration: true) do
     end
 
     it 'action buttons should not be accessible to users with insufficient powers' do
+      sign_out
       # Create an item.
-      owner    = 'archivist1'
-      reviewer = 'archivist5'
-      viewer   = 'archivist7'
       hi = create_new_item()
 
       # Submit for approval.
       # A viewer should not see the button.
       b = @buttons[:submit_for_approval]
-      login_as(viewer)
+      sign_in(viewer)
       should_visit_view_page(hi)
       expect(page).not_to have_button(b)
 
       # But the owner should see the button.
       # Submit it for approval.
-      login_as(owner)
+      sign_in(owner)
       should_visit_view_page(hi)
       click_button(b)
 
       # Disapprove item.
       # A viewer should not see the button.
       b = @buttons[:disapprove]
-      login_as(viewer)
+      sign_in(viewer)
       should_visit_view_page(hi)
       expect(page).not_to have_button(b)
 
       # But the reviewer should see the button.
       # Disapprove the item.
-      login_as(reviewer)
+      sign_in(reviewer)
       should_visit_view_page(hi)
       fill_in 'hydrus_item_disapproval_reason', with: 'Doh!'
       click_button(b)
@@ -481,26 +472,26 @@ describe('Item edit', type: :request, integration: true) do
       # Resubmit item.
       # A viewer should not see the button.
       b = @buttons[:resubmit]
-      login_as(viewer)
+      sign_in(viewer)
       should_visit_view_page(hi)
       expect(page).not_to have_button(b)
 
       # But the owner should see the button.
       # Resubmit the item.
-      login_as(owner)
+      sign_in(owner)
       should_visit_view_page(hi)
       click_button(b)
 
       # Approve item.
       # A viewer should not see the button.
       b = @buttons[:approve]
-      login_as(viewer)
+      sign_in(viewer)
       should_visit_view_page(hi)
       expect(page).not_to have_button(b)
 
       # But the reviewer should see the button.
       # Disapprove the item.
-      login_as(reviewer)
+      sign_in(reviewer)
       should_visit_view_page(hi)
       click_button(b)
 
@@ -510,13 +501,13 @@ describe('Item edit', type: :request, integration: true) do
       # Publish directly.
       # A viewer should not see the button.
       b = @buttons[:publish_directly]
-      login_as(viewer)
+      sign_in(viewer)
       should_visit_view_page(hi)
       expect(page).not_to have_button(b)
 
       # But the owner should see the button.
       # Publish directly.
-      login_as(owner)
+      sign_in(owner)
       should_visit_view_page(hi)
       click_button(b)
     end
@@ -551,9 +542,6 @@ describe('Item edit', type: :request, integration: true) do
         visibility: 'world',
         license_code: lic,
       )
-
-      # Login.
-      login_as('archivist1')
 
       # Visit edit page: set an embargo date and change visibility.
       should_visit_edit_page(@hi)
@@ -629,9 +617,6 @@ describe('Item edit', type: :request, integration: true) do
         # Check total N of ObjectFiles.
         expect(Hydrus::ObjectFile.where(pid: @hi.pid).size).to eq(exp.keys.size)
       }
-
-      # Login.
-      login_as('archivist1')
 
       # Visit view page and check file info.
       should_visit_view_page(@hi)

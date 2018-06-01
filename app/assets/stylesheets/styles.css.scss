@@ -81,7 +81,7 @@
   clear:left
 }
 .date_label{
-  float:left; 
+  float:left;
   width:70px;
 }
 .dates{
@@ -120,7 +120,7 @@ form.step .contributor-select {
 }
 form.step .related-citation {
 	textarea {
-	  width: 90%;	
+	  width: 90%;
 	}
 }
 form.step .related-item {
@@ -218,14 +218,14 @@ table form {
 /* This seems to help fix an issue w/ floats once we stack all columns on-top of each other */
 #main, #sidebar {
 	@media (max-width: 767px) {
-	  float: none;	
+	  float: none;
 	}
 }
 
 /* form: radio button groups with embedded select */
-.radio-input { 
+.radio-input {
 	float:left; clear:none;
-	text-align: right; 
+	text-align: right;
 	margin-right: 12px;
 	@media (max-width: 767px) {text-align: left;}
 }
@@ -235,7 +235,7 @@ table form {
 }
 /* make inline select pulldowns only as wide as necessary */
 .inline-select {
-	height: 20px; 
+	height: 20px;
 	padding: 0; // needed for reduced height in Firefox
 	width: auto;
 	&.right {margin: 2px 0 2px 0;}
@@ -281,8 +281,8 @@ table.hydrus-striped-table {
 #item-actions, #collection-actions {
 	display:none;
 }
-noscript #item-actions, noscript #collection-actions { 
-  display:block;	
+noscript #item-actions, noscript #collection-actions {
+  display:block;
 }
 #collection-actions .btn-group {margin-left: 18px;}
 .well {
@@ -310,7 +310,7 @@ noscript #item-actions, noscript #collection-actions {
 	.box-body {
 		padding: 10px;
 		legend {margin-bottom: 0;}
-		dt, dd { 
+		dt, dd {
 			line-height: 2em;
 			text-align: left;
 			width: 50%;
@@ -377,7 +377,7 @@ noscript #item-actions, noscript #collection-actions {
 }
   /* reformat sidebar based on screen size */
 .actions-box.item-status,
-.actions-box.collection-settings { 
+.actions-box.collection-settings {
 	@media (min-width: 768px) and (max-width: 979px) {
 	  .dl-horizontal dt {
 		  clear: both;
@@ -493,45 +493,13 @@ dl.item-view {
 		font-weight: bold;
 	}
 }
-#beta-dialog.modal, #signin.modal {
+#beta-dialog.modal {
 	.modal-header {@include modal-header;}
 	.modal-footer {
 		border: none;
 		background-color: inherit;
 		padding: 0 15px 20px;
 		text-align: center;
-	}
-}
-#signin, #new_user {
-	fieldset {text-align: left;}
-	p.help {
-		line-height: 1.5;
-		margin-top: 10px;
-	}
-	.signin-form {
-		margin-left: 20px;
-		margin-top: -10px;
-	  .signin-fields {
-			border-right: 1px solid #DDD;
-			float: left;
-			margin-right: 25px;
-			width: 245px;
-			input {
-				float: left;
-				&.signin-submit {margin-right: 40px;}
-			}
-			#user_remember_me {margin-right: 6px;}
-			.remember-me {margin-top: 10px;}
-			span {
-				float: right;
-				margin-right: 35px;
-			}
-		}
-		.webauth {
-			margin-bottom: 20px;
-			margin-top: 23px;
-			.btn {margin-top: 50px;}
-		}
 	}
 }
 
@@ -736,7 +704,7 @@ li.errors
 	line-height: 18px;
 }
 
-#loading-message 
+#loading-message
 {
 	background: none repeat scroll 0 0 #FFFEA1;
   border: 1px solid #FFCC00;

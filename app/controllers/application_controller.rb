@@ -14,6 +14,15 @@ class ApplicationController < ActionController::Base
   helper_method :to_bool
   helper_method :current_user
 
+  # This is a backport from Rails 5 and can be removed when we use Rails 5
+  def redirect_back(fallback_location:, **args)
+    if referer == request.headers['Referer']
+      redirect_to referer, **args
+    else
+      redirect_to fallback_location, **args
+    end
+  end
+
   def layout_name
     'sul_chrome/application'
   end
@@ -45,16 +54,11 @@ class ApplicationController < ActionController::Base
   protected
 
   def current_user
-    if request.env['WEBAUTH_USER']
-      WebAuthUser.new(request.env['WEBAUTH_USER'], request.env)
-    else
-      super
-    end
-  end
-
-  def authenticate_user! *args
-    unless request.env['WEBAUTH_USER']
-      super
+    super.tap do |cur_user|
+      break unless cur_user
+      if request.env['eduPersonEntitlement']
+        cur_user.groups = request.env['eduPersonEntitlement'].split(';')
+      end
     end
   end
 
@@ -80,5 +84,11 @@ class ApplicationController < ActionController::Base
       flash[:error] = errors_for_display(obj)
     end
     v
+  end
+
+  private
+
+  def after_sign_out_path_for(*)
+    '/Shibboleth.sso/Logout'
   end
 end

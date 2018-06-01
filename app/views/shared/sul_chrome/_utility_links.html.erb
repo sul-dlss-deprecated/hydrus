@@ -1,11 +1,10 @@
 <% if Settings.show_test_banner? %>
   <a rel="tooltip" data-placement='bottom' title="This website is in development and any data you add will be deleted."><span class="label label-warning">Test Site</span></a> |
-  <%= render(:partial => 'shared/beta_dialog')  unless seen_beta_dialog?%>
+  <%= render 'shared/beta_dialog' unless seen_beta_dialog? %>
 <% end %>
-<%- if current_user -%>
-  Welcome <%= current_user %>! | <%= link_to("Sign out", current_user.is_a?(WebAuthUser) ? webauth_logout_path : destroy_user_session_path) %>
-<%- else -%>
-  <%= hydrus_signin_link %>
-<%- end -%>
-| <%=link_to "Contact Us", contact_path(:from=>request.path)%>
-
+<% if current_user %>
+  Welcome <%= current_user %> | <%= link_to("Sign out", destroy_user_session_path) %>
+<% else %>
+  <%= link_to('Sign in', new_user_session_path, class: 'signin_link') %>
+<% end %>
+| <%= link_to "Contact Us", contact_path(from: request.path) %>

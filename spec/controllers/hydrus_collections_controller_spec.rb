@@ -10,15 +10,15 @@ describe HydrusCollectionsController, type: :controller do
   end
 
   describe 'Routes and Mapping' do
-    it 'should map collections show correctly' do
-      expect({ get: '/collections/abc' }).to route_to(
+    it 'maps collections show correctly' do
+      expect(get: '/collections/abc').to route_to(
         controller: 'hydrus_collections',
         action: 'show',
         id: 'abc')
     end
 
-    it 'should map collections destroy_value action correctly' do
-      expect({ get: '/collections/abc/destroy_value' }).to route_to(
+    it 'maps collections destroy_value action correctly' do
+      expect(get: '/collections/abc/destroy_value').to route_to(
         controller: 'hydrus_collections',
         action: 'destroy_value',
         id: 'abc')
@@ -28,8 +28,8 @@ describe HydrusCollectionsController, type: :controller do
       expect(destroy_hydrus_collection_value_path('123')).to match(/collections\/123\/destroy_value/)
     end
 
-    it 'should route collections/list_all correctly' do
-      expect({ get: '/collections/list_all' }).to route_to(
+    it 'routes collections/list_all correctly' do
+      expect(get: '/collections/list_all').to route_to(
         controller: 'hydrus_collections',
         action: 'list_all')
     end
@@ -44,64 +44,65 @@ describe HydrusCollectionsController, type: :controller do
   end
 
   describe 'Show Action', integration: true do
-    it 'should redirect the user when not logged in' do
-      @pid = 'druid:oo000oo0003'
-      get :show, id: @pid
+    it 'redirects the user when not logged in' do
+      get :show, id: 'druid:oo000oo0003'
       expect(response).to redirect_to new_user_session_path
     end
   end
 
   describe 'Update Action', integration: true do
-    before(:all) do
-      @pid = 'druid:oo000oo0003'
-    end
-
-    it 'should not allow a user to update an object if you do not have edit permissions' do
-      sign_in(mock_user)
-      put :update, id: @pid
+    it 'does not allow a user to update an object if you do not have edit permissions' do
+      sign_in(create(:user))
+      put :update, id: 'druid:oo000oo0003'
       expect(response).to redirect_to(root_path)
       expect(flash[:alert]).to eq('You are not authorized to access this page.')
     end
   end
 
   describe 'open', integration: true do
-    it 'should raise exception if user lacks required permissions' do
-      sign_in(mock_user)
-      post(:open, id: 'druid:oo000oo0003')
+    it 'shows a alert if user lacks required permissions' do
+      sign_in(create(:user))
+      post :open, id: 'druid:oo000oo0003'
 
       expect(flash[:alert]).to eq('You are not authorized to access this page.')
     end
   end
 
   describe 'close', integration: true do
-    it 'should raise exception if user lacks required permissions' do
-      sign_in(mock_user)
-      post(:close, id: 'druid:oo000oo0003')
+    it 'gives an alert if user lacks required permissions' do
+      sign_in(create(:user))
+      post :close, id: 'druid:oo000oo0003'
 
       expect(flash[:alert]).to eq('You are not authorized to access this page.')
     end
   end
 
   describe 'list_all', integration: true do
-    it 'should redirect to root url for non-admins when not in development mode' do
-      sign_in(mock_authed_user)
-      get(:list_all)
-      expect(flash[:alert]).to eq('You are not authorized to access this page.')
-      expect(response).to redirect_to(root_path)
+    context 'when logged in' do
+      let(:user) { create :archivist1 }
+      before do
+        sign_in(user)
+      end
+
+      it 'redirects to root url for non-admins when not in development mode' do
+        get :list_all
+        expect(flash[:alert]).to eq('You are not authorized to access this page.')
+        expect(response).to redirect_to(root_path)
+      end
+
+      it 'renders the page for users with sufficient powers' do
+        controller.current_ability.can :list_all_collections, Hydrus::Collection
+        get :list_all
+        expect(assigns[:all_collections]).not_to eq(nil)
+        expect(response).to render_template(:list_all)
+      end
     end
 
-    it 'should redirect to root path when not logged in' do
-      get(:list_all)
-      expect(response).to redirect_to(new_user_session_path)
-    end
-
-    it 'should render the page for users with sufficient powers' do
-      controller.current_ability.can :list_all_collections, Hydrus::Collection
-      sign_in(mock_authed_user)
-
-      get(:list_all)
-      expect(assigns[:all_collections]).not_to eq(nil)
-      expect(response).to render_template(:list_all)
+    context 'when not logged in' do
+      it 'redirects to new session path' do
+        get :list_all
+        expect(response).to redirect_to(new_user_session_path)
+      end
     end
   end
 end

@@ -78,21 +78,6 @@ namespace :hydrus do
     end
   end
 
-  # call with hydrus:update_passwords['newpassword']
-  desc 'update all fixture user passwords'
-  task :update_passwords, :new_password do |t, args|
-    require File.expand_path('config/environment')
-    new_password = args[:new_password]
-    users = YAML.load(File.read 'test/fixtures/users.yml')
-    users.each do |user, values|
-      puts "Updating password for #{values['email']}"
-      u = User.find_by_email(values['email'])
-      u.password = new_password
-      u.password_confirmation = new_password
-      u.save
-    end
-  end
-
   # call with rake hydrus:export_object['druid:xx00oo0001','/tmp']
   desc 'export object to foxml'
   task :export_object, :pid, :output_dir do |t, args|

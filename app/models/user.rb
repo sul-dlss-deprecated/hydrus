@@ -2,10 +2,9 @@ class User < ActiveRecord::Base
   include Hydra::User
   include Blacklight::User
 
-  devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable
+  attr_accessor :groups
 
-  #attr_accessible :email, :password, :password_confirmation, :remember_me
+  devise :remote_user_authenticatable
 
   # Blacklight uses #to_s on your user class to get
   # a user-displayable login/identifier for the account.
@@ -17,19 +16,18 @@ class User < ActiveRecord::Base
     email.split('@').first
   end
 
-  def is_webauth?
-    false
-  end
-
   def is_administrator?
-    false
+    return false if groups.nil?
+    groups.include? 'dlss:hydrus-app-administrators'
   end
 
   def is_collection_creator?
-    false
+    return false if groups.nil?
+    is_administrator? || groups.include?('dlss:hydrus-app-collection-creators')
   end
 
   def is_global_viewer?
-    false
+    return false if groups.nil?
+    is_administrator? || groups.include?('dlss:hydrus-app-global-viewers')
   end
 end

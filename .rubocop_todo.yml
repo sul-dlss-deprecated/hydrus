@@ -365,6 +365,10 @@ Lint/ShadowingOuterLocalVariable:
     - 'config/rsolr_certificate.rb'
     - 'lib/tasks/fixtures.rake'
 
+Lint/SplatKeywordArguments:
+  Exclude:
+    - 'app/controllers/application_controller.rb'
+
 # Offense count: 22
 # Cop supports --auto-correct.
 # Configuration parameters: IgnoreEmptyBlocks, AllowUnusedKeywordArguments.

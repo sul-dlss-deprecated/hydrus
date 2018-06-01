@@ -4,7 +4,11 @@ Hydrus::Application.routes.draw do
   root to: 'catalog#home'
   get 'catalog' => 'catalog#index', :as => :catalog_index
 
-  devise_for :users, controllers: { sessions: 'sessions' }
+  devise_for :users, skip: [:registrations, :passwords, :sessions]
+  devise_scope :user do
+    get 'webauth/login' => 'login#login', as: :new_user_session
+    match 'webauth/logout' => 'devise/sessions#destroy', :as => :destroy_user_session, :via => Devise.mappings[:user].sign_out_via
+  end
 
   # Actions to advance Collections through the Hydrus process.
   post 'collections/open/:id'  => 'hydrus_collections#open',     :as => 'open_collection'
@@ -45,10 +49,6 @@ Hydrus::Application.routes.draw do
   post 'items/:id/create_file' => 'hydrus_items#create_file', :as => 'create_hydrus_item_file'
   get 'items/:id/destroy_file' => 'hydrus_items#destroy_file', :as => 'destroy_hydrus_item_file'
   get 'collections/:id/destroy_value' => 'hydrus_collections#destroy_value', :as => 'destroy_hydrus_collection_value'
-  devise_scope :user do
-    get 'users/auth/webauth' => 'sessions#new', :as => 'webauth_login'
-    get 'users/auth/webauth/logout' => 'sessions#destroy_webauth', :as => 'webauth_logout'
-  end
 
   # Actions for the HydrusSolrController.
   get 'hydrus_solr/reindex/:id'           => 'hydrus_solr#reindex' # NOTE: It's not clear that anything is using this.

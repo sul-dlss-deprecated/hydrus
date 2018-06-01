@@ -4,6 +4,7 @@ gem 'rails', '~> 4.2.9'
 
 gem 'config'
 gem 'devise', '~> 4.0'
+gem 'devise-remote-user', '~> 1.0'
 gem 'jquery-rails'
 gem 'dynamic_form'
 gem 'bootstrap-datepicker-rails'
@@ -35,6 +36,7 @@ gem 'uglifier', '>= 1.0.3'
 # gems only needed for particular environments
 
 group :development, :test do
+  gem 'factory_bot_rails'
   gem 'jettywrapper', '~> 1.4'
   gem 'sqlite3'
   gem 'rspec-rails', '~> 3.1'
