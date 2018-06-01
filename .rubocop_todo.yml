@@ -318,6 +318,7 @@ Lint/AmbiguousRegexpLiteral:
 Lint/AssignmentInCondition:
   Exclude:
     - 'app/models/hy_time.rb'
+    - 'app/controllers/application_controller.rb'
 
 # Offense count: 7
 # Cop supports --auto-correct.
