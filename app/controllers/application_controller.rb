@@ -16,7 +16,7 @@ class ApplicationController < ActionController::Base
 
   # This is a backport from Rails 5 and can be removed when we use Rails 5
   def redirect_back(fallback_location:, **args)
-    if referer == request.headers['Referer']
+    if referer = request.headers['Referer']
       redirect_to referer, **args
     else
       redirect_to fallback_location, **args
