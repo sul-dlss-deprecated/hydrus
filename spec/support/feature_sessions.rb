@@ -11,7 +11,7 @@ module Features
 
     def sign_in(user = nil, groups: [])
       logout(:user)
-      TestShibbolethHeaders.user = user.sunetid
+      TestShibbolethHeaders.user = user.email
       TestShibbolethHeaders.groups = groups
     end
 
