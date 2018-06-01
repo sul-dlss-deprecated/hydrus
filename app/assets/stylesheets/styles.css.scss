@@ -360,13 +360,15 @@ noscript #item-actions, noscript #collection-actions {
 	position:fixed;
 	margin-left: 930px;
 	bottom: 150px;
-	@media (min-width: 980px) and (max-width: 1199px) {margin-left: 740px;}
-	@media (min-width: 768px) and (max-width: 979px) {margin-left: 590px;}
+	top: 150px;
+	@media (min-width: 980px) and (max-width: 1199px) {margin-left: 740px; top: 50px;}
+	@media (min-width: 768px) and (max-width: 979px) {margin-left: 590px; top: 50px;}
 	@media (max-width: 767px) {
 		position: relative;
 		margin-left: 0;
 	}
 }
+
 .object_file_group {
   margin-bottom: 20px;
   input {
