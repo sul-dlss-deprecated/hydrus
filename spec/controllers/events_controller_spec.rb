@@ -14,7 +14,7 @@ describe EventsController, type: :controller do
   end
 
   context 'as an authenticated user' do
-    let(:user) { User.find_or_create_by(email: 'archivist1@example.com') }
+    let(:user) { create :archivist1 }
     before :each do
       sign_in(user)
     end

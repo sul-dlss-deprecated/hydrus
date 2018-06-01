@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 RSpec.describe('Collection view', type: :request, integration: true) do
-  let(:archivist1) { User.find_or_create_by(email: 'archivist1@example.com') }
+  let(:archivist1) { create :archivist1 }
 
   before do
     @apo_druid = 'druid:oo000oo0002'

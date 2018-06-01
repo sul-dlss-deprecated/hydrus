@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe('Collection edit', type: :request, integration: true) do
-  let(:archivist1) { User.find_or_create_by(email: 'archivist1@example.com') }
+  let(:archivist1) { create :archivist1 }
 
   before do
     @druid          = 'druid:oo000oo0003'
@@ -382,8 +382,8 @@ describe('Collection edit', type: :request, integration: true) do
   end
 
   describe 'role-protection' do
-    let(:owner) { User.find_or_create_by(email: 'archivist2@example.com') }
-    let(:viewer) { User.find_or_create_by(email: 'archivist6@example.com') }
+    let(:owner) { create :archivist2 }
+    let(:viewer) { create :archivist6 }
     before(:each) do
       @prev_mint_ids = config_mint_ids()
     end

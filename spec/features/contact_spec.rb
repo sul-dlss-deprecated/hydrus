@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe('Contact page', type: :request, integration: true) do
-  let(:archivist3) { User.find_or_create_by(email: 'archivist3@example.com') }
+  let(:archivist3) { create :archivist3 }
   before(:each) do
     @name_textbox      = 'input#name'
     @email_textbox     = 'input#email'

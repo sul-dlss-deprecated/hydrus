@@ -48,8 +48,8 @@ describe HydrusItemsController, type: :controller do
   end
 
   describe 'New Action', integration: true do
-    let(:user) { User.find_or_create_by(email: 'some-user@example.com') }
-    let(:archivist1) { User.find_or_create_by(email: 'archivist1@example.com') }
+    let(:user) { create :user }
+    let(:archivist1) { create :archivist1 }
     it 'should restrict access to non authed user' do
       sign_in(user)
       get(:new, collection: 'druid:oo000oo0003')
@@ -66,7 +66,7 @@ describe HydrusItemsController, type: :controller do
   end
 
   describe 'Update Action' do
-    let(:user) { User.find_or_create_by(email: 'archivist1@example.com') }
+    let(:user) { create :archivist1 }
     describe('File upload', integration: true) do
       before(:all) do
         @pid = 'druid:oo000oo0001'
@@ -85,7 +85,7 @@ describe HydrusItemsController, type: :controller do
   end
 
   describe 'Index action' do
-    let(:user) { create :mock_user }
+    let(:user) { create :user }
     it "should redirect with a flash message when we're not dealing w/ a nested resrouce" do
       get :index
       expect(flash[:alert]).to eq('You need to sign in or sign up before continuing.')
@@ -116,7 +116,7 @@ describe HydrusItemsController, type: :controller do
   end
 
   describe '#publish_directly', integration: true do
-    let(:user) { create :mock_user }
+    let(:user) { create :user }
     it 'raises an exception if the user lacks the required permissions' do
       sign_in(user)
       post(:publish_directly, id: 'druid:oo000oo0001')
@@ -126,7 +126,7 @@ describe HydrusItemsController, type: :controller do
   end
 
   describe '#submit_for_approval', integration: true do
-    let(:user) { create :mock_user }
+    let(:user) { create :user }
     it 'raises an exception if the user lacks the required permissions' do
       sign_in(user)
       post(:submit_for_approval, id: 'druid:oo000oo0001')
@@ -136,7 +136,7 @@ describe HydrusItemsController, type: :controller do
   end
 
   describe '#approve', integration: true do
-    let(:user) { User.find_or_create_by(email: 'some-user@example.com') }
+    let(:user) { create :user }
     it 'raises an exception if the user lacks the required permissions' do
       sign_in(user)
       post(:approve, id: 'druid:oo000oo0001')
@@ -146,7 +146,7 @@ describe HydrusItemsController, type: :controller do
   end
 
   describe '#disapprove', integration: true do
-    let(:user) { User.find_or_create_by(email: 'some-user@example.com') }
+    let(:user) { create :user }
     it 'raises an exception if the user lacks the required permissions' do
       sign_in(user)
       post(:disapprove, id: 'druid:oo000oo0001')
@@ -156,7 +156,7 @@ describe HydrusItemsController, type: :controller do
   end
 
   describe '#resubmit', integration: true do
-    let(:user) { User.find_or_create_by(email: 'some-user@example.com') }
+    let(:user) { create :user }
     it 'raises an exception if the user lacks the required permissions' do
       sign_in(user)
       post(:resubmit, id: 'druid:oo000oo0001')
@@ -166,7 +166,7 @@ describe HydrusItemsController, type: :controller do
   end
 
   describe '#open_new_version', integration: true do
-    let(:user) { User.find_or_create_by(email: 'some-user@example.com') }
+    let(:user) { create :user }
     it 'raises an exception if the user lacks the required permissions' do
       sign_in(user)
       post(:open_new_version, id: 'druid:oo000oo0001')
