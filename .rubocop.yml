@@ -7,3 +7,7 @@ AllCops:
     - 'remediations/**/*'
     - 'db/schema.rb' # we are generating this in each environment, so it introduces rubocop faults
     - 'vendor/**/*'
+
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*'
