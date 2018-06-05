@@ -240,7 +240,7 @@ function ajax_loading_done(element) {
 }
 
 function show_message(text,id) {
-	$('#flash-notices').append('<div id="' + id + '" class="span8 offset2"><div class="alert alert-info"><button class="close" data-dismiss="alert">×</button>' + text + '</div></div>');
+	$('#flash-notices').append('<div id="' + id + '" class="col-md-8 offset2"><div class="alert alert-info"><button class="close" data-dismiss="alert">×</button>' + text + '</div></div>');
 }
 
 function check_tracked_form_state_change() {

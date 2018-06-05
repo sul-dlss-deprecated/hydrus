@@ -2,10 +2,10 @@
 
 <%- if current_user %>
   <div class="row dashboard">
-    <div class="span7">
+    <div class="col-md-7">
       <%= render :partial=>'home_intro' %>
     </div>
-    <div class="span4 offset1 promotion logged-in">
+    <div class="col-md-4 offset1 promotion logged-in">
       <%# Only show Contact the SDR button if current user cannot create collections %>
       <% if !Hydrus::Authorizable.can_create_collections(current_user) %>
         <%= render :partial=>'contact_sdr' %>
@@ -14,17 +14,17 @@
     </div>
   </div>
   <div class="row">
-    <div class="span12" id="dashboard">
+    <div class="col-md-12" id="dashboard">
       <%= render :partial=>'home_dashboard' %>
     </div>
   </div>
 <%- else -%>
   <div class="row">
-    <div class="span7" id="home_text">
+    <div class="col-md-7" id="home_text">
       <%= render :partial=>'home_intro' %>
       <%= render :partial=>'home_text' %>
     </div>
-    <div class="span4 offset1 promotion">
+    <div class="col-md-4 offset1 promotion">
       <%= render :partial=>'home_promotion_links' %>
       <%= render :partial=>'home_more_info' %>
     </div>

@@ -2,7 +2,7 @@
 
 <div id="flash-notices" class="row">
   <%- if flash[:notice] -%>
-    <div class="span8 offset2">
+    <div class="col-md-8 offset2">
       <div class="alert alert-info">
         <button class="close" data-dismiss="alert">×</button>
         <%= flash[:notice] %>
@@ -14,7 +14,7 @@
   </div>
 
   <%- if flash[:warning] || flash[:alert] -%>
-    <div class="span8 offset2">
+    <div class="col-md-8 offset2">
       <div class="alert">
         <button class="close" data-dismiss="alert">×</button>
         <%= flash[:warning] %>
@@ -23,7 +23,7 @@
     </div>
   <%- end -%>
   <%- if flash[:error] -%>
-    <div class="span8 offset2">
+    <div class="col-md-8 offset2">
       <div class="alert alert-error">
         <button class="close" data-dismiss="alert">×</button>
         <%= flash[:error] %>

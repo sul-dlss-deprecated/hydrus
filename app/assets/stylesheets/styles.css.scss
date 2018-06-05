@@ -49,7 +49,7 @@
 	margin-left: 0px;
 	margin-top: 30px;
 	padding: 2px 0;
-	> .span1, > .span9 {margin-left: 3px;}
+	> .col-md-1, > .col-md-9 {margin-left: 3px;}
 	&.first-header {margin-top: 6px;}
 }
 
@@ -465,7 +465,7 @@ dl.item-view {
 #hydrus_items-edit .field-group, #hydrus_collections-edit .field-group {
 	margin-left: -25px;
 	margin-right: -20px;
-	&> .span8 {margin-right: -20px;}
+	&> .col-md-8 {margin-right: -20px;}
 	@media (min-width: 768px) and (max-width: 1199px) {margin-left: -16px;}
 	@media (max-width: 767px) {margin-left: 5px;}
 }
