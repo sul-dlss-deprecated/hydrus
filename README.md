@@ -9,20 +9,13 @@ Digital Repository for preservation and access.
 
 ## Setting up your environment
 
-First, you need a Java runtime so you can have a local Solr and Fedora instance for development/testing.
-One way to install Solr/Fedora is by using solr_wrapper and jetty_wrapper (for Fedora),
+First, you need a Java runtime (Fedora 3 requires Java 8 and doesn't work with 9 or above)
+so you can have a local Solr and Fedora 3 instance for development/testing.
+One way to install Solr and Fedora 3 is by using solr_wrapper and jetty_wrapper (for Fedora),
  which is what the instructions below assume
 
 ```bash
-rvm install 2.3.4
-
-brew install exiftool
-
-git clone https://github.com/sul-dlss/hydrus.git
-
-cd hydrus
-
-bundle install
+brew install exiftool # Required by assembly-objectfile
 
 rake jetty:clean # download hydra-jetty
 
