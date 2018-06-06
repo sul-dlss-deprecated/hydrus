@@ -114,12 +114,6 @@ module Hydrus::GenericObjectStuff
   #   - Hydrus kicks off the assemblyWF/accessionWF pipeline.
   #   - Later, user edits Collection and clicks Save.
   #   - The save() method in Hydrus invokes publish_metadata().
-  #   - Here we simply call super(), which delegates to the dor-services gem,
-  #     provided that we are running in an environment intended to use the
-  #     entire the assembly/accessioning/publishing pipeline.
-  #   - Later, a nightly cron job (not built yet) will patrol Fedora, looking
-  #     for modified Collections and APOs. If it finds any, it will open a new
-  #     version and run the object through the pipeline.
   def publish_metadata
     return unless should_start_assembly_wf
     cannot_do(:publish_metadata) unless is_assemblable()
