@@ -4,7 +4,7 @@ var tooltip;
 $(document).ready(function(){
 
 	showOnLoad();
-	
+
 	$('#show_all_collections').click(function (){
 		$('#all_collections').toggleClass('hidden');
 		return false;
@@ -14,7 +14,7 @@ $(document).ready(function(){
 		$('#special_users').toggleClass('hidden');
 		return false;
 	});
-		
+
   if ($('#hydrus_collections-edit').length == 1 || $('#hydrus_collections-update').length == 1) {collection_edit_init();}
   if ($('#hydrus_items-edit').length == 1 || $('#hydrus_items-update').length == 1) {item_edit_init();}
   if ($('#itemsTable').length == 1) {$("#itemsTable").tablesorter();}
@@ -33,10 +33,8 @@ $(document).ready(function(){
     });
   });
 
-  // Show all dropdown menus.  This only happens on HydrusCollections#show and HydrusItems#indexc currently.
-  $(".add-content-dropdown").each(function(){
-    $(this).toggle();
-  });
+  // Activate dropdown menus. (currently on HydrusCollection#show)
+	$('.dropdown-toggle').dropdown()
 
 	$(document).on('confirm:complete', function(e,answer) {
 		item=$('#' + e.target.id);
@@ -94,10 +92,10 @@ function activate_edit_controls() {
     });
     return false;
   });
-  
+
   // javascript form submission
   $("#item-actions, #collection-actions").toggle();
-  $("#item-actions button[type=submit], #collection-actions button[type=submit]").click(function(){
+  $("#item-actions .save-edits, #collection-actions .save-edits").click(function(){
     $("form.step").append("<input type='hidden' value='" + $(this).attr('value') + "' name='" + $(this).attr('name') + "' />");
     $(this).attr("disabled","disabled");
     $(this).text("Please wait...");
@@ -152,7 +150,7 @@ function check_for_files_uploading() {
 	$("#edit_form").submit(function(e) {
 	     var self = this;
 	     e.preventDefault();
-     	if (filesInProgress != 0) 
+     	if (filesInProgress != 0)
 			{
 			var r=confirm("There are still files uploading.  If you click OK to continue saving the form, you may lose the uploading files.  Click cancel to allow these files to finish uploading.");
 			if (r==false)
@@ -163,7 +161,7 @@ function check_for_files_uploading() {
 			  }
 	 		}
 	      ajax_loading_indicator($('.save-edits')); // show loading indicator in UI
-          self.submit();		
+          self.submit();
 	});
 }
 
@@ -221,10 +219,10 @@ function ajax_loading_indicator(element) {
   if (element) {
       element.animate({opacity:0.25});
   		element.addClass("disabled");
-  		if (element.attr("disable_with") != '') { 
+  		if (element.attr("disable_with") != '') {
   			element.attr("enable_with",element.text()); // store the current text
   			element.text(element.attr("disable_with"));  // change the text
-  			}		
+  			}
     }
 }
 
@@ -235,12 +233,12 @@ function ajax_loading_done(element) {
     element.animate({opacity:1.0});
     element.removeAttr("disabled");
     element.removeClass("disabled");
-		if (element.attr("enable_with") != '') { element.text(element.attr("enable_with"));} // change the text back		
+		if (element.attr("enable_with") != '') { element.text(element.attr("enable_with"));} // change the text back
     }
 }
 
 function show_message(text,id) {
-	$('#flash-notices').append('<div id="' + id + '" class="col-md-8 offset2"><div class="alert alert-info"><button class="close" data-dismiss="alert">×</button>' + text + '</div></div>');
+	$('#flash-notices').append('<div id="' + id + '" class="col-sm-8 col-sm-offset-2"><div class="alert alert-info"><button class="close" data-dismiss="alert">×</button>' + text + '</div></div>');
 }
 
 function check_tracked_form_state_change() {
@@ -268,21 +266,21 @@ function collection_edit_init(){
   $("input:radio[name='hydrus_collection[requires_human_approval]']").on('click',function()
   {
   	  if ($(this).attr('value') == 'yes') {
-		  $('#reviewer-roles').removeClass('hidden'); 
+		  $('#reviewer-roles').removeClass('hidden');
 	  }
 	  else
 	  {
-		  $('#reviewer-roles').addClass('hidden'); 
+		  $('#reviewer-roles').addClass('hidden');
   	  }
   });
-  
+
   // if the user does not require human approval, hide the reviewer roles section by default
   if ($('#hydrus_collection_requires_human_approval_no').is(':checked')) {$("#reviewer-roles").addClass('hidden')};
-  
+
   // Manage state of select dropdowns when the select should be enabled only when its associated radio button is selected
   $('div.radio-select-group input:radio').click(function() { // when a radio button in the group is clicked
     $('div.radio-select-group select').prop('disabled', true); // disable all the selects
-    $('div.radio-select-group input:radio:checked').parentsUntil('.radio-select-option').siblings('div.radio-label').children('select')
+    $('div.radio-select-group input:checked').parentsUntil('.radio-select-option').children('select')
       .prop('disabled', false); // re-enable the select that is associated with the selected radio button
   });
   // On page load, execute the code block above to disable appropriate select dropdowns
@@ -302,29 +300,29 @@ function item_edit_init(){
   activate_edit_controls();
   check_for_files_uploading();
   $('input[name="hydrus_item[dates[date_type]]"]:checked').click()
-  
+
   // fill in default citation using authors, year, title format
 	$('#use_default_citation').click(function(){
 		var authors=''
 		var title=$('#hydrus_item_title').val().replace(/\.$/, "");
-		
+
 		// build authors list
 		$('.authors_textbox').each(function(index) {
 			var authorNumber=$(this).attr('data-author-number');
 			var authorType=$('.authors_dropdown[data-author-number="' + authorNumber + '"]').val();
 			if (authorType.indexOf('personal') == 0 || authorType.indexOf('author') != -1) {
-		  	authors += $(this).val() + ' and ';	
+		  	authors += $(this).val() + ' and ';
 			}
 		});
-			
+
 		var entered_year = $('#hydrus_item_dates_date_created').val().trim().substr(0,4);
-		
-		// complete citation format		
-		var citation=authors.slice(0, -" and ".length) + '. (' + entered_year + '). ' + title + '. Stanford Digital Repository. Available at: https://purl.stanford.edu/' + $('#object_id').attr('value').replace('druid:',''); 
+
+		// complete citation format
+		var citation=authors.slice(0, -" and ".length) + '. (' + entered_year + '). ' + title + '. Stanford Digital Repository. Available at: https://purl.stanford.edu/' + $('#object_id').attr('value').replace('druid:','');
 		$('#hydrus_item_preferred_citation').val(citation);
 		return false;
 	});
-	
+
 	// check for user entered authors/contributors -- if they have selected an "author" or "personal" type (e.g. personal name), warn them if we don't see any commas, implying they forgot to do LAST, FIRST
 	$(document).on('blur',".authors_textbox",function(){
 			var authorNumber=$(this).attr('data-author-number');
@@ -339,7 +337,7 @@ function item_edit_init(){
 					}
 				}
 		});
-		
+
   $(document).on('blur',"form input, form textarea",function(){
       validate_hydrus_item();
   });
@@ -355,7 +353,7 @@ function item_edit_init(){
 
 
 function showOnLoad() {
-	$('.showOnLoad').removeClass('hidden');	
+	$('.showOnLoad').removeClass('hidden');
 	$('.showOnLoad').show();
 }
 

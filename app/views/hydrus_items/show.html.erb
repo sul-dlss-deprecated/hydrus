@@ -5,18 +5,18 @@
   <div id="status-box"><%= render :partial => "status_box"%></div>
 
   <div id="actions-box"><%= render :partial => "actions_box_show"%></div>
-<%- end -%>
+<% end %>
 
 <div>
   <div class="row">
-    <div class="col-md-9">
+    <div class="col-sm-9">
       <%=render :partial=>'navigation' %>
     </div>
   </div>
 
   <div id="object-content-wrapper">
     <h3><%= title_text(@fobj) %></h3>
-    <h4 class="muted">Item Details</h4>
+    <h4 class="text-muted">Item Details</h4>
     <dl class="dl-horizontal item-view clearfix">
 
       <%= render "hydrus_items/basic_item_metadata" %>

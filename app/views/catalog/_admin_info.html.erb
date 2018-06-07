@@ -2,9 +2,9 @@
 	<h3>Administrator information for app version <%= Hydrus::Application.config.app_version %></h3>
 
 	<div>
-	  <%- if @all_collections.blank? -%>
+	  <% if @all_collections.blank? %>
 	    <p>No collections.</p>
-	  <%- else -%>
+	  <% else %>
 	    <h4>
         <a href="#" id="show_all_collections">Show all collections (<%=@all_collections.size%>)</a>
       </h4>

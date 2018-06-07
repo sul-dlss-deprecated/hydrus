@@ -1,9 +1,9 @@
-<div class="well item-status">
-   <div class="box-header">
+<div class="panel item-status">
+   <div class="panel-header">
       <span>Status</span>
         <span id="status-label" class="label label-<%=button_color(@fobj.status_label)%> status-label"><%=@fobj.status_label.capitalize%></span>
    </div>
-   <div class="box-body">
+   <div class="panel-body">
 
       <%=check_box_tag 'required_fields_checkbox', true, @fobj.required_fields_completed?, :disabled=>true%>
       <label for="required_fields_checkbox">
@@ -64,7 +64,7 @@
         </label>
       <% end %>
     	<span id="files-uploading"></span>
-	  
+
   </div>
 
 </div>

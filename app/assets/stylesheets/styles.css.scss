@@ -49,16 +49,14 @@
 	margin-left: 0px;
 	margin-top: 30px;
 	padding: 2px 0;
-	> .col-md-1, > .col-md-9 {margin-left: 3px;}
-	&.first-header {margin-top: 6px;}
+	> .col-sm-1, > .col-sm-9 { margin-left: 3px; }
+	&.first-header { margin-top: 6px; }
+	h4 { font-weight: bold }
 }
 
 .section-header .required {
-	// color: #990000;
-	color: #FFF;
 	float: right;
-	margin-right: 25px;
-	margin-top: 8px;
+	font-size: 11px;
 }
 
 .form-section-para {margin-top: 20px;}
@@ -104,9 +102,7 @@ form.step .dates input[type=text]{
   width:250px;
   display:inline;
 }
-form.step textarea, form.step input[type=text] {
-	width: 95%;
-}
+
 .short-textarea textarea {
 	height: 60px;
 }
@@ -123,11 +119,7 @@ form.step .related-citation {
 	  width: 90%;
 	}
 }
-form.step .related-item {
-	input[type=text] {
-		width: 90%;
-	}
-}
+
 form.step #file-upload {
 	input[type=text] {
 		width: 88%;
@@ -206,11 +198,9 @@ table form {
 #main {
 	float: left;
 }
+
 #sidebar {
 	float: right;
-	border-bottom: 1px solid #DDD;
-	border-left: 1px solid #DDD;
-	border-right: 1px solid #DDD;
 	margin-left: -1px;
 	margin-top: 38px;
 	form {margin-bottom: 0;}
@@ -229,10 +219,7 @@ table form {
 	margin-right: 12px;
 	@media (max-width: 767px) {text-align: left;}
 }
-.radio-label {
-	margin-left: 6px;
-	label {display: inline-block;}
-}
+
 /* make inline select pulldowns only as wide as necessary */
 .inline-select {
 	height: 20px;
@@ -284,14 +271,43 @@ table.hydrus-striped-table {
 noscript #item-actions, noscript #collection-actions {
   display:block;
 }
-#collection-actions .btn-group {margin-left: 18px;}
+#collection-actions .btn-group {
+	margin-left: 18px;
+}
+.panel {
+	.panel-body {
+		input[type=checkbox] {
+			display:none;
+		}
+	}
+	.panel-heading {
+		.panel-title {
+			text-transform: uppercase;
+			color: #555;
+			font-size: 12px;
+			.label {
+				font-size: 11px;
+			}
+		}
+
+		.status-label {
+			float: right;
+			text-transform: none;
+		}
+	}
+	.panel-heading.collection-actions {
+		border-top: 1px solid #ddd;
+		border-radius: 0;
+	}
+}
+
 .well {
 	box-shadow: none;
 	border: none;
 	background: none;
 	margin-bottom: 0;
 	margin-right: -2px;
-	padding: 0px 2px 0 0;
+	padding: 0;
 	.box-header {
 		background-color: #e8e8e8;
 		border-bottom: 1px solid #DDD;
@@ -358,12 +374,14 @@ noscript #item-actions, noscript #collection-actions {
 
 #hydrus_items-edit #sidebar, #hydrus_collections-edit #sidebar {
 	position:fixed;
-	margin-left: 930px;
-	@media (min-width: 980px) and (max-width: 1199px) {margin-left: 740px;}
-	@media (min-width: 768px) and (max-width: 979px) {margin-left: 590px;}
+	margin-left: 853px;
+	width: 270px;
+	@media (min-width: 980px) and (max-width: 1199px) { margin-left: 674px; }
+	@media (min-width: 768px) and (max-width: 979px) { margin-left: 495px; }
 	@media (max-width: 767px) {
 		position: relative;
 		margin-left: 0;
+		width: 100%;
 	}
 }
 .object_file_group {
@@ -458,14 +476,13 @@ dl.item-view {
 .collection-items h4, .section-header h4 {
 	border-top: 1px solid #CCC;
 	padding: 8px 0 12px;
-	margin-right: 25px;
 }
 
 #hydrus_items-edit .modal-header {@include modal-header;}
 #hydrus_items-edit .field-group, #hydrus_collections-edit .field-group {
 	margin-left: -25px;
 	margin-right: -20px;
-	&> .col-md-8 {margin-right: -20px;}
+	&> .col-sm-8 {margin-right: -20px;}
 	@media (min-width: 768px) and (max-width: 1199px) {margin-left: -16px;}
 	@media (max-width: 767px) {margin-left: 5px;}
 }
@@ -584,68 +601,6 @@ ul.breadcrumb {
   }
 }
 
-/* panel styles below will be unnecessary if we ever upgrade to Bootstrap V.3 */
-.panel {
-  margin-bottom: 20px;
-  background-color: #ffffff;
-  border: 1px solid transparent;
-  border-radius: 4px;
-  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
-          box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
-}
-
-.panel-body {
-  padding: 15px;
-}
-
-.panel-body:before,
-.panel-body:after {
-  display: table;
-  content: " ";
-}
-
-.panel-body:after {
-  clear: both;
-}
-
-.panel-heading {
-  padding: 10px 15px;
-  border-bottom: 1px solid transparent;
-  border-top-right-radius: 3px;
-  border-top-left-radius: 3px;
-}
-
-.panel-title {
-  margin-top: 0;
-  margin-bottom: 0;
-  font-size: 16px;
-}
-
-.panel-default {
-  border-color: #dddddd;
-  > .panel-heading {
-    color: #333333;
-    background-color: #f5f5f5;
-    border-color: #dddddd;
-    padding: 3px 12px;
-  }
-  .dashboard & {
-    margin-top: 15px;
-    .panel-title {
-      font-size: 13px;
-    }
-    .panel-body {
-      padding: 15px 15px 6px;
-      @include custom-list-bullets;
-    }
-  }
-  @media (max-width: 767px) {
-    margin-left: 0;
-    max-width: none;
-  }
-}
-/* end default panel styles */
-
 /* dashboard */
 #dashboard {
   .btn {
@@ -659,8 +614,8 @@ ul.breadcrumb {
 .nav {
 	margin-bottom: 0;
 }
-.nav-pills > .active a,
-.nav-pills > .active a:hover {
+.nav-pills > li.active a,
+.nav-pills > li.active a:hover {
 	background: rgba(202,189,172,0.7);
 	color: #6D1308;
 }

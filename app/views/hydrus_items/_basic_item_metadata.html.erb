@@ -1,4 +1,4 @@
-<%- coll = @fobj.collection -%>
+<% coll = @fobj.collection %>
 
 <dd>
   <% if @fobj.purl_page_ready? %>
@@ -9,7 +9,7 @@
   <% else %>
     <dt>Will be online at</dt>
     <dd>
-      <span class="muted"><%= @fobj.purl_url %></span>
+      <span class="text-muted"><%= @fobj.purl_url %></span>
     </dd>
   <% end %>
 </dd>

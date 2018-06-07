@@ -11,7 +11,7 @@ fedora:
   url: http://fedoraAdmin:fedoraAdmin@127.0.0.1:8983/fedora
 
 suri:
-  url: 'https://sul-lyberservices-dev.stanford.edu'
+  url: 'http://localhost:3002'
   user: ~
   password: ~
 

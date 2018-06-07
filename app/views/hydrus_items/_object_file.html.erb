@@ -8,22 +8,21 @@
 
   <div class="row object_file_label" id="object_file_label_<%=file.id%>">
 
-    <div class="col-md-9">
-      <%= text_field_tag("file_info[#{file.id}][label]", file.label) -%>
-      <%= link_to(
-            '<i class="icon-trash"></i>'.html_safe,
-            destroy_hydrus_item_file_path(:file_id => file.id, :id => file.pid),
+    <div class="col-sm-9">
+      <%= text_field_tag("file_info[#{file.id}][label]", file.label) %>
+      <%= link_to destroy_hydrus_item_file_path(:file_id => file.id, :id => file.pid),
             :class => "delete-file btn",
             :confirm => 'Are you sure? Once deleted, you cannot recover this file.',
             :remote  => true,
-            :id    => "delete_file_#{file.id}",
-          ) %>
+            :id    => "delete_file_#{file.id}" do %>
+        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+      <% end %>
     </div>
 
   </div>
 
   <div class="row object_file_hide" id="object_file_hide_<%=file.id%>">
-    <div class="col-md-9">
+    <div class="col-sm-9">
       <%= check_box_tag("file_info[#{file.id}][hide]", 'yes', file.hide) %>
       Hide file when published
     </div>

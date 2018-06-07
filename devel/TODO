@@ -126,11 +126,6 @@ hydrus-test, and hydrus-prod. [Hannah/Lynn]
 Collection create: APO.roleMetadata: set the value of <name> for the
 collection-manager. [Waiting on LDAP].
 
-Update SUL-chrome gem to latest Bootstrap (needed to be able to use the
-unchecked checkbox icon, which is not available in our current SUL-chrome gem).
-When this is done, change "icon-minus" to "icon-check-empty" in the
-select_status_checkbox_icon helper method (application_helper.rb).
-
 Upgrade to hydra-head 5.0, active-fedora 5.2, OM 1.8, Solrizer 2.0, and
 Blacklight 4.0. See github.com/projecthydra/hydra-head/wiki/Migrating-to-5.0.
 

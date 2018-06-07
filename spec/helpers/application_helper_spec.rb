@@ -54,7 +54,7 @@ describe ApplicationHelper, type: :helper do
 
   it 'should set the correct text for empty objects' do
     exp_unsp = '<span class="unspecified">to be entered</span>'
-    exp_na   = '<span class="muted">not available yet</span>'
+    exp_na   = '<span class="text-muted">not available yet</span>'
     expect(hydrus_object_setting_value(nil)).to eq(exp_unsp)
     expect(hydrus_object_setting_value('')).to eq(exp_unsp)
     expect(hydrus_object_setting_value('', na: true)).to eq(exp_na)
@@ -80,9 +80,9 @@ describe ApplicationHelper, type: :helper do
     expect(hydrus_strip(nil)).to eq('')
   end
 
-  it 'should show select status checkbox icon' do
-    expect(select_status_checkbox_icon(true)).to eq('<i class="icon-check"></i>')
-    expect(select_status_checkbox_icon(false)).to eq('<i class="icon-minus"></i>')
+  it 'shows select status checkbox icon' do
+    expect(select_status_checkbox_icon(true)).to eq '<span class="glyphicon glyphicon-check" aria-hidden="true"></span>'
+    expect(select_status_checkbox_icon(false)).to eq '<span class="glyphicon glyphicon-unchecked" aria-hidden="true"></span>'
   end
 
   it 'seen_beta_dialog? should be shown only once' do

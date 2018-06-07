@@ -1,8 +1,11 @@
-<div class="well actions-box" id="item-actions">
-  <div class="box-header">Actions</div>
-  <div class="box-body">
-    <fieldset>
-      <button type="submit" class="btn btn-small save-edits" name="save" id="save_<%= id %>">Save</button>
-    </fieldset>
-  </div> 
+<div class="panel-heading" id="item-actions">
+  <h3 class="panel-title">Actions</h3>
+</div>
+
+<div class="panel-body">
+  <%= f.submit 'Save', name: 'save',
+                       show_loading_indicator: true,
+                       disable_with: "Please wait...",
+                       class: 'btn btn-default save-edits',
+                       id: "save_#{id}" %>
 </div>

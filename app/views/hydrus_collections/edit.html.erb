@@ -1,111 +1,112 @@
-<%=render :partial=>'shared/set_page_title', :locals=>{:action=>"Editing"} %>
+<%= render 'shared/set_page_title', action: "Editing" %>
 
-<%- object_type = @fobj.object_type -%>
-<%= form_for(@fobj, :method => 'PUT', :html => {:class => "step", :"data-track-state-change"=>"true", :novalidate=>""}) do |f| -%>
+<% object_type = @fobj.object_type %>
+<%= form_for @fobj, method: 'PUT',
+                    html: { class: "step form-horizontal",
+                            :"data-track-state-change" => "true",
+                            novalidate: "" } do |f| %>
 
-<%- sidebar_items << capture do -%>
+ <% sidebar_items << capture do %>
+ <div class="panel panel-default actions-box" id="collection-actions">
+   <%= render 'status_box' %>
+   <%= render "actions_box_edit", f: f, id: 'js' %>
+ </div>
+ <% end %>
 
-  <div class="well actions-box" id="collection-actions">
+ <%= render 'navigation' %>
+  <div id="object-content-wrapper">
+    <h3><%= title_text(@fobj) %></h3>
+    <h4 class="text-muted">Collection Details</h4>
 
-      <div id="status-box"><%=render :partial=>'status_box' %></div>
-
-     <div id="actions-box"><%= render :partial => "actions_box_edit", :locals => {:f=>f, :id=>"js"}%></div>
-
-  </div>
-
-<%- end -%>
-
-<div class="row">
-  <div class="col-md-9">
-    <%=render :partial=>'navigation' %>
-  </div>
-</div>
-<div id="object-content-wrapper">
-  <h3><%= title_text(@fobj) %></h3>
-  <h4 class="muted">Collection Details</h4>
-
-    <%= hydrus_form_header(:required=>true, :first=>true) {"Name, description, contact"} %>
-		<p>Enter the title and brief description of the collection. Provide a single contact email address to be published with the collection.</p>
-    <div class="row field-group">
-      <%= hydrus_form_label do %>
-        <%= f.label :title, "Collection name" %>
-      <%- end -%>
-      <%= hydrus_form_value do %>
-        <%= f.text_field :title, :value => (@fobj.title || ""), :required => true %>
-      <%- end -%>
-    </div>
-    <div class="row field-group">
-      <%= hydrus_form_label do %>
-        <%= f.label :abstract, "Description" %>
-      <%- end -%>
-      <%= hydrus_form_value(:class=>"short-textarea") do %>
-        <%= f.text_area :abstract, :value => (@fobj.abstract || ""),:cols=>"100%", :required => true %>
-      <%- end -%>
-    </div>
-    <div class="row field-group">
-      <%= hydrus_form_label do %>
-        Contact email
-      <%- end -%>
-      <%= hydrus_form_value do %>
-        <%= f.text_field :contact, :value => (@fobj.contact || ""),:required => true%>
-      <%- end -%>
+    <div class='section-header first-header'>
+      <h4>Name, description, contact <span class='label label-danger required'>required</span></h4>
     </div>
 
-    <%= hydrus_form_header {"Links to related information"} %>
-		<p>Enter one or more URLS to relevant web pages that enhance the description and understanding of the collection. Examples include: project web site, department web site, event web site, professional profile.</p>
-    <div id="related-items" class="destroy-group">
-      <%= render "related_items" %>
-    </div>
-    <div class="row field-group">
-      <div class="col-md-8 offset1">
-        <%= button_tag("Add another link", :name=>"add_link", :"data-attribute" => "add_link", :id=>"add_link", :class=>"btn", :value=>@fobj.related_items.length) %>
+  	<p>Enter the title and brief description of the collection. Provide a single contact email address to be published with the collection.</p>
+
+    <div class="form-group">
+      <%= f.label :title, "Collection name", class: 'col-sm-2' %>
+      <div class="col-sm-10">
+        <%= f.text_field :title, :value => (@fobj.title || ""), required: true, class: 'form-control' %>
       </div>
     </div>
 
-    <%= hydrus_form_header(:required=>true) {"Release and visibility of content"} %>
-    <div id="content-visibility">
+    <div class="form-group">
+      <%= f.label :abstract, "Description", class: 'col-sm-2' %>
+      <div class="col-sm-10">
+        <%= f.text_area :abstract, value: (@fobj.abstract || ""), required: true, class: 'form-control' %>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :contact, "Contact email", class: 'col-sm-2' %>
+      <div class="col-sm-10">
+        <%= f.text_field :contact, value: (@fobj.contact || ""), required: true, class: 'form-control' %>
+      </div>
+    </div>
+
+    <div class='section-header'>
+      <h4>Links to related information</h4>
+    </div>
+
+  	<p>Enter one or more URLS to relevant web pages that enhance the description and understanding of the collection. Examples include: project web site, department web site, event web site, professional profile.</p>
+    <div id="related-items" class="destroy-group">
+      <%= render "related_items" %>
+    </div>
+
+    <div class="form-group">
+      <div class="col-sm-8 col-sm-offset-2">
+        <%= button_tag "Add another link", name: "add_link",
+                                           :"data-attribute" => "add_link",
+                                           id: "add_link",
+                                           class: "btn btn-default",
+                                           value: @fobj.related_items.length %>
+      </div>
+    </div>
+
+    <div class='section-header'>
+      <h4>Release and visibility of content <span class='label label-danger required'>required</span></h4>
+    </div>
+
+     <div id="content-visibility">
       <p>Content in SDR is intended to be shared. You can impose a delay (embargo) before
       content in this collection is released for public or Stanford-only discovery
       and download.</p>
 
-      <div class="row radio-select-group">
-        <%= hydrus_form_value do %>
-          <% Hydrus::AdminPolicyObject.embargo_types.each do |emb_opt, emb_text| %>
-            <div class="row radio-select-option">
-              <div class="col-md-1 radio-input">
-                <%= f.radio_button 'embargo_option', emb_opt %>
-              </div>
-              <div class="col-md-7 radio-label">
-                <%= f.label        'embargo_option', emb_text, :value => emb_opt %>
-                <%# Don't include embargo period select if embargo type is 'none' %>
-                <% unless emb_opt == 'none' %>
-                  <%= f.select "embargo_#{emb_opt}".to_sym, options_for_select(Hydrus::AdminPolicyObject.embargo_terms, @fobj.send("embargo_#{emb_opt}")), {:prompt => 'Select embargo'}, {:class => 'inline-select right', :id => "embargo_option_#{emb_opt}" } %>
-                <% end %>
-              </div>
-            </div>
-          <% end %>
+      <div class="radio-select-group">
+        <% Hydrus::AdminPolicyObject.embargo_types.each do |emb_opt, emb_text| %>
+          <div class="checkbox radio-select-option form-inline">
+            <%= f.label 'embargo_option' do %>
+              <%= f.radio_button 'embargo_option', emb_opt %>
+              <%= emb_text %>
+              <%# Don't include embargo period select if embargo type is 'none' %>
+              <% unless emb_opt == 'none' %>
+                <%= f.select "embargo_#{emb_opt}".to_sym,
+                             options_for_select(Hydrus::AdminPolicyObject.embargo_terms, @fobj.send("embargo_#{emb_opt}")),
+                             { prompt: 'Select embargo' },
+                             class: 'inline-select right form-control',
+                             id: "embargo_option_#{emb_opt}" %>
+              <% end %>
+            <% end %>
+          </div>
         <% end %>
       </div>
 
       <p class="form-section-para">After its release date, content in this collection can be discovered and downloaded by:</p>
-      <div class="row">
-        <%= hydrus_form_value do %>
-          <% Hydrus::AdminPolicyObject.visibility_types.each do |vis_opt, vis_text| %>
-            <div class="row">
-              <div class="col-md-1 radio-input">
-                <%= f.radio_button 'visibility_option_value', vis_opt %>
-              </div>
-              <div class="col-md-7 radio-label">
-                <%= f.label        'visibility_option_value', vis_text, :value => vis_opt %>
-              </div>
-            </div>
+      <% Hydrus::AdminPolicyObject.visibility_types.each do |vis_opt, vis_text| %>
+        <div class="checkbox">
+          <%= f.label 'visibility_option_value' do %>
+            <%= f.radio_button 'visibility_option_value', vis_opt %>
+            <%= vis_text %>
           <% end %>
-        <% end %>
-      </div>
-
+        </div>
+      <% end %>
     </div>
 
-    <%= hydrus_form_header {"Terms of Use and Licenses"} %>
+    <div class='section-header'>
+      <h4>Terms of Use and Licenses</h4>
+    </div>
+
     <div id="license">
       <p>
         The following Terms of Use will be displayed with each item published in
@@ -114,128 +115,112 @@
       </p>
 
       <p>After its release date, items in this collection should be covered by:</p>
-      <div class="row radio-select-group">
-        <%= hydrus_form_value do %>
-          <% Hydrus::AdminPolicyObject.license_types.each do |lic_opt, lic_text| %>
-            <div class="row radio-select-option">
-              <div class="col-md-1 radio-input">
-                <%= f.radio_button 'license_option', lic_opt %>
-              </div>
-              <div class="col-md-7 radio-label">
-                <%= f.label('license_option', lic_text, :value => lic_opt) %>
-                <%# Don't include license select dropdown if license type is 'no license' %>
-                <% unless lic_opt == 'none' %>
-                  <%= f.select(
-                        "license_#{lic_opt}".to_sym,
-                        grouped_options_for_select(
-                          Hydrus::GenericObject.license_groups,
-                          @fobj.send("license_#{lic_opt}")
-                        ),
-                        {:prompt => 'Select license'},
-                        {:class => 'inline-select right', :id => "license_option_#{lic_opt}" }
-                      )
-                  %>
-                <% end %>
-              </div>
-            </div>
-          <% end %>
+      <div class="radio-select-group">
+        <% Hydrus::AdminPolicyObject.license_types.each do |lic_opt, lic_text| %>
+          <div class="checkbox radio-select-option">
+            <%= f.label 'license_option' do %>
+              <%= f.radio_button 'license_option', lic_opt %>
+              <%= lic_text %>
+
+              <%# Don't include license select dropdown if license type is 'no license' %>
+              <% unless lic_opt == 'none' %>
+                <%= f.select "license_#{lic_opt}".to_sym,
+                      grouped_options_for_select(
+                        Hydrus::GenericObject.license_groups,
+                        @fobj.send("license_#{lic_opt}")
+                      ),
+                      { prompt: 'Select license'},
+                      class: 'inline-select right form-control',
+                      id: "license_option_#{lic_opt}" %>
+              <% end %>
+            <% end %>
+          </div>
         <% end %>
       </div>
     </div>
 
     <div id="role-management-wth-reviewers">
-	
-    <%= hydrus_form_header {"Collection participants"} %>
+       <div class='section-header'>
+         <h4>Collection participants</h4>
+       </div>
 
-    <div id="role-management">
-      <p>Provide a SUNet ID (NOT email address) for each person who can manage, deposit or view items in this
-         collection. Separate multiple IDs with a comma. You only need to add a user once for the highest level role, since they will 
-		 have the ability to perform the actions for any roles below.</p>
-          <div class="row field-group">
-           <%= hydrus_form_label do %>
-              <%= f.label :'apo_person_roles[hydrus-collection-depositor]', 'Owner' %>
-            <%- end %>
-          <%= hydrus_form_value do %>
-              <%= f.text_field :'apo_person_roles[hydrus-collection-depositor]', :value=>@fobj.apo_persons_with_role('hydrus-collection-depositor').first, :readonly=>true%>
-              <p class="help">This is the owner of the collection, and cannot be changed</p>
-
-  			<%- end %>
+       <div id="role-management">
+         <p>Provide a SUNet ID (NOT email address) for each person who can manage, deposit or view items in this
+            collection. Separate multiple IDs with a comma. You only need to add a user once for the highest level role, since they will
+   		     have the ability to perform the actions for any roles below.</p>
+         <div class="form-group">
+           <%= f.label :'apo_person_roles[hydrus-collection-depositor]', 'Owner', class: 'col-sm-2'  %>
+           <div class="col-sm-10">
+             <%= f.text_field :'apo_person_roles[hydrus-collection-depositor]',
+                              value: @fobj.apo_persons_with_role('hydrus-collection-depositor').first,
+                              readonly: true,
+                              class: 'form-control'%>
+             <span class="help-block">This is the owner of the collection, and cannot be changed</span>
+           </div>
          </div>
 
-      <% Hydrus::Responsible.role_labels(:collection_level).each do |role, h| %>
-        <%
-          role_label = h[:label]
-          help_text  = h[:help]
-          next if (role == 'hydrus-collection-depositor' || role=='hydrus-collection-reviewer')
-          k = :"apo_person_roles[#{role}]"
-        %>
-          <div class="row field-group">
-            <%= hydrus_form_label do %>
-              <%= f.label k, role_label.pluralize %>
-            <%- end %>
-            <%- pwr = @fobj.apo_persons_with_role(role) %>
-            <%= hydrus_form_value do %>
-              <%= f.text_field k, :value => pwr.to_a.join(', ') %>
-              <p class="help"><%=help_text%></p>
-            <%- end %>
-          </div>
-      <% end %>
-	  
-	  <% if @fobj.is_open%>
-      <input type="checkbox" checked="checked" name="should_send_role_change_emails" value="true" id="should_send_role_change_emails" /> Send emails to collection participants when members are added/removed.
-	  <% end %>
-	  
-     </div>
-
-     <%= hydrus_form_header {"Review Workflow"} %>
-
-     <div id="review-workflow">
-       <p>Select the optional review workflow if you want each submitted item to be reviewed before final deposit into the repository.</p>
-	   
-       <div class="row">
-         <%= hydrus_form_value do %>
-           <% %w(no yes).each do |opt| %>
-             <div class="row">
-               <div class="col-md-1 radio-input">
-                 <%= f.radio_button 'requires_human_approval', opt %>
-               </div>
-               <div class="col-md-7 radio-label">
-                 <%= f.label 'requires_human_approval', opt.capitalize, :value => opt %>
+         <% Hydrus::Responsible.role_labels(:collection_level).each do |role, h| %>
+           <%
+             role_label = h[:label]
+             help_text  = h[:help]
+             next if (role == 'hydrus-collection-depositor' || role=='hydrus-collection-reviewer')
+             k = :"apo_person_roles[#{role}]"
+           %>
+             <div class="form-group">
+               <%= f.label k, role_label.pluralize, class: 'col-sm-2' %>
+               <% pwr = @fobj.apo_persons_with_role(role) %>
+               <div class="col-sm-10">
+                 <%= f.text_field k, value: pwr.to_a.join(', '), class: 'form-control' %>
+                 <span class="help-block"><%= help_text %></span>
                </div>
              </div>
-           <% end %>
          <% end %>
+
+   	     <% if @fobj.is_open%>
+           <input type="checkbox" checked="checked" name="should_send_role_change_emails" value="true" id="should_send_role_change_emails" /> Send emails to collection participants when members are added/removed.
+   	     <% end %>
        </div>
-	   
-	   <div id="reviewer-roles">
-           <div class="row field-group">
-            <%= hydrus_form_label do %>
-               <%= f.label :managers, 'Managers' %>
-             <%- end %>
-           <%= hydrus_form_value do %>
-               <%= f.text_field :managers, :disabled=>true, :value=>@fobj.apo_persons_with_role('hydrus-collection-manager').to_a.join(', '), :readonly=>true%>
-               <p class="help">Manager(s) can review any submission by default.</p>
 
-   			<%- end %>
+       <div class='section-header'>
+         <h4>Review Workflow</h4>
+       </div>
+
+       <div id="review-workflow">
+         <p>Select the optional review workflow if you want each submitted item to be reviewed before final deposit into the repository.</p>
+
+         <% %w(no yes).each do |opt| %>
+           <div class="checkbox">
+             <%= f.label 'requires_human_approval' do %>
+               <%= f.radio_button 'requires_human_approval', opt %>
+               <%= opt.capitalize %>
+             <% end %>
+           </div>
+         <% end %>
+
+         <div id="reviewer-roles">
+           <div class="form-group">
+             <%= f.label :managers, 'Managers', class: 'col-sm-2' %>
+             <div class="col-sm-10">
+               <%= f.text_field :managers, disabled: true, value: @fobj.apo_persons_with_role('hydrus-collection-manager').to_a.join(', '), readonly: true, class: 'form-control'%>
+               <span class="help-block">Manager(s) can review any submission by default.</span>
+             </div>
+           </div>
+
+           <div class="form-group">
+            <%= f.label :'apo_person_roles[hydrus-collection-reviewer]', 'Reviewers', class: 'col-sm-2'  %>
+            <div class="col-sm-10">
+              <%= f.text_field :'apo_person_roles[hydrus-collection-reviewer]', value: @fobj.apo_persons_with_role('hydrus-collection-reviewer').to_a.join(', '), class: 'form-control' %>
+              <span class="help-block">Enter the SUNet ID of additional individuals who you authorize to review submissions (but not to add or manage items).</span>
+            </div>
           </div>
-          <div class="row field-group">
-           <%= hydrus_form_label do %>
-              <%= f.label :'apo_person_roles[hydrus-collection-reviewer]', 'Reviewers' %>
-            <%- end %>
-          <%= hydrus_form_value do %>
-              <%= f.text_field :'apo_person_roles[hydrus-collection-reviewer]', :value=>@fobj.apo_persons_with_role('hydrus-collection-reviewer').to_a.join(', ')%>
-              <p class="help">Enter the SUNet ID of additional individuals who you authorize to review submissions (but not to add or manage items).</p>
-  			<%- end %>
          </div>
-	   </div>
-	  </div>
-	 </div>
-    <noscript>
-      <div class="well actions-box" id="collection-actions">
-        <%= render :partial => "actions_box_edit", :locals => {:id=>"nojs"}%>
-      </div>
-    </noscript>
-
-  <% end %>
-</div> <!-- object-content-wrapper -->
+       </div>
+    </div>
+  <noscript>
+    <div class="panel panel-default actions-box" id="collection-actions">
+      <%= render "actions_box_edit", f: f, id: 'nojs' %>
+    </div>
+  </noscript>
+  </div> <!-- object-content-wrapper -->
+<% end %>
 <div id="druid-footer"><%= @fobj.pid %></div>

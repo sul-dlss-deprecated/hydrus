@@ -1,66 +1,81 @@
 <%=render :partial=>'shared/set_page_title', :locals=>{:action=>"Editing"} %>
 
-<%- object_type = @fobj.object_type -%>
-<% sidebar_items << capture do %>
-  <div id="status-box"><%= render :partial => "status_box"%></div>
 
-  <div id="actions-box"><%= render :partial => "actions_box_edit", :locals => {:id=>"js"}%></div>
-<%- end -%>
+<%= form_for @fobj, method: 'PUT',
+                    html: { id: 'edit_form',
+                            class: "step",
+                            multipart: true,
+                            :"data-track-state-change" => "true",
+                            novalidate: "" } do |f| %>
+
+  <% sidebar_items << capture do %>
+    <div class="panel panel-default actions-box" id="collection-actions">
+      <%= render "status_box"%>
+      <%= render "actions_box_edit", f: f, id: 'js' %>
+    </div>
+  <% end %>
 
 
 <div class="row">
-  <div class="col-md-9">
-    <%=render :partial=>'navigation' %>
+  <div class="col-sm-9">
+    <%= render 'navigation' %>
   </div>
 </div>
 <div id="object-content-wrapper">
   <h3><%= title_text(@fobj) %></h3>
-  <h4 class="muted">Item Details</h4>
+  <h4 class="text-muted">Item Details</h4>
 
-<%= form_for(@fobj, :method => 'PUT', :html => {:id=>'edit_form',:class=>"step", :multipart=>true, :"data-track-state-change"=>"true", :novalidate=>""}) do |f| -%>
+  <%= hidden_field_tag("object_id", params[:id]) %>
 
-  <%= hidden_field_tag("object_id", params[:id]) -%>
+  <div class='section-header first-header'>
+    <h4>Title and contact <span class='label label-danger required'>required</span></h4>
+  </div>
 
-  <%= hydrus_form_header(:required=>true, :first=>true) {"Title and contact"} %>
 	<p>Enter the item title and a single contact email address to be published with the item.</p>
-  <div class="row field-group">
+  <% object_type = @fobj.object_type %>
+  <div class="form-group">
     <%= hydrus_form_label do %>
       <%= f.label :title, "Title of #{object_type}" %>
-    <%- end -%>
+    <% end %>
     <%= hydrus_form_value(:class=>"short-textarea") do %>
       <%= f.text_area :title, :value=>(@fobj.title || ""), :cols=>'100%', :required => true %>
-    <%- end -%>
+    <% end %>
   </div>
 
-  <div class="row field-group">
+  <div class="form-group">
     <%= hydrus_form_label do %>
       Contact email
-    <%- end -%>
+    <% end %>
     <%= hydrus_form_value(:class=>"short-textarea") do %>
       <%= text_field_tag :"hydrus_item[contact]", (@fobj.contact || ""), :required => true %>
-    <%- end -%>
+    <% end %>
   </div>
 
-  <%= hydrus_form_header(:required=>true) {"Authors and Contributors"} -%>
+  <div class='section-header'>
+    <h4>Authors and Contributors <span class='label label-danger required'>required</span></h4>
+  </div>
 
-  <div class="row field-group">
-    <div class="col-md-9 contributor-select destroy-group">
+  <div class="form-group">
+    <div class="col-sm-9 contributor-select destroy-group">
       <p>
         Enter the name(s) of people, organizations or events responsible for producing the item.  Enter a personal name as &quot;LastName, FirstName&quot; or &quot;LastName, FirstName MiddleName&quot;. For example: &quot;Stanford, Jane Lathrop&quot;.
       </p>
       <%= render "contributors" %>
     </div>
   </div>
-  <%= hydrus_form_header(:required=>true) {"Date"} -%>
+
+  <div class='section-header'>
+    <h4>Date <span class='label label-danger required'>required</span></h4>
+  </div>
   <p>
     Enter either a single date or a date range below that best describes when the content of this item was created. The date value(s) must be formatted as <b>YYYY</b> or <b>YYYY-MM</b> or <b>YYYY-MM-DD</b>.<br>
     Select "Approximate" if an exact date value is not known.
   </p>
-  
+
   <div class="radio-select-option">
     <%=radio_button_tag(:"hydrus_item[dates[date_type]]","single",@fobj.dates[:single], {:class => "date_radio", :onclick => "$(\".dates input\").prop('disabled', true); $(\".single_date input\").prop('disabled', false)"})%>Single Date<br>
-    
-    <div class="col-md-9 dates single_date">
+
+    <div class="col-sm-9 dates single_date">
       <div class="date_div">
        <%= text_field_tag("hydrus_item[dates[date_created]]",  @fobj.dates[:date_created], :required => true, :class => 'date_input_short') %>
        <%=check_box_tag("hydrus_item[dates[date_created_approximate]]", "hi", @fobj.dates[:date_created_approximate])%>
@@ -72,8 +87,8 @@
 
   <div class="radio-select-option">
     <%=radio_button_tag(:"hydrus_item[dates[date_type]]","range",@fobj.dates[:range], {:class => "date_radio", :onclick => "$(\".dates input\").prop('disabled', true); $(\".date_range input\").prop('disabled', false)"})%>Date Range<br>
-    
-    <div class="col-md-9 dates date_range">
+
+    <div class="col-sm-9 dates date_range">
       <div class="date_div">
         <%= text_field_tag("hydrus_item[dates[date_start]]",  @fobj.dates[:date_range_start], :required => true, :class => 'date_input_short') %>
         <%=check_box_tag("hydrus_item[dates[date_range_start_approximate]]", 'hi', @fobj.dates[:date_range_start_approximate])%>
@@ -85,107 +100,119 @@
         <%= label_tag("hydrus_item[dates[date_created_range_approximate]]", "Approximate") %>
       </div>
     </div>
-  
+
      <%=radio_button_tag(:"hydrus_item[dates[date_type]]","undated",@fobj.dates[:undated] , {:class => "date_radio", :onclick => "$(\".dates input\").prop('disabled', true);"})%>Undated: the date of the item is unknown and cannot be approximated.
   </div>
-  
-    <%= hydrus_form_header(:required=>true) {"Upload file(s)"} -%>
 
-    <div class="row field-group">
-      <div class="col-md-9" id="file-upload">
+  <div class='section-header'>
+    <h4>Upload file(s) <span class='label label-danger required'>required</span></h4>
+  </div>
 
-        <%= render :partial=>'file_uploads' %>
+  <div class="form-group">
+    <div class="col-sm-9" id="file-upload">
 
-      </div>
+      <%= render :partial=>'file_uploads' %>
+
     </div>
+  </div>
 
-  <%= hydrus_form_header(:required=>true) {"Abstract and keywords"} -%>
+  <div class='section-header'>
+    <h4>Abstract and keywords <span class='label label-danger required'>required</span></h4>
+  </div>
 	<p>Enter a summary statement about the item contents (suggested 600 words maximum).
 	Add at least one keyword that relates to the content of the item.</p>
 
-  <div class="row field-group">
+  <div class="form-group">
     <%= hydrus_form_label do %>
       <%= f.label :abstract %>
-    <%- end -%>
-    <%= hydrus_form_value do  -%>
+    <% end %>
+    <%= hydrus_form_value do  %>
       <%= f.text_area :abstract, :value=>(@fobj.abstract || ""), :cols=>'100%',:required=>true %>
-    <%- end -%>
+    <% end %>
   </div>
-  <div class="row field-group">
+  <div class="form-group">
     <%= hydrus_form_label do %>
       <%= label_tag("hydrus_item_keywords", "Keywords") %>
-    <%- end -%>
-    <%= hydrus_form_value do  -%>
-      <%= text_field_tag("hydrus_item[keywords]", @fobj.keywords.join(", ")) -%>
+    <% end %>
+    <%= hydrus_form_value do  %>
+      <%= text_field_tag("hydrus_item[keywords]", @fobj.keywords.join(", ")) %>
       <div class="help">Separate keywords with commas. Include the full name of your Stanford department, school, program, institute, etc. (excluding any commas).</div>
-    <%- end -%>
+    <% end %>
   </div>
 
-  <%= hydrus_form_header {"Citations"} -%>
-<p> Provide a bibliographic citation for this item in a format of your preference. Be sure to include the item’s persistent URL: <br /><%=@fobj.purl_url%> </p>
-  <div class="row field-group">
+
+  <div class='section-header'>
+    <h4>Citations</h4>
+  </div>
+  <p>Provide a bibliographic citation for this item in a format of your preference. Be sure to include the item’s persistent URL: <br /><%=@fobj.purl_url%> </p>
+
+  <div class="form-group">
     <%= hydrus_form_label do %>
       <%= f.label :preferred_citation, "Preferred citation for this #{object_type}", :class => "hidden-tablet" %>
       <%= f.label :preferred_citation, "Cite this #{object_type}", :class => "visible-tablet" %>
-    <%- end -%>
-    <%= hydrus_form_value(:class=>"short-textarea") do  -%>
+    <% end %>
+    <%= hydrus_form_value(:class=>"short-textarea") do  %>
       <%= f.text_area :preferred_citation, :value=>hydrus_strip(@fobj.preferred_citation)%>
       <div class="help">
 			 <a href="#" id="use_default_citation" class="showOnLoad hidden">Use default citation</a>
       </div>
-    <%- end -%>
+    <% end %>
   </div>
 
-  <div class="row field-group">
+  <div class="form-group">
     <%= hydrus_form_label do %>
       <%= f.label :"related_citation_0", "Related published work" %>
-    <%- end -%>
-    <%= hydrus_form_value(:class=>"short-textarea") do  -%>
+    <% end %>
+    <%= hydrus_form_value(:class=>"short-textarea") do  %>
       <div id="related-citations" class="destroy-group">
         <%= render "related_citations" %>
       </div>
       <div class="help">
         Enter a citation for one or more other publications, such as a journal article, directly related to this item.
       </div>
-    <%- end -%>
+    <% end %>
   </div>
 
-  <div class="row field-group">
-    <div class="col-md-8 offset1">
+  <div class="form-group">
+    <div class="col-sm-8 col-sm-offset-1">
       <%= button_tag("Add another related work", :name=>"add_related_citation", :"data-attribute" => "add_related_citation", :id=>"add_related_citation", :class=>"btn", :value=>@fobj.related_citation.length) %>
     </div>
   </div>
 
 
-  <%= hydrus_form_header {"Links to related content"} -%>
+  <div class='section-header'>
+    <h4>Links to related content</h4>
+  </div>
 
   <div id="related-items" class="destroy-group">
     <%= render "related_items" %>
   </div>
-  <div class="row field-group">
-    <div class="col-md-8 offset1">
+  <div class="form-group">
+    <div class="col-sm-8 col-sm-offset-1">
       <%= button_tag("Add another link", :name=>"add_link", :"data-attribute" => "add_link", :id=>"add_link", :class=>"btn", :value=>@fobj.related_items.length) %>
     </div>
   </div>
 
-  <%= hydrus_form_header(:required=>true) {"Release and visibility of content"} %>
+  <div class='section-header'>
+    <h4>Release and visibility of content <span class='label label-danger required'>required</span></h4>
+  </div>
 
   <!-- Embargo -->
-  <div class="row embargo field-group">
-    <div class="col-md-9 sub-section">
+  <div class="form-group embargo">
+    <div class="col-sm-9 sub-section">
       <% if @fobj.embargo_can_be_changed %>
         This item will be released for discovery and download
         <div data-behavior="radio-disable-group" class="embargo-section">
           <%= radio_button_tag 'hydrus_item[embarg_visib][embargoed]',
                                "no",
-                               !@fobj.is_embargoed, 
+                               !@fobj.is_embargoed,
                                :"data-control-element" => "#hydrus_item_embarg_visib_date",
-                               :"data-control-disable" => "true" %> 
+                               :"data-control-disable" => "true" %>
           <%= f.label :embargo_immediate, "immediately" %>
           <%= radio_button_tag 'hydrus_item[embarg_visib][embargoed]',
                                "yes",
                                @fobj.is_embargoed,
-                               :"data-control-element" => "#hydrus_item_embarg_visib_date", 
+                               :"data-control-element" => "#hydrus_item_embarg_visib_date",
                                :"data-control-disable" => "false" %>
           <%= f.label :embargo_future, "on this date" %>
           <%= text_field_tag(
@@ -212,8 +239,8 @@
   </div>
 
   <!-- Visiblity -->
-  <div class="row field-group">
-    <div class="col-md-9">
+  <div class="form-group">
+    <div class="col-sm-9">
       After its release, this item can be downloaded and discovered by
       <% if @fobj.visibility_can_be_changed %>
         <%= select_tag(
@@ -228,13 +255,13 @@
   </div>
 
   <!-- Review release settings -->
-  <div class="row field-group">
-    <div class="col-md-9 sub-section">
+  <div class="form-group">
+    <div class="col-sm-9 sub-section">
       <span>
         <br />
         <input type="checkbox"
-               <%="checked disabled" if to_bool(@fobj.reviewed_release_settings)%> 
-               name="hydrus_item[reviewed_release_settings]" 
+               <%="checked disabled" if to_bool(@fobj.reviewed_release_settings)%>
+               name="hydrus_item[reviewed_release_settings]"
                value="true" id="release_settings" />
         I have reviewed the release and visibility settings above.
       </span>
@@ -242,19 +269,19 @@
   </div>
 
   <!-- Terms of deposit -->
-
-  <%= hydrus_form_header(:required => true) {"Terms of Deposit"} %>
-
-  <div class="row field-group">
-    <div class="col-md-9 sub-section">
+  <div class='section-header'>
+    <h4>Terms of Deposit <span class='label label-danger required'>required</span></h4>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-9 sub-section">
       <span>
         <br />
         <input type="checkbox"
-               <%="checked disabled" if to_bool(@fobj.terms_of_deposit_accepted?)%> 
-               name="hydrus_item[terms_of_deposit_checkbox]" 
+               <%="checked disabled" if to_bool(@fobj.terms_of_deposit_accepted?)%>
+               name="hydrus_item[terms_of_deposit_checkbox]"
                value="true" id="terms_of_deposit_checkbox" /> I have read and agree to the SDR
 					     <% tod_path = terms_of_deposit_path(@fobj) %>
-					      <%= link_to( 
+					      <%= link_to(
 					            "Terms of Deposit",
 					            tod_path,
 					            :target     => '_blank',
@@ -267,10 +294,16 @@
 
   <!-- Terms of use and license -->
 
-  <%= hydrus_form_header(:required => @fobj.licenses_can_vary) {"Terms of Use and Licenses"} %>
+  <div class='section-header'>
+    <h4>Terms of Use and Licenses
+    <% if @fobj.licenses_can_vary %>
+      <span class='label label-danger required'>required</span>
+    <% end %>
+    </h4>
+  </div>
 
-  <div class="row field-group">
-    <div class="col-md-9 sub-section">
+  <div class="form-group">
+    <div class="col-sm-9 sub-section">
       <p>
         The following Terms of Use will be displayed with this item when published:
         <%= in_quotes(@fobj.terms_of_use) %>
@@ -278,13 +311,13 @@
     </div>
   </div>
 
-  <div class="row field-group">
-    <div class="col-md-9">
+  <div class="form-group">
+    <div class="col-sm-9">
       <% if @fobj.licenses_can_vary %>
         This item will be licensed under
         <%= f.select :license,
-                     grouped_options_for_select(Hydrus::GenericObject.license_groups, @fobj.license), 
-                     {:prompt => 'Select license'}, 
+                     grouped_options_for_select(Hydrus::GenericObject.license_groups, @fobj.license),
+                     {:prompt => 'Select license'},
                      {:class => 'inline-select right' } %>
       <% else %>
         <span class="highlight-value">
@@ -299,30 +332,32 @@
 
   <% unless @fobj.is_initial_version %>
 
-    <%= hydrus_form_header(:required => true) {"Information about new version"} %>
+    <div class='section-header'>
+      <h4>Information about new version <span class='label label-danger required'>required</span></h4>
+    </div>
 
-    <div class="row field-group">
+    <div class="form-group">
       <%= hydrus_form_label do %>
         <%= f.label 'Description' %>
-      <%- end -%>
-      <%= hydrus_form_value do  -%>
+      <% end %>
+      <%= hydrus_form_value do  %>
         <%= f.text_area(:version_description,
                         :value => @fobj.version_description,
                         :required => true, :rows => 3) %>
-      <%- end -%>
+      <% end %>
     </div>
 
-    <div class="row field-group">
+    <div class="form-group">
       <%= hydrus_form_label do %>
         <%= f.label 'Scope of change' %>
-      <%- end -%>
+      <% end %>
       <%= hydrus_form_value do %>
         <% %w(major minor).each do |opt| %>
           <div class="row">
-            <div class="col-md-1 radio-input">
+            <div class="col-sm-1 radio-input">
               <%= f.radio_button 'version_significance', opt %>
             </div>
-            <div class="col-md-7 radio-label">
+            <div class="col-sm-7 radio-label">
               <%= f.label 'version_significance', opt.capitalize, :value => opt %>
               <% if opt == "minor" %>
                 <span class="help">
@@ -337,12 +372,10 @@
 
   <% end %>
 
-  <noscript>
-    <%= render :partial => "actions_box_edit", :locals => {:id=>"nojs"}%>
-  </noscript>
-
-<%- end -%>
-
-</div> <!-- object-content-wrapper -->
+    <noscript>
+      <%= render "actions_box_edit", f: f, id: 'nojs' %>
+    </noscript>
+  </div> <!-- object-content-wrapper -->
+<% end %>
 
 <div id="druid-footer"><%= @fobj.pid %></div>

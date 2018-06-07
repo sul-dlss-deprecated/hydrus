@@ -6,37 +6,35 @@
     <% if @fobj.is_awaiting_approval && can?(:review, @fobj) %>
 
       <!-- Disapprove. -->
-      <%= form_tag(disapprove_item_path(@fobj)) do -%>
+      <%= form_tag(disapprove_item_path(@fobj)) do %>
       <p>
         <%= label_tag("hydrus_item_disapproval_reason",
                       "Reason for return",
                       :class => "return-item") %>
         <%= text_field_tag("hydrus_item_disapproval_reason",
                            @fobj.disapproval_reason,
-                           :class => "return-item", :autofocus => true) -%><br />
+                           :class => "return-item", :autofocus => true) %><br />
         <span class="help">Item depositor will be notified by email</span>
       </p>
 
         <p>
-          <%= button_tag(
-                "Return",
-                :id    => 'hydrus_item_disapprove',
-                :class => 'btn btn-small save-edits',
-                :disable_with => "Please wait...",
-								:show_loading_indicator=>"true") %>
+          <%= button_tag "Return",
+                         id: 'hydrus_item_disapprove',
+                         class: 'btn btn-default save-edits',
+                         disable_with: "Please wait...",
+                         show_loading_indicator: "true" %>
         </p>
 
-      <% end -%>
+      <% end %>
 
 			      <!-- Approve. -->
 			      <p>
-			        <%= button_to(
-			              "Approve and Publish",
-			              approve_item_path(@fobj),
-			              :id    => 'hydrus_item_approve',
-			              :class => 'btn btn-small save-edits',
-										:confirm => 'You are about to approve this item for deposit to the Stanford Digital Repository. While the deposit is in process, you will not be able to edit the item. Are you sure you want to proceed?',
-			 							:disable_with => "Please wait...") %>
+			        <%= button_to "Approve and Publish",
+        			              approve_item_path(@fobj),
+                            id: 'hydrus_item_approve',
+                            class: 'btn btn-default save-edits',
+                            disable_with: "Please wait...",
+        										confirm: 'You are about to approve this item for deposit to the Stanford Digital Repository. While the deposit is in process, you will not be able to edit the item. Are you sure you want to proceed?' %>
 			      </p>
 
     <!-- Resubmit. -->
@@ -46,57 +44,53 @@
         <%= @fobj.disapproval_reason %>
       </p>
       <p>
-        <%= button_to(
-              "Resubmit for Approval",
-              resubmit_item_path(@fobj),
-              :id    => 'hydrus_item_resubmit',
-              :class => 'btn btn-small save-edits',
-              :confirm => 'You are about to submit an item for approval in the Stanford Digital Repository. This item cannot be edited while it is under review or, if approved, while the deposit is in progress. Are you sure you want to proceed?',
-              :disable_with => "Please wait...",
-  						:show_loading_indicator=>"true") %>
+        <%= button_to "Resubmit for Approval",
+                      resubmit_item_path(@fobj),
+                      id: 'hydrus_item_resubmit',
+                      class: 'btn btn-default save-edits',
+                      confirm: 'You are about to submit an item for approval in the Stanford Digital Repository. This item cannot be edited while it is under review or, if approved, while the deposit is in progress. Are you sure you want to proceed?',
+                      disable_with: "Please wait...",
+          						show_loading_indicator: "true" %>
       </p>
 
     <!-- Submit for Approval. -->
     <% elsif @fobj.is_submittable_for_approval && can?(:edit, @fobj)%>
       <p>
-        <%= button_to(
-              "Submit for Approval",
-              submit_for_approval_item_path(@fobj),
-              :id    => 'hydrus_item_submit_for_approval',
-              :class => 'btn btn-small save-edits',
-							:confirm => 'You are about to submit an item for approval in the Stanford Digital Repository. This item cannot be edited while it is under review or, if approved, while the deposit is in progress. Are you sure you want to proceed?',
-              :disable_with => "Please wait...") %>
+        <%= button_to "Submit for Approval",
+                      submit_for_approval_item_path(@fobj),
+                      id: 'hydrus_item_submit_for_approval',
+                      class: 'btn btn-default save-edits',
+                      confirm: 'You are about to submit an item for approval in the Stanford Digital Repository. This item cannot be edited while it is under review or, if approved, while the deposit is in progress. Are you sure you want to proceed?',
+                      disable_with: "Please wait..." %>
       </p>
 
     <!-- Publish directly (applies only to items not requiring approval by reviewer). -->
     <% elsif @fobj.is_publishable_directly && can?(:edit, @fobj) %>
       <p>
-        <%= button_to(
-              "Publish",
-              publish_directly_item_path(@fobj),
-              :id    => 'hydrus_item_publish_directly',
-              :class => 'btn btn-small save-edits',
-							:confirm => 'You are about to deposit this item to the Stanford Digital Repository. While the deposit is in process, you will not be able to edit the item. Are you sure you want to proceed?',
-              :disable_with => "Please wait...") %>
+        <%= button_to "Publish",
+                      publish_directly_item_path(@fobj),
+                      id: 'hydrus_item_publish_directly',
+                      class: 'btn btn-default save-edits',
+                      confirm: 'You are about to deposit this item to the Stanford Digital Repository. While the deposit is in process, you will not be able to edit the item. Are you sure you want to proceed?',
+                      disable_with: "Please wait..." %>
       </p>
 
     <!-- Open new version. -->
     <% elsif @fobj.is_accessioned && can?(:edit, @fobj) %>
       <p>
-        <%= button_to(
-              "Open new version",
-              open_new_version_item_path(@fobj),
-              :id    => 'hydrus_item_open_new_version',
-              :class => 'btn btn-small save-edits',
-							:confirm => 'You are about to open this published item for editing. When you complete editing, you will need to re-publish the item as a new version. The PURL for the revised item will not change. A text field is provided where you can enter a description of the changes in this version. Are you sure you want to proceed and open a new version?',
-              :disable_with => "Please wait..." ) %>
+        <%= button_to "Open new version",
+                      open_new_version_item_path(@fobj),
+                      id: 'hydrus_item_open_new_version',
+                      class: 'btn btn-default save-edits',
+                      confirm:'You are about to open this published item for editing. When you complete editing, you will need to re-publish the item as a new version. The PURL for the revised item will not change. A text field is provided where you can enter a description of the changes in this version. Are you sure you want to proceed and open a new version?',
+                      disable_with: "Please wait..." %>
       </p>
 
     <% end %>
 
     <!-- Terms of deposit. -->
     <p class="popup-link">
-      <i class="icon-share"></i>
+      <span class="glyphicon glyphicon-share" aria-hidden="true"></span>
       <% tod_path = terms_of_deposit_path(@fobj) %>
       <%= link_to(
             @fobj.terms_of_deposit_accepted? ?
@@ -111,7 +105,7 @@
     </p>
 
     <!-- Share PURL. -->
-    <p class="popup-link"><span style="display:none" id="share-purl"><i class="icon-envelope"></i> <a href="#" id="share-purl-link">Share link to this item</a></span>
+    <p class="popup-link"><span style="display:none" id="share-purl"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> <a href="#" id="share-purl-link">Share link to this item</a></span>
     <div id="copy-purl-link-area">
       <%= form_tag(send_purl_email_path, :remote => true,  :target => '_new' ) %>
       <p>Copy item link:   <%= text_field_tag "copy-purl-link", @fobj.purl_url, :readonly=>true %></p>
@@ -126,19 +120,18 @@
     <!-- Delete link  -->
     <% if can?(:edit, @fobj) && @fobj.is_destroyable %>
         <p style="display:none;" id="discard-item" class="discard-item">
-          <i class="icon-trash"></i>
-          <%= link_to('Discard this item', 
-                      @fobj, :method=>:delete, 
-                      :confirm => delete_confirm_msg(@fobj)) %>
+          <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+          <%= link_to('Discard this item',
+                      @fobj,
+                      method: :delete,
+                      confirm: delete_confirm_msg(@fobj)) %>
         </p>
         <noscript>
           <p class="discard-item">
-            <i class="icon-trash"></i>
-            <%= link_to('Discard this item',
-                        discard_item_confirmation_path(@fobj)) %>
+            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+            <%= link_to 'Discard this item', discard_item_confirmation_path(@fobj) %>
           </p>
         </noscript>
     <% end %>
-
   </div>
 </div>

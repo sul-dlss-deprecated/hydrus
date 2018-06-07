@@ -1,13 +1,13 @@
-<div id="content" class="col-md-12">
+<div id="content" class="col-sm-12">
 
       <h2 class="hide-text top-content-title"><%= t('blacklight.search.search_results_header') %></h2>
 
       <% @page_title = t('blacklight.search.title', :application_name => application_name) %>
 
 
-      <% content_for(:head) do -%>
+      <% content_for(:head) do %>
         <%= render_opensearch_response_metadata %>
-      <% end -%>
+      <% end %>
 
       <%= render :partial => 'did_you_mean' %>
 
@@ -16,11 +16,11 @@
       <%= render :partial => 'sort_and_per_page' %>
       <h2 class="hide-text"><%= t('blacklight.search.search_results') %></h2>
 
-      <%- if render_grouped_response? %>
+      <% if render_grouped_response? %>
         <%= render_grouped_document_index %>
-      <%- else %>
+      <% else %>
         <%= render_document_index %>
-      <%- end %>
+      <% end %>
 
       <%= render 'results_pagination' %>
 
