@@ -1,4 +1,4 @@
-ZIP_FILE = 'https://github.com/projecthydra/hydra-jetty/archive/v7.3.1.zip'
+Jettywrapper.hydra_jetty_version = 'v7.0.0'
 
 desc 'Run Continuous Integration Suite (tests, coverage, docs)'
 task ci: [:rubocop, 'jetty:clean', 'jetty:config'] do
@@ -11,9 +11,9 @@ task ci: [:rubocop, 'jetty:clean', 'jetty:config'] do
 
   Rake::Task['db:migrate'].invoke
 
-  require 'jettywrapper'
   jetty_params = Jettywrapper.load_config.merge({
-    jetty_home: File.expand_path(File.dirname(__FILE__) + '/../../jetty')
+    jetty_home: File.expand_path(File.dirname(__FILE__) + '/../../jetty'),
+    startup_wait: 90
   })
 
   error = nil
