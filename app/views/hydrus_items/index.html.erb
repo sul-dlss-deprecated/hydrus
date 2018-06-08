@@ -1,9 +1,9 @@
-<%=render :partial=>'shared/set_page_title' %>
+<%=render 'shared/set_page_title' %>
 
 <% sidebar_items << capture do %>
-  <div class="well actions-box collection-settings">
-    <%=render :partial=>'hydrus_collections/status_box' %>
-    <%=render :partial=>'hydrus_collections/actions_box_show' %>
+<div class="panel panel-default">
+    <%=render 'hydrus_collections/status_box' %>
+    <%=render 'hydrus_collections/actions_box_show' %>
   </div>
 <% end %>
 

@@ -3,7 +3,7 @@
 
 <%= form_for @fobj, method: 'PUT',
                     html: { id: 'edit_form',
-                            class: "step",
+                            class: "step form-horizontal",
                             multipart: true,
                             :"data-track-state-change" => "true",
                             novalidate: "" } do |f| %>
@@ -34,34 +34,29 @@
 	<p>Enter the item title and a single contact email address to be published with the item.</p>
   <% object_type = @fobj.object_type %>
   <div class="form-group">
-    <%= hydrus_form_label do %>
-      <%= f.label :title, "Title of #{object_type}" %>
-    <% end %>
-    <%= hydrus_form_value(:class=>"short-textarea") do %>
-      <%= f.text_area :title, :value=>(@fobj.title || ""), :cols=>'100%', :required => true %>
-    <% end %>
+    <%= f.label :title, "Title of #{object_type}", class: 'col-sm-2' %>
+
+    <div class="col-sm-10">
+      <%= f.text_area :title, value: (@fobj.title || ""), :cols=>'100%', required: true, class: 'form-control' %>
+    </div>
   </div>
 
   <div class="form-group">
-    <%= hydrus_form_label do %>
-      Contact email
-    <% end %>
-    <%= hydrus_form_value(:class=>"short-textarea") do %>
-      <%= text_field_tag :"hydrus_item[contact]", (@fobj.contact || ""), :required => true %>
-    <% end %>
+    <%= f.label :contact, "Contact email", class: 'col-sm-2' %>
+    <div class="col-sm-10">
+      <%= text_field_tag :"hydrus_item[contact]", (@fobj.contact || ""), required: true, class: 'form-control' %>
+    </div>
   </div>
 
   <div class='section-header'>
     <h4>Authors and Contributors <span class='label label-danger required'>required</span></h4>
   </div>
 
-  <div class="form-group">
-    <div class="col-sm-9 contributor-select destroy-group">
-      <p>
-        Enter the name(s) of people, organizations or events responsible for producing the item.  Enter a personal name as &quot;LastName, FirstName&quot; or &quot;LastName, FirstName MiddleName&quot;. For example: &quot;Stanford, Jane Lathrop&quot;.
-      </p>
-      <%= render "contributors" %>
-    </div>
+  <div class="form-group contributor-select destroy-group">
+    <p>
+      Enter the name(s) of people, organizations or events responsible for producing the item.  Enter a personal name as &quot;LastName, FirstName&quot; or &quot;LastName, FirstName MiddleName&quot;. For example: &quot;Stanford, Jane Lathrop&quot;.
+    </p>
+    <%= render "contributors" %>
   </div>
 
   <div class='section-header'>
@@ -73,12 +68,12 @@
   </p>
 
   <div class="radio-select-option">
-    <%=radio_button_tag(:"hydrus_item[dates[date_type]]","single",@fobj.dates[:single], {:class => "date_radio", :onclick => "$(\".dates input\").prop('disabled', true); $(\".single_date input\").prop('disabled', false)"})%>Single Date<br>
+    <%= radio_button_tag(:"hydrus_item[dates[date_type]]","single",@fobj.dates[:single], {:class => "date_radio", :onclick => "$(\".dates input\").prop('disabled', true); $(\".single_date input\").prop('disabled', false)"})%>Single Date<br>
 
     <div class="col-sm-9 dates single_date">
       <div class="date_div">
-       <%= text_field_tag("hydrus_item[dates[date_created]]",  @fobj.dates[:date_created], :required => true, :class => 'date_input_short') %>
-       <%=check_box_tag("hydrus_item[dates[date_created_approximate]]", "hi", @fobj.dates[:date_created_approximate])%>
+       <%= text_field_tag("hydrus_item[dates[date_created]]",  @fobj.dates[:date_created], required: true, class: 'form-control date_input_short') %>
+       <%= check_box_tag("hydrus_item[dates[date_created_approximate]]", "hi", @fobj.dates[:date_created_approximate])%>
        <%= label_tag("hydrus_item[dates[date_created_approximate]]" ,"Approximate") %>
       </div>
     </div>
@@ -90,12 +85,12 @@
 
     <div class="col-sm-9 dates date_range">
       <div class="date_div">
-        <%= text_field_tag("hydrus_item[dates[date_start]]",  @fobj.dates[:date_range_start], :required => true, :class => 'date_input_short') %>
+        <%= text_field_tag("hydrus_item[dates[date_start]]",  @fobj.dates[:date_range_start], required: true, class: 'form-control date_input_short') %>
         <%=check_box_tag("hydrus_item[dates[date_range_start_approximate]]", 'hi', @fobj.dates[:date_range_start_approximate])%>
         <%= label_tag("hydrus_item[dates[date_start_approximate]]","Approximate") %>
       </div>
       <span style="float:left; margin-left:10px;margin-right:10px; vertical-align: top;">To</span>
-      <div class="date_div"><%= text_field_tag("hydrus_item[dates[date_range_end]]", @fobj.dates[:date_range_end], :required => true, :class => 'date_input_short') %>
+      <div class="date_div"><%= text_field_tag("hydrus_item[dates[date_range_end]]", @fobj.dates[:date_range_end], required: true, class: 'form-control date_input_short') %>
         <%=check_box_tag("hydrus_item[dates[date_range_end_approximate]]", 'hi', @fobj.dates[:date_range_end_approximate])%>
         <%= label_tag("hydrus_item[dates[date_created_range_approximate]]", "Approximate") %>
       </div>
@@ -109,10 +104,8 @@
   </div>
 
   <div class="form-group">
-    <div class="col-sm-9" id="file-upload">
-
-      <%= render :partial=>'file_uploads' %>
-
+    <div class="col-sm-12" id="file-upload">
+      <%= render 'file_uploads' %>
     </div>
   </div>
 
@@ -123,21 +116,17 @@
 	Add at least one keyword that relates to the content of the item.</p>
 
   <div class="form-group">
-    <%= hydrus_form_label do %>
-      <%= f.label :abstract %>
-    <% end %>
-    <%= hydrus_form_value do  %>
-      <%= f.text_area :abstract, :value=>(@fobj.abstract || ""), :cols=>'100%',:required=>true %>
-    <% end %>
+    <%= f.label :abstract, class: 'col-sm-2' %>
+    <div class="col-sm-10">
+      <%= f.text_area :abstract, value: (@fobj.abstract || ""), cols: '100%', required: true, class: 'form-control' %>
+    </div>
   </div>
   <div class="form-group">
-    <%= hydrus_form_label do %>
-      <%= label_tag("hydrus_item_keywords", "Keywords") %>
-    <% end %>
-    <%= hydrus_form_value do  %>
-      <%= text_field_tag("hydrus_item[keywords]", @fobj.keywords.join(", ")) %>
-      <div class="help">Separate keywords with commas. Include the full name of your Stanford department, school, program, institute, etc. (excluding any commas).</div>
-    <% end %>
+    <%= f.label "keywords", "Keywords", class: 'col-sm-2' %>
+    <div class="col-sm-10">
+      <%= f.text_field :keywords, value: @fobj.keywords.join(", "), class: 'form-control' %>
+      <div class="help-block">Separate keywords with commas. Include the full name of your Stanford department, school, program, institute, etc. (excluding any commas).</div>
+    </div>
   </div>
 
 
@@ -147,35 +136,32 @@
   <p>Provide a bibliographic citation for this item in a format of your preference. Be sure to include the item’s persistent URL: <br /><%=@fobj.purl_url%> </p>
 
   <div class="form-group">
-    <%= hydrus_form_label do %>
-      <%= f.label :preferred_citation, "Preferred citation for this #{object_type}", :class => "hidden-tablet" %>
-      <%= f.label :preferred_citation, "Cite this #{object_type}", :class => "visible-tablet" %>
-    <% end %>
-    <%= hydrus_form_value(:class=>"short-textarea") do  %>
-      <%= f.text_area :preferred_citation, :value=>hydrus_strip(@fobj.preferred_citation)%>
-      <div class="help">
+    <%= f.label :preferred_citation, "Preferred citation for this #{object_type}", class: "hidden-sm col-sm-2" %>
+    <%= f.label :preferred_citation, "Cite this #{object_type}", class: "visible-sm col-sm-2" %>
+
+    <div class="col-sm-10">
+      <%= f.text_area :preferred_citation, value: hydrus_strip(@fobj.preferred_citation), class: 'form-control' %>
+      <div class="help-block">
 			 <a href="#" id="use_default_citation" class="showOnLoad hidden">Use default citation</a>
       </div>
-    <% end %>
+    </div>
   </div>
 
   <div class="form-group">
-    <%= hydrus_form_label do %>
-      <%= f.label :"related_citation_0", "Related published work" %>
-    <% end %>
-    <%= hydrus_form_value(:class=>"short-textarea") do  %>
+    <%= f.label :"related_citation_0", "Related published work", class: 'col-sm-2' %>
+    <div class="col-sm-10">
       <div id="related-citations" class="destroy-group">
         <%= render "related_citations" %>
       </div>
-      <div class="help">
+      <div class="help-block">
         Enter a citation for one or more other publications, such as a journal article, directly related to this item.
       </div>
-    <% end %>
+    </div>
   </div>
 
   <div class="form-group">
     <div class="col-sm-8 col-sm-offset-1">
-      <%= button_tag("Add another related work", :name=>"add_related_citation", :"data-attribute" => "add_related_citation", :id=>"add_related_citation", :class=>"btn", :value=>@fobj.related_citation.length) %>
+      <%= button_tag "Add another related work", name: "add_related_citation", :"data-attribute" => "add_related_citation", id: "add_related_citation", class: "btn btn-default", value: @fobj.related_citation.length %>
     </div>
   </div>
 
@@ -189,7 +175,7 @@
   </div>
   <div class="form-group">
     <div class="col-sm-8 col-sm-offset-1">
-      <%= button_tag("Add another link", :name=>"add_link", :"data-attribute" => "add_link", :id=>"add_link", :class=>"btn", :value=>@fobj.related_items.length) %>
+      <%= button_tag "Add another link", name: "add_link", :"data-attribute" => "add_link", id: "add_link", class: "btn btn-default", value: @fobj.related_items.length %>
     </div>
   </div>
 
@@ -337,20 +323,18 @@
     </div>
 
     <div class="form-group">
-      <%= hydrus_form_label do %>
-        <%= f.label 'Description' %>
-      <% end %>
-      <%= hydrus_form_value do  %>
+      <%= f.label 'Description', class: 'col-sm-2' %>
+      <div class="col-sm-10">
         <%= f.text_area(:version_description,
-                        :value => @fobj.version_description,
-                        :required => true, :rows => 3) %>
-      <% end %>
+                        value: @fobj.version_description,
+                        required: true,
+                        class: 'form-control',
+                        rows: 3) %>
+      </div>
     </div>
 
     <div class="form-group">
-      <%= hydrus_form_label do %>
-        <%= f.label 'Scope of change' %>
-      <% end %>
+      <%= f.label 'Scope of change', class: 'col-sm-2'  %>
       <%= hydrus_form_value do %>
         <% %w(major minor).each do |opt| %>
           <div class="row">
@@ -360,7 +344,7 @@
             <div class="col-sm-7 radio-label">
               <%= f.label 'version_significance', opt.capitalize, :value => opt %>
               <% if opt == "minor" %>
-                <span class="help">
+                <span class="help-block">
                   <%= "(for example, small text edits)" %>
                 </span>
               <% end %>

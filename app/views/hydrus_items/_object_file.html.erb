@@ -1,7 +1,7 @@
 <div class="object_file_group" id="object_file_group_<%=file.id%>">
 
   <div class="row object_file_name" id="object_file_name_<%=file.id%>">
-    <div class="span6">
+    <div class="col-sm-6">
       <%= file.filename %> (<%= number_to_human_size(file.size) %>)
     </div>
   </div>
@@ -9,16 +9,15 @@
   <div class="row object_file_label" id="object_file_label_<%=file.id%>">
 
     <div class="col-sm-9">
-      <%= text_field_tag("file_info[#{file.id}][label]", file.label) %>
-      <%= link_to destroy_hydrus_item_file_path(:file_id => file.id, :id => file.pid),
-            :class => "delete-file btn",
-            :confirm => 'Are you sure? Once deleted, you cannot recover this file.',
-            :remote  => true,
-            :id    => "delete_file_#{file.id}" do %>
+      <%= text_field_tag "file_info[#{file.id}][label]", file.label, class: 'form-control' %>
+      <%= link_to destroy_hydrus_item_file_path(file_id: file.id, id: file.pid),
+            class: "delete-file btn btn-default",
+            confirm: 'Are you sure? Once deleted, you cannot recover this file.',
+            remote: true,
+            id: "delete_file_#{file.id}" do %>
         <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
       <% end %>
     </div>
-
   </div>
 
   <div class="row object_file_hide" id="object_file_hide_<%=file.id%>">

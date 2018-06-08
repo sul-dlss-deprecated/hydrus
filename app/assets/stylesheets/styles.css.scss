@@ -103,6 +103,7 @@ form.step .dates input[type=text]{
   display:inline;
 }
 
+// TODO: Remove
 .short-textarea textarea {
 	height: 60px;
 }
@@ -394,6 +395,8 @@ noscript #item-actions, noscript #collection-actions {
   margin-bottom: 3px;
 }
   /* reformat sidebar based on screen size */
+
+// TODO: Remove?
 .actions-box.item-status,
 .actions-box.collection-settings {
 	@media (min-width: 768px) and (max-width: 979px) {
@@ -479,13 +482,7 @@ dl.item-view {
 }
 
 #hydrus_items-edit .modal-header {@include modal-header;}
-#hydrus_items-edit .field-group, #hydrus_collections-edit .field-group {
-	margin-left: -25px;
-	margin-right: -20px;
-	&> .col-sm-8 {margin-right: -20px;}
-	@media (min-width: 768px) and (max-width: 1199px) {margin-left: -16px;}
-	@media (max-width: 767px) {margin-left: 5px;}
-}
+
 #hydrus_collections-show {
 	#druid-footer {@include druid-footer;}
 }
