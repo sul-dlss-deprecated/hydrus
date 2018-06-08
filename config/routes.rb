@@ -1,6 +1,4 @@
 Hydrus::Application.routes.draw do
-  HydraHead.add_routes(self)
-
   root to: 'catalog#home'
   get 'catalog' => 'catalog#index', :as => :catalog_index
 
