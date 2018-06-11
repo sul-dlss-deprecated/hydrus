@@ -24,7 +24,7 @@ class SolrDocument
                          )
 
   def route_key
-    get('has_model_ssim').split(':').last.downcase.sub(/^dor_/, 'hydrus_')
+    fetch('has_model_ssim').split(':').last.downcase.sub(/^dor_/, 'hydrus_')
   end
 
   def to_model
@@ -32,25 +32,25 @@ class SolrDocument
   end
 
   def main_title
-    get('main_title_ssm')
+    fetch('main_title_ssm')
   end
 
   def pid
-    get('objectId_ssim')
+    fetch('objectId_ssim')
   end
 
   def object_type
-    get('has_model_ssim').gsub(/.+:Hydrus_/, '').downcase
+    fetch('has_model_ssim').gsub(/.+:Hydrus_/, '').downcase
   end
 
   def object_status
     typ    = object_type.to_sym
-    status = get('object_status_ssim')
+    status = fetch('object_status_ssim')
     Hydrus::GenericObject.status_label(typ, status)
   end
 
   def depositor
-    get("#{object_type}_depositor_person_identifier_ssm")
+    self["#{object_type}_depositor_person_identifier_ssm"]
   end
 
   def path
