@@ -48,7 +48,6 @@ namespace :deploy do
       within release_path do
         with rails_env: fetch(:rails_env) do
           rake 'hydrus:cleanup_tmp'
-          rake 'hydrus:index_all_workflows'
         end
       end
     end
