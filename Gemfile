@@ -37,7 +37,7 @@ gem 'uglifier', '>= 1.0.3'
 
 group :development, :test do
   gem 'factory_bot_rails'
-  gem 'jettywrapper', '~> 1.4'
+  gem 'jettywrapper', '~> 2.0'
   gem 'sqlite3'
   gem 'rspec-rails', '~> 3.1'
   gem 'capybara', '~> 2.18'
