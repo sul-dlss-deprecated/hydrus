@@ -1,4 +1,7 @@
-Jettywrapper.hydra_jetty_version = 'v7.0.0'
+if defined? Jettywrapper
+  # Only in dev/test
+  Jettywrapper.hydra_jetty_version = 'v7.0.0'
+end
 
 desc 'Run Continuous Integration Suite (tests, coverage, docs)'
 task ci: [:rubocop, 'jetty:clean', 'jetty:config'] do
