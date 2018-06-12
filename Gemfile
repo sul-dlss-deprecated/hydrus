@@ -15,7 +15,8 @@ gem 'whenever', '~> 0.9'
 
 # Stanford stuff
 gem 'assembly-objectfile', '~> 1.5'
-gem 'dor-services', '~> 5.24', require: false
+gem 'dor-services', '~> 5.31', require: false
+gem 'rubydora', '~> 2.1'
 gem 'bagit', '~> 0.4'
 gem 'dor-workflow-service'
 gem 'net-http-persistent', '~> 2.9' # https://github.com/sul-dlss/dor-workflow-service/issues/44
