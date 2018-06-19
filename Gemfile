@@ -42,6 +42,7 @@ group :development, :test do
   gem 'rspec-rails', '~> 3.1'
   gem 'capybara', '~> 2.18'
   gem 'simplecov'
+  gem 'coveralls'
   gem 'equivalent-xml'
   gem 'awesome_print'
   gem 'launchy'
