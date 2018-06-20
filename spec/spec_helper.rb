@@ -1,7 +1,16 @@
 # for test coverage
-
+require 'coveralls'
 require 'simplecov'
-SimpleCov.start 'rails'
+# Coveralls.wear!('rails')
+# SimpleCov.start 'rails'
+SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new([
+  SimpleCov::Formatter::HTMLFormatter,
+  Coveralls::SimpleCov::Formatter
+])
+SimpleCov.start do
+  add_filter 'spec'
+  add_filter 'vendor'
+end
 
 ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../../config/environment', __FILE__)
