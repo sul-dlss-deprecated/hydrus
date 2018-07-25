@@ -1,5 +1,5 @@
 # This tells Jettywrapper where to download from
-ZIP_URL = 'https://github.com/sul-dlss/fcrepo3-jetty/archive/master.zip'
+ZIP_URL = 'https://github.com/sul-dlss/fcrepo3-jetty/archive/master.zip'.freeze
 
 desc 'Run Continuous Integration Suite (tests, coverage, docs)'
 task ci: [:rubocop] do
