@@ -1,10 +1,8 @@
-if defined? Jettywrapper
-  # Only in dev/test
-  Jettywrapper.hydra_jetty_version = 'v7.0.0'
-end
+# This tells Jettywrapper where to download from
+ZIP_URL = 'https://github.com/sul-dlss/fcrepo3-jetty/archive/master.zip'
 
 desc 'Run Continuous Integration Suite (tests, coverage, docs)'
-task ci: [:rubocop, 'jetty:clean', 'jetty:config'] do
+task ci: [:rubocop] do
   unless Rails.env.test?
     # force any CI sub-tasks to run in the test environment (e.g. to ensure
     # fixtures get loaded into the right places)
@@ -13,16 +11,22 @@ task ci: [:rubocop, 'jetty:clean', 'jetty:config'] do
   end
 
   Rake::Task['db:migrate'].invoke
+  Rake::Task['jetty:clean'].invoke
 
   jetty_params = Jettywrapper.load_config.merge({
-    jetty_home: File.expand_path(File.dirname(__FILE__) + '/../../jetty'),
+    jetty_home: File.expand_path(File.dirname(__FILE__) + '../../../jetty'),
     startup_wait: 90
   })
 
   error = nil
   error = Jettywrapper.wrap(jetty_params) do
-    Rake::Task['hydrus:refreshfix'].invoke
-    Rake::Task['spec'].invoke
+    SolrWrapper.wrap do |solr|
+      solr.with_collection(name: 'hydrus-test',
+                           dir: File.join(File.expand_path('../..', File.dirname(__FILE__)), 'solr_conf', 'conf')) do
+        Rake::Task['hydrus:refreshfix'].invoke
+        Rake::Task['spec'].invoke
+      end
+    end
   end
   raise "TEST FAILURES: #{error}" if error
 end
