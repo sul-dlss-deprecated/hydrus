@@ -1,4 +1,3 @@
-
 # Create a Nokogiri document from an XML source, with some whitespace configuration.
 def noko_doc(x)
   Nokogiri.XML(x) { |conf| conf.default_xml.noblanks }
