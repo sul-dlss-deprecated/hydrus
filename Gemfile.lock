@@ -138,7 +138,7 @@ GEM
     deep_merge (1.2.1)
     deprecation (0.99.0)
       activesupport
-    devise (4.4.3)
+    devise (4.5.0)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
       railties (>= 4.1.0, < 6.0)
@@ -226,10 +226,10 @@ GEM
       nokogiri (>= 1.4.3)
     erubis (2.7.0)
     execjs (2.7.0)
-    factory_bot (4.10.0)
+    factory_bot (4.11.0)
       activesupport (>= 3.0.0)
-    factory_bot_rails (4.10.0)
-      factory_bot (~> 4.10.0)
+    factory_bot_rails (4.11.0)
+      factory_bot (~> 4.11.0)
       railties (>= 3.0.0)
     faraday (0.15.2)
       multipart-post (>= 1.2, < 3)
@@ -302,11 +302,11 @@ GEM
       unf
     mediashelf-loggable (0.4.10)
     method_source (0.9.0)
-    mime-types (3.1)
+    mime-types (3.2.2)
       mime-types-data (~> 3.2015)
-    mime-types-data (3.2016.0521)
+    mime-types-data (3.2018.0812)
     mini_exiftool (2.9.0)
-    mini_mime (1.0.0)
+    mini_mime (1.0.1)
     mini_portile2 (2.3.0)
     minitest (5.11.3)
     moab-versioning (2.1.0)
@@ -315,11 +315,11 @@ GEM
       nokogiri
       nokogiri-happymapper
       systemu
-    mods (2.3.1)
+    mods (2.4.0)
       edtf
       iso-639
       nokogiri
-      nom-xml (~> 0.6.0)
+      nom-xml (~> 1.0)
     multi_json (1.13.1)
     multipart-post (2.0.0)
     mysql2 (0.4.10)
@@ -334,7 +334,7 @@ GEM
       mini_portile2 (~> 2.3.0)
     nokogiri-happymapper (0.6.0)
       nokogiri (~> 1.5)
-    nom-xml (0.6.0)
+    nom-xml (1.0.0)
       activesupport (>= 3.2.18)
       i18n
       nokogiri
@@ -352,7 +352,7 @@ GEM
     pry (0.11.3)
       coderay (~> 1.1.0)
       method_source (~> 0.9.0)
-    public_suffix (3.0.2)
+    public_suffix (3.0.3)
     rack (1.6.10)
     rack-test (0.6.3)
       rack (>= 1.0)
@@ -414,7 +414,7 @@ GEM
       rsolr (>= 1.0.2)
     rspec-core (3.8.0)
       rspec-support (~> 3.8.0)
-    rspec-expectations (3.8.0)
+    rspec-expectations (3.8.1)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.8.0)
     rspec-mocks (3.8.0)
@@ -439,7 +439,7 @@ GEM
       unicode-display_width (~> 1.0, >= 1.0.1)
     ruby-cache (0.3.0)
     ruby-graphviz (1.2.3)
-    ruby-progressbar (1.9.0)
+    ruby-progressbar (1.10.0)
     rubydora (1.9.1)
       activemodel
       activesupport
@@ -505,7 +505,7 @@ GEM
     tzinfo (1.2.5)
       thread_safe (~> 0.1)
     uber (0.0.15)
-    uglifier (4.1.17)
+    uglifier (4.1.18)
       execjs (>= 0.3.0, < 3)
     unf (0.1.4)
       unf_ext
