@@ -60,7 +60,7 @@ GEM
       docopt (~> 0.5.0)
       validatable (~> 1.6)
     bcrypt (3.1.12)
-    blacklight (4.8.0)
+    blacklight (4.9.0)
       bootstrap-sass (>= 2.2.0, < 2.4)
       deprecation (~> 0.1)
       kaminari (~> 0.13)
@@ -231,7 +231,7 @@ GEM
     factory_bot_rails (4.11.1)
       factory_bot (~> 4.11.1)
       railties (>= 3.0.0)
-    faraday (0.15.2)
+    faraday (0.15.3)
       multipart-post (>= 1.2, < 3)
     ffi (1.9.25)
     globalid (0.4.1)
@@ -338,7 +338,7 @@ GEM
       activesupport (>= 3.2.18)
       i18n
       nokogiri
-    okcomputer (1.17.2)
+    okcomputer (1.17.3)
     om (3.1.1)
       activemodel
       activesupport
