@@ -89,7 +89,7 @@ class HydrusMailer < ActionMailer::Base
 
   def self.process_user_list(users)
     users.split(',').map do |user|
-      user =~ /.+@.+\..+/ ? user.strip : "#{user.strip}@stanford.edu"
+      user.match?(/.+@.+\..+/) ? user.strip : "#{user.strip}@stanford.edu"
     end
   end
 end
