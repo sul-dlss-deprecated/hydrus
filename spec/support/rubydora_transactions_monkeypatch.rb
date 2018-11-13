@@ -19,13 +19,12 @@ class Rubydora::Transaction
     without_transactions do
       # First, purge everything that was modified.
       aps.each do |p|
-        begin
-          repository.purge_object(pid: p)
-          solr.delete_by_id p
-          #run_hook(:after_rollback, :pid => p, :method => :ingest)
-        rescue
-        end
+        repository.purge_object(pid: p)
+        solr.delete_by_id p
+        #run_hook(:after_rollback, :pid => p, :method => :ingest)
+      rescue
       end
+
       # Then restore the fixtures to their original state.
       fixtures.each do |p, foxml|
         next unless fps.include?(p)

@@ -4,7 +4,7 @@ class UriValidator < ActiveModel::EachValidator
     configuration = { message: 'is invalid or not responding', format: URI::regexp(%w(http https)) }
     configuration.update(options)
 
-    if value =~ configuration[:format]
+    if value.match?(configuration[:format])
       begin # check header response
         case Net::HTTP.get_response(URI.parse(value))
           when Net::HTTPSuccess then true

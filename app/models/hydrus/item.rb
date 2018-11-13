@@ -802,7 +802,7 @@ class Hydrus::Item < Hydrus::GenericObject
   def is_initial_version(opts = {})
     return true if current_version == '1'
     return false if opts[:absolute]
-    version_tag =~ /\Av1\.0\./ ? true : false
+    version_tag.match?(/\Av1\.0\./) ? true : false
   end
 
   # Takes a string.
