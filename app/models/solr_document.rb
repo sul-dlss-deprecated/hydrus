@@ -24,7 +24,7 @@ class SolrDocument
                          )
 
   def route_key
-    fetch('has_model_ssim').split(':').last.downcase.sub(/^dor_/, 'hydrus_')
+    first('has_model_ssim').split(':').last.downcase.sub(/^dor_/, 'hydrus_')
   end
 
   def to_model
@@ -32,20 +32,20 @@ class SolrDocument
   end
 
   def main_title
-    fetch('main_title_ssm')
+    first('main_title_ssm')
   end
 
   def pid
-    fetch('objectId_ssim')
+    first('objectId_ssim')
   end
 
   def object_type
-    fetch('has_model_ssim').gsub(/.+:Hydrus_/, '').downcase
+    first('has_model_ssim').gsub(/.+:Hydrus_/, '').downcase
   end
 
   def object_status
     typ    = object_type.to_sym
-    status = fetch('object_status_ssim')
+    status = first('object_status_ssim')
     Hydrus::GenericObject.status_label(typ, status)
   end
 
