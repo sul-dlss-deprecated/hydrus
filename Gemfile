@@ -20,7 +20,7 @@ gem 'rubydora', '~> 2.1'
 gem 'bagit', '~> 0.4'
 gem 'dor-workflow-service'
 gem 'net-http-persistent', '~> 2.9' # https://github.com/sul-dlss/dor-workflow-service/issues/44
-gem 'hydra-head',  '~> 7.0'
+gem 'hydra-head', '~> 7.0'
 
 # Use okcomputer to monitor the application
 gem 'okcomputer'
