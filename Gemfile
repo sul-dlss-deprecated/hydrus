@@ -21,8 +21,7 @@ gem 'dor-services', '~> 5.24', require: false
 gem 'bagit', '~> 0.4'
 gem 'dor-workflow-service'
 gem 'net-http-persistent', '~> 2.9' # https://github.com/sul-dlss/dor-workflow-service/issues/44
-gem 'druid-tools', '~> 0.4.0'
-gem 'hydra-head',  '~> 6.5'
+gem 'hydra-head', '~> 6.5'
 
 # Use okcomputer to monitor the application
 gem 'okcomputer'
