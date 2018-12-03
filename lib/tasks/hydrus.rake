@@ -64,7 +64,6 @@ desc 'rails server with suppressed output'
 task server: :environment do
   # Note: to get this to work nicely, we also set the app to generate
   # unbuffered output: see config/application.rb.
-  system 'rake jetty:start' unless `rake jetty:status` =~ /^Running:/
   exclusions = [
     'WARN  Could not determine content-length of response',
     '^Loaded datastream druid:',

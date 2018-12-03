@@ -38,7 +38,6 @@ db/*.sqlite3
 workflow_service.log.*
 
 tags
-jetty/
 
 public/plugin_assets
 public/plugin_assets/

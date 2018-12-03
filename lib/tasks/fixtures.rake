@@ -180,18 +180,7 @@ namespace :hydrus do
     end
   end
 
-  desc 'restore jetty to initial state'
-  task :jetty_nuke do
-    puts 'Nuking jetty'
-    # Restore jetty to initial state.
-    Rake::Task['jetty:stop'].invoke
-    Rake::Task['jetty:clean'].invoke
-    Rake::Task['hydra:jetty:config_fedora'].invoke
-    Rake::Task['jetty:start'].invoke
-    Rake::Task['hydrus:clear_upload_files'].invoke
-  end
-
-  desc 'delete all existing objects in solr without nuking jetty (objects will remain in fedora)'
+  desc 'delete all existing objects in solr without nuking objects in fedora'
   task solr_nuke: :environment do
     require File.expand_path('config/environment')
     url1 = "curl #{Dor::Config.solrizer.url}/update --data '<delete><query>*:*</query></delete>' -H 'Content-type:text/xml; charset=utf-8'"

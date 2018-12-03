@@ -1,0 +1,25 @@
+version: '3.6'
+
+services:
+  solr:
+    image: solr:7
+    volumes:
+      - ./solr_conf/conf/:/myconfig
+    command: solr-create -c hydrus -d /myconfig
+    ports:
+      - 8984:8983
+
+  fcrepo:
+    image: suldlss/fcrepo:no-messaging-latest
+    ports:
+      - 8983:8080
+
+  suri:
+    image: suldlss/suri-rails:latest
+    ports:
+      - 3002:3000
+
+  workflow:
+    image: suldlss/workflow-server:latest
+    ports:
+      - 3001:3000
