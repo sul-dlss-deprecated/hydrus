@@ -8,7 +8,7 @@ hydrus:
     - 'druid:oo000oo0098' # versioningWF
 
 fedora:
-  url: http://fedoraAdmin:fedoraAdmin@127.0.0.1:8983/fedora-test
+  url: http://fedoraAdmin:fedoraAdmin@127.0.0.1:8983/fedora
 
 purl:
   base_url: 'https://purl.stanford.edu/'

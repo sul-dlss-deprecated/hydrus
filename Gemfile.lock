@@ -400,7 +400,6 @@ GEM
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 4.0)
       netrc (~> 0.8)
-    retriable (3.1.2)
     retries (0.0.5)
     rsolr (1.0.13)
       builder (>= 2.1.2)
@@ -456,11 +455,6 @@ GEM
       json (>= 1.8, < 3)
       simplecov-html (~> 0.10.0)
     simplecov-html (0.10.2)
-    solr_wrapper (2.0.0)
-      faraday
-      retriable
-      ruby-progressbar
-      rubyzip
     solrizer (3.4.1)
       activesupport
       daemons
@@ -548,7 +542,6 @@ DEPENDENCIES
   factory_bot_rails
   honeybadger
   hydra-head (~> 6.5)
-  jettywrapper (~> 2.0)
   jquery-rails
   launchy
   letter_opener
@@ -562,7 +555,6 @@ DEPENDENCIES
   rubocop (~> 0.58.1)
   sass-rails (~> 4.0)
   simplecov
-  solr_wrapper (~> 2.0)
   sqlite3
   sul_chrome (~> 0.1.0)
   uglifier (>= 1.0.3)

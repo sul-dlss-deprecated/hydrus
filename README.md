@@ -8,22 +8,22 @@ A Hydra application enabling deposit of digital objects into the Stanford
 Digital Repository for preservation and access.
 
 ## Setting up your environment
+### System Requirements
+1. Install Docker
 
-First, you need a Java runtime (Fedora 3 requires Java 8 and doesn't work with 9 or above)
-so you can have a local Solr and Fedora 3 instance for development/testing.
-One way to install Solr and Fedora 3 is by using solr_wrapper and jetty_wrapper (for Fedora),
- which is what the instructions below assume
+2. Install Ruby 2.5.3
+
+
+## Run the servers
+
+```
+docker-compose up
+```
+
 
 ```bash
 brew install exiftool # Required by assembly-objectfile
-
-rake jetty:clean # download hydra-jetty
-
 # Create a config/settings.local.yml file, adding passwords, etc.  Talk to another developer to see what is needed here.
-
-rake jetty:start # start your local fedora
-
-solr_wrapper # start Solr. Do this in a separate terminal window.
 
 rake db:migrate
 rake db:test:prepare
@@ -35,36 +35,18 @@ rake hydrus:refreshfix RAILS_ENV=test
 
 ## Running the application
 
-Assuming you are using solr_wrapper for Solr and jetty_wrapper for Fedora,
-start the servers:
-
-```bash
-rake jetty:start
-solr_wrapper # Do this in a separate terminal window.
-```
-
 Run the Hydrus application in either of these ways:
 
 ```bash
 rails server
-rake  server   # Filters some logging noise
-```
-
-## Running external services
-```
-docker pull suldlss/suri-rails:latest
-docker pull suldlss/workflow-server:latest
-docker run -d -p 127.0.0.1:3001:3000 suldlss/workflow-server:latest
-docker run -d -p 127.0.0.1:3002:3000 suldlss/suri-rails:latest
 ```
 
 ## Useful URLs during development
 
 * Hydrus - [http://localhost:3000](http://localhost:3000)
-* Jetty - [http://localhost:8983](http://localhost:8983)
 * Fedora admin - [http://localhost:8983/fedora/admin](http://localhost:8983/fedora/admin)
 * Fedora objects - [http://localhost:8983/fedora/objects](http://localhost:8983/fedora/objects)
-* Solr - [http://localhost:8984/solr](http://localhost:8983/solr)
+* Solr - [http://localhost:8984/solr](http://localhost:8984/solr)
 
 ## User accounts used during development
 
@@ -86,7 +68,7 @@ Also see:
 ## Running tests
 
 ```bash
-$ rake # Starts jetty and runs all tests.
+$ rake # Runs all tests.
 
 # Coverage reports
 $ open coverage/index.html
