@@ -16,4 +16,4 @@ suri:
   password: ~
 
 solr:
-  url: http://localhost:8983/solr/development
+  url: http://localhost:8984/solr/hydrus
