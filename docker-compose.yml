@@ -9,6 +9,14 @@ services:
     ports:
       - 8984:8983
 
+  solr-test:
+    image: solr:7
+    volumes:
+      - ./solr_conf/conf/:/myconfig
+    command: solr-create -c hydrus-test -d /myconfig
+    ports:
+      - 8985:8983
+
   fcrepo:
     image: suldlss/fcrepo:no-messaging-latest
     ports:

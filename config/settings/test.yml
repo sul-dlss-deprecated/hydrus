@@ -20,4 +20,4 @@ suri:
   mint_ids: false
 
 solr:
-  url: http://localhost:8984/solr/hydrus-test
+  url: http://localhost:8985/solr/hydrus-test
