@@ -480,9 +480,6 @@ GEM
     stanford-mods-normalizer (0.1.0)
       nokogiri (~> 1.8)
     stomp (1.4.6)
-    sul_chrome (0.1.0)
-      bootstrap-sass
-      rails (>= 3.1.0)
     systemu (2.6.5)
     temple (0.8.0)
     term-ansicolor (1.7.0)
@@ -557,7 +554,6 @@ DEPENDENCIES
   sass-rails (~> 4.0)
   simplecov
   sqlite3
-  sul_chrome (~> 0.1.0)
   uglifier (>= 1.0.3)
   validates_email_format_of
   whenever (~> 0.9)

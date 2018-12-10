@@ -1,0 +1,151 @@
+$baseFontSize: 13px;
+$baseLineHeight: 18px;
+
+@import 'bootstrap';
+@import 'bootstrap/responsive';
+
+@import "sul_chrome/sul_chrome_mixins";
+
+body {
+	background: url("/assets/body.png") repeat scroll 0 0 transparent;
+	font-family: Lucida Grande,Verdana,Arial,sans-serif;
+	line-height: 1.5em;
+}
+a {
+	color: #575246;
+	text-decoration: none;
+	border-bottom: 1px dotted #84785A;
+}
+a:hover, a:active {
+	color: #6D1308;
+	border-bottom: 1px dotted #6D1308;
+	text-decoration: none;
+}
+a.img-link {
+	border-bottom: none;
+}
+/* need to reset the bottom border on links styled as buttons  */
+a:hover.btn {
+	border-bottom:1px solid #CCCCCC;
+}
+.btn-primary {
+	background-color: #990000;
+}
+#sul-wrapper {
+	background: url("/assets/wrapper.png") repeat-x scroll 0 0 transparent;
+	text-align: center;
+	padding-top: 15px;
+}
+
+#container {
+	background: url("/assets/top-container.png") repeat-x scroll 0 0 #FFFFFF;
+  	border-radius: 3px 3px 3px 3px;
+  	border-top: 1px solid #FFFFFF;
+	margin: 0 auto;
+	padding: 10px 40px 40px;
+	// width: 960px;
+	text-align: left;
+	background-color: #FFFFFF;
+}
+#header {
+	margin-bottom: 12px;
+	#branding {
+		@media (max-width: 767px) {
+		  text-align:center;	
+		}		
+	}
+	#utility-links {
+		text-align: right;
+		@media (max-width: 767px) {
+		  text-align:center;	
+		}
+	}
+}
+#links {
+	float: right;
+}
+#header #links span {
+	color: #999999;
+}
+
+footer {
+	font-size: 90%;
+	text-align: center;
+	padding: 25px 0; 
+}
+footer img.footer-logo {
+	padding-bottom: 15px;
+	vertical-align: top;
+}
+footer a {
+	border-bottom: none; 
+	color:#575347;
+	margin-right: 10px;
+}
+footer #footer-links {
+	display: inline-block;
+	font-style: italic;
+	line-height: 1.5em;
+	margin-left: 20px;
+	text-align: left;
+}
+footer #footer-links a:hover{
+  border-bottom: none;
+}
+
+/* main navigation with CSS ribbon */
+$ribbon-offset-horizontal: 14px; // width of ribbon past main container
+$ribbon-offset-vertical: 8px; // height of shadow
+#navigation-ribbon {
+  @include border-top-radius(3px); 
+  padding: 0 5px 0 54px;
+  position: relative;
+  margin: 0 -54px 30px -54px;
+  text-shadow: 0 1px rgba(0,0,0,.8);
+  background: #651006;
+  background: url("/assets/bg-nav.png") repeat-x;
+  @include box-shadow(rgba(0,0,0,.3) 0 1px 0);
+  &:before, &:after { // ribbon edge styling
+    content: '';
+    position: absolute;
+    border-style: solid;
+    border-color: transparent;
+    bottom: -$ribbon-offset-vertical;
+  }
+  &:before {
+    border-width: 0 $ribbon-offset-horizontal $ribbon-offset-vertical 0;
+    border-right-color: #222;
+    left: 0;
+  }
+  &:after {
+    border-width: 0 0 $ribbon-offset-vertical $ribbon-offset-horizontal;
+    border-left-color: #222;
+    right: 0;
+  }
+  .navbar-inner {
+    background: none;
+    border-radius: 0;
+    min-height: 35px;
+    padding: 0;
+    .container {
+      height: 35px;
+      .nav {
+        float: left; // nav menu alignment
+        margin-right: 25px;
+        li {
+          margin-right: 5px;
+        }
+        a {
+          background-color: inherit;
+          border-bottom: none;
+          color: #FFF;
+          padding: 9px 18px 8px 0;
+          text-decoration: none;
+        }
+        a:hover, .active > a {
+          color: #CCC;
+        }
+      }
+    }
+  }
+}

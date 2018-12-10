@@ -1,16 +1,49 @@
-<%# WARNING: this layout is ignored!!  the sul-chrome layout is being used %>
-
 <!DOCTYPE html>
-<html>
+<html lang="en" class="no-js">
 <head>
-  <title><%=application_name%></title>
+  <title><%= h(@page_title || "") %></title>
+  <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon" />
   <%= stylesheet_link_tag    "application", :media => "all" %>
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
+  <%= raw(render_head_content) if defined?(Blacklight) %>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
-<body id="body">
-
-<%= yield %>
-
+<body id="<%= "#{params[:controller]}-#{params[:action]}" %>">
+  <div id="wrapper">
+    <div id="sul-wrapper">
+      <div id="container" class="container">
+        <header id="header">
+          <div class="row">
+            <div class="span6" id="branding">
+              <%= link_to(image_tag("sul.png"), "http://library.stanford.edu", :class=>"img-link") %>
+            </div>
+            <div class="span6" id="utility-links">
+              <%= render :partial => "shared/sul_chrome/utility_links" -%>
+            </div>
+          </div>
+        </header>
+        <%- navigation = render :partial => "shared/sul_chrome/navigation" -%>
+        <%- unless navigation.blank? -%>
+          <nav id="navigation-ribbon" class="navbar">
+            <div class="navbar-inner">
+              <div class="container">
+                <%= navigation %>
+              </div>
+            </div>
+          </nav>
+        <%- end -%>
+        <%= render :partial => "shared/sul_chrome/main_container" %>
+      </div>
+    </div>
+    <footer>
+      <%= image_tag("footer-stanford-logo.png", :class => "hidden-phone footer-logo") %>
+      <div id="footer-links">
+        <%= link_to("Stanford University Home", "http://www.stanford.edu") %> <%= link_to("Maps & Directions", "http://visit.stanford.edu/plan/maps.html") %> <%= link_to("Search Stanford", "http://www.stanford.edu/search/") %> <%= link_to("Terms of Use", "http://www.stanford.edu/site/terms.html") %> <%= link_to("Copyright Complaints", "http://www.stanford.edu/site/copyright.html") %><br/>
+        <span>&copy; Stanford University, Stanford, California 94305. (650) 723-2300</span>
+      </div>
+      <%= render "shared/sul_chrome/footer_addition" %>
+    </footer>
+  </div>
 </body>
 </html>

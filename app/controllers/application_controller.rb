@@ -1,5 +1,4 @@
 class ApplicationController < ActionController::Base
-  include SulChrome::Controller
   include Blacklight::Controller
   include Hydra::Controller::ControllerBehavior
   include Hydrus::ModelHelper
@@ -23,9 +22,9 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def layout_name
-    'sul_chrome/application'
-  end
+#   def layout_name
+#     'sul_chrome/application'
+#   end
 
   # When on an item/collection page, check druid against object type
   # and redirect to correct controller if needed.

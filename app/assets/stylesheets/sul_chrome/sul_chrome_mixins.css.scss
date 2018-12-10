@@ -1,0 +1,46 @@
+@mixin primary-button {
+  background-color: #9D3225;
+  *background-color: #9D3225;
+  background-image: -ms-linear-gradient(top, #ee5f5b, #bd362f);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#9D3225), to(#7C1306));
+  background-image: -webkit-linear-gradient(top, #9D3225, #7C1306);
+  background-image: -o-linear-gradient(top, #ee5f5b, #bd362f);
+  background-image: -moz-linear-gradient(top, #ee5f5b, #bd362f);
+  background-image: linear-gradient(top, #9D3225, #7C1306);
+  background-repeat: repeat-x;
+  border-color: #bd362f #bd362f #802420;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  filter: progid:dximagetransform.microsoft.gradient(startColorstr='#ee5f5b', endColorstr='#bd362f', GradientType=0);
+  filter: progid:dximagetransform.microsoft.gradient(enabled=false);
+  color: #FFFFFF;    
+
+	&:hover,
+	&:active,
+	&.active,
+	&.disabled,
+	&[disabled] {
+    background-color: #9D3225;
+	  *background-color: #9D3225;
+	  background: -webkit-gradient(linear, left top, left bottom, from(#9D3225), to(#510E06));
+	  background: -moz-linear-gradient(center top , #9D3225, #510E06) repeat scroll 0 0 transparent;
+	  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#9D3225', endColorstr='#510E06',GradientType=0 );	
+	  color: #FFFFFF;
+	}
+	&:active
+	&.active {
+		background-color: #9D3225 \9;
+	}
+}
+
+@mixin striped-table {
+	thead {
+		background-color: #DDDDDD;
+		border-top: 1px solid #CCCCCC;
+	}
+	tr.odd {
+		border-bottom: 1px solid #CCCCCC;
+	}
+	tr.even {
+		border-bottom: 1px solid #DDDDDD;
+	}
+}
