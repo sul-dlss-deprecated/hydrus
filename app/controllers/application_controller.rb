@@ -22,10 +22,6 @@ class ApplicationController < ActionController::Base
     end
   end
 
-#   def layout_name
-#     'sul_chrome/application'
-#   end
-
   # When on an item/collection page, check druid against object type
   # and redirect to correct controller if needed.
   def redirect_if_not_correct_object_type
