@@ -544,6 +544,14 @@ ul.breadcrumb {
 	.divider {color: #CCC;}
 }
 
+.dashboard {
+	.panel-default {
+		.panel-body {
+			@include custom-list-bullets;
+		}
+	}
+}
+
 .promotion {
   @include custom-list-bullets; // non-signed-in version of homepage
   ul {
@@ -552,11 +560,15 @@ ul.breadcrumb {
       margin-left: 0;
     }
   }
-  .hero-unit {
+  .jumbotron {
     border: 1px solid #ccc;
     margin-top: 15px;
     padding: 9px 12px;
     text-align: center;
+
+		font-size: 18px;
+		font-weight: 200;
+		line-height: 27px;
     @media (min-width: 768px) {
       margin-left: 30px;
       max-width: 220px;
@@ -565,18 +577,20 @@ ul.breadcrumb {
       color: #8d452d;
       font-size: 14px;
       line-height: 22px;
+			margin: 0;
     }
     p {
       font-size: 13px;
       line-height: 16px;
       margin-bottom: 0;
       margin-top: 4px;
+			font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
     }
     a, a:visited {
      color: #8d452d;
     }
   }
-  &.logged-in .hero-unit {
+  &.logged-in .jumbotron {
     margin-left: 0;
   }
 }
