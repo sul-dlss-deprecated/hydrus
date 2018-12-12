@@ -53,6 +53,8 @@ class ApplicationController < ActionController::Base
       break unless cur_user
       if request.env['eduPersonEntitlement']
         cur_user.groups = request.env['eduPersonEntitlement'].split(';')
+      elsif Rails.env.development? && ENV['ROLES']
+        cur_user.groups = ENV['ROLES'].split(';')
       end
     end
   end
