@@ -48,23 +48,6 @@ rails server
 * Fedora objects - [http://localhost:8983/fedora/objects](http://localhost:8983/fedora/objects)
 * Solr - [http://localhost:8984/solr](http://localhost:8984/solr)
 
-## User accounts used during development
-
-Default user:
-
-    username: archivist1@example.com
-    password: beatcal
-
-Fedora admin user:
-
-    username: fedoraAdmin
-    password: fedoraAdmin
-
-Also see:
-
-    app/models/hydrus/authorizable.rb
-    test/fixtures/users.yml
-
 ## Running tests
 
 ```bash
