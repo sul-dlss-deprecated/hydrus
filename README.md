@@ -35,10 +35,10 @@ rake hydrus:refreshfix RAILS_ENV=test
 
 ## Running the application
 
-Run the Hydrus application in either of these ways:
+You can provide the current user and roles using environment variables when the server is in development mode:
 
 ```bash
-rails server
+ROLES=dlss:hydrus-app-administrators CURRENT_USER=archivist1@stanford.edu rails server
 ```
 
 ## Useful URLs during development
