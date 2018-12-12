@@ -76,7 +76,7 @@
       <div class="radio-select-group">
         <% Hydrus::AdminPolicyObject.embargo_types.each do |emb_opt, emb_text| %>
           <div class="checkbox radio-select-option form-inline">
-            <%= f.label 'embargo_option' do %>
+            <%= f.label "embargo_option_#{emb_opt}" do %>
               <%= f.radio_button 'embargo_option', emb_opt %>
               <%= emb_text %>
               <%# Don't include embargo period select if embargo type is 'none' %>
@@ -95,7 +95,7 @@
       <p class="form-section-para">After its release date, content in this collection can be discovered and downloaded by:</p>
       <% Hydrus::AdminPolicyObject.visibility_types.each do |vis_opt, vis_text| %>
         <div class="checkbox">
-          <%= f.label 'visibility_option_value' do %>
+          <%= f.label "visibility_option_value_#{vis_opt}" do %>
             <%= f.radio_button 'visibility_option_value', vis_opt %>
             <%= vis_text %>
           <% end %>
@@ -117,8 +117,8 @@
       <p>After its release date, items in this collection should be covered by:</p>
       <div class="radio-select-group">
         <% Hydrus::AdminPolicyObject.license_types.each do |lic_opt, lic_text| %>
-          <div class="checkbox radio-select-option">
-            <%= f.label 'license_option' do %>
+          <div class="checkbox radio-select-option form-inline">
+            <%= f.label "license_option_#{lic_opt}" do %>
               <%= f.radio_button 'license_option', lic_opt %>
               <%= lic_text %>
 
@@ -190,7 +190,7 @@
 
          <% %w(no yes).each do |opt| %>
            <div class="checkbox">
-             <%= f.label 'requires_human_approval' do %>
+             <%= f.label "requires_human_approval_#{opt}" do %>
                <%= f.radio_button 'requires_human_approval', opt %>
                <%= opt.capitalize %>
              <% end %>

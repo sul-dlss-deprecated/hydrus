@@ -56,7 +56,6 @@ class ApplicationController < ActionController::Base
       elsif Rails.env.development? && ENV['ROLES']
         cur_user.groups = ENV['ROLES'].split(';')
       end
-      # cur_user.groups = ['dlss:hydrus-app-administrators']
     end
   end
 

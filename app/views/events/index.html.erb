@@ -1,7 +1,7 @@
 <% @page_title = "#{@fobj.title} - #{application_name}" %>
 
 <% sidebar_items << capture do %>
-  <div class="well actions-box collection-settings">
+  <div class="panel actions-box collection-settings">
     <%=render :partial=>"#{view_path_from_model(@fobj)}/status_box" %>
     <%=render :partial=>"#{view_path_from_model(@fobj)}/actions_box_show" %>
   </div>

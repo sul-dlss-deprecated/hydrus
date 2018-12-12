@@ -37,7 +37,7 @@
                  "To add items, you must open the collection." :
                  "To add items, you must fill in all required fields and open the collection."
     %>
-    <div class="btn-group" <%=raw "data-placement=\"bottom\" rel=\"tooltip\" data-original-title=\"#{message}\"" unless isopen%>>
+    <div class="btn-group" <%=raw "data-placement=\"bottom\" rel=\"tooltip\" data-original-title=\"#{message}\"" unless isopen %>>
       <button class="<%="disabled" unless isopen%> btn btn-default dropdown-toggle" data-toggle="dropdown">
         Add new item &hellip; <span class="caret"></span>
       </button>

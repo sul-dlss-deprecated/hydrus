@@ -6,7 +6,7 @@ describe('Item create', type: :request, integration: true) do
   before(:all) do
     @div_alert   = '#flash-notices div.alert'
     @span_status = 'span#status-label'
-    @div_actions = 'div.collection-actions'
+    @div_actions = 'div.panel-default'
     @notices = {
       save: 'Your changes have been saved.',
       publish_directly: 'Item published: v',

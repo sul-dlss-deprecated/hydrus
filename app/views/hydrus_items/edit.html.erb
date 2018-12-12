@@ -68,35 +68,41 @@
   </p>
 
   <div class="radio-select-option">
-    <%= radio_button_tag(:"hydrus_item[dates[date_type]]","single",@fobj.dates[:single], {:class => "date_radio", :onclick => "$(\".dates input\").prop('disabled', true); $(\".single_date input\").prop('disabled', false)"})%>Single Date<br>
+    <%= f.label "dates_date_type_single" do %>
+      <%= radio_button_tag(:"hydrus_item[dates[date_type]]","single",@fobj.dates[:single], {:class => "date_radio", :onclick => "$(\".dates input\").prop('disabled', true); $(\".single_date input\").prop('disabled', false)"})%>Single Date<br>
 
-    <div class="col-sm-9 dates single_date">
-      <div class="date_div">
-       <%= text_field_tag("hydrus_item[dates[date_created]]",  @fobj.dates[:date_created], required: true, class: 'form-control date_input_short') %>
-       <%= check_box_tag("hydrus_item[dates[date_created_approximate]]", "hi", @fobj.dates[:date_created_approximate])%>
-       <%= label_tag("hydrus_item[dates[date_created_approximate]]" ,"Approximate") %>
+      <div class="col-sm-12 dates single_date">
+        <div class="date_div">
+         <%= text_field_tag("hydrus_item[dates[date_created]]",  @fobj.dates[:date_created], required: true, class: 'form-control date_input_short') %>
+         <%= check_box_tag("hydrus_item[dates[date_created_approximate]]", "hi", @fobj.dates[:date_created_approximate])%>
+         <%= label_tag("hydrus_item[dates[date_created_approximate]]" ,"Approximate") %>
+        </div>
       </div>
-    </div>
+    <% end %>
   </div>
 
 
   <div class="radio-select-option">
-    <%=radio_button_tag(:"hydrus_item[dates[date_type]]","range",@fobj.dates[:range], {:class => "date_radio", :onclick => "$(\".dates input\").prop('disabled', true); $(\".date_range input\").prop('disabled', false)"})%>Date Range<br>
+    <%= f.label "dates_date_type_range" do %>
+      <%=radio_button_tag(:"hydrus_item[dates[date_type]]","range",@fobj.dates[:range], {:class => "date_radio", :onclick => "$(\".dates input\").prop('disabled', true); $(\".date_range input\").prop('disabled', false)"})%>Date Range<br>
 
-    <div class="col-sm-9 dates date_range">
-      <div class="date_div">
-        <%= text_field_tag("hydrus_item[dates[date_start]]",  @fobj.dates[:date_range_start], required: true, class: 'form-control date_input_short') %>
-        <%=check_box_tag("hydrus_item[dates[date_range_start_approximate]]", 'hi', @fobj.dates[:date_range_start_approximate])%>
-        <%= label_tag("hydrus_item[dates[date_start_approximate]]","Approximate") %>
+      <div class="col-sm-12 dates date_range">
+        <div class="date_div">
+          <%= text_field_tag("hydrus_item[dates[date_start]]",  @fobj.dates[:date_range_start], required: true, class: 'form-control date_input_short') %>
+          <%=check_box_tag("hydrus_item[dates[date_range_start_approximate]]", 'hi', @fobj.dates[:date_range_start_approximate])%>
+          <%= label_tag("hydrus_item[dates[date_start_approximate]]","Approximate") %>
+        </div>
+        <span style="float:left; margin-left:10px;margin-right:10px; vertical-align: top;">To</span>
+        <div class="date_div"><%= text_field_tag("hydrus_item[dates[date_range_end]]", @fobj.dates[:date_range_end], required: true, class: 'form-control date_input_short') %>
+          <%=check_box_tag("hydrus_item[dates[date_range_end_approximate]]", 'hi', @fobj.dates[:date_range_end_approximate])%>
+          <%= label_tag("hydrus_item[dates[date_created_range_approximate]]", "Approximate") %>
+        </div>
       </div>
-      <span style="float:left; margin-left:10px;margin-right:10px; vertical-align: top;">To</span>
-      <div class="date_div"><%= text_field_tag("hydrus_item[dates[date_range_end]]", @fobj.dates[:date_range_end], required: true, class: 'form-control date_input_short') %>
-        <%=check_box_tag("hydrus_item[dates[date_range_end_approximate]]", 'hi', @fobj.dates[:date_range_end_approximate])%>
-        <%= label_tag("hydrus_item[dates[date_created_range_approximate]]", "Approximate") %>
-      </div>
-    </div>
+    <% end %>
 
-     <%=radio_button_tag(:"hydrus_item[dates[date_type]]","undated",@fobj.dates[:undated] , {:class => "date_radio", :onclick => "$(\".dates input\").prop('disabled', true);"})%>Undated: the date of the item is unknown and cannot be approximated.
+    <%= f.label "dates_date_type_undated" do %>
+      <%= radio_button_tag(:"hydrus_item[dates[date_type]]","undated",@fobj.dates[:undated] , {:class => "date_radio", :onclick => "$(\".dates input\").prop('disabled', true);"})%>Undated: the date of the item is unknown and cannot be approximated.
+    <% end %>
   </div>
 
   <div class='section-header'>

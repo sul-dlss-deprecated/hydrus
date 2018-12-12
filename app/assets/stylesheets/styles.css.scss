@@ -221,13 +221,6 @@ table form {
 	@media (max-width: 767px) {text-align: left;}
 }
 
-/* make inline select pulldowns only as wide as necessary */
-.inline-select {
-	height: 20px;
-	padding: 0; // needed for reduced height in Firefox
-	width: auto;
-	&.right {margin: 2px 0 2px 0;}
-}
 .radio-select-group {
 	optgroup[label] {
 		background-color: #eeeeee;
@@ -276,11 +269,6 @@ noscript #item-actions, noscript #collection-actions {
 	margin-left: 18px;
 }
 .panel {
-	.panel-body {
-		input[type=checkbox] {
-			display:none;
-		}
-	}
 	.panel-heading {
 		.panel-title {
 			text-transform: uppercase;
@@ -296,80 +284,34 @@ noscript #item-actions, noscript #collection-actions {
 			text-transform: none;
 		}
 	}
-	.panel-heading.collection-actions {
+	.panel-heading.collection-actions,
+	.panel-heading.item-actions {
 		border-top: 1px solid #ddd;
 		border-radius: 0;
 	}
-}
-
-.well {
-	box-shadow: none;
-	border: none;
-	background: none;
-	margin-bottom: 0;
-	margin-right: -2px;
-	padding: 0;
-	.box-header {
-		background-color: #e8e8e8;
-		border-bottom: 1px solid #DDD;
-		border-top: 1px solid #DDD;
-		color: #555;
-		font-size: 12px;
-		font-weight: bold;
-		margin-bottom: 6px;
-		padding: 10px 6px 6px 10px;
-		text-transform: uppercase;
-		.status-label {
-			float: right;
-			text-transform: none;
-		}
-	}
-	.box-body {
-		padding: 10px;
-		legend {margin-bottom: 0;}
-		dt, dd {
-			line-height: 2em;
-			text-align: left;
-			width: 50%;
-		}
-		dd { margin-left: 55%;}
-		dl {
-			font-size: 85%;
-			margin-bottom: none;
-		}
+	.panel-body {
 		button {
 			display: block;
 			margin-bottom: 18px;
 		}
-		input[type=checkbox] {display:none;}
+		input[type=checkbox] {
+			display:none;
+		}
 		label {
 			font-size: 11px;
 			line-height: 1.3;
 			padding-bottom: 8px;
-			margin-left: 24px;
-			i {
-				margin-left: -24px;
-				margin-right: 7px;
-				font-size: 15px;
-			}
-			&.return-item {
-				font-weight: bold;
-				margin-left: 3px;
-				padding-bottom: 0;}
+			font-weight: normal;
 		}
-		input.return-item {margin-bottom: 2px;}
-		.help {margin-left: 3px;}
 		p {
 			font-size: 12px;
-      &.discard-item,&.popup-link {
-        margin: 6px 12px 6px 20px;
+			&.discard-item, &.popup-link {
 				i {
 					margin-right: 5px;
 					margin-left: -15px;
 				}
 			}
 		}
-		// .btn-group .btn {margin-bottom: 0px;}
 	}
 }
 
