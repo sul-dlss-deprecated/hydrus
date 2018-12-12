@@ -3,20 +3,6 @@ def noko_doc(x)
   Nokogiri.XML(x) { |conf| conf.default_xml.noblanks }
 end
 
-def login_pw
-  'beatcal'
-end
-
-def login_as(email, password = nil)
-  password ||= login_pw
-  email += '@example.com' unless email.include?('@')
-  logout
-  visit new_user_session_path
-  fill_in 'Email', with: email
-  fill_in 'Password', with: password
-  click_button 'Sign in'
-end
-
 def logout
   visit destroy_user_session_path
 end
