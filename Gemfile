@@ -25,7 +25,6 @@ gem 'hydra-head', '~> 6.5'
 
 # Use okcomputer to monitor the application
 gem 'okcomputer'
-gem 'sul_chrome', '~> 0.1.0'
 
 gem 'sass-rails',     '~> 4.0'
 gem 'coffee-rails',   '~> 4.2'

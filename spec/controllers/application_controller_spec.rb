@@ -1,10 +1,6 @@
 require 'spec_helper'
 
 describe ApplicationController, type: :controller do
-  it 'should have the correct layout name' do
-    expect(controller.layout_name).to eq('sul_chrome/application')
-  end
-
   it 'can exercise errors_for_display()' do
     obj = double('mock-object')
     msgs = {
