@@ -621,6 +621,7 @@ li.errors
   position: fixed;
   right: 2%;
   top: 2%;
+	z-index: 10;
 }
 
 #file-dropzone {
