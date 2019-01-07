@@ -38,7 +38,7 @@ rake hydrus:refreshfix RAILS_ENV=test
 You can provide the current user and roles using environment variables when the server is in development mode:
 
 ```bash
-ROLES=dlss:hydrus-app-administrators CURRENT_USER=archivist1@stanford.edu rails server
+ROLES=dlss:hydrus-app-administrators REMOTE_USER=archivist1@stanford.edu rails server
 ```
 
 ## Useful URLs during development
