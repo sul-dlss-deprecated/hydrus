@@ -50,11 +50,14 @@ class ApplicationController < ActionController::Base
 
   def current_user
     super.tap do |cur_user|
+      if Rails.env.development?
+        cur_user ||= User.find_or_create_by!(email: ENV['CURRENT_USER'])
+        cur_user.groups = ENV['ROLES'].split(';')
+        return cur_user
+      end
       break unless cur_user
       if request.env['eduPersonEntitlement']
         cur_user.groups = request.env['eduPersonEntitlement'].split(';')
-      elsif Rails.env.development? && ENV['ROLES']
-        cur_user.groups = ENV['ROLES'].split(';')
       end
     end
   end
