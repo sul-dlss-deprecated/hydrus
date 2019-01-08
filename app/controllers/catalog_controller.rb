@@ -5,12 +5,12 @@ class CatalogController < ApplicationController
   skip_authorization_check only: [:home, :index]
 
   include Blacklight::Catalog
-  include Hydrus::AccessControlsEnforcement
   # These before_filters apply the hydra access controls
   before_filter :enforce_index_permissions, only: :index
   before_filter :enforce_viewing_context_for_show_requests, only: :show
-  # This applies appropriate access controls to all solr queries
-  CatalogController.search_params_logic << :add_access_controls_to_solr_params
+
+  # Delegate to the SearchBuilder by setting to true. This is the default in BL 6.0
+  CatalogController.search_params_logic = true
 
   helper_method :has_search_parameters?
 
@@ -142,6 +142,15 @@ class CatalogController < ApplicationController
   end
 
   private
+
+  # Overriding blacklight so that we can pass the ability.
+  # This got moved into hydra-head in later versions:
+  # https://github.com/samvera/hydra-head/commit/836e4a3f3b634e55be186eda4bac3fc278b82347#diff-d83a35faa9691c9ff0921c1d1c3f00f8
+  def search_builder(*)
+    super.tap do |builder|
+      builder.current_ability = current_ability
+    end
+  end
 
   def enforce_index_permissions
     if (current_user.nil? && has_search_parameters?)

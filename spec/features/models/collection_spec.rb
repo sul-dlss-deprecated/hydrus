@@ -29,7 +29,7 @@ describe(Hydrus::Collection, type: :feature, integration: true) do
   it 'should be able to create a Collection object, with an APO' do
     coll = Hydrus::Collection.create(user)
     expect(coll).to be_instance_of Hydrus::Collection
-    expect(coll).to_not be_new
+    expect(coll).to_not be_new_record
     expect(coll.apo.roleMetadata.collection_manager.val.first.strip).to include user.sunetid
     expect(coll.item_type).to eq 'collection'
     expect(coll.events.event.val.size).to eq(1)

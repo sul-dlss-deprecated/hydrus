@@ -566,7 +566,7 @@ end
     expect(@go.related_item_title).to eq([''])
     expect(@go.related_item_url).to eq([''])
     # Assign a single value.
-    @go.related_item_title = 'Z'
+    @go.related_item_title = ['Z']
     @go.related_item_url = 'foo'
     expect(@go.related_item_title).to eq(['Z'])
     expect(@go.related_item_url).to eq(['http://foo'])
