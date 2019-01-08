@@ -23,14 +23,12 @@ docker-compose up
 
 ```bash
 brew install exiftool # Required by assembly-objectfile
-# Create a config/settings.local.yml file, adding passwords, etc.  Talk to another developer to see what is needed here.
 
 rake db:migrate
 rake db:test:prepare
 rake db:migrate RAILS_ENV=test
 
-rake hydrus:refreshfix # load all fedora and database fixtures, and get sample uploaded files
-rake hydrus:refreshfix RAILS_ENV=test
+rake hydrus:refreshfix RAILS_ENV=test # load all fedora and database fixtures, and get sample uploaded files
 ```
 
 ## Running the application
@@ -56,6 +54,15 @@ $ rake # Runs all tests.
 # Coverage reports
 $ open coverage/index.html
 ```
+
+If you encounter problems with running tests, try:
+
+```bash
+$ docker-compose stop
+$ docker-compose rm -vf
+$ docker-compose up -d
+```
+
 
 ## Deployment
 

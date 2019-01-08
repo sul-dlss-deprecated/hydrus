@@ -14,6 +14,3 @@ suri:
   url: 'https://sul-lyberservices-dev.stanford.edu'
   user: ~
   password: ~
-
-solr:
-  url: http://localhost:8984/solr/hydrus
