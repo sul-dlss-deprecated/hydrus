@@ -5,7 +5,7 @@ services:
     image: solr:7
     volumes:
       - ./solr_conf/conf/:/myconfig
-    command: solr-create -c hydrus -d /myconfig
+    command: solr-create -c hydrus-test -d /myconfig
     ports:
       - 8984:8983
 
