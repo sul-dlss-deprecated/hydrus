@@ -8,7 +8,7 @@ class Rubydora::Transaction
     # original state, based on fixtures that are passed in as a
     # hash, with PIDs and keys and foxml as values.
   def rollback_fixtures(fixtures)
-    solr = RSolr.connect(Blacklight.solr_config)
+    solr = Blacklight.default_index.connection
     # Two sets of PIDs:
     #   - everything that was modified
     #   - fixtures that were modified
