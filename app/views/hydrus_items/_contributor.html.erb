@@ -14,14 +14,13 @@
         "hydrus_item[contributors][#{index}][role_key]",
         grouped_options_for_select(Hydrus::Contributor.groups_for_select, c.role_key), :class=>'authors_dropdown',:"data-author-number"=>index,:"guid"=>guid) %>
 
-  <%= link_to(
-        '<i class="icon-trash"></i>'.html_safe,
-        destroy_hydrus_item_value_path(params[:id],
+  <%= link_to destroy_hydrus_item_value_path(params[:id],
           :term => "name",
           :term_index => index,
 					:guid => guid,
           :type => "contributor"),
-        :class => "delete-node btn",
-        :id => "remove_name_#{i}") %>
-
+        :class => "delete-node btn btn-default",
+        :id => "remove_name_#{i}" do %>
+        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+   <% end %>
 </div>

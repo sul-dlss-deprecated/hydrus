@@ -10,9 +10,7 @@ class CatalogController < ApplicationController
   before_filter :enforce_index_permissions, only: :index
   before_filter :enforce_viewing_context_for_show_requests, only: :show
   # This applies appropriate access controls to all solr queries
-  CatalogController.solr_search_params_logic << :add_access_controls_to_solr_params
-  # This filters out objects that you want to exclude from search results, like FileAssets
-  CatalogController.solr_search_params_logic << :exclude_unwanted_models
+  CatalogController.search_params_logic << :add_access_controls_to_solr_params
 
   helper_method :has_search_parameters?
 
@@ -23,13 +21,12 @@ class CatalogController < ApplicationController
     }
 
     # solr field configuration for search results/index views
-    config.index.show_link = 'id'
-    config.index.record_display_type = 'has_model_ssim'
+    config.index.title_field = 'id'
+    config.index.display_type_field = 'has_model_ssim'
 
     # solr field configuration for document/show views
-    config.show.html_title = 'id'
-    config.show.heading = 'id'
-    config.show.display_type = 'has_model_ssim'
+    config.show.title_field = 'id'
+    config.show.display_type_field = 'has_model_ssim'
 
     # solr fields that will be treated as facets by the blacklight application
     #   The ordering of the field names is the order of the display

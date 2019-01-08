@@ -1,13 +1,11 @@
 require 'spec_helper'
 
-describe('Home page', type: :request, integration: true) do
+RSpec.describe 'Home page', type: :request, integration: true do
   let(:archivist1) { create :archivist1 }
   let(:archivist2) { create :archivist2 }
   let(:archivist3) { create :archivist3 }
-  before(:each) do
+  before do
     @search_box  = '.search-query-form #search'
-    @sdr         = 'Stanford Digital Repository'
-    @your_cs     = 'Your Active Collections'
     @breadcrumbs = 'ul.breadcrumb li a'
     @cc_button   = 'a.btn[href="/collections/new"]'
     @alert       = 'div.alert'
@@ -15,30 +13,26 @@ describe('Home page', type: :request, integration: true) do
     @sign_in_msg = 'You must sign in'
   end
 
-  it 'if not logged in, should see intro text, but not other controls' do
-    sign_out
-    visit root_path
-    expect(page).to have_content(@sdr)
-    expect(page).not_to have_content(@your_cs)
-    expect(page).to have_no_selector(@search_box)
-    expect(page).not_to have_button(@cc_button)
+  context 'when not logged in' do
+    it 'shows intro text, but not other controls' do
+      sign_out
+      visit root_path
+      expect(page).to have_content('Stanford Digital Repository')
+      expect(page).not_to have_content('Your Active Collections')
+      expect(page).to have_no_selector(@search_box)
+      expect(page).not_to have_button(@cc_button)
+    end
   end
 
-  it 'if logged in, should see intro text, search box, and listing of collections' do
-    sign_in(archivist1)
-    visit root_path
-    expect(page).to have_content(@sdr)
-    expect(page).to have_content(@your_cs)
-    # page.should have_selector(@search_box)
-  end
-
-  context 'as archivist1' do
+  context 'when logged in as archivist1' do
     before do
       sign_in(archivist1)
     end
 
     it 'shows collections' do
       visit root_path
+      expect(page).to have_content('Stanford Digital Repository')
+      expect(page).to have_content('Your Active Collections')
       expect(find('div.user-collections')).to have_xpath("//a[@href='/collections/druid:oo000oo0003']")
       expect(find('div.user-collections')).to have_xpath("//a[@href='/collections/druid:oo000oo0004']")
       expect(find('div.user-collections')).to have_xpath("//a[@href='/collections/druid:oo000oo0010']")

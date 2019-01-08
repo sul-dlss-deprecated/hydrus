@@ -1,6 +1,6 @@
-<%= render :partial=>'shared/breadcrumbs' %>
+<%= render 'shared/breadcrumbs' %>
 
 <div class="row">
-  <div class="span9" id="main"><%= yield %></div>
-  <div class="span3" id="sidebar"><%= sidebar_items.join('').html_safe %></div>
+  <div class="col-sm-9" id="main"><%= yield %></div>
+  <div class="col-sm-3" id="sidebar"><%= sidebar_items.join('').html_safe %></div>
 </div>

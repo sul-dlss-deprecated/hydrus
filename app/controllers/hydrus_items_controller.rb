@@ -1,6 +1,5 @@
 class HydrusItemsController < ApplicationController
   include Hydra::Controller::ControllerBehavior
-  include Hydra::Controller::UploadBehavior
 
   before_filter :authenticate_user!
   before_filter :setup_attributes, except: [:new, :index, :send_purl_email, :terms_of_deposit, :agree_to_terms_of_deposit]

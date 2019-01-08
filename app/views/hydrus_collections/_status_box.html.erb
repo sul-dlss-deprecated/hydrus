@@ -1,35 +1,37 @@
-<div class="collection-status box-header">
-  <span>Status</span>
+<div class="panel-heading collection-status">
+  <h3 class="panel-title">Status
   <% if @fobj.is_open %>
     <span  id="status-label" class="label label-success status-label">Open for deposit</span>
  <% else %>
-    <span  id="status-label" class="label label-important status-label">Closed for deposit</span>
+    <span  id="status-label" class="label label-danger status-label">Closed for deposit</span>
   <% end %>
+  </h3>
 </div>
-<div class="box-body">
-    <%=check_box_tag 'required_fields_checkbox', true, @fobj.required_fields_completed?, :disabled=>true%>
-    <label for="required_fields_checkbox">
-      <%= select_status_checkbox_icon(@fobj.required_fields_completed?) %>
-      Name, description, contact provided
-    </label>
 
-    <%=check_box_tag 'embargo_details_checkbox', true, @fobj.embargo_details_provided?, :disabled=>true%>
-    <label for="embargo_details_checkbox">
-      <%= select_status_checkbox_icon(@fobj.embargo_details_provided?) %>
-      Release and visibility details provided
-    </label>
+<div class="panel-body">
+  <%= check_box_tag 'required_fields_checkbox', true, @fobj.required_fields_completed?, :disabled=>true%>
+  <label for="required_fields_checkbox">
+    <%= select_status_checkbox_icon(@fobj.required_fields_completed?) %>
+    Name, description, contact provided
+  </label>
 
-    <%=check_box_tag 'license_details_checkbox', true, @fobj.license_details_provided?, :disabled=>true%>
-    <label for="license_details_checkbox">
-      <%= select_status_checkbox_icon(@fobj.license_details_provided?) %>
-      License details provided
-    </label>
+  <%= check_box_tag 'embargo_details_checkbox', true, @fobj.embargo_details_provided?, :disabled=>true%>
+  <label for="embargo_details_checkbox">
+    <%= select_status_checkbox_icon(@fobj.embargo_details_provided?) %>
+    Release and visibility details provided
+  </label>
 
-   <% unless @fobj.is_open %>
-    <%=check_box_tag 'collection_opened_checkbox', true, @fobj.is_openable, :disabled=>true%>
-    <label for="collection_opened_checkbox">
-      <%= select_status_checkbox_icon(@fobj.is_openable) %>
-      Collection can be opened for deposit
-    </label>
+  <%= check_box_tag 'license_details_checkbox', true, @fobj.license_details_provided?, :disabled=>true%>
+  <label for="license_details_checkbox">
+    <%= select_status_checkbox_icon(@fobj.license_details_provided?) %>
+    License details provided
+  </label>
+
+  <% unless @fobj.is_open %>
+   <%= check_box_tag 'collection_opened_checkbox', true, @fobj.is_openable, :disabled=>true%>
+   <label for="collection_opened_checkbox">
+     <%= select_status_checkbox_icon(@fobj.is_openable) %>
+     Collection can be opened for deposit
+   </label>
   <% end %>
 </div>

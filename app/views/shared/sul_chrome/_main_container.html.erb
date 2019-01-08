@@ -1,40 +1,41 @@
-<div id="ajax-modal" class="modal hide fade" tabindex="-1"></div>
+<div id="ajax-modal" class="modal fade" tabindex="-1"></div>
+
+<div id="loading-message" class="hidden">
+    &nbsp;&nbsp;&nbsp;Working, please wait...&nbsp; <%= image_tag 'ajax-loader.gif'%>&nbsp;&nbsp;&nbsp;
+</div>
 
 <div id="flash-notices" class="row">
-  <%- if flash[:notice] -%>
-    <div class="span8 offset2">
+  <% if flash[:notice] %>
+    <div class="col-sm-8 col-sm-offset-2">
       <div class="alert alert-info">
         <button class="close" data-dismiss="alert">×</button>
         <%= flash[:notice] %>
       </div>
     </div>
-  <%- end -%>
-  <div id="loading-message" class="hidden">
-      &nbsp;&nbsp;&nbsp;Working, please wait...&nbsp; <%= image_tag 'ajax-loader.gif'%>&nbsp;&nbsp;&nbsp;
-  </div>
+  <% end %>
 
-  <%- if flash[:warning] || flash[:alert] -%>
-    <div class="span8 offset2">
+  <% if flash[:warning] || flash[:alert] %>
+    <div class="col-sm-8 col-sm-offset-2">
       <div class="alert">
         <button class="close" data-dismiss="alert">×</button>
         <%= flash[:warning] %>
         <%= flash[:alert] %>
       </div>
     </div>
-  <%- end -%>
-  <%- if flash[:error] -%>
-    <div class="span8 offset2">
+  <% end %>
+  <% if flash[:error] %>
+    <div class="col-sm-8 col-sm-offset-2">
       <div class="alert alert-error">
         <button class="close" data-dismiss="alert">×</button>
         <%= flash[:error] %>
       </div>
     </div>
-  <%- end -%>
+  <% end %>
 </div>
 
 <%= image_tag "test-version-ribbon.png", :title => "This website is in development and any data you add will be deleted.", :style => "position: absolute; top: 0; left: 0; border: 0;" if Settings.hydrus.show_test_banner?%>
 
 <h1>Stanford Digital Repository &ndash; Online Deposit</h1>
 
-<%-# display home page with different layout -%>
+<%# display home page with different layout %>
 <%= render_contextual_layout %>

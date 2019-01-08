@@ -4,13 +4,6 @@ class SolrDocument
 
   # self.unique_key = 'id'
 
-  # The following shows how to setup this blacklight document to display marc documents
-  extension_parameters[:marc_source_field] = :marc_display
-  extension_parameters[:marc_format_type] = :marcxml
-  use_extension(Blacklight::Solr::Document::Marc) do |document|
-    document.key?(:marc_display)
-  end
-
   # Email uses the semantic field mappings below to generate the body of an email.
   SolrDocument.use_extension(Blacklight::Solr::Document::Email)
 
@@ -31,7 +24,7 @@ class SolrDocument
                          )
 
   def route_key
-    get('has_model_ssim').split(':').last.downcase.sub(/^dor_/, 'hydrus_')
+    first('has_model_ssim').split(':').last.downcase.sub(/^dor_/, 'hydrus_')
   end
 
   def to_model
@@ -39,25 +32,25 @@ class SolrDocument
   end
 
   def main_title
-    get('main_title_ssm')
+    first('main_title_ssm')
   end
 
   def pid
-    get('objectId_ssim')
+    first('objectId_ssim')
   end
 
   def object_type
-    get('has_model_ssim').gsub(/.+:Hydrus_/, '').downcase
+    first('has_model_ssim').gsub(/.+:Hydrus_/, '').downcase
   end
 
   def object_status
     typ    = object_type.to_sym
-    status = get('object_status_ssim')
+    status = first('object_status_ssim')
     Hydrus::GenericObject.status_label(typ, status)
   end
 
   def depositor
-    get("#{object_type}_depositor_person_identifier_ssm")
+    self["#{object_type}_depositor_person_identifier_ssm"]
   end
 
   def path

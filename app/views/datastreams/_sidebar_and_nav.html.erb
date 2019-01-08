@@ -1,12 +1,12 @@
 <% sidebar_items << capture { %>
-  <div class="well actions-box collection-settings">
+  <div class="panel actions-box collection-settings">
     <%=render :partial=>"#{view_path_from_model(@fobj)}/status_box" %>
     <%=render :partial=>"#{view_path_from_model(@fobj)}/actions_box_show" %>
   </div>
 <% } %>
 
 <div class="row">
-  <div class="span9">
+  <div class="col-sm-9">
     <%= render_contextual_navigation(@fobj) %>
   </div>
 </div>

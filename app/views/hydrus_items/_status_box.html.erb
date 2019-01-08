@@ -1,70 +1,65 @@
-<div class="well item-status">
-   <div class="box-header">
-      <span>Status</span>
-        <span id="status-label" class="label label-<%=button_color(@fobj.status_label)%> status-label"><%=@fobj.status_label.capitalize%></span>
-   </div>
-   <div class="box-body">
+ <div class="panel-heading">
+   <h3 class="panel-title">Status <span id="status-label" class="label label-<%=button_color(@fobj.status_label)%> status-label"><%=@fobj.status_label.capitalize%></span></h3>
+ </div>
 
-      <%=check_box_tag 'required_fields_checkbox', true, @fobj.required_fields_completed?, :disabled=>true%>
-      <label for="required_fields_checkbox">
-        <%= select_status_checkbox_icon(@fobj.required_fields_completed?) %>
-        Required fields completed
+ <div class="panel-body">
+    <%=check_box_tag 'required_fields_checkbox', true, @fobj.required_fields_completed?, :disabled=>true%>
+    <label for="required_fields_checkbox">
+      <%= select_status_checkbox_icon(@fobj.required_fields_completed?) %>
+      Required fields completed
+    </label>
+
+    <%=check_box_tag 'files_uploaded_checkbox', true, @fobj.files_uploaded?, :disabled=>true%>
+    <label for="files_uploaded_checkbox">
+      <%= select_status_checkbox_icon(@fobj.files_uploaded?) %>
+      File(s) uploaded
+    </label>
+
+    <%=check_box_tag 'release_reviewed_checkbox', true, @fobj.reviewed_release_settings?, :disabled=>true%>
+    <label for="release_reviewed_checkbox">
+      <%= select_status_checkbox_icon(@fobj.reviewed_release_settings?) %>
+      Release and visibility settings reviewed
+    </label>
+
+    <% if @fobj.licenses_can_vary %>
+      <% v = not(@fobj.license.blank?) %>
+      <%=check_box_tag 'license_selected', true, v, :disabled=>true%>
+      <label for="license_selected">
+        <%= select_status_checkbox_icon(v) %>
+        License selected
       </label>
+    <% end %>
 
-      <%=check_box_tag 'files_uploaded_checkbox', true, @fobj.files_uploaded?, :disabled=>true%>
-      <label for="files_uploaded_checkbox">
-        <%= select_status_checkbox_icon(@fobj.files_uploaded?) %>
-        File(s) uploaded
-      </label>
+    <%=check_box_tag 'depositor_agreement_checkbox', true, @fobj.terms_of_deposit_accepted?, :disabled=>true%>
+    <label for="depositor_agreement_checkbox">
+      <%= select_status_checkbox_icon(@fobj.terms_of_deposit_accepted?) %>
+      Terms of Deposit accepted
+    </label>
 
-      <%=check_box_tag 'release_reviewed_checkbox', true, @fobj.reviewed_release_settings?, :disabled=>true%>
-      <label for="release_reviewed_checkbox">
-        <%= select_status_checkbox_icon(@fobj.reviewed_release_settings?) %>
-        Release and visibility settings reviewed
-      </label>
-
-      <% if @fobj.licenses_can_vary %>
-        <% v = not(@fobj.license.blank?) %>
-        <%=check_box_tag 'license_selected', true, v, :disabled=>true%>
-        <label for="license_selected">
-          <%= select_status_checkbox_icon(v) %>
-          License selected
-        </label>
-      <% end %>
-
-      <%=check_box_tag 'depositor_agreement_checkbox', true, @fobj.terms_of_deposit_accepted?, :disabled=>true%>
-      <label for="depositor_agreement_checkbox">
-        <%= select_status_checkbox_icon(@fobj.terms_of_deposit_accepted?) %>
-        Terms of Deposit accepted
-      </label>
-
-      <% if to_bool(@fobj.requires_human_approval) %>
-
-        <% unless @fobj.is_published %>
-          <%=check_box_tag 'item_submitted_approval_checkbox', true, @fobj.is_awaiting_approval, :disabled=>true%>
-          <label for="item_submitted_approval_checkbox">
-            <%= select_status_checkbox_icon(@fobj.is_awaiting_approval) %>
-            Item submitted for approval
-          </label>
-         <% end %>
-
-        <%=check_box_tag 'item_approved_checkbox', true, @fobj.is_published, :disabled=>true%>
-        <label for="item_approved_checkbox">
-          <%= select_status_checkbox_icon(@fobj.is_published) %>
-          Item approved
-        </label>
-      <% end %>
+    <% if to_bool(@fobj.requires_human_approval) %>
 
       <% unless @fobj.is_published %>
-        <% ispub = @fobj.is_publishable %>
-        <%=check_box_tag 'item_opened_checkbox', true, ispub, :disabled=>true%>
-        <label for="item_opened_checkbox">
-          <%= select_status_checkbox_icon(ispub) %>
-          Item can be published
+        <%=check_box_tag 'item_submitted_approval_checkbox', true, @fobj.is_awaiting_approval, :disabled=>true%>
+        <label for="item_submitted_approval_checkbox">
+          <%= select_status_checkbox_icon(@fobj.is_awaiting_approval) %>
+          Item submitted for approval
         </label>
-      <% end %>
-    	<span id="files-uploading"></span>
-	  
-  </div>
+       <% end %>
 
+      <%=check_box_tag 'item_approved_checkbox', true, @fobj.is_published, :disabled=>true%>
+      <label for="item_approved_checkbox">
+        <%= select_status_checkbox_icon(@fobj.is_published) %>
+        Item approved
+      </label>
+    <% end %>
+
+    <% unless @fobj.is_published %>
+      <% ispub = @fobj.is_publishable %>
+      <%=check_box_tag 'item_opened_checkbox', true, ispub, :disabled=>true%>
+      <label for="item_opened_checkbox">
+        <%= select_status_checkbox_icon(ispub) %>
+        Item can be published
+      </label>
+    <% end %>
+  	<span id="files-uploading"></span>
 </div>

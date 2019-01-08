@@ -1,37 +1,32 @@
-<div id="relatedItem-<%=guid%>" class="destroy-set">
+<div id="relatedItem-<%= guid %>" class="destroy-set">
 
-  <div class="row related-item field-group">
-
-    <%= hydrus_form_label do  %>
-      <%= label :"hydrus_item", :"related_item_title_#{index}", "Link title" %>
-    <%- end -%>
-
-    <%= hydrus_form_value do -%>
-      <%= text_field_tag :"hydrus_item[related_item_title[#{index}]]",
-                         hydrus_strip(@fobj.related_item_title[index]) %>
-      <%= link_to('<i class="icon-trash"></i>'.html_safe,
-                  destroy_hydrus_item_value_path(
-                    :term=>"relatedItem",
-                    :term_index=>index,
-										:guid => guid,
-                    :type=>"related_item"),
-                  :class=>"delete-node btn",
-                  :id=>"remove_relatedItem_#{index}") %>
-    <%- end -%>
-
+  <div class="related-item form-group">
+    <%= label :hydrus_item, :"related_item_title_#{index}", "Link title", class: 'col-sm-2' %>
+    <div class="col-sm-10">
+      <div class="input-group">
+        <%= text_field_tag :"hydrus_item[related_item_title[#{index}]]",
+                           hydrus_strip(@fobj.related_item_title[index]),
+                           class: 'form-control' %>
+        <span class="input-group-btn">
+          <%= link_to destroy_hydrus_item_value_path(
+                        :term=>"relatedItem",
+                        :term_index=>index,
+    										:guid => guid,
+                        :type=>"related_item"),
+                      :class=>"delete-node btn",
+                      :id=>"remove_relatedItem_#{index}" do %>
+            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+          <% end %>
+        </span>
+      </div>
+    </div>
   </div>
 
-  <div class="row related-item field-group">
-
-    <%= hydrus_form_label do  %>
-      <%= label :"hydrus_item", :"related_item_url_#{index}", "URL" %>
-    <%- end -%>
-
-    <%= hydrus_form_value do -%>
+  <div class="related-item form-group">
+    <%= label :"hydrus_item", :"related_item_url_#{index}", "URL", class: 'col-sm-2' %>
+    <div class="col-sm-10">
       <%= text_field_tag :"hydrus_item[related_item_url[#{index}]]",
                          hydrus_strip(@fobj.related_item_url[index]) %>
-    <%- end -%>
-
+    </div>
   </div>
-
 </div>

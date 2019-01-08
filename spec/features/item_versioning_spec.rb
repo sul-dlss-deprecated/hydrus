@@ -3,10 +3,11 @@ require 'spec_helper'
 describe('Item versioning', type: :request, integration: true) do
   let(:archivist1) { create :archivist1 }
 
-  before :each do
+  let(:item_discard) { '.glyphicon.glyphicon-trash' }
+
+  before do
     @hi = Hydrus::Item.find('druid:oo000oo0001')
     @ok_notice = 'Your changes have been saved.'
-    @item_discard = '.icon-trash'
     @buttons = {
       save: 'save_nojs',
       publish_directly: 'Publish',
@@ -23,7 +24,7 @@ describe('Item versioning', type: :request, integration: true) do
   # versioning, we (especially dor-services gem) must read from workflows.
   #
   # The rake task :refresh_workflows duplicates some of this behavior.
-  after(:each) do
+  after do
     p      = @hi.pid
     wf     = Dor::Config.hydrus.app_workflow
     wf_xml = Hydrus.fixture_foxml(p, is_wf: true)
@@ -36,7 +37,7 @@ describe('Item versioning', type: :request, integration: true) do
     sign_in(archivist1)
     item = Hydrus::Item.find('druid:oo000oo0005')
     should_visit_view_page(item)
-    expect(page).to have_css(@item_discard) # we are unpublished and on v1, we do have a discard button
+    expect(page).to have_css(item_discard) # we are unpublished and on v1, we do have a discard button
     expect(item.is_initial_version).to eq(true)
     expect(item.is_destroyable).to eq(true) # can destroy an initial unpublished version
     expect(item.object_status).not_to eq('published')
@@ -75,7 +76,7 @@ describe('Item versioning', type: :request, integration: true) do
     # Open new version.
     sign_in(archivist1)
     should_visit_view_page(@hi)
-    expect(page).not_to have_css(@item_discard) # we are published and on v1, we do not have a discard button
+    expect(page).not_to have_css(item_discard) # we are published and on v1, we do not have a discard button
 
     click_button(@buttons[:open_new_version])
 
@@ -98,7 +99,7 @@ describe('Item versioning', type: :request, integration: true) do
     # View page should not offer the Publish button, because the user
     # needs to fill in a version description.  It should also not offer a discard button since this is v2 and is unpublished
     should_visit_view_page(@hi)
-    expect(page).not_to have_css(@item_discard)
+    expect(page).not_to have_css(item_discard)
     expect(page).not_to have_button(@buttons[:publish_directly])
 
     # Add the version info.
@@ -129,7 +130,7 @@ describe('Item versioning', type: :request, integration: true) do
 
     # View page should offer open version button.
     should_visit_view_page(@hi)
-    expect(page).not_to have_css(@item_discard) # still no discard button
+    expect(page).not_to have_css(item_discard) # still no discard button
     click_button(@buttons[:open_new_version])
 
     # Assertions after opening new version.
@@ -139,7 +140,7 @@ describe('Item versioning', type: :request, integration: true) do
     expect(@hi.object_status).not_to eq('published')
 
     should_visit_view_page(@hi)
-    expect(page).not_to have_css(@item_discard) # still no discard button even though we are not published, since we are on v2
+    expect(page).not_to have_css(item_discard) # still no discard button even though we are not published, since we are on v2
   end
 
   it 'changing license should force user to select :major version' do

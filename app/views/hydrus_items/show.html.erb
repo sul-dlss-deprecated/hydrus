@@ -1,22 +1,22 @@
-<%=render :partial=>'shared/set_page_title' %>
+<%=render 'shared/set_page_title' %>
 
 <% sidebar_items << capture do %>
-
-  <div id="status-box"><%= render :partial => "status_box"%></div>
-
-  <div id="actions-box"><%= render :partial => "actions_box_show"%></div>
-<%- end -%>
+  <div class="panel panel-default">
+    <%= render "status_box" %>
+    <%= render "actions_box_show" %>
+  </div>
+<% end %>
 
 <div>
   <div class="row">
-    <div class="span9">
+    <div class="col-sm-9">
       <%=render :partial=>'navigation' %>
     </div>
   </div>
 
   <div id="object-content-wrapper">
     <h3><%= title_text(@fobj) %></h3>
-    <h4 class="muted">Item Details</h4>
+    <h4 class="text-muted">Item Details</h4>
     <dl class="dl-horizontal item-view clearfix">
 
       <%= render "hydrus_items/basic_item_metadata" %>
@@ -130,14 +130,14 @@
             <%= hydrus_object_setting_value(lic) %>
           </span>
         </dd>
- 
+
         <dt>Terms of use</dt>
         <dd>
           <span class="highlight-value">
             <%= @fobj.terms_of_use %>
           </span>
         </dd>
- 
+
       </div>
 
   </div> <!-- object-content-wrapper -->

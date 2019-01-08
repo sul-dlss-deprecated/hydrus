@@ -1,16 +1,13 @@
 <%=render :partial=>'shared/set_page_title' %>
 
-<%- sidebar_items << capture do -%>
+<% sidebar_items << capture do %>
 
-<div class="well actions-box collection-settings">
-
-      <div id="status-box"><%=render :partial=>'status_box' %></div>
-
-       <div id="actions-box"><%=render :partial=>'actions_box_show' %></div>
-
+<div class="panel panel-default actions-box collection-settings">
+  <%= render 'status_box' %>
+  <%= render 'actions_box_show' %>
 </div>
 
-<%- end -%>
+<% end %>
 <div>
   <span class="edit-browse">
         <%=render :partial=>'navigation' %>
@@ -18,7 +15,7 @@
 
   <div id="object-content-wrapper">
     <h3><%= title_text(@fobj) %></h3>
-    <h4 class="muted">Collection Details</h4>
+    <h4 class="text-muted">Collection Details</h4>
     <dl class="dl-horizontal collection-view">
       <%= render "hydrus_collections/basic_collection_metadata" %>
 
@@ -27,9 +24,9 @@
     <% unless hydrus_is_empty?(@fobj.related_items) %>
      <div class="collection-items">
          <h4>Links to related information</h4>
-          <%- @fobj.related_items.each_with_index do |related_item, index| -%>
+          <% @fobj.related_items.each_with_index do |related_item, index| %>
             <dd>&raquo; <%= related_item.url.blank? ? hydrus_object_setting_value(related_item.url) : link_to(related_item.title, related_item.url) %></dd>
-          <%- end -%>
+          <% end %>
     </div>
     <% end %>
 
@@ -126,7 +123,7 @@
           </dl>
     </div>
 
-    <% if to_bool(@fobj.requires_human_approval) %>	
+    <% if to_bool(@fobj.requires_human_approval) %>
     <div class="collection-items">
          <h4>Review Workflow</h4>
          <p>
@@ -145,4 +142,3 @@
   </div> <!-- object-content-wrapper -->
     <div id="druid-footer"><%= @fobj.pid %></div>
 </div>
-

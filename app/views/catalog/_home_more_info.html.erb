@@ -1,5 +1,5 @@
 <%# only wrap the list in the panel div if signed-in user %>
-<%- if current_user %>
+<% if current_user %>
   <div class="panel panel-default panel-home">
     <div class="panel-heading">
       <h3 class="panel-title">More Information</h3>
@@ -7,7 +7,7 @@
     <div class="panel-body">
 <% end %>
       <ul>
-        <%- if current_user %>
+        <% if current_user %>
           <li>
             <span class="info-prefix">&raquo;</span>
             <%= link_to "Digital Collections in SearchWorks", "http://searchworks.stanford.edu/?f%5Bcollection_type%5D%5B%5D=Digital+Collection" %>
@@ -22,7 +22,7 @@
           <%= link_to "SDR Services information web site", "http://library.stanford.edu/sdr" %>
         </li>
       </ul>
-<%- if current_user %>
+<% if current_user %>
     </div>
   </div>
 <% end %>

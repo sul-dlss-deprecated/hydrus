@@ -1,10 +1,8 @@
 $baseFontSize: 13px;
 $baseLineHeight: 18px;
 
-@import 'bootstrap';
-@import 'bootstrap/responsive';
-
 @import "sul_chrome/sul_chrome_mixins";
+@import "bootstrap/mixins/border-radius";
 
 body {
 	background: url("/assets/body.png") repeat scroll 0 0 transparent;
@@ -51,13 +49,13 @@ a:hover.btn {
 	margin-bottom: 12px;
 	#branding {
 		@media (max-width: 767px) {
-		  text-align:center;	
-		}		
+		  text-align:center;
+		}
 	}
 	#utility-links {
 		text-align: right;
 		@media (max-width: 767px) {
-		  text-align:center;	
+		  text-align:center;
 		}
 	}
 }
@@ -71,14 +69,14 @@ a:hover.btn {
 footer {
 	font-size: 90%;
 	text-align: center;
-	padding: 25px 0; 
+	padding: 25px 0;
 }
 footer img.footer-logo {
 	padding-bottom: 15px;
 	vertical-align: top;
 }
 footer a {
-	border-bottom: none; 
+	border-bottom: none;
 	color:#575347;
 	margin-right: 10px;
 }
@@ -97,14 +95,14 @@ footer #footer-links a:hover{
 $ribbon-offset-horizontal: 14px; // width of ribbon past main container
 $ribbon-offset-vertical: 8px; // height of shadow
 #navigation-ribbon {
-  @include border-top-radius(3px); 
+  @include border-top-radius(3px);
   padding: 0 5px 0 54px;
   position: relative;
   margin: 0 -54px 30px -54px;
   text-shadow: 0 1px rgba(0,0,0,.8);
   background: #651006;
   background: url("/assets/bg-nav.png") repeat-x;
-  @include box-shadow(rgba(0,0,0,.3) 0 1px 0);
+  box-shadow: rgba(0,0,0,.3) 0 1px 0;
   &:before, &:after { // ribbon edge styling
     content: '';
     position: absolute;

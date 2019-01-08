@@ -1,7 +1,7 @@
-<%- document = collection %>
+<% document = collection %>
     <div class="document <%= render_document_class document %>">
     
-      <% # header bar for doc items in index view -%>
+      <% # header bar for doc items in index view %>
       <div class="documentHeader clearfix">
         <h5>
         <%= link_to document.to_model.title, document.to_model %>

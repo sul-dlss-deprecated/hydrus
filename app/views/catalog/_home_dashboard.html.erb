@@ -1,8 +1,8 @@
 <div class="user-collections">
   <h3>Your collections</h3>
-  <%- if @collections.blank? -%>
+  <% if @collections.blank? %>
     <p>You have no active collections.</p>
-  <%- else -%>
+  <% else %>
     <p>Your Active Collections (<%=@collections.size%>).</p>
      <%= render :partial=>'collection_dashboard',
         :locals=>{:collections=>@collections,:show_roles=>false}%>
@@ -15,7 +15,7 @@
       <%= link_to(
             "Create a new collection",
             new_polymorphic_path(Hydrus::Collection),
-            :class => 'btn',
+            :class => 'btn btn-default',
             :disable_with=>'Please wait...',
             :disable_after_click=>'true')  %>
     <% end %>

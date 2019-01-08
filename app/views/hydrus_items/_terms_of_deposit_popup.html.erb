@@ -1,19 +1,23 @@
-<div class="modal hide fade" id="terms-of-deposit">
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal">×</button>
-    <h3 id="myModalLabel">Stanford Digital Repository<br />Terms of Deposit</h3>
-  </div>
-  <div class="modal-body">
-    <%= render :partial=>"terms_of_deposit_text" %>
-  </div>
-  <div class="modal-footer">
-    <a href="/SDRSelfDepositTerms.pdf"><button class="btn">Save</button></a>
-    <% if @fobj.terms_of_deposit_accepted?%>
-      <button class="btn btn-primary" data-dismiss="modal" id="tod-close-button" aria-hidden="true">Close</button>
-    <% else %>
-      <button class="btn" data-dismiss="modal" aria-hidden="true">Return without agreeing</button>
-      <button class="tod-agree btn btn-primary" data-url="<%="#{terms_of_deposit_agree_path(@pid)}&from=#{@from}"%>" data-dismiss="modal">I agree to these terms</button>
-    <% end %>
+<div class="modal fade" id="terms-of-deposit">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 class="modal-title" id="myModalLabel">Stanford Digital Repository<br />Terms of Deposit</h3>
+      </div>
+      <div class="modal-body">
+        <%= render "terms_of_deposit_text" %>
+      </div>
+      <div class="modal-footer">
+        <a href="/SDRSelfDepositTerms.pdf"><button class="btn">Save</button></a>
+        <% if @fobj.terms_of_deposit_accepted?%>
+          <button class="btn btn-primary" data-dismiss="modal" id="tod-close-button" aria-hidden="true">Close</button>
+        <% else %>
+          <button class="btn" data-dismiss="modal" aria-hidden="true">Return without agreeing</button>
+          <button class="tod-agree btn btn-primary" data-url="<%="#{terms_of_deposit_agree_path(@pid)}&from=#{@from}"%>" data-dismiss="modal">I agree to these terms</button>
+        <% end %>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -27,6 +31,3 @@ $(document).ready(function(){
   });
 });
 </script>
-
-
-

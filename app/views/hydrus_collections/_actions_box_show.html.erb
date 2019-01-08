@@ -1,30 +1,29 @@
 <% isopen = @fobj.is_open %>
 
-<div class="collection-actions box-header">Actions</div>
+<div class="collection-actions panel-heading">
+  <h3 class="panel-title">Actions</h3>
+</div>
 
-<div class="box-body">
-
+<div class="panel-body">
   <% if can? :edit, @fobj %>
   <!-- Open/close. -->
     <% if isopen %>
       <p>
-        <%= button_to(
-              "Close Collection",
-              close_collection_path(@fobj),
-              :id    => 'hydrus_collection_close',
-              :class => 'btn btn-small save-edits',
-              :disable_with => "Please wait...",
-							:show_loading_indicator=>"true") %>
+        <%= button_to "Close Collection",
+                      close_collection_path(@fobj),
+                      id: 'hydrus_collection_close',
+                      class: 'btn btn-default save-edits',
+                      disable_with: "Please wait...",
+        							show_loading_indicator: "true" %>
       </p>
     <% elsif @fobj.is_openable %>
       <p>
-        <%= button_to(
-              "Open Collection",
-              open_collection_path(@fobj),
-              :id    => 'hydrus_collection_open',
-              :class => 'btn btn-small save-edits',
-              :disable_with => "Please wait...",
-  						:show_loading_indicator=>"true") %>
+        <%= button_to "Open Collection",
+                      open_collection_path(@fobj),
+                      id: 'hydrus_collection_open',
+                      class: 'btn btn-default save-edits',
+                      disable_with: "Please wait...",
+        							show_loading_indicator: "true" %>
       </p>
     <% else %>
       <!-- <%= "#{isopen.inspect} #{@fobj.is_openable} #{@fobj.inspect}" %> -->
@@ -38,26 +37,25 @@
                  "To add items, you must open the collection." :
                  "To add items, you must fill in all required fields and open the collection."
     %>
-    <div class="btn-group add-content-dropdown" <%=raw "data-placement=\"bottom\" rel=\"tooltip\" data-original-title=\"#{message}\"" unless isopen%> style="display:none;" >
-      <button class="<%="disabled" unless isopen%> btn btn-small dropdown-toggle" data-toggle="dropdown">
+    <div class="btn-group" <%=raw "data-placement=\"bottom\" rel=\"tooltip\" data-original-title=\"#{message}\"" unless isopen %>>
+      <button class="<%="disabled" unless isopen%> btn btn-default dropdown-toggle" data-toggle="dropdown">
         Add new item &hellip; <span class="caret"></span>
       </button>
-      <%= render :partial => "shared/add_content_options" %>
+      <%= render "shared/add_content_options" %>
     </div>
     <noscript>
 			<% if @fobj.is_open %>
-	      <%= form_tag(new_hydrus_item_path, :method=>"GET", :class=>"add-content-options") do %>
+	      <%= form_tag new_hydrus_item_path,
+                     method: "GET",
+                     class: "add-content-options" do %>
 				  <%= hidden_field_tag(:collection,@fobj.id)%>
-	        <%= select_tag(
-	              "type",
-	              options_for_select(@fobj.item_types.to_a),
-	              :class=>"add-content-options"
-	            )
-	        %>
-	        <%= submit_tag("Add new item", :class=>"btn btn-small", :show_loading_indicator=>"true" ) %>
-	      <%- end -%>
+	        <%= select_tag "type",
+        	               options_for_select(@fobj.item_types.to_a),
+        	               class: "add-content-options" %>
+	        <%= submit_tag("Add new item", class: "btn btn-default", show_loading_indicator: "true" ) %>
+	      <% end %>
 		  <% else %>
-		  	<%=message%>
+		  	<%= message %>
 			<% end %>
     </noscript>
   <% end %>
@@ -65,15 +63,15 @@
   <!-- Delete. -->
   <% if can?(:edit, @fobj) && @fobj.is_destroyable %>
       <p style="display:none;" id="discard-item" class="discard-item">
-        <i class="icon-trash"></i>
-        <%= link_to('Discard this collection', 
-                    @fobj, :method=>:delete, 
+        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+        <%= link_to('Discard this collection',
+                    @fobj, :method=>:delete,
                     :confirm => delete_confirm_msg(@fobj)) %>
       </p>
       <noscript>
         <p class="discard-item">
-          <i class="icon-trash"></i> 
-          <%= link_to('Discard this collection', 
+          <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+          <%= link_to('Discard this collection',
                       discard_collection_confirmation_path(@fobj)) %>
         </p>
       </noscript>

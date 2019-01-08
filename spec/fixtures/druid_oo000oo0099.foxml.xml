@@ -40,6 +40,7 @@
         <rdf:RDF xmlns:fedora-model="info:fedora/fedora-system:def/model#" xmlns:hydra="http://projecthydra.org/ns/relations#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rel="info:fedora/fedora-system:def/relations-external#">
           <rdf:Description rdf:about="info:fedora/druid:oo000oo0099">
             <hydra:isGovernedBy rdf:resource="info:fedora/druid:oo000oo0000"/>
+            <fedora-model:hasModel rdf:resource="info:fedora/afmodel:Dor_WorkflowObject"/>
           </rdf:Description>
         </rdf:RDF>
       </foxml:xmlContent>

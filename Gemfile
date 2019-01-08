@@ -8,7 +8,6 @@ gem 'devise-remote-user', '~> 1.0'
 gem 'jquery-rails'
 gem 'dynamic_form'
 gem 'bootstrap-datepicker-rails'
-gem 'cancan'
 gem 'carrierwave', '~> 1.0'
 gem 'coderay'
 gem 'validates_email_format_of'
@@ -16,19 +15,18 @@ gem 'whenever', '~> 0.9'
 
 # Stanford stuff
 gem 'assembly-objectfile', '~> 1.5'
-gem 'blacklight',   '~> 4.4'
-gem 'dor-services', '~> 5.24', require: false
+gem 'dor-services', '~> 5.31', require: false
+gem 'rubydora', '~> 2.1'
 gem 'bagit', '~> 0.4'
 gem 'dor-workflow-service'
 gem 'net-http-persistent', '~> 2.9' # https://github.com/sul-dlss/dor-workflow-service/issues/44
-gem 'hydra-head', '~> 6.5'
+gem 'hydra-head', '~> 7.0'
 
 # Use okcomputer to monitor the application
 gem 'okcomputer'
 
-gem 'sass-rails',     '~> 4.0'
+gem 'sass-rails',     '~> 5.0'
 gem 'coffee-rails',   '~> 4.2'
-gem 'bootstrap-sass', '2.3.2.1'
 gem 'uglifier', '>= 1.0.3'
 
 # gems only needed for particular environments

@@ -80,7 +80,7 @@ module ApplicationHelper
   def hydrus_object_setting_value(obj, opts = {})
     return obj unless hydrus_is_empty?(obj)
     if opts[:na]
-      return content_tag(:span, 'not available yet', class: 'muted')
+      return content_tag(:span, 'not available yet', class: 'text-muted')
     else
       return content_tag(:span, 'to be entered', class: 'unspecified')
     end
@@ -139,7 +139,8 @@ module ApplicationHelper
   end
 
   def select_status_checkbox_icon(field)
-    content_tag(:i, nil, class: field ? 'icon-check' : 'icon-minus')
+    html_class = field ? 'glyphicon glyphicon-check' : 'glyphicon glyphicon-unchecked'
+    content_tag(:span, nil, class: html_class, 'aria-hidden' => 'true')
   end
 
   # Takes a value.

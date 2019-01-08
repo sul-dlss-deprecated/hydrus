@@ -1,21 +1,21 @@
-<%=render :partial=>'shared/set_page_title' %>
+<%=render 'shared/set_page_title' %>
 
-<%- sidebar_items << capture do -%>
-  <div class="well actions-box collection-settings">
-    <%=render :partial=>'hydrus_collections/status_box' %>
-    <%=render :partial=>'hydrus_collections/actions_box_show' %>
+<% sidebar_items << capture do %>
+<div class="panel panel-default">
+    <%=render 'hydrus_collections/status_box' %>
+    <%=render 'hydrus_collections/actions_box_show' %>
   </div>
-<%- end -%>
+<% end %>
 
 <div class="row">
-  <div class="span9">
+  <div class="col-sm-9">
     <%= render_contextual_navigation(@fobj) %>
   </div>
 </div>
 <div id="object-content-wrapper">
   <h3><%= hydrus_object_setting_value(@fobj.title) %></h3>
-  <h4 class="muted"><%=@items.size%> Items in This Collection</h4>
-  <%- unless @items.blank? -%>
+  <h4 class="text-muted"><%=@items.size%> Items in This Collection</h4>
+  <% unless @items.blank? %>
     <div id="items" class="collection-items">
       <table id="itemsTable" class="tablesorter hydrus-striped-table table-striped table-condensed">
         <thead>
@@ -44,7 +44,7 @@
         </tbody>
       </table>
     </div>
-  <%- else -%>
+  <% else %>
     No items have been added to this collection.
-  <%- end -%>
+  <% end %>
 </div> <!-- object-content-wrapper -->
