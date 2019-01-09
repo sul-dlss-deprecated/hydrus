@@ -128,7 +128,7 @@ describe(Hydrus::Item, type: :feature, integration: true) do
       allow(collection).to receive_messages(visibility_option_value: 'stanford', license: 'some-license')
       item = ItemService.create(collection.pid, user, 'some-type')
       expect(item).to be_instance_of Hydrus::Item
-      expect(item).to_not be_new
+      expect(item).to_not be_new_record
       expect(item.visibility).to include 'stanford'
       expect(item.item_type).to eq 'some-type'
       expect(item.events.event.val.size).to eq(1)
@@ -147,7 +147,7 @@ describe(Hydrus::Item, type: :feature, integration: true) do
       allow(collection).to receive_messages(users_accepted_terms_of_deposit: { user.to_s => Time.now })
       item = ItemService.create(collection.pid, user, 'some-type')
       expect(item).to be_instance_of Hydrus::Item
-      expect(item).to_not be_new
+      expect(item).to_not be_new_record
       expect(item.item_type).to eq 'some-type'
       expect(item.events.event.to_a).to include 'Terms of deposit accepted due to previous item acceptance in collection'
       expect(item.accepted_terms_of_deposit).to eq 'true'

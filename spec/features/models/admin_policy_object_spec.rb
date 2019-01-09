@@ -8,7 +8,7 @@ describe(Hydrus::AdminPolicyObject, type: :feature, integration: true) do
     user = 'foo@bar.com'
     apo  = Hydrus::AdminPolicyObject.create(user)
     # Should be an APO whose APO is the ur-APO.
-    expect(apo).to_not be_new
+    expect(apo).to_not be_new_record
     expect(apo).to be_instance_of Hydrus::AdminPolicyObject
     expect(apo.admin_policy_object.pid).to eq Dor::Config.hydrus.ur_apo_druid
     expect(apo.title).to eq Dor::Config.hydrus.initial_apo_title

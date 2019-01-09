@@ -76,7 +76,7 @@ module Hydrus::SolrQueryable
   end
 
   def self.solr
-    @solr ||= RSolr.connect(Blacklight.solr_config)
+    Blacklight.default_index.connection
   end
 
   # Returns a hash of SOLR query parameters.
