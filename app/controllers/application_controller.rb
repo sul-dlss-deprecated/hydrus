@@ -1,6 +1,5 @@
 class ApplicationController < ActionController::Base
   include Blacklight::Controller
-  include Hydra::Controller::ControllerBehavior
   include Hydrus::ModelHelper
   include ActionView::Helpers::OutputSafetyHelper # for safe_join() and raw()
 
