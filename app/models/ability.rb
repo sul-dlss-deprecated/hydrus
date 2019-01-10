@@ -1,15 +1,16 @@
 class Ability
   include CanCan::Ability
-  include Hydra::Ability
+  include Blacklight::SearchHelper
 
   AUTH = Hydrus::Authorizable
 
-  def hydra_default_permissions
 
-    user = current_user
+  attr_reader :current_user
+
+  def initialize(user, session=nil)
+    @current_user = user || Hydra::Ability.user_class.new # guest user (not logged in)
 
     # Read.
-
     can(:read, [String, ActiveFedora::Base]) do |obj|
       AUTH.can_read_object(user, get_fedora_object(obj))
     end
@@ -37,7 +38,6 @@ class Ability
     cannot(:read, SolrDocument)
 
     # Create.
-
     can(:create, Hydrus::Collection) if AUTH.can_create_collections(user)
     can(:create, Hydrus::Item)
 
@@ -46,7 +46,6 @@ class Ability
     end
 
     # Update/edit.
-
     can([:edit, :update], [String, ActiveFedora::Base]) do |obj|
       AUTH.can_edit_object(user, get_fedora_object(obj))
     end
@@ -54,7 +53,6 @@ class Ability
     cannot([:edit, :update], SolrDocument)
 
     # Review (approve/disapprove).
-
     can(:review, [String, ActiveFedora::Base]) do |obj|
       AUTH.can_review_item(user, get_fedora_object(obj))
     end
@@ -62,16 +60,13 @@ class Ability
     # Admin actions:
     #   - View datastreams.
     #   - List all collections.
-
     can(:view_datastreams,     :all) if AUTH.can_act_as_administrator(user)
     can(:list_all_collections, :all) if AUTH.can_act_as_administrator(user)
 
     # Destroy.
-
     cannot(:destroy, String)
     cannot(:destroy, ActiveFedora::Base)
     cannot(:destroy, SolrDocument)
-
   end
 
   # Takes a String (presumably a pid) or an ActiveFedora object.
