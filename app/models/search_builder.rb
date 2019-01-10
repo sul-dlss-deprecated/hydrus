@@ -1,9 +1,13 @@
 class SearchBuilder < Blacklight::SearchBuilder
   include Blacklight::Solr::SearchBuilderBehavior
   # Add a filter query to restrict the search to documents the current user has access to
-  include Hydra::AccessControlsEnforcement
   # This applies appropriate access controls to all solr queries
-  self.default_processor_chain += [:add_access_controls_to_solr_params]
+  self.default_processor_chain += [:apply_gated_discovery]
+  attr_writer :current_ability
+
+  def current_ability
+    @current_ability || raise("current_ability has not been set on #{self}")
+  end
 
   private
 
