@@ -4,10 +4,9 @@ class Ability
 
   AUTH = Hydrus::Authorizable
 
-
   attr_reader :current_user
 
-  def initialize(user, session=nil)
+  def initialize(user, _session = nil)
     @current_user = user || Hydra::Ability.user_class.new # guest user (not logged in)
 
     # Read.
