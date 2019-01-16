@@ -50,7 +50,12 @@ Dor.configure do
     timeout Settings.workflow.timeout
   end
 
-  dor_services.url Settings.dor_services.url
+  dor_services do
+    url Settings.dor_services.url
+    user Settings.dor_services.user
+    pass Settings.dor_services.pass
+  end
+
   solr.url Settings.solr.url
   sdr.url Settings.sdr.url
 

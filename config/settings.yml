@@ -19,8 +19,8 @@ workflow:
 
 dor_services:
   url: 'http://localhost:3003'
-  username: 'user'
-  password: 'password'
+  user: 'user'
+  pass: 'password'
 
 stacks:
   document_cache_storage_root: ~
