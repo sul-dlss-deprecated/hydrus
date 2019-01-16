@@ -8,16 +8,16 @@ A Hydra application enabling deposit of digital objects into the Stanford
 Digital Repository for preservation and access.
 
 ## Setting up your environment
+
 ### System Requirements
+
 1. Install Docker
-
 2. Install Ruby 2.5.3
-
 
 ## Run the servers
 
 ```
-docker-compose up
+docker-compose up -d
 ```
 
 
@@ -47,6 +47,8 @@ ROLES=dlss:hydrus-app-administrators REMOTE_USER=archivist1@stanford.edu rails s
 * Solr - [http://localhost:8984/solr](http://localhost:8984/solr)
 
 ## Running tests
+
+To run the test suite, invoke `rake` from the Hydrus app root. Note that the docker containers need to be running already for this work.
 
 ```bash
 $ rake # Runs all tests.

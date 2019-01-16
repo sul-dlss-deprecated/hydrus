@@ -23,3 +23,14 @@ services:
     image: suldlss/workflow-server:latest
     ports:
       - 3001:3000
+
+  dor-services-app:
+    image: suldlss/dor-services-app:latest
+    ports:
+      - 3003:3000
+    environment:
+      SOLR_URL: http://solr:8983/solr/hydrus_test
+      SETTINGS__SOLRIZER_URL: http://solr:8983/solr/hydrus_test
+      SETTINGS__FEDORA_URL: http://fedoraAdmin:fedoraAdmin@fcrepo:8080/fedora
+      SETTINGS__SURI__URL: http://suri:3000
+      SETTINGS__WORKFLOW_URL: http://workflow:3000
