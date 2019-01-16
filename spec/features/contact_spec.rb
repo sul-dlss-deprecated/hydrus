@@ -9,7 +9,7 @@ describe('Contact page', type: :request, integration: true) do
     @message_textarea  = 'textarea#message'
     @message           = 'Hello, this is is cool.'
     @send_button_text  = 'Send'
-    HydrusMailer.stub_chain(:contact_message, :deliver_now)
+    allow(HydrusMailer).to receive_message_chain(:contact_message, :deliver_now)
   end
 
   it 'shows the full form and then generate an email when a user fills in the contact form when not logged in' do
