@@ -1,6 +1,5 @@
 class Hydrus::RoleMetadataDS < ActiveFedora::OmDatastream
   include SolrDocHelper
-  include Hydrus::GenericDS
 
   set_terminology do |t|
     t.root path: 'roleMetadata'
@@ -75,15 +74,15 @@ class Hydrus::RoleMetadataDS < ActiveFedora::OmDatastream
   end
 
   def insert_role(role_type)
-    add_hydrus_child_node(ng_xml.root, :role, role_type)
+    xml_helper.add_hydrus_child_node(ng_xml.root, :role, role_type)
   end
 
   def insert_person(role_node, sunetid)
-    add_hydrus_child_node(role_node, :person, sunetid)
+    xml_helper.add_hydrus_child_node(role_node, :person, sunetid)
   end
 
   def insert_group(role_node, workgroup)
-    add_hydrus_child_node(role_node, :group, workgroup)
+    xml_helper.add_hydrus_child_node(role_node, :group, workgroup)
   end
 
   ####
@@ -129,5 +128,9 @@ class Hydrus::RoleMetadataDS < ActiveFedora::OmDatastream
     end
     # Return the solr doc.
     solr_doc
+  end
+
+  def xml_helper
+    @xml_helper ||= XmlHelperService.new(datastream: self)
   end
 end

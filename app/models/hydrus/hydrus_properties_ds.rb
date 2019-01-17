@@ -1,5 +1,4 @@
 class Hydrus::HydrusPropertiesDS < ActiveFedora::OmDatastream
-  include Hydrus::GenericDS
   include SolrDocHelper
 
   set_terminology do |t|
@@ -90,7 +89,11 @@ class Hydrus::HydrusPropertiesDS < ActiveFedora::OmDatastream
   def insert_user_accepting_terms_of_deposit(user, datetime_accepted)
     k = :users_accepted_terms_of_deposit
     parent = find_by_terms(k).first
-    parent = add_hydrus_child_node(ng_xml.root, k) if parent.nil?
-    add_hydrus_child_node(parent, :user, user, datetime_accepted)
+    parent = xml_helper.add_hydrus_child_node(ng_xml.root, k) if parent.nil?
+    xml_helper.add_hydrus_child_node(parent, :user, user, datetime_accepted)
+  end
+
+  def xml_helper
+    @xml_helper ||= XmlHelperService.new(datastream: self)
   end
 end

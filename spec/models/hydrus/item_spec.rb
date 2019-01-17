@@ -361,13 +361,13 @@ RSpec.describe Hydrus::Item, type: :model do
       end
 
       it 'returns ["world"] when the item is world visible' do
-        allow(item).to receive_message_chain('embargoMetadata', :has_world_read_node).and_return(true)
+        allow_any_instance_of(RightsMetadataService).to receive(:has_world_read_node).and_return(true)
         expect(item.visibility).to eq(['world'])
       end
 
       it 'returns an array of groups if the item is visible to specific groups' do
-        allow(item).to receive_message_chain('embargoMetadata', :has_world_read_node).and_return(false)
-        allow(item).to receive_message_chain('embargoMetadata', :group_read_nodes).and_return(mock_groups)
+        allow_any_instance_of(RightsMetadataService).to receive(:has_world_read_node).and_return(false)
+        allow_any_instance_of(RightsMetadataService).to receive(:group_read_nodes).and_return(mock_groups)
         expect(item.visibility).to eq %w(foo bar)
       end
     end
@@ -378,13 +378,13 @@ RSpec.describe Hydrus::Item, type: :model do
       end
 
       it 'returns ["world"] when the item is world visible' do
-        allow(item).to receive_message_chain('rightsMetadata', :has_world_read_node).and_return(true)
+        allow_any_instance_of(RightsMetadataService).to receive(:has_world_read_node).and_return(true)
         expect(item.visibility).to eq(['world'])
       end
 
       it 'returns an array of groups if the item is visible to specific groups' do
-        allow(item).to receive_message_chain('rightsMetadata', :has_world_read_node).and_return(false)
-        allow(item).to receive_message_chain('rightsMetadata', :group_read_nodes).and_return(mock_groups)
+        allow_any_instance_of(RightsMetadataService).to receive(:has_world_read_node).and_return(false)
+        allow_any_instance_of(RightsMetadataService).to receive(:group_read_nodes).and_return(mock_groups)
         expect(item.visibility).to eq %w(foo bar)
       end
     end

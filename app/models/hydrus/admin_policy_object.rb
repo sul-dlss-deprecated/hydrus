@@ -21,7 +21,7 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
 
   has_metadata(
     name: 'defaultObjectRights',
-    type: Hydrus::RightsMetadataDS,
+    type: Dor::DefaultObjectRightsDS,
     label: 'Default Object Rights',
     control_group: 'M',
     autocreate: true)

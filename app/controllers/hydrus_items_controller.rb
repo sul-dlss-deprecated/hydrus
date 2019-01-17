@@ -253,7 +253,7 @@ class HydrusItemsController < ApplicationController
 
   def destroy_value
     authorize! :edit, @fobj
-    @fobj.descMetadata.remove_node(params[:term], params[:term_index])
+    XmlHelperService.new(datastream: @fobj.descMetadata).remove_node(params[:term], params[:term_index])
     @fobj.save
     respond_to do |want|
       want.html { redirect_to :back }

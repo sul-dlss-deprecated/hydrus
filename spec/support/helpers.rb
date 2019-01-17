@@ -76,8 +76,9 @@ def check_emb_vis_lic(obj, opts)
     expect(em.ng_xml.at_xpath('//status').content).to eq('embargoed')
     expect(Time.zone.parse(em.ng_xml.at_xpath('//releaseDate').content)).to eq(Time.zone.parse(opts[:embargo_date]))
     # rightsMetadata
-    expect(rm.has_world_read_node).to eq(false)
-    expect(rm.group_read_nodes.size).to eq(0)
+    rights_metadata_service = RightsMetadataService.new(datastream: rm)
+    expect(rights_metadata_service.has_world_read_node).to eq(false)
+    expect(rights_metadata_service.group_read_nodes.size).to eq(0)
     expect(rm.ng_xml.at_xpath("#{rd}/embargoReleaseDate").content).to eq(opts[:embargo_date])
     expect(rm.ng_xml.xpath("#{rd}/none").size).to eq(1)
   else

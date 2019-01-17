@@ -1,6 +1,5 @@
 class Hydrus::DescMetadataDS < ActiveFedora::OmDatastream
   include SolrDocHelper
-  include Hydrus::GenericDS
 
   # MODS XML constants.
 
@@ -155,27 +154,27 @@ class Hydrus::DescMetadataDS < ActiveFedora::OmDatastream
   end
 
   def insert_date_created
-    add_hydrus_next_sibling_node(:originInfo, :date_created)
+    xml.helper.add_hydrus_next_sibling_node(:originInfo, :date_created)
   end
 
   def insert_contributor(name_type, name, role)
-    add_hydrus_next_sibling_node(:name, :contributor, name_type, name, role)
+    xml_helper.add_hydrus_next_sibling_node(:name, :contributor, name_type, name, role)
   end
 
   def insert_related_item
-    add_hydrus_next_sibling_node(:relatedItem, :relatedItem)
+    xml_helper.add_hydrus_next_sibling_node(:relatedItem, :relatedItem)
   end
 
   def insert_related_citation
-    add_hydrus_next_sibling_node(:related_citation, :related_citation)
+    xml_helper.add_hydrus_next_sibling_node(:related_citation, :related_citation)
   end
 
   def insert_topic(topic)
-    add_hydrus_next_sibling_node(:subject, :topic, topic)
+    xml_helper.add_hydrus_next_sibling_node(:subject, :topic, topic)
   end
 
   def insert_genre
-    add_hydrus_next_sibling_node(:typeOfResource, :genre)
+    xml_helper.add_hydrus_next_sibling_node(:typeOfResource, :genre)
   end
 
   # Returns the contributor information from descMetadata as an array
@@ -196,5 +195,9 @@ class Hydrus::DescMetadataDS < ActiveFedora::OmDatastream
       cs << c
     end
     cs
+  end
+
+  def xml_helper
+    @xml_helper ||= XmlHelperService.new(datastream: self)
   end
 end

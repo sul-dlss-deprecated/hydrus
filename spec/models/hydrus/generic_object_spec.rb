@@ -104,10 +104,10 @@ describe Hydrus::GenericObject, type: :model do
         expect(@go.license).to eq('none')
         expect(@go.license_text).to eq('')
         expect(@go.license_group_code).to eq(nil)
-        expect(@go.terms_of_use).to eq('')
+        expect(@go.use_statement).to eq('')
         # Set a value for terms of use.
         tou = 'blah blah blah'
-        @go.terms_of_use = tou
+        @go.use_statement = tou
         # Check various license flavors.
         tests = [
           ['cc-by-nc', 'CC BY-NC Attribution-NonCommercial', 'creativeCommons'],
@@ -120,7 +120,7 @@ describe Hydrus::GenericObject, type: :model do
           expect(@go.license_text).to eq(txt)
           expect(@go.license_group_code).to eq(gcode)
           # Terms of use should be unaffected.
-          expect(@go.terms_of_use).to eq(tou)
+          expect(@go.use_statement).to eq(tou)
           # License code in rightsMetadata XML should be correct.
           # In particular, the cc-by-nc code should be stored by by-nc.
           nd = @go.rightsMetadata.use.machine.nodeset.first
@@ -137,11 +137,11 @@ describe Hydrus::GenericObject, type: :model do
       expect(hgo.license_human('blah!!')).to match(/unknown license/i)
     end
 
-    it 'terms_of_use: getter and setter' do
+    it 'use_statement: getter and setter' do
       exp = 'foobar'
-      expect(@go.terms_of_use).to eq('')
-      @go.terms_of_use = exp
-      expect(@go.terms_of_use).to eq(exp)
+      expect(@go.use_statement).to eq('')
+      @go.use_statement = exp
+      expect(@go.use_statement).to eq(exp)
     end
   end
 

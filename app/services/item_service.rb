@@ -48,7 +48,7 @@ class ItemService
 
       # Set object status.
       item.object_status = 'draft'
-      item.terms_of_use = Hydrus::GenericObject.stanford_terms_of_use
+      item.use_statement = Hydrus::GenericObject.stanford_terms_of_use
     end
   end
 

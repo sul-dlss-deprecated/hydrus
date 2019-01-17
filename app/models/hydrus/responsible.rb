@@ -45,13 +45,14 @@ module Hydrus::Responsible
   # Takes a hash of roles and SUNETIDs: see pruned_role_info().
   # Rewrites roleMetadata <person> nodes to reflect the contents of the hash.
   def person_roles=(h)
-    roleMetadata.remove_nodes(:role, :person)
+    XmlHelperService.new(datastream: roleMetadata).remove_nodes(:role, :person)
     Hydrus::Responsible.pruned_role_info(h).each do |id, roles|
       roles.each do |r|
         roleMetadata.add_person_with_role(id, r)
       end
     end
   end
+
   #Takes a sunetid and an apo pid
   #use solr to quickly find the roles for a person under a given apo
   def self.roles_of_person person_id, apo_id

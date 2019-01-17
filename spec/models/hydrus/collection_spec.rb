@@ -400,15 +400,15 @@ describe Hydrus::Collection, type: :model do
 
     describe 'visibility getter and setter' do
       it "getter should return ['world'] if item is world visible" do
-        allow(@hc).to receive_message_chain(:rightsMetadata, :has_world_read_node).and_return(true)
+        allow_any_instance_of(RightsMetadataService).to receive(:has_world_read_node).and_return(true)
         expect(@hc.visibility).to eq(['world'])
       end
 
       it 'getter should return groups names if item is not world visible' do
         exp_groups = %w(foo bar)
         mock_nodes = exp_groups.map { |g| double('', text: g) }
-        allow(@hc).to receive_message_chain(:rightsMetadata, :has_world_read_node).and_return(false)
-        allow(@hc).to receive_message_chain(:rightsMetadata, :group_read_nodes).and_return(mock_nodes)
+        allow_any_instance_of(RightsMetadataService).to receive(:has_world_read_node).and_return(false)
+        allow_any_instance_of(RightsMetadataService).to receive(:group_read_nodes).and_return(mock_nodes)
         expect(@hc.visibility).to eq(exp_groups)
       end
 

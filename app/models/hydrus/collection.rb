@@ -128,7 +128,7 @@ class Hydrus::Collection < Dor::Collection
     coll.embargo_terms           = ''
     coll.requires_human_approval = 'no'
     coll.license_option          = 'none'
-    coll.terms_of_use            = Hydrus::GenericObject.stanford_terms_of_use
+    coll.use_statement            = Hydrus::GenericObject.stanford_terms_of_use
     # Set object status.
     coll.object_status = 'draft'
     coll.title = ''
@@ -490,12 +490,16 @@ class Hydrus::Collection < Dor::Collection
   end
 
   def visibility
-    return ['world'] if rightsMetadata.has_world_read_node
-    rightsMetadata.group_read_nodes.map { |n| n.text }
+    return ['world'] if rights_metadata_service.has_world_read_node
+    rights_metadata_service.group_read_nodes.map { |n| n.text }
   end
 
   def visibility=(val) # val = world or stanford
-    rightsMetadata.update_access_blocks(val)
+    rights_metadata_service.update_access_blocks(val)
+  end
+
+  def rights_metadata_service
+    RightsMetadataService.new(datastream: rightsMetadata)
   end
 
   ####

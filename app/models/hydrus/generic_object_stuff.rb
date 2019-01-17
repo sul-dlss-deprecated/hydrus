@@ -7,7 +7,6 @@ module Hydrus::GenericObjectStuff
     include Hydrus::Processable
     include Hydrus::Contentable
     include Hydrus::WorkflowDsExtension
-    include Hydrus::Licenseable
     include Hydrus::UserWorkflowable
     include Hydrus::Eventable
     include Hydrus::Cant
@@ -16,7 +15,7 @@ module Hydrus::GenericObjectStuff
 
     has_metadata(
       name: 'rightsMetadata',
-      type: Hydrus::RightsMetadataDS,
+      type: Dor::RightsMetadataDS,
       label: 'Rights Metadata',
       control_group: 'M')
 
@@ -53,9 +52,54 @@ module Hydrus::GenericObjectStuff
       ],
       'rightsMetadata' => [
         [:rmd_embargo_release_date, true,  :read_access, :machine, :embargo_release_date],
-        [:terms_of_use,             true,],
+        [:use_statement,             true],
       ],
     )
+  end
+
+  # Returns the object's license code: cc-by, pddl...
+  # Returns license code of 'none' if there is no license, a
+  # behavior that parallels the setter.
+  #
+  # Note: throughout the Hydrus app, creativeCommons license codes
+  # have a cc- prefix, which disambiguates those code from similar
+  # openDataCommons licenses; however, in the rightsMetadata XML
+  # the creativeCommons codes lack the cc- prefix. That's why the
+  # license getter and setter add and remove those prefixes.
+  def license
+    nd = rightsMetadata.use.machine.nodeset.first
+    return 'none' unless nd
+    prefix = nd[:type] == 'creativeCommons' ? 'cc-' : ''
+    prefix + nd.text
+  end
+
+  # Takes a license code: cc-by, pddl, none, ...
+  # Replaces the existing license, if any, with the license for that code.
+  def license=(code)
+    remove_license
+    return if code == 'none'
+    hgo   = Hydrus::GenericObject
+    gcode = hgo.license_group_code(code)
+    txt   = hgo.license_human(code)
+    code  = code.sub(/\Acc-/, '') if gcode == 'creativeCommons'
+    insert_license(gcode, code, txt)
+  end
+
+  # Takes a license-group code, a license code, and the corresponding license text.
+  # Adds the nodes for that license to the <use> node.
+  def insert_license(gcode, code, txt)
+    use_node = rightsMetadata.use.nodeset.first || rightsMetadata.ng_xml.root
+    xml_helper.add_hydrus_child_node(use_node, :license, gcode, code, txt)
+  end
+
+  # Remove license-related nodes.
+  def remove_license
+    q = '//use/*[@type!="useAndReproduction"]'
+    xml_helper.remove_nodes_by_xpath(q)
+  end
+
+  def xml_helper
+    XmlHelperService.new(datastream: rightsMetadata)
   end
 
   def apo

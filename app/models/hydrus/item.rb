@@ -133,7 +133,7 @@ class Hydrus::Item < Hydrus::GenericObject
   # Approve the Item.
   def approve
     raise "#{cannot_do_message(:approve)}\nItem is not approvable" unless is_approvable()
-    hydrusProperties.remove_nodes(:disapproval_reason)
+    XmlHelperService.new(datastream: hydrusProperties).remove_nodes(:disapproval_reason)
     events.add_event('hydrus', @current_user, 'Item approved')
     do_publish()
   end
@@ -153,7 +153,7 @@ class Hydrus::Item < Hydrus::GenericObject
     raise "#{cannot_do_message(:resubmit)}\nItem is not resubmittable" unless is_resubmittable()
     self.submit_for_approval_time = HyTime.now_datetime
     self.object_status = 'awaiting_approval'
-    hydrusProperties.remove_nodes(:disapproval_reason)
+    XmlHelperService.new(datastream: hydrusProperties).remove_nodes(:disapproval_reason)
     events.add_event('hydrus', @current_user, 'Item resubmitted for approval')
     send_deposit_review_email_notification
   end
@@ -496,8 +496,8 @@ class Hydrus::Item < Hydrus::GenericObject
       # though we also delete the entire datastream), because the former
       # happens right away (which we need) and the latter appears to
       # happen later (maybe during save).
-      rightsMetadata.remove_embargo_date
-      embargoMetadata.remove_embargo_date
+      RightsMetadataService.new(datastream: rightsMetadata).remove_embargo_date
+      RightsMetadataService.new(datastream: embargoMetadata).remove_embargo_date
       embargoMetadata.delete
     else
       self.rmd_embargo_release_date = ed
@@ -556,8 +556,9 @@ class Hydrus::Item < Hydrus::GenericObject
   # Embargo status determines which datastream is used to obtain the information.
   def visibility
     ds = is_embargoed ? embargoMetadata : rightsMetadata
-    return ['world'] if ds.has_world_read_node
-    ds.group_read_nodes.map { |n| n.text }
+    rights_metadata_service = RightsMetadataService.new(datastream: ds)
+    return ['world'] if rights_metadata_service.has_world_read_node
+    rights_metadata_service.group_read_nodes.map { |n| n.text }
   end
 
   # Takes a visibility -- typically 'world' or 'stanford'.
@@ -565,16 +566,18 @@ class Hydrus::Item < Hydrus::GenericObject
   # values, along with the embargo status.
   # Do not call this directly from the UI. Instead, use embarg_visib=().
   def visibility= val
+    rights_metadata_service = RightsMetadataService.new(datastream: rightsMetadata)
     if is_embargoed
+      embargo_metadata_service = RightsMetadataService.new(datastream: embargoMetadata)
       # If embargoed, we set access info in embargoMetadata.
-      embargoMetadata.initialize_release_access_node(:generic)
-      embargoMetadata.update_access_blocks(val)
+      embargo_metadata_service.initialize_release_access_node(:generic)
+      embargo_metadata_service.update_access_blocks(val)
       # And we clear our read access in rightsMetadata and add an explicit <none/> block.
-      rightsMetadata.deny_read_access
+      rights_metadata_service.deny_read_access
     else
       # Otherwise, just set access info in rightsMetadata.
       # The embargoMetadata should not exist at this point.
-      rightsMetadata.update_access_blocks(val)
+      rights_metadata_service.update_access_blocks(val)
     end
   end
 
@@ -596,7 +599,7 @@ class Hydrus::Item < Hydrus::GenericObject
   def keywords=(val)
     kws = Hydrus::ModelHelper.parse_delimited(val)
     return if keywords == kws
-    descMetadata.remove_nodes(:subject)
+    XmlHelperService.new(datastream: descMetadata).remove_nodes(:subject)
     kws.each { |kw| descMetadata.insert_topic(kw) }
   end
 
@@ -625,7 +628,7 @@ class Hydrus::Item < Hydrus::GenericObject
     h
   end
   def dates=(h)
-    descMetadata.remove_nodes(:date_created)
+    XmlHelperService.new(datastream: descMetadata).remove_nodes(:date_created)
     if h[:date_type] == 'single'
       descMetadata.originInfo.dateCreated = h[:date_created]
       #the if respond to is for initial item creation
@@ -724,7 +727,7 @@ class Hydrus::Item < Hydrus::GenericObject
   #
   # Uses that hash to rewrite all <name> nodes in the descMetadata.
   def contributors=(h)
-    descMetadata.remove_nodes(:name)
+    XmlHelperService.new(datastream: descMetadata).remove_nodes(:name)
     h.values.each { |c|
       insert_contributor(c['name'], c['role_key'])
     }
