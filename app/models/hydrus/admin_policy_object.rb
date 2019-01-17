@@ -95,8 +95,6 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
     %w[sdr:developer sdr:service-manager sdr:metadata-staff].each do |group|
       rmd.add_group_with_role(group, 'dor-apo-manager')
     end
-    # Create defaultObjectRights datastream ... by mentioning it.
-    apo.defaultObjectRights.content_will_change!
     # Add the references agreement to the APO's RELS-EXT.
     apo.add_relationship(:references_agreement, 'info:fedora/druid:mc322hh4254')
     # Save and return.
