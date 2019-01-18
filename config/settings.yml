@@ -18,7 +18,9 @@ workflow:
   url: 'https://workflow.example.com/workflow'
 
 dor_services:
-  url: 'https://user:password@dor-services.example.com'
+  url: 'http://localhost:3003'
+  user: 'user'
+  pass: 'password'
 
 stacks:
   document_cache_storage_root: ~

@@ -2,17 +2,24 @@ notifications:
   email: false
 
 sudo: required
+
 services:
   - docker
 
 before_install:
-  - docker run -d -p 8984:8983 -v $PWD/solr_conf/conf/:/myconfig solr:7 solr-create -c hydrus-test -d /myconfig
-  - docker run -d -p 8983:8080 suldlss/fcrepo:no-messaging-latest
-  - docker run -d -p 127.0.0.1:3001:3000 suldlss/workflow-server:latest
-  - docker run -d -p 127.0.0.1:3002:3000 suldlss/suri-rails:latest
-  - docker ps -a
+  # Travis's docker-compose is too old to handle v3.6 docker-compose templates.
+  # This code is from Travis's documentation: https://docs.travis-ci.com/user/docker/#using-docker-compose
+  - sudo rm /usr/local/bin/docker-compose
+  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+  - chmod +x docker-compose
+  - sudo mv docker-compose /usr/local/bin
+  - docker-compose up -d
+  - docker-compose ps
+
+env:
+  global:
+    - DOCKER_COMPOSE_VERSION=1.23.1
+    - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
 
 rvm:
   - 2.5.3 # deployed
-
-script: bundle exec rake ci

@@ -77,8 +77,7 @@ describe Hydrus::GenericObject, type: :model do
     it 'should be able to exercise register_dor_object(), using stubbed call to Dor' do
       args = %w(whobar item somePID)
       drp = Hydrus::GenericObject.dor_registration_params(*args)
-      expectation = expect(Dor::RegistrationService).to receive(:register_object)
-      expectation.with(hash_including(*drp.keys))
+      expect(Dor::Services::Client.objects).to receive(:register).with(params: hash_including(*drp.keys))
       Hydrus::GenericObject.register_dor_object(nil, nil, nil)
     end
   end

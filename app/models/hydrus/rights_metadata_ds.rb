@@ -67,6 +67,14 @@ class Hydrus::RightsMetadataDS < ActiveFedora::OmDatastream
     remove_nodes_by_xpath(q)
   end
 
+  # Hydrus uses customized rights metadata, but also uses models that include
+  # Dor::Editable. In dor-services 6.x, these methods moved out of the
+  # Dor::Editable module and moved into a datastream which Hydrus does not use.
+  # Stub out these methods to get the test suite running
+  [:default_rights, :use_license].each do |missing_method_name|
+    define_method(missing_method_name) {}
+  end
+
   def self.xml_template
     Nokogiri::XML::Builder.new do |xml|
       xml.rightsMetadata {

@@ -81,8 +81,8 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
     # Create the object, with the correct model.
     dconf = Dor::Config.hydrus
     args = [user, 'adminPolicy', dconf.ur_apo_druid]
-    apo  = Hydrus::GenericObject.register_dor_object(*args)
-    apo  = Hydrus::AdminPolicyObject.find(apo.pid)
+    response = Hydrus::GenericObject.register_dor_object(*args)
+    apo = Hydrus::AdminPolicyObject.find(response[:pid])
     apo.remove_relationship :has_model, 'info:fedora/afmodel:Dor_AdminPolicyObject'
     apo.assert_content_model
     # Add minimal descMetadata with a title.
@@ -95,8 +95,6 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
     %w[sdr:developer sdr:service-manager sdr:metadata-staff].each do |group|
       rmd.add_group_with_role(group, 'dor-apo-manager')
     end
-    # Create defaultObjectRights datastream ... by mentioning it.
-    apo.defaultObjectRights.content_will_change!
     # Add the references agreement to the APO's RELS-EXT.
     apo.add_relationship(:references_agreement, 'info:fedora/druid:mc322hh4254')
     # Save and return.

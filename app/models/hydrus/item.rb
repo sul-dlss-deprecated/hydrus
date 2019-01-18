@@ -169,15 +169,16 @@ class Hydrus::Item < Hydrus::GenericObject
   #   - Other options:
   #       :no_super   Used to prevent super() during testing.
   def open_new_version(opts = {})
-    raise "#{cannot_do_message(:open_new_version)}\nItem is not accessioned" unless is_accessioned()
+    raise "#{cannot_do_message(:open_new_version)}\nItem is not accessioned" unless is_accessioned
     # Store the time when the object was initially published.
-    self.initial_publish_time = publish_time() if is_initial_version
-    # Call the dor-services method, with a couple of Hydrus-specific options.
-    super(assume_accessioned: should_treat_as_accessioned(), create_workflows_ds: false)
+    self.initial_publish_time = publish_time if is_initial_version
+
     # Set some version metadata that the Hydrus app uses.
-    sig  = opts[:significance] || :major
-    desc = opts[:description]  || ''
-    versionMetadata.update_current_version(description: desc, significance: sig)
+    vers_md_upd_info = {}
+    vers_md_upd_info[:significance] = opts[:significance] || :major
+    vers_md_upd_info[:description] = opts[:description] || ''
+    # Use the dor-services-client to open a new version, passing along args needed by Hydrus
+    Dor::Services::Client.object(pid).open_new_version(assume_accessioned: should_treat_as_accessioned, create_workflows_ds: false, vers_md_upd_info: vers_md_upd_info)
     # Varying behavior: remediations vs ordinary user edits.
     if opts[:is_remediation]
       # Just log the event.
@@ -186,7 +187,7 @@ class Hydrus::Item < Hydrus::GenericObject
       self.version_started_time = HyTime.now_datetime
       # Put the object back in the draft state.
       self.object_status = 'draft'
-      uncomplete_workflow_steps()
+      uncomplete_workflow_steps
       # Store a copy of the current license and visibility.
       # We use those values when enforcing subsequent-version validations.
       self.prior_license = license

@@ -15,7 +15,8 @@ gem 'whenever', '~> 0.9'
 
 # Stanford stuff
 gem 'assembly-objectfile', '~> 1.5'
-gem 'dor-services', '~> 5.31', require: false
+gem 'dor-services', '~> 6.1', require: false
+gem 'dor-services-client', '~> 1.1'
 gem 'rubydora', '~> 2.1'
 gem 'bagit', '~> 0.4'
 gem 'dor-workflow-service'

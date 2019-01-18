@@ -112,9 +112,9 @@ class Hydrus::Collection < Dor::Collection
     # Make sure user can create collections.
     cannot_do(:create) unless Hydrus::Authorizable.can_create_collections(user)
     # Create the object, with the correct model.
-    apo     = Hydrus::AdminPolicyObject.create(user)
-    dor_obj = Hydrus::GenericObject.register_dor_object(user, 'collection', apo.pid)
-    coll    = Hydrus::Collection.find(dor_obj.pid)
+    apo      = Hydrus::AdminPolicyObject.create(user)
+    response = Hydrus::GenericObject.register_dor_object(user, 'collection', apo.pid)
+    coll     = Hydrus::Collection.find(response[:pid])
     coll.remove_relationship :has_model, 'info:fedora/afmodel:Dor_Collection'
     coll.assert_content_model
     # Set the item_type, and add some Hydrus-specific info to identityMetadata.
@@ -266,7 +266,7 @@ class Hydrus::Collection < Dor::Collection
     apo.identityMetadata.objectLabel = apt
     apo.title                        = apt
     apo.label                        = apt
-    apo.datastreams['DC'].content    = apo.generate_dublin_core.to_s
+    apo.datastreams['DC'].content    = Dor::DublinCoreService.new(apo).to_xml
     identityMetadata.objectLabel     = t
     self.label                       = t
   end

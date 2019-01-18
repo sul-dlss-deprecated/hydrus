@@ -40,7 +40,7 @@ class ItemService
   # @return [Hydrus::Item]
   def build_item(item_type)
     dor_item = Hydrus::GenericObject.register_dor_object(user, 'item', collection.apo_pid)
-    Hydrus::Item.find(dor_item.pid).tap do |item|
+    Hydrus::Item.find(dor_item[:pid]).tap do |item|
       item.remove_relationship :has_model, 'info:fedora/afmodel:Dor_Item'
       item.assert_content_model
       # Set the item_type, and add some Hydrus-specific info to identityMetadata.

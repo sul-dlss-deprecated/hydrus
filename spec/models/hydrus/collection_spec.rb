@@ -70,7 +70,7 @@ describe Hydrus::Collection, type: :model do
       }
       tests.each do |meth, predicate|
         allow(@hc).to receive(predicate).and_return(false)
-        expect { @hc.send(meth) }.to raise_error
+        expect { @hc.send(meth) }.to raise_error(RuntimeError)
       end
     end
   end
