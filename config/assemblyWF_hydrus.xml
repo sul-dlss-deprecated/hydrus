@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<workflow>
+<workflow id="assemblyWF">
   <process name="start-assembly"        priority="80" status="completed" lifecycle="pipelined"/>
   <process name="jp2-create"            priority="80" status="skipped"/>
   <process name="checksum-compute"      priority="80" status="waiting"/>
