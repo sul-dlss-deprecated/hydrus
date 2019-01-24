@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Hydrus::GenericObject, type: :model do
-  before(:each) do
+  before do
     @cannot_do_regex = /\ACannot perform action/
     @go      = Hydrus::GenericObject.new
     @apo_pid = 'druid:oo000oo0002'
@@ -388,10 +388,26 @@ end
     end
   end
 
-  it 'publish_metadata() should do nothing if app is not configured to start common assembly' do
-    allow(@go).to receive(:should_start_assembly_wf).and_return(false)
-    expect(@go).not_to receive(:is_assemblable)
-    @go.publish_metadata
+  describe '#publish_metadata' do
+    let(:object) { Hydrus::GenericObject.new(pid: pid) }
+    let(:pid) { 'druid:oo000oo0003' }
+
+    context 'when not configured to start common assembly' do
+      it 'returns without publishing' do
+        allow(object).to receive(:should_start_assembly_wf).and_return(false)
+        expect(object).not_to receive(:is_assemblable)
+        object.publish_metadata
+      end
+    end
+
+    context 'when configured to start common assembly' do
+      it 'invokes the client to publish' do
+        allow(object).to receive(:should_start_assembly_wf).and_return(true)
+        allow(object).to receive(:is_assemblable).and_return(true)
+        expect(Dor::Services::Client.object(pid)).to receive(:publish)
+        object.publish_metadata
+      end
+    end
   end
 
   describe 'current_user' do
