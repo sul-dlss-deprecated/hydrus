@@ -1,6 +1,6 @@
 development:
   adapter: solr
-  url: http://localhost:8984/solr/hydrus
+  url: http://localhost:8984/solr/hydrus-test
 
 test:
   adapter: solr
