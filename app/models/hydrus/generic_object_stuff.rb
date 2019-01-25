@@ -116,8 +116,8 @@ module Hydrus::GenericObjectStuff
   #   - The save() method in Hydrus invokes publish_metadata().
   def publish_metadata
     return unless should_start_assembly_wf
-    cannot_do(:publish_metadata) unless is_assemblable()
-    publish_metadata_remotely
+    cannot_do(:publish_metadata) unless is_assemblable
+    Dor::Services::Client.object(pid).publish
   end
 
   # Takes a list of fields that were changed by the user and
