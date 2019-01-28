@@ -191,7 +191,7 @@ class Hydrus::Item < Hydrus::GenericObject
       # Store a copy of the current license and visibility.
       # We use those values when enforcing subsequent-version validations.
       self.prior_license = license
-      self.prior_visibility = visibility
+      self.prior_visibility = visibility.first
       # Log the event.
       events.add_event('hydrus', @current_user, 'New version opened')
     end

@@ -1078,12 +1078,34 @@ RSpec.describe Hydrus::Item, type: :model do
     end
   end
 
-  describe 'open_new_version()' do
+  describe '#open_new_version' do
     # More significant testing is done at the integration level.
+    context 'when the item has not been accessioned' do
+      before do
+        allow(item).to receive(:is_accessioned).and_return(false)
+      end
 
-    it 'should raise exception if item is initial version' do
-      allow(item).to receive(:is_accessioned).and_return(false)
-      expect { item.open_new_version }.to raise_exception(@cannot_do_regex)
+      it 'raises an exception' do
+        expect { item.open_new_version }.to raise_exception(@cannot_do_regex)
+      end
+    end
+
+    context 'when it has been accessioned' do
+      let(:object_client) { instance_double(Dor::Services::Client::Object, open_new_version: true) }
+
+      before do
+        item.submitted_for_publish_time = HyTime.now_datetime
+        item.visibility = 'stanford'
+        allow(item).to receive(:is_accessioned).and_return(true)
+        allow(Dor::Services::Client).to receive(:object).and_return(object_client)
+        allow(item).to receive(:uncomplete_workflow_steps)
+      end
+
+      it 'calls the client and sets prior_visibility to the old visibility value' do
+        item.open_new_version
+        expect(object_client).to have_received(:open_new_version)
+        expect(item.prior_visibility).to eq 'stanford'
+      end
     end
   end
 
