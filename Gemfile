@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~> 4.2.9'
+gem 'rails', '~> 5.2'
 
 gem 'config'
 gem 'devise', '~> 4.0'
@@ -27,6 +27,7 @@ gem 'cancancan', '~> 1.17'
 # Use okcomputer to monitor the application
 gem 'okcomputer'
 
+gem 'bootsnap'
 gem 'sass-rails',     '~> 5.0'
 gem 'coffee-rails',   '~> 4.2'
 gem 'uglifier', '>= 1.0.3'
@@ -48,6 +49,7 @@ group :development, :test do
   gem 'pry'
   gem 'rubocop', '~> 0.58.1'
   # gem 'rubocop-rspec', '~> 1.5'
+  gem 'rails-controller-testing'
 end
 
 group :production do

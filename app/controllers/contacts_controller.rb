@@ -1,7 +1,7 @@
 class ContactsController < ApplicationController
   skip_authorization_check
 
-  before_filter :form_params
+  before_action :form_params
 
   def show
     @page_title = 'Contact Us'

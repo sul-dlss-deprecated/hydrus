@@ -135,7 +135,7 @@ module ApplicationHelper
   end
 
   def view_path_from_model(model)
-    model.class.to_s.pluralize.parameterize('_')
+    model.class.to_s.pluralize.parameterize(separator: '_')
   end
 
   def select_status_checkbox_icon(field)

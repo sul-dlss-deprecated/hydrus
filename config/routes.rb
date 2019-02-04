@@ -1,4 +1,4 @@
-Hydrus::Application.routes.draw do
+Rails.application.routes.draw do
   root to: 'catalog#home'
   get 'catalog' => 'catalog#index', :as => :catalog_index
 

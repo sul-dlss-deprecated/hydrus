@@ -21,6 +21,7 @@ require 'rspec/matchers' # req by equivalent-xml custom matcher `be_equivalent_t
 require 'equivalent-xml'
 require 'equivalent-xml/rspec_matchers'
 require 'factory_bot'
+require 'hydrus'
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are

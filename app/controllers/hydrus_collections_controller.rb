@@ -1,7 +1,7 @@
 class HydrusCollectionsController < ApplicationController
-  before_filter :authenticate_user!
-  before_filter :setup_attributes, except: [:index, :new, :list_all]
-  before_filter :redirect_if_not_correct_object_type, only: [:edit, :show]
+  before_action :authenticate_user!
+  before_action :setup_attributes, except: [:index, :new, :list_all]
+  before_action :redirect_if_not_correct_object_type, only: [:edit, :show]
 
   def index
     authorize! :index, Hydrus::Collection
@@ -56,7 +56,8 @@ class HydrusCollectionsController < ApplicationController
     ####
 
     if params.has_key?('hydrus_collection')
-      @fobj.attributes = params['hydrus_collection']
+      @fobj.attributes = params['hydrus_collection'].to_unsafe_hash
+
     end
 
     ####
@@ -119,7 +120,7 @@ class HydrusCollectionsController < ApplicationController
     @fobj.descMetadata.remove_node(params[:term], params[:term_index])
     @fobj.save
     respond_to do |want|
-      want.html { redirect_to :back }
+      want.html { redirect_back fallback_location: root_path }
       want.js
     end
   end

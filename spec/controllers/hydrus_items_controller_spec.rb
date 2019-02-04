@@ -44,7 +44,7 @@ describe HydrusItemsController, type: :controller do
   describe 'Show Action', integration: true do
     it 'should redirect when not logged in' do
       @pid = 'druid:oo000oo0001'
-      get(:show, id: @pid)
+      get :show, params: { id: @pid }
       expect(response).to redirect_to new_user_session_path
     end
   end
@@ -54,7 +54,7 @@ describe HydrusItemsController, type: :controller do
     let(:archivist1) { create :archivist1 }
     it 'should restrict access to non authed user' do
       sign_in(user)
-      get(:new, collection: 'druid:oo000oo0003')
+      get :new, params: { collection: 'druid:oo000oo0003' }
       expect(response).to redirect_to(root_path)
       expect(flash[:alert]).to eq('You are not authorized to access this page.')
     end
@@ -77,7 +77,7 @@ describe HydrusItemsController, type: :controller do
 
       it 'should update the file successfully' do
         sign_in(user)
-        put :update, :id => @pid, 'files' => [@file]
+        put :update, params: { :id => @pid, 'files' => [@file] }
         expect(response).to redirect_to(hydrus_item_path(@pid))
         expect(flash[:notice]).to match(/Your changes have been saved/)
         expect(flash[:notice]).to match(/&#39;fixture.html&#39; uploaded/)
@@ -102,15 +102,15 @@ describe HydrusItemsController, type: :controller do
         expect(mock_coll).to receive(:items_list)
         allow(Hydrus::Collection).to receive(:find).and_return(mock_coll)
         controller.current_ability.can :read, mock_coll
-        get :index, hydrus_collection_id: '1234'
-        expect(response).to be_success
+        get :index, params: { hydrus_collection_id: '1234' }
+        expect(response).to be_successful
         expect(assigns(:fobj)).to eq(mock_coll)
       end
 
       it 'should restrict access to authorized users' do
         sign_in(user)
         allow(Hydrus::Collection).to receive(:find).and_return(double('', :current_user= => nil))
-        get :index, hydrus_collection_id: '12345'
+        get :index, params: { hydrus_collection_id: '12345' }
         expect(flash[:alert]).to eq('You are not authorized to access this page.')
         expect(response).to redirect_to(root_path)
       end
@@ -121,7 +121,7 @@ describe HydrusItemsController, type: :controller do
     let(:user) { create :user }
     it 'raises an exception if the user lacks the required permissions' do
       sign_in(user)
-      post(:publish_directly, id: 'druid:oo000oo0001')
+      post :publish_directly, params: { id: 'druid:oo000oo0001' }
       expect(flash[:alert]).to eq('You are not authorized to access this page.')
       expect(response).to redirect_to(root_path)
     end
@@ -131,7 +131,7 @@ describe HydrusItemsController, type: :controller do
     let(:user) { create :user }
     it 'raises an exception if the user lacks the required permissions' do
       sign_in(user)
-      post(:submit_for_approval, id: 'druid:oo000oo0001')
+      post :submit_for_approval, params: { id: 'druid:oo000oo0001' }
       expect(flash[:alert]).to eq('You are not authorized to access this page.')
       expect(response).to redirect_to(root_path)
     end
@@ -141,7 +141,7 @@ describe HydrusItemsController, type: :controller do
     let(:user) { create :user }
     it 'raises an exception if the user lacks the required permissions' do
       sign_in(user)
-      post(:approve, id: 'druid:oo000oo0001')
+      post :approve, params: { id: 'druid:oo000oo0001' }
       expect(flash[:alert]).to eq('You are not authorized to access this page.')
       expect(response).to redirect_to(root_path)
     end
@@ -151,7 +151,7 @@ describe HydrusItemsController, type: :controller do
     let(:user) { create :user }
     it 'raises an exception if the user lacks the required permissions' do
       sign_in(user)
-      post(:disapprove, id: 'druid:oo000oo0001')
+      post :disapprove, params: { id: 'druid:oo000oo0001' }
       expect(flash[:alert]).to eq('You are not authorized to access this page.')
       expect(response).to redirect_to(root_path)
     end
@@ -161,7 +161,7 @@ describe HydrusItemsController, type: :controller do
     let(:user) { create :user }
     it 'raises an exception if the user lacks the required permissions' do
       sign_in(user)
-      post(:resubmit, id: 'druid:oo000oo0001')
+      post :resubmit, params: { id: 'druid:oo000oo0001' }
       expect(flash[:alert]).to eq('You are not authorized to access this page.')
       expect(response).to redirect_to(root_path)
     end
@@ -171,7 +171,7 @@ describe HydrusItemsController, type: :controller do
     let(:user) { create :user }
     it 'raises an exception if the user lacks the required permissions' do
       sign_in(user)
-      post(:open_new_version, id: 'druid:oo000oo0001')
+      post :open_new_version, params: { id: 'druid:oo000oo0001' }
       expect(flash[:alert]).to eq('You are not authorized to access this page.')
       expect(response).to redirect_to(root_path)
     end

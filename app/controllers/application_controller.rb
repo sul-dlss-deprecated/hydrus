@@ -15,15 +15,6 @@ class ApplicationController < ActionController::Base
   helper_method :to_bool
   helper_method :current_user
 
-  # This is a backport from Rails 5 and can be removed when we use Rails 5
-  def redirect_back(fallback_location:, **args)
-    if referer = request.headers['Referer']
-      redirect_to referer, **args
-    else
-      redirect_to fallback_location, **args
-    end
-  end
-
   # When on an item/collection page, check druid against object type
   # and redirect to correct controller if needed.
   def redirect_if_not_correct_object_type
