@@ -21,7 +21,7 @@ gem 'rubydora', '~> 2.1'
 gem 'bagit', '~> 0.4'
 gem 'dor-workflow-service'
 gem 'net-http-persistent', '~> 2.9' # https://github.com/sul-dlss/dor-workflow-service/issues/44
-gem 'blacklight', '~> 5.19'
+gem 'blacklight', '~> 6.19'
 gem 'cancancan', '~> 1.17'
 
 # Use okcomputer to monitor the application
