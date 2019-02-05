@@ -1,4 +1,4 @@
-class CreateHydrusObjectFiles < ActiveRecord::Migration
+class CreateHydrusObjectFiles < ActiveRecord::Migration[4.2]
   def change
     create_table(:object_files) do |t|
       t.string :pid, null: false, default: ''
