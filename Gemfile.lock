@@ -577,7 +577,7 @@ DEPENDENCIES
   rubydora (~> 2.1)
   sass-rails (~> 5.0)
   simplecov
-  sqlite3
+  sqlite3 (~> 1.3.13)
   uglifier (>= 1.0.3)
   validates_email_format_of
   whenever (~> 0.9)
