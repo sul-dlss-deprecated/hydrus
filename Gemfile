@@ -34,7 +34,7 @@ gem 'uglifier', '>= 1.0.3'
 
 group :development, :test do
   gem 'factory_bot_rails'
-  gem 'sqlite3'
+  gem 'sqlite3', '~> 1.3.13'
   gem 'rspec-rails', '~> 3.1'
   gem 'capybara', '~> 2.18'
   gem 'simplecov'
