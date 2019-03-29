@@ -1,6 +1,4 @@
 class HydrusCollectionsController < ApplicationController
-  include Hydra::Controller::ControllerBehavior
-
   before_filter :authenticate_user!
   before_filter :setup_attributes, except: [:index, :new, :list_all]
   before_filter :redirect_if_not_correct_object_type, only: [:edit, :show]
