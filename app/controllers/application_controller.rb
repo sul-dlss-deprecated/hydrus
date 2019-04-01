@@ -5,6 +5,9 @@ class ApplicationController < ActionController::Base
 
   check_authorization unless: :devise_controller?
 
+  # This can be removed after upgrading to Blacklight 7
+  skip_after_action :discard_flash_if_xhr
+
   rescue_from CanCan::AccessDenied do |exception|
     redirect_to root_url, alert: exception.message
   end

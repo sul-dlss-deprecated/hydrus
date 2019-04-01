@@ -9,9 +9,6 @@ class CatalogController < ApplicationController
   before_filter :enforce_index_permissions, only: :index
   before_filter :enforce_viewing_context_for_show_requests, only: :show
 
-  # Delegate to the SearchBuilder by setting to true. This is the default in BL 6.0
-  CatalogController.search_params_logic = true
-
   helper_method :has_search_parameters?
 
   configure_blacklight do |config|
