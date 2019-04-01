@@ -102,12 +102,14 @@ RSpec.describe Hydrus::SolrQueryable, type: :model do
     expect(Set.new(h.keys)).to eq(Set.new([:rows, :fl, :q, :fq]))
   end
 
-  it 'can exercise get_druids_from_response()' do
-    k    = 'objectId_ssim'
-    exp  = [12, 34, 56]
-    docs = exp.map { |n| { k => [n] } }
-    resp = double('resp', docs: docs)
-    expect(instance.get_druids_from_response(resp)).to eq(exp)
+  describe '#get_druids_from_response' do
+    let(:resp_hash) { { 'docs' => exp.map { |n| { 'objectId_ssim' => [n] } } } }
+    let(:resp) { instance_double(RSolr::HashWithResponse, fetch: resp_hash) }
+    let(:exp) { [12, 34, 56] }
+
+    it 'returns the document identifiers' do
+      expect(instance.get_druids_from_response(resp)).to eq(exp)
+    end
   end
 
   # Note: These are integration tests.
@@ -156,7 +158,7 @@ RSpec.describe Hydrus::SolrQueryable, type: :model do
         fake_pids << 'fake_pid'
       end
       h = instance.squery_item_counts_of_collections(fake_pids)
-      # this raises an exception due to receiving a 413 error from solr unless the parameters are posted
+      # this raises a RSolr::Error::Http exception due to receiving a 414 error from solr unless the parameters are posted
       expect { resp, sdocs = instance.issue_solr_query(h) }.not_to raise_error
     end
   end
