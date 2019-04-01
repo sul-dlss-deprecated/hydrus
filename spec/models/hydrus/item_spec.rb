@@ -391,66 +391,96 @@ RSpec.describe Hydrus::Item, type: :model do
   end
 
   describe 'embarg_visib=()' do
+    let(:embargo_date) { '2012-02-28T08:00:00+00:00' }
+
     before do
-      @edate = '2012-02-28T08:00:00+00:00'
       # This enables the tests to run in a timezone other than Pacific.
-      allow(HyTime).to receive(:datetime).with('2012-02-28', from_localzone: true).and_return(@edate)
+      allow(HyTime).to receive(:datetime).with('2012-02-28', from_localzone: true).and_return(embargo_date)
     end
-    let(:xml) do
-      # XML snippets for various <access> nodes.
-      ed = "<embargoReleaseDate>#{@edate}</embargoReleaseDate><none/>"
 
-      twpc = "         <twentyPctVisibilityStatus/>
-         <twentyPctVisibilityReleaseDate/>"
+    let(:machine_world) { '<machine><world/></machine>' }
+    let(:machine_stanford) { '<machine><group>stanford</group></machine>' }
+    let(:discover_world) { %Q[<access type="discover">#{machine_world}</access>] }
+    let(:read_stanford) { %Q[<access type="read">#{machine_stanford}</access>] }
+    let(:read_world) { %Q[<access type="read">#{machine_world}</access>] }
+    let(:rights_metadata_start) { %Q[<rightsMetadata>] }
+    let(:rights_metadata_end) {
+      '<use><human type="useAndReproduction"/></use>' +
+        '</rightsMetadata>'
+    }
 
-      mw       = '<machine><world/></machine>'
-      ms       = '<machine><group>stanford</group></machine>'
-      me       = "<machine>#{ed}</machine>"
-      rd_world = %Q[<access type="read">#{mw}</access>]
-      rd_stanf = %Q[<access type="read">#{ms}</access>]
-      rd_emb   = %Q[<access type="read">#{me}</access>]
-      di_world = %Q[<access type="discover">#{mw}</access>]
-      # XML snippets for embargoMetadata.
-      em_date  = %Q[<releaseDate>#{@edate}</releaseDate>]
-      em_start = %Q[<embargoMetadata><status>embargoed</status>#{em_date}]
-      em_end   = %Q[</embargoMetadata>]
-      em_world = %Q[<releaseAccess>#{di_world}#{rd_world}</releaseAccess>]
-      em_stanf = %Q[<releaseAccess>#{di_world}#{rd_stanf}</releaseAccess>]
-      # XML snippets for rightsMetadata.
-      rm_start = %Q[<rightsMetadata>]
-      rm_end   = '<use><human type="useAndReproduction"/></use>' +
-                 '</rightsMetadata>'
-      # Assemble expected Nokogiri XML for embargoMetadata and rightsMetadata.
+    let(:item) { Hydrus::Item.new }
+
+    let(:embargo_visibility_attributes) do
       {
-        em_world: noko_doc([em_start, em_world, twpc, em_end].join),
-        em_stanf: noko_doc([em_start, em_stanf, twpc, em_end].join),
-        rm_emb: noko_doc([rm_start, di_world, rd_emb, rm_end].join),
-        rm_world: noko_doc([rm_start, di_world, rd_world, rm_end].join),
-        rm_stanf: noko_doc([rm_start, di_world, rd_stanf, rm_end].join),
+        'embargoed'  => embargoed,
+        'date'       => date,
+        'visibility' => visibility
       }
     end
 
-    it 'can exercise all combinations of is_embargoed and visibility to get expected XML' do
-      # All permutations of embargoed = yes|no and visibility = world|stanford,
-      # along with the expected rightsMetadata and embargoMetadata XML keys.
-      tests = [
-        [true,  'world',    :rm_emb,   :em_world],
-        [true,  'stanford', :rm_emb,   :em_stanf],
-        [false, 'world',    :rm_world, nil],
-        [false, 'stanford', :rm_stanf, nil],
-      ]
-      dt = HyTime.date_display(@edate)
-      tests.each do |emb, vis, exp_rm, exp_em|
-        h = {
-          'embargoed'  => emb ? 'yes' : 'no',
-          'date'       => emb ? dt    : '',
-          'visibility' => vis,
-        }
-        item = Hydrus::Item.new
-        expect(item.embargoMetadata).to receive(:delete) unless emb
-        item.embarg_visib = h
-        expect(item.rightsMetadata.ng_xml).to  be_equivalent_to(xml[exp_rm])
-        expect(item.embargoMetadata.ng_xml).to be_equivalent_to(xml[exp_em]) if emb
+    context 'when is_embargoed is true' do
+      let(:embargoed) { 'yes' }
+      let(:date) { HyTime.date_display(embargo_date) }
+
+      let(:machine_embargo) { %Q[<machine><embargoReleaseDate>#{embargo_date}</embargoReleaseDate><none/></machine>] }
+      let(:read_embargo) { %Q[<access type="read">#{machine_embargo}</access>] }
+
+      let(:twenty_percent) { '<twentyPctVisibilityStatus/><twentyPctVisibilityReleaseDate/>' }
+      let(:em_end) { %Q[</embargoMetadata>] }
+      let(:em_date) { %Q[<releaseDate>#{embargo_date}</releaseDate>] }
+      let(:em_world) { %Q[<releaseAccess>#{discover_world}#{read_world}</releaseAccess>] }
+      let(:em_stanf) { %Q[<releaseAccess>#{discover_world}#{read_stanford}</releaseAccess>] }
+      let(:em_start) { %Q[<embargoMetadata><status>embargoed</status>#{em_date}] }
+
+      let(:rm_emb) { noko_doc([rights_metadata_start, discover_world, read_embargo, rights_metadata_end].join) }
+
+      context 'and visibility is world' do
+        let(:visibility) { 'world' }
+        let(:expected_em) { noko_doc([em_start, em_world, twenty_percent, em_end].join) }
+
+        it 'returns the expected XML' do
+          item.embarg_visib = embargo_visibility_attributes
+          expect(item.rightsMetadata.ng_xml).to  be_equivalent_to(rm_emb)
+          expect(item.embargoMetadata.ng_xml).to be_equivalent_to(expected_em)
+        end
+      end
+
+      context 'and visibility is stanford' do
+        let(:visibility) { 'stanford' }
+        let(:expected_em) { noko_doc([em_start, em_stanf, twenty_percent, em_end].join) }
+
+        it 'returns the expected XML' do
+          item.embarg_visib = embargo_visibility_attributes
+          expect(item.rightsMetadata.ng_xml).to  be_equivalent_to(rm_emb)
+          expect(item.embargoMetadata.ng_xml).to be_equivalent_to(expected_em)
+        end
+      end
+    end
+
+    context 'when is_embargoed is false' do
+      let(:embargoed) { 'no' }
+      let(:date) { '' }
+
+      context 'and visibility is world' do
+        let(:visibility) { 'world' }
+        let(:rm_world) { noko_doc([rights_metadata_start, discover_world, read_world, rights_metadata_end].join) }
+        it 'returns the expected XML' do
+          expect(item.embargoMetadata).to receive(:delete)
+          item.embarg_visib = embargo_visibility_attributes
+          expect(item.rightsMetadata.ng_xml).to be_equivalent_to(rm_world)
+        end
+      end
+
+      context 'and visibilty is stanford' do
+        let(:visibility) { 'stanford' }
+        let(:rm_stanf) { noko_doc([rights_metadata_start, discover_world, read_stanford, rights_metadata_end].join) }
+
+        it 'returns the expected XML' do
+          expect(item.embargoMetadata).to receive(:delete)
+          item.embarg_visib = embargo_visibility_attributes
+          expect(item.rightsMetadata.ng_xml).to be_equivalent_to(rm_stanf)
+        end
       end
     end
   end
