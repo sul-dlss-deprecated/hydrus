@@ -296,6 +296,10 @@ GEM
     letter_opener (1.7.0)
       launchy (~> 2.2)
     link_header (0.0.8)
+    listen (3.1.5)
+      rb-fsevent (~> 0.9, >= 0.9.4)
+      rb-inotify (~> 0.9, >= 0.9.7)
+      ruby_dep (~> 1.2)
     loofah (2.2.3)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
@@ -451,6 +455,7 @@ GEM
       unicode-display_width (~> 1.0, >= 1.0.1)
     ruby-cache (0.3.0)
     ruby-progressbar (1.10.0)
+    ruby_dep (1.5.0)
     rubydora (2.1.0)
       activemodel (>= 4.2.10)
       activesupport
@@ -485,6 +490,11 @@ GEM
       nokogiri
       stomp
       xml-simple
+    spring (2.0.2)
+      activesupport (>= 4.2)
+    spring-watcher-listen (2.0.1)
+      listen (>= 2.7, < 4.0)
+      spring (>= 1.2, < 3.0)
     sprockets (3.7.2)
       concurrent-ruby (~> 1.0)
       rack (> 1, < 3)
@@ -571,6 +581,7 @@ DEPENDENCIES
   jquery-rails
   launchy
   letter_opener
+  listen (>= 3.0.5, < 3.2)
   mysql2 (~> 0.4.5)
   net-http-persistent (~> 2.9)
   okcomputer
@@ -583,6 +594,8 @@ DEPENDENCIES
   rubydora (~> 2.1)
   sass-rails (~> 5.0)
   simplecov
+  spring
+  spring-watcher-listen (~> 2.0.0)
   sqlite3 (~> 1.3.13)
   uglifier (>= 1.0.3)
   validates_email_format_of
