@@ -64,5 +64,4 @@ group :deployment do
 end
 
 gem 'honeybadger'
-gem 'rsolr-ext'
 gem 'rsolr', '~> 2.2'
