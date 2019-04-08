@@ -70,8 +70,8 @@ module Hydrus::SolrQueryable
 
   # This static version was added specifically to deal with loading the dashboard without instantiating an object.
   def self.issue_solr_query(h)
-    solr_response = solr.find(h)
-    document_list = solr_response.docs.map { |doc| SolrDocument.new(doc, solr_response) }
+    solr_response = solr.post('select', data: h)
+    document_list = solr_response.fetch('response').fetch('docs').map { |doc| SolrDocument.new(doc, solr_response) }
     [solr_response, document_list]
   end
 
@@ -187,11 +187,11 @@ module Hydrus::SolrQueryable
     data
   end
 
-  # Takes a SOLR response.
-  # Returns an array of druids corresponding to the documents.
+  # @param [RSolr::HashWithResponse]
+  # @return [Array<String>] an array of druids corresponding to the documents.
   def get_druids_from_response(resp)
     k = 'objectId_ssim'
-    resp.docs.map { |doc| doc[k].first }
+    resp.fetch('response').fetch('docs').map { |doc| doc[k].first }
   end
 
   # Takes a SOLR response and a hash of field remappings.
@@ -203,7 +203,7 @@ module Hydrus::SolrQueryable
   # When retrieving values from the SOLR documents, only the first
   # values for each key is retained.
   def get_fields_from_response(resp, fields)
-    resp.docs.map { |doc|
+    resp.fetch('response').fetch('docs').map { |doc|
       h = {}
       fields.each { |solr_doc_key, remapped_key|
         d = doc[solr_doc_key]

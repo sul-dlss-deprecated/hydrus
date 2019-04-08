@@ -65,4 +65,4 @@ end
 
 gem 'honeybadger'
 gem 'rsolr-ext'
-gem 'rsolr', '~> 1.1'
+gem 'rsolr', '~> 2.2'

@@ -472,11 +472,14 @@ describe Hydrus::Collection, type: :model do
       expect(@HC.all_hydrus_collections).to eq(exp)
     end
 
-    it 'can exercise get_facet_counts_from_response()' do
-      exp  = 1234
-      fcs  = { 'facet_pivot' => { a: exp } }
-      resp = double('resp', facet_counts: fcs)
-      expect(@HC.get_facet_counts_from_response(resp)).to eq(exp)
+    describe '#get_facet_counts_from_response' do
+      let(:resp_hash) { { 'facet_pivot' => { a: exp } } }
+      let(:resp) { instance_double(RSolr::HashWithResponse, fetch: resp_hash) }
+      let(:exp) { 1234 }
+
+      it 'returns the document identifiers' do
+        expect(@HC.get_facet_counts_from_response(resp)).to eq(exp)
+      end
     end
 
     it 'can exercise item_counts_with_labels()' do

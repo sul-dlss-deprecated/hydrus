@@ -686,11 +686,11 @@ class Hydrus::Collection < Dor::Collection
     counts
   end
 
-  # Takes a SOLR response.
+  # @param [RSolr::HashWithResponse]
   # Returns an array of hashes containing the needed facet counts.
   # Written as a separate method for testing purposes.
   def self.get_facet_counts_from_response(resp)
-    resp.facet_counts['facet_pivot'].values.first
+    resp.fetch('facet_counts').fetch('facet_pivot').values.first
   end
 
   # Returns an array-of-arrays containing the collection's @item_counts
