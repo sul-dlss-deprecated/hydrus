@@ -1,4 +1,5 @@
 # -*- encoding : utf-8 -*-
+
 require 'blacklight/catalog'
 
 class CatalogController < ApplicationController
@@ -52,8 +53,8 @@ class CatalogController < ApplicationController
     # previously. Simply remove these lines if you'd rather use Solr request
     # handler defaults, or have no facets.
     config.default_solr_params[:'facet.field'] = config.facet_fields.keys
-    #use this instead if you don't want to query facets marked :show=>false
-    #config.default_solr_params[:'facet.field'] = config.facet_fields.select{ |k, v| v[:show] != false}.keys
+    # use this instead if you don't want to query facets marked :show=>false
+    # config.default_solr_params[:'facet.field'] = config.facet_fields.select{ |k, v| v[:show] != false}.keys
 
     # solr fields to be displayed in the index (search results) view
     #   The ordering of the field names is the order of the display
@@ -89,7 +90,7 @@ class CatalogController < ApplicationController
     # solr request handler? The one set in config[:default_solr_parameters][:qt],
     # since we aren't specifying it otherwise.
 
-#    config.add_search_field 'text', :label => 'Everywhere'
+    #    config.add_search_field 'text', :label => 'Everywhere'
 
     # "sort results by" select (pulldown)
     # label in pulldown is followed by the name of the SOLR field to sort by and
@@ -135,7 +136,6 @@ class CatalogController < ApplicationController
     end
 
     super
-
   end
 
   private

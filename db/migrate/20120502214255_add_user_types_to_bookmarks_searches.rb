@@ -1,4 +1,5 @@
 # -*- encoding : utf-8 -*-
+
 class AddUserTypesToBookmarksSearches < ActiveRecord::Migration
   def self.up
     add_column :searches, :user_type, :string

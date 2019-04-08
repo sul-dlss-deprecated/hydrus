@@ -11,12 +11,12 @@ def dashboard(*args)
   # View: display results.
   collections.each do |hc|
     ap({
-      coll_pid: hc.pid,
-      apo_pid: hc.apo.pid,
-      title: hc.title,
-      roles: hc.apo.roles_of_person(user),
-      item_counts: hc.item_counts,
-    })
+         coll_pid: hc.pid,
+         apo_pid: hc.apo.pid,
+         title: hc.title,
+         roles: hc.apo.roles_of_person(user),
+         item_counts: hc.item_counts,
+       })
   end
 end
 

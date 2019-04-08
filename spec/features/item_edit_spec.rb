@@ -85,7 +85,7 @@ describe('Item edit', type: :request, integration: true) do
       expect(@hi.descMetadata.originInfo.dateCreated.nodeset.first['encoding']).to eq('w3cdtf')
       expect(@hi.descMetadata.originInfo.dateCreated.nodeset.first['qualifier']).to eq('approximate')
 
-      #check for duplicate nodes hannah reported
+      # check for duplicate nodes hannah reported
       expect(@hi.descMetadata.originInfo.length).to eq(1)
     end
     it 'should edit a date range' do
@@ -538,10 +538,9 @@ describe('Item edit', type: :request, integration: true) do
 
       # Check embargoMD and rightsMD: initial.
       check_emb_vis_lic(@hi,
-        embargo_date: '',
-        visibility: 'world',
-        license_code: lic,
-      )
+                        embargo_date: '',
+                        visibility: 'world',
+                        license_code: lic,)
 
       # Visit edit page: set an embargo date and change visibility.
       should_visit_edit_page(@hi)
@@ -557,10 +556,9 @@ describe('Item edit', type: :request, integration: true) do
       # Check embargoMD and rightsMD: after setting an embargo date.
       @hi = Hydrus::Item.find(@hi.pid)
       check_emb_vis_lic(@hi,
-        embargo_date: later_dt,
-        visibility: 'stanford',
-        license_code: lic,
-      )
+                        embargo_date: later_dt,
+                        visibility: 'stanford',
+                        license_code: lic,)
 
       # Visit edit page: remove embargo.
       should_visit_edit_page(@hi)
@@ -574,10 +572,9 @@ describe('Item edit', type: :request, integration: true) do
       # Check embargoMD and rightsMD: after removing embargo.
       @hi = Hydrus::Item.find(@hi.pid)
       check_emb_vis_lic(@hi,
-        embargo_date: '',
-        visibility: 'stanford',
-        license_code: lic,
-      )
+                        embargo_date: '',
+                        visibility: 'stanford',
+                        license_code: lic,)
     end
   end
 

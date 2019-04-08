@@ -9,7 +9,6 @@ module Hydrus::SolrQueryable
   ####
 
   def self.add_gated_discovery(solr_parameters, apo_pids, user)
-
     h = { fq: [] }
     add_governed_by_filter(h, apo_pids)
     add_involved_user_filter(h, user)
@@ -68,7 +67,8 @@ module Hydrus::SolrQueryable
   def issue_solr_query(*args)
     Hydrus::SolrQueryable.issue_solr_query *args
   end
-  #This static version was added specifically to deal with loading the dashboard without instantiating an object.
+
+  # This static version was added specifically to deal with loading the dashboard without instantiating an object.
   def self.issue_solr_query(h)
     solr_response = solr.find(h)
     document_list = solr_response.docs.map { |doc| SolrDocument.new(doc, solr_response) }
@@ -111,7 +111,6 @@ module Hydrus::SolrQueryable
   end
 
   def squery_apo_roles(apo_druid)
-
   end
 
   # Takes an array of APO druids.

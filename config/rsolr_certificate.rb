@@ -20,11 +20,11 @@ class RSolr::ClientCert::Connection
     begin
       RestClient.proxy = request_context[:proxy]
       resource = RestClient::Resource.new(
-      request_context[:uri].to_s,
-      open_timeout: request_context[:open_timeout],
-      timeout: request_context[:read_timeout],
-      ssl_client_cert: ssl_client_cert,
-      ssl_client_key: ssl_client_key
+        request_context[:uri].to_s,
+        open_timeout: request_context[:open_timeout],
+        timeout: request_context[:read_timeout],
+        ssl_client_cert: ssl_client_cert,
+        ssl_client_key: ssl_client_key
       )
       result = {}
       if request_context[:method] == :get

@@ -68,9 +68,9 @@ describe Hydrus::Responsible, type: :model do
 
   it 'roles_of_person() should return expected roles' do
     expect(@obj.roles_of_person('archivist3')).to eq(Set.new(%w(
-      hydrus-collection-reviewer
-      hydrus-collection-item-depositor
-    )))
+                                                               hydrus-collection-reviewer
+                                                               hydrus-collection-item-depositor
+                                                             )))
     expect(@obj.roles_of_person('xxxxx')).to eq(Set.new)
   end
 

@@ -18,24 +18,27 @@ module Hydrus::GenericObjectStuff
       name: 'rightsMetadata',
       type: Hydrus::RightsMetadataDS,
       label: 'Rights Metadata',
-      control_group: 'M')
+      control_group: 'M'
+    )
 
     has_metadata(
       name: 'descMetadata',
       type: Hydrus::DescMetadataDS,
       label: 'Descriptive Metadata',
-      control_group: 'M')
+      control_group: 'M'
+    )
 
     has_metadata(
       name: 'hydrusProperties',
       type: Hydrus::HydrusPropertiesDS,
       label: 'Hydrus Properties',
-      control_group: 'X')
+      control_group: 'X'
+    )
 
     setup_delegations(
       # [:METHOD_NAME,              :uniq, :at... ]
       'descMetadata' => [
-        [:title,                    true,  :main_title],
+        [:title,                    true, :main_title],
         [:abstract,                 true],
         [:related_item_title,       false, :relatedItem, :titleInfo, :title],
         [:contact,                  true],
@@ -52,7 +55,7 @@ module Hydrus::GenericObjectStuff
         [:object_version,                     true],
       ],
       'rightsMetadata' => [
-        [:rmd_embargo_release_date, true,  :read_access, :machine, :embargo_release_date],
+        [:rmd_embargo_release_date, true, :read_access, :machine, :embargo_release_date],
         [:terms_of_use,             true,],
       ],
     )

@@ -61,7 +61,7 @@ def check_emb_vis_lic(obj, opts)
   rd     = '//access[@type="read"]/machine'
   rm     = obj.rightsMetadata
   em     = obj.embargoMetadata
-  is_emb = (obj.class ==Hydrus::Item && obj.is_embargoed)
+  is_emb = (obj.class == Hydrus::Item && obj.is_embargoed)
 
   # Consistency between is_embargoed() and testing expectations.
   expect(opts[:embargo_date].blank?).to eq(!is_emb)

@@ -88,7 +88,7 @@ class Hydrus::GenericObject < Dor::Item
         identityMetadata.add_value(:objectType, 'set')
         identityMetadata.content_will_change!
         descMetadata.ng_xml.search('//mods:mods/mods:typeOfResource', 'mods' => 'http://www.loc.gov/mods/v3').each do |node|
-  				    node['collection'] = 'yes'
+          node['collection'] = 'yes'
         end
       end
     else
@@ -100,7 +100,7 @@ class Hydrus::GenericObject < Dor::Item
         descMetadata.typeOfResource = 'text'
         descMetadata.insert_genre
         descMetadata.genre = 'thesis'
-        #this is messy but I couldnt get OM to do what I needed it to
+        # this is messy but I couldnt get OM to do what I needed it to
         set_genre_authority_to_marc descMetadata
       when 'article'
         descMetadata.typeOfResource = 'text'
@@ -149,9 +149,11 @@ class Hydrus::GenericObject < Dor::Item
       descMetadata.content_will_change!
     end
   end
+
   def set_genre_authority_to_marc descMetadata
     descMetadata.ng_xml.search('//mods:genre', 'mods' => 'http://www.loc.gov/mods/v3').first['authority'] = 'marcgt'
   end
+
   def remove_genre_authority descMetadata
     node = descMetadata.ng_xml.search('//mods:genre', 'mods' => 'http://www.loc.gov/mods/v3').first
     node.remove_attribute('authority') if node
@@ -197,17 +199,17 @@ class Hydrus::GenericObject < Dor::Item
         ['No license', 'none'],
       ]],
       ['Creative Commons Licenses', [
-        ['CC BY Attribution'                                 , 'cc-by'],
-        ['CC BY-SA Attribution Share Alike'                  , 'cc-by-sa'],
-        ['CC BY-ND Attribution-NoDerivs'                     , 'cc-by-nd'],
-        ['CC BY-NC Attribution-NonCommercial'                , 'cc-by-nc'],
-        ['CC BY-NC-SA Attribution-NonCommercial-ShareAlike'  , 'cc-by-nc-sa'],
-        ['CC BY-NC-ND Attribution-NonCommercial-NoDerivs'    , 'cc-by-nc-nd'],
+        ['CC BY Attribution', 'cc-by'],
+        ['CC BY-SA Attribution Share Alike', 'cc-by-sa'],
+        ['CC BY-ND Attribution-NoDerivs', 'cc-by-nd'],
+        ['CC BY-NC Attribution-NonCommercial', 'cc-by-nc'],
+        ['CC BY-NC-SA Attribution-NonCommercial-ShareAlike', 'cc-by-nc-sa'],
+        ['CC BY-NC-ND Attribution-NonCommercial-NoDerivs', 'cc-by-nc-nd'],
       ]],
       ['Open Data Commons Licenses', [
-        ['PDDL Public Domain Dedication and License'         , 'pddl'],
-        ['ODC-By Attribution License'                        , 'odc-by'],
-        ['ODC-ODbl Open Database License'                    , 'odc-odbl'],
+        ['PDDL Public Domain Dedication and License', 'pddl'],
+        ['ODC-By Attribution License', 'odc-by'],
+        ['ODC-ODbl Open Database License', 'odc-odbl'],
       ]],
     ]
   end
@@ -313,7 +315,7 @@ class Hydrus::GenericObject < Dor::Item
     is_collection? ? owner : item_depositor_id
   end
 
-  def send_object_returned_email_notification(opts={})
+  def send_object_returned_email_notification(opts = {})
     return if recipients_for_object_returned_email.blank?
     email = HydrusMailer.object_returned(returned_by: @current_user, object: self, item_url: opts[:item_url])
     email.deliver_now unless email.blank?

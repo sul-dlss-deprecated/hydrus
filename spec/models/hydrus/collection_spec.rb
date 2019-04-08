@@ -481,10 +481,10 @@ describe Hydrus::Collection, type: :model do
 
     it 'can exercise item_counts_with_labels()' do
       cs = {
-          'draft'             => 1,
-          'awaiting_approval' => 2,
-          'returned'          => 3,
-          'published'         => 4,
+        'draft' => 1,
+        'awaiting_approval' => 2,
+        'returned'          => 3,
+        'published'         => 4,
       }
       allow(@hc).to receive(:item_counts).and_return(cs)
       exp = [

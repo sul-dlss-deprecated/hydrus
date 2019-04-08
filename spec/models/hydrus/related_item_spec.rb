@@ -62,7 +62,8 @@ describe Hydrus::RelatedItem, type: :model do
     describe '.new_from_node' do
       subject { Hydrus::RelatedItem.new_from_node(related_item_node) }
       context 'Complete record' do
-        let(:related_item_node) { Nokogiri::XML <<-eos
+        let(:related_item_node) {
+          Nokogiri::XML <<-eos
                <relatedItem>
                 <titleInfo>
                   <title>Learn VB in 1 Day</title>
@@ -81,7 +82,8 @@ describe Hydrus::RelatedItem, type: :model do
       end
 
       context 'Record without a title' do
-        let(:related_item_node) { Nokogiri::XML <<-eos
+        let(:related_item_node) {
+          Nokogiri::XML <<-eos
                <relatedItem>
                 <titleInfo>
                 </titleInfo>
@@ -90,7 +92,7 @@ describe Hydrus::RelatedItem, type: :model do
                 </location>
               </relatedItem>
           eos
-       }
+        }
         it 'should have a title and url' do
           expect(subject.title).to eq(subject.url)
           expect(subject.url).to eq('http://example.com')
@@ -98,7 +100,8 @@ describe Hydrus::RelatedItem, type: :model do
       end
 
       context 'Record without a url' do
-        let(:related_item_node) { Nokogiri::XML <<-eos
+        let(:related_item_node) {
+          Nokogiri::XML <<-eos
              <relatedItem>
               <titleInfo>
               </titleInfo>
