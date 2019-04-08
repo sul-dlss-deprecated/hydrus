@@ -238,8 +238,8 @@ describe('Collection create', type: :request, integration: true) do
       expect(hyc.all_hydrus_objects(models: [hya], pids_only: true)).to include(apid)
       expect(hyc.all_hydrus_objects(models: [hyc], pids_only: true)).to include(cpid)
       #   - in workflows
-      expect(wfs.get_workflows(apid)).to eq([hwf])
-      expect(wfs.get_workflows(cpid)).to eq([hwf])
+      expect(wfs.workflows(apid)).to eq([hwf])
+      expect(wfs.workflows(cpid)).to eq([hwf])
       # Delete the collection and its APO.
       expect(hc.is_destroyable).to eq(true)
       click_link 'Discard this collection'
@@ -253,8 +253,8 @@ describe('Collection create', type: :request, integration: true) do
       expect(hyc.all_hydrus_objects(models: [hya], pids_only: true)).not_to include(apid)
       expect(hyc.all_hydrus_objects(models: [hyc], pids_only: true)).not_to include(cpid)
       #   - from workflows
-      expect(wfs.get_workflows(apid)).to eq([])
-      expect(wfs.get_workflows(cpid)).to eq([])
+      expect(wfs.workflows(apid)).to eq([])
+      expect(wfs.workflows(cpid)).to eq([])
     end
   end
 end
