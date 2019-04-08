@@ -58,7 +58,8 @@ module Hydrus::Contentable
       style: conf.cm_style,
       file_attributes: conf.cm_file_attributes,
       auto_labels: false,
-      include_root_xml: false)
+      include_root_xml: false
+    )
   end
 
   def parent_directory

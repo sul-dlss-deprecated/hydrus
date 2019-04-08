@@ -45,14 +45,14 @@ class Hydrus::Collection < Dor::Collection
   attr_accessor :item_counts
 
   setup_delegations(
-  # [:METHOD_NAME,             :uniq,  :at... ]
-  'hydrusProperties' => [
-    [:requires_human_approval, true],
-    [:embargo_option,          true,],
-    [:embargo_terms,           true,],
-    [:license_option,          true,],
-    [:visibility_option,       true,],
-  ],
+    # [:METHOD_NAME,             :uniq,  :at... ]
+    'hydrusProperties' => [
+      [:requires_human_approval, true],
+      [:embargo_option,          true,],
+      [:embargo_terms,           true,],
+      [:license_option,          true,],
+      [:visibility_option,       true,],
+    ],
   )
 
   has_many :hydrus_items, property: :is_member_of_collection, class_name: 'Hydrus::Item'
@@ -87,8 +87,7 @@ class Hydrus::Collection < Dor::Collection
   end
 
   # return a helper array of hashes with just some basic info to build the items list -this allows us to build the item listing view without having to go to Fedora at all and is much faster
-  def items_list(opts={})
-
+  def items_list(opts = {})
     get_num_files = opts[:num_files] || true
 
     items = []
@@ -103,7 +102,6 @@ class Hydrus::Collection < Dor::Collection
       items << { pid: id, num_files: num_files, object_type: object_type, title: title, status_label: status, item_depositor_id: depositor, create_date: create_date }
     end
     items
-
   end
 
   # Creates a new Collection, sets up various defaults, saves and
@@ -207,7 +205,7 @@ class Hydrus::Collection < Dor::Collection
     apo.persons_with_role('hydrus-collection-item-depositor') +
     apo.persons_with_role('hydrus-collection-manager') +
     apo.persons_with_role('hydrus-collection-depositor')
-    ).to_a.join(', ')
+  ).to_a.join(', ')
   end
 
   # Opens the collection.
@@ -272,7 +270,6 @@ class Hydrus::Collection < Dor::Collection
   end
 
   def send_all_role_change_emails
-
     # new depositors get an email if the collection is open
     depositors_before_update = old_self.apo.persons_with_role('hydrus-collection-item-depositor')
     depositors_after_update = self.apo.persons_with_role('hydrus-collection-item-depositor')
@@ -294,7 +291,6 @@ class Hydrus::Collection < Dor::Collection
     viewers_before_update = old_self.apo.persons_with_role('hydrus-collection-viewer')
     viewers_after_update = self.apo.persons_with_role('hydrus-collection-viewer')
     self.send_role_change_email((self.apo.persons_with_role('hydrus-collection-manager') + self.apo.persons_with_role('hydrus-collection-reviewer')).to_a.join(',')) if (reviewers_before_update != reviewers_after_update) || (viewers_before_update != viewers_after_update)
-
   end
 
   def send_role_change_email(recipients)
@@ -531,8 +527,7 @@ class Hydrus::Collection < Dor::Collection
   # Takes a user name.
   # Returns a hash of item counts (broken down by object status) for
   # collections in which the USER plays a role.
-  def self.dashboard_stats(user=nil)
-
+  def self.dashboard_stats(user = nil)
     if user.nil? # if we don't specify a user, we want everything (for an admin), so we can skip APO lookups and go directly to all collections
 
       coll_pids = all_hydrus_collections
@@ -550,13 +545,11 @@ class Hydrus::Collection < Dor::Collection
 
     # Returns the item counts for those collections.
     item_counts_of_collections(coll_pids)
-
   end
 
   # Takes a user name
   # Returns a hash of solr documents, one for each collection (if no user is supplied, you will get everything)
-  def self.dashboard_hash user=nil
-
+  def self.dashboard_hash user = nil
     toret = {}
     h = nil
 
@@ -578,12 +571,11 @@ class Hydrus::Collection < Dor::Collection
   end
 
   # Takes a username, and returns an array of collection hashes suitable for building the dashboard (if no user is supplied, you will get everything)
-  def self.collections_hash(current_user=nil)
-
+  def self.collections_hash(current_user = nil)
     stats = Hydrus::Collection.dashboard_stats(current_user)
     solr = Hydrus::Collection.dashboard_hash(current_user)
 
-    #build a hash with all of the needed collection information without instantiating each collection, because fedora is slow
+    # build a hash with all of the needed collection information without instantiating each collection, because fedora is slow
     collections = stats.keys.map { |coll_dru|
       hash = {}
       hash[:pid] = coll_dru
@@ -711,6 +703,7 @@ class Hydrus::Collection < Dor::Collection
   def self.item_counts_with_labels ic
     ic.map { |s, n| [n, Hydrus::GenericObject.status_label(:item, s)] }
   end
+
   # Deletes a Collection and its APO.
   def delete
     cannot_do(:delete) unless is_destroyable

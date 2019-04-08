@@ -27,7 +27,7 @@ Devise.setup do |config|
   # config.mailer = "Devise::Mailer"
 
   # Automatically apply schema changes in tableless databases
-  #config.apply_schema = false # depracated
+  # config.apply_schema = false # depracated
 
   # ==> ORM configuration
   # Load and configure the ORM. Supports :active_record (default) and

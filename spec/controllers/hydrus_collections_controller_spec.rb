@@ -14,14 +14,16 @@ describe HydrusCollectionsController, type: :controller do
       expect(get: '/collections/abc').to route_to(
         controller: 'hydrus_collections',
         action: 'show',
-        id: 'abc')
+        id: 'abc'
+      )
     end
 
     it 'maps collections destroy_value action correctly' do
       expect(get: '/collections/abc/destroy_value').to route_to(
         controller: 'hydrus_collections',
         action: 'destroy_value',
-        id: 'abc')
+        id: 'abc'
+      )
     end
 
     it 'should have the destroy_hydrus_collection_value convenience url' do
@@ -31,7 +33,8 @@ describe HydrusCollectionsController, type: :controller do
     it 'routes collections/list_all correctly' do
       expect(get: '/collections/list_all').to route_to(
         controller: 'hydrus_collections',
-        action: 'list_all')
+        action: 'list_all'
+      )
     end
 
     it 'routes open action correctly' do

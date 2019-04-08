@@ -13,7 +13,7 @@ class Hydrus::Item < Hydrus::GenericObject
   validates :abstract,            not_empty: true, if: :should_validate
   validates :contact,             not_empty: true, if: :should_validate
   validates :keywords,            not_empty: true, if: :should_validate
-  #validates :date_created,        :not_empty => true, :if => :should_validate
+  # validates :date_created,        :not_empty => true, :if => :should_validate
   validates :version_description, not_empty: true, if: lambda {
     should_validate() && !is_initial_version()
   }
@@ -67,8 +67,8 @@ class Hydrus::Item < Hydrus::GenericObject
       [:related_citation,          false],
     ],
     'roleMetadata' => [
-    #  [:item_depositor_id,         true,  :item_depositor, :person, :identifier],
-      [:item_depositor_name,       true,  :item_depositor, :person, :name],
+      #  [:item_depositor_id,         true,  :item_depositor, :person, :identifier],
+      [:item_depositor_name,       true, :item_depositor, :person, :name],
     ],
     'hydrusProperties' => [
       [:reviewed_release_settings, true],
@@ -83,7 +83,8 @@ class Hydrus::Item < Hydrus::GenericObject
     name: 'roleMetadata',
     type: Hydrus::RoleMetadataDS,
     label: 'Role Metadata',
-    control_group: 'M')
+    control_group: 'M'
+  )
 
   # @return [String] the identifier of the object's depositor
   def item_depositor_id
@@ -204,8 +205,8 @@ class Hydrus::Item < Hydrus::GenericObject
   def close_version(opts = {})
     raise "#{cannot_do_message(:close_version)}\nItem is initial version" if is_initial_version(absolute: true)
     # We want to start accessioning only if ...
-    sa = !!opts[:is_remediation]              # ... we are running a remediation and
-    sa = false if should_treat_as_accessioned  # ... we are not in development or test
+    sa = !!opts[:is_remediation] # ... we are running a remediation and
+    sa = false if should_treat_as_accessioned # ... we are not in development or test
     super(version_num: version_id, start_accession: sa)
   end
 
@@ -214,7 +215,7 @@ class Hydrus::Item < Hydrus::GenericObject
   # this collection within the last year you can pass in a specific collection
   # to check, if not specified, defaults to this item's collection (useful when
   # creating new items)
-  def requires_terms_acceptance(user, coll=self.collection)
+  def requires_terms_acceptance(user, coll = self.collection)
     if to_bool(accepted_terms_of_deposit)
       # if this item has previously been accepted, no further checks are needed
       false
@@ -525,7 +526,7 @@ class Hydrus::Item < Hydrus::GenericObject
     b  = beginning_of_embargo_range.to_datetime
     e  = end_of_embargo_range.to_datetime
     dt = embargo_date.to_datetime
-    unless (b <=dt && dt <=e)
+    unless (b <= dt && dt <= e)
       b = HyTime.date_display(b)
       e = HyTime.date_display(e)
       errors.add(:embargo_date, "must be in the range #{b} through #{e}")
@@ -607,9 +608,9 @@ class Hydrus::Item < Hydrus::GenericObject
 
   def dates
     h = {}
-    #raise descMetadata.ng_xml.to_s
+    # raise descMetadata.ng_xml.to_s
     h[:date_created] = single_date? ? descMetadata.date_created : ''
-    #raise descMetadata.date_created.inspect
+    # raise descMetadata.date_created.inspect
     begin
       h[:date_created_approximate] = (descMetadata.originInfo.dateCreated.respond_to?(:nodeset) && single_date?) ? descMetadata.originInfo.dateCreated.nodeset.first['qualifier'] == 'approximate' : false
     rescue
@@ -624,11 +625,12 @@ class Hydrus::Item < Hydrus::GenericObject
     h[:single] = single_date?
     h
   end
+
   def dates=(h)
     descMetadata.remove_nodes(:date_created)
     if h[:date_type] == 'single'
       descMetadata.originInfo.dateCreated = h[:date_created]
-      #the if respond to is for initial item creation
+      # the if respond to is for initial item creation
       if descMetadata.originInfo.dateCreated && descMetadata.originInfo.dateCreated.respond_to?(:nodeset)
         descMetadata.originInfo.dateCreated.nodeset.first['qualifier'] = 'approximate' if h[:date_created_approximate]
         descMetadata.originInfo.dateCreated.nodeset.first['keyDate'] = 'yes'
@@ -652,7 +654,8 @@ class Hydrus::Item < Hydrus::GenericObject
       descMetadata.originInfo.dateCreated = 'Undated'
     end
   end
-  #the date(s) rendered for display
+
+  # the date(s) rendered for display
   def date_display
     disp = ''
     if date_range?
@@ -680,6 +683,7 @@ class Hydrus::Item < Hydrus::GenericObject
       end
     end
   end
+
   def date_range?
     descMetadata.originInfo.date_range_start.length == 1
   end
@@ -689,12 +693,12 @@ class Hydrus::Item < Hydrus::GenericObject
   end
 
   def undated?
-    !date_range? && date_created =='Undated'
+    !date_range? && date_created == 'Undated'
   end
 
-  #check whether a string that we think is a date matches our expected date format
+  # check whether a string that we think is a date matches our expected date format
   def valid_date_string? str
-    str =~/^\d{4}$/ || str =~/^\d{4}-\d{2}$/ || str =~/^\d{4}-\d{2}-\d{2}$/
+    str =~ /^\d{4}$/ || str =~ /^\d{4}-\d{2}$/ || str =~ /^\d{4}-\d{2}-\d{2}$/
   end
 
   def has_specified_a_valid_date
@@ -714,6 +718,7 @@ class Hydrus::Item < Hydrus::GenericObject
       end
     end
   end
+
   # This is the setter called from the Item edit UI.
   # Takes a params-style hash like this, with the inner hashes
   # having the name and role_key for the Item's contributors:
@@ -821,8 +826,8 @@ class Hydrus::Item < Hydrus::GenericObject
   # Returns the significance (major, minor, or admin) of the current version.
   # This method probably belongs in dor-services gem.
   def version_significance
-    tags = versionMetadata.find_by_terms(:version, :tag).
-           map { |t| Dor::VersionTag.parse(t.value) }.sort
+    tags = versionMetadata.find_by_terms(:version, :tag)
+                          .map { |t| Dor::VersionTag.parse(t.value) }.sort
     return :major if tags.size < 2
     curr = tags[-1]
     prev = tags[-2]

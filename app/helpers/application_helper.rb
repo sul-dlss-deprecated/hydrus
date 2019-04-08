@@ -156,7 +156,6 @@ module ApplicationHelper
   end
 
   def google_analytics
-
     <<-HTML
         <script>
           (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -168,7 +167,7 @@ module ApplicationHelper
           ga('send', 'pageview');
 
         </script>
-      HTML
-  .html_safe
+    HTML
+      .html_safe
   end
 end

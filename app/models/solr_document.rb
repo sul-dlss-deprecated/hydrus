@@ -1,4 +1,5 @@
 # -*- encoding : utf-8 -*-
+
 class SolrDocument
   include Blacklight::Solr::Document
 
@@ -17,11 +18,11 @@ class SolrDocument
   # Recommendation: Use field names from Dublin Core
   use_extension(Blacklight::Document::DublinCore)
   field_semantics.merge!(
-                         title: 'title_tesim',
-                         author: 'author_display',
-                         language: 'language_facet',
-                         format: 'format'
-                         )
+    title: 'title_tesim',
+    author: 'author_display',
+    language: 'language_facet',
+    format: 'format'
+  )
 
   def route_key
     first('has_model_ssim').split(':').last.downcase.sub(/^dor_/, 'hydrus_')

@@ -7,6 +7,7 @@ class MockValidatable
   end
 
   def is_draft; end
+
   def valid?; end
 end
 

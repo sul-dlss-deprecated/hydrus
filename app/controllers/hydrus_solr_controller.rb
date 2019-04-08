@@ -72,6 +72,7 @@ class HydrusSolrController < ApplicationController
   end
 
   private
+
   # Private method to determine if the given object belongs to
   # one of the Hydrus classes.
   def is_hydrus_object(obj)

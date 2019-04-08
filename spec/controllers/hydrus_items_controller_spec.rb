@@ -7,14 +7,16 @@ describe HydrusItemsController, type: :controller do
       expect({ get: '/items/abc' }).to route_to(
         controller: 'hydrus_items',
         action: 'show',
-        id: 'abc')
+        id: 'abc'
+      )
     end
 
     it 'should map items destroy_value action correctly' do
       expect({ get: '/items/abc/destroy_value' }).to route_to(
         controller: 'hydrus_items',
         action: 'destroy_value',
-        id: 'abc')
+        id: 'abc'
+      )
     end
 
     it 'routes publish_directly action correctly' do

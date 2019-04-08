@@ -112,7 +112,6 @@ class HydrusCollectionsController < ApplicationController
         end
       }
     end
-
   end
 
   def destroy_value
@@ -141,11 +140,12 @@ class HydrusCollectionsController < ApplicationController
 
   def list_all
     authorize! :list_all_collections, Hydrus::Collection
-    @all_collections = Hydrus::Collection.all_hydrus_collections.
-                       sort.map { |p| Hydrus::Collection.find({ id: p }, lightweight: true) }
+    @all_collections = Hydrus::Collection.all_hydrus_collections
+                                         .sort.map { |p| Hydrus::Collection.find({ id: p }, lightweight: true) }
   end
 
   private
+
   def setup_attributes
     @fobj = Hydrus::Collection.find(params[:id])
     @fobj.current_user = current_user

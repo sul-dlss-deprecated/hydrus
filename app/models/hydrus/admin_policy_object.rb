@@ -11,32 +11,37 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
     name: 'descMetadata',
     type: Hydrus::DescMetadataDS,
     label: 'Descriptive Metadata',
-    control_group: 'M')
+    control_group: 'M'
+  )
 
   has_metadata(
     name: 'roleMetadata',
     type: Hydrus::RoleMetadataDS,
     label: 'Role Metadata',
-    control_group: 'M')
+    control_group: 'M'
+  )
 
   has_metadata(
     name: 'defaultObjectRights',
     type: Hydrus::RightsMetadataDS,
     label: 'Default Object Rights',
     control_group: 'M',
-    autocreate: true)
+    autocreate: true
+  )
 
   has_metadata(
     name: 'contentMetadata',
     type: Dor::ContentMetadataDS,
     label: 'Content Metadata',
-    control_group: 'M')
+    control_group: 'M'
+  )
 
   has_metadata(
     name: 'hydrusProperties',
     type: Hydrus::HydrusPropertiesDS,
     label: 'Hydrus Properties',
-    control_group: 'X')
+    control_group: 'X'
+  )
 
   # Note: all other APO validation occurs in the Collection class.
   validates :pid, is_druid: true

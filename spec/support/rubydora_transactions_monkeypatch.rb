@@ -4,9 +4,9 @@
 # Not sure what the two run_hook() calls do or whether they are needed;
 # just copied the approach used in Rubydora's rollback().
 class Rubydora::Transaction
-    # Roll-back transactions by restoring the repository to its
-    # original state, based on fixtures that are passed in as a
-    # hash, with PIDs and keys and foxml as values.
+  # Roll-back transactions by restoring the repository to its
+  # original state, based on fixtures that are passed in as a
+  # hash, with PIDs and keys and foxml as values.
   def rollback_fixtures(fixtures)
     solr = Blacklight.default_index.connection
     # Two sets of PIDs:
@@ -21,7 +21,7 @@ class Rubydora::Transaction
       aps.each do |p|
         repository.purge_object(pid: p)
         solr.delete_by_id p
-        #run_hook(:after_rollback, :pid => p, :method => :ingest)
+        # run_hook(:after_rollback, :pid => p, :method => :ingest)
       rescue
       end
 
@@ -35,7 +35,7 @@ class Rubydora::Transaction
             ActiveFedora::Base.find(p, cast: true).to_solr
           end
           solr.add $fixture_solr_cache[p]
-          #run_hook(:after_rollback, :pid => p, :method => :purge_object)
+          # run_hook(:after_rollback, :pid => p, :method => :purge_object)
         rescue
         end
       end
@@ -46,7 +46,7 @@ class Rubydora::Transaction
     true
   end
 
-    # Returns the pids of all objects modified in any way during the transaction.
+  # Returns the pids of all objects modified in any way during the transaction.
   def all_pids
     repository.transactions_log.map { |entry| entry.last[:pid] }.uniq
   end

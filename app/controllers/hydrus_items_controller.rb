@@ -64,7 +64,6 @@ class HydrusItemsController < ApplicationController
   end
 
   def update
-
     authorize! :edit, @fobj
     notice = []
 
@@ -113,7 +112,7 @@ class HydrusItemsController < ApplicationController
     params.has_key?(:add_contributor) ||
     params.has_key?(:add_link) ||
     params.has_key?(:add_related_citation)
-    )
+  )
 
     if has_mvf
       if params.has_key?(:add_contributor)
@@ -150,8 +149,8 @@ class HydrusItemsController < ApplicationController
     notice << 'Your changes have been saved.'
     @fobj.validate!
     notice << @fobj.errors.messages.map { |field, error|
-        "#{field.to_s.humanize.capitalize} #{error.join(', ')}"
-      }
+      "#{field.to_s.humanize.capitalize} #{error.join(', ')}"
+    }
     flash[:notice] = safe_join(notice, raw('<br />')) unless notice.blank?
     flash[:error] = nil if flash[:error].blank?
 
@@ -178,7 +177,6 @@ class HydrusItemsController < ApplicationController
         end
       }
     end
-
   end
 
   def terms_of_deposit
