@@ -630,7 +630,7 @@ describe('Item create', type: :request, integration: true) do
       #   - in workflows
       expect(hi.class).to eq(hyi)
       expect(hyc.all_hydrus_objects(models: [hyi], pids_only: true)).to include(pid)
-      expect(wfs.get_workflows(pid)).to eq([hwf])
+      expect(wfs.workflows(pid)).to eq([hwf])
       #   - with an uploaded file
       #   - and a corresponding entry in DB table
       expect(Dir.glob(dir + '/*').size).to eq(1)
@@ -646,7 +646,7 @@ describe('Item create', type: :request, integration: true) do
       #   - from workflows
       expect { hyi.find(pid) }.to raise_error(afe)
       expect(hyc.all_hydrus_objects(models: [hyi], pids_only: true)).not_to include(pid)
-      expect(wfs.get_workflows(pid)).to eq([])
+      expect(wfs.workflows(pid)).to eq([])
       #   - with no upload directory
       #   - and no DB entries
       expect(File.directory?(dir)).to eq(false)
