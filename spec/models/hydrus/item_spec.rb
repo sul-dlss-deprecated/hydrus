@@ -391,7 +391,7 @@ RSpec.describe Hydrus::Item, type: :model do
   end
 
   describe 'embarg_visib=()' do
-    let(:embargo_date) { '2012-02-28T08:00:00+00:00' }
+    let(:embargo_date) { '2012-02-28T08:00:00Z' }
 
     before do
       # This enables the tests to run in a timezone other than Pacific.
