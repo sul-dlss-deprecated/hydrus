@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<workflow>
+<workflow id="hydrusAssemblyWF">
   <process name="start-deposit" status="completed" lifecycle="registered"/>
   <process name="submit" status="completed"/>
   <process name="approve" status="completed"/>
