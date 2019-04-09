@@ -48,7 +48,7 @@ describe HydrusCollectionsController, type: :controller do
 
   describe 'Show Action', integration: true do
     it 'redirects the user when not logged in' do
-      get :show, id: 'druid:oo000oo0003'
+      get :show, params: { id: 'druid:oo000oo0003' }
       expect(response).to redirect_to new_user_session_path
     end
   end
@@ -56,7 +56,7 @@ describe HydrusCollectionsController, type: :controller do
   describe 'Update Action', integration: true do
     it 'does not allow a user to update an object if you do not have edit permissions' do
       sign_in(create(:user))
-      put :update, id: 'druid:oo000oo0003'
+      put :update, params: { id: 'druid:oo000oo0003' }
       expect(response).to redirect_to(root_path)
       expect(flash[:alert]).to eq('You are not authorized to access this page.')
     end
@@ -65,7 +65,7 @@ describe HydrusCollectionsController, type: :controller do
   describe 'open', integration: true do
     it 'shows a alert if user lacks required permissions' do
       sign_in(create(:user))
-      post :open, id: 'druid:oo000oo0003'
+      post :open, params: { id: 'druid:oo000oo0003' }
 
       expect(flash[:alert]).to eq('You are not authorized to access this page.')
     end
@@ -74,7 +74,7 @@ describe HydrusCollectionsController, type: :controller do
   describe 'close', integration: true do
     it 'gives an alert if user lacks required permissions' do
       sign_in(create(:user))
-      post :close, id: 'druid:oo000oo0003'
+      post :close, params: { id: 'druid:oo000oo0003' }
 
       expect(flash[:alert]).to eq('You are not authorized to access this page.')
     end

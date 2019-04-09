@@ -8,7 +8,7 @@ describe EventsController, type: :controller do
   end
 
   it 'should require login' do
-    get :index, hydrus_collection_id: '1234'
+    get :index, params: { hydrus_collection_id: '1234' }
     expect(flash[:alert]).to eq('You need to sign in or sign up before continuing.')
     expect(response).to redirect_to(new_user_session_path)
   end
@@ -25,7 +25,7 @@ describe EventsController, type: :controller do
       allow(ActiveFedora::Base).to receive(:find).and_return(mock_coll)
       @ability.cannot :read, mock_coll
 
-      get :index, hydrus_collection_id: '1234'
+      get :index, params: { hydrus_collection_id: '1234' }
 
       expect(flash[:alert]).to eq('You are not authorized to access this page.')
       expect(response).to redirect_to(root_path)
@@ -37,9 +37,9 @@ describe EventsController, type: :controller do
       allow(ActiveFedora::Base).to receive(:find).and_return(mock_coll)
       @ability.can :read, mock_coll
 
-      get :index, hydrus_collection_id: '1234'
+      get :index, params: { hydrus_collection_id: '1234' }
 
-      expect(response).to be_success
+      expect(response).to be_successful
       expect(assigns(:fobj)).to eq(mock_coll)
     end
   end

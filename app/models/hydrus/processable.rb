@@ -1,7 +1,6 @@
 # A mixin for workflow stuff.
 
 module Hydrus::Processable
-  HWF  = Dor::Config.hydrus.app_workflow # 'hydrusAssemblyWF'
   REPO = 'dor'
 
   def workflow_client
@@ -28,13 +27,13 @@ module Hydrus::Processable
   # Takes the name of a step in the Hydrus workflow.
   # Calls the workflow service to mark that step as completed.
   def update_workflow_status(step, status)
-    workflow_client.update_workflow_status(REPO, pid, HWF, step, status)
+    workflow_client.update_workflow_status(REPO, pid, Dor::Config.hydrus.app_workflow, step, status)
     workflows_content_is_stale
   end
 
   # Deletes an objects hydrus workflow.
   def delete_hydrus_workflow
-    workflow_client.delete_workflow(REPO, pid, HWF)
+    workflow_client.delete_workflow(REPO, pid, Dor::Config.hydrus.app_workflow)
   end
 
   # Resets two instance variables of the workflow datastream. By resorting to

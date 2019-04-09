@@ -1,8 +1,8 @@
 class HydrusItemsController < ApplicationController
-  before_filter :authenticate_user!
-  before_filter :setup_attributes, except: [:new, :index, :send_purl_email, :terms_of_deposit, :agree_to_terms_of_deposit]
-  before_filter :check_for_collection, only: :new
-  before_filter :redirect_if_not_correct_object_type, only: [:edit, :show]
+  before_action :authenticate_user!
+  before_action :setup_attributes, except: [:new, :index, :send_purl_email, :terms_of_deposit, :agree_to_terms_of_deposit]
+  before_action :check_for_collection, only: :new
+  before_action :redirect_if_not_correct_object_type, only: [:edit, :show]
 
   def index
     unless params.has_key?(:hydrus_collection_id)
@@ -101,7 +101,7 @@ class HydrusItemsController < ApplicationController
     ####
 
     if params.has_key?('hydrus_item')
-      @fobj.attributes = params['hydrus_item']
+      @fobj.attributes = params['hydrus_item'].to_unsafe_hash
     end
 
     ####
@@ -239,7 +239,7 @@ class HydrusItemsController < ApplicationController
     respond_to do |want|
       want.html {
         flash[:warning] = 'The file was deleted.'
-        redirect_to :back
+        redirect_back fallback_location: root_path
       }
       want.js {
         render action: :destroy_file
@@ -252,7 +252,7 @@ class HydrusItemsController < ApplicationController
     @fobj.descMetadata.remove_node(params[:term], params[:term_index])
     @fobj.save
     respond_to do |want|
-      want.html { redirect_to :back }
+      want.html { redirect_back fallback_location: root_path }
       want.js
     end
   end

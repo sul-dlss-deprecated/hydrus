@@ -41,19 +41,19 @@ class HydrusSolrController < ApplicationController
       msg = "#{msg}: failed to find object"
       index_logger.warn(msg)
       response.status = 404
-      render(text: msg)
+      render(plain: msg)
     elsif is_hydrus_object(obj)
       # It's a Hydrus object: re-solrize it and render the SOLR document.
       solr_doc = obj.to_solr
       solr.add(solr_doc, add_attributes: { commitWithin: 5000 })
       msg = "#{msg}: updated SOLR index: class=#{obj.class}"
       index_logger.info(msg)
-      render(text: solr_doc)
+      render(plain: solr_doc)
     else
       # Not a Hydrus object: skip it.
       msg = "#{msg}: skipped non-Hydrus object"
       index_logger.info(msg)
-      render(text: msg)
+      render(plain: msg)
     end
   end
 
@@ -68,7 +68,7 @@ class HydrusSolrController < ApplicationController
     solr.delete_by_id(pid)
     solr.commit
     index_logger.info(msg)
-    render(text: msg)
+    render(plain: msg)
   end
 
   private

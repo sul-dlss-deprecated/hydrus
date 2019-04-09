@@ -6,9 +6,9 @@ class CatalogController < ApplicationController
   skip_authorization_check only: [:home, :index]
 
   include Blacklight::Catalog
-  # These before_filters apply the hydra access controls
-  before_filter :enforce_index_permissions, only: :index
-  before_filter :enforce_viewing_context_for_show_requests, only: :show
+  # These before_actions apply the hydra access controls
+  before_action :enforce_index_permissions, only: :index
+  before_action :enforce_viewing_context_for_show_requests, only: :show
 
   helper_method :has_search_parameters?
 

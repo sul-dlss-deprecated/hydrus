@@ -11,8 +11,8 @@ module ApplicationHelper
 
   def license_image(license_code)
     gcode = Hydrus::GenericObject.license_group_code(license_code)
-    lcode = license_code.downcase.gsub('-', '_')
-    gcode == 'creativeCommons' ? image_tag("licenses/#{lcode}.png") : ''
+    lcode = license_code.underscore.downcase
+    gcode == 'creativeCommons' ? image_tag("licenses/#{lcode}.png", alt: lcode.humanize) : ''
   end
 
   def license_link(license_code)
@@ -135,7 +135,7 @@ module ApplicationHelper
   end
 
   def view_path_from_model(model)
-    model.class.to_s.pluralize.parameterize('_')
+    model.class.to_s.pluralize.parameterize(separator: '_')
   end
 
   def select_status_checkbox_icon(field)

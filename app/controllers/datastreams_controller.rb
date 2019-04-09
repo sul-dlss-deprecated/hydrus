@@ -1,11 +1,11 @@
 class DatastreamsController < ApplicationController
-  before_filter do
+  before_action do
     if contextual_id.blank?
       raise ActionController::RoutingError.new('Not Found')
     end
   end
 
-  before_filter :authenticate_user!
+  before_action :authenticate_user!
 
   def index
     pid = contextual_id()
