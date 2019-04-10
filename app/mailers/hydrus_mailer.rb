@@ -1,3 +1,5 @@
+require 'hydrus' # the fixture_pids
+
 class HydrusMailer < ActionMailer::Base
   helper ApplicationHelper
 
