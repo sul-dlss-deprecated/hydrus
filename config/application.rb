@@ -16,7 +16,7 @@ module Hydrus
     # -- all .rb files in that directory are automatically loaded.
 
     # Custom directories with classes and modules you want to be autoloadable.
-    config.autoload_paths += %W(#{config.root}/lib #{config.root}/lib/validators)
+    config.eager_load_paths += %W(#{config.root}/lib #{config.root}/lib/validators)
   end
 end
 
