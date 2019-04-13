@@ -264,7 +264,6 @@ class Hydrus::Collection < Dor::Collection
     apo.identityMetadata.objectLabel = apt
     apo.title                        = apt
     apo.label                        = apt
-    apo.datastreams['DC'].content    = Dor::DublinCoreService.new(apo).to_xml
     identityMetadata.objectLabel     = t
     self.label                       = t
   end
