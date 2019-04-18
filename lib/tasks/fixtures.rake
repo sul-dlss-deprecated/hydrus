@@ -38,7 +38,7 @@ namespace :hydrus do
   task reindex: :environment do
     require File.expand_path('config/environment')
     pid = ENV['pid']
-    obj = Dor.load_instance pid
+    obj = Dor.find pid
     unless obj.nil?
       puts "Reindexing #{pid} in solr"
       solr_doc = obj.to_solr
