@@ -92,4 +92,18 @@ class Hydrus::RightsMetadataDS < ActiveFedora::OmDatastream
       }
     end.doc
   end
+
+  # Copied in from Dor::Services because this is an interface that the rights metadata is supposed to implement
+  def rights
+    xml = ng_xml
+    if xml.search('//rightsMetadata/access[@type=\'read\']/machine/group').length == 1
+      'Stanford'
+    elsif xml.search('//rightsMetadata/access[@type=\'read\']/machine/world').length == 1
+      'World'
+    elsif xml.search('//rightsMetadata/access[@type=\'discover\']/machine/none').length == 1
+      'Dark'
+    else
+      'None'
+    end
+  end
 end

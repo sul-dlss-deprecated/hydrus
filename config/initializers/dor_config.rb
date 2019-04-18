@@ -40,7 +40,6 @@ Dor.configure do
   end
 
   solr.url Settings.solr.url
-  sdr.url Settings.sdr.url
 
   hydrus do
     initial_apo_title 'Intial Hydrus APO title'

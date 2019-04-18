@@ -19,7 +19,7 @@ class Dor::WorkflowDs
   end
 
   # Takes the name of a hydrusAssemblyWF step.
-  # Returns the staus of the corresponding process node.
+  # Returns the status of the corresponding process node.
   def get_workflow_status(step)
     node = get_workflow_step(step)
     node && node['status']
