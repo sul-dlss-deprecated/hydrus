@@ -22,7 +22,6 @@
           <tr>
             <th class="title">Title</th>
             <th class="depositor">Depositor</th>
-            <!-- <th class="type">Type</th> -->
             <th class="status">Status</th>
             <th class="status"># of Files</th>
             <th class="date">Date added</th>
@@ -33,9 +32,8 @@
           <!-- Can use Hydrus::Item.milestones.last to get status. Speak with Lynn. -->
           <% @items.sort_by{|i|i[:create_date]}.reverse.each do |item| %>
             <tr class="document <%= cycle("even","odd") %>">
-              <td><%= link_to item[:title],hydrus_item_path(item[:pid]) %></td>
+              <td><%= link_to item[:title], hydrus_item_path(item[:pid]) %></td>
               <td><%= item[:item_depositor_id] %></td>
-              <!-- <td><%#= item[:object_type] %></td> -->
               <td><%= item[:status_label] %></td>
               <td><%= item[:num_files] %></td>
               <td><%= HyTime.datetime_display(Array(item[:create_date]).first) %></td>

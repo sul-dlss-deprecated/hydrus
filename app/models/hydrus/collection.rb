@@ -594,9 +594,9 @@ class Hydrus::Collection < Dor::Collection
 
   # given a solr document, try a few places to get the title, starting with objectlabel, then dc_title, and finally just untitled
   def self.object_title(solr_doc)
-    mods_title = solr_doc['titleInfo_title_ssm']
+    mods_title = solr_doc['titleInfo_title_ssm'].reject(&:blank?)
     dc_title = solr_doc['title_tesim']
-    if !mods_title.nil?
+    if mods_title.present?
       return mods_title.first
     elsif !dc_title.nil?
       return dc_title.first unless dc_title.first == 'Hydrus'

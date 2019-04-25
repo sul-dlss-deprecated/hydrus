@@ -1,8 +1,24 @@
 require 'spec_helper'
 
-describe Hydrus::Collection, type: :model do
-  before(:each) do
+RSpec.describe Hydrus::Collection, type: :model do
+  before do
     @hc = Hydrus::Collection.new
+  end
+
+  describe '.object_title' do
+    subject(:title) { described_class.object_title(document) }
+
+    before do
+      # Don't index workflow stuff
+      allow_any_instance_of(Dor::ProcessableIndexer).to receive(:to_solr).and_return({})
+    end
+    
+    context 'for a new document' do
+      let(:document) { Hydrus::Item.new.to_solr }
+      it 'is untitled' do
+        expect(title).to eq 'Untitled'
+      end
+    end
   end
 
   describe 'save()' do
