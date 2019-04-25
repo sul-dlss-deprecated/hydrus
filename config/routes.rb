@@ -30,7 +30,7 @@ Rails.application.routes.draw do
     resources :items, only: :index, controller: 'hydrus_items'
   end
 
-  resources :items, controller: 'hydrus_items', as: 'hydrus_items' do
+  resources :items, controller: 'hydrus_items', as: 'hydrus_items', only: [:show, :edit, :update, :new, :create, :destroy] do
     resources :events, only: :index
     resources :datastreams, only: :index
     get 'terms_of_deposit', as: 'terms_of_deposit', on: :collection

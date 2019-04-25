@@ -4,11 +4,8 @@ class HydrusItemsController < ApplicationController
   before_action :check_for_collection, only: :new
   before_action :redirect_if_not_correct_object_type, only: [:edit, :show]
 
+  # GET /collections/:hydrus_collection_id/items
   def index
-    unless params.has_key?(:hydrus_collection_id)
-      raise ActionController::RoutingError.new('Not Found')
-    end
-
     @fobj = Hydrus::Collection.find(params[:hydrus_collection_id])
     @fobj.current_user = current_user
     authorize! :read, @fobj
