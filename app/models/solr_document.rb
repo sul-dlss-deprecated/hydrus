@@ -24,6 +24,18 @@ class SolrDocument
     format: 'format'
   )
 
+  # given a solr document, try a few places to get the title, starting with objectlabel, then dc_title, and finally just untitled
+  def object_title
+    mods_title = self['titleInfo_title_ssm'].reject(&:blank?)
+    dc_title = self['title_tesim']
+
+    return mods_title.first if mods_title.present?
+
+    return dc_title.first if dc_title && dc_title.first != 'Hydrus'
+
+    'Untitled'
+  end
+
   def route_key
     first('has_model_ssim').split(':').last.downcase.sub(/^dor_/, 'hydrus_')
   end

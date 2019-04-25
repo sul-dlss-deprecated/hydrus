@@ -51,7 +51,7 @@ RSpec.describe HydrusItemsController, type: :controller do
     let(:user) { create :user }
 
     context 'when not signed in' do
-      it "redirects with a flash message" do
+      it 'redirects with a flash message' do
         get :index, params: { hydrus_collection_id: '1234' }
         expect(flash[:alert]).to eq('You need to sign in or sign up before continuing.')
         expect(response).to redirect_to(new_user_session_path)
@@ -59,13 +59,14 @@ RSpec.describe HydrusItemsController, type: :controller do
     end
 
     context 'when signed in as an authorized user' do
-      let(:mock_coll) { instance_double(Hydrus::Collection, items_list: list) }
-      let(:list) { instance_double(Array) }
+      let(:mock_coll) { instance_double(Hydrus::Collection, pid: '1234') }
+      let(:presenter_list) { instance_double(Array) }
 
       before do
         sign_in(user)
         expect(mock_coll).to receive(:"current_user=")
         allow(Hydrus::Collection).to receive(:find).and_return(mock_coll)
+        allow(controller).to receive(:item_presenters_for_collection).and_return(presenter_list)
         controller.current_ability.can :read, mock_coll
       end
 
@@ -73,7 +74,7 @@ RSpec.describe HydrusItemsController, type: :controller do
         get :index, params: { hydrus_collection_id: '1234' }
         expect(response).to be_successful
         expect(assigns(:fobj)).to eq(mock_coll)
-        expect(assigns(:items)).to eq(list)
+        expect(assigns(:items)).to eq(presenter_list)
       end
     end
 

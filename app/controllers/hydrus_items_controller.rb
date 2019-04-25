@@ -9,7 +9,8 @@ class HydrusItemsController < ApplicationController
     @fobj = Hydrus::Collection.find(params[:hydrus_collection_id])
     @fobj.current_user = current_user
     authorize! :read, @fobj
-    @items = @fobj.items_list(num_files: true)
+
+    @items = item_presenters_for_collection(@fobj.pid)
   end
 
   def setup_attributes
@@ -296,12 +297,21 @@ class HydrusItemsController < ApplicationController
     redirect_to(hydrus_item_path)
   end
 
-  protected
+  private
 
   def check_for_collection
     unless params.has_key?(:collection)
       flash[:error] = 'You cannot create an item without specifying a collection.'
       redirect_to root_path
+    end
+  end
+
+  def item_presenters_for_collection(pid)
+    query = Hydrus::Collection.squery_items_in_collection(pid)
+    _, sdocs = Hydrus::Collection.issue_solr_query(query)
+    sdocs.map do |solr_doc|
+      num_files = Hydrus::ObjectFile.where(pid: solr_doc['id']).count
+      ItemPresenter.new(num_files: num_files, solr_doc: solr_doc)
     end
   end
 end
