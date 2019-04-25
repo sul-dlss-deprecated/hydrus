@@ -93,7 +93,8 @@ class Hydrus::Collection < Dor::Collection
     items = []
     items_from_solr.each do |solr_doc|
       id = solr_doc['id']
-      title = self.class.object_title(solr_doc)
+      solr_title = self.class.object_title(solr_doc)
+      title = solr_title.blank? ? 'Untitled' : solr_title
       num_files = (get_num_files ? Hydrus::ObjectFile.where(pid: id).count : -1)
       status = self.class.array_to_single(solr_doc['object_status_ssim'])
       object_type = self.class.array_to_single(solr_doc['mods_typeOfResource_ssim'])
