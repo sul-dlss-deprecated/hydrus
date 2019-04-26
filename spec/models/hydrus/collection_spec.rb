@@ -1,7 +1,7 @@
 require 'spec_helper'
 
-describe Hydrus::Collection, type: :model do
-  before(:each) do
+RSpec.describe Hydrus::Collection, type: :model do
+  before do
     @hc = Hydrus::Collection.new
   end
 

@@ -6,9 +6,9 @@
       </tr>
     </thead>
     <tbody>
-    <% collections.each do |pid,doc| %>
+    <% collections.each do |pid, doc| %>
       <tr>
-        <td><%= link_to(Hydrus::Collection.object_title(doc[:solr]), hydrus_collection_path(pid),:disable_after_click=>'true') %></td>
+        <td><%= link_to(doc[:solr].object_title, hydrus_collection_path(pid), disable_after_click: 'true') %></td>
         <td>
             <%= link_to(
                   'items',

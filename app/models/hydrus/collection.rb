@@ -86,24 +86,6 @@ class Hydrus::Collection < Dor::Collection
     sdocs
   end
 
-  # return a helper array of hashes with just some basic info to build the items list -this allows us to build the item listing view without having to go to Fedora at all and is much faster
-  def items_list(opts = {})
-    get_num_files = opts[:num_files] || true
-
-    items = []
-    items_from_solr.each do |solr_doc|
-      id = solr_doc['id']
-      title = self.class.object_title(solr_doc)
-      num_files = (get_num_files ? Hydrus::ObjectFile.where(pid: id).count : -1)
-      status = self.class.array_to_single(solr_doc['object_status_ssim'])
-      object_type = self.class.array_to_single(solr_doc['mods_typeOfResource_ssim'])
-      depositor = self.class.array_to_single(solr_doc['item_depositor_person_identifier_ssm'])
-      create_date = solr_doc['system_create_dtsi']
-      items << { pid: id, num_files: num_files, object_type: object_type, title: title, status_label: status, item_depositor_id: depositor, create_date: create_date }
-    end
-    items
-  end
-
   # Creates a new Collection, sets up various defaults, saves and
   # returns the object.
   def self.create(user)
@@ -579,7 +561,7 @@ class Hydrus::Collection < Dor::Collection
       hash = {}
       hash[:pid] = coll_dru
       hash[:item_counts] = stats[coll_dru] || {}
-      hash[:title] = self.object_title(solr[coll_dru][:solr])
+      hash[:title] = solr[coll_dru][:solr].object_title
       hash[:roles] = Hydrus::Responsible.roles_of_person current_user.to_s, solr[coll_dru][:solr]['is_governed_by_ssim'].first.gsub('info:fedora/', '')
       count = 0
       stats[coll_dru].keys.each do |key|
@@ -590,23 +572,6 @@ class Hydrus::Collection < Dor::Collection
       hash
     }
     collections
-  end
-
-  # given a solr document, try a few places to get the title, starting with objectlabel, then dc_title, and finally just untitled
-  def self.object_title(solr_doc)
-    mods_title = solr_doc['titleInfo_title_ssm']
-    dc_title = solr_doc['title_tesim']
-    if !mods_title.nil?
-      return mods_title.first
-    elsif !dc_title.nil?
-      return dc_title.first unless dc_title.first == 'Hydrus'
-    end
-    'Untitled'
-  end
-
-  # given a solr doc field that might be an array, extract the first value if not nil, otherwise return blank
-  def self.array_to_single(solr_doc_value)
-    solr_doc_value.blank? ? '' : solr_doc_value.first
   end
 
   # Returns an array collection druids for all APOs
