@@ -54,6 +54,25 @@ namespace :hydrus do
     pids.each { |pid| solr.add(Dor.find(pid).to_solr, add_attributes: { commitWithin: 5000 }) } # index into hydrus solr
   end
 
+  desc 'Reindex all hydrus collections and items into hydrus solr'
+  task reindex_all_hydrus_objects: :enviroment do
+    solr = Dor::SearchService.solr
+    collection_pids = Hydrus::Collection.all_hydrus_collections
+    total_collections = collection_pids.size
+    puts "Found #{total_collections} hydrus collections.  Started re-index at #{Time.now}"
+    collection_pids.each_with_index do |collection_pid, coll_index|
+      puts "#{coll_index + 1} of #{total_collections}: Collection #{collection_pid}"
+      collection = Hydrus::Collection.find(collection_pid)
+      solr.add(collection.to_solr, add_attributes: { commitWithin: 5000 })
+      total_items = collection.items.size
+      collection.items.each_with_index do |item, item_index|
+        puts "....#{item_index + 1} of #{total_items}: Item #{item.pid}"
+        solr.add(item.to_solr, add_attributes: { commitWithin: 5000 })
+      end
+    end
+    puts "Completed re-index at #{Time.now}"
+  end
+
   desc 'Cleanup file upload temp files'
   task cleanup_tmp: :environment do
     CarrierWave.clean_cached_files!
