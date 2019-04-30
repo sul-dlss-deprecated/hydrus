@@ -55,7 +55,7 @@ namespace :hydrus do
   end
 
   desc 'Reindex all hydrus collections and items into hydrus solr'
-  task reindex_all_hydrus_objects: :enviroment do
+  task reindex_all_hydrus_objects: :environment do
     solr = Dor::SearchService.solr
     collection_pids = Hydrus::Collection.all_hydrus_collections
     total_collections = collection_pids.size
