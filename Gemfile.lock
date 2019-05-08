@@ -329,7 +329,7 @@ GEM
       nom-xml (~> 1.0)
     msgpack (1.2.10)
     multi_json (1.13.1)
-    multipart-post (2.0.0)
+    multipart-post (2.1.0)
     mysql2 (0.4.10)
     net-http-persistent (2.9.4)
     net-scp (2.0.0)
@@ -532,7 +532,7 @@ GEM
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.7.6)
-    unicode-display_width (1.5.0)
+    unicode-display_width (1.6.0)
     validatable (1.6.7)
     validates_email_format_of (1.6.3)
       i18n
