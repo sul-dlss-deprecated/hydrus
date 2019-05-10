@@ -179,7 +179,7 @@ class Hydrus::Item < Hydrus::GenericObject
     vers_md_upd_info[:significance] = opts[:significance] || :major
     vers_md_upd_info[:description] = opts[:description] || ''
     # Use the dor-services-client to open a new version, passing along args needed by Hydrus
-    Dor::Services::Client.object(pid).open_new_version(assume_accessioned: should_treat_as_accessioned, create_workflows_ds: false, vers_md_upd_info: vers_md_upd_info)
+    Dor::Services::Client.object(pid).open_new_version(assume_accessioned: should_treat_as_accessioned, vers_md_upd_info: vers_md_upd_info)
     # Varying behavior: remediations vs ordinary user edits.
     if opts[:is_remediation]
       # Just log the event.
