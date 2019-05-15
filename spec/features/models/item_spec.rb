@@ -83,7 +83,7 @@ describe(Hydrus::Item, type: :feature, integration: true) do
       druid = 'druid:oo000oo0003'
       hi    = ItemService.create(druid, user)
       wf    = Dor::Config.hydrus.app_workflow
-      steps = Dor::Config.hydrus.app_workflow_steps
+      steps = %w(start-deposit submit approve start-assembly)
       exp   = Hash[steps.map { |s| [s, 'waiting'] }]
       # Code to check workflow statuses.
       check_statuses = lambda {

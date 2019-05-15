@@ -45,7 +45,6 @@ Dor.configure do
   hydrus do
     initial_apo_title 'Intial Hydrus APO title'
     app_workflow           'hydrusAssemblyWF'
-    app_workflow_steps     %w(start-deposit submit approve start-assembly)
     ur_apo_druid           Settings.hydrus.ur_apo_druid
     app_version File.read ::File.expand_path('../../../VERSION', __FILE__)
 

@@ -240,3 +240,4 @@ hof.save  # should return true if it succeeded
 5. Refresh the object page in hydrus to confirm the files are listed.  You can also double-check that the files were placed in the correct location, `/data/hydrus-files/DRUID/TREE/PATH/DRUID/content`
     e.g. `/data/hydrus-files/xx/111/yy/2222/xx111yy2222/content`
 6. Delete the files from the */data/hydrus-files/tmp* directory
+

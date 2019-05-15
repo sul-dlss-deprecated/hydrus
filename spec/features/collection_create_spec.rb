@@ -152,7 +152,7 @@ describe('Collection create', type: :request, integration: true) do
     expect(coll.valid?).to eq(true)
     expect(coll.is_open).to eq(true)
     # The workflow steps of both the collection and apo should be completed.
-    Dor::Config.hydrus.app_workflow_steps.each do |step|
+    %w(start-deposit submit approve start-assembly).each do |step|
       expect(coll.workflows.workflow_step_is_done(step)).to eq(true)
       expect(apo.workflows.workflow_step_is_done(step)).to eq(true)
     end

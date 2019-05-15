@@ -17,11 +17,6 @@ describe Hydrus::Processable, type: :model do
     end
   end
 
-  it 'can exercise uncomplete_workflow_steps() stubbed' do
-    expect(@go).to receive(:update_workflow_status).exactly(3).times
-    @go.uncomplete_workflow_steps()
-  end
-
   it 'can exercise workflows_content_is_stale, stubbed' do
     expect(@go.workflows).to receive(:instance_variable_set).twice
     @go.workflows_content_is_stale

@@ -13,17 +13,6 @@ module Hydrus::Processable
     update_workflow_status(step, 'completed')
   end
 
-  # Marks all steps in the hydrusAssemblyWF (except the first) as waiting.
-  # This occurs when the user opens a new version of an Item.
-  #
-  # TODO: I don't believe Hydrus should be doing this. This ends up calling
-  # `workflow_client.update_workflow_status` several times on processes that do not
-  # exist.  Instead, it should call `workflow_client.create_workflow`.
-  def uncomplete_workflow_steps
-    steps = Dor::Config.hydrus.app_workflow_steps[1..-1]
-    steps.each { |s| update_workflow_status(s, 'waiting') }
-  end
-
   # Takes the name of a step in the Hydrus workflow.
   # Calls the workflow service to mark that step as completed.
   def update_workflow_status(step, status)
@@ -63,7 +52,7 @@ module Hydrus::Processable
   def start_assembly_wf
     return unless should_start_assembly_wf
     xml = Dor::Config.hydrus.assembly_wf_xml
-    workflow_client.create_workflow(REPO, pid, 'assemblyWF', xml)
+    workflow_client.create_workflow(REPO, pid, 'hydrusAssemblyWF', xml)
   end
 
   # Returns value of Dor::Config.hydrus.start_assembly_wf.
