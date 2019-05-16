@@ -70,8 +70,14 @@ describe(Hydrus::Item, type: :feature, integration: true) do
 
   describe 'do_publish()' do
     let(:user) { create :archivist1 }
+
+    let(:mock_wf_client) { instance_double(Dor::Workflow::Client) }
+
     before(:each) do
       @prev_mint_ids = config_mint_ids()
+      allow(Dor::Workflow::Client).to receive(:new).and_return(mock_wf_client)
+      allow(mock_wf_client).to receive(:create_workflow_by_name)
+      allow(mock_wf_client).to receive(:update_workflow_status)
     end
 
     after(:each) do
@@ -79,29 +85,16 @@ describe(Hydrus::Item, type: :feature, integration: true) do
     end
 
     it 'should modify workflows as expected' do
-      # Setup.
       druid = 'druid:oo000oo0003'
       hi    = ItemService.create(druid, user)
-      wf    = Dor::Config.hydrus.app_workflow
-      steps = Dor::Config.hydrus.app_workflow_steps
-      exp   = Hash[steps.map { |s| [s, 'waiting'] }]
-      # Code to check workflow statuses.
-      check_statuses = lambda {
-        hi = Hydrus::Item.find(hi.pid) # A refreshed copy of object.
-        statuses = steps.map { |s| [s, hi.workflows.get_workflow_status(s)] }
-        expect(Hash[statuses]).to eq(exp)
-      }
-      # Initial statuses.
-      exp['start-deposit'] = 'completed'
-      check_statuses.call()
-      # After running do_publish, with start_assembly_wf=true.
       allow(hi).to receive(:should_start_assembly_wf).and_return(true)
       allow(hi).to receive(:is_assemblable).and_return(true)
-      expect(Dor::WorkflowService).to receive(:create_workflow).once
       hi.do_publish()
-      exp['approve'] = 'completed'
-      exp['start-assembly'] = 'completed'
-      check_statuses.call()
+      expect(mock_wf_client).to have_received(:update_workflow_status).with('dor', hi.pid,
+                                                                            'hydrusAssemblyWF', 'approve', 'completed')
+      expect(mock_wf_client).to have_received(:update_workflow_status).with('dor', hi.pid,
+                                                                            'hydrusAssemblyWF', 'start-assembly', 'completed')
+      expect(mock_wf_client).to have_received(:create_workflow_by_name).with(hi.pid, 'assemblyWF')
     end
   end
 
