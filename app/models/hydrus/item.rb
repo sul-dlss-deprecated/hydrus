@@ -188,7 +188,7 @@ class Hydrus::Item < Hydrus::GenericObject
       self.version_started_time = HyTime.now_datetime
       # Put the object back in the draft state.
       self.object_status = 'draft'
-      uncomplete_workflow_steps
+      start_hydrus_wf
       # Store a copy of the current license and visibility.
       # We use those values when enforcing subsequent-version validations.
       self.prior_license = license

@@ -1132,6 +1132,7 @@ RSpec.describe Hydrus::Item, type: :model do
       end
 
       it 'calls the client and sets prior_visibility to the old visibility value' do
+        expect(item).to receive(:start_hydrus_wf)
         item.open_new_version
         expect(object_client).to have_received(:open_new_version)
         expect(item.prior_visibility).to eq 'stanford'

@@ -45,7 +45,6 @@ Dor.configure do
   hydrus do
     initial_apo_title 'Intial Hydrus APO title'
     app_workflow           'hydrusAssemblyWF'
-    app_workflow_steps     %w(start-deposit submit approve start-assembly)
     ur_apo_druid           Settings.hydrus.ur_apo_druid
     app_version File.read ::File.expand_path('../../../VERSION', __FILE__)
     exception_error_page   Settings.hydrus.exception_error_page  # if true, a generic error page will be shown with no exception messages; if false, standard Rails exceptions are shown directly to the user
