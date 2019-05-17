@@ -24,11 +24,9 @@ docker-compose up -d
 ```bash
 brew install exiftool # Required by assembly-objectfile
 
-rake db:migrate
-rake db:test:prepare
-rake db:migrate RAILS_ENV=test
+./bin/rails db:migrate db:test:prepare
 
-rake hydrus:refreshfix RAILS_ENV=test # load all fedora and database fixtures, and get sample uploaded files
+RAILS_ENV=test ./bin/rails hydrus:refreshfix # load all fedora and database fixtures, and get sample uploaded files
 ```
 
 ## Running the application

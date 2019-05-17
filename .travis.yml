@@ -19,6 +19,10 @@ before_install:
   - docker-compose up -d
   - docker-compose ps
 
+before_script:
+  - echo "Waiting for Fcrepo to start"
+  - until curl --silent -XGET --fail -o /dev/null http://localhost:8983; do printf '.'; sleep 1; done
+
 env:
   global:
     - DOCKER_COMPOSE_VERSION=1.23.1
