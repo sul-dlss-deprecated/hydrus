@@ -4,7 +4,7 @@ module Hydrus::Processable
   REPO = 'dor'
 
   def workflow_client
-    Dor::Config.workflow.client
+    @workflow_client ||= Dor::Workflow::Client.new(url: Settings.workflow.url)
   end
 
   # Takes the name of a step in the Hydrus workflow.
@@ -56,14 +56,12 @@ module Hydrus::Processable
     start_assembly_wf
   end
 
-  # Kicks off a Hydrus-specific variant of assemblyWF -- one that skips
-  # the creation of derivative files (JP2s, etc). This method is normally
-  # configured to be a no-op during local development and the running of
+  # Kicks off assemblyWF
+  # This method is normally configured to be a no-op during local development and the running of
   # automated tests.
   def start_assembly_wf
     return unless should_start_assembly_wf
-    xml = Dor::Config.hydrus.assembly_wf_xml
-    workflow_client.create_workflow(REPO, pid, 'assemblyWF', xml)
+    workflow_client.create_workflow_by_name(pid, 'assemblyWF')
   end
 
   # Returns value of Dor::Config.hydrus.start_assembly_wf.
@@ -81,29 +79,10 @@ module Hydrus::Processable
     return false unless is_published
     return true if should_treat_as_accessioned
 
-    # During the assembly-accessioning process, an object is assembled, then
-    # the object is accessioned, and finally (during a nightly cron job) the
-    # workflow-archiver moves the object's workflow lifecycle rows from the
-    # "active" table to the "archive" table in the workflow service's DB.
-    #
-    # Here are the lifecycle milestones we need to consider:
-    #
-    #   assemblyWF  start     pipelined
-    #   accessionWF start     submitted
-    #   accessionWF end       accessioned
-    p = pid()
-
     # Never accessioned.
-    # This query check both active and archived rows.
-    return false unless workflow_client.get_lifecycle(REPO, p, 'accessioned')
+    return false unless workflow_client.lifecycle(REPO, pid(), 'accessioned')
 
-    # Actively in the middle of assemblyWF or accessionWF.
-    # We don't want to treat an object as fully accessioned until
-    # the robots are finished and the archiver has run.
-    return false if workflow_client.get_active_lifecycle(REPO, p, 'pipelined')
-    return false if workflow_client.get_active_lifecycle(REPO, p, 'submitted')
-
-    # Accessioned and archived.
+    # Accessioned.
     true
   end
 
@@ -114,7 +93,7 @@ module Hydrus::Processable
            # In development and test mode, simulated a publish_time of 1 day later.
            submitted_for_publish_time.to_datetime + 1.day
          else
-           workflow_client.get_lifecycle(REPO, pid, 'published')
+           workflow_client.lifecycle(REPO, pid, 'published')
          end
     HyTime.datetime(pt)
   end

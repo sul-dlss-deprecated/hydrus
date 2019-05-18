@@ -1,16 +1,20 @@
 require 'spec_helper'
 
 describe Hydrus::Processable, type: :model do
+  let(:mock_wf_client) { instance_double(Dor::Workflow::Client) }
+
   before(:each) do
     @cannot_do_regex = /\ACannot perform action/
     @go = Hydrus::GenericObject.new
+    allow(Dor::Workflow::Client).to receive(:new).and_return(mock_wf_client)
+    allow(mock_wf_client).to receive(:update_workflow_status)
   end
 
   describe 'complete_workflow_step()' do
     it 'can exercise the method, stubbing out call to WF service' do
       step = 'submit'
       args = ['dor', @go.pid, 'hydrusAssemblyWF', step, 'completed']
-      expect(Dor::WorkflowService).to receive(:update_workflow_status).with(*args)
+      expect(mock_wf_client).to receive(:update_workflow_status).with(*args)
       allow(@go).to receive_message_chain(:workflows, :workflow_step_is_done).and_return(false)
       expect(@go).to receive(:workflows_content_is_stale)
       @go.complete_workflow_step(step)
@@ -59,7 +63,7 @@ describe Hydrus::Processable, type: :model do
   describe 'start_assembly_wf()' do
     it 'should do nothing if the app is not configured to start assemblyWF' do
       allow(@go).to receive(:should_start_assembly_wf).and_return(false)
-      expect(Dor::WorkflowService).not_to receive(:create_workflow)
+      expect(Dor::Workflow::Client).not_to receive(:create_workflow_by_name)
       @go.start_assembly_wf
     end
 
@@ -71,7 +75,6 @@ describe Hydrus::Processable, type: :model do
   describe 'is_accessioned()' do
     it 'can exercise all logic branches' do
       # At each stage, we set a stub, call is_accessioned(), and then reverse the stub.
-      wfs = Dor::Config.workflow.client
       # Not published: false.
       allow(@go).to receive(:is_published).and_return(false)
       expect(@go.is_accessioned).to eq(false)
@@ -81,13 +84,9 @@ describe Hydrus::Processable, type: :model do
       expect(@go.is_accessioned).to eq(true)
       allow(@go).to receive(:should_treat_as_accessioned).and_return(false)
       # Never accessioned: false.
-      allow(wfs).to receive(:get_lifecycle).and_return(false)
+      allow(mock_wf_client).to receive(:lifecycle).and_return(false)
       expect(@go.is_accessioned).to eq(false)
-      allow(wfs).to receive(:get_lifecycle).and_return(true)
-      # Accessioned but not archived: true.
-      allow(wfs).to receive(:get_active_lifecycle).and_return(true)
-      expect(@go.is_accessioned).to eq(false)
-      allow(wfs).to receive(:get_active_lifecycle).and_return(false)
+      allow(mock_wf_client).to receive(:lifecycle).and_return(true)
       # Survived all tests: true.
       expect(@go.is_accessioned).to eq(true)
     end
@@ -104,7 +103,7 @@ describe Hydrus::Processable, type: :model do
     it 'production mode: query workflow service' do
       allow(@go).to receive(:should_treat_as_accessioned).and_return(false)
       exp = '2000-02-01T00:30:00Z'
-      allow(Dor::WorkflowService).to receive(:get_lifecycle).and_return(exp)
+      allow(mock_wf_client).to receive(:lifecycle).and_return(exp)
       expect(@go.publish_time).to eq(exp)
     end
   end
