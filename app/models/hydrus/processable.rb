@@ -73,8 +73,12 @@ module Hydrus::Processable
     return false unless is_published
     return true if should_treat_as_accessioned
 
-    # Never accessioned.
-    return false unless workflow_client.lifecycle(REPO, pid(), 'accessioned')
+    # Return false unless has been accessioned at least once.
+    # accessioned lifecyle is set in the last step in the accessionWF.
+    return false unless workflow_client.lifecycle(REPO, pid, 'accessioned')
+
+    # Return false if accessionWF has been started for most current version and there are there are any incomplete workflow steps.
+    return false if workflow_client.active_lifecycle(REPO, pid, 'submitted')
 
     # Accessioned.
     true

@@ -84,9 +84,13 @@ describe Hydrus::Processable, type: :model do
       expect(@go.is_accessioned).to eq(true)
       allow(@go).to receive(:should_treat_as_accessioned).and_return(false)
       # Never accessioned: false.
-      allow(mock_wf_client).to receive(:lifecycle).and_return(false)
+      allow(mock_wf_client).to receive(:lifecycle).with('dor', @go.pid, 'accessioned').and_return(false)
       expect(@go.is_accessioned).to eq(false)
-      allow(mock_wf_client).to receive(:lifecycle).and_return(true)
+      allow(mock_wf_client).to receive(:lifecycle).with('dor', @go.pid, 'accessioned').and_return(true)
+      # AccessionWF active for current version: true
+      allow(mock_wf_client).to receive(:active_lifecycle).with('dor', @go.pid, 'submitted').and_return(true)
+      expect(@go.is_accessioned).to eq(false)
+      allow(mock_wf_client).to receive(:active_lifecycle).with('dor', @go.pid, 'submitted').and_return(false)
       # Survived all tests: true.
       expect(@go.is_accessioned).to eq(true)
     end
