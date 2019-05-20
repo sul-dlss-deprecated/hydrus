@@ -21,9 +21,9 @@ describe Hydrus::Processable, type: :model do
     end
   end
 
-  it 'can exercise uncomplete_workflow_steps() stubbed' do
-    expect(@go).to receive(:update_workflow_status).exactly(3).times
-    @go.uncomplete_workflow_steps()
+  it 'can exercise start_hydrus_wf() stubbed' do
+    expect(mock_wf_client).to receive(:create_workflow_by_name).with(@go.pid, 'hydrusAssemblyWF')
+    @go.start_hydrus_wf()
   end
 
   it 'can exercise workflows_content_is_stale, stubbed' do
