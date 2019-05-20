@@ -25,9 +25,6 @@ namespace :hydrus do
       fixture_loader.reload(pid)
     }
 
-    # index the workflow objects
-    Rake::Task['hydrus:reindex_workflow_objects'].invoke
-
     unless ['test', 'development'].include?(Rails.env)
       puts "****NOTE: For security reasons, you might want to change passwords for default users after this task using \"RAILS_ENV=#{ENV['RAILS_ENV']}rake hydrus:update_passwords['newpassword']\"*****"
     end
@@ -45,18 +42,6 @@ namespace :hydrus do
       Dor::SearchService.solr.add(solr_doc, add_attributes: { commitWithin: 1000 })
     else
       puts "#{pid} not found"
-    end
-  end
-
-  # call with rake hydrus:reindex_workflow_objects
-  desc 'reindex all workflow objects for the given environment'
-  task reindex_workflow_objects: :environment do
-    require File.expand_path('config/environment')
-    pids = Dor::Config.hydrus.workflow_object_druids
-    pids.each do |pid|
-      ENV['pid'] = pid
-      Rake::Task['hydrus:reindex'].reenable
-      Rake::Task['hydrus:reindex'].invoke
     end
   end
 
@@ -104,9 +89,7 @@ namespace :hydrus do
   task :refreshfix do
     ts = [
       'hydrus:loadfix',
-      'hydrus:refresh_workflows',
-      'hydrus:refresh_upload_files',
-      'hydrus:reindex_workflow_objects',
+      'hydrus:refresh_upload_files'
     ]
     ts.each do |t|
       Rake::Task[t].reenable
@@ -146,37 +129,6 @@ namespace :hydrus do
     all_folders = Dir.glob("#{dst_base}/*")
     all_folders.each do |folder|
       FileUtils.rm_rf folder
-    end
-  end
-
-  # This task restores the workflows datastream to initial conditions for
-  # our fixture objects.
-  #   - hydrusAssemblyWF: content is replaces (see spec/fixtures/workflow_xml).
-  #   - versioningWF:     content is removed
-  # An after() block in spec/integration/item_edit_spec.rb duplications
-  # some of this behavior.
-  desc 'refresh workflow datastreams'
-  task :refresh_workflows do
-    require File.expand_path('config/environment')
-    repo    = 'dor'
-    hwf     = 'hydrusAssemblyWF'
-    vwf     = 'versioningWF'
-    # Read files in workflow fixtures directory.
-    Dir.glob('spec/fixtures/workflow_xml/druid_*.xml').each do |f|
-      # Read XML from file and get druid from file name.
-      xml   = File.read(f)
-      druid = File.basename(f, '.xml').gsub(/_/, ':')
-      # Push content up to the WF service.
-      resp = [druid, hwf]
-      begin
-        resp << Dor::WorkflowService.delete_workflow(repo, druid, hwf)
-      rescue Faraday::ResourceNotFound
-        logger.info "Delete workflow for #{druid} returned 404"
-      end
-      resp << Dor::WorkflowService.create_workflow(repo, druid, hwf, xml)
-      resp << vwf
-      resp << Dor::WorkflowService.delete_workflow(repo, druid, vwf)
-      puts resp.inspect
     end
   end
 

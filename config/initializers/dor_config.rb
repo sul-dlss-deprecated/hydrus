@@ -52,9 +52,6 @@ Dor.configure do
     exception_recipients   Settings.hydrus.exception_recipients  # list of email addresses, comma separated, that will be notified when an exception occurs - leave blank for no emails
     host                   Settings.hydrus.host                  # server host, used in emails
     start_assembly_wf      Settings.hydrus.start_assembly_wf     # determines if assembly workflow is started when publishing
-
-    # complete list of all workflow objects defined in this environment
-    workflow_object_druids Settings.hydrus.workflow_object_druids
   end
 
   purl do
