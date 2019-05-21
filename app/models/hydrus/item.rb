@@ -201,13 +201,13 @@ class Hydrus::Item < Hydrus::GenericObject
   # Closes the current version of the Item.
   # This occurs when an Item is published, unless it was the initial version.
   # See do_publish(), where all of the Hydrus-specific work is done; here
-  # we simply invoke the dor-services method.
+  # we simply invoke the dor-services client method.
   def close_version(opts = {})
     raise "#{cannot_do_message(:close_version)}\nItem is initial version" if is_initial_version(absolute: true)
     # We want to start accessioning only if ...
     sa = !!opts[:is_remediation] # ... we are running a remediation and
     sa = false if should_treat_as_accessioned # ... we are not in development or test
-    super(version_num: version_id, start_accession: sa)
+    Dor::Services::Client.object(pid).close_version(version_num: version_id, start_accession: sa)
   end
 
   # indicates if this item has an accepted terms of deposit, or if the supplied
