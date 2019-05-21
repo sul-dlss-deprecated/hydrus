@@ -42,15 +42,12 @@ module Hydrus
     Hash[pids.zip(xmls)]
   end
 
-  # Takes a PID for a Hydrus fixtures, and an optional hash with the :is_wf
-  # key. Reads the corresponding file from the fixture directory and returns
+  # @param [String] pid  a PID for a Hydrus fixture
+  # Reads the corresponding file from the fixture directory and returns
   # the content. Used when restoring fixture objects in a Hydrus rake task
   # and during testing.
-  def self.fixture_foxml(pid, opts = {})
-    p = pid.sub(/:/, '_')
-    w = opts[:is_wf] ? 'workflow_xml/' : ''
-    e = opts[:is_wf] ? ''              : '.foxml'
-    f = File.join('spec/fixtures', w, p + e + '.xml')
+  def self.fixture_foxml(pid)
+    f = File.join('spec/fixtures', "#{pid.sub(/:/, '_')}.foxml.xml")
     IO.read(f)
   end
 

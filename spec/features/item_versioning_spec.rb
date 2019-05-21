@@ -25,12 +25,11 @@ describe('Item versioning', type: :request, integration: true) do
   #
   # The rake task :refresh_workflows duplicates some of this behavior.
   after do
-    p      = @hi.pid
-    wf     = Dor::Config.hydrus.app_workflow
-    wf_xml = Hydrus.fixture_foxml(p, is_wf: true)
-    Dor::Config.workflow.client.delete_workflow('dor', p, 'versioningWF')
-    Dor::Config.workflow.client.delete_workflow('dor', p, wf)
-    Dor::Config.workflow.client.create_workflow('dor', p, wf, wf_xml)
+    workflow_name = Dor::Config.hydrus.app_workflow
+    workflow_client = Dor::Workflow::Client.new(url: Settings.workflow.url)
+    workflow_client.delete_workflow('dor', @hi.pid, 'versioningWF')
+    workflow_client.delete_workflow('dor', @hi.pid, workflow_name)
+    workflow_client.create_workflow_by_name(@hi.pid, workflow_name)
   end
 
   it 'initial unpublished version of an item offers discard button' do
