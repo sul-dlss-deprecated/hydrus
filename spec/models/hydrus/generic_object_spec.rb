@@ -59,26 +59,37 @@ describe Hydrus::GenericObject, type: :model do
     expect(ri.url).to eq('')
   end
 
-  describe 'registration' do
-    it 'dor_registration_params() should return the expected hash' do
-      # Non-APO: hash should include initiate_workflow.
-      args = %w(whobar item somePID)
-      drp = Hydrus::GenericObject.dor_registration_params(*args)
-      expect(drp).to be_instance_of Hash
-      expect(drp[:admin_policy]).to eq(args.last)
-      expect(drp).to include(:initiate_workflow)
-      # APO: hash should not includes initiate_workflow.
-      args = %w(whobar adminPolicy somePID)
-      drp = Hydrus::GenericObject.dor_registration_params(*args)
-      expect(drp).to be_instance_of Hash
-      expect(drp).to include(:initiate_workflow)
+  describe '.dor_registration_params' do
+    subject(:dor_registration_params) do
+      Hydrus::GenericObject.dor_registration_params(*args)
     end
 
-    it 'should be able to exercise register_dor_object(), using stubbed call to Dor' do
-      args = %w(whobar item somePID)
-      drp = Hydrus::GenericObject.dor_registration_params(*args)
-      expect(Dor::Services::Client.objects).to receive(:register).with(params: hash_including(*drp.keys))
+    let(:args) { %w(whobar item somePID) }
+
+    it 'returns the expected hash' do
+      expect(dor_registration_params).to be_instance_of Hash
+      expect(dor_registration_params[:admin_policy]).to eq(args.last)
+    end
+  end
+
+  describe '.register_dor_object' do
+    subject(:register_dor_object) do
       Hydrus::GenericObject.register_dor_object(nil, nil, nil)
+    end
+
+    let(:dor_registration_params) do
+      Hydrus::GenericObject.dor_registration_params(*args)
+    end
+    let(:args) { %w(whobar item somePID) }
+    let(:objects_client) { instance_double(Dor::Services::Client::Objects, register: nil) }
+
+    before do
+      allow(Dor::Services::Client).to receive(:objects).and_return(objects_client)
+    end
+
+    it 'calls the dor-serivices-client to register' do
+      register_dor_object
+      expect(objects_client).to have_received(:register).with(params: hash_including(*dor_registration_params.keys))
     end
   end
 

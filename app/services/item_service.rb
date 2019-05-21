@@ -39,8 +39,10 @@ class ItemService
   # Create the object, with the correct model.
   # @return [Hydrus::Item]
   def build_item(item_type)
-    dor_item = Hydrus::GenericObject.register_dor_object(user, 'item', collection.apo_pid)
-    Hydrus::Item.find(dor_item[:pid]).tap do |item|
+    registration_response = Hydrus::GenericObject.register_dor_object(user, 'item', collection.apo_pid)
+    workflow_client.create_workflow_by_name(registration_response[:pid], Dor::Config.hydrus.app_workflow)
+
+    Hydrus::Item.find(registration_response[:pid]).tap do |item|
       item.remove_relationship :has_model, 'info:fedora/afmodel:Dor_Item'
       item.assert_content_model
       # Set the item_type, and add some Hydrus-specific info to identityMetadata.
@@ -50,6 +52,10 @@ class ItemService
       item.object_status = 'draft'
       item.terms_of_use = Hydrus::GenericObject.stanford_terms_of_use
     end
+  end
+
+  def workflow_client
+    @workflow_client ||= Dor::Workflow::Client.new(url: Settings.workflow.url)
   end
 
   # Add the Item to the Collection.

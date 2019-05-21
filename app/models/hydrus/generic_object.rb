@@ -306,8 +306,7 @@ class Hydrus::GenericObject < Dor::Item
       admin_policy: apo_pid,
       source_id: "Hydrus:#{obj_typ}-#{user_string}-#{HyTime.now_datetime_full}",
       label: 'Hydrus',
-      tag: [Settings.hydrus.project_tag],
-      initiate_workflow: [Dor::Config.hydrus.app_workflow],
+      tag: [Settings.hydrus.project_tag]
     }
   end
 

@@ -1,12 +1,18 @@
 # A mixin for workflow stuff.
 
 module Hydrus::Processable
+  extend ActiveSupport::Concern
   REPO = 'dor'
 
   def workflow_client
-    @workflow_client ||= Dor::Workflow::Client.new(url: Settings.workflow.url)
+    @workflow_client ||= self.class.workflow_client
   end
 
+  module ClassMethods
+    def workflow_client
+      Dor::Workflow::Client.new(url: Settings.workflow.url)
+    end
+  end
   # Takes the name of a step in the Hydrus workflow.
   # Calls the workflow service to mark that step as completed.
   def complete_workflow_step(step)

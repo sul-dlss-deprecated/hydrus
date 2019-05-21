@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe('Collection create', type: :request, integration: true) do
+RSpec.describe('Collection create', type: :request, integration: true) do
   let(:archivist1) { create :archivist1 }
   let(:archivist99) { create :archivist99 }
 
