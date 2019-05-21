@@ -22,7 +22,7 @@ describe Hydrus::Processable, type: :model do
   end
 
   it 'can exercise start_hydrus_wf() stubbed' do
-    expect(mock_wf_client).to receive(:create_workflow_by_name).with(@go.pid, 'hydrusAssemblyWF')
+    expect(mock_wf_client).to receive(:create_workflow_by_name).with(@go.pid, 'hydrusAssemblyWF', version: '1')
     @go.start_hydrus_wf()
   end
 

@@ -94,7 +94,7 @@ describe(Hydrus::Item, type: :feature, integration: true) do
                                                                             'hydrusAssemblyWF', 'approve', 'completed')
       expect(mock_wf_client).to have_received(:update_workflow_status).with('dor', hi.pid,
                                                                             'hydrusAssemblyWF', 'start-assembly', 'completed')
-      expect(mock_wf_client).to have_received(:create_workflow_by_name).with(hi.pid, 'assemblyWF')
+      expect(mock_wf_client).to have_received(:create_workflow_by_name).with(hi.pid, 'assemblyWF', version: '1')
     end
   end
 
