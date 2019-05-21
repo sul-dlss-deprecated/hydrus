@@ -21,6 +21,8 @@ dor_services:
   url: 'http://localhost:3003'
   user: dor-service-user
   pass: dor-service-password
+  token: 'secret-token'
+  token_header: 'X-Auth' # This has to match dor-services-app ApplicationController::TOKEN_HEADER
 
 stacks:
   document_cache_storage_root: ~
@@ -33,7 +35,7 @@ stacks:
 
 solr:
   url: 'https://solr.example.com/solr/collection'
-  
+
 suri:
   url: 'http://localhost:3002'
   user: ~
