@@ -1141,9 +1141,24 @@ RSpec.describe Hydrus::Item, type: :model do
   end
 
   describe 'close_version()' do
-    it 'should raise exception if item is initial version' do
-      allow(item).to receive(:is_initial_version).and_return(true)
-      expect { item.close_version }.to raise_exception(@cannot_do_regex)
+    context 'when item is initial version' do
+      it 'should raise exception' do
+        allow(item).to receive(:is_initial_version).and_return(true)
+        expect { item.close_version }.to raise_exception(@cannot_do_regex)
+      end
+    end
+    context 'when item is not initial version' do
+      let(:object_client) { instance_double(Dor::Services::Client::Object, close_version: true) }
+
+      before do
+        allow(item).to receive(:is_initial_version).and_return(false)
+        allow(Dor::Services::Client).to receive(:object).and_return(object_client)
+      end
+
+      it 'calls the client and sets prior_visibility to the old visibility value' do
+        item.close_version
+        expect(object_client).to have_received(:close_version).with(version_num: '1', start_accession: false)
+      end
     end
   end
 
