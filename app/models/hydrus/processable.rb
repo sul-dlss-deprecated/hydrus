@@ -56,12 +56,12 @@ module Hydrus::Processable
   # automated tests.
   def start_assembly_wf
     return unless should_start_assembly_wf
-    workflow_client.create_workflow_by_name(pid, 'assemblyWF')
+    workflow_client.create_workflow_by_name(pid, 'assemblyWF', version: current_version)
   end
 
   # Kicks off hydrusAssemblyWF
   def start_hydrus_wf
-    workflow_client.create_workflow_by_name(pid, Dor::Config.hydrus.app_workflow)
+    workflow_client.create_workflow_by_name(pid, Dor::Config.hydrus.app_workflow, version: current_version)
   end
 
   # Returns value of Dor::Config.hydrus.start_assembly_wf.

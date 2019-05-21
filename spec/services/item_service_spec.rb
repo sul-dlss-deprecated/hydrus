@@ -27,7 +27,8 @@ RSpec.describe ItemService do
         expect(item.requires_terms_acceptance(user, collection)).to eq(true)
         expect(item.accepted_terms_of_deposit).to eq('false')
         expect(item.terms_of_deposit_accepted?).to eq(false)
-        expect(workflow_client).to have_received(:create_workflow_by_name).with(String, 'hydrusAssemblyWF')
+        expect(workflow_client).to have_received(:create_workflow_by_name).with(String, 'hydrusAssemblyWF',
+                                                                                version: '1')
       end
     end
 
