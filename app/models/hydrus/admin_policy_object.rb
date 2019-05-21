@@ -88,6 +88,8 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
     args = [user, 'adminPolicy', dconf.ur_apo_druid]
     response = Hydrus::GenericObject.register_dor_object(*args)
     apo = Hydrus::AdminPolicyObject.find(response[:pid])
+    workflow_client.create_workflow_by_name(response[:pid], Dor::Config.hydrus.app_workflow)
+
     apo.remove_relationship :has_model, 'info:fedora/afmodel:Dor_AdminPolicyObject'
     apo.assert_content_model
     # Add minimal descMetadata with a title.
