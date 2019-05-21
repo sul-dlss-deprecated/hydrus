@@ -4,7 +4,7 @@ RSpec.describe('Collection create', type: :request, integration: true) do
   let(:archivist1) { create :archivist1 }
   let(:archivist99) { create :archivist99 }
 
-  before(:each) do
+  before do
     @alert           = 'div.alert'
     @notice_save     = 'Your changes have been saved'
     @notice_open     = 'Collection opened'

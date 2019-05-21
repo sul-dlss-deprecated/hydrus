@@ -33,10 +33,7 @@ stacks:
 
 solr:
   url: 'https://solr.example.com/solr/collection'
-
-sdr:
-  url: 'https://sdr.example.com/solr/collection'
-
+  
 suri:
   url: 'http://localhost:3002'
   user: ~

@@ -13,11 +13,11 @@ RSpec.describe ItemService do
   describe '.create' do
     subject(:item) { described_class.create(collection.pid, user) }
 
-    let(:workflow_client) { instance_double(Dor::Workflow::Client, create_workflow_by_name: nil) }
+    let(:workflow_client) { instance_double(Dor::Workflow::Client, create_workflow_by_name: nil, all_workflows_xml: '', milestones: []) }
     let(:collection) { Hydrus::Collection.find('druid:oo000oo0003') }
 
     before do
-      allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
+      allow(Dor::Config.workflow).to receive(:client).and_return(workflow_client)
     end
 
     context 'if the user has already accepted another item in this collection but it was more than 1 year ago' do

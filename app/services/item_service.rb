@@ -55,7 +55,7 @@ class ItemService
   end
 
   def workflow_client
-    @workflow_client ||= Dor::Workflow::Client.new(url: Settings.workflow.url)
+    Dor::Config.workflow.client
   end
 
   # Add the Item to the Collection.

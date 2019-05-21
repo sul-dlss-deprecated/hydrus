@@ -1,15 +1,15 @@
 require 'spec_helper'
 
-describe(Hydrus::Item, type: :feature, integration: true) do
-  describe('Content metadata generation') do
-    it 'should be able to generate content metadata, returning blank CM when no files exist and setting content metadata stream to a blank template' do
+RSpec.describe Hydrus::Item, type: :feature, integration: true do
+  describe 'Content metadata generation' do
+    it 'generates content metadata, returning blank CM when no files exist and setting content metadata stream to a blank template' do
       xml = '<contentMetadata objectId="__DO_NOT_USE__" type="file"/>'
       hi = Hydrus::Item.new pid: '__DO_NOT_USE__'
       hi.update_content_metadata
       expect(hi.datastreams['contentMetadata'].content).to be_equivalent_to(xml)
     end
 
-    it 'should be able to generate content metadata, returning and setting correct cm when files exist' do
+    it 'generates content metadata, returning and setting correct cm when files exist' do
       item = Hydrus::Item.find('druid:oo000oo0001')
       expect(item.files.size).to eq(4)
       expect(item.datastreams['contentMetadata'].content).to be_equivalent_to '<contentMetadata></contentMetadata>'
@@ -55,7 +55,7 @@ describe(Hydrus::Item, type: :feature, integration: true) do
       Dor::Config.configure.suri.mint_ids = @prev_mint_ids
     end
 
-    it 'should accept the terms for an item, updating the appropriate hydrusProperties metadata in item and collection' do
+    it 'accepts the terms for an item, updating the appropriate hydrusProperties metadata in item and collection' do
       expect(item.requires_terms_acceptance(user_key, collection)).to eq(true)
       expect(item.accepted_terms_of_deposit).to eq('false')
       expect(collection.users_accepted_terms_of_deposit.keys.include?(user_key)).to eq(false)
@@ -70,31 +70,33 @@ describe(Hydrus::Item, type: :feature, integration: true) do
 
   describe 'do_publish()' do
     let(:user) { create :archivist1 }
-
-    let(:mock_wf_client) { instance_double(Dor::Workflow::Client) }
-
-    before(:each) do
+    let(:wfs) do
+      instance_double(Dor::Workflow::Client,
+                      all_workflows_xml: '',
+                      milestones: [],
+                      update_workflow_status: nil,
+                      create_workflow_by_name: nil)
+    end
+    before do
       @prev_mint_ids = config_mint_ids()
-      allow(Dor::Workflow::Client).to receive(:new).and_return(mock_wf_client)
-      allow(mock_wf_client).to receive(:create_workflow_by_name)
-      allow(mock_wf_client).to receive(:update_workflow_status)
+      allow(Dor::Config.workflow).to receive(:client).and_return(wfs)
     end
 
-    after(:each) do
+    after do
       config_mint_ids(@prev_mint_ids)
     end
 
-    it 'should modify workflows as expected' do
+    it 'modifies workflows' do
       druid = 'druid:oo000oo0003'
       hi    = ItemService.create(druid, user)
       allow(hi).to receive(:should_start_assembly_wf).and_return(true)
       allow(hi).to receive(:is_assemblable).and_return(true)
       hi.do_publish()
-      expect(mock_wf_client).to have_received(:update_workflow_status).with('dor', hi.pid,
-                                                                            'hydrusAssemblyWF', 'approve', 'completed')
-      expect(mock_wf_client).to have_received(:update_workflow_status).with('dor', hi.pid,
-                                                                            'hydrusAssemblyWF', 'start-assembly', 'completed')
-      expect(mock_wf_client).to have_received(:create_workflow_by_name).with(hi.pid, 'assemblyWF', version: '1')
+      expect(wfs).to have_received(:update_workflow_status).with('dor', hi.pid,
+                                                                 'hydrusAssemblyWF', 'approve', 'completed')
+      expect(wfs).to have_received(:update_workflow_status).with('dor', hi.pid,
+                                                                 'hydrusAssemblyWF', 'start-assembly', 'completed')
+      expect(wfs).to have_received(:create_workflow_by_name).with(hi.pid, 'assemblyWF', version: '1')
     end
   end
 
