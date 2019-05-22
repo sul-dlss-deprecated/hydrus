@@ -108,10 +108,10 @@ RSpec.describe Hydrus::Processable, type: :model do
       allow(wfs).to receive(:lifecycle).with('dor', @go.pid, 'accessioned').and_return(false)
       expect(@go.is_accessioned).to eq(false)
       allow(wfs).to receive(:lifecycle).with('dor', @go.pid, 'accessioned').and_return(true)
-      # AccessionWF active for current version: true
-      allow(wfs).to receive(:active_lifecycle).with('dor', @go.pid, 'submitted').and_return(true)
+      # HydrusAssemblyWF active for current version: true
+      allow(wfs).to receive(:active_lifecycle).with('dor', @go.pid, 'registered').and_return(true)
       expect(@go.is_accessioned).to eq(false)
-      allow(wfs).to receive(:active_lifecycle).with('dor', @go.pid, 'submitted').and_return(false)
+      allow(wfs).to receive(:active_lifecycle).with('dor', @go.pid, 'registered').and_return(false)
       # Survived all tests: true.
       expect(@go.is_accessioned).to eq(true)
     end

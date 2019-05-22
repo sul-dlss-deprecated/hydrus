@@ -64,7 +64,8 @@ module Hydrus::Processable
     Dor::Config.hydrus.start_assembly_wf
   end
 
-  # Returns true if the most recent version of the object has been accessioned.
+  # Returns true if the item is published, has completed the accession wf at least once, and all of the workflow
+  # steps for the current version are completed.
   def is_accessioned
     # Basic tests:
     #   - Must be published before it can be accessioned.
@@ -77,8 +78,8 @@ module Hydrus::Processable
     # accessioned lifecyle is set in the last step in the accessionWF.
     return false unless workflow_client.lifecycle(REPO, pid, 'accessioned')
 
-    # Return false if accessionWF has been started for most current version and there are there are any incomplete workflow steps.
-    return false if workflow_client.active_lifecycle(REPO, pid, 'submitted')
+    # Return false if there are any incomplete steps in current workflow.
+    return false if workflow_client.active_lifecycle(REPO, pid, 'registered')
 
     # Accessioned.
     true
