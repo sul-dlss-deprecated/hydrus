@@ -64,24 +64,12 @@ module Hydrus::Processable
     Dor::Config.hydrus.start_assembly_wf
   end
 
-  # Returns true if the most recent version of the object has been accessioned.
-  def is_accessioned
-    # Basic tests:
-    #   - Must be published before it can be accessioned.
-    #   - For local development and automated testing, treat published as
-    #     equivalent to accessioned.
+  # Returns true if a new version can be opened for the object.
+  def version_openeable?
     return false unless is_published
-    return true if should_treat_as_accessioned
-
-    # Return false unless has been accessioned at least once.
-    # accessioned lifecyle is set in the last step in the accessionWF.
-    return false unless workflow_client.lifecycle(REPO, pid, 'accessioned')
-
-    # Return false if accessionWF has been started for most current version and there are there are any incomplete workflow steps.
-    return false if workflow_client.active_lifecycle(REPO, pid, 'submitted')
-
-    # Accessioned.
-    true
+    # For testing, this avoids Dor::Services::Client.
+    return false if should_treat_as_accessioned
+    Dor::Services::Client.object(pid).version.openeable?(assume_accessioned: should_treat_as_accessioned)
   end
 
   # Returns a string -- the datetime when the object achived the published

@@ -88,32 +88,41 @@ RSpec.describe Hydrus::Processable, type: :model do
     end
   end
 
-  describe 'is_accessioned()' do
-    let(:wfs) { instance_double(Dor::Workflow::Client) }
+  describe 'version_openeable?' do
+    let(:object_client) { instance_double(Dor::Services::Client::Object) }
+    let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion) }
+
     before do
-      allow(Dor::Config.workflow).to receive(:client).and_return(wfs)
+      allow(@go).to receive(:is_published).and_return(true)
+      allow(@go).to receive(:should_treat_as_accessioned).and_return(false)
+      allow(version_client).to receive(:openeable?).and_return(true)
+      allow(Dor::Services::Client).to receive(:object).and_return(object_client)
+      allow(object_client).to receive(:version).and_return(version_client)
     end
 
-    it 'can exercise all logic branches' do
-      # At each stage, we set a stub, call is_accessioned(), and then reverse the stub.
-      # Not published: false.
-      allow(@go).to receive(:is_published).and_return(false)
-      expect(@go.is_accessioned).to eq(false)
-      allow(@go).to receive(:is_published).and_return(true)
-      # Running in development or test mode: true.
-      allow(@go).to receive(:should_treat_as_accessioned).and_return(true)
-      expect(@go.is_accessioned).to eq(true)
-      allow(@go).to receive(:should_treat_as_accessioned).and_return(false)
-      # Never accessioned: false.
-      allow(wfs).to receive(:lifecycle).with('dor', @go.pid, 'accessioned').and_return(false)
-      expect(@go.is_accessioned).to eq(false)
-      allow(wfs).to receive(:lifecycle).with('dor', @go.pid, 'accessioned').and_return(true)
-      # AccessionWF active for current version: true
-      allow(wfs).to receive(:active_lifecycle).with('dor', @go.pid, 'submitted').and_return(true)
-      expect(@go.is_accessioned).to eq(false)
-      allow(wfs).to receive(:active_lifecycle).with('dor', @go.pid, 'submitted').and_return(false)
-      # Survived all tests: true.
-      expect(@go.is_accessioned).to eq(true)
+    context 'when item has not been published' do
+      before do
+        allow(@go).to receive(:is_published).and_return(false)
+      end
+
+      it 'returns false' do
+        expect(@go.version_openeable?).to eq(false)
+      end
+    end
+    context 'when published, but dor-services-app reports a new version cannot be opened' do
+      before do
+        allow(version_client).to receive(:openeable?).and_return(false)
+      end
+
+      it 'returns false' do
+        expect(@go.version_openeable?).to eq(false)
+      end
+    end
+
+    context 'when published and dor-services-app reports a new version can be opened' do
+      it 'returns true' do
+        expect(@go.version_openeable?).to eq(true)
+      end
     end
   end
 

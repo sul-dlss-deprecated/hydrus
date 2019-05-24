@@ -567,7 +567,7 @@ DEPENDENCIES
   devise-remote-user (~> 1.0)
   dlss-capistrano
   dor-services (~> 7.1)
-  dor-services-client (~> 1.1)
+  dor-services-client (~> 1.9.2)
   dynamic_form
   equivalent-xml
   factory_bot_rails
