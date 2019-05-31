@@ -170,7 +170,7 @@ class Hydrus::Item < Hydrus::GenericObject
   #   - Other options:
   #       :no_super   Used to prevent super() during testing.
   def open_new_version(opts = {})
-    raise "#{cannot_do_message(:open_new_version)}\nItem is not accessioned" unless is_accessioned
+    raise "#{cannot_do_message(:open_new_version)}\nItem is not accessioned" unless version_openeable?
     # Store the time when the object was initially published.
     self.initial_publish_time = publish_time if is_initial_version
 
@@ -179,7 +179,7 @@ class Hydrus::Item < Hydrus::GenericObject
     vers_md_upd_info[:significance] = opts[:significance] || :major
     vers_md_upd_info[:description] = opts[:description] || ''
     # Use the dor-services-client to open a new version, passing along args needed by Hydrus
-    Dor::Services::Client.object(pid).open_new_version(assume_accessioned: should_treat_as_accessioned, vers_md_upd_info: vers_md_upd_info)
+    Dor::Services::Client.object(pid).version.open(assume_accessioned: should_treat_as_accessioned, vers_md_upd_info: vers_md_upd_info)
     # Varying behavior: remediations vs ordinary user edits.
     if opts[:is_remediation]
       # Just log the event.
@@ -207,7 +207,7 @@ class Hydrus::Item < Hydrus::GenericObject
     # We want to start accessioning only if ...
     sa = !!opts[:is_remediation] # ... we are running a remediation and
     sa = false if should_treat_as_accessioned # ... we are not in development or test
-    Dor::Services::Client.object(pid).close_version(version_num: version_id, start_accession: sa)
+    Dor::Services::Client.object(pid).version.close(version_num: version_id, start_accession: sa)
   end
 
   # indicates if this item has an accepted terms of deposit, or if the supplied

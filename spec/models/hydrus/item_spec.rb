@@ -1112,7 +1112,7 @@ RSpec.describe Hydrus::Item, type: :model do
     # More significant testing is done at the integration level.
     context 'when the item has not been accessioned' do
       before do
-        allow(item).to receive(:is_accessioned).and_return(false)
+        allow(item).to receive(:version_openeable?).and_return(false)
       end
 
       it 'raises an exception' do
@@ -1121,20 +1121,23 @@ RSpec.describe Hydrus::Item, type: :model do
     end
 
     context 'when it has been accessioned' do
-      let(:object_client) { instance_double(Dor::Services::Client::Object, open_new_version: true) }
+      let(:object_client) { instance_double(Dor::Services::Client::Object) }
+
+      let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, open: true) }
 
       before do
         item.submitted_for_publish_time = HyTime.now_datetime
         item.visibility = 'stanford'
-        allow(item).to receive(:is_accessioned).and_return(true)
+        allow(item).to receive(:version_openeable?).and_return(true)
         allow(Dor::Services::Client).to receive(:object).and_return(object_client)
+        allow(object_client).to receive(:version).and_return(version_client)
         allow(item).to receive(:uncomplete_workflow_steps)
       end
 
       it 'calls the client and sets prior_visibility to the old visibility value' do
         expect(item).to receive(:start_hydrus_wf)
         item.open_new_version
-        expect(object_client).to have_received(:open_new_version)
+        expect(version_client).to have_received(:open)
         expect(item.prior_visibility).to eq 'stanford'
       end
     end
@@ -1148,16 +1151,19 @@ RSpec.describe Hydrus::Item, type: :model do
       end
     end
     context 'when item is not initial version' do
-      let(:object_client) { instance_double(Dor::Services::Client::Object, close_version: true) }
+      let(:object_client) { instance_double(Dor::Services::Client::Object) }
+
+      let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, close: true) }
 
       before do
         allow(item).to receive(:is_initial_version).and_return(false)
         allow(Dor::Services::Client).to receive(:object).and_return(object_client)
+        allow(object_client).to receive(:version).and_return(version_client)
       end
 
       it 'calls the client and sets prior_visibility to the old visibility value' do
         item.close_version
-        expect(object_client).to have_received(:close_version).with(version_num: '1', start_accession: false)
+        expect(version_client).to have_received(:close).with(version_num: '1', start_accession: false)
       end
     end
   end
