@@ -39,6 +39,7 @@ group :development, :test do
   gem 'sqlite3', '~> 1.3.13'
   gem 'rspec-rails', '~> 3.1'
   gem 'capybara', '~> 2.18'
+  gem 'selenium-webdriver' # for js testing
   gem 'simplecov'
   gem 'coveralls'
   gem 'equivalent-xml'

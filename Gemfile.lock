@@ -127,6 +127,8 @@ GEM
       activemodel (>= 4.0.0)
       activesupport (>= 4.0.0)
       mime-types (>= 1.16)
+    childprocess (1.0.1)
+      rake (< 13.0)
     chronic (0.10.2)
     coderay (1.1.2)
     coffee-rails (4.2.2)
@@ -459,6 +461,7 @@ GEM
       mime-types
       nokogiri
       rest-client
+    rubyzip (1.2.3)
     sass (3.7.4)
       sass-listen (~> 4.0.0)
     sass-listen (4.0.0)
@@ -473,6 +476,9 @@ GEM
     sassc (2.0.1)
       ffi (~> 1.9)
       rake
+    selenium-webdriver (3.142.2)
+      childprocess (>= 0.5, < 2.0)
+      rubyzip (~> 1.2, >= 1.2.2)
     simplecov (0.16.1)
       docile (~> 1.1)
       json (>= 1.8, < 3)
@@ -586,6 +592,7 @@ DEPENDENCIES
   rubocop (~> 0.58.1)
   rubydora (~> 2.1)
   sass-rails (~> 5.0)
+  selenium-webdriver
   simplecov
   spring
   spring-watcher-listen (~> 2.0.0)
