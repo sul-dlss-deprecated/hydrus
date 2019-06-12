@@ -22,14 +22,14 @@ describe HydrusSolrController, type: :controller do
 
     it 'should index Hydrus objects' do
       allow(ActiveFedora::Base).to receive(:find).and_return(instance_double(Hydrus::Item, tags: ['Project : Hydrus'], to_solr: { id: 'x' }))
-      expect(Dor::SearchService.solr).to receive(:update).with(data: /x/).and_return(true)
+      expect(Dor::SearchService.solr).to receive(:add).with({ id: 'x' }, add_attributes: { commitWithin: 5000 }).and_return(true)
       get :reindex, params: { id: 'druid:oo000oo9999' }
       expect(response.status).to eq(200)
     end
 
     it 'should index Hydrus objects tagged with our project prefix' do
       allow(ActiveFedora::Base).to receive(:find).and_return(instance_double(Hydrus::Item, tags: ['Project : Hydrus : IR : data'], to_solr: { id: 'x' }))
-      expect(Dor::SearchService.solr).to receive(:update).with(data: /x/).and_return(true)
+      expect(Dor::SearchService.solr).to receive(:add).with({ id: 'x' }, add_attributes: { commitWithin: 5000 }).and_return(true)
       get :reindex, params: { id: 'druid:oo000oo9999' }
       expect(response.status).to eq(200)
     end
