@@ -231,7 +231,7 @@ GEM
       dry-initializer (~> 3.0)
       dry-logic (~> 1.0)
       dry-types (~> 1.0)
-    dry-types (1.1.0)
+    dry-types (1.1.1)
       concurrent-ruby (~> 1.0)
       dry-container (~> 0.3)
       dry-core (~> 0.4, >= 0.4.4)
@@ -260,7 +260,7 @@ GEM
     haml (5.1.1)
       temple (>= 0.8.0)
       tilt
-    honeybadger (4.3.1)
+    honeybadger (4.4.0)
     hooks (0.4.1)
       uber (~> 0.0.14)
     htmlentities (4.3.4)
