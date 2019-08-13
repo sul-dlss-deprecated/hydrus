@@ -18,7 +18,7 @@ gem 'assembly-objectfile', '~> 1.5'
 # We don't require this by default, because we need it to load after hydrus models
 # or we'll get a superclass mismatch for Hydrus::Item
 gem 'dor-services', '~> 7.1', require: false
-gem 'dor-services-client', '~> 1.9.2'
+gem 'dor-services-client', '~> 1.11'
 gem 'rubydora', '~> 2.1'
 gem 'bagit', '~> 0.4'
 gem 'blacklight', '~> 6.19'
