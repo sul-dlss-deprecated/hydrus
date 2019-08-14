@@ -19,9 +19,8 @@ workflow:
 
 dor_services:
   url: 'http://localhost:3003'
-  user: dor-service-user
-  pass: dor-service-password
-  token: 'secret-token'
+  # To generate the token: docker-compose run dor-services-app rake generate_token
+  token: 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJIeWRydXMtVGVzdCJ9.vfo6tMpMhoSqlNaIeW1N0CZKDHbNo_ABHHfpVmIZoHc'
   token_header: 'X-Auth' # This has to match dor-services-app ApplicationController::TOKEN_HEADER
 
 stacks:
