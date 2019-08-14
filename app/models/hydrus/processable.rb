@@ -65,11 +65,11 @@ module Hydrus::Processable
   end
 
   # Returns true if a new version can be opened for the object.
-  def version_openeable?
+  def version_openable?
     return false unless is_published
     # For testing, this avoids Dor::Services::Client.
     return false if should_treat_as_accessioned
-    Dor::Services::Client.object(pid).version.openeable?(assume_accessioned: should_treat_as_accessioned)
+    Dor::Services::Client.object(pid).version.openable?(assume_accessioned: should_treat_as_accessioned)
   end
 
   # Returns a string -- the datetime when the object achived the published

@@ -1112,7 +1112,7 @@ RSpec.describe Hydrus::Item, type: :model do
     # More significant testing is done at the integration level.
     context 'when the item has not been accessioned' do
       before do
-        allow(item).to receive(:version_openeable?).and_return(false)
+        allow(item).to receive(:version_openable?).and_return(false)
       end
 
       it 'raises an exception' do
@@ -1128,7 +1128,7 @@ RSpec.describe Hydrus::Item, type: :model do
       before do
         item.submitted_for_publish_time = HyTime.now_datetime
         item.visibility = 'stanford'
-        allow(item).to receive(:version_openeable?).and_return(true)
+        allow(item).to receive(:version_openable?).and_return(true)
         allow(Dor::Services::Client).to receive(:object).and_return(object_client)
         allow(object_client).to receive(:version).and_return(version_client)
         allow(item).to receive(:uncomplete_workflow_steps)
