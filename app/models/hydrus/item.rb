@@ -170,7 +170,7 @@ class Hydrus::Item < Hydrus::GenericObject
   #   - Other options:
   #       :no_super   Used to prevent super() during testing.
   def open_new_version(opts = {})
-    raise "#{cannot_do_message(:open_new_version)}\nItem is not accessioned" unless version_openeable?
+    raise "#{cannot_do_message(:open_new_version)}\nItem is not accessioned" unless version_openable?
     # Store the time when the object was initially published.
     self.initial_publish_time = publish_time if is_initial_version
 

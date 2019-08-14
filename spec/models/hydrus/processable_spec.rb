@@ -88,14 +88,14 @@ RSpec.describe Hydrus::Processable, type: :model do
     end
   end
 
-  describe 'version_openeable?' do
+  describe 'version_openable?' do
     let(:object_client) { instance_double(Dor::Services::Client::Object) }
     let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion) }
 
     before do
       allow(@go).to receive(:is_published).and_return(true)
       allow(@go).to receive(:should_treat_as_accessioned).and_return(false)
-      allow(version_client).to receive(:openeable?).and_return(true)
+      allow(version_client).to receive(:openable?).and_return(true)
       allow(Dor::Services::Client).to receive(:object).and_return(object_client)
       allow(object_client).to receive(:version).and_return(version_client)
     end
@@ -106,22 +106,22 @@ RSpec.describe Hydrus::Processable, type: :model do
       end
 
       it 'returns false' do
-        expect(@go.version_openeable?).to eq(false)
+        expect(@go.version_openable?).to eq(false)
       end
     end
     context 'when published, but dor-services-app reports a new version cannot be opened' do
       before do
-        allow(version_client).to receive(:openeable?).and_return(false)
+        allow(version_client).to receive(:openable?).and_return(false)
       end
 
       it 'returns false' do
-        expect(@go.version_openeable?).to eq(false)
+        expect(@go.version_openable?).to eq(false)
       end
     end
 
     context 'when published and dor-services-app reports a new version can be opened' do
       it 'returns true' do
-        expect(@go.version_openeable?).to eq(true)
+        expect(@go.version_openable?).to eq(true)
       end
     end
   end
