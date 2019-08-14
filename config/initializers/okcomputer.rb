@@ -75,7 +75,7 @@ suri_url.userinfo = [Dor::Config.suri.user, Dor::Config.suri.pass].join(':')
 OkComputer::Registry.register 'suri_url', OkComputer::HttpCheck.new(suri_url.to_s)
 
 # dor-services-app
-about_url = Dor::Config.dor_services.url + '/v1/about'
+about_url = Settings.dor_services.url + '/v1/about'
 OkComputer::Registry.register 'dor_services_url', OkComputer::HttpCheck.new(about_url)
 
 # Local filesystem public/uploads -> shared/public/uploads -> /data/hydrus-files
