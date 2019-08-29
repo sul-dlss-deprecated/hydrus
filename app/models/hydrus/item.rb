@@ -6,6 +6,7 @@ class Hydrus::Item < Hydrus::GenericObject
   has_and_belongs_to_many :collections, property: :is_member_of_collection, class_name: 'Hydrus::Collection'
 
   REQUIRED_FIELDS = [:title, :abstract, :contact, :keywords, :version_description, :date_created]
+  DEFAULT_VERSION_SIGNIFICANCE = :major
 
   after_validation :strip_whitespace
   attr_accessor :dates
@@ -175,11 +176,11 @@ class Hydrus::Item < Hydrus::GenericObject
     self.initial_publish_time = publish_time if is_initial_version
 
     # Set some version metadata that the Hydrus app uses.
-    vers_md_upd_info = {}
-    vers_md_upd_info[:significance] = opts[:significance] || :major
-    vers_md_upd_info[:description] = opts[:description] || ''
+    version_options = {}
+    version_options[:significance] = opts[:significance] || DEFAULT_VERSION_SIGNIFICANCE
+    version_options[:description] = opts[:description] || ''
     # Use the dor-services-client to open a new version, passing along args needed by Hydrus
-    Dor::Services::Client.object(pid).version.open(assume_accessioned: should_treat_as_accessioned, vers_md_upd_info: vers_md_upd_info)
+    Dor::Services::Client.object(pid).version.open(assume_accessioned: should_treat_as_accessioned, **version_options)
     # Varying behavior: remediations vs ordinary user edits.
     if opts[:is_remediation]
       # Just log the event.
