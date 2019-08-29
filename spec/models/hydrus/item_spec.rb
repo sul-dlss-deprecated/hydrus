@@ -1121,8 +1121,8 @@ RSpec.describe Hydrus::Item, type: :model do
     end
 
     context 'when it has been accessioned' do
+      let(:description) { 'Best version ever described!' }
       let(:object_client) { instance_double(Dor::Services::Client::Object) }
-
       let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, open: true) }
 
       before do
@@ -1136,8 +1136,10 @@ RSpec.describe Hydrus::Item, type: :model do
 
       it 'calls the client and sets prior_visibility to the old visibility value' do
         expect(item).to receive(:start_hydrus_wf)
-        item.open_new_version
-        expect(version_client).to have_received(:open)
+        item.open_new_version(description: description)
+        expect(version_client).to have_received(:open).with(assume_accessioned: true,
+                                                            significance: Hydrus::Item::DEFAULT_VERSION_SIGNIFICANCE,
+                                                            description: description)
         expect(item.prior_visibility).to eq 'stanford'
       end
     end
