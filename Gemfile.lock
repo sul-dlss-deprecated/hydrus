@@ -128,9 +128,9 @@ GEM
       activesupport (>= 4.0.0)
       mime-types (>= 1.16)
     chronic (0.10.2)
-    cocina-models (0.1.0)
-      dry-struct
-      dry-types
+    cocina-models (0.1.2)
+      dry-struct (~> 1.0)
+      dry-types (~> 1.1)
       zeitwerk (~> 2.1)
     coderay (1.1.2)
     coffee-rails (4.2.2)
@@ -198,7 +198,7 @@ GEM
       solrizer (~> 3.0)
       stanford-mods (>= 2.3.1)
       stanford-mods-normalizer (~> 0.1)
-    dor-services-client (2.5.0)
+    dor-services-client (2.6.2)
       activesupport (>= 4.2, < 7)
       cocina-models (~> 0.1.0)
       faraday (~> 0.15)
