@@ -81,7 +81,7 @@ class HydrusSolrController < ApplicationController
 
   # Private method to return the application's SOLR connection.
   def solr
-    Dor::SearchService.solr
+    ActiveFedora.solr.conn
   end
 
   # Private method to return the logger for the SOLR reindexer.

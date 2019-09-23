@@ -40,7 +40,7 @@ namespace :hydrus do
     item.save
 
     # index into solr
-    solr = Dor::SearchService.solr
+    solr = ActiveFedora.solr.conn
     solr_doc = item.to_solr
     solr.add(solr_doc, add_attributes: { commitWithin: 5000 })
   end
@@ -49,14 +49,14 @@ namespace :hydrus do
   task index_all_workflows: :environment do
     # get all workflow objects using risearch (sparql on fedora) since we don't have a direct connection to argo solr
     model_type = "<#{Dor::WorkflowObject.to_class_uri}>"
-    solr = Dor::SearchService.solr
+    solr = ActiveFedora.solr.conn
     pids = Dor::SearchService.risearch 'select $object from <#ri> where $object ' "<fedora-model:hasModel> #{model_type}", { limit: nil }
     pids.each { |pid| solr.add(Dor.find(pid).to_solr, add_attributes: { commitWithin: 5000 }) } # index into hydrus solr
   end
 
   desc 'Reindex all hydrus collections and items into hydrus solr'
   task reindex_all_hydrus_objects: :environment do
-    solr = Dor::SearchService.solr
+    solr = ActiveFedora.solr.conn
     collection_pids = Hydrus::Collection.all_hydrus_collections
     total_collections = collection_pids.size
     puts "Found #{total_collections} hydrus collections.  Started re-index at #{Time.now}"

@@ -39,7 +39,7 @@ namespace :hydrus do
     unless obj.nil?
       puts "Reindexing #{pid} in solr"
       solr_doc = obj.to_solr
-      Dor::SearchService.solr.add(solr_doc, add_attributes: { commitWithin: 1000 })
+      ActiveFedora.solr.conn.add(solr_doc, add_attributes: { commitWithin: 1000 })
     else
       puts "#{pid} not found"
     end
@@ -57,8 +57,8 @@ namespace :hydrus do
       all_pids.each do |pid|
         puts "Deleteing #{pid}"
         Dor::Config.fedora.client["objects/#{pid}"].delete
-        Dor::SearchService.solr.delete_by_id(pid)
-        Dor::SearchService.solr.commit
+        ActiveFedora.solr.conn.delete_by_id(pid)
+        ActiveFedora.solr.conn.commit
       end
     end
   end
