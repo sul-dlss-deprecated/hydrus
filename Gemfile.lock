@@ -580,6 +580,7 @@ DEPENDENCIES
   dlss-capistrano
   dor-services (~> 7.2)
   dor-services-client (~> 2.0)
+  dor-workflow-client (~> 3.9)
   dynamic_form
   equivalent-xml
   factory_bot_rails

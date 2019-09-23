@@ -8,14 +8,17 @@ RSpec.describe Hydrus::Processable, type: :model do
 
   describe 'complete_workflow_step()' do
     let(:wfs) { instance_double(Dor::Workflow::Client) }
+    let(:step) { 'submit' }
+
     before do
       allow(Dor::Config.workflow).to receive(:client).and_return(wfs)
     end
 
     it 'can exercise the method, stubbing out call to WF service' do
-      step = 'submit'
-      args = ['dor', @go.pid, 'hydrusAssemblyWF', step, 'completed']
-      expect(wfs).to receive(:update_workflow_status).with(*args)
+      expect(wfs).to receive(:update_status).with(druid: @go.pid,
+                                                  workflow: 'hydrusAssemblyWF',
+                                                  process: step,
+                                                  status: 'completed')
       allow(@go).to receive_message_chain(:workflows, :workflow_step_is_done).and_return(false)
       expect(@go).to receive(:workflows_content_is_stale)
       @go.complete_workflow_step(step)
