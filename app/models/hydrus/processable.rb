@@ -16,7 +16,10 @@ module Hydrus::Processable
   # Takes the name of a step in the Hydrus workflow.
   # Calls the workflow service to mark that step as completed.
   def update_workflow_status(step, status)
-    workflow_client.update_workflow_status(REPO, pid, Dor::Config.hydrus.app_workflow, step, status)
+    workflow_client.update_status(druid: pid,
+                                  workflow: Dor::Config.hydrus.app_workflow,
+                                  process: step,
+                                  status: status)
     workflows_content_is_stale
   end
 

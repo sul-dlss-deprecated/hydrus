@@ -74,7 +74,7 @@ RSpec.describe Hydrus::Item, type: :feature, integration: true do
       instance_double(Dor::Workflow::Client,
                       all_workflows_xml: '',
                       milestones: [],
-                      update_workflow_status: nil,
+                      update_status: nil,
                       create_workflow_by_name: nil)
     end
     before do
@@ -92,10 +92,14 @@ RSpec.describe Hydrus::Item, type: :feature, integration: true do
       allow(hi).to receive(:should_start_assembly_wf).and_return(true)
       allow(hi).to receive(:is_assemblable).and_return(true)
       hi.do_publish()
-      expect(wfs).to have_received(:update_workflow_status).with('dor', hi.pid,
-                                                                 'hydrusAssemblyWF', 'approve', 'completed')
-      expect(wfs).to have_received(:update_workflow_status).with('dor', hi.pid,
-                                                                 'hydrusAssemblyWF', 'start-assembly', 'completed')
+      expect(wfs).to have_received(:update_status).with(druid: hi.pid,
+                                                        workflow: 'hydrusAssemblyWF',
+                                                        process: 'approve',
+                                                        status: 'completed')
+      expect(wfs).to have_received(:update_status).with(druid: hi.pid,
+                                                        workflow: 'hydrusAssemblyWF',
+                                                        process: 'start-assembly',
+                                                        status: 'completed')
       expect(wfs).to have_received(:create_workflow_by_name).with(hi.pid, 'assemblyWF', version: '1')
     end
   end
