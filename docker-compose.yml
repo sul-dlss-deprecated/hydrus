@@ -20,7 +20,7 @@ services:
       - 3002:3000
 
   db:
-    image: postgres
+    image: postgres:11
      # No ports shared externally, so that this doesn't conflict with the postgres
      # server that TravisCI starts up.
      # ports:
