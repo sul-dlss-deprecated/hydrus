@@ -67,7 +67,7 @@ GEM
       mini_exiftool
       nokogiri
     ast (2.4.0)
-    autoprefixer-rails (9.6.5)
+    autoprefixer-rails (9.7.0)
       execjs
     awesome_print (1.8.0)
     bagit (0.4.3)
@@ -311,7 +311,7 @@ GEM
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
       ruby_dep (~> 1.2)
-    loofah (2.3.0)
+    loofah (2.3.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     mail (2.7.1)
@@ -354,7 +354,7 @@ GEM
       activesupport (>= 3.2.18)
       i18n
       nokogiri
-    okcomputer (1.17.4)
+    okcomputer (1.18.0)
     om (3.2.0)
       activemodel (>= 5.1, < 7)
       activesupport
