@@ -7,18 +7,6 @@ RSpec.describe Hydrus::Item, type: :model do
   before do
     @cannot_do_regex = /\ACannot perform action/
     allow(item).to receive(:collection).and_return(collection)
-    @workflow_xml = <<-END
-      <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-      <workflows objectId="druid:oo000oo0001">
-        <workflow repository="dor" objectId="druid:oo000oo0001" id="hydrusAssemblyWF">
-          <process version="1" lifecycle="registered" elapsed="0.0" attempts="0" datetime="1234" status="completed" name="start-deposit"/>
-          <process version="1" elapsed="0.0" attempts="0" datetime="9999" status="completed" name="submit"/>
-          <process version="1" elapsed="0.0" attempts="0" datetime="1234" name="approve"/>
-          <process version="1" elapsed="0.0" attempts="0" datetime="1234" name="start-assembly"/>
-        </workflow>
-      </workflows>
-    END
-    @workflow_xml = noko_doc(@workflow_xml)
   end
 
   describe '#files' do
