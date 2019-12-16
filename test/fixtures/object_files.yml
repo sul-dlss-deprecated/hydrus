@@ -1,6 +1,6 @@
 file1:
   id:         1
-  pid:        "druid:oo000oo0001"
+  pid:        "druid:bb123bb1234"
   created_at: <%= HyTime.now_datetime %>
   updated_at: <%= HyTime.now_datetime %>
   label:      "Main survey -- formatted in HTML"
@@ -10,7 +10,7 @@ file1:
 
 file2:
   id:         2
-  pid:        "druid:oo000oo0001"
+  pid:        "druid:bb123bb1234"
   created_at: <%= HyTime.now_datetime %>
   updated_at: <%= HyTime.now_datetime %>
   label:      "Main survey -- as PDF (prepared May 17, 2012)"
@@ -20,7 +20,7 @@ file2:
 
 file3:
   id:         3
-  pid:        "druid:oo000oo0001"
+  pid:        "druid:bb123bb1234"
   created_at: <%= HyTime.now_datetime %>
   updated_at: <%= HyTime.now_datetime %>
   label:      "Main survey -- as plain text (extracted into CSV tables)"
@@ -30,7 +30,7 @@ file3:
 
 file4:
   id:         4
-  pid:        "druid:oo000oo0001"
+  pid:        "druid:bb123bb1234"
   created_at: <%= HyTime.now_datetime %>
   updated_at: <%= HyTime.now_datetime %>
   label:      "Imagine this is a set of data samples"

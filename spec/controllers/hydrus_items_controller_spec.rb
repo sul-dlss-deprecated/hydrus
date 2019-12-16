@@ -4,7 +4,7 @@ RSpec.describe HydrusItemsController, type: :controller do
   # SHOW ACTION.
   describe 'Show Action', integration: true do
     it 'should redirect when not logged in' do
-      @pid = 'druid:oo000oo0001'
+      @pid = 'druid:bb123bb1234'
       get :show, params: { id: @pid }
       expect(response).to redirect_to new_user_session_path
     end
@@ -32,7 +32,7 @@ RSpec.describe HydrusItemsController, type: :controller do
     let(:user) { create :archivist1 }
     describe('File upload', integration: true) do
       before(:all) do
-        @pid = 'druid:oo000oo0001'
+        @pid = 'druid:bb123bb1234'
         @file = fixture_file_upload('/../../spec/fixtures/files/fixture.html', 'text/html')
       end
 
@@ -96,7 +96,7 @@ RSpec.describe HydrusItemsController, type: :controller do
     let(:user) { create :user }
     it 'raises an exception if the user lacks the required permissions' do
       sign_in(user)
-      post :publish_directly, params: { id: 'druid:oo000oo0001' }
+      post :publish_directly, params: { id: 'druid:bb123bb1234' }
       expect(flash[:alert]).to eq('You are not authorized to access this page.')
       expect(response).to redirect_to(root_path)
     end
@@ -106,7 +106,7 @@ RSpec.describe HydrusItemsController, type: :controller do
     let(:user) { create :user }
     it 'raises an exception if the user lacks the required permissions' do
       sign_in(user)
-      post :submit_for_approval, params: { id: 'druid:oo000oo0001' }
+      post :submit_for_approval, params: { id: 'druid:bb123bb1234' }
       expect(flash[:alert]).to eq('You are not authorized to access this page.')
       expect(response).to redirect_to(root_path)
     end
@@ -116,7 +116,7 @@ RSpec.describe HydrusItemsController, type: :controller do
     let(:user) { create :user }
     it 'raises an exception if the user lacks the required permissions' do
       sign_in(user)
-      post :approve, params: { id: 'druid:oo000oo0001' }
+      post :approve, params: { id: 'druid:bb123bb1234' }
       expect(flash[:alert]).to eq('You are not authorized to access this page.')
       expect(response).to redirect_to(root_path)
     end
@@ -126,7 +126,7 @@ RSpec.describe HydrusItemsController, type: :controller do
     let(:user) { create :user }
     it 'raises an exception if the user lacks the required permissions' do
       sign_in(user)
-      post :disapprove, params: { id: 'druid:oo000oo0001' }
+      post :disapprove, params: { id: 'druid:bb123bb1234' }
       expect(flash[:alert]).to eq('You are not authorized to access this page.')
       expect(response).to redirect_to(root_path)
     end
@@ -136,7 +136,7 @@ RSpec.describe HydrusItemsController, type: :controller do
     let(:user) { create :user }
     it 'raises an exception if the user lacks the required permissions' do
       sign_in(user)
-      post :resubmit, params: { id: 'druid:oo000oo0001' }
+      post :resubmit, params: { id: 'druid:bb123bb1234' }
       expect(flash[:alert]).to eq('You are not authorized to access this page.')
       expect(response).to redirect_to(root_path)
     end
@@ -146,7 +146,7 @@ RSpec.describe HydrusItemsController, type: :controller do
     let(:user) { create :user }
     it 'raises an exception if the user lacks the required permissions' do
       sign_in(user)
-      post :open_new_version, params: { id: 'druid:oo000oo0001' }
+      post :open_new_version, params: { id: 'druid:bb123bb1234' }
       expect(flash[:alert]).to eq('You are not authorized to access this page.')
       expect(response).to redirect_to(root_path)
     end

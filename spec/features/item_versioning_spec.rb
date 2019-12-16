@@ -6,7 +6,7 @@ describe('Item versioning', type: :request, integration: true) do
   let(:item_discard) { '.glyphicon.glyphicon-trash' }
 
   before do
-    @hi = Hydrus::Item.find('druid:oo000oo0001')
+    @hi = Hydrus::Item.find('druid:bb123bb1234')
     @ok_notice = 'Your changes have been saved.'
     @buttons = {
       save: 'save_nojs',
@@ -34,7 +34,7 @@ describe('Item versioning', type: :request, integration: true) do
 
   it 'initial unpublished version of an item offers discard button' do
     sign_in(archivist1)
-    item = Hydrus::Item.find('druid:oo000oo0005')
+    item = Hydrus::Item.find('druid:bb123bb5432')
     should_visit_view_page(item)
     expect(page).to have_css(item_discard) # we are unpublished and on v1, we do have a discard button
     expect(item.is_initial_version).to eq(true)

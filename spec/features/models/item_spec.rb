@@ -10,25 +10,25 @@ RSpec.describe Hydrus::Item, type: :feature, integration: true do
     end
 
     it 'generates content metadata, returning and setting correct cm when files exist' do
-      item = Hydrus::Item.find('druid:oo000oo0001')
+      item = Hydrus::Item.find('druid:bb123bb1234')
       expect(item.files.size).to eq(4)
       expect(item.datastreams['contentMetadata'].content).to be_equivalent_to '<contentMetadata></contentMetadata>'
       item.update_content_metadata
       expect(item.datastreams['contentMetadata'].content).to be_equivalent_to <<-EOF
-      <contentMetadata objectId="oo000oo0001" type="file">
-        <resource id="oo000oo0001_1" sequence="1" type="file">
+      <contentMetadata objectId="bb123bb1234" type="file">
+        <resource id="bb123bb1234_1" sequence="1" type="file">
           <label>Main survey -- formatted in HTML</label>
           <file id="pinocchio.htm" preserve="yes" publish="yes" shelve="yes"/>
         </resource>
-        <resource id="oo000oo0001_2" sequence="2" type="file">
+        <resource id="bb123bb1234_2" sequence="2" type="file">
           <label>Main survey -- as plain text (extracted into CSV tables)</label>
           <file id="pinocchio.-punctuation_in=file.name.txt" preserve="yes" publish="no" shelve="no"/>
         </resource>
-        <resource id="oo000oo0001_3" sequence="3" type="file">
+        <resource id="bb123bb1234_3" sequence="3" type="file">
           <label>Main survey -- as PDF (prepared May 17, 2012)</label>
           <file id="pinocchio characters tc in file name.pdf" preserve="yes" publish="yes" shelve="yes"/>
         </resource>
-        <resource id="oo000oo0001_4" sequence="4" type="file">
+        <resource id="bb123bb1234_4" sequence="4" type="file">
           <label>Imagine this is a set of data samples</label>
           <file id="pinocchio_using_a_rather_long_filename-2012-05-17.zip" preserve="yes" publish="yes" shelve="yes"/>
         </resource>

@@ -95,11 +95,11 @@ describe ApplicationHelper, type: :helper do
   end
 
   it 'should set the terms of deposit path' do
-    expect(terms_of_deposit_path('druid:oo000oo0001')).to eq('/items/terms_of_deposit?pid=druid%3Aoo000oo0001')
+    expect(terms_of_deposit_path('druid:bb123bb1234')).to eq('/items/terms_of_deposit?pid=druid%3Abb123bb1234')
   end
 
   it 'should set the terms of deposit agree path' do
-    expect(helper.terms_of_deposit_agree_path('druid:oo000oo0001')).to eq('/items/agree_to_terms_of_deposit?pid=druid%3Aoo000oo0001')
+    expect(helper.terms_of_deposit_agree_path('druid:bb123bb1234')).to eq('/items/agree_to_terms_of_deposit?pid=druid%3Abb123bb1234')
   end
 
   it 'should show edit item text' do
@@ -117,11 +117,11 @@ describe ApplicationHelper, type: :helper do
   describe 'item title link helpers', integration: true do
     it 'should return item title links, showing special text when blank' do
       hi = Hydrus::Item.new
-      hi2 = Hydrus::Item.find('druid:oo000oo0001')
+      hi2 = Hydrus::Item.find('druid:bb123bb1234')
       expect(helper.title_text(hi)).to eq('Untitled')
       expect(helper.title_text(hi2)).to eq('How Couples Meet and Stay Together')
       expect(helper.title_link(hi)).to have_selector 'a[href="/items"][disable_after_click="true"]', text: 'Untitled'
-      expect(helper.title_link(hi2)).to have_selector 'a[href="/items/druid:oo000oo0001"][disable_after_click="true"]', text: 'How Couples Meet and Stay Together'
+      expect(helper.title_link(hi2)).to have_selector 'a[href="/items/druid:bb123bb1234"][disable_after_click="true"]', text: 'How Couples Meet and Stay Together'
     end
   end
 

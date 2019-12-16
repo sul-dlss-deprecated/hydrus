@@ -24,8 +24,8 @@ module Hydrus
       'druid:oo000oo0004',
       'druid:oo000oo0010',
       # Items.
-      'druid:oo000oo0001',
-      'druid:oo000oo0005',
+      'druid:bb123bb1234',
+      'druid:bb123bb5432',
       'druid:oo000oo0006',
       'druid:oo000oo0007',
       'druid:oo000oo0011',

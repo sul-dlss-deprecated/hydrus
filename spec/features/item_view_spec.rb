@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 RSpec.describe('Item view', type: :request, integration: true) do
-  let(:druid) { 'druid:oo000oo0001' }
+  let(:druid) { 'druid:bb123bb1234' }
 
   context 'when signed in' do
     let(:user) { create :archivist1 }
@@ -30,7 +30,7 @@ RSpec.describe('Item view', type: :request, integration: true) do
       expect(page).to have_content('archivist1@example.com')
       expect(page).to have_content('How Couples Meet and Stay Together')
       expect(page).to have_content('The story of Pinocchio')
-      expect(page).to have_content('druid:oo000oo0001')
+      expect(page).to have_content('druid:bb123bb1234')
       expect(page).to have_content('Contributing author')
       expect(page).to have_content('Frisbee, Hanna')
       expect(page).to have_content('Sponsor')
@@ -70,8 +70,8 @@ RSpec.describe('Item view', type: :request, integration: true) do
       visit '/items/druid:oo000oo0003'
       expect(current_path).to eq('/collections/druid:oo000oo0003')
       # Edit collection URL with an item PID.
-      visit '/collections/druid:oo000oo0001/edit'
-      expect(current_path).to eq('/items/druid:oo000oo0001/edit')
+      visit '/collections/druid:bb123bb1234/edit'
+      expect(current_path).to eq('/items/druid:bb123bb1234/edit')
     end
 
     describe '#purl_page_ready?' do

@@ -10,8 +10,8 @@ describe(HydrusSolrController, type: :feature, integration: true) do
 
   describe '#reindex' do
     it 'indexes an item into solr' do
-      expect(ActiveFedora.solr.conn).to receive(:add).with(hash_including(id: 'druid:oo000oo0001'), anything)
-      visit '/hydrus_solr/reindex/druid:oo000oo0001'
+      expect(ActiveFedora.solr.conn).to receive(:add).with(hash_including(id: 'druid:bb123bb1234'), anything)
+      visit '/hydrus_solr/reindex/druid:bb123bb1234'
     end
   end
 end
