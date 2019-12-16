@@ -1,23 +1,24 @@
 require 'spec_helper'
 require 'rake'
 
-describe Hydrus::ObjectFile, type: :feature, integration: true do
+RSpec.describe Hydrus::ObjectFile, type: :feature, integration: true do
   fixtures :object_files
+  let(:pid) { 'druid:bb123bb1234' }
 
-  it 'should find four files associated with the first item and it should grab the url of a given file' do
-    pid = 'druid:oo000oo0001'
-    files = Hydrus::ObjectFile.where(pid: pid)
-    expect(files.size).to eq(4)
-    f = files[0]
-    exp_url = '/uploads/oo/000/oo/0001/oo000oo0001/content/pinocchio.htm'
-    expect(f.url).to eq(exp_url)
-    expect(f.current_path).to eq("#{Rails.root}/public#{exp_url}")
-    expect(files[1].filename).to eq(%q{pinocchio characters tc in file name.pdf})
-    expect(files[1].size).to be > 0
+  describe '.where' do
+    subject(:files) { described_class.where(pid: pid) }
+    it 'finds four files associated with the first item and it grabs the url of a given file' do
+      expect(files.size).to eq(4)
+      f = files[0]
+      exp_url = '/uploads/bb/123/bb/1234/bb123bb1234/content/pinocchio.htm'
+      expect(f.url).to eq(exp_url)
+      expect(f.current_path).to eq("#{Rails.root}/public#{exp_url}")
+      expect(files[1].filename).to eq(%q{pinocchio characters tc in file name.pdf})
+      expect(files[1].size).to be > 0
+    end
   end
 
   it 'should delete a file from the file system and disassociate from item when called' do
-    pid = 'druid:oo000oo0001'
     @hi = Hydrus::Item.find(pid)
 
     files = @hi.files

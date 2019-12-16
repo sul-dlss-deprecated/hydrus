@@ -3,7 +3,7 @@ require 'spec_helper'
 describe('Item edit', type: :request, integration: true) do
   let(:archivist1) { create :archivist1 }
   before :each do
-    @druid = 'druid:oo000oo0001'
+    @druid = 'druid:bb123bb1234'
     @hi    = Hydrus::Item.find @druid
     @ok_notice = 'Your changes have been saved.'
     @buttons = {
@@ -265,7 +265,7 @@ describe('Item edit', type: :request, integration: true) do
 
   it 'editing related content w/o titles' do
     # Save copy of the original datastreams.
-    @druid = 'druid:oo000oo0005'
+    @druid = 'druid:bb123bb5432'
     @hi    = Hydrus::Item.find(@druid)
     # Set up the new values for the fields we will edit.
     ni = OpenStruct.new(

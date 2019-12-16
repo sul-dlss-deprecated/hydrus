@@ -293,7 +293,7 @@ RSpec.describe Hydrus::Item, type: :model do
     end
   end
   describe 'roleMetadata in the item', integration: true do
-    subject { Hydrus::Item.find('druid:oo000oo0001') }
+    subject { Hydrus::Item.find('druid:bb123bb1234') }
     it 'should have a roleMetadata datastream' do
       expect(subject.roleMetadata).to be_an_instance_of(Hydrus::RoleMetadataDS)
       expect(subject.item_depositor_id).to eq('archivist1')
@@ -1253,12 +1253,12 @@ RSpec.describe Hydrus::Item, type: :model do
         n = tags.find_index(v)
         xml = [
           '<?xml version="1.0"?>',
-          '<versionMetadata objectId="druid:oo000oo0001">',
+          '<versionMetadata objectId="druid:bb123bb1234">',
           vs[0..n],
           '</versionMetadata>',
         ]
         vm = Dor::VersionMetadataDS.from_xml(xml.flatten.join)
-        allow(vm).to receive(:pid).and_return('druid:oo000oo0001')
+        allow(vm).to receive(:pid).and_return('druid:bb123bb1234')
         allow(item).to receive(:versionMetadata).and_return(vm)
         item.datastreams['versionMetadata'] = vm
       }

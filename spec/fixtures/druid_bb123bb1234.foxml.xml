@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<foxml:digitalObject VERSION="1.1" PID="druid:oo000oo0001"
+<foxml:digitalObject VERSION="1.1" PID="druid:bb123bb1234"
   xmlns:foxml="info:fedora/fedora-system:def/foxml#"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/definitions/1/0/foxml1-1.xsd">
@@ -21,7 +21,7 @@
           xmlns:fedora="info:fedora/fedora-system:def/relations-external#"
           xmlns:hydra="http://projecthydra.org/ns/relations#"
           xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
-          <rdf:Description rdf:about="info:fedora/druid:oo000oo0001">
+          <rdf:Description rdf:about="info:fedora/druid:bb123bb1234">
             <hydra:isGovernedBy rdf:resource="info:fedora/druid:oo000oo0002"/>
             <fedora:isMemberOf rdf:resource="info:fedora/druid:oo000oo0003"/>
             <fedora:isMemberOfCollection
@@ -39,7 +39,7 @@
       CREATED="2011-07-05T20:49:25.801Z" MIMETYPE="text/xml" SIZE="345">
       <foxml:xmlContent>
         <identityMetadata>
-          <objectId>druid:oo000oo0001</objectId>
+          <objectId>druid:bb123bb1234</objectId>
           <objectType>item</objectType>
           <objectLabel>How Couples Meet and Stay Together</objectLabel>
           <objectCreator>DOR</objectCreator>
@@ -79,7 +79,7 @@
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
           <dc:title>How Couples Meet and Stay Together</dc:title>
-          <dc:identifier>druid:oo000oo0001</dc:identifier>
+          <dc:identifier>druid:bb123bb1234</dc:identifier>
         </oai_dc:dc>
       </foxml:xmlContent>
     </foxml:datastreamVersion>
@@ -136,7 +136,7 @@
             2. Have the most recent marriage cohorts (especially the traditional heterosexual same-race married couples) met in the same way their parents and grandparents did?
             3. How do the couple dissolution rates of nontraditional couples compare to the couple dissolution rates of more traditional same-race heterosexual couples?
             4. How does the availability of civil union, domestic partnership or same-sex marriage rights affect couple stability for same-sex couples? This study will provide the first nationally representative data on the couple dissolution rates of same-sex couples.</abstract>
-          <note type="preferred citation" displayLabel="Preferred Citation">Rosenfeld, Michael J., and Reuben J. Thomas. 2011. How Couples Meet and Stay Together, Waves 1, 2, and 3: Public version 3.04 [Computer file]. Stanford, CA: Stanford University Libraries. http://purl.stanford.edu/oo000oo0001</note>
+          <note type="preferred citation" displayLabel="Preferred Citation">Rosenfeld, Michael J., and Reuben J. Thomas. 2011. How Couples Meet and Stay Together, Waves 1, 2, and 3: Public version 3.04 [Computer file]. Stanford, CA: Stanford University Libraries. http://purl.stanford.edu/bb123bb1234</note>
           <note type="citation/reference" displayLabel="Related Publication">Nolan, K., Ward, L., Conroy, T. &amp; Welch, L. (2011). "Are the Brainwaves of Race Car Drivers Different?" Journal of Physiological Psychology, 54(1), pp. 235-249.</note>
           <note type="citation/reference" displayLabel="Related Publication">Nolan, K. (2010). "Brainwave Measurement of Race Car Drivers" Proceedings of the Annual Meeting of Cognitive Psychologists, pp. 822-828.</note>
           <note type="contact" displayLabel="Contact">archivist1@example.com</note>
@@ -204,7 +204,7 @@
     <foxml:datastreamVersion ID="rightsMetadata.0" LABEL="Rights Metadata"
       CREATED="2011-07-05T20:46:24.337Z" MIMETYPE="text/xml" SIZE="293">
       <foxml:xmlContent>
-        <rightsMetadata objectId="druid:oo000oo0001">
+        <rightsMetadata objectId="druid:bb123bb1234">
           <access type="discover">
             <machine>
               <world/>
@@ -226,7 +226,7 @@
   </foxml:datastream>
   <foxml:datastream ID="workflows" STATE="A" CONTROL_GROUP="E" VERSIONABLE="false">
     <foxml:datastreamVersion ID="workflows.0" LABEL="Workflows" CREATED="2012-04-11T18:09:43.955Z" MIMETYPE="application/xml">
-      <foxml:contentLocation TYPE="URL" REF="http://sul-lyberservices-dev.stanford.edu/workflow/dor/objects/druid:oo000oo0001/workflows" />
+      <foxml:contentLocation TYPE="URL" REF="http://sul-lyberservices-dev.stanford.edu/workflow/dor/objects/druid:bb123bb1234/workflows" />
     </foxml:datastreamVersion>
   </foxml:datastream>
   <foxml:datastream ID="events" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
@@ -243,7 +243,7 @@
   <foxml:datastream ID="versionMetadata" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
     <foxml:datastreamVersion ID="versionMetadata.1" LABEL="Version Metadata" CREATED="2012-12-21T16:58:42.002Z" MIMETYPE="text/xml" SIZE="201">
       <foxml:xmlContent>
-        <versionMetadata objectId="druid:oo000oo0001">
+        <versionMetadata objectId="druid:bb123bb1234">
           <version tag="1.0.0" versionId="1">
             <description>Initial Version</description>
           </version>

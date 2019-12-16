@@ -14,7 +14,7 @@
 
 USE_IRB = ARGV.delete '--irb'
 
-dru = 'druid:oo000oo0001'
+dru = 'druid:bb123bb1234'
 hi  = Hydrus::Item.find(dru)
 hc  = hi.collection
 

@@ -520,7 +520,7 @@ describe('Item create', type: :request, integration: true) do
   end
 
   describe('terms of acceptance for an existing item', integration: true) do
-    subject { Hydrus::Item.find('druid:oo000oo0001') }
+    subject { Hydrus::Item.find('druid:bb123bb1234') }
 
     it 'should indicate if the item has had terms accepted already' do
       expect(subject.accepted_terms_of_deposit).to eq('true')
@@ -608,7 +608,7 @@ describe('Item create', type: :request, integration: true) do
 
   describe 'delete()' do
     it 'should raise error if object is not destroyable' do
-      hi = Hydrus::Item.find('druid:oo000oo0001')
+      hi = Hydrus::Item.find('druid:bb123bb1234')
       expect(hi.is_destroyable).to eq(false)
       expect { hi.delete }.to raise_error(RuntimeError)
     end

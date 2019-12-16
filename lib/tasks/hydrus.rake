@@ -2,7 +2,7 @@ namespace :hydrus do
   desc 'associate DOR item with Hydrus'
   # associates a non-hydrus DOR item with the Hydrus app by adding datastreams and indexing into Hydrus solr
   # need to pass in druid of object to associated, collection druid of Hydrus collection to associate with, and type of hydrus object (e.g. dataset)
-  # run with RAILS_ENV=production rake hydrus:index_object druid=druid:oo000oo0001 collection=druid:oo00oo002 type=dataset
+  # run with RAILS_ENV=production rake hydrus:index_object druid=druid:bb123bb1234 collection=druid:oo00oo002 type=dataset
   task index_object: :environment do |t, args|
     druid = ENV['druid'] # druid to index (full druid, including druid: prefix)
     collection = ENV['collection'] # druid of collection to associate with  (full druid, including druid: prefix)

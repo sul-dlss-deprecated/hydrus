@@ -116,11 +116,11 @@ RSpec.describe Hydrus::SolrQueryable, type: :model do
   describe('all_hydrus_objects()', integration: true) do
     before(:each) do
       @all_objects = [
-        { pid: 'druid:oo000oo0001', object_type: 'Item',              object_version: '2013.02.26a' },
+        { pid: 'druid:bb123bb1234', object_type: 'Item',              object_version: '2013.02.26a' },
+        { pid: 'druid:bb123bb5432', object_type: 'Item',              object_version: '2013.02.26a' },
         { pid: 'druid:oo000oo0002', object_type: 'AdminPolicyObject', object_version: '2013.02.26a' },
         { pid: 'druid:oo000oo0003', object_type: 'Collection',        object_version: '2013.02.26a' },
         { pid: 'druid:oo000oo0004', object_type: 'Collection',        object_version: '2013.02.26a' },
-        { pid: 'druid:oo000oo0005', object_type: 'Item',              object_version: '2013.02.26a' },
         { pid: 'druid:oo000oo0006', object_type: 'Item',              object_version: '2013.02.26a' },
         { pid: 'druid:oo000oo0007', object_type: 'Item',              object_version: '2013.02.26a' },
         { pid: 'druid:oo000oo0008', object_type: 'AdminPolicyObject', object_version: '2013.02.26a' },
@@ -132,18 +132,18 @@ RSpec.describe Hydrus::SolrQueryable, type: :model do
       ]
     end
 
-    it 'should get all Hydrus objects, with the correct info' do
+    it 'gets all Hydrus objects, with the correct info' do
       got = instance.all_hydrus_objects.sort_by { |h| h[:pid] }
       expect(got).to eq(@all_objects)
     end
 
-    it 'should get all Hydrus objects -- but only an array of PIDs' do
+    it 'get all Hydrus objects -- but only an array of PIDs' do
       got = instance.all_hydrus_objects(pids_only: true).sort
       exp = @all_objects.map { |h| h[:pid] }
       expect(got).to eq(exp)
     end
 
-    it 'should all Items and Collections, with the correct info' do
+    it 'gets all Items and Collections, with the correct info' do
       ms = [Hydrus::Collection, Hydrus::Item]
       got = instance.all_hydrus_objects(models: ms).sort_by { |h| h[:pid] }
       exp = @all_objects.reject { |h| h[:object_type] == 'AdminPolicyObject' }

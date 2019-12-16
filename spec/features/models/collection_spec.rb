@@ -16,7 +16,7 @@ describe(Hydrus::Collection, type: :feature, integration: true) do
     expect(hc.hydrus_items).to eq(hc.items)
     items = hc.items
     druids = items.map { |i| i.pid }
-    expect(druids).to include('druid:oo000oo0001', 'druid:oo000oo0005', 'druid:oo000oo0006', 'druid:oo000oo0007')
+    expect(druids).to include('druid:bb123bb1234', 'druid:bb123bb5432', 'druid:oo000oo0006', 'druid:oo000oo0007')
   end
 
   it 'should behave nicely when it has no member Hydrus::Items' do
