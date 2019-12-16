@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe('Item versioning', type: :request, integration: true) do
+RSpec.describe('Item versioning', type: :request, integration: true) do
   let(:archivist1) { create :archivist1 }
 
   let(:item_discard) { '.glyphicon.glyphicon-trash' }
@@ -29,7 +29,7 @@ describe('Item versioning', type: :request, integration: true) do
     workflow_client = Dor::Workflow::Client.new(url: Settings.workflow.url)
     workflow_client.delete_workflow('dor', @hi.pid, 'versioningWF')
     workflow_client.delete_workflow('dor', @hi.pid, workflow_name)
-    workflow_client.create_workflow_by_name(@hi.pid, workflow_name)
+    workflow_client.create_workflow_by_name(@hi.pid, workflow_name, version: '1')
   end
 
   it 'initial unpublished version of an item offers discard button' do
