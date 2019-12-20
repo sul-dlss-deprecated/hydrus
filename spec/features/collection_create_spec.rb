@@ -56,7 +56,7 @@ RSpec.describe('Collection create', type: :request, integration: true) do
     # Check workflow of Collection.
     wf_nodes = coll.workflows.find_by_terms(:workflow)
     expect(wf_nodes.size).to eq(1)
-    expect(wf_nodes.first[:id]).to eq(Dor::Config.hydrus.app_workflow.to_s)
+    expect(wf_nodes.first[:id]).to eq(Settings.hydrus.app_workflow.to_s)
     # Check identityMetadata of Collection.
     expect(coll.identityMetadata.tag.to_a).to include('Project : Hydrus')
     expect(coll.identityMetadata.objectType.to_a).to include('collection', 'set')
@@ -224,7 +224,7 @@ RSpec.describe('Collection create', type: :request, integration: true) do
       hya = Hydrus::AdminPolicyObject
       afe = ActiveFedora::ObjectNotFoundError
       wfs = Dor::Config.workflow.client
-      hwf = Dor::Config.hydrus.app_workflow.to_s
+      hwf = Settings.hydrus.app_workflow.to_s
       # Create a new collection.
       hc   = create_new_collection()
       apo  = hc.apo

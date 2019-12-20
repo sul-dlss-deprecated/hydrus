@@ -14,6 +14,6 @@
 	<p>Email: <%=@email%></p>
 <% end %>
 <p>Message: <%=@message%></p>
-<p>Source Page: <%=Dor::Config.hydrus.host + @from%></p>
+<p>Source Page: <%= Settings.hydrus.host + @from %></p>
 <p>User agent: <%=@request.env["HTTP_USER_AGENT"]%></p>
 </body></html>

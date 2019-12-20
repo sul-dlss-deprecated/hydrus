@@ -25,7 +25,7 @@ RSpec.describe('Item versioning', type: :request, integration: true) do
   #
   # The rake task :refresh_workflows duplicates some of this behavior.
   after do
-    workflow_name = Dor::Config.hydrus.app_workflow
+    workflow_name = Settings.hydrus.app_workflow
     workflow_client = Dor::Workflow::Client.new(url: Settings.workflow.url)
     workflow_client.delete_workflow('dor', @hi.pid, 'versioningWF')
     workflow_client.delete_workflow('dor', @hi.pid, workflow_name)

@@ -87,7 +87,7 @@ RSpec.describe Hydrus::Processable, type: :model do
     end
 
     it 'can exercise should_start_assembly_wf()' do
-      expect(@go.should_start_assembly_wf).to eq(Dor::Config.hydrus.start_assembly_wf)
+      expect(@go.should_start_assembly_wf).to eq(Settings.hydrus.start_assembly_wf)
     end
   end
 

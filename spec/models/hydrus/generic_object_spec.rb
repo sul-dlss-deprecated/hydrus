@@ -294,7 +294,7 @@ describe Hydrus::GenericObject, type: :model do
     it 'get_workflow_node() should return a node with correct id attribute' do
       node = @go.workflows.get_workflow_node
       expect(node).to be_instance_of Nokogiri::XML::Element
-      expect(node['id']).to eq(Dor::Config.hydrus.app_workflow.to_s)
+      expect(node['id']).to eq(Settings.hydrus.app_workflow.to_s)
     end
 
     it 'get_workflow_step() should return a node with correct name attribute' do

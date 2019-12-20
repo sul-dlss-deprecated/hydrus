@@ -10,8 +10,8 @@ describe(Hydrus::AdminPolicyObject, type: :feature, integration: true) do
     # Should be an APO whose APO is the ur-APO.
     expect(apo).to_not be_new_record
     expect(apo).to be_instance_of Hydrus::AdminPolicyObject
-    expect(apo.admin_policy_object.pid).to eq Dor::Config.hydrus.ur_apo_druid
-    expect(apo.title).to eq Dor::Config.hydrus.initial_apo_title
+    expect(apo.admin_policy_object.pid).to eq Settings.hydrus.ur_apo_druid
+    expect(apo.title).to eq Settings.hydrus.initial_apo_title
     expect(apo.label).to eq apo.title
     expect(apo.roleMetadata).to_not be_new
     expect(apo.roleMetadata.collection_manager.to_a).to include user

@@ -73,7 +73,7 @@ class Hydrus::GenericObject < Dor::Item
   end
 
   def purl_url
-    "#{Dor::Config.purl.base_url}#{dru}"
+    "#{Settings.purl.base_url}#{dru}"
   end
 
   # Takes an item_type: :dataset, etc. for items, or just :collection for collections.

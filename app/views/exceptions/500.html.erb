@@ -12,7 +12,7 @@
   to let us know how you got here.
 </p>
 
-<% if Dor::Config.hydrus.exception_error_panel && !@exception.blank?%>
+<% if Settings.hydrus.exception_error_panel && !@exception.blank?%>
 
   <a onclick="JavaScript:toggleErrors();" href="#">Full error message</a>
   <div style="display:none" id="errors">

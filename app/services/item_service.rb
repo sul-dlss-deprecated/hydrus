@@ -42,7 +42,7 @@ class ItemService
     registration_response = Hydrus::GenericObject.register_dor_object(user, 'item', collection.apo_pid)
 
     Hydrus::Item.find(registration_response[:pid]).tap do |item|
-      workflow_client.create_workflow_by_name(item.pid, Dor::Config.hydrus.app_workflow, version: item.current_version)
+      workflow_client.create_workflow_by_name(item.pid, Settings.hydrus.app_workflow, version: item.current_version)
       item.remove_relationship :has_model, 'info:fedora/afmodel:Dor_Item'
       item.assert_content_model
       # Set the item_type, and add some Hydrus-specific info to identityMetadata.

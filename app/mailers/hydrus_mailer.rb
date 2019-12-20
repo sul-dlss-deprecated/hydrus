@@ -86,7 +86,7 @@ class HydrusMailer < ActionMailer::Base
   end
 
   def host
-    Dor::Config.hydrus.host
+    Settings.hydrus.host
   end
 
   def self.process_user_list(users)

@@ -1,9 +1,8 @@
 hydrus:
+  app_workflow: hydrusAssemblyWF
   show_test_banner: false
-  exception_error_page:   true  # if true, a generic error page will be shown with no exception messages; if false, standard Rails exceptions are shown directly to the user
-  exception_error_panel:  false
+  exception_error_panel: false
   host: 'hydrus-test.stanford.edu'
-  exception_recipients: ''
   ur_apo_druid: 'druid:bb000bb0000'
   project_tag: 'Project : Hydrus'
 
@@ -19,13 +18,8 @@ dor_services:
   token: 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJIeWRydXMtVGVzdCJ9.vfo6tMpMhoSqlNaIeW1N0CZKDHbNo_ABHHfpVmIZoHc'
 
 stacks:
-  document_cache_storage_root: ~
   document_cache_host: ~
-  document_cache_user: ~
   local_workspace_root: ~
-  storage_root: ~
-  host: ~
-  user: ~
 
 solr:
   url: 'https://solr.example.com/solr/collection'

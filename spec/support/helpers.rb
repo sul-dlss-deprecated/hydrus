@@ -110,12 +110,12 @@ end
 # order to pass validations. This method can be used to set the mint_ids
 # configuration to true, and then latter restore the previous value.
 def config_mint_ids(prev = nil)
-  suri = Dor::Config.configure.suri
+  suri = Dor::Config.suri
   if prev.nil?
     prev = suri.mint_ids
-    suri.mint_ids = true
+    suri.mint_ids(true)
   else
-    suri.mint_ids = prev
+    suri.mint_ids(prev)
   end
   prev
 end

@@ -6,7 +6,7 @@ class Dor::WorkflowDs
 
   # Returns the hydrusAssemblyWF node from the object's workflows.
   def get_workflow_node
-    wf = Dor::Config.hydrus.app_workflow
+    wf = Settings.hydrus.app_workflow
     q = "//workflow[@id='#{wf}']"
     ng_xml.at_xpath(q)
   end

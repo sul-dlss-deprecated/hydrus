@@ -33,14 +33,11 @@ describe('Item create', type: :request, integration: true) do
     }
     @hc_druid = 'druid:bb000bb0003'
     @edit_path_regex = Regexp.new('/items/(druid:\w{11})/edit')
-    # Need to mint an actual druid in order to pass validation.
-    @prev_mint_ids = Dor::Config.configure.suri.mint_ids
-    Dor::Config.configure.suri.mint_ids = true
   end
 
-  after(:all) do
-    # Restore mint_ids setting.
-    Dor::Config.configure.suri.mint_ids = @prev_mint_ids
+  before do
+    # Need to mint an actual druid in order to pass validation.
+    allow(Dor::Config.suri).to receive(:mint_ids).and_return(true)
   end
 
   context 'depositing items into collections' do
@@ -88,7 +85,7 @@ describe('Item create', type: :request, integration: true) do
     # Check workflow of Item.
     wf_nodes = item.workflows.find_by_terms(:workflow)
     expect(wf_nodes.size).to eq(1)
-    expect(wf_nodes.first[:id]).to eq(Dor::Config.hydrus.app_workflow.to_s)
+    expect(wf_nodes.first[:id]).to eq(Settings.hydrus.app_workflow.to_s)
     # Check identityMetadata of Item.
     expect(item.identityMetadata.tag.to_a).to include('Project : Hydrus')
     # Check roles of the Item.
@@ -619,7 +616,7 @@ describe('Item create', type: :request, integration: true) do
       hyc = Hydrus::Collection
       afe = ActiveFedora::ObjectNotFoundError
       wfs = Dor::Config.workflow.client
-      hwf = Dor::Config.hydrus.app_workflow.to_s
+      hwf = Settings.hydrus.app_workflow.to_s
       # Create a new item.
       hi  = create_new_item()
       pid = hi.pid

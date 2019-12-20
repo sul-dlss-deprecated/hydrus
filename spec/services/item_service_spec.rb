@@ -3,11 +3,8 @@
 require 'spec_helper'
 
 RSpec.describe ItemService do
-  around do |example|
-    @prev_mint_ids = Dor::Config.configure.suri.mint_ids
-    Dor::Config.configure.suri.mint_ids = true
-    example.run
-    Dor::Config.configure.suri.mint_ids = @prev_mint_ids
+  before do
+    allow(Dor::Config.suri).to receive(:mint_ids).and_return(true)
   end
 
   describe '.create' do
