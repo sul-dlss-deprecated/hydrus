@@ -67,8 +67,8 @@ RSpec.describe('Item view', type: :request, integration: true) do
 
     it 'redirect_if_not_correct_object_type()' do
       # View item URL with a collection PID.
-      visit '/items/druid:oo000oo0003'
-      expect(current_path).to eq('/collections/druid:oo000oo0003')
+      visit '/items/druid:bb000bb0003'
+      expect(current_path).to eq('/collections/druid:bb000bb0003')
       # Edit collection URL with an item PID.
       visit '/collections/druid:bb123bb1234/edit'
       expect(current_path).to eq('/items/druid:bb123bb1234/edit')

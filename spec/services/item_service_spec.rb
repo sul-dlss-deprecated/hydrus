@@ -14,7 +14,7 @@ RSpec.describe ItemService do
     subject(:item) { described_class.create(collection.pid, user) }
 
     let(:workflow_client) { instance_double(Dor::Workflow::Client, create_workflow_by_name: nil, all_workflows_xml: '', milestones: []) }
-    let(:collection) { Hydrus::Collection.find('druid:oo000oo0003') }
+    let(:collection) { Hydrus::Collection.find('druid:bb000bb0003') }
 
     before do
       allow(Dor::Config.workflow).to receive(:client).and_return(workflow_client)

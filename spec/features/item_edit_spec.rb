@@ -361,7 +361,7 @@ describe('Item edit', type: :request, integration: true) do
     check_emb_vis_lic(@hi, ps)
 
     # Modify the collection to allow varying license.
-    should_visit_edit_page(Hydrus::Collection.find('druid:oo000oo0003'))
+    should_visit_edit_page(Hydrus::Collection.find('druid:bb000bb0003'))
     choose varies_radio
     select(new_collection_license, from: collection_licenses)
     click_button(@buttons[:save])

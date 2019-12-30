@@ -15,7 +15,7 @@ RSpec.describe HydrusItemsController, type: :controller do
     let(:archivist1) { create :archivist1 }
     it 'should restrict access to non authed user' do
       sign_in(user)
-      get :new, params: { collection: 'druid:oo000oo0003' }
+      get :new, params: { collection: 'druid:bb000bb0003' }
       expect(response).to redirect_to(root_path)
       expect(flash[:alert]).to eq('You are not authorized to access this page.')
     end

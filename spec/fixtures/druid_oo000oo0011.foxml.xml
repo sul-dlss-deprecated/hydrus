@@ -22,7 +22,7 @@
           xmlns:hydra="http://projecthydra.org/ns/relations#"
           xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
           <rdf:Description rdf:about="info:fedora/druid:oo000oo0011">
-            <hydra:isGovernedBy rdf:resource="info:fedora/druid:oo000oo0009"/>
+            <hydra:isGovernedBy rdf:resource="info:fedora/druid:bb000bb0009"/>
             <fedora:isMemberOf rdf:resource="info:fedora/druid:oo000oo0010"/>
             <fedora:isMemberOfCollection
               rdf:resource="info:fedora/druid:oo000oo0010"/>

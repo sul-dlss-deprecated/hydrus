@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<foxml:digitalObject VERSION="1.1" PID="druid:oo000oo0008" xmlns:foxml="info:fedora/fedora-system:def/foxml#" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/definitions/1/0/foxml1-1.xsd">
+<foxml:digitalObject VERSION="1.1" PID="druid:bb000bb0008" xmlns:foxml="info:fedora/fedora-system:def/foxml#" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/definitions/1/0/foxml1-1.xsd">
   <foxml:objectProperties>
     <foxml:property NAME="info:fedora/fedora-system:def/model#state" VALUE="Active" />
     <foxml:property NAME="info:fedora/fedora-system:def/model#label" VALUE="APO for Large Network Dataset Collection" />
@@ -11,7 +11,7 @@
     <foxml:datastreamVersion ID="RELS-EXT.0" LABEL="RDF Statements about this object" CREATED="2011-07-25T20:32:10.617Z" MIMETYPE="application/rdf+xml" FORMAT_URI="info:fedora/fedora-system:FedoraRELSExt-1.0" SIZE="424">
       <foxml:xmlContent>
         <rdf:RDF xmlns:fedora-model="info:fedora/fedora-system:def/model#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rel="info:fedora/fedora-system:def/relations-external#" xmlns:hydra="http://projecthydra.org/ns/relations#">
-          <rdf:Description rdf:about="info:fedora/druid:oo000oo0008">
+          <rdf:Description rdf:about="info:fedora/druid:bb000bb0008">
             <hydra:isGovernedBy rdf:resource="info:fedora/druid:hv992ry2431" />
             <hasModel xmlns="info:fedora/fedora-system:def/model#" rdf:resource="info:fedora/afmodel:Hydrus_AdminPolicyObject" />
           </rdf:Description>
@@ -23,7 +23,7 @@
     <foxml:datastreamVersion ID="identityMetadata.0" LABEL="Identity Metadata" CREATED="2011-07-05T20:49:25.801Z" MIMETYPE="text/xml" SIZE="345">
       <foxml:xmlContent>
         <identityMetadata>
-          <objectId>druid:oo000oo0008</objectId>
+          <objectId>druid:bb000bb0008</objectId>
           <objectType>adminPolicy</objectType>
           <objectLabel>APO for Large Network Dataset Collection</objectLabel>
           <objectCreator>DOR</objectCreator>
@@ -38,7 +38,7 @@
       <foxml:xmlContent>
         <oai_dc:dc xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
           <dc:title>APO for Large Network Dataset Collection</dc:title>
-          <dc:identifier>druid:oo000oo0008</dc:identifier>
+          <dc:identifier>druid:bb000bb0008</dc:identifier>
         </oai_dc:dc>
       </foxml:xmlContent>
     </foxml:datastreamVersion>
@@ -50,7 +50,7 @@
           <titleInfo>
             <title>APO for Large Network Dataset Collection</title>
           </titleInfo>
-          <identifier type="druid">oo000oo0008</identifier>
+          <identifier type="druid">bb000bb0008</identifier>
         </mods>
       </foxml:xmlContent>
     </foxml:datastreamVersion>
@@ -58,7 +58,7 @@
   <foxml:datastream ID="defaultObjectRights" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
     <foxml:datastreamVersion ID="defaultObjectRights.0" LABEL="Default Object Rights" CREATED="2011-07-05T20:46:24.337Z" MIMETYPE="text/xml" SIZE="293">
       <foxml:xmlContent>
-        <defaultObjectRights objectId="druid:oo000oo0008">
+        <defaultObjectRights objectId="druid:bb000bb0008">
           <access type="discover">
             <machine>
               <world/>
@@ -91,7 +91,7 @@
   <foxml:datastream ID="administrativeMetadata" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
     <foxml:datastreamVersion ID="administrativeMetadata.0" LABEL="Administrative Metadata" CREATED="2011-07-05T20:59:01.385Z" MIMETYPE="text/xml" SIZE="1186">
       <foxml:xmlContent>
-        <administrativeMetadata objectId="druid:oo000oo0008">
+        <administrativeMetadata objectId="druid:bb000bb0008">
         </administrativeMetadata>
       </foxml:xmlContent>
     </foxml:datastreamVersion>
@@ -99,7 +99,7 @@
   <foxml:datastream ID="roleMetadata" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
     <foxml:datastreamVersion ID="roleMetadata.0" LABEL="Role Metadata" CREATED="2011-07-05T20:47:26.359Z" MIMETYPE="text/xml" SIZE="405">
       <foxml:xmlContent>
-        <roleMetadata objectId="druid:oo000oo0008">
+        <roleMetadata objectId="druid:bb000bb0008">
           <role type="hydrus-collection-manager">
              <person>
                 <identifier type="sunetid">archivist1</identifier>
@@ -128,7 +128,7 @@
   </foxml:datastream>
   <foxml:datastream ID="workflows" STATE="A" CONTROL_GROUP="E" VERSIONABLE="false">
     <foxml:datastreamVersion ID="workflows.0" LABEL="Workflows" CREATED="2012-04-11T18:09:43.955Z" MIMETYPE="application/xml">
-      <foxml:contentLocation TYPE="URL" REF="http://sul-lyberservices-dev.stanford.edu/workflow/dor/objects/druid:oo000oo0003/workflows" />
+      <foxml:contentLocation TYPE="URL" REF="http://sul-lyberservices-dev.stanford.edu/workflow/dor/objects/druid:bb000bb0003/workflows" />
     </foxml:datastreamVersion>
   </foxml:datastream>
   <foxml:datastream ID="events" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
