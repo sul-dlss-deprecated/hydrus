@@ -4,7 +4,7 @@ describe Hydrus::GenericObject, type: :model do
   before do
     @cannot_do_regex = /\ACannot perform action/
     @go      = Hydrus::GenericObject.new
-    @apo_pid = 'druid:oo000oo0002'
+    @apo_pid = 'druid:bb000bb0002'
   end
 
   it 'apo() should return a new blank apo if the apo_pid is nil' do
@@ -12,8 +12,8 @@ describe Hydrus::GenericObject, type: :model do
   end
 
   it 'dru() should return the druid without the prefix' do
-    allow(@go).to receive(:pid).and_return('druid:oo000oo0003')
-    expect(@go.dru).to eq('oo000oo0003')
+    allow(@go).to receive(:pid).and_return('druid:bb000bb0003')
+    expect(@go.dru).to eq('bb000bb0003')
   end
 
   describe 'apo' do
@@ -402,7 +402,7 @@ describe Hydrus::GenericObject, type: :model do
 
   describe '#publish_metadata' do
     let(:object) { Hydrus::GenericObject.new(pid: pid) }
-    let(:pid) { 'druid:oo000oo0003' }
+    let(:pid) { 'druid:bb000bb0003' }
 
     context 'when not configured to start common assembly' do
       it 'returns without publishing' do

@@ -212,7 +212,7 @@ RSpec.describe('Collection create', type: :request, integration: true) do
 
   describe 'delete()' do
     it 'should raise error if object is not destroyable' do
-      hc = Hydrus::Collection.find('druid:oo000oo0004')
+      hc = Hydrus::Collection.find('druid:bb000bb0004')
       expect(hc.is_destroyable).to eq(false)
       expect { hc.delete }.to raise_error(RuntimeError)
     end

@@ -22,7 +22,7 @@ class ApplicationController < ActionController::Base
     ot = @fobj.object_type
     if %w(item collection).include?(ot)
       return if self.controller_name == "hydrus_#{ot}s"
-      p = request.fullpath            # Eg: /items/druid:oo000oo0003/edit
+      p = request.fullpath            # Eg: /items/druid:bb000bb0003/edit
       p = p.sub(/\A\/\w+/, "/#{ot}s") # Change 'item' to 'collection'.
       redirect_to(p)
     else

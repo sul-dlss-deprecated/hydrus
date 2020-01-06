@@ -31,7 +31,7 @@ describe('Item create', type: :request, integration: true) do
       approve: 'Approve and Publish',
       publish_directly: 'Publish',
     }
-    @hc_druid = 'druid:oo000oo0003'
+    @hc_druid = 'druid:bb000bb0003'
     @edit_path_regex = Regexp.new('/items/(druid:\w{11})/edit')
     # Need to mint an actual druid in order to pass validation.
     @prev_mint_ids = Dor::Config.configure.suri.mint_ids

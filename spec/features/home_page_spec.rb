@@ -33,8 +33,8 @@ RSpec.describe 'Home page', type: :request, integration: true do
       visit root_path
       expect(page).to have_content('Stanford Digital Repository')
       expect(page).to have_content('Your Active Collections')
-      expect(find('div.user-collections')).to have_xpath("//a[@href='/collections/druid:oo000oo0003']")
-      expect(find('div.user-collections')).to have_xpath("//a[@href='/collections/druid:oo000oo0004']")
+      expect(find('div.user-collections')).to have_xpath("//a[@href='/collections/druid:bb000bb0003']")
+      expect(find('div.user-collections')).to have_xpath("//a[@href='/collections/druid:bb000bb0004']")
       expect(find('div.user-collections')).to have_xpath("//a[@href='/collections/druid:oo000oo0010']")
     end
 
@@ -56,8 +56,8 @@ RSpec.describe 'Home page', type: :request, integration: true do
 
     it 'shows the collections they have access to' do
       visit root_path
-      expect(find('div.user-collections')).to have_xpath("//a[@href='/collections/druid:oo000oo0003']")
-      expect(find('div.user-collections')).not_to have_xpath("//a[@href='/collections/druid:oo000oo0004']")
+      expect(find('div.user-collections')).to have_xpath("//a[@href='/collections/druid:bb000bb0003']")
+      expect(find('div.user-collections')).not_to have_xpath("//a[@href='/collections/druid:bb000bb0004']")
       expect(find('div.user-collections')).to have_xpath("//a[@href='/collections/druid:oo000oo0010']")
     end
 

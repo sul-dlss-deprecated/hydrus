@@ -11,7 +11,7 @@ describe(Hydrus::Collection, type: :feature, integration: true) do
   end
 
   it 'should be able to find its member Hydrus::Items' do
-    druid = 'druid:oo000oo0003'
+    druid = 'druid:bb000bb0003'
     hc    = Hydrus::Collection.find druid
     expect(hc.hydrus_items).to eq(hc.items)
     items = hc.items
@@ -20,7 +20,7 @@ describe(Hydrus::Collection, type: :feature, integration: true) do
   end
 
   it 'should behave nicely when it has no member Hydrus::Items' do
-    druid = 'druid:oo000oo0004'
+    druid = 'druid:bb000bb0004'
     hc    = Hydrus::Collection.find druid
     expect(hc.hydrus_items).to eq([])
     expect(hc.items).to eq([])

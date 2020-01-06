@@ -41,7 +41,7 @@ RSpec.describe Hydrus::Item, type: :feature, integration: true do
     let(:user_key) { 'archivist5' }
     let(:user) { create :archivist5 }
     let(:item) { ItemService.create(collection.pid, user) }
-    let(:collection) { Hydrus::Collection.find('druid:oo000oo0003') }
+    let(:collection) { Hydrus::Collection.find('druid:bb000bb0003') }
 
     before do
       allow(Hydrus::Authorizable).to receive(:can_create_items_in).and_return(true)
@@ -87,7 +87,7 @@ RSpec.describe Hydrus::Item, type: :feature, integration: true do
     end
 
     it 'modifies workflows' do
-      druid = 'druid:oo000oo0003'
+      druid = 'druid:bb000bb0003'
       hi    = ItemService.create(druid, user)
       allow(hi).to receive(:should_start_assembly_wf).and_return(true)
       allow(hi).to receive(:is_assemblable).and_return(true)

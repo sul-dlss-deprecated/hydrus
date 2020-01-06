@@ -114,17 +114,17 @@ RSpec.describe Hydrus::SolrQueryable, type: :model do
 
   # Note: These are integration tests.
   describe('all_hydrus_objects()', integration: true) do
-    before(:each) do
+    before do
       @all_objects = [
+        { pid: 'druid:bb000bb0002', object_type: 'AdminPolicyObject', object_version: '2013.02.26a' },
+        { pid: 'druid:bb000bb0003', object_type: 'Collection',        object_version: '2013.02.26a' },
+        { pid: 'druid:bb000bb0004', object_type: 'Collection',        object_version: '2013.02.26a' },
+        { pid: 'druid:bb000bb0008', object_type: 'AdminPolicyObject', object_version: '2013.02.26a' },
+        { pid: 'druid:bb000bb0009', object_type: 'AdminPolicyObject', object_version: '2013.02.26a' },
         { pid: 'druid:bb123bb1234', object_type: 'Item',              object_version: '2013.02.26a' },
         { pid: 'druid:bb123bb5432', object_type: 'Item',              object_version: '2013.02.26a' },
-        { pid: 'druid:oo000oo0002', object_type: 'AdminPolicyObject', object_version: '2013.02.26a' },
-        { pid: 'druid:oo000oo0003', object_type: 'Collection',        object_version: '2013.02.26a' },
-        { pid: 'druid:oo000oo0004', object_type: 'Collection',        object_version: '2013.02.26a' },
         { pid: 'druid:oo000oo0006', object_type: 'Item',              object_version: '2013.02.26a' },
         { pid: 'druid:oo000oo0007', object_type: 'Item',              object_version: '2013.02.26a' },
-        { pid: 'druid:oo000oo0008', object_type: 'AdminPolicyObject', object_version: '2013.02.26a' },
-        { pid: 'druid:oo000oo0009', object_type: 'AdminPolicyObject', object_version: '2013.02.26a' },
         { pid: 'druid:oo000oo0010', object_type: 'Collection',        object_version: '2013.02.26a' },
         { pid: 'druid:oo000oo0011', object_type: 'Item',              object_version: '2013.02.26a' },
         { pid: 'druid:oo000oo0012', object_type: 'Item',              object_version: '2013.02.26a' },

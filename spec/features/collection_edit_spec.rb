@@ -4,8 +4,8 @@ describe('Collection edit', type: :request, integration: true) do
   let(:archivist1) { create :archivist1 }
 
   before do
-    @druid          = 'druid:oo000oo0003'
-    @druid_no_files = 'druid:oo000oo0004'
+    @druid          = 'druid:bb000bb0003'
+    @druid_no_files = 'druid:bb000bb0004'
     @hc             = Hydrus::Collection.find @druid
     @buttons = {
       sign_in: 'Sign in',

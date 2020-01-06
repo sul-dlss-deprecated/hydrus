@@ -113,10 +113,10 @@ ap hi.relationships(:is_member_of_collection)
 
 __END__
 
-hi.add_to_collection 'druid:oo000oo0002'
+hi.add_to_collection 'druid:bb000bb0002'
 hi.save
 
-c = Hydrus::Item.find('druid:oo000oo0002')
+c = Hydrus::Item.find('druid:bb000bb0002')
 hi.add_relationship_by_name 'set',        c
 hi.add_relationship_by_name 'collection', c
 hi.save

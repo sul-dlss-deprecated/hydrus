@@ -165,7 +165,7 @@ end
 def create_new_item(opts = {})
   # Setup options.
   default_opts = {
-    collection_pid: 'druid:oo000oo0003',
+    collection_pid: 'druid:bb000bb0003',
     user: create(:archivist1),
     title: 'title_foo',
     abstract: 'abstract_foo',

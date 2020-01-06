@@ -627,7 +627,7 @@ class Hydrus::Collection < Dor::Collection
     # Extract needed counts from SOLR response and put them into to the hash.
     # In the loop below, each fc hash looks like this example:
     #   {
-    #     "value" => "info:fedora/druid:oo000oo0003",
+    #     "value" => "info:fedora/druid:bb000bb0003",
     #     "pivot" => [
     #       { "value" => "draft",             "count" => 1 },
     #       { "value" => "awaiting_approval", "count" => 3 },

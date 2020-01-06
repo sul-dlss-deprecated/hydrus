@@ -11,17 +11,15 @@ module Hydrus
   # transaction features to support fixture restoration.
   def self.fixture_pids
     [
-      # Ur-APO and the workflow objects.
-      'druid:oo000oo0000',
-      'druid:oo000oo0099',  # hydrusAssemblyWF
-      'druid:oo000oo0098',  # versioningWF
+      # Ur-APO
+      'druid:bb000bb0000',
       # APOs.
-      'druid:oo000oo0002',
-      'druid:oo000oo0008',
-      'druid:oo000oo0009',
+      'druid:bb000bb0002',
+      'druid:bb000bb0008',
+      'druid:bb000bb0009',
       # Collections.
-      'druid:oo000oo0003',
-      'druid:oo000oo0004',
+      'druid:bb000bb0003',
+      'druid:bb000bb0004',
       'druid:oo000oo0010',
       # Items.
       'druid:bb123bb1234',

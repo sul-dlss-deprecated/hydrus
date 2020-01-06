@@ -45,7 +45,7 @@ namespace :hydrus do
     end
   end
 
-  # call with rake hydrus:delete_objects pid=druid:oo000oo0003
+  # call with rake hydrus:delete_objects pid=druid:bb000bb0003
   desc 'delete a given hydrus collection object and all associated items and APOs'
   task delete_objects: :environment do
     require File.expand_path('config/environment')

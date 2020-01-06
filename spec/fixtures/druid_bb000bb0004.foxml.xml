@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<foxml:digitalObject VERSION="1.1" PID="druid:oo000oo0003" xmlns:foxml="info:fedora/fedora-system:def/foxml#" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/definitions/1/0/foxml1-1.xsd">
+<foxml:digitalObject VERSION="1.1" PID="druid:bb000bb0004" xmlns:foxml="info:fedora/fedora-system:def/foxml#" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/definitions/1/0/foxml1-1.xsd">
   <foxml:objectProperties>
     <foxml:property NAME="info:fedora/fedora-system:def/model#state" VALUE="Active" />
-    <foxml:property NAME="info:fedora/fedora-system:def/model#label" VALUE="SSDS Social Science Data Collection" />
+    <foxml:property NAME="info:fedora/fedora-system:def/model#label" VALUE="Large Network Dataset Collection" />
     <foxml:property NAME="info:fedora/fedora-system:def/model#ownerId" VALUE="DOR" />
-    <foxml:property NAME="info:fedora/fedora-system:def/model#createdDate" VALUE="2011-07-05T17:12:18.757Z" />
+    <foxml:property NAME="info:fedora/fedora-system:def/model#createdDate" VALUE="2010-02-25T17:12:18.757Z" />
     <foxml:property NAME="info:fedora/fedora-system:def/view#lastModifiedDate" VALUE="2011-07-25T20:32:10.617Z" />
   </foxml:objectProperties>
   <foxml:datastream ID="RELS-EXT" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
     <foxml:datastreamVersion ID="RELS-EXT.0" LABEL="RDF Statements about this object" CREATED="2011-07-25T20:32:10.617Z" MIMETYPE="application/rdf+xml" FORMAT_URI="info:fedora/fedora-system:FedoraRELSExt-1.0" SIZE="424">
       <foxml:xmlContent>
         <rdf:RDF xmlns:fedora="info:fedora/fedora-system:def/relations-external#" xmlns:hydra="http://projecthydra.org/ns/relations#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
-          <rdf:Description rdf:about="info:fedora/druid:oo000oo0003">
-            <hydra:isGovernedBy rdf:resource="info:fedora/druid:oo000oo0002" />
+          <rdf:Description rdf:about="info:fedora/druid:bb000bb0004">
+            <hydra:isGovernedBy rdf:resource="info:fedora/druid:bb000bb0008" />
             <hasModel xmlns="info:fedora/fedora-system:def/model#" rdf:resource="info:fedora/afmodel:Hydrus_Collection" />
           </rdf:Description>
         </rdf:RDF>
@@ -20,15 +20,15 @@
     </foxml:datastreamVersion>
   </foxml:datastream>
   <foxml:datastream ID="identityMetadata" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
-    <foxml:datastreamVersion ID="identityMetadata.0" LABEL="Identity Metadata" CREATED="2011-07-05T20:49:25.801Z" MIMETYPE="text/xml" SIZE="345">
+    <foxml:datastreamVersion ID="identityMetadata.0" LABEL="Identity Metadata" CREATED="2010-02-25T20:49:25.801Z" MIMETYPE="text/xml" SIZE="345">
       <foxml:xmlContent>
         <identityMetadata>
-          <objectId>druid:oo000oo0003</objectId>
+          <objectId>druid:bb000bb0004</objectId>
           <objectType>collection</objectType>
           <objectType>set</objectType>
-          <objectLabel>SSDS Social Science Data Collection</objectLabel>
+          <objectLabel>Large Network Dataset Collection</objectLabel>
           <objectCreator>DOR</objectCreator>
-          <otherId name="uuid">d96e19f2-9ff1-11e1-86c5-02231e89cef0</otherId>
+          <otherId name="uuid">d96e19f2-9ff1-11e1-86c5-02231e89cec5</otherId>
           <tag>Project : Hydrus</tag>
           <tag>Hydrus : collection</tag>
         </identityMetadata>
@@ -36,39 +36,33 @@
     </foxml:datastreamVersion>
   </foxml:datastream>
   <foxml:datastream ID="DC" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
-    <foxml:datastreamVersion ID="DC.0" LABEL="Dublin Core Record for this object" CREATED="2011-07-05T20:50:11.624Z" MIMETYPE="text/xml" FORMAT_URI="http://www.openarchives.org/OAI/2.0/oai_dc/" SIZE="459">
+    <foxml:datastreamVersion ID="DC.0" LABEL="Dublin Core Record for this object" CREATED="2010-02-25T20:50:11.624Z" MIMETYPE="text/xml" FORMAT_URI="http://www.openarchives.org/OAI/2.0/oai_dc/" SIZE="459">
       <foxml:xmlContent>
         <oai_dc:dc xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
-          <dc:title>SSDS Social Science Data Collection</dc:title>
-          <dc:identifier>druid:oo000oo0003</dc:identifier>
+          <dc:title>Large Network Dataset Collection</dc:title>
+          <dc:identifier>druid:bb000bb0004</dc:identifier>
         </oai_dc:dc>
       </foxml:xmlContent>
     </foxml:datastreamVersion>
   </foxml:datastream>
   <foxml:datastream ID="descMetadata" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
-    <foxml:datastreamVersion ID="descMetadata.0" LABEL="Descriptive Metadata" CREATED="2011-07-05T20:50:24.156Z" MIMETYPE="text/xml" SIZE="377">
+    <foxml:datastreamVersion ID="descMetadata.0" LABEL="Descriptive Metadata" CREATED="2010-02-25T20:50:24.156Z" MIMETYPE="text/xml" SIZE="377">
       <foxml:xmlContent>
         <mods xmlns="http://www.loc.gov/mods/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.3" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-3.xsd">
           <titleInfo>
-            <title>SSDS Social Science Data Collection</title>
+            <title>Large Network Dataset Collection</title>
           </titleInfo>
           <typeOfResource collection="yes" />
-          <abstract>The Social Science Data and Software (SSDS) Data Collection at Stanford University assembles research data produced by Stanford faculty and other researchers working in the social sciences. Preserving and providing access to research data through this collection is one of several SSDS services in support of research and instruction in the social sciences. If you have a social science dataset that you would like to add to the SSDS collection, please contact the collection owner using the contact information provided.</abstract>
+          <abstract>The SNAP library is being actively developed since 2004 and is organically growing as a result of our research pursuits in analysis of large social and information networks. Largest network we analyzed so far using the library was the Microsoft Instant Messenger network from 2006 with 240 million nodes and 1.3 billion edges.</abstract>
           <note type="contact">archivist1@example.com</note>
-          <relatedItem type="references">
+          <note type="contact">http://example.com</note>
+          <note type="contact">Contact Superman</note>
+          <relatedItem>
             <titleInfo>
               <title></title>
             </titleInfo>
             <location>
-              <url>http://data.stanford.edu/</url>
-            </location>
-          </relatedItem>
-          <relatedItem type="references">
-            <titleInfo>
-              <title>About the SSDS</title>
-            </titleInfo>
-            <location>
-              <url>http://ssds.stanford.edu/</url>
+              <url>http://snap.stanford.edu/</url>
             </location>
           </relatedItem>
         </mods>
@@ -76,9 +70,9 @@
     </foxml:datastreamVersion>
   </foxml:datastream>
   <foxml:datastream ID="rightsMetadata" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
-    <foxml:datastreamVersion ID="rightsMetadata.0" LABEL="Rights Metadata" CREATED="2011-07-05T20:46:24.337Z" MIMETYPE="text/xml" SIZE="293">
+    <foxml:datastreamVersion ID="rightsMetadata.0" LABEL="Rights Metadata" CREATED="2010-02-25T20:46:24.337Z" MIMETYPE="text/xml" SIZE="155">
       <foxml:xmlContent>
-        <rightsMetadata objectId="druid:oo000oo0003">
+        <rightsMetadata objectId="druid:bb000bb0004">
           <access type="discover">
             <machine>
               <world/>
@@ -114,15 +108,13 @@
           <submittedForPublishTime>2012-11-01T00:00:00Z</submittedForPublishTime>
           <initialSubmittedForPublishTime>2012-11-01T00:00:00Z</initialSubmittedForPublishTime>
           <lastModifyTime>2012-11-01T00:00:22Z</lastModifyTime>
-          <embargoOption>varies</embargoOption>
           <embargoTerms>1 year</embargoTerms>
 					<itemType>collection</itemType>
+          <embargoOption>varies</embargoOption>
           <licenseOption>fixed</licenseOption>
           <visibilityOption>fixed</visibilityOption>
           <requiresHumanApproval>no</requiresHumanApproval>
           <usersAcceptedTermsOfDeposit>
-                <user dateAccepted="2011-09-02T09:02:32Z">archivist1</user>
-                <user dateAccepted="2012-05-02T20:02:44Z">archivist3</user>
           </usersAcceptedTermsOfDeposit>
           <objectStatus>published_open</objectStatus>
           <objectVersion>2013.02.26a</objectVersion>
@@ -132,7 +124,7 @@
   </foxml:datastream>
   <foxml:datastream ID="workflows" STATE="A" CONTROL_GROUP="E" VERSIONABLE="false">
     <foxml:datastreamVersion ID="workflows.0" LABEL="Workflows" CREATED="2012-04-11T18:09:43.955Z" MIMETYPE="application/xml">
-      <foxml:contentLocation TYPE="URL" REF="http://sul-lyberservices-dev.stanford.edu/workflow/dor/objects/druid:oo000oo0003/workflows" />
+      <foxml:contentLocation TYPE="URL" REF="http://sul-lyberservices-dev.stanford.edu/workflow/dor/objects/druid:bb000bb0004/workflows" />
     </foxml:datastreamVersion>
   </foxml:datastream>
   <foxml:datastream ID="events" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">

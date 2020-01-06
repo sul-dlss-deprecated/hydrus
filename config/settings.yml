@@ -4,12 +4,8 @@ hydrus:
   exception_error_panel:  false
   host: 'hydrus-test.stanford.edu'
   exception_recipients: ''
-  ur_apo_druid: 'druid:oo000oo0000'
+  ur_apo_druid: 'druid:bb000bb0000'
   project_tag: 'Project : Hydrus'
-  workflow_object_druids:
-    - 'druid:oo000oo0099' # hydrusAssemblyWF
-    - 'druid:rs056hz6024' # assemblyWF
-    - 'druid:yp220bx1022' # versioningWF
 
 purl:
   base_url: 'https://sul-purl-test.stanford.edu/'

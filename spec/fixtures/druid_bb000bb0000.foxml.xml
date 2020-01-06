@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<foxml:digitalObject VERSION="1.1" PID="druid:oo000oo0000"
+<foxml:digitalObject VERSION="1.1" PID="druid:bb000bb0000"
   xmlns:foxml="info:fedora/fedora-system:def/foxml#"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/definitions/1/0/foxml1-1.xsd">
@@ -13,7 +13,7 @@
     <foxml:datastreamVersion ID="RELS-EXT.0" LABEL="RDF Statements about this object" CREATED="2011-07-25T20:32:10.617Z" MIMETYPE="application/rdf+xml" FORMAT_URI="info:fedora/fedora-system:FedoraRELSExt-1.0" SIZE="424">
       <foxml:xmlContent>
         <rdf:RDF xmlns:fedora-model="info:fedora/fedora-system:def/model#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rel="info:fedora/fedora-system:def/relations-external#" xmlns:hydra="http://projecthydra.org/ns/relations#">
-          <rdf:Description rdf:about="info:fedora/druid:oo000oo0000">
+          <rdf:Description rdf:about="info:fedora/druid:bb000bb0000">
             <hasModel xmlns="info:fedora/fedora-system:def/model#" rdf:resource="info:fedora/afmodel:Dor_AdminPolicyObject" />
           </rdf:Description>
         </rdf:RDF>
@@ -49,7 +49,7 @@
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
           <dc:title>Ur-APO</dc:title>
-          <dc:identifier>druid:oo000oo0000</dc:identifier>
+          <dc:identifier>druid:bb000bb0000</dc:identifier>
           <dc:language>eng</dc:language>
         </oai_dc:dc>
       </foxml:xmlContent>
@@ -61,7 +61,7 @@
       CREATED="2012-07-03T21:23:13.584Z" MIMETYPE="text/xml" SIZE="348">
       <foxml:xmlContent>
         <identityMetadata>
-          <objectId>druid:oo000oo0000</objectId>
+          <objectId>druid:bb000bb0000</objectId>
           <objectType>adminPolicy</objectType>
           <objectLabel>Hydrus Ur-APO</objectLabel>
           <objectDescription>Ur-APO</objectDescription>
@@ -168,7 +168,7 @@
   </foxml:datastream>
   <foxml:datastream ID="workflows" STATE="A" CONTROL_GROUP="E" VERSIONABLE="false">
     <foxml:datastreamVersion ID="workflows.0" LABEL="Workflows" CREATED="2012-04-11T18:09:43.955Z" MIMETYPE="application/xml">
-      <foxml:contentLocation TYPE="URL" REF="http://sul-lyberservices-dev.stanford.edu/workflow/dor/objects/druid:oo000oo0000/workflows"/>
+      <foxml:contentLocation TYPE="URL" REF="http://sul-lyberservices-dev.stanford.edu/workflow/dor/objects/druid:bb000bb0000/workflows"/>
     </foxml:datastreamVersion>
   </foxml:datastream>
 </foxml:digitalObject>
