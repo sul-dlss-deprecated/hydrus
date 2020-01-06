@@ -18,6 +18,7 @@ before_install:
   - sudo mv docker-compose /usr/local/bin
   - docker-compose up -d
   - docker-compose ps
+  - yes | gem update --system
 
 before_script:
   - echo "Waiting for Fcrepo to start"
