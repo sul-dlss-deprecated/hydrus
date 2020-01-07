@@ -62,7 +62,11 @@ group :development do
 end
 
 group :production do
-  gem 'mysql2', '~> 0.5.0'
+  # pinning because the latest mysql2 gem prevents successful deployment (a native extension compilation
+  # error is raised).  jcoyne suspects that the newer gem version requires a newer version of glibc than
+  # is on the VM, and that provisioning a newer VM with a newer version of MySQL (and its newer glibc
+  # requirement) would solve this dependency issue and allow use of the latest gem.
+  gem 'mysql2', '~> 0.4.10'
 end
 
 group :deployment do
