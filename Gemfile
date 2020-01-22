@@ -31,7 +31,7 @@ gem 'okcomputer'
 gem 'bootsnap'
 gem 'sassc', '~> 2.0.1' # Pinning to 2.0 because 2.1 requires GLIBC 2.14 on deploy
 gem 'sass-rails',     '~> 5.0'
-gem 'coffee-rails',   '~> 4.2'
+gem 'coffee-rails',   '~> 5.0'
 gem 'uglifier', '>= 1.0.3'
 
 # gems only needed for particular environments
