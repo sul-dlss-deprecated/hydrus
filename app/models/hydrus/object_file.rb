@@ -8,8 +8,9 @@ class Hydrus::ObjectFile < ActiveRecord::Base
     file.size
   end
 
+  # Override the URL supplied by CarrierWave
   def url
-    file.url
+    Rails.application.routes.url_helpers.file_upload_path(id: pid, filename: filename)
   end
 
   def current_path

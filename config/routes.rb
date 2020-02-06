@@ -54,6 +54,11 @@ Rails.application.routes.draw do
   match 'dor/reindex/:id'           => 'hydrus_solr#reindex',           :as => 'reindex',           via: [:get, :post, :put]
   match 'dor/delete_from_index/:id' => 'hydrus_solr#delete_from_index', :as => 'delete_from_index', via: [:get, :post]
 
+  # Action to get an uploaded file
+  constraints filename: %r{[^/]+} do
+    get '/file/:id/:filename' => 'object_files#show', :as => 'file_upload'
+  end
+
   get '/404', to: 'exceptions#render_404'
   get '/500', to: 'exceptions#render_500'
 end

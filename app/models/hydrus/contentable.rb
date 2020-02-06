@@ -67,8 +67,8 @@ module Hydrus::Contentable
   end
 
   def base_file_directory
-    f = File.join(Rails.root, 'public', Hydrus::Application.config.file_upload_path)
-    DruidTools::Druid.new(pid, f).path
+    file_object = Hydrus::ObjectFile.new(pid: DruidTools::Druid.new(pid).druid)
+    File.join(file_object.file.base_dir)
   end
 
   def content_directory

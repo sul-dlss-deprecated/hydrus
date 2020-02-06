@@ -3,6 +3,7 @@ hydrus:
   exception_error_page:   true  # if true, a generic error page will be shown with no exception messages; if false, standard Rails exceptions are shown directly to the user
   exception_error_panel:  false
   host: 'hydrus-test.stanford.edu'
+  file_upload_path: 'uploads'
   exception_recipients: ''
   ur_apo_druid: 'druid:bb000bb0000'
   project_tag: 'Project : Hydrus'

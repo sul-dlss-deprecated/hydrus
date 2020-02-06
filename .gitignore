@@ -24,6 +24,7 @@ coverage/*
 ## PROJECT::GENERAL
 rdoc
 public/uploads
+uploads
 /public/assets
 doc
 pkg

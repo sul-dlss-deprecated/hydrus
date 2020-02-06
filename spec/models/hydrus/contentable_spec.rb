@@ -4,7 +4,7 @@ describe Hydrus::Contentable, type: :model do
   before(:each) do
     @go       = Hydrus::GenericObject.new
     @pid      = 'oo000oo9999'
-    @base_dir = '/oo/000/oo/9999/oo000oo9999'
+    @base_dir = File.join(Rails.root, Settings.hydrus.file_upload_path, './oo/000/oo/9999/oo000oo9999')
     allow(@go).to receive(:pid).and_return(@pid)
   end
 

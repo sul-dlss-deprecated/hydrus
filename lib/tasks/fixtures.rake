@@ -97,7 +97,7 @@ namespace :hydrus do
     end
   end
 
-  desc 'reload test uploaded files to public/upload directory'
+  desc 'reload test uploaded files to upload directory'
   task :refresh_upload_files do
     # Copies fixture files from source control to the app's public area:
     #   source: spec/fixtures/files/DRUID/*
@@ -106,7 +106,7 @@ namespace :hydrus do
     require File.expand_path('config/environment')
     app_base = File.expand_path('../../../', __FILE__)
     src_base = File.join(app_base, 'spec/fixtures/files')
-    dst_base = File.join(app_base, 'public', Hydrus::Application.config.file_upload_path)
+    dst_base = File.join(app_base, Settings.hydrus.file_upload_path)
     FIXTURE_PIDS.each do |pid|
       pid.gsub!('druid:', '')
       src = File.join(src_base, pid)
@@ -119,12 +119,12 @@ namespace :hydrus do
     end
   end
 
-  desc 'clear uploaded files [public/upload] directory'
+  desc 'clear uploaded files upload directory'
   task :clear_upload_files do
     puts 'clearing upload files directory'
     require File.expand_path('config/environment')
     app_base = File.expand_path('../../../', __FILE__)
-    dst_base = File.join(app_base, 'public', Hydrus::Application.config.file_upload_path)
+    dst_base = File.join(app_base, Settings.hydrus.file_upload_path)
     puts "Removing all folders in #{dst_base}"
     all_folders = Dir.glob("#{dst_base}/*")
     all_folders.each do |folder|
