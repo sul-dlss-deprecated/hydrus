@@ -216,7 +216,7 @@ GEM
       zeitwerk (~> 2.1)
     druid-tools (2.1.0)
       deprecation
-    dry-configurable (0.11.0)
+    dry-configurable (0.11.3)
       concurrent-ruby (~> 1.0)
       dry-core (~> 0.4, >= 0.4.7)
       dry-equalizer (~> 0.2)
@@ -497,10 +497,10 @@ GEM
     sassc (2.0.1)
       ffi (~> 1.9)
       rake
-    simplecov (0.18.2)
+    simplecov (0.18.3)
       docile (~> 1.1)
       simplecov-html (~> 0.11)
-    simplecov-html (0.12.0)
+    simplecov-html (0.12.1)
     solrizer (3.4.1)
       activesupport
       daemons
