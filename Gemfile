@@ -41,7 +41,7 @@ group :development, :test do
   gem 'sqlite3', '~> 1.3.13'
   gem 'rspec-rails', '~> 3.1'
   gem 'capybara', '~> 2.18'
-  gem 'simplecov'
+  gem 'simplecov', '~> 0.17.1', require: false # 0.18 breaks reporting to coveralls
   gem 'coveralls'
   gem 'equivalent-xml'
   gem 'awesome_print'
