@@ -7,6 +7,9 @@ gem 'devise', '~> 4.0'
 gem 'devise-remote-user', '~> 1.0'
 gem 'jquery-rails'
 gem 'dynamic_form'
+# iso-639 0.3.0 isn't compatible with ruby 2.5.  This declaration can be dropped when we upgrade to ruby 2.6
+# see https://github.com/alphabetum/iso-639/issues/12
+gem 'iso-639', '~> 0.2.10'
 gem 'bootstrap-datepicker-rails'
 gem 'carrierwave', '~> 1.0'
 gem 'coderay'
