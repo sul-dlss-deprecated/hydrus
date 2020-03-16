@@ -10,12 +10,6 @@ services:
   - docker
 
 before_install:
-  # Travis's docker-compose is too old to handle v3.6 docker-compose templates.
-  # This code is from Travis's documentation: https://docs.travis-ci.com/user/docker/#using-docker-compose
-  - sudo rm /usr/local/bin/docker-compose
-  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
-  - chmod +x docker-compose
-  - sudo mv docker-compose /usr/local/bin
   - docker-compose up -d
   - docker-compose ps
   - yes | gem update --system
@@ -26,7 +20,6 @@ before_script:
 
 env:
   global:
-    - DOCKER_COMPOSE_VERSION=1.23.1
     - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
 
 rvm:
