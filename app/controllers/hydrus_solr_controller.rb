@@ -76,7 +76,11 @@ class HydrusSolrController < ApplicationController
   # Private method to determine if the given object belongs to
   # one of the Hydrus classes.
   def is_hydrus_object(obj)
-    obj.respond_to?(:tags) && obj.tags.any? { |tag| tag.starts_with? Settings.hydrus.project_tag }
+    tags_client(obj.pid).list.any? { |tag| tag.starts_with? Settings.hydrus.project_tag }
+  end
+
+  def tags_client(pid)
+    Dor::Services::Client.object(pid).administrative_tags
   end
 
   # Private method to return the application's SOLR connection.
