@@ -19,8 +19,6 @@ RSpec.describe Hydrus::Processable, type: :model do
                                                   workflow: 'hydrusAssemblyWF',
                                                   process: step,
                                                   status: 'completed')
-      allow(@go).to receive_message_chain(:workflows, :workflow_step_is_done).and_return(false)
-      expect(@go).to receive(:workflows_content_is_stale)
       @go.complete_workflow_step(step)
     end
   end
@@ -38,11 +36,6 @@ RSpec.describe Hydrus::Processable, type: :model do
       start_hydrus_wf
       expect(wfs).to have_received(:create_workflow_by_name).with(@go.pid, 'hydrusAssemblyWF', version: '1')
     end
-  end
-
-  it 'can exercise workflows_content_is_stale, stubbed' do
-    expect(@go.workflows).to receive(:instance_variable_set).twice
-    @go.workflows_content_is_stale
   end
 
   describe 'start_common_assembly()' do
@@ -87,7 +80,7 @@ RSpec.describe Hydrus::Processable, type: :model do
     end
 
     it 'can exercise should_start_assembly_wf()' do
-      expect(@go.should_start_assembly_wf).to eq(Dor::Config.hydrus.start_assembly_wf)
+      expect(@go.should_start_assembly_wf).to eq(Settings.hydrus.start_assembly_wf)
     end
   end
 

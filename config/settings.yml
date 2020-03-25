@@ -1,7 +1,8 @@
 hydrus:
+  initial_apo_title: 'Intial Hydrus APO title'
+  app_workflow: 'hydrusAssemblyWF'
   show_test_banner: false
-  exception_error_page:   true  # if true, a generic error page will be shown with no exception messages; if false, standard Rails exceptions are shown directly to the user
-  exception_error_panel:  false
+  exception_error_panel: false
   host: 'hydrus-test.stanford.edu'
   file_upload_path: 'uploads'
   exception_recipients: ''
@@ -20,13 +21,10 @@ dor_services:
   token: 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJIeWRydXMtVGVzdCJ9.vfo6tMpMhoSqlNaIeW1N0CZKDHbNo_ABHHfpVmIZoHc'
 
 stacks:
-  document_cache_storage_root: ~
   document_cache_host: ~
-  document_cache_user: ~
+  local_stacks_root: ~
   local_workspace_root: ~
-  storage_root: ~
-  host: ~
-  user: ~
+  local_document_cache_root: ~
 
 solr:
   url: 'https://solr.example.com/solr/collection'

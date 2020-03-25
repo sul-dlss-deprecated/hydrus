@@ -6,7 +6,6 @@ module Hydrus::GenericObjectStuff
     include Hydrus::Validatable
     include Hydrus::Processable
     include Hydrus::Contentable
-    include Hydrus::WorkflowDsExtension
     include Hydrus::Licenseable
     include Hydrus::UserWorkflowable
     include Hydrus::Eventable

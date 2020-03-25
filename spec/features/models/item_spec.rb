@@ -49,10 +49,10 @@ RSpec.describe Hydrus::Item, type: :feature, integration: true do
     end
 
     around do |example|
-      @prev_mint_ids = Dor::Config.configure.suri.mint_ids
-      Dor::Config.configure.suri.mint_ids = true
+      @prev_mint_ids = Settings.suri.mint_ids
+      Settings.suri.mint_ids = true
       example.run
-      Dor::Config.configure.suri.mint_ids = @prev_mint_ids
+      Settings.suri.mint_ids = @prev_mint_ids
     end
 
     it 'accepts the terms for an item, updating the appropriate hydrusProperties metadata in item and collection' do
@@ -68,15 +68,19 @@ RSpec.describe Hydrus::Item, type: :feature, integration: true do
     end
   end
 
-  describe 'do_publish()' do
+  describe 'do_publish' do
+    let(:fake_workflows_response) { instance_double(Dor::Workflow::Response::Workflows, workflows: []) }
+    let(:fake_workflow_routes) { instance_double(Dor::Workflow::Client::WorkflowRoutes, all_workflows: fake_workflows_response) }
     let(:user) { create :archivist1 }
     let(:wfs) do
       instance_double(Dor::Workflow::Client,
                       all_workflows_xml: '',
                       milestones: [],
                       update_status: nil,
-                      create_workflow_by_name: nil)
+                      create_workflow_by_name: nil,
+                      workflow_routes: fake_workflow_routes)
     end
+
     before do
       @prev_mint_ids = config_mint_ids()
       allow(Dor::Config.workflow).to receive(:client).and_return(wfs)
@@ -91,7 +95,7 @@ RSpec.describe Hydrus::Item, type: :feature, integration: true do
       hi    = ItemService.create(druid, user)
       allow(hi).to receive(:should_start_assembly_wf).and_return(true)
       allow(hi).to receive(:is_assemblable).and_return(true)
-      hi.do_publish()
+      hi.do_publish
       expect(wfs).to have_received(:update_status).with(druid: hi.pid,
                                                         workflow: 'hydrusAssemblyWF',
                                                         process: 'approve',

@@ -5,15 +5,15 @@
   </head>
   <body>
 <p>Contact Us message from Hydrus (SDR) %>:</p>
-<p>Time submitted: <%=Time.now%></p>
-<p>Subject: <%=@subject%></p>
+<p>Time submitted: <%= Time.now %></p>
+<p>Subject: <%= @subject %></p>
 <% if @user %>
-	<p>User: <%=@user.to_s%></p>
+	<p>User: <%= @user.to_s %></p>
 <% else %>
-	<p>Name: <%=@name%></p>
-	<p>Email: <%=@email%></p>
+	<p>Name: <%= @name %></p>
+	<p>Email: <%= @email %></p>
 <% end %>
-<p>Message: <%=@message%></p>
-<p>Source Page: <%=Dor::Config.hydrus.host + @from%></p>
-<p>User agent: <%=@request.env["HTTP_USER_AGENT"]%></p>
+<p>Message: <%= @message %></p>
+<p>Source Page: <%= Settings.hydrus.host + @from %></p>
+<p>User agent: <%= @request.env["HTTP_USER_AGENT"] %></p>
 </body></html>

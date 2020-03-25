@@ -83,16 +83,14 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
 
   def self.create(user)
     # Create the object, with the correct model.
-    dconf = Dor::Config.hydrus
-    args = [user, 'adminPolicy', dconf.ur_apo_druid]
-    response = Hydrus::GenericObject.register_dor_object(*args)
+    response = Hydrus::GenericObject.register_dor_object(user, 'adminPolicy', Settings.hydrus.ur_apo_druid)
     apo = Hydrus::AdminPolicyObject.find(response[:pid])
-    Dor::Config.workflow.client.create_workflow_by_name(response[:pid], Dor::Config.hydrus.app_workflow, version: apo.current_version)
+    Dor::Config.workflow.client.create_workflow_by_name(response[:pid], Settings.hydrus.app_workflow, version: apo.current_version)
 
     apo.remove_relationship :has_model, 'info:fedora/afmodel:Dor_AdminPolicyObject'
     apo.assert_content_model
     # Add minimal descMetadata with a title.
-    apo.title = dconf.initial_apo_title
+    apo.title = Settings.hydrus.initial_apo_title
     apo.label = apo.title
     # Add roleMetadata with current user as hydrus-collection-manager.
     rmd = apo.roleMetadata

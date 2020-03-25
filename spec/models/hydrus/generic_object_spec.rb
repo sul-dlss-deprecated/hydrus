@@ -267,53 +267,6 @@ describe Hydrus::GenericObject, type: :model do
   end
 
   describe 'workflow stuff' do
-    before(:each) do
-      xml = <<-EOXML
-        <workflows>
-          <workflow id="foo">
-            <process status="waiting" name="aa"/>
-            <process status="waiting" name="bb"/>
-          </workflow>
-          <workflow id="hydrusAssemblyWF">
-            <process status="completed" name="start-deposit" lifecycle="registered"/>
-            <process status="waiting"   name="submit"/>
-            <process status="waiting"   name="approve"/>
-            <process status="waiting"   name="start-assembly"/>
-          </workflow>
-          <workflow id="accessionWF">
-            <process status="waiting" name="publish" lifecycle="published"/>
-            <process status="waiting" name="bar"/>
-          </workflow>
-        </workflows>
-      EOXML
-      @workflow = Dor::WorkflowDs.from_xml(noko_doc(xml))
-      @go = Hydrus::GenericObject.new
-      allow(@go).to receive(:workflows).and_return(@workflow)
-    end
-
-    it 'get_workflow_node() should return a node with correct id attribute' do
-      node = @go.workflows.get_workflow_node
-      expect(node).to be_instance_of Nokogiri::XML::Element
-      expect(node['id']).to eq(Dor::Config.hydrus.app_workflow.to_s)
-    end
-
-    it 'get_workflow_step() should return a node with correct name attribute' do
-      node = @go.workflows.get_workflow_step('approve')
-      expect(node).to be_instance_of Nokogiri::XML::Element
-      expect(node['name']).to eq('approve')
-    end
-
-    it 'get_workflow_status() should return the current status of a step' do
-      expect(@go.workflows.get_workflow_status('start-deposit')).to eq('completed')
-      expect(@go.workflows.get_workflow_status('submit')).to        eq('waiting')
-      expect(@go.workflows.get_workflow_status('blort')).to         eq(nil)
-    end
-
-    it 'workflow_step_is_done() should return correct value' do
-      expect(@go.workflows.workflow_step_is_done('start-deposit')).to eq(true)
-      expect(@go.workflows.workflow_step_is_done('submit')).to        eq(false)
-    end
-
     it 'is_published() should return true if object status is any flavor of publish' do
       tests = {
         'published'         => true,
@@ -360,7 +313,7 @@ describe Hydrus::GenericObject, type: :model do
     end
   end
 
-  describe 'events stuff' do
+  describe '#get_hydrus_events' do
     before(:each) do
       xml = <<-EOF
         <events>
@@ -373,7 +326,7 @@ describe Hydrus::GenericObject, type: :model do
       allow(@go).to receive(:events).and_return(@events)
     end
 
-    it 'get_workflow_node() should return a node with correct id attribute' do
+    it 'returns expected events' do
       es = @go.get_hydrus_events
       expect(es.size).to eq(2)
       e = es.first

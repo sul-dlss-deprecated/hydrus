@@ -3,6 +3,7 @@ require 'spec_helper'
 RSpec.describe('Collection create', type: :request, integration: true) do
   let(:archivist1) { create :archivist1 }
   let(:archivist99) { create :archivist99 }
+  let(:wfs) { Dor::Config.workflow.client }
 
   before do
     @alert           = 'div.alert'
@@ -54,9 +55,10 @@ RSpec.describe('Collection create', type: :request, integration: true) do
     expect(apo).to be_instance_of Hydrus::AdminPolicyObject
     expect(apo.defaultObjectRights.ng_xml).to be_equivalent_to coll.rightsMetadata.ng_xml # collection rights metadata should be equal to apo default object rights
     # Check workflow of Collection.
-    wf_nodes = coll.workflows.find_by_terms(:workflow)
+    wf_xml = Dor::Config.workflow.client.all_workflows_xml(druid)
+    wf_nodes = Dor::Workflow::Response::Workflows.new(xml: wf_xml).workflows
     expect(wf_nodes.size).to eq(1)
-    expect(wf_nodes.first[:id]).to eq(Dor::Config.hydrus.app_workflow.to_s)
+    expect(wf_nodes.first.workflow_name).to eq(Settings.hydrus.app_workflow.to_s)
     # Check identityMetadata of Collection.
     expect(coll.identityMetadata.tag.to_a).to include('Project : Hydrus')
     expect(coll.identityMetadata.objectType.to_a).to include('collection', 'set')
@@ -153,8 +155,12 @@ RSpec.describe('Collection create', type: :request, integration: true) do
     expect(coll.is_open).to eq(true)
     # The workflow steps of both the collection and apo should be completed.
     %w(start-deposit submit approve start-assembly).each do |step|
-      expect(coll.workflows.workflow_step_is_done(step)).to eq(true)
-      expect(apo.workflows.workflow_step_is_done(step)).to eq(true)
+      expect(
+        wfs.workflow_status(druid: coll.pid, workflow: Settings.hydrus.app_workflow, process: step)
+      ).to eq('completed')
+      expect(
+        wfs.workflow_status(druid: apo.pid, workflow: Settings.hydrus.app_workflow, process: step)
+      ).to eq('completed')
     end
     # Close the Collection.
     click_button(close_button)
@@ -223,8 +229,7 @@ RSpec.describe('Collection create', type: :request, integration: true) do
       hyc = Hydrus::Collection
       hya = Hydrus::AdminPolicyObject
       afe = ActiveFedora::ObjectNotFoundError
-      wfs = Dor::Config.workflow.client
-      hwf = Dor::Config.hydrus.app_workflow.to_s
+      hwf = Settings.hydrus.app_workflow.to_s
       # Create a new collection.
       hc   = create_new_collection()
       apo  = hc.apo
