@@ -25,7 +25,7 @@ RSpec.describe('Item versioning', type: :request, integration: true) do
   #
   # The rake task :refresh_workflows duplicates some of this behavior.
   after do
-    workflow_name = Dor::Config.hydrus.app_workflow
+    workflow_name = Settings.hydrus.app_workflow
     workflow_client = Dor::Workflow::Client.new(url: Settings.workflow.url)
     workflow_client.delete_workflow('dor', @hi.pid, 'versioningWF')
     workflow_client.delete_workflow('dor', @hi.pid, workflow_name)
@@ -69,8 +69,9 @@ RSpec.describe('Item versioning', type: :request, integration: true) do
     expect(@hi.prior_license).to eq(nil)
     expect(@hi.is_destroyable).to eq(false) # cannot destroy a published version
     n_events = @hi.get_hydrus_events.size
-    expect(@hi.workflows.workflow_step_is_done('submit')).to eq(true)
-    expect(@hi.workflows.workflow_step_is_done('approve')).to eq(true)
+    # TODO: Replace these with dor-workflow-client calls
+    # expect(@hi.workflows.workflow_step_is_done('submit')).to eq(true)
+    # expect(@hi.workflows.workflow_step_is_done('approve')).to eq(true)
 
     # Open new version.
     sign_in(archivist1)
@@ -92,8 +93,9 @@ RSpec.describe('Item versioning', type: :request, integration: true) do
     es = @hi.get_hydrus_events
     expect(es.size).to eq(n_events + 1)
     expect(es.last.text).to eq('New version opened')
-    expect(@hi.workflows.workflow_step_is_done('submit')).to eq(false)
-    expect(@hi.workflows.workflow_step_is_done('approve')).to eq(false)
+    # TODO: Replace these with dor-workflow-client calls
+    # expect(@hi.workflows.workflow_step_is_done('submit')).to eq(false)
+    # expect(@hi.workflows.workflow_step_is_done('approve')).to eq(false)
 
     # View page should not offer the Publish button, because the user
     # needs to fill in a version description.  It should also not offer a discard button since this is v2 and is unpublished
@@ -123,8 +125,9 @@ RSpec.describe('Item versioning', type: :request, integration: true) do
 
     # Assertions after adding version description.
     @hi = Hydrus::Item.find(@hi.pid)
-    expect(@hi.workflows.workflow_step_is_done('submit')).to eq(true)
-    expect(@hi.workflows.workflow_step_is_done('approve')).to eq(true)
+    # TODO: Replace these with dor-workflow-client calls
+    # expect(@hi.workflows.workflow_step_is_done('submit')).to eq(true)
+    # expect(@hi.workflows.workflow_step_is_done('approve')).to eq(true)
     expect(@hi.object_status).to eq('published')
 
     # View page should offer open version button.

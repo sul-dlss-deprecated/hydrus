@@ -4,16 +4,25 @@ require 'spec_helper'
 
 RSpec.describe ItemService do
   around do |example|
-    @prev_mint_ids = Dor::Config.configure.suri.mint_ids
-    Dor::Config.configure.suri.mint_ids = true
+    @prev_mint_ids = Settings.suri.mint_ids
+    Settings.suri.mint_ids = true
     example.run
-    Dor::Config.configure.suri.mint_ids = @prev_mint_ids
+    Settings.suri.mint_ids = @prev_mint_ids
   end
 
   describe '.create' do
     subject(:item) { described_class.create(collection.pid, user) }
 
-    let(:workflow_client) { instance_double(Dor::Workflow::Client, create_workflow_by_name: nil, all_workflows_xml: '', milestones: []) }
+    let(:fake_workflows_response) { instance_double(Dor::Workflow::Response::Workflows, workflows: []) }
+    let(:fake_workflow_routes) { instance_double(Dor::Workflow::Client::WorkflowRoutes, all_workflows: fake_workflows_response) }
+    let(:workflow_client) do
+      instance_double(Dor::Workflow::Client,
+                      create_workflow_by_name: nil,
+                      all_workflows_xml: '',
+                      milestones: [],
+                      workflow_routes: fake_workflow_routes)
+    end
+
     let(:collection) { Hydrus::Collection.find('druid:bb000bb0003') }
 
     before do

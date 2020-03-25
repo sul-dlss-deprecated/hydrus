@@ -4,6 +4,7 @@ RSpec.describe SolrDocument, type: :model do
   describe '#object_title' do
     subject(:title) { solr_doc.object_title }
     let(:solr_doc) { described_class.new(values) }
+    let(:user) { create(:archivist1) }
 
     before do
       # Don't index workflow stuff
@@ -11,14 +12,16 @@ RSpec.describe SolrDocument, type: :model do
     end
 
     context 'for a new item' do
-      let(:values) { Hydrus::Item.new.to_solr }
+      let(:values) { Hydrus::Item.create.to_solr }
+
       it 'is untitled' do
         expect(title).to eq 'Untitled'
       end
     end
 
     context 'for a new Hydrus::Collection' do
-      let(:values) { Hydrus::Collection.new.to_solr }
+      let(:values) { Hydrus::Collection.create(user).to_solr }
+
       it 'is untitled' do
         expect(title).to eq 'Untitled'
       end

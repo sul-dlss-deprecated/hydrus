@@ -1,6 +1,5 @@
 hydrus:
   exception_error_panel: false
-  exception_error_page: false
   host: localhost:3000
   start_assembly_wf: false
 

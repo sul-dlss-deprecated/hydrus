@@ -97,7 +97,7 @@ class Hydrus::Collection < Dor::Collection
 
     coll = Hydrus::Collection.find(response[:pid])
     # Create workflow
-    Dor::Config.workflow.client.create_workflow_by_name(response[:pid], Dor::Config.hydrus.app_workflow, version: coll.current_version)
+    Dor::Config.workflow.client.create_workflow_by_name(response[:pid], Settings.hydrus.app_workflow, version: coll.current_version)
 
     coll.remove_relationship :has_model, 'info:fedora/afmodel:Dor_Collection'
     coll.assert_content_model

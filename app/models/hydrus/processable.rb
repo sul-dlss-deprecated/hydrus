@@ -17,24 +17,14 @@ module Hydrus::Processable
   # Calls the workflow service to mark that step as completed.
   def update_workflow_status(step, status)
     workflow_client.update_status(druid: pid,
-                                  workflow: Dor::Config.hydrus.app_workflow,
+                                  workflow: Settings.hydrus.app_workflow,
                                   process: step,
                                   status: status)
-    workflows_content_is_stale
   end
 
   # Deletes an objects hydrus workflow.
   def delete_hydrus_workflow
-    workflow_client.delete_workflow(REPO, pid, Dor::Config.hydrus.app_workflow)
-  end
-
-  # Resets two instance variables of the workflow datastream. By resorting to
-  # this encapsulation-violating hack, we ensure that our current Hydrus object
-  # will not rely on its cached copy of the workflow XML. Instead it will call
-  # to the workflow service to get the latest XML, particularly during the
-  # save() process, which is when our object will be resolarized.
-  def workflows_content_is_stale
-    %w(@content @ng_xml).each { |v| workflows.instance_variable_set(v, nil) }
+    workflow_client.delete_workflow(REPO, pid, Settings.hydrus.app_workflow)
   end
 
   # Generates the object's contentMetadata, finalizes the hydrusAssemblyWF
@@ -58,13 +48,13 @@ module Hydrus::Processable
 
   # Kicks off hydrusAssemblyWF
   def start_hydrus_wf
-    workflow_client.create_workflow_by_name(pid, Dor::Config.hydrus.app_workflow, version: current_version)
+    workflow_client.create_workflow_by_name(pid, Settings.hydrus.app_workflow, version: current_version)
   end
 
-  # Returns value of Dor::Config.hydrus.start_assembly_wf.
+  # Returns value of Settings.hydrus.start_assembly_wf.
   # Wrapped in method to simplify testing stubs.
   def should_start_assembly_wf
-    Dor::Config.hydrus.start_assembly_wf
+    Settings.hydrus.start_assembly_wf
   end
 
   # Returns true if a new version can be opened for the object.
