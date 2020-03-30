@@ -17,6 +17,8 @@ before_install:
 before_script:
   - echo "Waiting for Fcrepo to start"
   - until curl --silent -XGET --fail -o /dev/null http://localhost:8983; do printf '.'; sleep 1; done
+  - echo "Waiting for dor-services-app to start"
+  - until curl --silent -XGET --fail -o /dev/null http://localhost:3003/v1/about; do printf '.'; sleep 1; done
 
 env:
   global:
