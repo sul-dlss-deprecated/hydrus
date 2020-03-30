@@ -59,8 +59,8 @@ RSpec.describe('Collection create', type: :request, integration: true) do
     wf_nodes = Dor::Workflow::Response::Workflows.new(xml: wf_xml).workflows
     expect(wf_nodes.size).to eq(1)
     expect(wf_nodes.first.workflow_name).to eq(Settings.hydrus.app_workflow.to_s)
-    # Check identityMetadata of Collection.
-    expect(coll.identityMetadata.tag.to_a).to include('Project : Hydrus')
+    # Check tags of Collection.
+    expect(Dor::Services::Client.object(druid).administrative_tags.list).to include('Project : Hydrus')
     expect(coll.identityMetadata.objectType.to_a).to include('collection', 'set')
     # Check the typeOfResource of the collection
     expect(coll.descMetadata.ng_xml.search('//mods:typeOfResource', 'mods' => 'http://www.loc.gov/mods/v3').first['collection']).to eq('yes')

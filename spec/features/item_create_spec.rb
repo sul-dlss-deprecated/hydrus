@@ -3,6 +3,7 @@ require 'spec_helper'
 describe('Item create', type: :request, integration: true) do
   let(:archivist1) { create :archivist1 }
   let(:archivist6) { create :archivist6 }
+
   before(:all) do
     @div_alert   = '#flash-notices div.alert'
     @span_status = 'span#status-label'
@@ -90,8 +91,8 @@ describe('Item create', type: :request, integration: true) do
     wf_nodes = Dor::Workflow::Response::Workflows.new(xml: wf_xml).workflows
     expect(wf_nodes.size).to eq(1)
     expect(wf_nodes.first.workflow_name).to eq(Settings.hydrus.app_workflow.to_s)
-    # Check identityMetadata of Item.
-    expect(item.identityMetadata.tag.to_a).to include('Project : Hydrus')
+    # Check tags of Item.
+    expect(Dor::Services::Client.object(druid).administrative_tags.list).to include('Project : Hydrus')
     # Check roles of the Item.
     expect(item.person_roles).to eq({ 'hydrus-item-depositor' => Set.new(['archivist1']) })
 
