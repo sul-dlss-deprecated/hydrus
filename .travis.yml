@@ -12,6 +12,10 @@ before_install:
 before_script:
   - echo "Waiting for Fcrepo to start"
   - until curl --silent -XGET --fail -o /dev/null http://localhost:8983; do printf '.'; sleep 1; done
+  - until curl --silent -XGET --fail -o /dev/null http://localhost:8984; do printf '.'; sleep 1; done
+  - until curl --silent -XGET --fail -o /dev/null http://localhost:3002; do printf '.'; sleep 1; done
+  - until curl --silent -XGET --fail -o /dev/null http://localhost:3003; do printf '.'; sleep 1; done
+  - until curl --silent -XGET --fail -o /dev/null http://localhost:3004; do printf '.'; sleep 1; done
 
 env:
   global:
