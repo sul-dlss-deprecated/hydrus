@@ -67,6 +67,7 @@ services:
       DATABASE_PASSWORD: sekret
       DATABASE_HOSTNAME: db
       DATABASE_PORT: 5432
+      REDIS_URL: redis://redis:6379/
       SETTINGS__SOLR__URL: http://solr:8983/solr/hydrus-test
       SETTINGS__FEDORA_URL: http://fedoraAdmin:fedoraAdmin@fcrepo:8080/fedora
       SETTINGS__SURI__URL: http://suri:3000
