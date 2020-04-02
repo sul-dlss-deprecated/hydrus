@@ -82,6 +82,7 @@ services:
       - solr
       - suri
       - workflow
+      - redis
 
   dor-indexing-app:
     image: suldlss/dor-indexing-app:latest
