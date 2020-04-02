@@ -10,11 +10,12 @@ before_install:
   - yes | gem update --system
 
 before_script:
-  - echo "Waiting for Fcrepo to start"
+  - echo "Waiting for services to start"
   - until curl --silent -XGET --fail -o /dev/null http://localhost:8983; do printf '.'; sleep 1; done
   - until curl --silent -XGET --fail -o /dev/null http://localhost:8984; do printf '.'; sleep 1; done
+  - until curl --silent -XGET --fail -o /dev/null http://localhost:3001/status; do printf '.'; sleep 1; done
   - until curl --silent -XGET --fail -o /dev/null http://localhost:3002; do printf '.'; sleep 1; done
-  - until curl --silent -XGET --fail -o /dev/null http://localhost:3003; do printf '.'; sleep 1; done
+  - until curl --silent -XGET --fail -o /dev/null http://localhost:3003/status; do printf '.'; sleep 1; done
   - until curl --silent -XGET --fail -o /dev/null http://localhost:3004; do printf '.'; sleep 1; done
 
 env:
