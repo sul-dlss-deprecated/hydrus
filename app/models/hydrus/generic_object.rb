@@ -295,19 +295,38 @@ class Hydrus::GenericObject < Dor::Item
 
   # Registers an object in Dor, and returns it.
   def self.register_dor_object(*args)
-    params = self.dor_registration_params(*args)
-    Dor::Services::Client.objects.register(params: params)
+    request_model = Cocina::Models.build_request(self.dor_registration_params(*args))
+    Dor::Services::Client.objects.register(params: request_model)
   end
 
   # Returns a hash of info needed to register a Dor object.
   def self.dor_registration_params(user_string, obj_typ, apo_pid)
     {
-      object_type: obj_typ,
-      admin_policy: apo_pid,
-      source_id: "Hydrus:#{obj_typ}-#{user_string}-#{HyTime.now_datetime_full}",
+      type: self.cocina_type(obj_typ),
       label: 'Hydrus',
-      tag: [Settings.hydrus.project_tag]
-    }
+      version: 1,
+      administrative: {
+        hasAdminPolicy: apo_pid
+      }
+    }.tap do |params|
+
+      params[:administrative][:partOfProject] = 'Hydrus' unless obj_typ == 'adminPolicy'
+      params[:identification] = { sourceId: "Hydrus:#{obj_typ}-#{user_string}-#{HyTime.now_datetime_full}" } if obj_typ == 'item'
+      params[:access] = {} if obj_typ == 'collection'
+    end.with_indifferent_access
+  end
+
+  def self.cocina_type(obj_type)
+    case obj_type
+    when 'adminPolicy'
+      Cocina::Models::Vocab.admin_policy
+    when 'collection'
+      Cocina::Models::Vocab.collection
+    when 'item'
+      Cocina::Models::Vocab.object
+    else
+      raise "#{obj_type} not supported"
+    end
   end
 
   def recipients_for_object_returned_email

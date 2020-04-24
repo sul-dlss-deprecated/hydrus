@@ -84,8 +84,8 @@ class Hydrus::AdminPolicyObject < Dor::AdminPolicyObject
   def self.create(user)
     # Create the object, with the correct model.
     response = Hydrus::GenericObject.register_dor_object(user, 'adminPolicy', Settings.hydrus.ur_apo_druid)
-    apo = Hydrus::AdminPolicyObject.find(response[:pid])
-    Dor::Config.workflow.client.create_workflow_by_name(response[:pid], Settings.hydrus.app_workflow, version: apo.current_version)
+    apo = Hydrus::AdminPolicyObject.find(response.externalIdentifier)
+    Dor::Config.workflow.client.create_workflow_by_name(response.externalIdentifier, Settings.hydrus.app_workflow, version: apo.current_version)
 
     apo.remove_relationship :has_model, 'info:fedora/afmodel:Dor_AdminPolicyObject'
     apo.assert_content_model

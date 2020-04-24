@@ -95,9 +95,9 @@ class Hydrus::Collection < Dor::Collection
     apo      = Hydrus::AdminPolicyObject.create(user)
     response = Hydrus::GenericObject.register_dor_object(user, 'collection', apo.pid)
 
-    coll = Hydrus::Collection.find(response[:pid])
+    coll = Hydrus::Collection.find(response.externalIdentifier)
     # Create workflow
-    Dor::Config.workflow.client.create_workflow_by_name(response[:pid], Settings.hydrus.app_workflow, version: coll.current_version)
+    Dor::Config.workflow.client.create_workflow_by_name(response.externalIdentifier, Settings.hydrus.app_workflow, version: coll.current_version)
 
     coll.remove_relationship :has_model, 'info:fedora/afmodel:Dor_Collection'
     coll.assert_content_model
