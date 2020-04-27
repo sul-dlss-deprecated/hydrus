@@ -64,23 +64,28 @@ describe Hydrus::GenericObject, type: :model do
       Hydrus::GenericObject.dor_registration_params(*args)
     end
 
-    let(:args) { %w(whobar item somePID) }
+    let(:args) { %w(whobar item druid:bc123df4567) }
 
     it 'returns the expected hash' do
-      expect(dor_registration_params).to be_instance_of Hash
-      expect(dor_registration_params[:admin_policy]).to eq(args.last)
+      puts dor_registration_params
+      expect(dor_registration_params[:type]).to eq('http://cocina.sul.stanford.edu/models/object.jsonld')
+      expect(dor_registration_params[:label]).to eq('Hydrus')
+      expect(dor_registration_params[:version]).to eq(1)
+      expect(dor_registration_params[:administrative][:hasAdminPolicy]).to eq('druid:bc123df4567')
+      expect(dor_registration_params[:administrative][:partOfProject]).to eq('Hydrus')
+      expect(dor_registration_params[:identification][:sourceId]).to start_with('Hydrus:item-whobar-')
     end
   end
 
   describe '.register_dor_object' do
     subject(:register_dor_object) do
-      Hydrus::GenericObject.register_dor_object(nil, nil, nil)
+      Hydrus::GenericObject.register_dor_object(*args)
     end
 
     let(:dor_registration_params) do
       Hydrus::GenericObject.dor_registration_params(*args)
     end
-    let(:args) { %w(whobar item somePID) }
+    let(:args) { %w(whobar item druid:bc123df4567) }
     let(:objects_client) { instance_double(Dor::Services::Client::Objects, register: nil) }
 
     before do
@@ -89,7 +94,7 @@ describe Hydrus::GenericObject, type: :model do
 
     it 'calls the dor-serivices-client to register' do
       register_dor_object
-      expect(objects_client).to have_received(:register).with(params: hash_including(*dor_registration_params.keys))
+      expect(objects_client).to have_received(:register).with(params: Cocina::Models::RequestDRO)
     end
   end
 
