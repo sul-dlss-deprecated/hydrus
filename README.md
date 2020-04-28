@@ -12,7 +12,7 @@ Digital Repository for preservation and access.
 ### System Requirements
 
 1. Install Docker
-2. Install Ruby 2.5.3
+2. Install Ruby (version per travis CI config)
 
 ## Run the servers
 
