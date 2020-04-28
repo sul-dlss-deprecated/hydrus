@@ -9,9 +9,18 @@ describe(HydrusSolrController, type: :feature, integration: true) do
   end
 
   describe '#reindex' do
+    let(:druid) { 'druid:bb123bb1234' }
+    let(:fake_object_client) { instance_double(Dor::Services::Client::Object, administrative_tags: fake_tags_client) }
+    let(:fake_tags_client) { instance_double(Dor::Services::Client::AdministrativeTags, list: tags) }
+    let(:tags) { ['Project : Hydrus'] }
+
+    before do
+      allow(Dor::Services::Client).to receive(:object).with(druid).and_return(fake_object_client)
+    end
+
     it 'indexes an item into solr' do
-      expect(ActiveFedora.solr.conn).to receive(:add).with(hash_including(id: 'druid:bb123bb1234'), anything)
-      visit '/hydrus_solr/reindex/druid:bb123bb1234'
+      expect(ActiveFedora.solr.conn).to receive(:add).with(hash_including(id: druid), anything)
+      visit "/hydrus_solr/reindex/#{druid}"
     end
   end
 end
