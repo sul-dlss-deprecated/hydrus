@@ -21,7 +21,6 @@ stacks:
   document_cache_host: ~
   local_stacks_root: ~
   local_workspace_root: ~
-  local_document_cache_root: ~
 
 solr:
   url: 'https://solr.example.com/solr/collection'

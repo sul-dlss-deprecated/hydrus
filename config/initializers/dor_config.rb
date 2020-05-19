@@ -35,7 +35,6 @@ Dor.configure do
 
   stacks do
     document_cache_host Settings.stacks.document_cache_host
-    local_document_cache_root Settings.stacks.local_document_cache_root
     local_workspace_root Settings.stacks.local_workspace_root
     local_stacks_root Settings.stacks.local_stacks_root
   end
