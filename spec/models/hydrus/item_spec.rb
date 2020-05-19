@@ -997,35 +997,50 @@ RSpec.describe Hydrus::Item, type: :model do
     end
   end
 
-  describe 'do_publish()' do
-    it 'should call expected methods and set labels, status, and events' do
-      # Set up object title.
-      exp = 'foobar title'
-      allow(item).to receive(:title).and_return(exp)
-      # Stub method calls.
-      expect(item).to receive(:complete_workflow_step).with('approve')
-      expect(item).not_to receive(:close_version)
-      expect(item).to receive(:start_common_assembly)
-      # Before-assertions.
-      expect(item.is_initial_version).to eq(true)
-      expect(item.submitted_for_publish_time).to be_blank
-      expect(item.initial_submitted_for_publish_time).to be_blank
-      expect(item.get_hydrus_events.size).to eq(0)
-      # Run it, and make after-assertions.
-      item.do_publish
-      expect(item.label).to eq(exp)
+  describe '#do_publish' do
+    subject(:publish) { item.do_publish }
+
+    before do
+      allow(item).to receive(:title).and_return(title)
+      allow(item).to receive(:close_version)
+      allow(item).to receive(:complete_workflow_step).with('approve')
+      allow(item).to receive(:start_common_assembly)
+    end
+
+    let(:title) do
+      'Examination of four early exhibitions of Giant Sequoia: ' \
+      'the Snediker & Stegman ("The Mammoth Tree"; ' \
+      'later to be known as "The Forest King") exhibit in Stockton, ' \
+      'California (October 12-25, 1870) and the Jellerson & Ricker Big Tree ' \
+      'exhibits 1870-1871 (New York, Boston, etc.)'
+    end
+
+    it 'call expected methods and set labels, status, and events' do
+      publish
+
+      expect(item).not_to have_received(:close_version)
+
+      expect(item.label).to eq 'Examination of four early exhibitions of Giant ' \
+        'Sequoia: the Snediker & Stegman ("The Mammoth Tree"; later to be ' \
+        'known as "The Forest King") exhibit in Stockton, California ' \
+        '(October 12-25, 1870) and the Jellerson & Ricker Big Tree exhibits ' \
+        '1870-1871...'
       expect(item.submitted_for_publish_time).not_to be_blank
       expect(item.initial_submitted_for_publish_time).not_to be_blank
       expect(item.object_status).to eq('published')
       expect(item.get_hydrus_events.first.text).to match(/\AItem published: v\d/)
+      allow(item).to receive(:valid?).and_return(true)
     end
 
-    it 'should close_version() if the object is not an initial version' do
-      allow(item).to receive(:complete_workflow_step)
-      allow(item).to receive(:start_common_assembly)
-      allow(item).to receive(:is_initial_version).and_return(false)
-      expect(item).to receive(:close_version)
-      item.do_publish
+    context 'when the object is not an initial version' do
+      before do
+        allow(item).to receive(:is_initial_version).and_return(false)
+      end
+
+      it 'closes the version' do
+        publish
+        expect(item).to have_received(:close_version)
+      end
     end
   end
 
