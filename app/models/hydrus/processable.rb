@@ -24,7 +24,7 @@ module Hydrus::Processable
 
   # Deletes an objects hydrus workflow.
   def delete_hydrus_workflow
-    workflow_client.delete_workflow(REPO, pid, Settings.hydrus.app_workflow)
+    workflow_client.delete_workflow(REPO, pid, Settings.hydrus.app_workflow, version: current_version)
   end
 
   # Generates the object's contentMetadata, finalizes the hydrusAssemblyWF
