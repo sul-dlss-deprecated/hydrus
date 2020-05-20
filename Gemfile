@@ -22,7 +22,7 @@ gem 'assembly-objectfile', '~> 1.5'
 # or we'll get a superclass mismatch for Hydrus::Item
 gem 'dor-services', '~> 8.0', require: false
 gem 'dor-services-client', '~> 6.0'
-gem 'dor-workflow-client', '~> 3.9'
+gem 'dor-workflow-client', '~> 3.22'
 gem 'rubydora', '~> 2.1'
 gem 'bagit', '~> 0.4'
 gem 'blacklight', '~> 6.19'
