@@ -110,7 +110,8 @@ class Hydrus::Item < Hydrus::GenericObject
     # Set label and title.
     t = title()
     identityMetadata.objectLabel = t
-    self.label = t
+    # Fedora 3 can only accept labels up to 255 characters, so trim them
+    self.label = t.truncate(255, separator: /\s/)
     datastreams['DC'].title = [t]
     # Update object status and advance workflow.
     self.object_status = 'published'
