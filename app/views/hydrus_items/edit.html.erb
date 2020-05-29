@@ -219,7 +219,7 @@
       <% elsif @fobj.is_embargoed %>
         This item will be released for discovery and download
         <span class="highlight-value">
-          <%= HyTime.datetime_display(@fobj.embargo_date) + '.' %>
+          <%= HyTime.date_display(@fobj.embargo_date, from_localzone: true) + '.' %>
         </span>
       <% else %>
         This item will be released for discovery and download
