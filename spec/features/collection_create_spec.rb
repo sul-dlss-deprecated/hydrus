@@ -11,11 +11,6 @@ RSpec.describe('Collection create', type: :request, integration: true) do
     @notice_open     = 'Collection opened'
     @notice_close    = 'Collection closed'
     @edit_path_regex = Regexp.new('/collections/(druid:\w{11})/edit')
-    @prev_mint_ids   = config_mint_ids()
-  end
-
-  after(:each) do
-    config_mint_ids(@prev_mint_ids)
   end
 
   it 'should not be able to visit new collection URL if user lacks authority to create collections' do

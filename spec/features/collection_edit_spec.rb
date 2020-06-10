@@ -303,14 +303,6 @@ describe('Collection edit', type: :request, integration: true) do
     end
 
     describe 'when updating a collection' do
-      before(:each) do
-        @prev_mint_ids = config_mint_ids()
-      end
-
-      after(:each) do
-        config_mint_ids(@prev_mint_ids)
-      end
-
       it "should send an email to managers when we're opening a collection and to a depositor when we add them" do
         sign_in(archivist1)
         visit new_hydrus_collection_path()
@@ -384,13 +376,6 @@ describe('Collection edit', type: :request, integration: true) do
   describe 'role-protection' do
     let(:owner) { create :archivist2 }
     let(:viewer) { create :archivist6 }
-    before(:each) do
-      @prev_mint_ids = config_mint_ids()
-    end
-
-    after(:each) do
-      config_mint_ids(@prev_mint_ids)
-    end
 
     it 'action buttons should not be accessible to users with insufficient powers' do
       # Create a collection.

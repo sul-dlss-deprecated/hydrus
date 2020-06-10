@@ -34,14 +34,6 @@ describe('Item create', type: :request, integration: true) do
     }
     @hc_druid = 'druid:bb000bb0003'
     @edit_path_regex = Regexp.new('/items/(druid:\w{11})/edit')
-    # Need to mint an actual druid in order to pass validation.
-    @prev_mint_ids = Settings.suri.mint_ids
-    Settings.suri.mint_ids = true
-  end
-
-  after(:all) do
-    # Restore mint_ids setting.
-    Settings.suri.mint_ids = @prev_mint_ids
   end
 
   context 'depositing items into collections' do

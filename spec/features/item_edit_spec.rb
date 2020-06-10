@@ -429,13 +429,6 @@ describe('Item edit', type: :request, integration: true) do
     let(:owner) { create :archivist1 }
     let(:reviewer) { create :archivist5 }
     let(:viewer) { create :archivist7 }
-    before(:each) do
-      @prev_mint_ids = config_mint_ids()
-    end
-
-    after(:each) do
-      config_mint_ids(@prev_mint_ids)
-    end
 
     it 'action buttons should not be accessible to users with insufficient powers' do
       sign_out

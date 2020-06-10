@@ -51,6 +51,7 @@ public/plugin_assets/
 
 .rvmrc
 deploy/.rvmrc
+.ruby-version
 
 ## PROJECT::SPECIFIC
 
