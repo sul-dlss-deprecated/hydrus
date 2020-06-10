@@ -48,13 +48,6 @@ RSpec.describe Hydrus::Item, type: :feature, integration: true do
       allow(Hydrus::Authorizable).to receive(:can_edit_item).and_return(true)
     end
 
-    around do |example|
-      @prev_mint_ids = Settings.suri.mint_ids
-      Settings.suri.mint_ids = true
-      example.run
-      Settings.suri.mint_ids = @prev_mint_ids
-    end
-
     it 'accepts the terms for an item, updating the appropriate hydrusProperties metadata in item and collection' do
       expect(item.requires_terms_acceptance(user_key, collection)).to eq(true)
       expect(item.accepted_terms_of_deposit).to eq('false')
@@ -82,12 +75,7 @@ RSpec.describe Hydrus::Item, type: :feature, integration: true do
     end
 
     before do
-      @prev_mint_ids = config_mint_ids()
       allow(Dor::Config.workflow).to receive(:client).and_return(wfs)
-    end
-
-    after do
-      config_mint_ids(@prev_mint_ids)
     end
 
     it 'modifies workflows' do
@@ -111,12 +99,7 @@ RSpec.describe Hydrus::Item, type: :feature, integration: true do
   describe 'create()' do
     let(:user) { create :archivist1 }
 
-    after do
-      config_mint_ids(@prev_mint_ids)
-    end
-
     before do
-      @prev_mint_ids = config_mint_ids()
       allow(Hydrus::Collection).to receive(:find).with(collection.pid).and_return(collection)
     end
 

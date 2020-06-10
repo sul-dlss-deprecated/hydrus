@@ -106,20 +106,6 @@ def check_emb_vis_lic(obj, opts)
   expect(u.content).to eq(opts[:license_code].sub(/\Acc-/, ''))
 end
 
-# Some integration tests requires the minting of a valid druid in
-# order to pass validations. This method can be used to set the mint_ids
-# configuration to true, and then latter restore the previous value.
-def config_mint_ids(prev = nil)
-  suri = Settings.suri
-  if prev.nil?
-    prev = suri.mint_ids
-    suri.mint_ids = true
-  else
-    suri.mint_ids = prev
-  end
-  prev
-end
-
 # Creates a new collection through the UI.
 # User can pass in options to control how the form is filled out.
 # Returns the new collection.

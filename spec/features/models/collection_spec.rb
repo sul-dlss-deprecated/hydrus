@@ -2,13 +2,6 @@ require 'spec_helper'
 
 describe(Hydrus::Collection, type: :feature, integration: true) do
   let(:user) { create :archivist1 }
-  before(:all) do
-    @prev_mint_ids = config_mint_ids()
-  end
-
-  after(:all) do
-    config_mint_ids(@prev_mint_ids)
-  end
 
   it 'should be able to find its member Hydrus::Items' do
     druid = 'druid:bb000bb0003'

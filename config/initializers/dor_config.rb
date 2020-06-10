@@ -9,14 +9,6 @@ Dor.configure do
     url Settings.fedora.url
   end
 
-  suri do
-    mint_ids Settings.suri.mint_ids
-    id_namespace('druid')
-    url Settings.suri.url
-    user Settings.suri.user
-    pass Settings.suri.password
-  end
-
   # Using client certificates for connections is optional
   if Settings.ssl
     ssl do

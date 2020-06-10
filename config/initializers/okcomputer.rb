@@ -69,11 +69,6 @@ OkComputer::Registry.register 'solr_url', OkComputer::HttpCheck.new(solr_url)
 # fedora
 OkComputer::Registry.register 'fedora_url', HttpWithClientKeyCheck.new(Dor::Config.fedora.url)
 
-# suri
-suri_url = URI(Dor::Config.suri.url + '/suri2/namespaces')
-suri_url.userinfo = [Dor::Config.suri.user, Dor::Config.suri.pass].join(':')
-OkComputer::Registry.register 'suri_url', OkComputer::HttpCheck.new(suri_url.to_s)
-
 # dor-services-app
 about_url = Settings.dor_services.url + '/v1/about'
 OkComputer::Registry.register 'dor_services_url', OkComputer::HttpCheck.new(about_url)

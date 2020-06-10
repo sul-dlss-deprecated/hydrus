@@ -3,13 +3,6 @@
 require 'spec_helper'
 
 RSpec.describe ItemService do
-  around do |example|
-    @prev_mint_ids = Settings.suri.mint_ids
-    Settings.suri.mint_ids = true
-    example.run
-    Settings.suri.mint_ids = @prev_mint_ids
-  end
-
   describe '.create' do
     subject(:item) { described_class.create(collection.pid, user) }
 
