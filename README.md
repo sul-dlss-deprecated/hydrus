@@ -1,6 +1,6 @@
 # Hydrus
 [![Build Status](https://travis-ci.org/sul-dlss/hydrus.svg?branch=master)](https://travis-ci.org/sul-dlss/hydrus)
-[![Coverage Status](https://coveralls.io/repos/github/sul-dlss/hydrus/badge.svg)](https://coveralls.io/github/sul-dlss/hydrus)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/4f81c285af8b8889c9f4/test_coverage)](https://codeclimate.com/github/sul-dlss/hydrus/test_coverage)
 
 ## Overview
 
