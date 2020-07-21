@@ -651,7 +651,7 @@ li.errors
 	margin: 2px 0;
 	border: 1px inset #446;
 	border-radius: 5px;
-	background: #eee url("/assets/progress.png") 100% 0 repeat-y;
+	background: #eee url(asset-path("progress.png")) 100% 0 repeat-y;
 }
 
 #file-progress p.failed
