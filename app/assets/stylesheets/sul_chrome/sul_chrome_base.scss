@@ -5,7 +5,7 @@ $baseLineHeight: 18px;
 @import "bootstrap/mixins/border-radius";
 
 body {
-	background: url("/assets/body.png") repeat scroll 0 0 transparent;
+	background: url(asset-path("body.png")) repeat scroll 0 0 transparent;
 	font-family: Lucida Grande,Verdana,Arial,sans-serif;
 	line-height: 1.5em;
 }
@@ -30,13 +30,13 @@ a:hover.btn {
 	background-color: #990000;
 }
 #sul-wrapper {
-	background: url("/assets/wrapper.png") repeat-x scroll 0 0 transparent;
+	background: url(asset-path("wrapper.png")) repeat-x scroll 0 0 transparent;
 	text-align: center;
 	padding-top: 15px;
 }
 
 #container {
-	background: url("/assets/top-container.png") repeat-x scroll 0 0 #FFFFFF;
+	background: url(asset-path("top-container.png")) repeat-x scroll 0 0 #FFFFFF;
   	border-radius: 3px 3px 3px 3px;
   	border-top: 1px solid #FFFFFF;
 	margin: 0 auto;
@@ -101,7 +101,7 @@ $ribbon-offset-vertical: 8px; // height of shadow
   margin: 0 -54px 30px -54px;
   text-shadow: 0 1px rgba(0,0,0,.8);
   background: #651006;
-  background: url("/assets/bg-nav.png") repeat-x;
+  background: url(asset-path("bg-nav.png")) repeat-x;
   box-shadow: rgba(0,0,0,.3) 0 1px 0;
   &:before, &:after { // ribbon edge styling
     content: '';
