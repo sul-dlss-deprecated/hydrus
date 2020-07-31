@@ -18,16 +18,11 @@ Dor.configure do
     end
   end
 
-  workflow do
-    url     Settings.workflow.url
-    timeout Settings.workflow.timeout
+  solr do
+    url Settings.solr.url
   end
 
-  solr.url Settings.solr.url
-
   stacks do
-    document_cache_host Settings.stacks.document_cache_host
     local_workspace_root Settings.stacks.local_workspace_root
-    local_stacks_root Settings.stacks.local_stacks_root
   end
 end
