@@ -71,7 +71,7 @@ GEM
       mini_exiftool
       nokogiri
     ast (2.4.1)
-    autoprefixer-rails (9.8.5)
+    autoprefixer-rails (9.8.6.1)
       execjs
     awesome_print (1.8.0)
     bagit (0.4.4)
@@ -249,7 +249,7 @@ GEM
       dry-equalizer (~> 0.3)
       dry-inflector (~> 0.1, >= 0.1.2)
       dry-logic (~> 1.0, >= 1.0.2)
-    dry-validation (1.5.2)
+    dry-validation (1.5.3)
       concurrent-ruby (~> 1.0)
       dry-container (~> 0.7, >= 0.7.1)
       dry-core (~> 0.4)
