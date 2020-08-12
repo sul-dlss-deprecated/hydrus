@@ -104,7 +104,7 @@ RSpec.describe WorkflowIndexer do
       end
 
       it 'indexes the iso8601 UTC dates' do
-        expect(solr_doc).to match a_hash_including('wf_accessionWF_hello_dttsi' => '2012-11-07T00:18:57Z')
+        expect(solr_doc).to match a_hash_including('wf_accessionWF_start-accession_dttsi' => '2012-11-07T00:18:24Z')
         expect(solr_doc).to match a_hash_including('wf_accessionWF_technical-metadata_dttsi' => '2012-11-07T00:18:58Z')
       end
     end
@@ -128,8 +128,7 @@ RSpec.describe WorkflowIndexer do
 
       it 'only indexes the dates on steps that include a date' do
         expect(solr_doc).to match a_hash_including('wf_accessionWF_technical-metadata_dttsi')
-        expect(solr_doc).not_to match a_hash_including('wf_accessionWF_hello_dttsi')
-        expect(solr_doc).not_to match a_hash_including('wf_accessionWF_start-accession_dttsi')
+        expect(solr_doc).not_to match a_hash_including('wf_accessionWF_start_dttsi')
         expect(solr_doc).not_to match a_hash_including('wf_accessionWF_goodbye_dttsi')
       end
     end
