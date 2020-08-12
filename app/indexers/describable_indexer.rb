@@ -15,6 +15,7 @@ class DescribableIndexer
     { 'metadata_format_ssim' => 'mods' }
   end
 
+  # rubocop:disable Style/SymbolArray
   def add_mods_to_solr_doc
     solr_doc = {}
     mods_sources = {
@@ -49,4 +50,5 @@ class DescribableIndexer
     end
     solr_doc
   end
+  # rubocop:enable Style/SymbolArray
 end

@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# rubocop:disable Style/ClassVars
 class IdentifiableIndexer
   include SolrDocHelper
 
@@ -121,3 +122,4 @@ class IdentifiableIndexer
     related_obj.full_title || default_title
   end
 end
+# rubocop:enable Style/ClassVars

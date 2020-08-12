@@ -11,7 +11,7 @@ class RoleMetadataDatastreamIndexer
   # @return [Hash] the partial solr document for roleMetadata
   def to_solr
     {}.tap do |solr_doc|
-      # rubocop:disable Rails/DynamicFindBy
+      # rubocop:disable Style/SymbolArray
       resource.roleMetadata.find_by_xpath('/roleMetadata/role/*').each do |actor|
         role_type = actor.parent['type']
         val = [actor.at_xpath('identifier/@type'), actor.at_xpath('identifier/text()')].join ':'
@@ -19,7 +19,7 @@ class RoleMetadataDatastreamIndexer
         add_solr_value(solr_doc, "apo_role_#{role_type}", val, :string, [:symbol])
         add_solr_value(solr_doc, 'apo_register_permissions', val, :string, %i[symbol stored_searchable]) if %w[dor-apo-manager dor-apo-depositor].include? role_type
       end
-      # rubocop:enable Rails/DynamicFindBy
+      # rubocop:enable Style/SymbolArray
     end
   end
 end

@@ -13,7 +13,7 @@ RSpec.describe HydrusSolrController, type: :controller do
     let(:mock_hydrus_obj) { instance_double(Hydrus::Item, to_solr: { id: 'x' }, pid: pid) }
     let(:mock_indexer) { instance_double(CompositeIndexer::Instance, to_solr: mock_solr_doc) }
     let(:mock_solr_doc) { { id: pid } }
-  
+
     context 'when an object is not found in Fedora' do
       it 'responds with 404' do
         allow(ActiveFedora::Base).to receive(:find).and_return(nil)

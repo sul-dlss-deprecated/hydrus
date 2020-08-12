@@ -33,10 +33,10 @@ RSpec.describe ProcessableIndexer do
 
         let(:status) do
           instance_double(Dor::Workflow::Client::Status,
-            milestones: {},
-            info: { status_code: 0 },
-            display: 'v1 blah (parenthetical)',
-            display_simplified: 'blah')
+                          milestones: {},
+                          info: { status_code: 0 },
+                          display: 'v1 blah (parenthetical)',
+                          display_simplified: 'blah')
         end
 
         let(:workflow_client) { instance_double(Dor::Workflow::Client, status: status) }
@@ -95,10 +95,10 @@ RSpec.describe ProcessableIndexer do
 
       let(:status) do
         instance_double(Dor::Workflow::Client::Status,
-          milestones: milestones,
-          info: { status_code: 4 },
-          display: 'v4 In accessioning (described, published)',
-          display_simplified: 'In accessioning')
+                        milestones: milestones,
+                        info: { status_code: 4 },
+                        display: 'v4 In accessioning (described, published)',
+                        display_simplified: 'In accessioning')
       end
 
       let(:workflow_client) { instance_double(Dor::Workflow::Client, status: status) }

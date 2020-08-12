@@ -23,7 +23,7 @@ class ProcessIndexer
     return unless status
 
     # add a record of the robot having operated on this item, so we can track robot activity
-    solr_doc.add_process_time(workflow_name, name, Time.parse(process.datetime)) if has_time?
+    solr_doc.add_process_time(workflow_name, name, Time.parse(process.datetime)) if time?
 
     index_error_message
 
@@ -42,7 +42,7 @@ class ProcessIndexer
   attr_reader :process, :workflow_name, :solr_doc
   delegate :status, :name, :state, :error_message, :datetime, to: :process
 
-  def has_time?
+  def time?
     datetime && (status == 'completed' || status == 'error')
   end
 
