@@ -7,7 +7,6 @@ class RightsMetadataDatastreamIndexer
   end
 
   # @return [Hash] the partial solr document for rightsMetadata
-  # rubocop:disable Metrics/AbcSize
   # rubocop:disable Metrics/CyclomaticComplexity
   # rubocop:disable Metrics/PerceivedComplexity
   def to_solr
@@ -83,7 +82,6 @@ class RightsMetadataDatastreamIndexer
 
     solr_doc
   end
-  # rubocop:enable Metrics/AbcSize
   # rubocop:enable Metrics/CyclomaticComplexity
   # rubocop:enable Metrics/PerceivedComplexity
 end
