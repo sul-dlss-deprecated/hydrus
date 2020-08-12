@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
-require 'webmock/rspec'
+# require 'webmock/rspec'
 
 RSpec.describe WorkflowIndexer do
   before do
