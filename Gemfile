@@ -79,5 +79,8 @@ group :deployment do
   gem 'dlss-capistrano'
 end
 
-gem 'honeybadger'
+# gem 'honeybadger', '~> 4.2'
+# See https://github.com/honeybadger-io/honeybadger-ruby/issues/369
+gem 'honeybadger', github: 'honeybadger-io/honeybadger-ruby', branch: 'avoid-ar-connections'
+
 gem 'rsolr', '~> 2.2'
