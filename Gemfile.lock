@@ -1,3 +1,10 @@
+GIT
+  remote: https://github.com/honeybadger-io/honeybadger-ruby.git
+  revision: 6e1b826891b9a50f089ffa0d6018cdf269050c2b
+  branch: avoid-ar-connections
+  specs:
+    honeybadger (4.7.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -281,7 +288,6 @@ GEM
       temple (>= 0.8.0)
       tilt
     hashdiff (1.0.1)
-    honeybadger (4.7.1)
     hooks (0.4.1)
       uber (~> 0.0.14)
     htmlentities (4.3.4)
@@ -600,7 +606,7 @@ DEPENDENCIES
   dynamic_form
   equivalent-xml
   factory_bot_rails
-  honeybadger
+  honeybadger!
   iso-639 (~> 0.2.10)
   jquery-rails
   launchy
