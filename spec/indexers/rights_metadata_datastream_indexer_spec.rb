@@ -29,7 +29,7 @@ RSpec.describe RightsMetadataDatastreamIndexer do
     XML
   end
 
-  let(:obj) { Dor::Item.new(pid: 'druid:rt923jk342') }
+  let(:obj) { Hydrus::Item.new(pid: 'druid:rt923jk342') }
   let(:rights_md_ds) { obj.rightsMetadata }
 
   let(:indexer) do
@@ -47,7 +47,7 @@ RSpec.describe RightsMetadataDatastreamIndexer do
       expect(doc).to include(
         'copyright_ssim' => ['Copyright © World Trade Organization'],
         'use_statement_ssim' => ['Official WTO documents are free for public use.'],
-        'use_license_machine_ssi' => 'by-nc-nd',
+        'use_license_machine_ssi' => nil,
         'rights_descriptions_ssim' => ['world']
       )
     end
