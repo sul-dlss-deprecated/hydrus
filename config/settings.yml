@@ -10,7 +10,7 @@ hydrus:
   project_tag: 'Project : Hydrus'
 
 purl:
-  base_url: 'https://sul-purl-test.stanford.edu/'
+  base_url: 'https://sul-purl-stage.stanford.edu/'
 
 dor_services:
   url: 'http://localhost:3003'
