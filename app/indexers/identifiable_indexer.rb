@@ -47,10 +47,8 @@ class IdentifiableIndexer
     solrize_related_obj_titles(solr_doc, collections, @@collection_hash, :collection)
     solr_doc['public_dc_relation_tesim'] ||= solr_doc['collection_title_tesim'] if solr_doc['collection_title_tesim']
     solr_doc['metadata_source_ssi'] = identity_metadata_source
-    # This used to be added to the index by https://github.com/sul-dlss/dor-services/commit/11b80d249d19326ef591411ffeb634900e75c2c3
-    # and was called dc_identifier_druid_tesim
-    # It is used to search based on druid.
-    solr_doc['objectId_tesim'] = [resource.pid, resource.pid.split(':').last]
+    # This used to be added to the index by https://github.com/sul-dlss/dor-services/blob/8.x-stable/lib/dor/datastreams/identity_metadata_ds.rb#L14
+    solr_doc['objectId_ssim'] = [resource.pid, resource.pid.split(':').last]
     solr_doc
   end
 
