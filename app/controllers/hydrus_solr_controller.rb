@@ -44,8 +44,7 @@ class HydrusSolrController < ApplicationController
       render(plain: msg)
     elsif is_hydrus_object(obj)
       # It's a Hydrus object: re-solrize it and render the SOLR document.
-      indexer = Indexer.for(obj)
-      solr_doc = indexer.to_solr
+      solr_doc = obj.to_solr
       solr.add(solr_doc, add_attributes: { commitWithin: 5000 })
       msg = "#{msg}: updated SOLR index: class=#{obj.class}"
       index_logger.info(msg)
