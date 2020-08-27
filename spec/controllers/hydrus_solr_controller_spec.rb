@@ -6,14 +6,6 @@ RSpec.describe HydrusSolrController, type: :controller do
   let(:pid) { 'druid:bc123df4567' }
 
   describe 'reindex' do
-    before do
-      allow(Indexer).to receive(:for).with(mock_hydrus_obj).and_return(mock_indexer)
-    end
-
-    let(:mock_hydrus_obj) { instance_double(Hydrus::Item, to_solr: { id: 'x' }, pid: pid) }
-    let(:mock_indexer) { instance_double(CompositeIndexer::Instance, to_solr: mock_solr_doc) }
-    let(:mock_solr_doc) { { id: pid } }
-
     context 'when an object is not found in Fedora' do
       it 'responds with 404' do
         allow(ActiveFedora::Base).to receive(:find).and_return(nil)
@@ -51,8 +43,8 @@ RSpec.describe HydrusSolrController, type: :controller do
 
       it 'indexes the object' do
         allow(ActiveFedora::Base).to receive(:find)
-          .and_return(mock_hydrus_obj)
-        expect(ActiveFedora.solr.conn).to receive(:add).with({ id: pid }, add_attributes: { commitWithin: 5000 }).and_return(true)
+          .and_return(instance_double(Hydrus::Item, to_solr: { id: 'x' }, pid: pid))
+        expect(ActiveFedora.solr.conn).to receive(:add).with({ id: 'x' }, add_attributes: { commitWithin: 5000 }).and_return(true)
         get :reindex, params: { id: 'druid:bc123df4567' }
         expect(response.status).to eq(200)
       end
@@ -69,8 +61,8 @@ RSpec.describe HydrusSolrController, type: :controller do
 
       it 'indexes the object' do
         allow(ActiveFedora::Base).to receive(:find)
-          .and_return(mock_hydrus_obj)
-        expect(ActiveFedora.solr.conn).to receive(:add).with({ id: pid }, add_attributes: { commitWithin: 5000 }).and_return(true)
+          .and_return(instance_double(Hydrus::Item, to_solr: { id: 'x' }, pid: pid))
+        expect(ActiveFedora.solr.conn).to receive(:add).with({ id: 'x' }, add_attributes: { commitWithin: 5000 }).and_return(true)
         get :reindex, params: { id: 'druid:bc123df4567' }
         expect(response.status).to eq(200)
       end

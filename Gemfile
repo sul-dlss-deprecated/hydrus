@@ -54,7 +54,6 @@ group :development, :test do
   gem 'rubocop', '~> 0.58.1'
   # gem 'rubocop-rspec', '~> 1.5'
   gem 'rails-controller-testing'
-  gem 'webmock'
 end
 
 group :development do
