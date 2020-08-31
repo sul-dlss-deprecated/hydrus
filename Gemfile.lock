@@ -71,7 +71,7 @@ GEM
       mini_exiftool
       nokogiri
     ast (2.4.1)
-    autoprefixer-rails (9.8.6.2)
+    autoprefixer-rails (9.8.6.3)
       execjs
     awesome_print (1.8.0)
     bagit (0.4.4)
@@ -132,7 +132,7 @@ GEM
       activesupport (>= 4.0.0)
       mime-types (>= 1.16)
     chronic (0.10.2)
-    cocina-models (0.36.0)
+    cocina-models (0.37.0)
       activesupport
       dry-struct (~> 1.0)
       dry-types (~> 1.1)
@@ -177,7 +177,7 @@ GEM
     docopt (0.5.0)
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
-    dor-rights-auth (1.4.0)
+    dor-rights-auth (1.5.0)
       nokogiri
     dor-services (8.6.0)
       active-fedora (>= 8.7.0, < 9)
@@ -197,9 +197,9 @@ GEM
       solrizer (~> 3.0)
       stanford-mods (>= 2.3.1)
       stanford-mods-normalizer (~> 0.1)
-    dor-services-client (6.8.0)
+    dor-services-client (6.10.0)
       activesupport (>= 4.2, < 7)
-      cocina-models (~> 0.36.0)
+      cocina-models (~> 0.37.0)
       deprecation
       faraday (>= 0.15, < 2)
       moab-versioning (~> 4.0)
@@ -318,7 +318,7 @@ GEM
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
       ruby_dep (~> 1.2)
-    loofah (2.6.0)
+    loofah (2.7.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     mail (2.7.1)
@@ -369,7 +369,7 @@ GEM
     openapi3_parser (0.8.2)
       commonmarker (~> 0.17)
       psych (~> 3.1)
-    openapi_parser (0.11.2)
+    openapi_parser (0.12.1)
     orm_adapter (0.5.0)
     parallel (1.19.2)
     parser (2.7.1.4)
@@ -510,7 +510,7 @@ GEM
       nokogiri
       stomp
       xml-simple
-    spring (2.1.0)
+    spring (2.1.1)
     spring-watcher-listen (2.0.1)
       listen (>= 2.7, < 4.0)
       spring (>= 1.2, < 3.0)
