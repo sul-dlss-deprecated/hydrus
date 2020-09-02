@@ -40,8 +40,8 @@ class HttpWithClientKeyCheck < OkComputer::Check
 
   # Public: Return the status of the HTTP check
   def check
-    if resource.status == 200
-      mark_message 'HTTP check successful'
+    if [200, 302].include? resource.status
+      mark_message "HTTP check successful: returned #{resource.status}"
     else
       mark_message "Error: Status code is #{resource.status}"
       mark_failure
@@ -73,5 +73,5 @@ OkComputer::Registry.register 'fedora_url', HttpWithClientKeyCheck.new(Dor::Conf
 about_url = Settings.dor_services.url + '/v1/about'
 OkComputer::Registry.register 'dor_services_url', OkComputer::HttpCheck.new(about_url)
 
-# Local filesystem public/uploads -> shared/public/uploads -> /data/hydrus-files
-OkComputer::Registry.register 'document_cache_root', OkComputer::DirectoryCheck.new('public/uploads')
+# Local filesystem uploads -> ../shared/uploads -> /data/hydrus-files
+OkComputer::Registry.register 'document_cache_root', OkComputer::DirectoryCheck.new('uploads')
