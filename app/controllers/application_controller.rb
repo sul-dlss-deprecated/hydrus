@@ -41,6 +41,10 @@ class ApplicationController < ActionController::Base
 
   protected
 
+  def contextual_id
+    @contextual_id ||= params.select { |k, _| k.to_s =~ /^hydrus_.*_id/ }.to_unsafe_hash.each_value.first
+  end
+
   def current_user
     super.tap do |cur_user|
       break unless cur_user
