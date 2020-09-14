@@ -12,10 +12,4 @@ class EventsController < ApplicationController
     @fobj.current_user = current_user
     authorize! :read, @fobj
   end
-
-  protected
-
-  def contextual_id
-    @contextual_id ||= params.select { |k, v| k.to_s =~ /^hydrus_.*_id/ }.to_unsafe_hash.each_value.first
-  end
 end
