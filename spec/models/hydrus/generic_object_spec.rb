@@ -67,13 +67,21 @@ describe Hydrus::GenericObject, type: :model do
     let(:args) { %w(whobar item druid:bc123df4567) }
 
     it 'returns the expected hash' do
-      puts dor_registration_params
       expect(dor_registration_params[:type]).to eq('http://cocina.sul.stanford.edu/models/object.jsonld')
       expect(dor_registration_params[:label]).to eq('Hydrus')
       expect(dor_registration_params[:version]).to eq(1)
       expect(dor_registration_params[:administrative][:hasAdminPolicy]).to eq('druid:bc123df4567')
       expect(dor_registration_params[:administrative][:partOfProject]).to eq('Hydrus')
       expect(dor_registration_params[:identification][:sourceId]).to start_with('Hydrus:item-whobar-')
+      expect(dor_registration_params[:access]).to eq nil
+    end
+
+    context 'when collection object' do
+      let(:args) { %w(whobar collection druid:ab123de4567) }
+
+      it 'access is "world"' do
+        expect(dor_registration_params[:access][:access]).to eq('world')
+      end
     end
   end
 

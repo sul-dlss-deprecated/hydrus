@@ -312,7 +312,7 @@ class Hydrus::GenericObject < Dor::Item
 
       params[:administrative][:partOfProject] = 'Hydrus' unless obj_typ == 'adminPolicy'
       params[:identification] = { sourceId: "Hydrus:#{obj_typ}-#{user_string}-#{HyTime.now_datetime_full}" } if obj_typ == 'item'
-      params[:access] = {} if obj_typ == 'collection'
+      params[:access] = { access: 'world' } if obj_typ == 'collection'
     end.with_indifferent_access
   end
 
