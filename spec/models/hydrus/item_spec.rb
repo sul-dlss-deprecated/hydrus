@@ -648,9 +648,20 @@ RSpec.describe Hydrus::Item, type: :model do
     end
 
     describe 'embargo_date_in_range()' do
-      it 'should not perform validation unless preconditions are met' do
+      it 'should not perform validation unless is_embargoed preconditions are met' do
         expect(item).not_to receive(:beginning_of_embargo_range)
+        collection = instance_double(Hydrus::Collection, embargo_terms: '2 years')
+        allow(item).to receive(:collection).and_return(collection)
         allow(item).to receive(:is_embargoed).and_return(false)
+        item.embargo_date_in_range
+      end
+
+      it 'should not perform validation unless collection.embargo_terms preconditions are met' do
+        expect(item).not_to receive(:beginning_of_embargo_range)
+
+        collection = instance_double(Hydrus::Collection, embargo_terms: nil)
+        allow(item).to receive(:collection).and_return(collection)
+        allow(item).to receive(:is_embargoed).and_return(true)
         item.embargo_date_in_range
       end
 
@@ -673,6 +684,8 @@ RSpec.describe Hydrus::Item, type: :model do
         }
         # Validate those dates.
         allow(item).to receive(:is_embargoed).and_return(true)
+        collection = instance_double(Hydrus::Collection, embargo_terms: '2 years')
+        allow(item).to receive(:collection).and_return(collection)
         k = :embargo_date
         dts.each do |dt, is_ok|
           expect(item.errors).not_to have_key(k)
