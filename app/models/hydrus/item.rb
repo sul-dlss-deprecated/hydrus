@@ -524,7 +524,7 @@ class Hydrus::Item < Hydrus::GenericObject
   # past embargo date, because the nightly job that removes embargoMetadata
   # once the date has passed might not have run yet.
   def embargo_date_in_range
-    return unless is_embargoed
+    return unless is_embargoed && collection.embargo_terms
     b  = beginning_of_embargo_range.to_datetime
     e  = end_of_embargo_range.to_datetime
     dt = embargo_date.to_datetime
