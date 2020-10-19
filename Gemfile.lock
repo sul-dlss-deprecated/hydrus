@@ -268,8 +268,9 @@ GEM
     factory_bot_rails (6.1.0)
       factory_bot (~> 6.1.0)
       railties (>= 5.0.0)
-    faraday (1.0.1)
+    faraday (1.1.0)
       multipart-post (>= 1.2, < 3)
+      ruby2_keywords
     faraday_middleware (1.0.0)
       faraday (~> 1.0)
     ffi (1.13.1)
@@ -475,6 +476,7 @@ GEM
     ruby-enum (0.8.0)
       i18n
     ruby-progressbar (1.10.1)
+    ruby2_keywords (0.0.2)
     ruby_dep (1.5.0)
     rubydora (2.1.0)
       activemodel (>= 4.2.10)
