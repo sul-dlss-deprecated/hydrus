@@ -75,3 +75,31 @@ OkComputer::Registry.register 'dor_services_url', OkComputer::HttpCheck.new(abou
 
 # Local filesystem uploads -> ../shared/uploads -> /data/hydrus-files
 OkComputer::Registry.register 'document_cache_root', OkComputer::DirectoryCheck.new('uploads')
+
+# spot check tables for data loss
+class TablesHaveDataCheck < OkComputer::Check
+  def check
+    msg = [
+      Search,
+      UserRole,
+      User
+    ].map { |klass| table_check(klass) }.join(' ')
+    mark_message msg
+  end
+
+  private
+
+  # @return [String] message
+  def table_check(klass)
+    # has at least 1 record
+    return "#{klass.name} has data." if klass.any?
+
+    mark_failure
+    "#{klass.name} has no data."
+  rescue => e
+    mark_failure
+    "#{e.class.name} received: #{e.message}."
+  end
+end
+
+OkComputer::Registry.register 'feature-tables-have-data', TablesHaveDataCheck.new
