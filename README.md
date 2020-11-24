@@ -1,5 +1,5 @@
 # Hydrus
-[![Build Status](https://travis-ci.org/sul-dlss/hydrus.svg?branch=master)](https://travis-ci.org/sul-dlss/hydrus)
+[![Build Status](https://travis-ci.com/sul-dlss/hydrus.svg?branch=master)](https://travis-ci.com/sul-dlss/hydrus)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/4f81c285af8b8889c9f4/test_coverage)](https://codeclimate.com/github/sul-dlss/hydrus/test_coverage)
 
 ## Overview
