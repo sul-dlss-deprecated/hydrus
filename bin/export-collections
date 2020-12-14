@@ -1,8 +1,11 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
+# Usage:
+#   RAILS_ENV=production bin/export-collections > collections.jsonl
+
 require_relative '../config/environment'
-list = Hydrus::Collection.where(pid: 'druid:vq434wh5503') # Hydrus::Collection.all
+list = Hydrus::Collection.all
 
 def serialize(coll)
   creator = coll.events.ng_xml.xpath('//event[text()="Collection created"]/@who').to_s
@@ -25,4 +28,4 @@ end
 
 warn "Exporting #{list.count} collections"
 
-list.map { |collection| serialize(collection) }
+puts list.map { |collection| serialize(collection).to_json }
