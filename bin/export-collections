@@ -14,6 +14,8 @@ def serialize(coll)
     druid: coll.id,
     creator: { sunetid: creator },
     name: coll.title,
+    description: coll.abstract,
+    contact_email: coll.contact,
     visibility_option_value: coll.visibility_option_value,
     embargo_option: coll.embargo_option,
     embargo_terms: coll.embargo_terms,
