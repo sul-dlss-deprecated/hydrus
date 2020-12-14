@@ -1,0 +1,28 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require_relative '../config/environment'
+list = Hydrus::Collection.where(pid: 'druid:vq434wh5503') # Hydrus::Collection.all
+
+def serialize(coll)
+  creator = coll.events.ng_xml.xpath('//event[text()="Collection created"]/@who').to_s
+  apo = coll.apo
+  {
+    druid: coll.id,
+    creator: { sunetid: creator },
+    name: coll.title,
+    visibility_option_value: coll.visibility_option_value,
+    embargo_option: coll.embargo_option,
+    embargo_terms: coll.embargo_terms,
+    requires_human_approval: coll.requires_human_approval,
+    license_option: coll.license_option,
+    object_status: coll.object_status,
+    managers: apo.persons_with_role('hydrus-collection-manager'),
+    depositors: apo.persons_with_role('hydrus-collection-item-depositor') + apo.persons_with_role('hydrus-collection-depositor'),
+    reviewers: apo.persons_with_role('hydrus-collection-reviewer')
+  }
+end
+
+warn "Exporting #{list.count} collections"
+
+list.map { |collection| serialize(collection) }
