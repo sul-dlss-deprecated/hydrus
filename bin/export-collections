@@ -4,17 +4,22 @@
 # Usage:
 #   RAILS_ENV=production bin/export-collections > collections.jsonl
 
+GRAVEYARD_APO = 'druid:kg712km1576'
+UNIVERSITY_ARCHIVES_APO = 'druid:yf767bj4831'
+
 require_relative '../config/environment'
 list = Hydrus::Collection.all
 
 def serialize(coll)
   creator = coll.events.ng_xml.xpath('//event[text()="Collection created"]/@who').to_s
-  apo = coll.apo
-
-  unless apo.class == Hydrus::AdminPolicyObject
-    warn "The APO (#{apo.id}) for collection #{coll.id} is not a Hydrus::APO"
-    return {}
+  return if coll.apo_id == GRAVEYARD_APO
+  if coll.apo_id == UNIVERSITY_ARCHIVES_APO
+    warn "Collection #{collection.id} is in the Univrsity Archives APO, which is not a Hydrus::APO"
+    return
   end
+
+  apo = coll.apo
+  related_items = coll.related_items.map { |rel| { link_title: rel.title, url: rel.url } }
 
   {
     druid: coll.id,
@@ -31,10 +36,11 @@ def serialize(coll)
     object_status: coll.object_status,
     managers: apo.persons_with_role('hydrus-collection-manager'),
     depositors: apo.persons_with_role('hydrus-collection-item-depositor') + apo.persons_with_role('hydrus-collection-depositor'),
-    reviewers: apo.persons_with_role('hydrus-collection-reviewer')
+    reviewers: apo.persons_with_role('hydrus-collection-reviewer'),
+    related_items: related_items
   }
 end
 
 warn "Exporting #{list.count} collections"
 
-puts list.map { |collection| serialize(collection).to_json }
+puts list.map { |collection| serialize(collection).to_json }.compact
