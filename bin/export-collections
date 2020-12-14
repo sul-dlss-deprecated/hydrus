@@ -12,6 +12,7 @@ def serialize(coll)
   apo = coll.apo
   {
     druid: coll.id,
+    version: coll.current_version.to_i,
     creator: { sunetid: creator },
     name: coll.title,
     description: coll.abstract,
