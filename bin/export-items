@@ -31,5 +31,14 @@ def serialize(item)
 end
 
 warn "Exporting #{list.count} items"
-
-puts list.map { |item| serialize(item).to_json }.compact
+count = 0
+list.find_each do |item|
+  count += 1
+  warn count
+  begin
+    attributes = serialize(item)
+    puts attributes.compact.to_json
+  rescue => e
+    warn "Error with #{item.pid}. #{e.message}"
+  end
+end
