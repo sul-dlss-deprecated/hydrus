@@ -19,7 +19,7 @@ def serialize(coll)
   end
 
   apo = coll.apo
-  related_items = coll.related_items.map { |rel| { link_title: rel.title, url: rel.url } }
+  related_items = coll.related_items.map { |rel| { link_title: rel.title.presence, url: rel.url.presence }.compact }.reject(&:blank?)
 
   {
     druid: coll.id,
