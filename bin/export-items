@@ -10,6 +10,9 @@ list = Hydrus::Item.all
 def serialize(item)
   creator = item.roleMetadata.ng_xml.xpath('//role/person/identifier').text
   related_items = item.related_items.map { |rel| { link_title: rel.title.presence, url: rel.url.presence }.compact }.reject(&:blank?)
+  contributors = item.contributors.
+   map { |contrib| { full_name: contrib.name, role: contrib.role, name_type: contrib.name_type }}.
+   reject { |contrib| contrib[:full_name].blank? }
 
   {
     druid: item.id,
@@ -26,7 +29,8 @@ def serialize(item)
     object_status: item.object_status,
     item_type: item.item_type,
     citation: item.preferred_citation,
-    related_items: related_items
+    related_items: related_items,
+    contributors: contributors
   }
 end
 
