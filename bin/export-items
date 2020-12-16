@@ -7,13 +7,26 @@
 require_relative '../config/environment'
 list = Hydrus::Item.all
 
+def contributors(item)
+  item.contributors.
+    map { |contrib| { full_name: contrib.name, role: contrib.role, name_type: contrib.name_type }}.
+    reject { |contrib| contrib[:full_name].blank? }
+end
+
+def files(item)
+  item.files.
+    map do |object_file|
+      {
+        path: File.realdirpath(object_file.current_path),
+        label: object_file.label
+      }
+    end
+end
+
+
 def serialize(item)
   creator = item.roleMetadata.ng_xml.xpath('//role/person/identifier').text
   related_items = item.related_items.map { |rel| { link_title: rel.title.presence, url: rel.url.presence }.compact }.reject(&:blank?)
-  contributors = item.contributors.
-   map { |contrib| { full_name: contrib.name, role: contrib.role, name_type: contrib.name_type }}.
-   reject { |contrib| contrib[:full_name].blank? }
-
   {
     druid: item.id,
     version: item.current_version.to_i,
@@ -30,7 +43,10 @@ def serialize(item)
     item_type: item.item_type,
     citation: item.preferred_citation,
     related_items: related_items,
-    contributors: contributors
+    contributors: contributors(item),
+    files: files(item),
+    created_at: item.create_date,
+    updated_at: item.modified_date
   }
 end
 
