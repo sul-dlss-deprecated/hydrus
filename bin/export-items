@@ -43,6 +43,7 @@ def serialize(item)
     item_type: item.item_type,
     citation: item.preferred_citation,
     related_items: related_items,
+    related_citations: item.related_citation,
     contributors: contributors(item),
     keywords: item.keywords,
     files: files(item),
