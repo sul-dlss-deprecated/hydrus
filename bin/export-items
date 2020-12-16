@@ -44,6 +44,7 @@ def serialize(item)
     citation: item.preferred_citation,
     related_items: related_items,
     contributors: contributors(item),
+    keywords: item.keywords,
     files: files(item),
     created_at: item.create_date,
     updated_at: item.modified_date
