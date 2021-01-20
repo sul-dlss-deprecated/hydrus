@@ -132,7 +132,7 @@ GEM
       activesupport (>= 4.0.0)
       mime-types (>= 1.16)
     chronic (0.10.2)
-    cocina-models (0.44.0)
+    cocina-models (0.45.0)
       activesupport
       dry-struct (~> 1.0)
       dry-types (~> 1.1)
@@ -197,9 +197,9 @@ GEM
       solrizer (~> 3.0)
       stanford-mods (>= 2.3.1)
       stanford-mods-normalizer (~> 0.1)
-    dor-services-client (6.16.0)
+    dor-services-client (6.17.0)
       activesupport (>= 4.2, < 7)
-      cocina-models (~> 0.44.0)
+      cocina-models (~> 0.45.0)
       deprecation
       faraday (>= 0.15, < 2)
       moab-versioning (~> 4.0)
@@ -594,7 +594,7 @@ DEPENDENCIES
   devise-remote-user (~> 1.0)
   dlss-capistrano
   dor-services (~> 8.0)
-  dor-services-client (~> 6.16)
+  dor-services-client (~> 6.17)
   dor-workflow-client (~> 3.22)
   dynamic_form
   equivalent-xml
