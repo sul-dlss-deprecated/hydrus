@@ -5,6 +5,7 @@ notifications:
   email: false
 
 before_install:
+  - echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
   - docker-compose up -d
   - docker-compose ps
   - yes | gem update --system
