@@ -11,7 +11,7 @@ gem 'dynamic_form'
 # see https://github.com/alphabetum/iso-639/issues/12
 gem 'iso-639', '~> 0.2.10'
 gem 'bootstrap-datepicker-rails'
-gem 'carrierwave', '~> 1.0'
+gem 'carrierwave', '~> 1.3'
 gem 'coderay'
 gem 'validates_email_format_of'
 gem 'whenever', '~> 0.9'
