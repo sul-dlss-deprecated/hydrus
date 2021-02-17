@@ -4,8 +4,17 @@
 # Usage:
 #   RAILS_ENV=production bin/export-items > items.jsonl
 
+COLLECTION_DRUIDS_LIST = 'collection_druids.txt'
+
 require_relative '../config/environment'
-list = Hydrus::Item.all
+
+collection_druids = File.exist?(COLLECTION_DRUIDS_LIST) ?
+                      File.read(COLLECTION_DRUIDS_LIST).split.map { |bare_druid| "druid:#{bare_druid}" } :
+                      []
+
+list = collection_druids.any? ?
+         Hydrus::Collection.find(collection_druids).flat_map(&:items) :
+         Hydrus::Item.all
 
 def contributors(item)
   item.contributors.

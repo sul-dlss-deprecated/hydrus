@@ -4,11 +4,19 @@
 # Usage:
 #   RAILS_ENV=production bin/export-collections > collections.jsonl
 
+COLLECTION_DRUIDS_LIST = 'collection_druids.txt'
 GRAVEYARD_APO = 'druid:kg712km1576'
 UNIVERSITY_ARCHIVES_APO = 'druid:yf767bj4831'
 
 require_relative '../config/environment'
-list = Hydrus::Collection.all
+
+collection_druids = File.exist?(COLLECTION_DRUIDS_LIST) ?
+                      File.read(COLLECTION_DRUIDS_LIST).split.map { |bare_druid| "druid:#{bare_druid}" } :
+                      []
+
+list = collection_druids.any? ?
+         Hydrus::Collection.find(collection_druids) :
+         Hydrus::Collection.all
 
 def serialize(coll)
   creator = coll.events.ng_xml.xpath('//event[text()="Collection created"]/@who').to_s
