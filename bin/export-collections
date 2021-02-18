@@ -48,8 +48,8 @@ def serialize(coll)
     depositors: apo.persons_with_role('hydrus-collection-item-depositor') + apo.persons_with_role('hydrus-collection-depositor'),
     reviewers: apo.persons_with_role('hydrus-collection-reviewer'),
     related_items: related_items,
-    created_at: item.create_date,
-    updated_at: item.modified_date
+    created_at: coll.create_date,
+    updated_at: coll.modified_date
   }
 end
 
