@@ -8,13 +8,53 @@ COLLECTION_DRUIDS_LIST = 'collection_druids.txt'
 
 require_relative '../config/environment'
 
+# Monkey-patch AF to allow using HTTP POST (for querying items by their collection)
+module ActiveFedora
+  class SolrService
+    def self.query(query, args={})
+      raw = args.delete(:raw)
+      args = args.merge(:q=>query, :qt=>'standard')
+      result = SolrService.instance.conn.post('select', :data=>args)
+      return result if raw
+      result['response']['docs']
+    end
+  end
+
+  module FinderMethods
+    def find_in_batches conditions, opts={}
+      data = { :q => create_query(conditions) }
+      opts[:qt] = @klass.solr_query_handler
+      #set default sort to created date ascending
+      unless opts[:sort].present?
+        opts[:sort]= @klass.default_sort_params
+      end
+
+      batch_size = opts.delete(:batch_size) || 1000
+
+      counter = 0
+      begin
+        counter += 1
+        response = ActiveFedora::SolrService.instance.conn.paginate counter, batch_size, "select", { :method => :post, :params => opts, :data => data }
+        docs = response["response"]["docs"]
+        yield docs
+      end while docs.has_next?
+    end
+  end
+end
+
 collection_druids = File.exist?(COLLECTION_DRUIDS_LIST) ?
                       File.read(COLLECTION_DRUIDS_LIST).split.map { |bare_druid| "druid:#{bare_druid}" } :
                       []
 
-list = collection_druids.any? ?
-         Hydrus::Collection.find(collection_druids).flat_map(&:items) :
+list = if collection_druids.any?
+         where_collection_in_list_query = ActiveFedora::SolrService.construct_query_for_rel(
+           collection_druids.map { |druid| [:is_member_of_collection, "info:fedora/#{druid}"] },
+           ' OR '
+         )
+         Hydrus::Item.where(where_collection_in_list_query)
+       else
          Hydrus::Item.all
+       end
 
 def contributors(item)
   item.contributors.
@@ -63,7 +103,7 @@ end
 
 warn "Exporting #{list.count} items"
 count = 0
-list.find_each do |item|
+list.each do |item|
   count += 1
   warn count
   begin
