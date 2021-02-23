@@ -72,6 +72,16 @@ def files(item)
     end
 end
 
+def events_for(item)
+  item.get_hydrus_events.map do |event|
+    {
+      who: event.who, # is a bare sunetid string, maps to user_id
+      when: event.when, # is a UTC timestamp string, maps to created_at/updated_at
+      text: event.text # is a string, maps to event_type ('update_metadata') and description
+      # mapping also requires an eventable_type ('Work') and an eventable_id (the work ID)
+    }
+  end
+end
 
 def serialize(item)
   creator = item.roleMetadata.ng_xml.xpath('//role/person/identifier').text
@@ -96,6 +106,7 @@ def serialize(item)
     contributors: contributors(item),
     keywords: item.keywords,
     files: files(item),
+    events: events_for(item),
     created_at: item.create_date,
     updated_at: item.modified_date
   }
