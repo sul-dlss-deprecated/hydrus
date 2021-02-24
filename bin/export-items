@@ -5,6 +5,8 @@
 #   RAILS_ENV=production bin/export-items > items.jsonl
 
 COLLECTION_DRUIDS_LIST = 'collection_druids.txt'
+GRAVEYARD_APO = 'druid:kg712km1576'
+UNIVERSITY_ARCHIVES_APO = 'druid:yf767bj4831'
 
 require_relative '../config/environment'
 
@@ -42,9 +44,15 @@ module ActiveFedora
   end
 end
 
-collection_druids = File.exist?(COLLECTION_DRUIDS_LIST) ?
-                      File.read(COLLECTION_DRUIDS_LIST).split.map { |bare_druid| "druid:#{bare_druid}" } :
+collection_druids = if File.exist?(COLLECTION_DRUIDS_LIST)
+                      File
+                        .read(COLLECTION_DRUIDS_LIST)
+                        .split
+                        .map { |bare_druid| "druid:#{bare_druid}" }
+                        .reject { |druid| [GRAVEYARD_APO, UNIVERSITY_ARCHIVES_APO].include?(Hydrus::Collection.find(druid).admin_policy_object_id) }
+                    else
                       []
+                    end
 
 list = if collection_druids.any?
          where_collection_in_list_query = ActiveFedora::SolrService.construct_query_for_rel(
