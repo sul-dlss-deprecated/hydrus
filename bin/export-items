@@ -124,6 +124,9 @@ list.each do |item|
     if item.apo_pid == GRAVEYARD_APO
       warn "Skipping #{item.pid} because it belongs to the Graveyard APO"
       next
+    elsif item.catkey.present?
+      warn "Skipping #{item.pid} because it has a catkey"
+      next
     end
     attributes = serialize(item)
     puts attributes.compact.to_json

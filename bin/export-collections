@@ -67,4 +67,11 @@ end
 
 warn "Exporting #{list.count} collections"
 
-puts list.map { |collection| serialize(collection).to_json }.compact
+list.map do |collection|
+  if collection.catkey.present?
+    warn "Skipping #{collection.pid} because it has a catkey"
+    next
+  end
+
+  puts serialize(collection).to_json
+end
