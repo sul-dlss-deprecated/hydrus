@@ -70,7 +70,8 @@ def files(item)
     map do |object_file|
       {
         path: File.realdirpath(object_file.current_path),
-        label: object_file.label
+        label: object_file.label,
+        hide: object_file.hide
       }
     end
 end
