@@ -6,7 +6,6 @@
 
 COLLECTION_DRUIDS_LIST = 'collection_druids.txt'
 GRAVEYARD_APO = 'druid:kg712km1576'
-UNIVERSITY_ARCHIVES_APO = 'druid:yf767bj4831'
 
 require_relative '../config/environment'
 
@@ -45,11 +44,7 @@ module ActiveFedora
 end
 
 collection_druids = if File.exist?(COLLECTION_DRUIDS_LIST)
-                      File
-                        .read(COLLECTION_DRUIDS_LIST)
-                        .split
-                        .map { |bare_druid| "druid:#{bare_druid}" }
-                        .reject { |druid| [GRAVEYARD_APO, UNIVERSITY_ARCHIVES_APO].include?(Hydrus::Collection.find(druid).admin_policy_object_id) }
+                      File.read(COLLECTION_DRUIDS_LIST).split.map { |bare_druid| "druid:#{bare_druid}" }
                     else
                       []
                     end
@@ -126,6 +121,10 @@ list.each do |item|
   count += 1
   warn count
   begin
+    if item.apo_pid == GRAVEYARD_APO
+      warn "Skipping #{item.pid} because it belongs to the Graveyard APO"
+      next
+    end
     attributes = serialize(item)
     puts attributes.compact.to_json
   rescue => e
