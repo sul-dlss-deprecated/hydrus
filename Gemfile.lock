@@ -133,7 +133,7 @@ GEM
       mime-types (>= 1.16)
       ssrf_filter (~> 1.0)
     chronic (0.10.2)
-    cocina-models (0.54.0.beta.2)
+    cocina-models (0.54.0)
       activesupport
       dry-struct (~> 1.0)
       dry-types (~> 1.1)
@@ -198,9 +198,9 @@ GEM
       solrizer (~> 3.0)
       stanford-mods (>= 2.3.1)
       stanford-mods-normalizer (~> 0.1)
-    dor-services-client (6.26.0.beta.1)
+    dor-services-client (6.26.0)
       activesupport (>= 4.2, < 7)
-      cocina-models (~> 0.54.0.beta)
+      cocina-models (~> 0.54.0)
       deprecation
       faraday (>= 0.15, < 2)
       moab-versioning (~> 4.0)
@@ -596,7 +596,7 @@ DEPENDENCIES
   devise-remote-user (~> 1.0)
   dlss-capistrano
   dor-services (~> 8.0)
-  dor-services-client (~> 6.26.0.beta)
+  dor-services-client (~> 6.26.0)
   dor-workflow-client (~> 3.22)
   dynamic_form
   equivalent-xml
@@ -627,4 +627,4 @@ DEPENDENCIES
   whenever (~> 0.9)
 
 BUNDLED WITH
-   2.2.13
+   2.2.14
