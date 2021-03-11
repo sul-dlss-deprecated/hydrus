@@ -21,7 +21,7 @@ gem 'assembly-objectfile', '~> 1.5'
 # We don't require this by default, because we need it to load after hydrus models
 # or we'll get a superclass mismatch for Hydrus::Item
 gem 'dor-services', '~> 8.0', require: false
-gem 'dor-services-client', '~> 6.19'
+gem 'dor-services-client', '~> 6.26.0'
 gem 'dor-workflow-client', '~> 3.22'
 gem 'rubydora', '~> 2.1'
 gem 'bagit', '~> 0.4'
@@ -51,7 +51,7 @@ group :development, :test do
   gem 'byebug'
   gem 'letter_opener'
   gem 'pry'
-  gem 'rubocop', '~> 0.58.1'
+  gem 'rubocop'
   # gem 'rubocop-rspec', '~> 1.5'
   gem 'rails-controller-testing'
 end
