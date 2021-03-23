@@ -62,7 +62,7 @@ GEM
     airbrussh (1.4.0)
       sshkit (>= 1.6.1, != 1.7.0)
     arel (9.0.0)
-    assembly-objectfile (1.10.0)
+    assembly-objectfile (1.10.2)
       activesupport (>= 5.2.0)
       deprecation
       dry-struct (~> 1.0)
@@ -88,7 +88,7 @@ GEM
       rails (>= 4.2, < 6)
       rsolr (>= 1.0.6, < 3)
       twitter-typeahead-rails (= 0.11.1.pre.corejavascript)
-    bootsnap (1.7.2)
+    bootsnap (1.7.3)
       msgpack (~> 1.0)
     bootstrap-datepicker-rails (1.9.0.1)
       railties (>= 3.0)
@@ -133,7 +133,7 @@ GEM
       mime-types (>= 1.16)
       ssrf_filter (~> 1.0)
     chronic (0.10.2)
-    cocina-models (0.56.0)
+    cocina-models (0.56.1)
       activesupport
       dry-struct (~> 1.0)
       dry-types (~> 1.1)
@@ -198,7 +198,7 @@ GEM
       solrizer (~> 3.0)
       stanford-mods (>= 2.3.1)
       stanford-mods-normalizer (~> 0.1)
-    dor-services-client (6.30.0)
+    dor-services-client (6.30.1)
       activesupport (>= 4.2, < 7)
       cocina-models (~> 0.56.0)
       deprecation
@@ -277,7 +277,7 @@ GEM
     haml (5.2.1)
       temple (>= 0.8.0)
       tilt
-    honeybadger (4.7.3)
+    honeybadger (4.8.0)
     hooks (0.4.1)
       uber (~> 0.0.14)
     htmlentities (4.3.4)
