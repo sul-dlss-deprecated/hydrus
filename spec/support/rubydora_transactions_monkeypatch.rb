@@ -31,9 +31,7 @@ class Rubydora::Transaction
         begin
           repository.ingest(pid: p, file: foxml)
           $fixture_solr_cache ||= {}
-          $fixture_solr_cache[p] ||= begin
-            ActiveFedora::Base.find(p, cast: true).to_solr
-          end
+          $fixture_solr_cache[p] ||= ActiveFedora::Base.find(p, cast: true).to_solr
           solr.add $fixture_solr_cache[p]
           # run_hook(:after_rollback, :pid => p, :method => :purge_object)
         rescue
