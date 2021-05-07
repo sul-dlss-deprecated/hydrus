@@ -79,4 +79,5 @@ group :deployment do
 end
 
 gem 'honeybadger', '~> 4.2'
+gem 'lograge'
 gem 'rsolr', '~> 2.2'
