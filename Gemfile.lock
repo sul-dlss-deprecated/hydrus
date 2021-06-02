@@ -133,7 +133,7 @@ GEM
       mime-types (>= 1.16)
       ssrf_filter (~> 1.0)
     chronic (0.10.2)
-    cocina-models (0.59.0)
+    cocina-models (0.59.1)
       activesupport
       dry-struct (~> 1.0)
       dry-types (~> 1.1)
