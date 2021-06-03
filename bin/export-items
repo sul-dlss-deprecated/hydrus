@@ -7,6 +7,17 @@
 COLLECTION_DRUIDS_LIST = 'collection_druids.txt'
 GRAVEYARD_APO = 'druid:kg712km1576'
 
+# This list from: https://docs.google.com/spreadsheets/d/1Gu0TIUpNByNgNtFDn5MJARUvtsgcNXJAHiKf5s_NsUc/edit#gid=0
+# NOTE: we don't need to worry about the "hydrus object with DOI", because these are not returned in the query
+# for Hydrus::Items as they have been converted to Dor::Item.
+ITEMS_TO_EXCLUDE = %w[
+  druid:ty334nd6571
+  druid:bx749bs2681
+  druid:zc000fq4044
+  druid:pr213sh5046
+  druid:jr671fk0644
+]
+
 require_relative '../config/environment'
 
 # Monkey-patch AF to allow using HTTP POST (for querying items by their collection)
@@ -127,6 +138,9 @@ list.each do |item|
       next
     elsif item.catkey.present?
       warn "Skipping #{item.pid} because it has a catkey"
+      next
+    elsif ITEMS_TO_EXCLUDE.include? item.pid
+      warn "Skipping #{item.pid} because it is on the list of items to exclude"
       next
     end
     attributes = serialize(item)
