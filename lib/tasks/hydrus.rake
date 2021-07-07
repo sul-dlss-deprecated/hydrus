@@ -77,6 +77,43 @@ namespace :hydrus do
   task cleanup_tmp: :environment do
     CarrierWave.clean_cached_files!
   end
+
+  desc 'add person to collection manager'
+  task :add_to_collection_manager, [:sunetid] => :environment do |_t, args|
+    new_sunet = args[:sunetid]
+    logger = Logger.new("#{Rails.root}/log/add_to_collection_manager.log")
+    druids = CSV.read('tmp/add.txt').flatten
+    total_druids = druids.count
+    druids.each_with_index do |druid, i|
+      message = "#{i + 1} of #{total_druids} : #{druid}"
+      puts message
+      fobj = Hydrus::Collection.find("druid:#{druid}")
+      if fobj.apo.class != Hydrus::AdminPolicyObject || fobj.object_type != 'collection'
+        message = "....SKIPPING #{druid}, not a valid hydrus collection object"
+        logger.error message
+        puts message
+        next
+      end
+      unless fobj.valid?
+        message = "....SKIPPING #{druid}, not able to save (likely in a draft state)"
+        logger.error message
+        puts message
+        next
+      end
+      if fobj.apo_person_roles['hydrus-collection-manager']&.include? new_sunet
+        message = "....SKIPPING #{druid}, already has #{new_sunet}"
+        logger.error message
+        puts message
+        next
+      end
+      message = ".....ADDING to #{druid}: #{new_sunet}"
+      logger.info message
+      puts message
+      collection_managers = fobj.cleaned_usernames['hydrus-collection-manager']&.split(',') || []
+      fobj.apo_person_roles = fobj.cleaned_usernames.merge({ 'hydrus-collection-manager' => collection_managers.push(new_sunet).join(',') })
+      fobj.save
+    end
+  end
 end
 
 desc 'rails server with suppressed output'
