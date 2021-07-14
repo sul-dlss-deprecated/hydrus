@@ -1,0 +1,66 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# Usage:
+#   RAILS_ENV=production bin/export-items > items.jsonl
+
+require_relative '../config/environment'
+list = Hydrus::Item.all
+
+def contributors(item)
+  item.contributors.
+    map { |contrib| { full_name: contrib.name, role: contrib.role, name_type: contrib.name_type }}.
+    reject { |contrib| contrib[:full_name].blank? }
+end
+
+def files(item)
+  item.files.
+    map do |object_file|
+      {
+        path: File.realdirpath(object_file.current_path),
+        label: object_file.label
+      }
+    end
+end
+
+
+def serialize(item)
+  creator = item.roleMetadata.ng_xml.xpath('//role/person/identifier').text
+  related_items = item.related_items.map { |rel| { link_title: rel.title.presence, url: rel.url.presence }.compact }.reject(&:blank?)
+  {
+    druid: item.id,
+    version: item.current_version.to_i,
+    creator: { sunetid: creator },
+    title: item.title,
+    abstract: item.abstract,
+    contact_email: item.contact,
+    collection: item.collection_id,
+    visibility: item.visibility.first,
+    license: item.license,
+    embargo_release_date: item.rmd_embargo_release_date,
+    date_created: item.date_created,
+    object_status: item.object_status,
+    item_type: item.item_type,
+    citation: item.preferred_citation,
+    related_items: related_items,
+    related_citations: item.related_citation,
+    contributors: contributors(item),
+    keywords: item.keywords,
+    files: files(item),
+    created_at: item.create_date,
+    updated_at: item.modified_date
+  }
+end
+
+warn "Exporting #{list.count} items"
+count = 0
+list.find_each do |item|
+  count += 1
+  warn count
+  begin
+    attributes = serialize(item)
+    puts attributes.compact.to_json
+  rescue => e
+    warn "Error with #{item.pid}. #{e.message}"
+  end
+end
